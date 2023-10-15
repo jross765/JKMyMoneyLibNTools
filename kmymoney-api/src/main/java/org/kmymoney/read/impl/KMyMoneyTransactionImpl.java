@@ -2,15 +2,16 @@ package org.kmymoney.read.impl;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Currency;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kmymoney.Const;
 import org.kmymoney.currency.CurrencyNameSpace;
@@ -21,7 +22,6 @@ import org.kmymoney.read.KMyMoneyFile;
 import org.kmymoney.read.KMyMoneyTransaction;
 import org.kmymoney.read.KMyMoneyTransactionSplit;
 import org.kmymoney.read.SplitNotFoundException;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -32,6 +32,18 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyTransactionImpl.class);
 
     /**
+     * format of the dataPosted-field in the xml(jwsdp)-file.
+     */
+    private static final DateTimeFormatter DATE_POSTED_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
+
+    /**
+     * @see KMyMoneyTransaction#getEntryDate()
+     */
+    protected static final DateTimeFormatter DATE_ENTERED_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
+    
+    // ---------------------------------------------------------------
+
+    /**
      * the JWSDP-object we are facading.
      */
     private KMYMONEYFILE.TRANSACTIONS.TRANSACTION jwsdpPeer;
@@ -40,6 +52,23 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      * The file we belong to.
      */
     private final KMyMoneyFile file;
+
+    // ---------------------------------------------------------------
+
+    /**
+     * @see KMyMoneyTransaction#getDatePosted()
+     */
+    protected LocalDateTime postDate;
+
+    /**
+     * @see KMyMoneyTransaction#getEntryDate()
+     */
+    protected LocalDateTime entryDate;
+
+    /**
+     * The Currency-Format to use if no locale is given.
+     */
+    protected NumberFormat currencyFormat;
 
     // ---------------------------------------------------------------
 
@@ -78,18 +107,10 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     }
 
     /**
-     * @return "ISO4217" for a currency "FUND" or a fond,...
-     * @see KMyMoneyAccount#getCurrencyNameSpace()
-     */
-    public String getCurrencyNameSpace() {
-	return jwsdpPeer.getCurrency().getCmdtySpace();
-    }
-
-    /**
      * @see KMyMoneyAccount#getCurrencyID()
      */
     public String getCurrencyID() {
-	return jwsdpPeer.getCurrency().getCmdtyId();
+	return jwsdpPeer.getCommodity();
     }
 
     /**
@@ -178,10 +199,10 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     }
 
     /**
-     * @see KMyMoneyTransaction#getDescription()
+     * @see KMyMoneyTransaction#getMemo()
      */
-    public String getDescription() {
-	return jwsdpPeer.getDescription();
+    public String getMemo() {
+	return jwsdpPeer.getMemo();
     }
 
     // ----------------------------
@@ -190,7 +211,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      * @return the JWSDP-object we are facading.
      */
     @SuppressWarnings("exports")
-    public GncTransaction getJwsdpPeer() {
+    public KMYMONEYFILE.TRANSACTIONS.TRANSACTION getJwsdpPeer() {
 	return jwsdpPeer;
     }
 
@@ -296,48 +317,16 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     }
 
     /**
-     * @see KMyMoneyTransaction#getDateEntered()
+     * @see KMyMoneyTransaction#getEntryDate()
      */
-    protected static final DateTimeFormatter DATE_ENTERED_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
-
-    /**
-     * @see KMyMoneyTransaction#getDateEntered()
-     */
-    protected ZonedDateTime dateEntered;
-
-    /**
-     * @see KMyMoneyTransaction#getDateEntered()
-     */
-    public ZonedDateTime getDateEntered() {
-	if (dateEntered == null) {
-	    String s = jwsdpPeer.getDateEntered().getTsDate();
-	    try {
-		// "2001-09-18 00:00:00 +0200"
-		dateEntered = ZonedDateTime.parse(s, DATE_ENTERED_FORMAT);
-	    } catch (Exception e) {
-		IllegalStateException ex = new IllegalStateException("unparsable date '" + s + "' in transaction!");
-		ex.initCause(e);
-		throw ex;
-	    }
+    public LocalDateTime getEntryDate() {
+	if (entryDate == null) {
+	    XMLGregorianCalendar cal = jwsdpPeer.getEntrydate();
+	    entryDate = LocalDateTime.of(cal.getYear(), cal.getMonth(), cal.getDay());
 	}
 
-	return dateEntered;
+	return entryDate;
     }
-
-    /**
-     * format of the dataPosted-field in the xml(jwsdp)-file.
-     */
-    private static final DateTimeFormatter DATE_POSTED_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
-
-    /**
-     * @see KMyMoneyTransaction#getDatePosted()
-     */
-    protected ZonedDateTime datePosted;
-
-    /**
-     * The Currency-Format to use if no locale is given.
-     */
-    protected NumberFormat currencyFormat;
 
     /**
      * The Currency-Format to use if no locale is given.
@@ -367,21 +356,13 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     /**
      * @see KMyMoneyTransaction#getDatePosted()
      */
-    public ZonedDateTime getDatePosted() {
-	if (datePosted == null) {
-	    String s = jwsdpPeer.getDatePosted().getTsDate();
-	    try {
-		// "2001-09-18 00:00:00 +0200"
-		datePosted = ZonedDateTime.parse(s, DATE_POSTED_FORMAT);
-	    } catch (Exception e) {
-		IllegalStateException ex = new IllegalStateException(
-			"unparsable date '" + s + "' in transaction with id='" + getId() + "'!");
-		ex.initCause(e);
-		throw ex;
-	    }
+    public LocalDateTime getDatePosted() {
+	if (postDate == null) {
+	    XMLGregorianCalendar cal = jwsdpPeer.getPostdate();
+	    postDate = LocalDateTime.of(cal.getYear(), cal.getMonth(), cal.getDay());
 	}
 
-	return datePosted;
+	return postDate;
     }
 
     /**
@@ -390,7 +371,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     @Override
     public String toString() {
 	StringBuffer buffer = new StringBuffer();
-	buffer.append("[GnucashTransactionImpl:");
+	buffer.append("[KMyMoneyTransactionImpl:");
 
 	buffer.append(" id: ");
 	buffer.append(getId());
@@ -405,23 +386,23 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
 	}
 
 	buffer.append(" description: '");
-	buffer.append(getDescription() + "'");
+	buffer.append(getMemo() + "'");
 
 	buffer.append(" #splits: ");
 	buffer.append(getSplitsCount());
 
-	buffer.append(" date-posted: ");
+	buffer.append(" post-date: ");
 	try {
 	    buffer.append(getDatePosted().format(DATE_POSTED_FORMAT));
 	} catch (Exception e) {
 	    buffer.append(getDatePosted().toString());
 	}
 
-	buffer.append(" date-entered: ");
+	buffer.append(" entry-date: ");
 	try {
-	    buffer.append(getDateEntered().format(DATE_ENTERED_FORMAT));
+	    buffer.append(getEntryDate().format(DATE_ENTERED_FORMAT));
 	} catch (Exception e) {
-	    buffer.append(getDateEntered().toString());
+	    buffer.append(getEntryDate().toString());
 	}
 
 	buffer.append("]");
@@ -442,7 +423,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
 		return compare;
 	    }
 
-	    return otherTrx.getDateEntered().compareTo(getDateEntered());
+	    return otherTrx.getEntryDate().compareTo(getEntryDate());
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    return 0;

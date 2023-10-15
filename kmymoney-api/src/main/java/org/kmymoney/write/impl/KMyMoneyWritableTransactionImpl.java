@@ -292,7 +292,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
      * @see KMyMoneyWritableTransaction#setDateEntered(LocalDateTime)
      */
     public void setDateEntered(final ZonedDateTime dateEntered) {
-	this.dateEntered = dateEntered;
+	this.entryDate = dateEntered;
 	getJwsdpPeer().getTrnDateEntered().setTsDate(DATE_ENTERED_FORMAT.format(dateEntered));
 	getWritingFile().setModified(true);
     }
@@ -301,8 +301,8 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
      * @see KMyMoneyWritableTransaction#setDatePosted(LocalDateTime)
      */
     public void setDatePosted(final LocalDate datePosted) {
-	this.datePosted = ZonedDateTime.of(datePosted, LocalTime.MIN, ZoneId.systemDefault());
-	getJwsdpPeer().getTrnDatePosted().setTsDate(DATE_ENTERED_FORMAT.format(this.datePosted));
+	this.postDate = ZonedDateTime.of(datePosted, LocalTime.MIN, ZoneId.systemDefault());
+	getJwsdpPeer().getTrnDatePosted().setTsDate(DATE_ENTERED_FORMAT.format(this.postDate));
 	getWritingFile().setModified(true);
     }
 

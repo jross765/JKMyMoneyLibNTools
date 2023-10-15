@@ -12,50 +12,6 @@ import org.kmymoney.numbers.FixedPointNumber;
  */
 public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransactionSplit> {
 
-  // For the following enumerations cf.:
-  // https://github.com/Gnucash/gnucash/blob/stable/libgnucash/engine/Split.h
-  
-  // Note: The following should be chars, but the method where they are 
-  // used is generated and accepts a String.
-  // ::MAGIC
-  public static final String CREC = "c"; // cleared
-  public static final String YREC = "y"; // reconciled  
-  public static final String FREC = "f"; // frozen into accounting period
-  public static final String NREC = "n"; // not reconciled or cleared
-  public static final String VREC = "v"; // void
-    
-  // ::TODO: Locale-specific, make generic
-  // ::MAGIC
-  public static final String ACTION_INVOICE = "Rechnung";
-  public static final String ACTION_BILL    = "Lieferantenrechnung";
-  public static final String ACTION_PAYMENT = "Zahlung";
-  public static final String ACTION_BUY     = "Kauf";
-  public static final String ACTION_SELL    = "Verkauf";
-  
-  // Not yet, for future releases:
-//  public static final String SPLIT_DATE_RECONCILED    = "date-reconciled";
-//  public static final String SPLIT_BALANCE            = "balance";
-//  public static final String SPLIT_CLEARED_BALANCE    = "cleared-balance";
-//  public static final String SPLIT_RECONCILED_BALANCE = "reconciled-balance";
-//  public static final String SPLIT_MEMO               = "memo";
-//  public static final String SPLIT_ACTION             = "action";
-//  public static final String SPLIT_RECONCILE          = "reconcile-flag";
-//  public static final String SPLIT_AMOUNT             = "amount";
-//  public static final String SPLIT_SHARE_PRICE        = "share-price";
-//  public static final String SPLIT_VALUE              = "value";
-//  public static final String SPLIT_TYPE               = "type";
-//  public static final String SPLIT_VOIDED_AMOUNT      = "voided-amount";
-//  public static final String SPLIT_VOIDED_VALUE       = "voided-value";
-//  public static final String SPLIT_LOT                = "lot";
-//  public static final String SPLIT_TRANS              = "trans";
-//  public static final String SPLIT_ACCOUNT            = "account";
-//  public static final String SPLIT_ACCOUNT_GUID       = "account-guid";
-//  public static final String SPLIT_ACCT_FULLNAME      = "acct-fullname";
-//  public static final String SPLIT_CORR_ACCT_NAME     = "corr-acct-fullname";
-//  public static final String SPLIT_CORR_ACCT_CODE     = "corr-acct-code";
-  
-  // -----------------------------------------------------------------
-
     /**
      *
      * @return the unique-id to identify this object with across name- and hirarchy-changes
@@ -131,39 +87,39 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * The quantity is in the currency of the account!
      * @return the number of items added to the account
      */
-    FixedPointNumber getQuantity();
+    FixedPointNumber getShares();
 
     /**
      * The quantity is in the currency of the account!
      * @return the number of items added to the account
      */
-    String getQuantityFormatted();
-
-    /**
-     * The quantity is in the currency of the account!
-     * @param locale the locale to use
-     * @return the number of items added to the account
-     */
-    String getQuantityFormatted(Locale locale);
-
-    /**
-     * The quantity is in the currency of the account!
-     * @return the number of items added to the account
-     */
-    String getQuantityFormattedForHTML();
+    String getSharesFormatted();
 
     /**
      * The quantity is in the currency of the account!
      * @param locale the locale to use
      * @return the number of items added to the account
      */
-    String getQuantityFormattedForHTML(Locale locale);
+    String getSharesFormatted(Locale locale);
+
+    /**
+     * The quantity is in the currency of the account!
+     * @return the number of items added to the account
+     */
+    String getSharesFormattedForHTML();
+
+    /**
+     * The quantity is in the currency of the account!
+     * @param locale the locale to use
+     * @return the number of items added to the account
+     */
+    String getSharesFormattedForHTML(Locale locale);
 
     /**
      * @return the user-defined description for this object
      *         (may contain multiple lines and non-ascii-characters)
      */
-    String getDescription();
+    String getMemo();
 
       /**
      * Get the type of association this split has with

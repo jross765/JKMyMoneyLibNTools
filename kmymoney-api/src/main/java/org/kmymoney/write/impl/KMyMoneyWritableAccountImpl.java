@@ -500,7 +500,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			if (whenHappened.isBefore(from.atStartOfDay())) {
 				continue;
 			}
-			retval = retval.add(split.getQuantity());
+			retval = retval.add(split.getShares());
 		}
 		return retval;
 	}

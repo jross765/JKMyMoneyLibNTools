@@ -482,7 +482,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 			}
 
 			// the currency of the quantity is the one of the account
-			balance.add(split.getQuantity());
+			balance.add(split.getShares());
 		}
 		
 		return balance;
@@ -496,7 +496,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		FixedPointNumber balance = new FixedPointNumber();
 		
 		for (KMyMoneyTransactionSplit split : getTransactionSplits()) {
-			balance.add(split.getQuantity());
+			balance.add(split.getShares());
 
 			if (split == lastIncludesSplit) {
 				break;

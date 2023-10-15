@@ -30,6 +30,7 @@ import java.util.zip.GZIPInputStream;
 import org.kmymoney.Const;
 import org.kmymoney.currency.ComplexCurrencyTable;
 import org.kmymoney.generated.KMYMONEYFILE;
+import org.kmymoney.generated.KMYMONEYFILE.PRICES;
 import org.kmymoney.generated.ObjectFactory;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyAccount;
@@ -317,7 +318,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     protected Map<String, KMyMoneyTransactionSplit> transactionSplitID2transactionSplit;
 
     /**
-     * All customers indexed by their unique id-String.
+     * All payees indexed by their unique id-String.
      *
      * @see KMyMoneyPayee
      * @see KMyMoneyPayeeImpl
@@ -359,12 +360,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	// fill maps
 	initAccountMap(pRootElement);
 
-	initGenerInvoiceMap(pRootElement);
-
-	// invoiceEntries refer to invoices, therefore they must be loaded after
-	// them
-	initGenerInvoiceEntryMap(pRootElement);
-
 	// transactions refer to invoices, therefore they must be loaded after
 	// them
 	initTransactionMap(pRootElement);
@@ -399,17 +394,17 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
 	for (Iterator<Object> iter = pRootElement.getGncBook().getBookElements().iterator(); iter.hasNext();) {
 	    Object bookElement = iter.next();
-	    if (!(bookElement instanceof GncAccount)) {
+	    if (!(bookElement instanceof KMYMONEYFILE.ACCOUNTS.ACCOUNT)) {
 		continue;
 	    }
-	    GncAccount jwsdpAcct = (GncAccount) bookElement;
+	    KMYMONEYFILE.ACCOUNTS.ACCOUNT jwsdpAcct = (KMYMONEYFILE.ACCOUNTS.ACCOUNT) bookElement;
 
 	    try {
 		KMyMoneyAccount acct = createAccount(jwsdpAcct);
 		accountID2account.put(acct.getId(), acct);
 	    } catch (RuntimeException e) {
 		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initAccountMap: "
-			+ "ignoring illegal Account-Entry with id=" + jwsdpAcct.getActId().getValue(), e);
+			+ "ignoring illegal Account-Entry with id=" + jwsdpAcct.getId().getValue(), e);
 	    }
 	} // for
 
@@ -422,10 +417,10 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
 	for (Iterator<Object> iter = pRootElement.getGncBook().getBookElements().iterator(); iter.hasNext();) {
 	    Object bookElement = iter.next();
-	    if (!(bookElement instanceof GncTransaction)) {
+	    if (!(bookElement instanceof KMYMONEYFILE.TRANSACTIONS.TRANSACTION)) {
 		continue;
 	    }
-	    GncTransaction jwsdpTrx = (GncTransaction) bookElement;
+	    KMYMONEYFILE.TRANSACTIONS.TRANSACTION jwsdpTrx = (KMYMONEYFILE.TRANSACTIONS.TRANSACTION) bookElement;
 
 	    try {
 		KMyMoneyTransactionImpl trx = createTransaction(jwsdpTrx);
@@ -435,7 +430,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 		}
 	    } catch (RuntimeException e) {
 		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initTransactionMap: "
-			+ "ignoring illegal Transaction-Entry with id=" + jwsdpTrx.getTrnId().getValue(), e);
+			+ "ignoring illegal Transaction-Entry with id=" + jwsdpTrx.getId().getValue(), e);
 	    }
 	} // for
 
@@ -443,25 +438,25 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     private void initPayeeMap(final KMYMONEYFILE pRootElement) {
-	customerID2customer = new HashMap<>();
+	payeeID2Payee = new HashMap<>();
 
 	for (Iterator<Object> iter = pRootElement.getGncBook().getBookElements().iterator(); iter.hasNext();) {
 	    Object bookElement = iter.next();
 	    if (!(bookElement instanceof KMYMONEYFILE.GncBook.GncGncPayee)) {
 		continue;
 	    }
-	    KMYMONEYFILE.GncBook.GncGncPayee jwsdpCust = (KMYMONEYFILE.GncBook.GncGncPayee) bookElement;
+	    KMYMONEYFILE.GncBook.GncGncPayee jwsdpPye = (KMYMONEYFILE.GncBook.GncGncPayee) bookElement;
 
 	    try {
-		KMyMoneyPayeeImpl cust = createPayee(jwsdpCust);
-		customerID2customer.put(cust.getId(), cust);
+		KMyMoneyPayeeImpl pye = createPayee(jwsdpPye);
+		payeeID2Payee.put(pye.getId(), pye);
 	    } catch (RuntimeException e) {
 		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initPayeeMap: "
-			+ "ignoring illegal Payee-Entry with id=" + jwsdpCust.getCustId(), e);
+			+ "ignoring illegal Payee-Entry with id=" + jwsdpPye.getId(), e);
 	    }
 	} // for
 
-	LOGGER.debug("No. of entries in customer map: " + customerID2customer.size());
+	LOGGER.debug("No. of entries in payee map: " + payeeID2Payee.size());
     }
 
     
@@ -499,7 +494,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      */
     private void loadPriceDatabase(final KMYMONEYFILE pRootElement) {
 	boolean noPriceDB = true;
-	List<Object> bookElements = pRootElement.getGncBook().getBookElements();
+	PRICES bookElements = pRootElement.getPRICES();
 	for (Object bookElement : bookElements) {
 	    if (!(bookElement instanceof KMYMONEYFILE.GncBook.GncPricedb)) {
 		continue;
@@ -515,9 +510,9 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 		getCurrencyTable().clear();
 		getCurrencyTable().setConversionFactor("ISO4217", getDefaultCurrencyID(), new FixedPointNumber(1));
 
-		for (Iterator<KMYMONEYFILE.GncBook.GncPricedb.Price> iter = priceDB.getPrice().iterator(); iter.hasNext();) {
-		    KMYMONEYFILE.GncBook.GncPricedb.Price price = iter.next();
-		    KMYMONEYFILE.GncBook.GncPricedb.Price.PriceCommodity comodity = price.getPriceCommodity();
+		for (Iterator<KMYMONEYFILE.PRICES.PRICE> iter = priceDB.getPrice().iterator(); iter.hasNext();) {
+		    KMYMONEYFILE.PRICES.PRICE price = iter.next();
+		    KMYMONEYFILE.PRICES.Commodity comodity = price.getPriceCommodity();
 
 		    // check if we already have a latest price for this comodity
 		    // (=currency, fund, ...)
@@ -708,25 +703,25 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @param jwsdpAcct the JWSDP-peer (parsed xml-element) to fill our object with
      * @return the new GnucashAccount to wrap the given jaxb-object.
      */
-    protected KMyMoneyAccount createAccount(final GncAccount jwsdpAcct) {
-	KMyMoneyAccount acct = new KMyMoneyAccountImpl(jwsdpAcct, this);
+    protected KMyMoneyAccount createAccount(final KMYMONEYFILE.ACCOUNTS.A jwsdpAcct) {
+	KMyMoneyAccountImpl acct = new KMyMoneyAccountImpl(jwsdpAcct, this);
 	return acct;
     }
 
     /**
-     * @param jwsdpCust the JWSDP-peer (parsed xml-element) to fill our object with
+     * @param jwsdpPye the JWSDP-peer (parsed xml-element) to fill our object with
      * @return the new GnucashPayee to wrap the given JAXB object.
      */
-    protected KMyMoneyPayeeImpl createPayee(final KMYMONEYFILE.GncBook.GncGncPayee jwsdpCust) {
-	KMyMoneyPayeeImpl cust = new KMyMoneyPayeeImpl(jwsdpCust, this);
-	return cust;
+    protected KMyMoneyPayee createPayee(final KMYMONEYFILE.PAYEES.PAYEE jwsdpPye) {
+	KMyMoneyPayeeImpl pye = new KMyMoneyPayeeImpl(jwsdpPye, this);
+	return pye;
     }
 
     /**
      * @param jwsdpTrx the JWSDP-peer (parsed xml-element) to fill our object with
      * @return the new GnucashTransaction to wrap the given jaxb-object.
      */
-    protected KMyMoneyTransactionImpl createTransaction(final GncTransaction jwsdpTrx) {
+    protected KMyMoneyTransaction createTransaction(final KMYMONEYFILE.TRANSACTIONS.TRANSACTION jwsdpTrx) {
 	KMyMoneyTransactionImpl trx = new KMyMoneyTransactionImpl(jwsdpTrx, this);
 	return trx;
     }
@@ -902,13 +897,13 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see KMyMoneyFile#getPayeeByID(java.lang.String)
      */
     public KMyMoneyPayee getPayeeByID(final String id) {
-	if (customerID2customer == null) {
+	if (payeeID2Payee == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
 
-	KMyMoneyPayee retval = customerID2customer.get(id);
+	KMyMoneyPayee retval = payeeID2Payee.get(id);
 	if (retval == null) {
-	    LOGGER.warn("No Payee with id '" + id + "'. We know " + customerID2customer.size() + " customers.");
+	    LOGGER.warn("No Payee with id '" + id + "'. We know " + payeeID2Payee.size() + " payees.");
 	}
 	return retval;
     }
@@ -918,13 +913,13 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      */
     public KMyMoneyPayee getPayeeByName(final String name) {
 
-	if (customerID2customer == null) {
+	if (payeeID2Payee == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
 
-	for (KMyMoneyPayee customer : getPayees()) {
-	    if (customer.getName().equals(name)) {
-		return customer;
+	for (KMyMoneyPayee payee : getPayees()) {
+	    if (payee.getName().equals(name)) {
+		return payee;
 	    }
 	}
 	return null;
@@ -934,7 +929,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see KMyMoneyFile#getPayees()
      */
     public Collection<KMyMoneyPayee> getPayees() {
-	return customerID2customer.values();
+	return payeeID2Payee.values();
     }
 
     // ---------------------------------------------------------------
@@ -1266,22 +1261,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getUserDefinedAttribute(final String aName) {
-	return myGnucashObject.getUserDefinedAttribute(aName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Collection<String> getUserDefinedAttributeKeys() {
-	return myGnucashObject.getUserDefinedAttributeKeys();
-    }
-
     // ---------------------------------------------------------------
     // Statistics (for test purposes)
 
@@ -1297,24 +1276,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	return transactionSplitID2transactionSplit.size();
     }
 
-    public int getNofEntriesGenerInvoiceMap() {
-	return invoiceID2invoice.size();
-    }
-
-    public int getNofEntriesGenerInvoiceEntriesMap() {
-	return invoiceEntryID2invoiceEntry.size();
-    }
-
-    public int getNofEntriesGenerJobMap() {
-	return jobID2job.size();
-    }
-
     public int getNofEntriesPayeeMap() {
-	return customerID2customer.size();
-    }
-
-    public int getNofEntriesVendorMap() {
-	return vendorID2vendor.size();
+	return payeeID2Payee.size();
     }
 
 }

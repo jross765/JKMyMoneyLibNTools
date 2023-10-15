@@ -49,8 +49,8 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 	KMyMoneyAccount acct = getAccount();
 	if (acct == null) {
 	    System.err.println("No such Account id='" + getAccountID() + "' for Transactions-Split with id '" + getId()
-		    + "' description '" + getDescription() + "' in transaction with id '" + getTransaction().getId()
-		    + "' description '" + getTransaction().getDescription() + "'");
+		    + "' description '" + getMemo() + "' in transaction with id '" + getTransaction().getId()
+		    + "' description '" + getTransaction().getMemo() + "'");
 	} else {
 	    acct.addTransactionSplit(this);
 	}
@@ -129,7 +129,7 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     /**
      * @return The currencyFormat for the quantity to use when no locale is given.
      */
-    protected NumberFormat getQuantityCurrencyFormat() {
+    protected NumberFormat getSharesCurrencyFormat() {
 
 	return ((KMyMoneyAccountImpl) getAccount()).getCurrencyFormat();
     }
@@ -200,17 +200,17 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     }
 
     /**
-     * @see KMyMoneyTransactionSplit#getQuantity()
+     * @see KMyMoneyTransactionSplit#getShares()
      */
-    public FixedPointNumber getQuantity() {
-	return new FixedPointNumber(jwsdpPeer.getNumber());
+    public FixedPointNumber getShares() {
+	return new FixedPointNumber(jwsdpPeer.getShares());
     }
 
     /**
      * The value is in the currency of the account!
      */
-    public String getQuantityFormatted() {
-	return getQuantityCurrencyFormat().format(getQuantity());
+    public String getSharesFormatted() {
+	return getSharesCurrencyFormat().format(getShares());
     }
 
     /**
@@ -219,28 +219,28 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
      * @param locale the locale to format to
      * @return the formatted number
      */
-    public String getQuantityFormatted(final Locale locale) {
+    public String getSharesFormatted(final Locale locale) {
 	if (getTransaction().getCurrencyNameSpace().equals(CurrencyNameSpace.NAMESPACE_CURRENCY)) {
-	    return NumberFormat.getNumberInstance(locale).format(getQuantity());
+	    return NumberFormat.getNumberInstance(locale).format(getShares());
 	}
 
 	NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
 	nf.setCurrency(Currency.getInstance(getAccount().getCurrency()));
-	return nf.format(getQuantity());
+	return nf.format(getShares());
     }
 
     /**
      * The value is in the currency of the account!
      */
-    public String getQuantityFormattedForHTML() {
-	return getQuantityFormatted().replaceFirst("€", "&euro;");
+    public String getSharesFormattedForHTML() {
+	return getSharesFormatted().replaceFirst("€", "&euro;");
     }
 
     /**
      * The value is in the currency of the account!
      */
-    public String getQuantityFormattedForHTML(final Locale locale) {
-	return getQuantityFormatted(locale).replaceFirst("€", "&euro;");
+    public String getSharesFormattedForHTML(final Locale locale) {
+	return getSharesFormatted(locale).replaceFirst("€", "&euro;");
     }
 
     /**
@@ -248,7 +248,7 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
      *
      * @see KMyMoneyTransactionSplit#getDescription()
      */
-    public String getDescription() {
+    public String getMemo() {
 	if (jwsdpPeer.getMemo() == null) {
 	    return "";
 	}
@@ -261,7 +261,7 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     @Override
     public String toString() {
 	StringBuffer buffer = new StringBuffer();
-	buffer.append("[GnucashTransactionSplitImpl:");
+	buffer.append("[KMyMoneyTransactionSplitImpl:");
 
 	buffer.append(" id: ");
 	buffer.append(getId());
@@ -279,17 +279,17 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 	KMyMoneyAccount account = getAccount();
 	buffer.append(account == null ? "null" : "'" + account.getQualifiedName() + "'");
 
-	buffer.append(" description: '");
-	buffer.append(getDescription() + "'");
+	buffer.append(" memo: '");
+	buffer.append(getMemo() + "'");
 
 	buffer.append(" transaction-description: '");
-	buffer.append(getTransaction().getDescription() + "'");
+	buffer.append(getTransaction().getMemo() + "'");
 
 	buffer.append(" value: ");
 	buffer.append(getValue());
 
 	buffer.append(" quantity: ");
-	buffer.append(getQuantity());
+	buffer.append(getShares());
 
 	buffer.append("]");
 	return buffer.toString();

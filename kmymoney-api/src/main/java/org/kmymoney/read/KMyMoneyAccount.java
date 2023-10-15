@@ -66,7 +66,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * @return a user-defined description to acompany the name of the account. Can
      *         encompass many lines.
      */
-    String getDescription();
+    String getMemo();
 
     /**
      * @return the account-number

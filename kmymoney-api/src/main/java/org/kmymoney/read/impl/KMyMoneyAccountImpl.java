@@ -19,9 +19,34 @@ import org.kmymoney.read.KMyMoneyTransactionSplit;
  * jwsdp-generated backend.
  */
 public class KMyMoneyAccountImpl extends SimpleAccount 
-                                implements KMyMoneyAccount 
+                                 implements KMyMoneyAccount 
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyAccountImpl.class);
+
+    // ---------------------------------------------------------------
+
+    /**
+     * the JWSDP-object we are facading.
+     */
+    private KMYMONEYFILE.ACCOUNTS.ACCOUNT jwsdpPeer;
+
+    // ---------------------------------------------------------------
+
+    /**
+     * The splits of this transaction. May not be fully initialized during loading
+     * of the gnucash-file.
+     *
+     * @see #mySplitsNeedSorting
+     */
+    private final List<KMyMoneyTransactionSplit> mySplits = new LinkedList<KMyMoneyTransactionSplit>();
+
+    /**
+     * If {@link #mySplits} needs to be sorted because it was modified. Sorting is
+     * done in a lazy way.
+     */
+    private boolean mySplitsNeedSorting = false;
+    
+    // ---------------------------------------------------------------
 
     /**
      * @param peer    the JWSDP-object we are facading.
@@ -36,10 +61,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 	// file = gncfile;
     }
 
-    /**
-     * the JWSDP-object we are facading.
-     */
-    private KMYMONEYFILE.ACCOUNTS.ACCOUNT jwsdpPeer;
+    // ---------------------------------------------------------------
 
     /**
      * @see KMyMoneyAccount#getId()
@@ -83,7 +105,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     /**
      * @see KMyMoneyAccount#getDescription()
      */
-    public String getDescription() {
+    public String getMemo() {
 	return jwsdpPeer.getDescription();
     }
 
@@ -93,20 +115,6 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     public Byte getType() {
 	return jwsdpPeer.getType();
     }
-
-    /**
-     * The splits of this transaction. May not be fully initialized during loading
-     * of the gnucash-file.
-     *
-     * @see #mySplitsNeedSorting
-     */
-    private final List<KMyMoneyTransactionSplit> mySplits = new LinkedList<KMyMoneyTransactionSplit>();
-
-    /**
-     * If {@link #mySplits} needs to be sorted because it was modified. Sorting is
-     * done in a lazy way.
-     */
-    private boolean mySplitsNeedSorting = false;
 
     /**
      * @see KMyMoneyAccount#getTransactionSplits()
