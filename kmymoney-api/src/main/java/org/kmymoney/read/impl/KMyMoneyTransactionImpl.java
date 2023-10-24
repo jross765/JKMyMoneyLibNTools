@@ -2,7 +2,7 @@ package org.kmymoney.read.impl;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,14 +14,15 @@ import java.util.Locale;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kmymoney.Const;
-import org.kmymoney.currency.CurrencyNameSpace;
-import org.kmymoney.generated.KMYMONEYFILE;
+import org.kmymoney.generated.SPLIT;
+import org.kmymoney.generated.TRANSACTION;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyAccount;
 import org.kmymoney.read.KMyMoneyFile;
 import org.kmymoney.read.KMyMoneyTransaction;
 import org.kmymoney.read.KMyMoneyTransactionSplit;
 import org.kmymoney.read.SplitNotFoundException;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -46,7 +47,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     /**
      * the JWSDP-object we are facading.
      */
-    private KMYMONEYFILE.TRANSACTIONS.TRANSACTION jwsdpPeer;
+    private TRANSACTION jwsdpPeer;
 
     /**
      * The file we belong to.
@@ -58,12 +59,12 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     /**
      * @see KMyMoneyTransaction#getDatePosted()
      */
-    protected LocalDateTime postDate;
+    protected LocalDate postDate;
 
     /**
      * @see KMyMoneyTransaction#getEntryDate()
      */
-    protected LocalDateTime entryDate;
+    protected LocalDate entryDate;
 
     /**
      * The Currency-Format to use if no locale is given.
@@ -81,7 +82,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      */
     @SuppressWarnings("exports")
     public KMyMoneyTransactionImpl(
-	    final KMYMONEYFILE.TRANSACTIONS.TRANSACTION peer, 
+	    final TRANSACTION peer, 
 	    final KMyMoneyFile gncFile) {
 
 	jwsdpPeer = peer;
@@ -109,7 +110,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     /**
      * @see KMyMoneyAccount#getCurrencyID()
      */
-    public String getCurrencyID() {
+    public String getCommodity() {
 	return jwsdpPeer.getCommodity();
     }
 
@@ -147,8 +148,8 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     public String getBalanceFormatted(final Locale loc) {
 
 	NumberFormat cf = NumberFormat.getInstance(loc);
-	if (getCurrencyNameSpace().equals(CurrencyNameSpace.NAMESPACE_CURRENCY)) {
-	    cf.setCurrency(Currency.getInstance(getCurrencyID()));
+	if (getCommodity().equals("XYZ")) { // ::TODO is currency, not security
+	    cf.setCurrency(Currency.getInstance(getCommodity()));
 	} else {
 	    cf.setCurrency(null);
 	}
@@ -182,8 +183,8 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      */
     public String getNegatedBalanceFormatted(final Locale loc) throws NumberFormatException {
 	NumberFormat cf = NumberFormat.getInstance(loc);
-	if (getCurrencyNameSpace().equals(CurrencyNameSpace.NAMESPACE_CURRENCY)) {
-	    cf.setCurrency(Currency.getInstance(getCurrencyID()));
+	if (getCommodity().equals("XYZ")) { // ::TODO is currency, not security
+	    cf.setCurrency(Currency.getInstance(getCommodity()));
 	} else {
 	    cf.setCurrency(null);
 	}
@@ -211,7 +212,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      * @return the JWSDP-object we are facading.
      */
     @SuppressWarnings("exports")
-    public KMYMONEYFILE.TRANSACTIONS.TRANSACTION getJwsdpPeer() {
+    public TRANSACTION getJwsdpPeer() {
 	return jwsdpPeer;
     }
 
@@ -295,10 +296,10 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      */
     public List<KMyMoneyTransactionSplit> getSplits() {
 	if (mySplits == null) {
-	    List<KMYMONEYFILE.TRANSACTIONS.TRANSACTION.SPLITS.SPLIT> jwsdpSplits = jwsdpPeer.getSPLITS().getSPLIT();
+	    List<SPLIT> jwsdpSplits = jwsdpPeer.getSPLITS().getSPLIT();
 
 	    mySplits = new ArrayList<KMyMoneyTransactionSplit>(jwsdpSplits.size());
-	    for (KMYMONEYFILE.TRANSACTIONS.TRANSACTION.SPLITS.SPLIT element : jwsdpSplits) {
+	    for (SPLIT element : jwsdpSplits) {
 
 		mySplits.add(createSplit(element));
 	    }
@@ -312,17 +313,17 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      * @param element the jaxb-data
      * @return the new split-instance
      */
-    protected KMyMoneyTransactionSplitImpl createSplit(final KMYMONEYFILE.TRANSACTIONS.TRANSACTION.SPLITS.SPLIT element) {
+    protected KMyMoneyTransactionSplitImpl createSplit(final SPLIT element) {
 	return new KMyMoneyTransactionSplitImpl(element, this);
     }
 
     /**
      * @see KMyMoneyTransaction#getEntryDate()
      */
-    public LocalDateTime getEntryDate() {
+    public LocalDate getEntryDate() {
 	if (entryDate == null) {
-	    XMLGregorianCalendar cal = jwsdpPeer.getEntrydate();
-	    entryDate = LocalDateTime.of(cal.getYear(), cal.getMonth(), cal.getDay());
+	    String dateStr = jwsdpPeer.getEntrydate();
+	    entryDate = LocalDate.parse(dateStr);
 	}
 
 	return entryDate;
@@ -336,8 +337,8 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     protected NumberFormat getCurrencyFormat() {
 	if (currencyFormat == null) {
 	    currencyFormat = NumberFormat.getCurrencyInstance();
-	    if (getCurrencyNameSpace().equals(CurrencyNameSpace.NAMESPACE_CURRENCY)) {
-		currencyFormat.setCurrency(Currency.getInstance(getCurrencyID()));
+	    if (getCommodity().equals("XYZ")) { // ::TODO is currency, not security 
+		currencyFormat.setCurrency(Currency.getInstance(getCommodity()));
 	    } else {
 		currencyFormat = NumberFormat.getInstance();
 	    }
@@ -356,10 +357,10 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     /**
      * @see KMyMoneyTransaction#getDatePosted()
      */
-    public LocalDateTime getDatePosted() {
+    public LocalDate getDatePosted() {
 	if (postDate == null) {
 	    XMLGregorianCalendar cal = jwsdpPeer.getPostdate();
-	    postDate = LocalDateTime.of(cal.getYear(), cal.getMonth(), cal.getDay());
+	    postDate = LocalDate.of(cal.getYear(), cal.getMonth(), cal.getDay());
 	}
 
 	return postDate;

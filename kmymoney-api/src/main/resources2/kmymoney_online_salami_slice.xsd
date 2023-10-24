@@ -1,0 +1,325 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="CREATION_DATE">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:date" name="date"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LAST_MODIFIED_DATE">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:date" name="date"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VERSION">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:byte" name="id"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FIXVERSION">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:byte" name="id"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ADDRESS">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="telephone" use="optional"/>
+          <xs:attribute type="xs:string" name="county" use="optional"/>
+          <xs:attribute type="xs:string" name="zipcode" use="optional"/>
+          <xs:attribute type="xs:string" name="street" use="optional"/>
+          <xs:attribute type="xs:string" name="city" use="optional"/>
+          <xs:attribute type="xs:string" name="postcode" use="optional"/>
+          <xs:attribute type="xs:string" name="state" use="optional"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PAYEE">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ADDRESS"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="name" use="optional"/>
+      <xs:attribute type="xs:string" name="id" use="optional"/>
+      <xs:attribute type="xs:byte" name="matchingenabled" use="optional"/>
+      <xs:attribute type="xs:string" name="email" use="optional"/>
+      <xs:attribute type="xs:string" name="reference" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SUBACCOUNT">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="id" use="optional"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SUBACCOUNTS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="SUBACCOUNT" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ACCOUNT">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element ref="SUBACCOUNTS" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="parentaccount" use="optional"/>
+      <xs:attribute type="xs:string" name="name" use="optional"/>
+      <xs:attribute type="xs:string" name="id" use="optional"/>
+      <xs:attribute type="xs:string" name="lastmodified" use="optional"/>
+      <xs:attribute type="xs:string" name="institution" use="optional"/>
+      <xs:attribute type="xs:string" name="number" use="optional"/>
+      <xs:attribute type="xs:string" name="lastreconciled" use="optional"/>
+      <xs:attribute type="xs:string" name="opened" use="optional"/>
+      <xs:attribute type="xs:string" name="currency" use="optional"/>
+      <xs:attribute type="xs:byte" name="type" use="optional"/>
+      <xs:attribute type="xs:string" name="description" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SPLIT">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="value" use="optional"/>
+          <xs:attribute type="xs:string" name="price" use="optional"/>
+          <xs:attribute type="xs:string" name="bankid" use="optional"/>
+          <xs:attribute type="xs:string" name="id" use="optional"/>
+          <xs:attribute type="xs:string" name="action" use="optional"/>
+          <xs:attribute type="xs:string" name="number" use="optional"/>
+          <xs:attribute type="xs:string" name="memo" use="optional"/>
+          <xs:attribute type="xs:string" name="payee" use="optional"/>
+          <xs:attribute type="xs:string" name="shares" use="optional"/>
+          <xs:attribute type="xs:string" name="account" use="optional"/>
+          <xs:attribute type="xs:byte" name="reconcileflag" use="optional"/>
+          <xs:attribute type="xs:string" name="reconciledate" use="optional"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SPLITS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="SPLIT" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TRANSACTION">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="SPLITS"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="commodity" use="optional"/>
+      <xs:attribute type="xs:string" name="id" use="optional"/>
+      <xs:attribute type="xs:string" name="memo" use="optional"/>
+      <xs:attribute type="xs:date" name="entrydate" use="optional"/>
+      <xs:attribute type="xs:date" name="postdate" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PAIR">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="value" use="optional"/>
+          <xs:attribute type="xs:string" name="key" use="optional"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CURRENCY">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:byte" name="saf"/>
+          <xs:attribute type="xs:string" name="name"/>
+          <xs:attribute type="xs:byte" name="pp"/>
+          <xs:attribute type="xs:string" name="id"/>
+          <xs:attribute type="xs:byte" name="scf"/>
+          <xs:attribute type="xs:string" name="symbol"/>
+          <xs:attribute type="xs:byte" name="rounding-method"/>
+          <xs:attribute type="xs:byte" name="type"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FILEINFO">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="CREATION_DATE"/>
+        <xs:element ref="LAST_MODIFIED_DATE"/>
+        <xs:element ref="VERSION"/>
+        <xs:element ref="FIXVERSION"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="USER">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ADDRESS"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="name"/>
+      <xs:attribute type="xs:string" name="email"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="INSTITUTIONS">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:byte" name="count"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PAYEES">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="PAYEE" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute type="xs:byte" name="count"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="COSTCENTERS">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:byte" name="count"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TAGS">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:byte" name="count"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ACCOUNTS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ACCOUNT" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute type="xs:byte" name="count"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TRANSACTIONS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="TRANSACTION" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute type="xs:byte" name="count"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="KEYVALUEPAIRS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="PAIR" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SCHEDULES">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:byte" name="count"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SECURITIES">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:byte" name="count"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CURRENCIES">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="CURRENCY"/>
+      </xs:sequence>
+      <xs:attribute type="xs:byte" name="count"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PRICES">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:byte" name="count"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="REPORTS">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:byte" name="count"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BUDGETS">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:byte" name="count"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ONLINEJOBS">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:byte" name="count"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="KMYMONEY-FILE">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="FILEINFO"/>
+        <xs:element ref="USER"/>
+        <xs:element ref="INSTITUTIONS"/>
+        <xs:element ref="PAYEES"/>
+        <xs:element ref="COSTCENTERS"/>
+        <xs:element ref="TAGS"/>
+        <xs:element ref="ACCOUNTS"/>
+        <xs:element ref="TRANSACTIONS"/>
+        <xs:element ref="KEYVALUEPAIRS"/>
+        <xs:element ref="SCHEDULES"/>
+        <xs:element ref="SECURITIES"/>
+        <xs:element ref="CURRENCIES"/>
+        <xs:element ref="PRICES"/>
+        <xs:element ref="REPORTS"/>
+        <xs:element ref="BUDGETS"/>
+        <xs:element ref="ONLINEJOBS"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

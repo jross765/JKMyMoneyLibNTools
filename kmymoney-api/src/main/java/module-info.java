@@ -10,6 +10,6 @@ module kmymoney.api {
 	exports org.kmymoney.read;
 	exports org.kmymoney.read.impl;
 	
-	exports org.kmymoney.write;
-	exports org.kmymoney.write.impl;
+//	exports org.kmymoney.write;
+//	exports org.kmymoney.write.impl;
 }

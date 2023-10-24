@@ -55,7 +55,7 @@
   <xs:element name="USER">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="BASEADDRESS">
+        <xs:extension base="ADDRESS">
           <xs:attribute name="email" use="required"/>
           <xs:attribute name="name" use="required" type="xs:NCName"/>
         </xs:extension>
@@ -73,7 +73,7 @@
   <xs:element name="INSTITUTION">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="BASEADDRESS">
+        <xs:extension base="ADDRESS">
           <xs:sequence>
             <xs:element ref="ACCOUNTIDS"/>
             <xs:element ref="KEYVALUEPAIRS"/>
@@ -109,7 +109,7 @@
   <xs:element name="PAYEE">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="BASEADDRESS">
+        <xs:extension base="ADDRESS">
           <xs:attribute name="defaultaccountid" type="xs:NCName"/>
           <xs:attribute name="email" use="required"/>
           <xs:attribute name="id" use="required" type="xs:NCName"/>
@@ -335,7 +335,7 @@
       <xs:attribute name="count" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="BASEADDRESS">
+  <xs:complexType name="ADDRESS">
     <xs:sequence>
       <xs:element ref="ADDRESS"/>
     </xs:sequence>

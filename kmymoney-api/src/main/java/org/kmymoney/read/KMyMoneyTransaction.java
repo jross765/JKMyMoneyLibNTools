@@ -1,12 +1,12 @@
 package org.kmymoney.read;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
 import org.kmymoney.currency.CurrencyNameSpace;
-import org.kmymoney.generated.KMYMONEYFILE;
+import org.kmymoney.generated.TRANSACTION;
 import org.kmymoney.numbers.FixedPointNumber;
 
 /**
@@ -16,7 +16,7 @@ import org.kmymoney.numbers.FixedPointNumber;
 public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
 
     @SuppressWarnings("exports")
-    KMYMONEYFILE.TRANSACTIONS.TRANSACTION getJwsdpPeer();
+    TRANSACTION getJwsdpPeer();
 
     /**
      * The gnucash-file is the top-level class to contain everything.
@@ -44,13 +44,13 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
      *
      * @return the date the transaction was entered into the system
      */
-    LocalDateTime getEntryDate();
+    LocalDate getEntryDate();
 
     /**
      *
      * @return the date the transaction happened
      */
-    LocalDateTime getDatePosted();
+    LocalDate getDatePosted();
 
     /**
      *
@@ -101,19 +101,12 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
     boolean isBalanced();
 
     /**
-     * @return "ISO4217" for a currency "FUND" or a fond,...
-     * @see {@link CurrencyNameSpace#NAMESPACE_CURRENCY}
-     * @see {@link KMyMoneyAccount#CURRENCY_NAMESPACE_FUND}
-     */
-    String getCurrencyNameSpace();
-
-    /**
      * The name of the currency in the given namespace e.g. "EUR" for euro in
      * namespace "ISO4217"= {@link CurrencyNameSpace#NAMESPACE_CURRENCY}
      * 
      * @see {@link #getCurrencyNameSpace()}
      */
-    String getCurrencyID();
+    String getCommodity();
 
     /**
      * The result is in the currency of the transaction.<br/>

@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import javax.swing.JWindow;
+
 import org.kmymoney.currency.ComplexCurrencyTable;
 import org.kmymoney.currency.CurrencyNameSpace;
 import org.kmymoney.numbers.FixedPointNumber;
@@ -240,7 +242,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 
 		for (Object element : getTransactionSplits()) {
 			KMyMoneyTransactionSplit split = (KMyMoneyTransactionSplit) element;
-			if (date == null || split.getTransaction().getDatePosted().isBefore( ChronoZonedDateTime.from(date.atStartOfDay()) )) {
+			if (date == null || split.getTransaction().getDatePosted().isBefore( date )) {
 				if (lastSplit == null || split.getTransaction().getDatePosted().isAfter(lastSplit.getTransaction().getDatePosted())) {
 					lastSplit = split;
 				}
@@ -353,9 +355,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		}
 
 		// is conversion needed?
-		if (getCurrencyNameSpace().equals(currencyNameSpace)
-				&&
-				getCurrencyID().equals(currencyName)) {
+		if (getCurrency().equals(currencyName)) {
 			return retval;
 		}
 
@@ -402,13 +402,9 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	/**
 	 * @return null if we are no currency but e.g. a fund
 	 */
-	public String getCurrency() {
+	public Currency getCurrency() {
 
-		if (!getCurrencyNameSpace().equals(CurrencyNameSpace.NAMESPACE_CURRENCY)) {
-			return null;
-		}
-
-		String gnucashCurrencyID = getCurrency();
+		String gnucashCurrencyID = getCurrencyCode();
 		return Currency.getInstance(gnucashCurrencyID);
 	}
 
@@ -475,7 +471,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		for ( KMyMoneyTransactionSplit split : getTransactionSplits() ) {
 			if ( date  != null &&
 			     after != null ) {
-			  if ( split.getTransaction().getDatePosted().isAfter( ChronoZonedDateTime.from(date.atStartOfDay()) ) ) {
+			  if ( split.getTransaction().getDatePosted().isAfter( date ) ) {
 			      after.add(split);
 			      continue;
 			  }

@@ -1,5 +1,6 @@
 package org.kmymoney.read;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -71,7 +72,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
     /**
      * @return the account-number
      */
-    String getCode();
+    String getNumber();
 
     /**
      * @return user-readable name of this account. Does not contain the name of
@@ -122,14 +123,16 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * @see #TYPE_PAYABLE
      * @see #TYPE_RECEIVABLE there are other types too
      */
-    Byte getType();
+    BigInteger getType();
 
     /**
      * @return "ISO4217" for a currency "FUND" or a fond,...
      * @see {@link #NAMESPACE_CURRENCY}
      * @see {@link #CURRENCY_NAMESPACE_FUND}
      */
-    String getCurrency();
+    String getCurrencyCode();
+
+    Currency getCurrency();
 
     /**
      * The returned list ist sorted by the natural order of the Transaction-Splits.

@@ -1,12 +1,13 @@
 package org.kmymoney.read.impl;
 
 import java.text.NumberFormat;
+import java.util.Collection;
 import java.util.Currency;
 import java.util.Locale;
 
-import org.kmymoney.Const;
 import org.kmymoney.currency.CurrencyNameSpace;
 import org.kmymoney.generated.KMYMONEYFILE;
+import org.kmymoney.generated.SPLIT;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyAccount;
 import org.kmymoney.read.KMyMoneyTransaction;
@@ -24,7 +25,7 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     /**
      * the JWSDP-object we are facading.
      */
-    private KMYMONEYFILE.TRANSACTIONS.TRANSACTION.SPLITS.SPLIT jwsdpPeer;
+    private SPLIT jwsdpPeer;
 
     /**
      * the transaction this split belongs to.
@@ -41,7 +42,7 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
      */
     @SuppressWarnings("exports")
     public KMyMoneyTransactionSplitImpl(
-	    final KMYMONEYFILE.TRANSACTIONS.TRANSACTION.SPLITS.SPLIT peer, 
+	    final SPLIT peer, 
 	    final KMyMoneyTransaction trx) {
 	jwsdpPeer = peer;
 	myTransaction = trx;
@@ -74,14 +75,14 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
      * @return the JWSDP-object we are facading.
      */
     @SuppressWarnings("exports")
-    public KMYMONEYFILE.TRANSACTIONS.TRANSACTION.SPLITS.SPLIT getJwsdpPeer() {
+    public SPLIT getJwsdpPeer() {
 	return jwsdpPeer;
     }
 
     /**
      * @param newPeer the JWSDP-object we are facading.
      */
-    protected void setJwsdpPeer(final KMYMONEYFILE.TRANSACTIONS.TRANSACTION.SPLITS.SPLIT newPeer) {
+    protected void setJwsdpPeer(final SPLIT newPeer) {
 	if (newPeer == null) {
 	    throw new IllegalArgumentException("null not allowed for field this.jwsdpPeer");
 	}
@@ -155,8 +156,8 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     public String getValueFormatted(final Locale locale) {
 
 	NumberFormat cf = NumberFormat.getInstance(locale);
-	if (getTransaction().getCurrencyNameSpace().equals(CurrencyNameSpace.NAMESPACE_CURRENCY)) {
-	    cf.setCurrency(Currency.getInstance(getTransaction().getCurrencyID()));
+	if (getTransaction().getCommodity().equals("XYZ")) { // ::TODO: is currency, not security 
+	    cf.setCurrency(Currency.getInstance(getTransaction().getCommodity()));
 	} else {
 	    cf = NumberFormat.getNumberInstance(locale);
 	}
@@ -220,12 +221,12 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
      * @return the formatted number
      */
     public String getSharesFormatted(final Locale locale) {
-	if (getTransaction().getCurrencyNameSpace().equals(CurrencyNameSpace.NAMESPACE_CURRENCY)) {
+	if (getTransaction().getCommodity().equals("XYZ")) { // ::TODO is currency, not security
 	    return NumberFormat.getNumberInstance(locale).format(getShares());
 	}
 
 	NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
-	nf.setCurrency(Currency.getInstance(getAccount().getCurrency()));
+	nf.setCurrency(getAccount().getCurrency());
 	return nf.format(getShares());
     }
 

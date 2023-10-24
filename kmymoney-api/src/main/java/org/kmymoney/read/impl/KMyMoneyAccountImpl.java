@@ -1,25 +1,24 @@
 package org.kmymoney.read.impl;
 
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.kmymoney.currency.CurrencyNameSpace;
-import org.kmymoney.generated.KMYMONEYFILE;
+import org.kmymoney.generated.ACCOUNT;
 import org.kmymoney.read.KMyMoneyAccount;
 import org.kmymoney.read.KMyMoneyFile;
-import org.kmymoney.read.KMyMoneyObject;
 import org.kmymoney.read.KMyMoneyTransactionSplit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of GnucashAccount that used a
  * jwsdp-generated backend.
  */
 public class KMyMoneyAccountImpl extends SimpleAccount 
-                                 implements KMyMoneyAccount 
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyAccountImpl.class);
 
@@ -28,7 +27,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     /**
      * the JWSDP-object we are facading.
      */
-    private KMYMONEYFILE.ACCOUNTS.ACCOUNT jwsdpPeer;
+    private ACCOUNT jwsdpPeer;
 
     // ---------------------------------------------------------------
 
@@ -53,7 +52,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      * @param gncFile the file to register under
      */
     @SuppressWarnings("exports")
-    public KMyMoneyAccountImpl(final KMYMONEYFILE.ACCOUNTS.ACCOUNT peer, final KMyMoneyFile gncFile) {
+    public KMyMoneyAccountImpl(final ACCOUNT peer, final KMyMoneyFile gncFile) {
 	super(gncFile);
 
 	jwsdpPeer = peer;
@@ -95,7 +94,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      * @return "ISO4217" for a currency "FUND" or a fond,...
      * @see KMyMoneyAccount#getCurrencyNameSpace()
      */
-    public String getCurrency() {
+    public String getCurrencyCode() {
 	if (jwsdpPeer.getCurrency() == null) {
 	    return CurrencyNameSpace.NAMESPACE_CURRENCY; // default-currency because gnucash 2.2 has no currency on the root-account
 	}
@@ -109,10 +108,14 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 	return jwsdpPeer.getDescription();
     }
 
+    public String getNumber() {
+	return jwsdpPeer.getNumber();
+    }
+
     /**
      * @see KMyMoneyAccount#getType()
      */
-    public Byte getType() {
+    public BigInteger getType() {
 	return jwsdpPeer.getType();
     }
 
@@ -166,14 +169,14 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      * @return the JWSDP-object we are wrapping.
      */
     @SuppressWarnings("exports")
-    public KMYMONEYFILE.ACCOUNTS.ACCOUNT getJwsdpPeer() {
+    public ACCOUNT getJwsdpPeer() {
 	return jwsdpPeer;
     }
 
     /**
      * @param newPeer the JWSDP-object we are wrapping.
      */
-    protected void setJwsdpPeer(final KMYMONEYFILE.ACCOUNTS.ACCOUNT newPeer) {
+    protected void setJwsdpPeer(final ACCOUNT newPeer) {
 	if (newPeer == null) {
 	    throw new IllegalArgumentException("null not allowed for field this.jwsdpPeer");
 	}

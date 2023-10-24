@@ -9,10 +9,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -29,9 +29,16 @@ import java.util.zip.GZIPInputStream;
 
 import org.kmymoney.Const;
 import org.kmymoney.currency.ComplexCurrencyTable;
+import org.kmymoney.generated.ACCOUNT;
+import org.kmymoney.generated.BUDGETS;
 import org.kmymoney.generated.KMYMONEYFILE;
-import org.kmymoney.generated.KMYMONEYFILE.PRICES;
 import org.kmymoney.generated.ObjectFactory;
+import org.kmymoney.generated.PAYEE;
+import org.kmymoney.generated.PRICE;
+import org.kmymoney.generated.PRICEPAIR;
+import org.kmymoney.generated.PRICES;
+import org.kmymoney.generated.SECURITY;
+import org.kmymoney.generated.TRANSACTION;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyAccount;
 import org.kmymoney.read.KMyMoneyFile;
@@ -352,10 +359,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	// fill prices
 
 	loadPriceDatabase(pRootElement);
-	if (pRootElement.getGncBook().getBookSlots() == null) {
-	    pRootElement.getGncBook().setBookSlots((new ObjectFactory()).createSlotsType());
-	}
-	myGnucashObject = new KMyMoneyObjectImpl(pRootElement.getGncBook().getBookSlots(), this);
 
 	// fill maps
 	initAccountMap(pRootElement);
@@ -369,19 +372,19 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	// check for unknown book-elements
 	for (Iterator<Object> iter = pRootElement.getGncBook().getBookElements().iterator(); iter.hasNext();) {
 	    Object bookElement = iter.next();
-	    if (bookElement instanceof KMYMONEYFILE.ACCOUNTS.ACCOUNT ) {
+	    if (bookElement instanceof ACCOUNT ) {
 		continue;
 	    }
-	    if (bookElement instanceof KMYMONEYFILE.TRANSACTIONS.TRANSACTION ) {
+	    if (bookElement instanceof TRANSACTION ) {
 		continue;
 	    }
-	    if (bookElement instanceof KMYMONEYFILE.PAYEES.PAYEE ) {
+	    if (bookElement instanceof PAYEE ) {
 		continue;
 	    }
-	    if (bookElement instanceof KMYMONEYFILE.SECURITIES ) {
+	    if (bookElement instanceof SECURITY ) {
 		continue;
 	    }
-	    if (bookElement instanceof KMYMONEYFILE.BUDGETS ) {
+	    if (bookElement instanceof BUDGETS ) {
 		continue;
 	    }
 	    throw new IllegalArgumentException(
@@ -392,19 +395,13 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     private void initAccountMap(final KMYMONEYFILE pRootElement) {
 	accountID2account = new HashMap<>();
 
-	for (Iterator<Object> iter = pRootElement.getGncBook().getBookElements().iterator(); iter.hasNext();) {
-	    Object bookElement = iter.next();
-	    if (!(bookElement instanceof KMYMONEYFILE.ACCOUNTS.ACCOUNT)) {
-		continue;
-	    }
-	    KMYMONEYFILE.ACCOUNTS.ACCOUNT jwsdpAcct = (KMYMONEYFILE.ACCOUNTS.ACCOUNT) bookElement;
-
+	for ( ACCOUNT jwsdpAcct : pRootElement.getACCOUNTS().getACCOUNT() ) {
 	    try {
 		KMyMoneyAccount acct = createAccount(jwsdpAcct);
 		accountID2account.put(acct.getId(), acct);
 	    } catch (RuntimeException e) {
 		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initAccountMap: "
-			+ "ignoring illegal Account-Entry with id=" + jwsdpAcct.getId().getValue(), e);
+			+ "ignoring illegal Account-Entry with id=" + jwsdpAcct.getId(), e);
 	    }
 	} // for
 
@@ -415,13 +412,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	transactionID2transaction = new HashMap<>();
 	transactionSplitID2transactionSplit = new HashMap<>();
 
-	for (Iterator<Object> iter = pRootElement.getGncBook().getBookElements().iterator(); iter.hasNext();) {
-	    Object bookElement = iter.next();
-	    if (!(bookElement instanceof KMYMONEYFILE.TRANSACTIONS.TRANSACTION)) {
-		continue;
-	    }
-	    KMYMONEYFILE.TRANSACTIONS.TRANSACTION jwsdpTrx = (KMYMONEYFILE.TRANSACTIONS.TRANSACTION) bookElement;
-
+	for ( TRANSACTION jwsdpTrx : pRootElement.getTRANSACTIONS().getTRANSACTION() ) {
 	    try {
 		KMyMoneyTransactionImpl trx = createTransaction(jwsdpTrx);
 		transactionID2transaction.put(trx.getId(), trx);
@@ -430,7 +421,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 		}
 	    } catch (RuntimeException e) {
 		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initTransactionMap: "
-			+ "ignoring illegal Transaction-Entry with id=" + jwsdpTrx.getId().getValue(), e);
+			+ "ignoring illegal Transaction-Entry with id=" + jwsdpTrx.getId(), e);
 	    }
 	} // for
 
@@ -440,13 +431,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     private void initPayeeMap(final KMYMONEYFILE pRootElement) {
 	payeeID2Payee = new HashMap<>();
 
-	for (Iterator<Object> iter = pRootElement.getGncBook().getBookElements().iterator(); iter.hasNext();) {
-	    Object bookElement = iter.next();
-	    if (!(bookElement instanceof KMYMONEYFILE.GncBook.GncGncPayee)) {
-		continue;
-	    }
-	    KMYMONEYFILE.GncBook.GncGncPayee jwsdpPye = (KMYMONEYFILE.GncBook.GncGncPayee) bookElement;
-
+	for ( PAYEE jwsdpPye : pRootElement.getPAYEES().getPAYEE() ) {
 	    try {
 		KMyMoneyPayeeImpl pye = createPayee(jwsdpPye);
 		payeeID2Payee.put(pye.getId(), pye);
@@ -471,21 +456,17 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @return the default-currencyID to use.
      */
     public String getDefaultCurrencyID() {
-	KMYMONEYFILE root = getRootElement();
-	if (root == null) {
-	    return "EUR";
-	}
-	for (Iterator<Object> iter = getRootElement().getGncBook().getBookElements().iterator(); iter.hasNext();) {
-	    Object bookElement = iter.next();
-	    if (!(bookElement instanceof GncAccount)) {
-		continue;
-	    }
-	    GncAccount jwsdpAccount = (GncAccount) bookElement;
-	    if (jwsdpAccount.getActCommodity() != null
-		    && jwsdpAccount.getActCommodity().getCmdtySpace().equals("ISO4217")) {
-		return jwsdpAccount.getActCommodity().getCmdtyId();
-	    }
-	}
+	// ::TODO
+//	KMYMONEYFILE root = getRootElement();
+//	if (root == null) {
+//	    return "EUR";
+//	}
+//	for ( ACCOUNT jwsdpAccount : getRootElement().getACCOUNTS().getACCOUNT() ) {
+//	    if (jwsdpAccount.getActCommodity() != null
+//		    && jwsdpAccount.getActCommodity().getCmdtySpace().equals("ISO4217")) {
+//		return jwsdpAccount.getActCommodity().getCmdtyId();
+//	    }
+//	}
 	return "EUR";
     }
 
@@ -494,25 +475,13 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      */
     private void loadPriceDatabase(final KMYMONEYFILE pRootElement) {
 	boolean noPriceDB = true;
-	PRICES bookElements = pRootElement.getPRICES();
-	for (Object bookElement : bookElements) {
-	    if (!(bookElement instanceof KMYMONEYFILE.GncBook.GncPricedb)) {
-		continue;
-	    }
-	    noPriceDB = false;
-	    KMYMONEYFILE.GncBook.GncPricedb priceDB = (KMYMONEYFILE.GncBook.GncPricedb) bookElement;
+	PRICES priceDB = pRootElement.getPRICES();
 
-	    if (priceDB.getVersion() != 1) {
-
-		LOGGER.warn("We know only the format of the price-db 1, " + "the file has version "
-			+ priceDB.getVersion() + " prices will not be loaded!");
-	    } else {
 		getCurrencyTable().clear();
 		getCurrencyTable().setConversionFactor("ISO4217", getDefaultCurrencyID(), new FixedPointNumber(1));
 
-		for (Iterator<KMYMONEYFILE.PRICES.PRICE> iter = priceDB.getPrice().iterator(); iter.hasNext();) {
-		    KMYMONEYFILE.PRICES.PRICE price = iter.next();
-		    KMYMONEYFILE.PRICES.Commodity comodity = price.getPriceCommodity();
+		for ( PRICEPAIR pricePair : priceDB.getPRICEPAIR() ) {
+		    String comodity = pricePair.getFrom();
 
 		    // check if we already have a latest price for this comodity
 		    // (=currency, fund, ...)
@@ -539,8 +508,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 				+ "' - '" + comodity.getCmdtyId() + "' but has no comodity for it");
 		    }
 		}
-	    }
-	}
 
 	if (noPriceDB) {
 	    // case: no priceDB in file
@@ -576,12 +543,12 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	FixedPointNumber factor = new FixedPointNumber(1); // factor is used if the quote is not to our base-currency
 	final int maxRecursionDepth = 5;
 
-	for (Object bookElement : getRootElement().getGncBook().getBookElements()) {
-	    if (!(bookElement instanceof KMYMONEYFILE.GncBook.GncPricedb)) {
-		continue;
-	    }
-	    KMYMONEYFILE.GncBook.GncPricedb priceDB = (KMYMONEYFILE.GncBook.GncPricedb) bookElement;
-	    for (KMYMONEYFILE.GncBook.GncPricedb.Price priceQuote : (List<KMYMONEYFILE.GncBook.GncPricedb.Price>) priceDB.getPrice()) {
+//	for (Object bookElement : getRootElement().getGncBook().getBookElements()) {
+//	    if (!(bookElement instanceof KMYMONEYFILE.GncBook.GncPricedb)) {
+//		continue;
+//	    }
+	    PRICES priceDB = getRootElement().getPRICES();
+	    for (PRICEPAIR priceQuote : (List<PRICEPAIR>) priceDB.getPRICEPAIR()) {
 
 		try {
 		    if (priceQuote == null) {
@@ -680,7 +647,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 			    + "')! Ignoring a bad price-quote '" + priceQuote + "'", e);
 		}
 
-	    }
+//	    }
 	}
 
 	LOGGER.debug(getClass().getName() + ".getLatestPrice(pCmdtySpace='" + pCmdtySpace + "', String pCmdtyId='"
@@ -703,7 +670,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @param jwsdpAcct the JWSDP-peer (parsed xml-element) to fill our object with
      * @return the new GnucashAccount to wrap the given jaxb-object.
      */
-    protected KMyMoneyAccount createAccount(final KMYMONEYFILE.ACCOUNTS.A jwsdpAcct) {
+    protected KMyMoneyAccountImpl createAccount(final ACCOUNT jwsdpAcct) {
 	KMyMoneyAccountImpl acct = new KMyMoneyAccountImpl(jwsdpAcct, this);
 	return acct;
     }
@@ -712,7 +679,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @param jwsdpPye the JWSDP-peer (parsed xml-element) to fill our object with
      * @return the new GnucashPayee to wrap the given JAXB object.
      */
-    protected KMyMoneyPayee createPayee(final KMYMONEYFILE.PAYEES.PAYEE jwsdpPye) {
+    protected KMyMoneyPayeeImpl createPayee(final PAYEE jwsdpPye) {
 	KMyMoneyPayeeImpl pye = new KMyMoneyPayeeImpl(jwsdpPye, this);
 	return pye;
     }
@@ -721,7 +688,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @param jwsdpTrx the JWSDP-peer (parsed xml-element) to fill our object with
      * @return the new GnucashTransaction to wrap the given jaxb-object.
      */
-    protected KMyMoneyTransaction createTransaction(final KMYMONEYFILE.TRANSACTIONS.TRANSACTION jwsdpTrx) {
+    protected KMyMoneyTransactionImpl createTransaction(final TRANSACTION jwsdpTrx) {
 	KMyMoneyTransactionImpl trx = new KMyMoneyTransactionImpl(jwsdpTrx, this);
 	return trx;
     }
@@ -855,25 +822,10 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     /**
-     * @param type the type-string to look for
-     * @return the count-data saved in the xml-file
-     */
-    protected GncCountData findCountDataByType(final String type) {
-	for (Iterator<GncCountData> iter = getRootElement().getGncBook().getGncCountData().iterator(); iter.hasNext();) {
-	    GncCountData count = (GncCountData) iter.next();
-	    if (count.getCdType().equals(type)) {
-		return count;
-	    }
-	}
-	return null;
-    }
-
-    /**
      * @return the number of transactions
      */
-    protected int getTransactionCount() {
-	GncCountData count = findCountDataByType("transaction");
-	return count.getValue();
+    protected BigInteger getTransactionCount() {
+	return getRootElement().getTRANSACTIONS().getCount();
     }
 
     /**
