@@ -128,15 +128,4 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      */
     String getAction();
 
-    /**
-     * @return all keys that can be used with ${@link #getUserDefinedAttribute(String)}}.
-     */
-    Collection<String> getUserDefinedAttributeKeys();
-
-    /**
-     * @param name the name of the user-defined attribute
-     * @return the value or null if not set
-     */
-    String getUserDefinedAttribute(final String name);
-
 }

@@ -368,7 +368,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		}
 
 		if (!currencyTable.convertToBaseCurrency(retval, getCurrency())) {
-			Collection<String> currencies = getKMyMoneyFile().getCurrencyTable().getCurrencies(getCurrencyNameSpace());
+			Collection<String> currencies = getKMyMoneyFile().getCurrencyTable().getCurrencies();
 			LOGGER.error("SimpleAccount.getBalance() - cannot transfer "
 					+ "from our currency '"
 					+ getCurrency()
@@ -417,7 +417,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		}
 
 		// the currency may have changed
-		if (this.getCurrency().equals(CurrencyNameSpace.NAMESPACE_CURRENCY)) {
+		if (this.getCurrency().equals(CurrencyNameSpace.CURRENCY)) {
 			Currency currency = getCurrency();
 			currencyFormat.setCurrency(currency);
 		} else {

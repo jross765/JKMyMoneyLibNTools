@@ -27,6 +27,16 @@ public class SimpleCurrencyTable implements Serializable {
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimpleCurrencyTable.class);
 
+	/**
+	 * maps a currency-name in capital letters(e.g. "GBP")
+	 * to a factor {@link FixedPointNumber}
+	 * that is to be multiplied with an amount of that currency
+	 * to get the value in the base-currency.
+	 *
+	 * @see {@link #getConversionFactor(String)}
+	 */
+	private Map<String, FixedPointNumber> mIso4217CurrencyCodes2Factor = new Hashtable<String, FixedPointNumber>();
+
 	//------------------------ support for propertyChangeListeners ------------------
 	//
 	///**
@@ -97,16 +107,6 @@ public class SimpleCurrencyTable implements Serializable {
 	//-------------------------------------------------------
 
 	/**
-	 * Just an overridden ToString to return this classe's name
-	 * and hashCode.
-	 *
-	 * @return className and hashCode
-	 */
-	public String toString() {
-		return "CurrencyTable@" + hashCode();
-	}
-
-	/**
 	 *
 	 */
 	public SimpleCurrencyTable() {
@@ -114,16 +114,6 @@ public class SimpleCurrencyTable implements Serializable {
 		setConversionFactor("EUR", new FixedPointNumber(1));
 		//setConversionFactor("GBP", new FixedPointNumber("769/523"));
 	}
-
-	/**
-	 * maps a currency-name in capital letters(e.g. "GBP")
-	 * to a factor {@link FixedPointNumber}
-	 * that is to be multiplied with an amount of that currency
-	 * to get the value in the base-currency.
-	 *
-	 * @see {@link #getConversionFactor(String)}
-	 */
-	private Map<String, FixedPointNumber> mIso4217CurrencyCodes2Factor = new Hashtable<String, FixedPointNumber>();
 
 	/**
 	 * @param iso4217CurrencyCode a currency-name in capital letters(e.g. "GBP")
@@ -198,6 +188,16 @@ public class SimpleCurrencyTable implements Serializable {
 	 */
 	public Collection<String> getCurrencies() {
 		return mIso4217CurrencyCodes2Factor.keySet();
+	}
+
+	/**
+	 * Just an overridden ToString to return this classe's name
+	 * and hashCode.
+	 *
+	 * @return className and hashCode
+	 */
+	public String toString() {
+		return "CurrencyTable@" + hashCode();
 	}
 
 }

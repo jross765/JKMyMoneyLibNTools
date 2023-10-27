@@ -13,6 +13,7 @@ import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -26,6 +27,8 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
+
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kmymoney.Const;
 import org.kmymoney.currency.ComplexCurrencyTable;
@@ -290,8 +293,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @return the latest price-quote in the gnucash-file in EURO
      * @see {@link KMyMoneyFile#getLatestPrice(String, String)}
      */
-    public FixedPointNumber getLatestPrice(final String pCmdtySpace, final String pCmdtyId) {
-	return getLatestPrice(pCmdtySpace, pCmdtyId, 0);
+    public FixedPointNumber getLatestPrice(final String pCmdtyId) {
+	return getLatestPrice(pCmdtyId, 0);
     }
 
     /**
@@ -368,28 +371,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	initTransactionMap(pRootElement);
 
 	initPayeeMap(pRootElement);
-
-	// check for unknown book-elements
-	for (Iterator<Object> iter = pRootElement.getGncBook().getBookElements().iterator(); iter.hasNext();) {
-	    Object bookElement = iter.next();
-	    if (bookElement instanceof ACCOUNT ) {
-		continue;
-	    }
-	    if (bookElement instanceof TRANSACTION ) {
-		continue;
-	    }
-	    if (bookElement instanceof PAYEE ) {
-		continue;
-	    }
-	    if (bookElement instanceof SECURITY ) {
-		continue;
-	    }
-	    if (bookElement instanceof BUDGETS ) {
-		continue;
-	    }
-	    throw new IllegalArgumentException(
-		    "<gnc:book> contains unknown element [" + bookElement.getClass().getName() + "]");
-	}
     }
 
     private void initAccountMap(final KMYMONEYFILE pRootElement) {
@@ -478,20 +459,20 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	PRICES priceDB = pRootElement.getPRICES();
 
 		getCurrencyTable().clear();
-		getCurrencyTable().setConversionFactor("ISO4217", getDefaultCurrencyID(), new FixedPointNumber(1));
+		getCurrencyTable().setConversionFactor(getDefaultCurrencyID(), new FixedPointNumber(1));
 
 		for ( PRICEPAIR pricePair : priceDB.getPRICEPAIR() ) {
-		    String comodity = pricePair.getFrom();
+		    String fromCurr = pricePair.getFrom();
+		    String toCurr = pricePair.getTo();
 
 		    // check if we already have a latest price for this comodity
 		    // (=currency, fund, ...)
-		    if (getCurrencyTable().getConversionFactor(comodity.getCmdtySpace(),
-			    comodity.getCmdtyId()) != null) {
+		    if (getCurrencyTable().getConversionFactor(fromCurr) != null) {
 			continue;
 		    }
 
 		    String baseCurrency = getDefaultCurrencyID();
-		    if (comodity.getCmdtySpace().equals("ISO4217") && comodity.getCmdtyId().equals(baseCurrency)) {
+		    if (fromCurr.equals(baseCurrency)) {
 			LOGGER.warn("Ignoring price-quote for " + baseCurrency + " because " + baseCurrency + " is"
 				+ "our base-currency.");
 			continue;
@@ -499,13 +480,13 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
 		    // get the latest price in the file and insert it into
 		    // our currency table
-		    FixedPointNumber factor = getLatestPrice(comodity.getCmdtySpace(), comodity.getCmdtyId());
+		    FixedPointNumber factor = getLatestPrice(fromCurr);
 
 		    if (factor != null) {
-			getCurrencyTable().setConversionFactor(comodity.getCmdtySpace(), comodity.getCmdtyId(), factor);
+			getCurrencyTable().setConversionFactor(fromCurr, factor);
 		    } else {
-			LOGGER.warn("The gnucash-file defines a factor for a comodity '" + comodity.getCmdtySpace()
-				+ "' - '" + comodity.getCmdtyId() + "' but has no comodity for it");
+			LOGGER.warn("The gnucash-file defines a factor for a comodity '" 
+				+ fromCurr + "' but has no comodity for it");
 		    }
 		}
 
@@ -530,15 +511,12 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see {@link KMyMoneyFile#getLatestPrice(String, String)}
      * @see #getDefaultCurrencyID()
      */
-    private FixedPointNumber getLatestPrice(final String pCmdtySpace, final String pCmdtyId, final int depth) {
-	if (pCmdtySpace == null) {
-	    throw new IllegalArgumentException("null parameter 'pCmdtySpace' " + "given");
-	}
+    private FixedPointNumber getLatestPrice(final String pCmdtyId, final int depth) {
 	if (pCmdtyId == null) {
 	    throw new IllegalArgumentException("null parameter 'pCmdtyId' " + "given");
 	}
 
-	Date latestDate = null;
+	LocalDate latestDate = null;
 	FixedPointNumber latestQuote = null;
 	FixedPointNumber factor = new FixedPointNumber(1); // factor is used if the quote is not to our base-currency
 	final int maxRecursionDepth = 5;
@@ -548,109 +526,82 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 //		continue;
 //	    }
 	    PRICES priceDB = getRootElement().getPRICES();
-	    for (PRICEPAIR priceQuote : (List<PRICEPAIR>) priceDB.getPRICEPAIR()) {
-
-		try {
-		    if (priceQuote == null) {
-			LOGGER.warn("gnucash-file contains null price-quotes" + " there may be a problem with JWSDP");
-			continue;
-		    }
-		    if (priceQuote.getPriceCurrency() == null) {
-			LOGGER.warn("gnucash-file contains price-quotes" + " with no currency id='"
-				+ priceQuote.getPriceId().getValue() + "'");
-			continue;
-		    }
-		    if (priceQuote.getPriceCurrency().getCmdtyId() == null) {
-			LOGGER.warn("gnucash-file contains price-quotes" + " with no currency-id id='"
-				+ priceQuote.getPriceId().getValue() + "'");
-			continue;
-		    }
-		    if (priceQuote.getPriceCurrency().getCmdtySpace() == null) {
-			LOGGER.warn("gnucash-file contains price-quotes" + " with no currency-namespace id='"
-				+ priceQuote.getPriceId().getValue() + "'");
-			continue;
-		    }
-		    if (priceQuote.getPriceTime() == null) {
-			LOGGER.warn("gnucash-file contains price-quotes" + " with no timestamp id='"
-				+ priceQuote.getPriceId().getValue() + "'");
-			continue;
-		    }
-		    if (priceQuote.getPriceValue() == null) {
-			LOGGER.warn("gnucash-file contains price-quotes" + " with no value id='"
-				+ priceQuote.getPriceId().getValue() + "'");
-			continue;
-		    }
-		    /*
-		     * if (priceQuote.getPriceCommodity().getCmdtySpace().equals("FUND") &&
-		     * priceQuote.getPriceType() == null) {
-		     * LOGGER.warn("gnucash-file contains FUND-price-quotes" + " with no type id='"
-		     * + priceQuote.getPriceId().getValue() + "'"); continue; }
-		     */
-		    if (!priceQuote.getPriceCommodity().getCmdtySpace().equals(pCmdtySpace)) {
-			continue;
-		    }
-		    if (!priceQuote.getPriceCommodity().getCmdtyId().equals(pCmdtyId)) {
-			continue;
-		    }
-		    /*
-		     * if (priceQuote.getPriceCommodity().getCmdtySpace().equals("FUND") &&
-		     * (priceQuote.getPriceType() == null ||
-		     * !priceQuote.getPriceType().equals("last") )) {
-		     * LOGGER.warn("ignoring FUND-price-quote of unknown type '" +
-		     * priceQuote.getPriceType() + "' expecting 'last' "); continue; }
-		     */
-
-		    if (!priceQuote.getPriceCurrency().getCmdtySpace().equals("ISO4217")) {
-			if (depth > maxRecursionDepth) {
-			    LOGGER.warn("ignoring price-quote that is not in an" + " ISO4217 -currency but in '"
-				    + priceQuote.getPriceCurrency().getCmdtyId());
+	    for ( PRICEPAIR pricePair : (List<PRICEPAIR>) priceDB.getPRICEPAIR() ) {
+		
+		String fromCurr = pricePair.getFrom();
+		String toCurr = pricePair.getFrom();
+		
+		if ( fromCurr == null ) {
+		    LOGGER.warn("KMyMoney-file contains price-quotes" + " with no from-currency: '"
+			    + pricePair.toString() + "'");
+		    continue;
+		}
+		
+		if ( toCurr == null ) {
+		    LOGGER.warn("KMyMoney-file contains price-quotes" + " with no to-currency: '"
+			    + pricePair.toString() + "'");
+		    continue;
+		}
+		
+		for ( PRICE prc : pricePair.getPRICE() ) {
+		    try {
+			if (prc == null) {
+			    LOGGER.warn("KMyMoney-file contains null price-quotes" 
+				    + " there may be a problem with JWSDP");
 			    continue;
 			}
-			factor = getLatestPrice(priceQuote.getPriceCurrency().getCmdtySpace(),
-				priceQuote.getPriceCurrency().getCmdtyId(), depth + 1);
-		    } else {
-			if (!priceQuote.getPriceCurrency().getCmdtyId().equals(getDefaultCurrencyID())) {
+			if (prc.getDate() == null) {
+			    LOGGER.warn("KMyMoney-file contains price-quotes" + " with no timestamp: '"
+				    + pricePair.toString() + "'");
+			    continue;
+			}
+			if (prc.getPrice() == null) {
+			    LOGGER.warn("KMyMoney-file contains price-quotes" + " with no price value: '"
+				    + pricePair.toString() + "'");
+			    continue;
+			}
+
+			if ( ! fromCurr.equals(pCmdtyId)) {
+			    continue;
+			}
+
+			if ( ! fromCurr.equals(getDefaultCurrencyID()) ) {
 			    if (depth > maxRecursionDepth) {
 				LOGGER.warn("ignoring price-quote that is not in " + getDefaultCurrencyID() + " "
-					+ "but in  '" + priceQuote.getPriceCurrency().getCmdtyId());
+					+ "but in  '" + fromCurr + "'");
 				continue;
 			    }
-			    factor = getLatestPrice(priceQuote.getPriceCurrency().getCmdtySpace(),
-				    priceQuote.getPriceCurrency().getCmdtyId(), depth + 1);
+			    factor = getLatestPrice(fromCurr, depth + 1);
 			}
+
+			XMLGregorianCalendar dateCal = prc.getDate();
+			LocalDate date = LocalDate.of(dateCal.getYear(), dateCal.getMonth(), dateCal.getDay());
+
+			if (latestDate == null || latestDate.isBefore(date)) {
+			    latestDate = date;
+			    latestQuote = new FixedPointNumber(prc.getPrice());
+			    LOGGER.debug("getLatestPrice(pCmdtyId='" + pCmdtyId
+				    + "') converted " + latestQuote + " <= " + prc.getPrice());
+			}
+
+		    } catch (NumberFormatException e) {
+			LOGGER.error("[NumberFormatException] Problem in " + getClass().getName()
+				+ ".getLatestPrice(pCmdtyId='" + pCmdtyId
+				+ "')! Ignoring a bad price-quote '" + pricePair + "'", e);
+		    } catch (NullPointerException e) {
+			LOGGER.error("[NullPointerException] Problem in " + getClass().getName()
+				+ ".getLatestPrice(pCmdtyId='" + pCmdtyId
+				+ "')! Ignoring a bad price-quote '" + pricePair + "'", e);
+		    } catch (ArithmeticException e) {
+			LOGGER.error("[ArithmeticException] Problem in " + getClass().getName()
+				+ ".getLatestPrice(pCmdtyId='" + pCmdtyId
+				+ "')! Ignoring a bad price-quote '" + pricePair + "'", e);
 		    }
-
-		    Date date = PRICE_QUOTE_DATE_FORMAT.parse(priceQuote.getPriceTime().getTsDate());
-
-		    if (latestDate == null || latestDate.before(date)) {
-			latestDate = date;
-			latestQuote = new FixedPointNumber(priceQuote.getPriceValue());
-			LOGGER.debug("getLatestPrice(pCmdtySpace='" + pCmdtySpace + "', String pCmdtyId='" + pCmdtyId
-				+ "') converted " + latestQuote + " <= " + priceQuote.getPriceValue());
-		    }
-
-		} catch (NumberFormatException e) {
-		    LOGGER.error("[NumberFormatException] Problem in " + getClass().getName()
-			    + ".getLatestPrice(pCmdtySpace='" + pCmdtySpace + "', String pCmdtyId='" + pCmdtyId
-			    + "')! Ignoring a bad price-quote '" + priceQuote + "'", e);
-		} catch (ParseException e) {
-		    LOGGER.error("[ParseException] Problem in " + getClass().getName() + ".getLatestPrice(pCmdtySpace='"
-			    + pCmdtySpace + "', String pCmdtyId='" + pCmdtyId + "')! Ignoring a bad price-quote '"
-			    + priceQuote + "'", e);
-		} catch (NullPointerException e) {
-		    LOGGER.error("[NullPointerException] Problem in " + getClass().getName()
-			    + ".getLatestPrice(pCmdtySpace='" + pCmdtySpace + "', String pCmdtyId='" + pCmdtyId
-			    + "')! Ignoring a bad price-quote '" + priceQuote + "'", e);
-		} catch (ArithmeticException e) {
-		    LOGGER.error("[ArithmeticException] Problem in " + getClass().getName()
-			    + ".getLatestPrice(pCmdtySpace='" + pCmdtySpace + "', String pCmdtyId='" + pCmdtyId
-			    + "')! Ignoring a bad price-quote '" + priceQuote + "'", e);
 		}
-
 //	    }
 	}
 
-	LOGGER.debug(getClass().getName() + ".getLatestPrice(pCmdtySpace='" + pCmdtySpace + "', String pCmdtyId='"
+	LOGGER.debug(getClass().getName() + ".getLatestPrice(pCmdtyId='"
 		+ pCmdtyId + "')= " + latestQuote + " from " + latestDate);
 
 	if (latestQuote == null) {

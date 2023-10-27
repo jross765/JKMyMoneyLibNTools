@@ -37,6 +37,11 @@ public class KMyMoneyPayeeImpl implements KMyMoneyPayee {
     // ---------------------------------------------------------------
 
     @Override
+    public String getId() {
+	return jwsdpPeer.getId();
+    }
+
+    @Override
     public String getName() {
 	return jwsdpPeer.getName();
     }

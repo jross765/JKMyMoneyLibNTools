@@ -13,16 +13,10 @@ import java.util.Map;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyFile;
 
-/**
- * Currency-Table that can work with multiple namespaces.<br/>
- * By default "ISO4217"-GnucashFile.getDefaultCurrencyID() is added with the value 1. (to be used as a base.currency)
- *
- * @see KMyMoneyFile#getDefaultCurrencyID()
- */
 public class ComplexCurrencyTable extends SimpleCurrencyTable implements Serializable {
 
 	public interface ComplexCurrencyTableChangeListener {
-		void conversionFactorChanged(final String namespace, final String currency, final FixedPointNumber factor);
+		void conversionFactorChanged(final String currency, final FixedPointNumber factor);
 	}
 
 	private transient volatile List<ComplexCurrencyTableChangeListener> listeners = null;
@@ -41,10 +35,10 @@ public class ComplexCurrencyTable extends SimpleCurrencyTable implements Seriali
 		listeners.remove(listener);
 	}
 
-	protected void fireCurrencyTableChanged(final String namespace, final String currency, final FixedPointNumber factor) {
+	protected void fireCurrencyTableChanged(final String currency, final FixedPointNumber factor) {
 		if (listeners != null) {
 			for (ComplexCurrencyTableChangeListener listener : listeners) {
-				listener.conversionFactorChanged(namespace, currency, factor);
+				listener.conversionFactorChanged(currency, factor);
 			}
 		}
 	}
@@ -135,22 +129,6 @@ public class ComplexCurrencyTable extends SimpleCurrencyTable implements Seriali
 	}
 
 	/**
-	 * Add a new namespace with no conversion-factors.<br/>
-	 * Will not overwrite an existing namespace.
-	 *
-	 * @param namespace the new namespace to add.
-	 */
-	public void addNameSpace(final String namespace) {
-		if (getNamespace(namespace) != null) {
-			return;
-		}
-
-		SimpleCurrencyTable currencyTable = new SimpleCurrencyTable();
-		currencyTable.clear();
-		addNameSpace(namespace, currencyTable);
-	}
-
-	/**
 	 * Add a new namespace with an initial set of conversion-factors.
 	 *
 	 * @param namespace the new namespace to add.
@@ -185,7 +163,7 @@ public class ComplexCurrencyTable extends SimpleCurrencyTable implements Seriali
 			throw new IllegalArgumentException("null currency-id given!");
 		}
 
-		return convertFromBaseCurrency(CurrencyNameSpace.NAMESPACE_CURRENCY, pValue, pIso4217CurrencyCode);
+		return convertFromBaseCurrency(CurrencyNameSpace.CURRENCY, pValue, pIso4217CurrencyCode);
 	}
 
 	/**
@@ -245,7 +223,7 @@ public class ComplexCurrencyTable extends SimpleCurrencyTable implements Seriali
 		if (pIso4217CurrencyCode == null) {
 			throw new IllegalArgumentException("null currency-id given!");
 		}
-		return convertToBaseCurrency(CurrencyNameSpace.NAMESPACE_CURRENCY, pValue, pIso4217CurrencyCode);
+		return convertToBaseCurrency(CurrencyNameSpace.CURRENCY, pValue, pIso4217CurrencyCode);
 	}
 
 	/**
@@ -256,26 +234,7 @@ public class ComplexCurrencyTable extends SimpleCurrencyTable implements Seriali
 		if (pIso4217CurrencyCode == null) {
 			throw new IllegalArgumentException("null currency-id given!");
 		}
-		return getConversionFactor(CurrencyNameSpace.NAMESPACE_CURRENCY, pIso4217CurrencyCode);
-	}
-
-	/**
-	 * @see SimpleCurrencyTable#setConversionFactor(java.lang.String, FixedPointNumber)
-	 */
-	@Override
-	public void setConversionFactor(final String pIso4217CurrencyCode,
-			final FixedPointNumber pFactor) {
-
-		if (pIso4217CurrencyCode == null) {
-			throw new IllegalArgumentException("null currency-id given!");
-		}
-		if (pFactor == null) {
-			throw new IllegalArgumentException("null conversion-factor given!");
-		}
-
-		setConversionFactor(CurrencyNameSpace.NAMESPACE_CURRENCY, pIso4217CurrencyCode, pFactor);
-
-		fireCurrencyTableChanged(CurrencyNameSpace.NAMESPACE_CURRENCY, pIso4217CurrencyCode, pFactor);
+		return getConversionFactor(pIso4217CurrencyCode);
 	}
 
 	/**
@@ -283,13 +242,10 @@ public class ComplexCurrencyTable extends SimpleCurrencyTable implements Seriali
 	 *
 	 * @see SimpleCurrencyTable#setConversionFactor(java.lang.String, FixedPointNumber)
 	 */
-	public void setConversionFactor(final String namespace,
+	public void setConversionFactor(
 			final String pIso4217CurrencyCode,
 			final FixedPointNumber pFactor) {
 
-		if (namespace == null) {
-			throw new IllegalArgumentException("null namepace given!");
-		}
 		if (pIso4217CurrencyCode == null) {
 			throw new IllegalArgumentException("null currency-id given!");
 		}
@@ -297,15 +253,14 @@ public class ComplexCurrencyTable extends SimpleCurrencyTable implements Seriali
 			throw new IllegalArgumentException("null conversion-factor given!");
 		}
 
-		SimpleCurrencyTable table = getNamespace(namespace);
+		SimpleCurrencyTable table = getNamespace(CurrencyNameSpace.CURRENCY);
 		if (table == null) {
-			addNameSpace(namespace);
-			table = getNamespace(namespace);
+			table = getNamespace(CurrencyNameSpace.CURRENCY);
 		}
 
 		table.setConversionFactor(pIso4217CurrencyCode, pFactor);
 
-		fireCurrencyTableChanged(namespace, pIso4217CurrencyCode, pFactor);
+		fireCurrencyTableChanged(pIso4217CurrencyCode, pFactor);
 	}
 
 	/**
@@ -356,7 +311,7 @@ public class ComplexCurrencyTable extends SimpleCurrencyTable implements Seriali
 	public ComplexCurrencyTable() {
 		super();
 
-		addNameSpace(CurrencyNameSpace.NAMESPACE_CURRENCY, new SimpleCurrencyTable());
+		addNameSpace(CurrencyNameSpace.CURRENCY, new SimpleCurrencyTable());
 	}
 
 	/**

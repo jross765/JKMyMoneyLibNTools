@@ -44,7 +44,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param pCmdtyId    the currency-name
      * @return the latest price-quote in the gnucash-file in EURO
      */
-    FixedPointNumber getLatestPrice(final String pCmdtySpace, final String pCmdtyId);
+    FixedPointNumber getLatestPrice(final String pCmdtyId);
 
     // public abstract void setFile(File file);
 
@@ -168,15 +168,5 @@ public interface KMyMoneyFile extends KMyMoneyObject {
     public int getNofEntriesTransactionMap();
 
     public int getNofEntriesTransactionSplitsMap();
-
-    public int getNofEntriesGenerInvoiceMap();
-
-    public int getNofEntriesGenerInvoiceEntriesMap();
-
-    public int getNofEntriesGenerJobMap();
-
-    public int getNofEntriesCustomerMap();
-
-    public int getNofEntriesVendorMap();
 
 }

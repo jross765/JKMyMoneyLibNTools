@@ -96,7 +96,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      */
     public String getCurrencyCode() {
 	if (jwsdpPeer.getCurrency() == null) {
-	    return CurrencyNameSpace.NAMESPACE_CURRENCY; // default-currency because gnucash 2.2 has no currency on the root-account
+	    return CurrencyNameSpace.CURRENCY; // default-currency because gnucash 2.2 has no currency on the root-account
 	}
 	return jwsdpPeer.getCurrency();
     }
