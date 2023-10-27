@@ -11,14 +11,12 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -33,14 +31,12 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.kmymoney.Const;
 import org.kmymoney.currency.ComplexCurrencyTable;
 import org.kmymoney.generated.ACCOUNT;
-import org.kmymoney.generated.BUDGETS;
 import org.kmymoney.generated.KMYMONEYFILE;
 import org.kmymoney.generated.ObjectFactory;
 import org.kmymoney.generated.PAYEE;
 import org.kmymoney.generated.PRICE;
 import org.kmymoney.generated.PRICEPAIR;
 import org.kmymoney.generated.PRICES;
-import org.kmymoney.generated.SECURITY;
 import org.kmymoney.generated.TRANSACTION;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyAccount;
@@ -49,6 +45,8 @@ import org.kmymoney.read.KMyMoneyObject;
 import org.kmymoney.read.KMyMoneyPayee;
 import org.kmymoney.read.KMyMoneyTransaction;
 import org.kmymoney.read.KMyMoneyTransactionSplit;
+import org.kmymoney.read.NoEntryFoundException;
+import org.kmymoney.read.TooManyEntriesFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -58,8 +56,8 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 
 /**
- * Implementation of GnucashFile that can only
- * read but not modify Gnucash-Files. <br/>
+ * Implementation of KMyMoneyFile that can only
+ * read but not modify KMyMoney-Files. <br/>
  * @see KMyMoneyFile
  */
 public class KMyMoneyFileImpl implements KMyMoneyFile {
@@ -174,27 +172,62 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	return retval;
     }
 
+    @Override
+    public Collection<KMyMoneyAccount> getAccountsByName(final String name) {
+	return getAccountsByName(name, true, true);
+    }
+    
     /**
-     * @see KMyMoneyFile#getAccountByName(java.lang.String)
+     * @see KMyMoneyFile#getAccountsByName(java.lang.String)
      */
-    public KMyMoneyAccount getAccountByName(final String name) {
+    @Override
+    public Collection<KMyMoneyAccount> getAccountsByName(final String expr, boolean qualif, boolean relaxed) {
 
 	if (accountID2account == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
 
-	for (KMyMoneyAccount account : accountID2account.values()) {
-	    if (account.getName().equals(name)) {
-		return account;
-	    }
-	    if (account.getQualifiedName().equals(name)) {
-		return account;
+	Collection<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
+	
+	for ( KMyMoneyAccount acct : accountID2account.values() ) {
+	    if ( relaxed ) {
+		if ( qualif ) {
+		    if ( acct.getQualifiedName().trim().toLowerCase().
+			    contains(expr.trim().toLowerCase()) ) {
+			result.add(acct);
+		    }
+		} else {
+		    if ( acct.getName().trim().toLowerCase().
+			    contains(expr.trim().toLowerCase()) ) {
+			result.add(acct);
+		    }
+		}
+	    } else {
+		if ( qualif ) {
+		    if ( acct.getQualifiedName().equals(expr) ) {
+			result.add(acct);
+		    }
+		} else {
+		    if ( acct.getName().equals(expr) ) {
+			result.add(acct);
+		    }
+		}
 	    }
 	}
 
-	return null;
+	return result;
     }
 
+    @Override
+    public KMyMoneyAccount getAccountByNameUniq(final String name, final boolean qualif) throws NoEntryFoundException, TooManyEntriesFoundException {
+	Collection<KMyMoneyAccount> acctList = getAccountsByName(name, qualif, false);
+	if ( acctList.size() == 0 )
+	    throw new NoEntryFoundException();
+	else if ( acctList.size() > 1 )
+	    throw new TooManyEntriesFoundException();
+	else
+	    return acctList.iterator().next();
+    }
     /**
      * warning: this function has to traverse all accounts. If it much faster to try
      * getAccountByID first and only call this method if the returned account does
@@ -202,16 +235,18 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      *
      * @param nameRegEx the regular expression of the name to look for
      * @return null if not found
+     * @throws TooManyEntriesFoundException 
+     * @throws NoEntryFoundException 
      * @see #getAccountByID(String)
      * @see #getAccountByName(String)
      */
-    public KMyMoneyAccount getAccountByNameEx(final String nameRegEx) {
+    public KMyMoneyAccount getAccountByNameEx(final String nameRegEx) throws NoEntryFoundException, TooManyEntriesFoundException {
 
 	if (accountID2account == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
 
-	KMyMoneyAccount foundAccount = getAccountByName(nameRegEx);
+	KMyMoneyAccount foundAccount = getAccountByNameUniq(nameRegEx, true);
 	if (foundAccount != null) {
 	    return foundAccount;
 	}
@@ -234,13 +269,15 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @param id   the id to look for
      * @param name the name to look for if nothing is found for the id
      * @return null if not found
+     * @throws TooManyEntriesFoundException 
+     * @throws NoEntryFoundException 
      * @see #getAccountByID(String)
      * @see #getAccountByName(String)
      */
-    public KMyMoneyAccount getAccountByIDorName(final String id, final String name) {
+    public KMyMoneyAccount getAccountByIDorName(final String id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
 	KMyMoneyAccount retval = getAccountByID(id);
 	if (retval == null) {
-	    retval = getAccountByName(name);
+	    retval = getAccountByNameUniq(name, true);
 	}
 
 	return retval;
@@ -254,10 +291,12 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @param name the regular expression of the name to look for if nothing is
      *             found for the id
      * @return null if not found
+     * @throws TooManyEntriesFoundException 
+     * @throws NoEntryFoundException 
      * @see #getAccountByID(String)
      * @see #getAccountByName(String)
      */
-    public KMyMoneyAccount getAccountByIDorNameEx(final String id, final String name) {
+    public KMyMoneyAccount getAccountByIDorNameEx(final String id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
 	KMyMoneyAccount retval = getAccountByID(id);
 	if (retval == null) {
 	    retval = getAccountByNameEx(name);
@@ -265,20 +304,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
 	return retval;
     }
-
-    
-
-    // ----------------------------
-
-    
-
-    // ----------------------------
-
-    
-
-    // ----------------------------
-
-    
 
     // ---------------------------------------------------------------
 
@@ -339,7 +364,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * Helper to implement the {@link KMyMoneyObject}-interface without having the
      * same code twice.
      */
-    private KMyMoneyObjectImpl myGnucashObject;
+    private KMyMoneyObjectImpl myKMyMoneyObject;
 
     /**
      * @return the underlying JAXB-element
@@ -452,7 +477,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     /**
-     * @param pRootElement the root-element of the Gnucash-file
+     * @param pRootElement the root-element of the KMyMoney-file
      */
     private void loadPriceDatabase(final KMYMONEYFILE pRootElement) {
 	boolean noPriceDB = true;
@@ -619,7 +644,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
     /**
      * @param jwsdpAcct the JWSDP-peer (parsed xml-element) to fill our object with
-     * @return the new GnucashAccount to wrap the given jaxb-object.
+     * @return the new KMyMoneyAccount to wrap the given jaxb-object.
      */
     protected KMyMoneyAccountImpl createAccount(final ACCOUNT jwsdpAcct) {
 	KMyMoneyAccountImpl acct = new KMyMoneyAccountImpl(jwsdpAcct, this);
@@ -628,7 +653,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
     /**
      * @param jwsdpPye the JWSDP-peer (parsed xml-element) to fill our object with
-     * @return the new GnucashPayee to wrap the given JAXB object.
+     * @return the new KMyMoneyPayee to wrap the given JAXB object.
      */
     protected KMyMoneyPayeeImpl createPayee(final PAYEE jwsdpPye) {
 	KMyMoneyPayeeImpl pye = new KMyMoneyPayeeImpl(jwsdpPye, this);
@@ -637,7 +662,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
     /**
      * @param jwsdpTrx the JWSDP-peer (parsed xml-element) to fill our object with
-     * @return the new GnucashTransaction to wrap the given jaxb-object.
+     * @return the new KMyMoneyTransaction to wrap the given jaxb-object.
      */
     protected KMyMoneyTransactionImpl createTransaction(final TRANSACTION jwsdpTrx) {
 	KMyMoneyTransactionImpl trx = new KMyMoneyTransactionImpl(jwsdpTrx, this);
@@ -689,7 +714,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	setFile(pFile);
 
 	InputStream in = new FileInputStream(pFile);
-	if (pFile.getName().endsWith(".gz")) {
+	if ( pFile.getName().endsWith(".gz") ||
+	     pFile.getName().endsWith(".kmy") ) {
 	    in = new BufferedInputStream(in);
 	    in = new GZIPInputStream(in);
 	} else {
@@ -708,7 +734,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	loadInputStream(in);
 
 	long end = System.currentTimeMillis();
-	LOGGER.info("GnucashFileImpl.loadFile took " + (end - start) + " ms (total) ");
+	LOGGER.info("KMyMoneyFileImpl.loadFile took " + (end - start) + " ms (total) ");
 
     }
 
@@ -719,13 +745,18 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	try {
 
 	    JAXBContext myContext = getJAXBContext();
+	    if ( myContext == null ) {
+		// ::TODO: make it fatal
+		LOGGER.error("loadInputStream: JAXB context cannot be found/generated");
+		throw new IOException("JAXB context cannot be found/generated");
+	    }
 	    Unmarshaller unmarshaller = myContext.createUnmarshaller();
 
 	    KMYMONEYFILE o = (KMYMONEYFILE) unmarshaller.unmarshal(new InputSource(new BufferedReader(reader)));
 	    long start2 = System.currentTimeMillis();
 	    setRootElement(o);
 	    long end = System.currentTimeMillis();
-	    LOGGER.info("GnucashFileImpl.loadFileInputStream took " + (end - start) + " ms (total) " + (start2 - start)
+	    LOGGER.info("KMyMoneyFileImpl.loadFileInputStream took " + (end - start) + " ms (total) " + (start2 - start)
 		    + " ms (jaxb-loading)" + (end - start2) + " ms (building facades)");
 
 	} catch (JAXBException e) {

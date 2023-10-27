@@ -380,7 +380,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 			return null;
 		}
 
-		if (!currencyTable.convertFromBaseCurrency(currencyNameSpace, retval, currencyName)) {
+		if (!currencyTable.convertFromBaseCurrency(retval, currencyName)) {
 			LOGGER.error("SimpleAccount.getBalance() - cannot transfer "
 					+ "from base-currenty to given currency '"
 					+ currencyNameSpace

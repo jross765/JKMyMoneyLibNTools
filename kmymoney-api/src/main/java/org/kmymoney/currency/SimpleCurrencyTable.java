@@ -104,16 +104,15 @@ public class SimpleCurrencyTable implements Serializable {
 	//    }
 	//}
 
-	//-------------------------------------------------------
+	// -----------------------------------------------------------
 
-	/**
-	 *
-	 */
 	public SimpleCurrencyTable() {
 		super();
 		setConversionFactor("EUR", new FixedPointNumber(1));
 		//setConversionFactor("GBP", new FixedPointNumber("769/523"));
 	}
+
+	// -----------------------------------------------------------
 
 	/**
 	 * @param iso4217CurrencyCode a currency-name in capital letters(e.g. "GBP")

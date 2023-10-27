@@ -96,7 +96,11 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @return null if not found
      * @see #getAccountByID(String)
      */
-    KMyMoneyAccount getAccountByName(String name);
+    Collection<KMyMoneyAccount> getAccountsByName(String expr);
+
+    Collection<KMyMoneyAccount> getAccountsByName(String expr, boolean qualif, boolean relaxed);
+
+    KMyMoneyAccount getAccountByNameUniq(String expr, boolean qualif) throws NoEntryFoundException, TooManyEntriesFoundException;
 
     /**
      * warning: this function has to traverse all accounts. If it much faster to try
@@ -105,10 +109,12 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      *
      * @param name the regular expression of the name to look for
      * @return null if not found
+     * @throws org.kmymoney.read.TooManyEntriesFoundException 
+     * @throws org.kmymoney.read.NoEntryFoundException 
      * @see #getAccountByID(String)
      * @see #getAccountByName(String)
      */
-    KMyMoneyAccount getAccountByNameEx(String name);
+    KMyMoneyAccount getAccountByNameEx(String name) throws NoEntryFoundException, TooManyEntriesFoundException;
 
     /**
      * First try to fetch the account by id, then fall back to traversing all
@@ -117,10 +123,12 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param id   the id to look for
      * @param name the name to look for if nothing is found for the id
      * @return null if not found
+     * @throws org.kmymoney.read.TooManyEntriesFoundException 
+     * @throws org.kmymoney.read.NoEntryFoundException 
      * @see #getAccountByID(String)
      * @see #getAccountByName(String)
      */
-    KMyMoneyAccount getAccountByIDorName(String id, String name);
+    KMyMoneyAccount getAccountByIDorName(String id, String name) throws NoEntryFoundException, TooManyEntriesFoundException;
 
     /**
      * First try to fetch the account by id, then fall back to traversing all
@@ -130,10 +138,12 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param name the regular expression of the name to look for if nothing is
      *             found for the id
      * @return null if not found
+     * @throws org.kmymoney.read.TooManyEntriesFoundException 
+     * @throws org.kmymoney.read.NoEntryFoundException 
      * @see #getAccountByID(String)
      * @see #getAccountByName(String)
      */
-    KMyMoneyAccount getAccountByIDorNameEx(String id, String name);
+    KMyMoneyAccount getAccountByIDorNameEx(String id, String name) throws NoEntryFoundException, TooManyEntriesFoundException;
 
     // ----------------------------
 
