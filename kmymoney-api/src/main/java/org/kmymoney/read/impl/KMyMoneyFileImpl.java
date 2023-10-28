@@ -315,7 +315,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     /**
      * @param pCmdtySpace the namespace for pCmdtyId
      * @param pCmdtyId    the currency-name
-     * @return the latest price-quote in the gnucash-file in EURO
+     * @return the latest price-quote in the kmymoney-file in EURO
      * @see {@link KMyMoneyFile#getLatestPrice(String, String)}
      */
     public FixedPointNumber getLatestPrice(final String pCmdtyId) {
@@ -323,7 +323,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     /**
-     * the top-level Element of the gnucash-files parsed and checked for validity by
+     * the top-level Element of the kmymoney-files parsed and checked for validity by
      * JAXB.
      */
     private KMYMONEYFILE rootElement;
@@ -510,7 +510,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 		    if (factor != null) {
 			getCurrencyTable().setConversionFactor(fromCurr, factor);
 		    } else {
-			LOGGER.warn("The gnucash-file defines a factor for a comodity '" 
+			LOGGER.warn("The kmymoney-file defines a factor for a comodity '" 
 				+ fromCurr + "' but has no comodity for it");
 		    }
 		}
@@ -532,7 +532,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @param depth       used for recursion. Allways call with '0' for aborting
      *                    recursive quotes (quotes to other then the base- currency)
      *                    we abort if the depth reached 6.
-     * @return the latest price-quote in the gnucash-file in the default-currency
+     * @return the latest price-quote in the kmymoney-file in the default-currency
      * @see {@link KMyMoneyFile#getLatestPrice(String, String)}
      * @see #getDefaultCurrencyID()
      */
@@ -795,7 +795,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     protected JAXBContext getJAXBContext() {
 	if (myJAXBContext == null) {
 	    try {
-		myJAXBContext = JAXBContext.newInstance("org.gnucash.generated", this.getClass().getClassLoader());
+		myJAXBContext = JAXBContext.newInstance("org.kmymoney.generated", this.getClass().getClassLoader());
 	    } catch (JAXBException e) {
 		LOGGER.error(e.getMessage(), e);
 	    }
