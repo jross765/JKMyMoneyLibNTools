@@ -3,7 +3,10 @@ package org.kmymoney.read;
 import java.io.File;
 import java.util.Collection;
 
-import org.kmymoney.currency.ComplexCurrencyTable;
+import org.kmymoney.basetypes.InvalidSecCurrIDException;
+import org.kmymoney.basetypes.InvalidSecCurrTypeException;
+import org.kmymoney.basetypes.KMMSecCurrID;
+import org.kmymoney.currency.ComplexPriceTable;
 import org.kmymoney.numbers.FixedPointNumber;
 
 /**
@@ -26,7 +29,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * 
      * @return Returns the currencyTable.
      */
-    ComplexCurrencyTable getCurrencyTable();
+    ComplexPriceTable getCurrencyTable();
 
     /**
      * Use a heuristic to determine the defaultcurrency-id. If we cannot find one,
@@ -39,12 +42,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 
     // ---------------------------------------------------------------
 
-    /**
-     * @param pCmdtySpace the namespace for pCmdtyId
-     * @param pCmdtyId    the currency-name
-     * @return the latest price-quote in the gnucash-file in EURO
-     */
-    FixedPointNumber getLatestPrice(final String pCmdtyId);
+    FixedPointNumber getLatestPrice(final KMMSecCurrID secCurrID) throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
 
     // public abstract void setFile(File file);
 

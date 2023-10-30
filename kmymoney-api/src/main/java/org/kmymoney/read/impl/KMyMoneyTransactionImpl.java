@@ -300,7 +300,6 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
 
 	    mySplits = new ArrayList<KMyMoneyTransactionSplit>(jwsdpSplits.size());
 	    for (SPLIT element : jwsdpSplits) {
-
 		mySplits.add(createSplit(element));
 	    }
 	}

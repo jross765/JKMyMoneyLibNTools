@@ -14,8 +14,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import org.kmymoney.currency.ComplexCurrencyTable;
-import org.kmymoney.currency.CurrencyNameSpace;
+import org.kmymoney.basetypes.InvalidSecCurrIDException;
+import org.kmymoney.basetypes.InvalidSecCurrTypeException;
+import org.kmymoney.basetypes.KMMSecCurrID;
+import org.kmymoney.currency.ComplexPriceTable;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyAccount;
 import org.kmymoney.read.KMyMoneyFile;
@@ -151,82 +153,39 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	}
 
 	/**
-	 * @param date     ignores transactions after the given date
-	 * @param currency the currency the result shall be in (use account-currency if null)
-	 * @return null if the conversion is not possible
-	 * @see #getBalance(LocalDate)
-	 */
-	public FixedPointNumber getBalance(final LocalDate date, final Currency currency) {
-
-		FixedPointNumber retval = getBalance(date);
-
-		if (retval == null) {
-			LOGGER.warn("SimpleAccount.getBalance() - error creating balance!");
-			return null;
-		}
-
-		if (currency == null || retval.equals(new FixedPointNumber())) {
-			return retval;
-		}
-
-		// is conversion needed?
-		if (getCurrency().equals(currency.getCurrencyCode())) {
-			return retval;
-		}
-
-		ComplexCurrencyTable currencyTable = getKMyMoneyFile().getCurrencyTable();
-
-		if (currencyTable == null) {
-			LOGGER.warn("SimpleAccount.getBalance() - cannot transfer "
-					+ "to given currency because we have no currency-table!");
-			return null;
-		}
-
-		if (!currencyTable.convertToBaseCurrency(retval, getCurrency())) {
-			LOGGER.warn("SimpleAccount.getBalance() - cannot transfer "
-					+ "from our currency '"
-					+ getCurrency()
-					+ "' to the base-currency!");
-			return null;
-		}
-
-		if (!currencyTable.convertFromBaseCurrency(retval, currency.getCurrencyCode())) {
-			LOGGER.warn("SimpleAccount.getBalance() - cannot transfer "
-					+ "from base-currenty to given currency '"
-					+ currency
-					+ "'!");
-			return null;
-		}
-
-		return retval;
-	}
-
-	/**
+	 * @throws InvalidSecCurrIDException 
+	 * @throws InvalidSecCurrTypeException 
 	 * @see KMyMoneyAccount#getBalanceRecursiveFormatted(LocalDate)
 	 */
-	public String getBalanceRecursiveFormatted(final LocalDate date) {
+	public String getBalanceRecursiveFormatted(final LocalDate date) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
 		return getCurrencyFormat().format(getBalanceRecursive(date));
 	}
 
 	/**
+	 * @throws InvalidSecCurrIDException 
+	 * @throws InvalidSecCurrTypeException 
 	 * @see KMyMoneyAccount#getBalanceRecursiveFormatted()
 	 */
-	public String getBalanceRecursiveFormatted() {
+	public String getBalanceRecursiveFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
 		return getCurrencyFormat().format(getBalanceRecursive());
 	}
 
 	/**
+	 * @throws InvalidSecCurrIDException 
+	 * @throws InvalidSecCurrTypeException 
 	 * @see KMyMoneyAccount#getBalanceRecursive()
 	 */
-	public FixedPointNumber getBalanceRecursive() {
+	public FixedPointNumber getBalanceRecursive() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
 		return getBalanceRecursive(LocalDate.now());
 	}
 
 	/**
+	 * @throws InvalidSecCurrIDException 
+	 * @throws InvalidSecCurrTypeException 
 	 * @see KMyMoneyAccount#getBalanceRecursive(LocalDate)
 	 */
-	public FixedPointNumber getBalanceRecursive(final LocalDate date) {
-		return getBalanceRecursive(date, this.getCurrency());
+	public FixedPointNumber getBalanceRecursive(final LocalDate date) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+		return getBalanceRecursive(date, getSecCurrID());
 	}
 
 	/**
@@ -268,47 +227,24 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	 * @param currencyNameSpace the currency the result shall be in
 	 * @param currencyName      the currency the result shall be in
 	 * @return Gets the balance including all sub-accounts.
+	 * @throws InvalidSecCurrIDException 
+	 * @throws InvalidSecCurrTypeException 
 	 * @see KMyMoneyAccount#getBalanceRecursive(Date, Currency)
 	 */
 	public FixedPointNumber getBalanceRecursive(final LocalDate date,
-                                                    final String currencyNameSpace,
-                                                    final String currencyName) {
+                                                    final KMMSecCurrID secCurrID) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
 
-	    FixedPointNumber retval = getBalance(date, currencyNameSpace, currencyName);
+	    FixedPointNumber retval = getBalance(date, secCurrID);
 
 	    if (retval == null) {
 		retval = new FixedPointNumber();
 	    }
 
 	    for ( KMyMoneyAccount child : getChildren() ) {
-		retval.add(child.getBalanceRecursive(date, currencyNameSpace, currencyName));
+		retval.add(child.getBalanceRecursive(date, secCurrID));
 	    }
 
 	    return retval;
-	}
-
-	/**
-	 * Ignores accounts for wich this conversion is not possible.
-	 *
-	 * @param date     ignores transactions after the given date
-	 * @param currency the currency the result shall be in
-	 * @return Gets the balance including all sub-accounts.
-	 * @see KMyMoneyAccount#getBalanceRecursive(Date, Currency)
-	 */
-	public FixedPointNumber getBalanceRecursive(final LocalDate date, final Currency currency) {
-
-		FixedPointNumber retval = getBalance(date, currency);
-
-		if (retval == null) {
-			retval = new FixedPointNumber();
-		}
-
-		for (Object element : getChildren()) {
-			KMyMoneyAccount child = (KMyMoneyAccount) element;
-			retval.add(child.getBalanceRecursive(date, currency));
-		}
-
-		return retval;
 	}
 
 	/**
@@ -342,9 +278,12 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	 * @param currencyNameSpace the currency the result shall be in
 	 * @param currencyName      the currency the result shall be in
 	 * @return null if the conversion is not possible
+	 * @throws InvalidSecCurrIDException 
+	 * @throws InvalidSecCurrTypeException 
 	 * @see #getBalance(LocalDate)
 	 */
-	public FixedPointNumber getBalance(final LocalDate date, final String currencyNameSpace, final String currencyName) {
+	public FixedPointNumber getBalance(final LocalDate date, 
+		final KMMSecCurrID secCurrID) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
 		FixedPointNumber retval = getBalance(date);
 
 		if (retval == null) {
@@ -354,11 +293,12 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		}
 
 		// is conversion needed?
-		if (getCurrency().equals(currencyName)) {
+		if ( secCurrID.getType() == KMMSecCurrID.Type.CURRENCY &&
+		     secCurrID.equals(getCurrency().getCurrencyCode()) ) {
 			return retval;
 		}
 
-		ComplexCurrencyTable currencyTable = getKMyMoneyFile().getCurrencyTable();
+		ComplexPriceTable currencyTable = getKMyMoneyFile().getCurrencyTable();
 
 		if (currencyTable == null) {
 			LOGGER.error("SimpleAccount.getBalance() - cannot transfer "
@@ -366,11 +306,11 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 			return null;
 		}
 
-		if (!currencyTable.convertToBaseCurrency(retval, getCurrency())) {
-			Collection<String> currencies = getKMyMoneyFile().getCurrencyTable().getCurrencies();
+		if (!currencyTable.convertToBaseCurrency(retval, secCurrID)) {
+			Collection<String> currencies = getKMyMoneyFile().getCurrencyTable().getCurrencies(KMMSecCurrID.Type.CURRENCY);
 			LOGGER.error("SimpleAccount.getBalance() - cannot transfer "
 					+ "from our currency '"
-					+ getCurrency()
+					+ getSecCurrID().toString()
 					+ "' to the base-currency!"
 					+ " \n(we know " + getKMyMoneyFile().getCurrencyTable().getNameSpaces().size()
 					+ " currency-namespaces and "
@@ -379,12 +319,10 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 			return null;
 		}
 
-		if (!currencyTable.convertFromBaseCurrency(retval, currencyName)) {
+		if (!currencyTable.convertFromBaseCurrency(retval, secCurrID)) {
 			LOGGER.error("SimpleAccount.getBalance() - cannot transfer "
 					+ "from base-currenty to given currency '"
-					+ currencyNameSpace
-					+ "-"
-					+ currencyName
+					+ secCurrID.toString()
 					+ "'!");
 			return null;
 		}
@@ -400,23 +338,29 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 
 	/**
 	 * @return null if we are no currency but e.g. a fund
+	 * @throws InvalidSecCurrIDException 
+	 * @throws InvalidSecCurrTypeException 
 	 */
-	public Currency getCurrency() {
+	public Currency getCurrency() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+		if ( getSecCurrID().getType() != KMMSecCurrID.Type.CURRENCY ) {
+			return null;
+		}
 
-		String gnucashCurrencyID = getCurrencyCode();
-		return Currency.getInstance(gnucashCurrencyID);
+		String kmmCurrID = getSecCurrID().getCode();
+		return Currency.getInstance(kmmCurrID);
 	}
 
 	/**
 	 * @return The currency-format to use for formating.
+	 * @throws InvalidSecCurrIDException 
 	 */
-	public NumberFormat getCurrencyFormat() {
+	public NumberFormat getCurrencyFormat() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
 		if (currencyFormat == null) {
 			currencyFormat = NumberFormat.getCurrencyInstance();
 		}
 
-		// the currency may have changed
-		if (this.getCurrency().equals(CurrencyNameSpace.CURRENCY)) {
+		    // the currency may have changed
+		if ( this.getSecCurrID().getType() == KMMSecCurrID.Type.CURRENCY ) {
 			Currency currency = getCurrency();
 			currencyFormat.setCurrency(currency);
 		} else {
@@ -429,22 +373,26 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	/**
 	 * same as {@link #getBalance(LocalDate)}. <br/>
 	 * ignores transactions after the current date+time.
+	 * @throws InvalidSecCurrIDException 
+	 * @throws InvalidSecCurrTypeException 
 	 *
 	 * @see #getBalance(LocalDate)
 	 */
-	public String getBalanceFormatted() {
+	public String getBalanceFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
 		return getCurrencyFormat().format(getBalance());
 	}
 
 	/**
 	 * same as {@link #getBalance(LocalDate)}. <br/>
 	 * ignores transactions after the current date+time.
+	 * @throws InvalidSecCurrIDException 
+	 * @throws InvalidSecCurrTypeException 
 	 *
 	 * @see #getBalance(LocalDate)
 	 */
-	public String getBalanceFormatted(final Locale loc) {
+	public String getBalanceFormatted(final Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
 
-		NumberFormat cf = NumberFormat.getCurrencyInstance(loc);
+		NumberFormat cf = NumberFormat.getCurrencyInstance(lcl);
 		cf.setCurrency(getCurrency());
 		return cf.format(getBalance());
 	}

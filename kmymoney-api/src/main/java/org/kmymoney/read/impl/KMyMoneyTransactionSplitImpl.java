@@ -1,12 +1,13 @@
 package org.kmymoney.read.impl;
 
 import java.text.NumberFormat;
-import java.util.Collection;
 import java.util.Currency;
 import java.util.Locale;
 
-import org.kmymoney.currency.CurrencyNameSpace;
-import org.kmymoney.generated.KMYMONEYFILE;
+import org.kmymoney.basetypes.InvalidSecCurrIDException;
+import org.kmymoney.basetypes.InvalidSecCurrTypeException;
+import org.kmymoney.basetypes.KMMCurrID;
+import org.kmymoney.basetypes.KMMSecCurrID;
 import org.kmymoney.generated.SPLIT;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyAccount;
@@ -47,14 +48,16 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 	jwsdpPeer = peer;
 	myTransaction = trx;
 
-	KMyMoneyAccount acct = getAccount();
-	if (acct == null) {
-	    System.err.println("No such Account id='" + getAccountID() + "' for Transactions-Split with id '" + getId()
-		    + "' description '" + getMemo() + "' in transaction with id '" + getTransaction().getId()
-		    + "' description '" + getTransaction().getMemo() + "'");
-	} else {
-	    acct.addTransactionSplit(this);
-	}
+	// ::CHECK
+	// ::TODO
+//	KMyMoneyAccount acct = getAccount();
+//	if (acct == null) {
+//	    System.err.println("No such Account id='" + getAccountID() + "' for Transactions-Split with id '" + getId()
+//		    + "' description '" + getMemo() + "' in transaction with id '" + getTransaction().getId()
+//		    + "' description '" + getTransaction().getMemo() + "'");
+//	} else {
+//	    acct.addTransactionSplit(this);
+//	}
 
     }
 
@@ -129,8 +132,10 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 
     /**
      * @return The currencyFormat for the quantity to use when no locale is given.
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
      */
-    protected NumberFormat getSharesCurrencyFormat() {
+    protected NumberFormat getSharesCurrencyFormat() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
 
 	return ((KMyMoneyAccountImpl) getAccount()).getCurrencyFormat();
     }
@@ -153,13 +158,13 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     /**
      * @see KMyMoneyTransactionSplit#getValueFormatted(java.util.Locale)
      */
-    public String getValueFormatted(final Locale locale) {
+    public String getValueFormatted(final Locale lcl) {
 
-	NumberFormat cf = NumberFormat.getInstance(locale);
+	NumberFormat cf = NumberFormat.getInstance(lcl);
 	if (getTransaction().getCommodity().equals("XYZ")) { // ::TODO: is currency, not security 
 	    cf.setCurrency(Currency.getInstance(getTransaction().getCommodity()));
 	} else {
-	    cf = NumberFormat.getNumberInstance(locale);
+	    cf = NumberFormat.getNumberInstance(lcl);
 	}
 
 	return cf.format(getValue());
@@ -175,8 +180,8 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     /**
      * @see KMyMoneyTransactionSplit#getValueFormattedForHTML(java.util.Locale)
      */
-    public String getValueFormattedForHTML(final Locale locale) {
-	return getValueFormatted(locale).replaceFirst("€", "&euro;");
+    public String getValueFormattedForHTML(final Locale lcl) {
+	return getValueFormatted(lcl).replaceFirst("€", "&euro;");
     }
 
     /**
@@ -187,17 +192,21 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     }
 
     /**
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
      * @see KMyMoneyTransactionSplit#getAccountBalanceFormatted()
      */
-    public String getAccountBalanceFormatted() {
+    public String getAccountBalanceFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
 	return ((KMyMoneyAccountImpl) getAccount()).getCurrencyFormat().format(getAccountBalance());
     }
 
     /**
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
      * @see KMyMoneyTransactionSplit#getAccountBalanceFormatted(java.util.Locale)
      */
-    public String getAccountBalanceFormatted(final Locale locale) {
-	return getAccount().getBalanceFormatted(locale);
+    public String getAccountBalanceFormatted(final Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+	return getAccount().getBalanceFormatted(lcl);
     }
 
     /**
@@ -209,39 +218,48 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 
     /**
      * The value is in the currency of the account!
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
      */
-    public String getSharesFormatted() {
+    public String getSharesFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
 	return getSharesCurrencyFormat().format(getShares());
     }
 
     /**
      * The value is in the currency of the account!
      *
-     * @param locale the locale to format to
+     * @param lcl the locale to format to
      * @return the formatted number
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
      */
-    public String getSharesFormatted(final Locale locale) {
-	if (getTransaction().getCommodity().equals("XYZ")) { // ::TODO is currency, not security
-	    return NumberFormat.getNumberInstance(locale).format(getShares());
+    public String getSharesFormatted(final Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+	NumberFormat nf = NumberFormat.getCurrencyInstance(lcl);
+	if ( getAccount().getSecCurrID().getType() == KMMSecCurrID.Type.CURRENCY ) {
+	    nf.setCurrency(new KMMCurrID(getAccount().getSecCurrID()).getCurrency());
+	    return nf.format(getShares());
 	}
-
-	NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
-	nf.setCurrency(getAccount().getCurrency());
-	return nf.format(getShares());
+	else {
+	    return nf.format(getShares()) + " " + getAccount().getSecCurrID().toString(); 
+	}
     }
 
     /**
      * The value is in the currency of the account!
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
      */
-    public String getSharesFormattedForHTML() {
+    public String getSharesFormattedForHTML() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
 	return getSharesFormatted().replaceFirst("€", "&euro;");
     }
 
     /**
      * The value is in the currency of the account!
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
      */
-    public String getSharesFormattedForHTML(final Locale locale) {
-	return getSharesFormatted(locale).replaceFirst("€", "&euro;");
+    public String getSharesFormattedForHTML(final Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+	return getSharesFormatted(lcl).replaceFirst("€", "&euro;");
     }
 
     /**
@@ -289,7 +307,7 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 	buffer.append(" value: ");
 	buffer.append(getValue());
 
-	buffer.append(" quantity: ");
+	buffer.append(" shares: ");
 	buffer.append(getShares());
 
 	buffer.append("]");

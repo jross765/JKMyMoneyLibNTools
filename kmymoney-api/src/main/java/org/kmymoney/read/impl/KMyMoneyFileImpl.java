@@ -18,7 +18,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -29,7 +28,12 @@ import java.util.zip.GZIPInputStream;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kmymoney.Const;
-import org.kmymoney.currency.ComplexCurrencyTable;
+import org.kmymoney.basetypes.InvalidSecCurrIDException;
+import org.kmymoney.basetypes.InvalidSecCurrTypeException;
+import org.kmymoney.basetypes.KMMCurrID;
+import org.kmymoney.basetypes.KMMSecCurrID;
+import org.kmymoney.basetypes.KMMSecID;
+import org.kmymoney.currency.ComplexPriceTable;
 import org.kmymoney.generated.ACCOUNT;
 import org.kmymoney.generated.KMYMONEYFILE;
 import org.kmymoney.generated.ObjectFactory;
@@ -67,7 +71,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     /**
      * my CurrencyTable.
      */
-    private final ComplexCurrencyTable currencyTable = new ComplexCurrencyTable();
+    private final ComplexPriceTable currencyTable = new ComplexPriceTable();
 
     private static final String PADDING_TEMPLATE = "000000";
 
@@ -77,9 +81,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @param pFile the file to load and initialize from
      * @throws IOException on low level reading-errors (FileNotFoundException if not
      *                     found)
+     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidSecCurrIDException 
      * @see #loadFile(File)
      */
-    public KMyMoneyFileImpl(final File pFile) throws IOException {
+    public KMyMoneyFileImpl(final File pFile) throws IOException, InvalidSecCurrIDException, InvalidSecCurrTypeException {
 	super();
 	loadFile(pFile);
     }
@@ -88,9 +94,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @param pFile the file to load and initialize from
      * @throws IOException on low level reading-errors (FileNotFoundException if not
      *                     found)
+     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidSecCurrIDException 
      * @see #loadFile(File)
      */
-    public KMyMoneyFileImpl(final InputStream is) throws IOException {
+    public KMyMoneyFileImpl(final InputStream is) throws IOException, InvalidSecCurrIDException, InvalidSecCurrTypeException {
 	super();
 	loadInputStream(is);
     }
@@ -101,7 +109,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @return Returns the currencyTable.
      * @link #currencyTable
      */
-    public ComplexCurrencyTable getCurrencyTable() {
+    public ComplexPriceTable getCurrencyTable() {
 	return currencyTable;
     }
 
@@ -316,10 +324,20 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @param pCmdtySpace the namespace for pCmdtyId
      * @param pCmdtyId    the currency-name
      * @return the latest price-quote in the kmymoney-file in EURO
+     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidSecCurrIDException 
      * @see {@link KMyMoneyFile#getLatestPrice(String, String)}
      */
-    public FixedPointNumber getLatestPrice(final String pCmdtyId) {
-	return getLatestPrice(pCmdtyId, 0);
+    public FixedPointNumber getLatestPrice(final String secCurrIDStr) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+	if ( secCurrIDStr.startsWith("E0") ) { // ::MAGIC
+	    return getLatestPrice(new KMMSecID(secCurrIDStr));
+	} else {
+	    return getLatestPrice(new KMMCurrID(secCurrIDStr));
+	}
+    }
+
+    public FixedPointNumber getLatestPrice(final KMMSecCurrID secCurrID) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+	return getLatestPrice(secCurrID, 0);
     }
 
     /**
@@ -377,8 +395,10 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * Set the new root-element and load all accounts, transactions,... from it.
      *
      * @param pRootElement the new root-element
+     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidSecCurrIDException 
      */
-    protected void setRootElement(final KMYMONEYFILE pRootElement) {
+    protected void setRootElement(final KMYMONEYFILE pRootElement) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
 	if (pRootElement == null) {
 	    throw new IllegalArgumentException("null not allowed for field this.rootElement");
 	}
@@ -478,21 +498,31 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
     /**
      * @param pRootElement the root-element of the KMyMoney-file
+     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidSecCurrIDException 
      */
-    private void loadPriceDatabase(final KMYMONEYFILE pRootElement) {
+    private void loadPriceDatabase(final KMYMONEYFILE pRootElement) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
 	boolean noPriceDB = true;
 	PRICES priceDB = pRootElement.getPRICES();
 
-		getCurrencyTable().clear();
-		getCurrencyTable().setConversionFactor(getDefaultCurrencyID(), new FixedPointNumber(1));
+		// getCurrencyTable().clear();
+	if ( priceDB.getPRICEPAIR().size() > 0 )
+	    noPriceDB = false;
 
 		for ( PRICEPAIR pricePair : priceDB.getPRICEPAIR() ) {
 		    String fromCurr = pricePair.getFrom();
 		    String toCurr = pricePair.getTo();
+		    
+		    // ::TODO: Try to implement Security type
+		    KMMSecCurrID.Type nameSpace = null;
+		    if ( fromCurr.startsWith("E0") ) // ::MAGIC
+			nameSpace = KMMSecCurrID.Type.SECURITY;
+		    else
+			nameSpace = KMMSecCurrID.Type.CURRENCY;
 
 		    // check if we already have a latest price for this comodity
 		    // (=currency, fund, ...)
-		    if (getCurrencyTable().getConversionFactor(fromCurr) != null) {
+		    if ( getCurrencyTable().getConversionFactor(nameSpace, fromCurr) != null ) {
 			continue;
 		    }
 
@@ -505,13 +535,13 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
 		    // get the latest price in the file and insert it into
 		    // our currency table
-		    FixedPointNumber factor = getLatestPrice(fromCurr);
+		    FixedPointNumber factor = getLatestPrice(new KMMSecCurrID(nameSpace, fromCurr));
 
 		    if (factor != null) {
-			getCurrencyTable().setConversionFactor(fromCurr, factor);
+			getCurrencyTable().setConversionFactor(nameSpace, fromCurr, factor);
 		    } else {
-			LOGGER.warn("The kmymoney-file defines a factor for a comodity '" 
-				+ fromCurr + "' but has no comodity for it");
+			LOGGER.warn("The KMyMoney-file defines a factor for a commodity '" 
+				+ fromCurr + "' but has no commodity for it");
 		    }
 		}
 
@@ -533,101 +563,111 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      *                    recursive quotes (quotes to other then the base- currency)
      *                    we abort if the depth reached 6.
      * @return the latest price-quote in the kmymoney-file in the default-currency
+     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidSecCurrIDException 
      * @see {@link KMyMoneyFile#getLatestPrice(String, String)}
      * @see #getDefaultCurrencyID()
      */
-    private FixedPointNumber getLatestPrice(final String pCmdtyId, final int depth) {
-	if (pCmdtyId == null) {
-	    throw new IllegalArgumentException("null parameter 'pCmdtyId' " + "given");
+    private FixedPointNumber getLatestPrice(final KMMSecCurrID secCurrID, final int depth) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+	if (secCurrID == null) {
+	    throw new IllegalArgumentException("null parameter 'secCurrID' given");
 	}
+	// System.err.println("depth: " + depth);
 
 	LocalDate latestDate = null;
 	FixedPointNumber latestQuote = null;
 	FixedPointNumber factor = new FixedPointNumber(1); // factor is used if the quote is not to our base-currency
 	final int maxRecursionDepth = 5;
 
-//	for (Object bookElement : getRootElement().getGncBook().getBookElements()) {
-//	    if (!(bookElement instanceof KMYMONEYFILE.GncBook.GncPricedb)) {
-//		continue;
-//	    }
-	    PRICES priceDB = getRootElement().getPRICES();
-	    for ( PRICEPAIR pricePair : (List<PRICEPAIR>) priceDB.getPRICEPAIR() ) {
+	PRICES priceDB = getRootElement().getPRICES();
+	for ( PRICEPAIR pricePair : priceDB.getPRICEPAIR() ) {
+	    String fromCurr = pricePair.getFrom();
+	    String toCurr = pricePair.getTo();
+	    // System.err.println("pricepair: " + fromCurr + " -> " + toCurr);
 		
-		String fromCurr = pricePair.getFrom();
-		String toCurr = pricePair.getFrom();
+	    if ( fromCurr == null ) {
+		LOGGER.warn("KMyMoney-file contains price-quotes" + " with no from-currency: '"
+			+ pricePair.toString() + "'");
+		continue;
+	    }
 		
-		if ( fromCurr == null ) {
-		    LOGGER.warn("KMyMoney-file contains price-quotes" + " with no from-currency: '"
-			    + pricePair.toString() + "'");
-		    continue;
-		}
+	    if ( toCurr == null ) {
+		LOGGER.warn("KMyMoney-file contains price-quotes" + " with no to-currency: '"
+			+ pricePair.toString() + "'");
+		continue;
+	    }
 		
-		if ( toCurr == null ) {
-		    LOGGER.warn("KMyMoney-file contains price-quotes" + " with no to-currency: '"
-			    + pricePair.toString() + "'");
-		    continue;
-		}
-		
-		for ( PRICE prc : pricePair.getPRICE() ) {
-		    try {
-			if (prc == null) {
-			    LOGGER.warn("KMyMoney-file contains null price-quotes" 
-				    + " there may be a problem with JWSDP");
-			    continue;
-			}
-			if (prc.getDate() == null) {
-			    LOGGER.warn("KMyMoney-file contains price-quotes" + " with no timestamp: '"
-				    + pricePair.toString() + "'");
-			    continue;
-			}
-			if (prc.getPrice() == null) {
-			    LOGGER.warn("KMyMoney-file contains price-quotes" + " with no price value: '"
-				    + pricePair.toString() + "'");
-			    continue;
-			}
+	    for ( PRICE prc : pricePair.getPRICE() ) {
+		try {
+		    if (prc == null) {
+			LOGGER.warn("KMyMoney-file contains null price-quotes" 
+				+ " there may be a problem with JWSDP");
+			continue;
+		    }
+		    
+		    if (prc.getDate() == null) {
+			LOGGER.warn("KMyMoney-file contains price-quotes" + " with no timestamp: '"
+				+ pricePair.toString() + "'");
+			continue;
+		    }
+		    
+		    if (prc.getPrice() == null) {
+			LOGGER.warn("KMyMoney-file contains price-quotes" + " with no price value: '"
+				+ pricePair.toString() + "'");
+			continue;
+		    }
 
-			if ( ! fromCurr.equals(pCmdtyId)) {
+		    if ( ! fromCurr.equals(secCurrID.getCode()) ) {
+			continue;
+		    }
+
+		    // BEGIN core
+		    if ( toCurr.startsWith("E0") ) {
+			if (depth > maxRecursionDepth) {
+			    LOGGER.warn("ignoring price-quote that is not in an ISO4217-currency but in '" + toCurr + "'");
 			    continue;
 			}
-
-			if ( ! fromCurr.equals(getDefaultCurrencyID()) ) {
+			factor = getLatestPrice(new KMMSecID(toCurr), depth + 1);
+		    } else {
+			if ( ! toCurr.equals(getDefaultCurrencyID()) ) {
 			    if (depth > maxRecursionDepth) {
 				LOGGER.warn("ignoring price-quote that is not in " + getDefaultCurrencyID() + " "
-					+ "but in  '" + fromCurr + "'");
+					+ "but in  '" + toCurr + "'");
 				continue;
 			    }
-			    factor = getLatestPrice(fromCurr, depth + 1);
+			    factor = getLatestPrice(new KMMCurrID(toCurr), depth + 1);
 			}
-
-			XMLGregorianCalendar dateCal = prc.getDate();
-			LocalDate date = LocalDate.of(dateCal.getYear(), dateCal.getMonth(), dateCal.getDay());
-
-			if (latestDate == null || latestDate.isBefore(date)) {
-			    latestDate = date;
-			    latestQuote = new FixedPointNumber(prc.getPrice());
-			    LOGGER.debug("getLatestPrice(pCmdtyId='" + pCmdtyId
-				    + "') converted " + latestQuote + " <= " + prc.getPrice());
-			}
-
-		    } catch (NumberFormatException e) {
-			LOGGER.error("[NumberFormatException] Problem in " + getClass().getName()
-				+ ".getLatestPrice(pCmdtyId='" + pCmdtyId
-				+ "')! Ignoring a bad price-quote '" + pricePair + "'", e);
-		    } catch (NullPointerException e) {
-			LOGGER.error("[NullPointerException] Problem in " + getClass().getName()
-				+ ".getLatestPrice(pCmdtyId='" + pCmdtyId
-				+ "')! Ignoring a bad price-quote '" + pricePair + "'", e);
-		    } catch (ArithmeticException e) {
-			LOGGER.error("[ArithmeticException] Problem in " + getClass().getName()
-				+ ".getLatestPrice(pCmdtyId='" + pCmdtyId
-				+ "')! Ignoring a bad price-quote '" + pricePair + "'", e);
 		    }
+		    // END core
+
+		    XMLGregorianCalendar dateCal = prc.getDate();
+		    LocalDate date = LocalDate.of(dateCal.getYear(), dateCal.getMonth(), dateCal.getDay());
+
+		    if (latestDate == null || latestDate.isBefore(date)) {
+			latestDate = date;
+			latestQuote = new FixedPointNumber(prc.getPrice());
+			LOGGER.debug("getLatestPrice(pCmdtyId='" + secCurrID.toString()
+				+ "') converted " + latestQuote + " <= " + prc.getPrice());
+		    }
+
+		} catch (NumberFormatException e) {
+		    LOGGER.error("[NumberFormatException] Problem in " + getClass().getName()
+			    + ".getLatestPrice(pCmdtyId='" + secCurrID.toString()
+			    + "')! Ignoring a bad price-quote '" + pricePair + "'", e);
+		} catch (NullPointerException e) {
+		    LOGGER.error("[NullPointerException] Problem in " + getClass().getName()
+			    + ".getLatestPrice(pCmdtyId='" + secCurrID.toString()
+			    + "')! Ignoring a bad price-quote '" + pricePair + "'", e);
+		} catch (ArithmeticException e) {
+		    LOGGER.error("[ArithmeticException] Problem in " + getClass().getName()
+			    + ".getLatestPrice(pCmdtyId='" + secCurrID.toString()
+			    + "')! Ignoring a bad price-quote '" + pricePair + "'", e);
 		}
-//	    }
-	}
+	    } // for price
+	} // for pricepair
 
 	LOGGER.debug(getClass().getName() + ".getLatestPrice(pCmdtyId='"
-		+ pCmdtyId + "')= " + latestQuote + " from " + latestDate);
+		+ secCurrID.toString() + "')= " + latestQuote + " from " + latestDate);
 
 	if (latestQuote == null) {
 	    return null;
@@ -697,9 +737,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @param pFile the file to read
      * @throws IOException on low level reading-errors (FileNotFoundException if not
      *                     found)
+     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidSecCurrIDException 
      * @see #setRootElement(KMYMONEYFILE)
      */
-    protected void loadFile(final File pFile) throws IOException {
+    protected void loadFile(final File pFile) throws IOException, InvalidSecCurrIDException, InvalidSecCurrTypeException {
 
 	long start = System.currentTimeMillis();
 
@@ -738,7 +780,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
     }
 
-    protected void loadInputStream(InputStream in) throws UnsupportedEncodingException, IOException {
+    protected void loadInputStream(InputStream in) throws UnsupportedEncodingException, IOException, InvalidSecCurrIDException, InvalidSecCurrTypeException {
 	long start = System.currentTimeMillis();
 
 	NamespaceRemovererReader reader = new NamespaceRemovererReader(new InputStreamReader(in, "utf-8"));
@@ -752,9 +794,9 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	    }
 	    Unmarshaller unmarshaller = myContext.createUnmarshaller();
 
-	    KMYMONEYFILE o = (KMYMONEYFILE) unmarshaller.unmarshal(new InputSource(new BufferedReader(reader)));
+	    KMYMONEYFILE obj = (KMYMONEYFILE) unmarshaller.unmarshal(new InputSource(new BufferedReader(reader)));
 	    long start2 = System.currentTimeMillis();
-	    setRootElement(o);
+	    setRootElement(obj);
 	    long end = System.currentTimeMillis();
 	    LOGGER.info("KMyMoneyFileImpl.loadFileInputStream took " + (end - start) + " ms (total) " + (start2 - start)
 		    + " ms (jaxb-loading)" + (end - start2) + " ms (building facades)");

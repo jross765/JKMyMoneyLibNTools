@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 
-import org.kmymoney.currency.CurrencyNameSpace;
 import org.kmymoney.generated.TRANSACTION;
 import org.kmymoney.numbers.FixedPointNumber;
 
@@ -145,12 +144,6 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
      */
     boolean isBalanced();
 
-    /**
-     * The name of the currency in the given namespace e.g. "EUR" for euro in
-     * namespace "ISO4217"= {@link CurrencyNameSpace#NAMESPACE_CURRENCY}
-     * 
-     * @see {@link #getCurrencyNameSpace()}
-     */
     String getCommodity();
 
     /**

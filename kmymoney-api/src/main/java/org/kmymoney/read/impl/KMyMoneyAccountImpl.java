@@ -6,7 +6,11 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.kmymoney.currency.CurrencyNameSpace;
+import org.kmymoney.basetypes.InvalidSecCurrIDException;
+import org.kmymoney.basetypes.InvalidSecCurrTypeException;
+import org.kmymoney.basetypes.KMMCurrID;
+import org.kmymoney.basetypes.KMMSecCurrID;
+import org.kmymoney.basetypes.KMMSecID;
 import org.kmymoney.generated.ACCOUNT;
 import org.kmymoney.read.KMyMoneyAccount;
 import org.kmymoney.read.KMyMoneyFile;
@@ -91,17 +95,6 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     }
 
     /**
-     * @return "ISO4217" for a currency "FUND" or a fond,...
-     * @see KMyMoneyAccount#getCurrencyNameSpace()
-     */
-    public String getCurrencyCode() {
-	if (jwsdpPeer.getCurrency() == null) {
-	    return CurrencyNameSpace.CURRENCY; // default-currency because gnucash 2.2 has no currency on the root-account
-	}
-	return jwsdpPeer.getCurrency();
-    }
-
-    /**
      * @see KMyMoneyAccount#getDescription()
      */
     public String getMemo() {
@@ -182,6 +175,20 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 	}
 
 	jwsdpPeer = newPeer;
+    }
+
+    @Override
+    public KMMSecCurrID getSecCurrID() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+
+	KMMSecCurrID result = null;
+
+	if ( jwsdpPeer.getCurrency().startsWith("E0") ) { // ::MAGIC
+	    result = new KMMSecID(jwsdpPeer.getCurrency());
+	} else {
+	    result = new KMMCurrID(jwsdpPeer.getCurrency());
+	}
+
+	return result;
     }
 
 }

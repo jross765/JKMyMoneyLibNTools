@@ -2,6 +2,8 @@ package org.kmymoney.read;
 
 import java.util.Locale;
 
+import org.kmymoney.basetypes.InvalidSecCurrIDException;
+import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.numbers.FixedPointNumber;
 
 /**
@@ -62,10 +64,10 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     String getValueFormatted();
     /**
      * The value is in the currency of the transaction!
-     * @param locale the locale to use
+     * @param lcl the locale to use
      * @return the value-transfer this represents
      */
-    String getValueFormatted(Locale locale);
+    String getValueFormatted(Locale lcl);
     /**
      * The value is in the currency of the transaction!
      * @return the value-transfer this represents
@@ -73,10 +75,10 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     String getValueFormattedForHTML();
     /**
      * The value is in the currency of the transaction!
-     * @param locale the locale to use
+     * @param lcl the locale to use
      * @return the value-transfer this represents
      */
-    String getValueFormattedForHTML(Locale locale);
+    String getValueFormattedForHTML(Locale lcl);
 
     /**
      * @return the balance of the account (in the account's currency)
@@ -87,13 +89,17 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     /**
      * @return the balance of the account (in the account's currency)
      *         up to this split.
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
      */
-    String getAccountBalanceFormatted();
+    String getAccountBalanceFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
 
     /**
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
      * @see KMyMoneyAccount#getBalanceFormatted()
      */
-    String getAccountBalanceFormatted(Locale locale);
+    String getAccountBalanceFormatted(Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
 
     /**
      * The quantity is in the currency of the account!
@@ -104,28 +110,36 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     /**
      * The quantity is in the currency of the account!
      * @return the number of items added to the account
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
      */
-    String getSharesFormatted();
+    String getSharesFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
 
     /**
      * The quantity is in the currency of the account!
-     * @param locale the locale to use
+     * @param lcl the locale to use
      * @return the number of items added to the account
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
      */
-    String getSharesFormatted(Locale locale);
+    String getSharesFormatted(Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
 
     /**
      * The quantity is in the currency of the account!
      * @return the number of items added to the account
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
      */
-    String getSharesFormattedForHTML();
+    String getSharesFormattedForHTML() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
 
     /**
      * The quantity is in the currency of the account!
-     * @param locale the locale to use
+     * @param lcl the locale to use
      * @return the number of items added to the account
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
      */
-    String getSharesFormattedForHTML(Locale locale);
+    String getSharesFormattedForHTML(Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
 
     /**
      * @return the user-defined description for this object
