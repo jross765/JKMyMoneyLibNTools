@@ -6,7 +6,6 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Currency;
@@ -14,8 +13,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-
-import javax.swing.JWindow;
 
 import org.kmymoney.currency.ComplexCurrencyTable;
 import org.kmymoney.currency.CurrencyNameSpace;
@@ -117,19 +114,21 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	/**
 	 * get name including the name of the parent.accounts.
 	 *
-	 * @return e.g. "Aktiva::test::test2"
+	 * @return e.g. "Asset::Barvermögen::Bargeld"
 	 * @see KMyMoneyAccount#getQualifiedName()
 	 */
 	public String getQualifiedName() {
 		KMyMoneyAccount acc = getParentAccount();
-		if (acc == null || acc.getId() == getId()) {
-			if (getParentAccountId() == null) {
+		if ( acc == null || 
+		     acc.getId() == getId() ) {
+			if ( getParentAccountId() == null ||
+			     getParentAccountId().equals("") ) {
 				return getName();
 			}
 
-			return "UNKNOWN::" + getName();
+			return "UNKNOWN" + SEPARATOR + getName();
 		}
-		return acc.getQualifiedName() + "::" + getName();
+		return acc.getQualifiedName() + SEPARATOR + getName();
 	}
 
 	/**

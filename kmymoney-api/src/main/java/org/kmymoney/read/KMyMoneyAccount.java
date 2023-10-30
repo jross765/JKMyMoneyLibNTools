@@ -17,44 +17,79 @@ import org.kmymoney.numbers.FixedPointNumber;
 public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
 
     // For the following types cf.:
-    // https://github.com/Gnucash/gnucash/blob/stable/libgnucash/engine/Account.h
+    // https://github.com/KDE/kmymoney/blob/master/kmymoney/mymoney/mymoneyaccount.h
     //
-    // Examples (from German accounting):
-    //
-    // - TYPE_BANK = "BANK"; Girokonto, Tagesgeldkonto
-    // - TYPE_CASH = "CASH"; Kasse
-    // - TYPE_CREDIT = "CREDIT"; "Kreditkarte"
-    // - TYPE_ASSET = "ASSET"; Vermögensgegenstaende, "1. Forderungen aus
-    // Lieferungen und Leistungen"
-    // - TYPE_LIABILITY = "LIABILITY"; Verbindlichkeiten ggueber Lieferanten
-    // - TYPE_STOCK = "STOCK"; Aktie
-    // - TYPE_MUTUAL = "MUTUAL"; Investment-Fonds
-    // - TYPE_CURRENCY = "CURRENCY";
-    // - TYPE_INCOME = "INCOME"; "Umsatzerloese 16% USt"
-    // - TYPE_EXPENSE = "EXPENSE"; "private Ausgaben"
-    // - TYPE_EQUITY = "EQUITY"; "Anfangsbestand"
-    // - TYPE_RECEIVABLE = "RECEIVABLE"; "Forderungen aus Lieferungen und
-    // Leistungen"
-    // - TYPE_PAYABLE = "PAYABLE"; "Verbindlichkeiten ggueber Lieferant xyz"
-    // - TYPE_ROOT = "ROOT"; guess ;-)
-    // - TYPE_TRADING = "TRADING";
-
+    /**
+     * The current assignment is as follows:
+     *
+     * - Asset
+     *   - Asset
+     *   - Checkings
+     *   - Savings
+     *   - Cash
+     *   - Currency
+     *   - Investment
+     *   - MoneyMarket
+     *   - CertificateDep
+     *   - AssetLoan
+     *   - Stock
+     *
+     * - Liability
+     *   - Liability
+     *   - CreditCard
+     *   - Loan
+     *
+     * - Income
+     *   - Income
+     *
+     * - Expense
+     *   - Expense
+     *
+     * - Equity
+     *   - Equity
+     */
+    
+    // For the following types cf.:
+    // https://github.com/KDE/kmymoney/blob/master/kmymoney/mymoney/mymoneyenums.h
+    /*
+     * Checkings,         Standard checking account
+     * Savings,              Typical savings account
+     * Cash,                 Denotes a shoe-box or pillowcase stuffed with cash
+     * CreditCard,           Credit card accounts
+     * Loan,                 Loan and mortgage accounts (liability)
+     * CertificateDep,       Certificates of Deposit
+     * Investment,           Investment account
+     * MoneyMarket,          Money Market Account
+     * Asset,                Denotes a generic asset account
+     * Liability,            Denotes a generic liability account.
+     * Currency,             Denotes a currency trading account.
+     * Income,               Denotes an income account
+     * Expense,              Denotes an expense account
+     * AssetLoan,            Denotes a loan (asset of the owner of this object)
+     * Stock,                Denotes an security account as sub-account for an investment
+     * Equity,               Denotes an equity account e.g. opening/closing balance
+    */
+    
     // ::MAGIC
-    public static final String TYPE_BANK       = "BANK";
-    public static final String TYPE_CASH       = "CASH";
-    public static final String TYPE_CREDIT     = "CREDIT";
-    public static final String TYPE_ASSET      = "ASSET";
-    public static final String TYPE_LIABILITY  = "LIABILITY";
-    public static final String TYPE_STOCK      = "STOCK";
-    public static final String TYPE_MUTUAL     = "MUTUAL";
-    public static final String TYPE_CURRENCY   = "CURRENCY";
-    public static final String TYPE_INCOME     = "INCOME";
-    public static final String TYPE_EXPENSE    = "EXPENSE";
-    public static final String TYPE_EQUITY     = "EQUITY";
-    public static final String TYPE_RECEIVABLE = "RECEIVABLE";
-    public static final String TYPE_PAYABLE    = "PAYABLE";
-    public static final String TYPE_ROOT       = "ROOT";
-    public static final String TYPE_TRADING    = "TRADING";
+    // ::TODO Convert to enum
+    public static final int TYPE_CHECKING            = 1;
+    public static final int TYPE_SAVINGS             = 2;
+    public static final int TYPE_CASH                = 3;
+    public static final int TYPE_CREDIT_CARD         = 4;
+    public static final int TYPE_LOAN                = 5;
+    public static final int TYPE_CERTIFICATE_DEPOSIT = 6;
+    public static final int TYPE_INVESTMENT          = 7;
+    public static final int TYPE_MONEY_MARKET        = 8;
+    public static final int TYPE_ASSET               = 9;
+    public static final int TYPE_LIABILITY           = 10;
+    public static final int TYPE_CURRENCY            = 11;
+    public static final int TYPE_INCOME              = 12;
+    public static final int TYPE_EXPENSE             = 13;
+    public static final int TYPE_ASSET_LOAN          = 14;
+    public static final int TYPE_STOCK               = 15;
+    public static final int TYPE_EQUITY              = 16;
+    
+    public static String SEPARATOR = "::";
 
     // -----------------------------------------------------------------
 
@@ -83,7 +118,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
     /**
      * get name including the name of the parent.accounts.
      *
-     * @return e.g. "Aktiva::test::test2"
+     * @return e.g. "Asset::Barvermögen::Bargeld"
      */
     String getQualifiedName();
 

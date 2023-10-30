@@ -1,6 +1,5 @@
 package org.kmymoney.read;
 
-import java.util.Collection;
 import java.util.Locale;
 
 import org.kmymoney.numbers.FixedPointNumber;
@@ -12,6 +11,19 @@ import org.kmymoney.numbers.FixedPointNumber;
  */
 public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransactionSplit> {
 
+    // For the following states cf.:
+    // https://github.com/KDE/kmymoney/blob/master/kmymoney/mymoney/mymoneyenums.h
+
+    // ::MAGIC
+    // ::TODO Convert to enum
+    public static final int STATE_UNKNOWN        = -1;
+    public static final int STATE_NOT_RECONCILED = 0;
+    public static final int STATE_CLEARED        = 1;
+    public static final int STATE_RECONCILES     = 2;
+    public static final int STATE_FROZEN         = 3;
+    
+    // ---------------------------------------------------------------
+    
     /**
      *
      * @return the unique-id to identify this object with across name- and hirarchy-changes
