@@ -8,7 +8,9 @@ module kmymoney.api {
 	exports org.kmymoney.numbers;
 	
 	exports org.kmymoney.read;
+	exports org.kmymoney.read.aux;
 	exports org.kmymoney.read.impl;
+	exports org.kmymoney.read.impl.aux;
 	
 //	exports org.kmymoney.write;
 //	exports org.kmymoney.write.impl;

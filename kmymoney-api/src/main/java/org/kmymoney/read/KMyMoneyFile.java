@@ -5,8 +5,11 @@ import java.util.Collection;
 
 import org.kmymoney.basetypes.InvalidSecCurrIDException;
 import org.kmymoney.basetypes.InvalidSecCurrTypeException;
+import org.kmymoney.basetypes.KMMCurrID;
 import org.kmymoney.basetypes.KMMSecCurrID;
+import org.kmymoney.basetypes.KMMSecID;
 import org.kmymoney.currency.ComplexPriceTable;
+import org.kmymoney.generated.KMYMONEYFILE;
 import org.kmymoney.numbers.FixedPointNumber;
 
 /**
@@ -22,6 +25,9 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @return the file on disk we are managing
      */
     File getFile();
+
+    @SuppressWarnings("exports")
+    KMYMONEYFILE getRootElement();
 
     /**
      * The Currency-Table gets initialized with the latest prices found in the
@@ -142,6 +148,53 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @see #getAccountByName(String)
      */
     KMyMoneyAccount getAccountByIDorNameEx(String id, String name) throws NoEntryFoundException, TooManyEntriesFoundException;
+
+    // ----------------------------
+
+    /**
+     * @param id the unique id of the customer to look for
+     * @return the customer or null if it's not found
+     */
+    KMyMoneyCurrency getCurrencyByID(String id);
+
+    KMyMoneyCurrency getCurrencyByQualifID(KMMCurrID currID);
+
+    /**
+     * warning: this function has to traverse all securites. If it much faster to
+     * try getCustomerByID first and only call this method if the returned account
+     * does not have the right name.
+     *
+     * @param name the name to look for
+     * @return null if not found
+     * @see #getCustomerByID(String)
+     */
+    // Collection<KMyMoneyCurrency> getCurrenciesByName(String name);
+
+    /**
+     * @return a (possibly read-only) collection of all customers Do not modify the
+     *         returned collection!
+     */
+    Collection<KMyMoneyCurrency> getCurrencies();
+
+    // ----------------------------
+
+    /**
+     * @param id the unique id of the customer to look for
+     * @return the customer or null if it's not found
+     */
+    KMyMoneySecurity getSecurityByID(String id);
+
+    KMyMoneySecurity getSecurityByQualifID(KMMSecID secID);
+
+    KMyMoneySecurity getSecurityByQualifID(String qualifID) throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+
+    public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr);
+    
+    public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed);
+
+    public KMyMoneySecurity getSecurityByNameUniq(final String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
+
+    Collection<KMyMoneySecurity> getSecurities();
 
     // ----------------------------
 

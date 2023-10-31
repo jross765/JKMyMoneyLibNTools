@@ -35,18 +35,22 @@ import org.kmymoney.basetypes.KMMSecCurrID;
 import org.kmymoney.basetypes.KMMSecID;
 import org.kmymoney.currency.ComplexPriceTable;
 import org.kmymoney.generated.ACCOUNT;
+import org.kmymoney.generated.CURRENCY;
 import org.kmymoney.generated.KMYMONEYFILE;
 import org.kmymoney.generated.ObjectFactory;
 import org.kmymoney.generated.PAYEE;
 import org.kmymoney.generated.PRICE;
 import org.kmymoney.generated.PRICEPAIR;
 import org.kmymoney.generated.PRICES;
+import org.kmymoney.generated.SECURITY;
 import org.kmymoney.generated.TRANSACTION;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyAccount;
+import org.kmymoney.read.KMyMoneyCurrency;
 import org.kmymoney.read.KMyMoneyFile;
 import org.kmymoney.read.KMyMoneyObject;
 import org.kmymoney.read.KMyMoneyPayee;
+import org.kmymoney.read.KMyMoneySecurity;
 import org.kmymoney.read.KMyMoneyTransaction;
 import org.kmymoney.read.KMyMoneyTransactionSplit;
 import org.kmymoney.read.NoEntryFoundException;
@@ -371,6 +375,22 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     protected Map<String, KMyMoneyTransactionSplit> transactionSplitID2transactionSplit;
 
     /**
+     * All currencies indexed by their unique id-String.
+     *
+     * @see KMyMoneyCurrency
+     * @see KMyMoneyCurrencyImpl
+     */
+    protected Map<String, KMyMoneyCurrency> currID2Curr;
+
+    /**
+     * All securities indexed by their unique id-String.
+     *
+     * @see KMyMoneySecurity
+     * @see KMyMoneySecurityImpl
+     */
+    protected Map<String, KMyMoneySecurity> secID2Sec;
+
+    /**
      * All payees indexed by their unique id-String.
      *
      * @see KMyMoneyPayee
@@ -387,7 +407,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     /**
      * @return the underlying JAXB-element
      */
-    protected KMYMONEYFILE getRootElement() {
+    @SuppressWarnings("exports")
+    public KMYMONEYFILE getRootElement() {
 	return rootElement;
     }
 
@@ -414,6 +435,10 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	// transactions refer to invoices, therefore they must be loaded after
 	// them
 	initTransactionMap(pRootElement);
+
+	initCurrencyMap(pRootElement);
+
+	initSecurityMap(pRootElement);
 
 	initPayeeMap(pRootElement);
     }
@@ -452,6 +477,38 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	} // for
 
 	LOGGER.debug("No. of entries in transaction map: " + transactionID2transaction.size());
+    }
+
+    private void initCurrencyMap(final KMYMONEYFILE pRootElement) {
+	currID2Curr = new HashMap<>();
+
+	for ( CURRENCY jwsdpCurr : pRootElement.getCURRENCIES().getCURRENCY() ) {
+	    try {
+		KMyMoneyCurrencyImpl curr = createCurrency(jwsdpCurr);
+		currID2Curr.put(jwsdpCurr.getId(), curr);
+	    } catch (RuntimeException e) {
+		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initCurrencyMap: "
+			+ "ignoring illegal Currency-Entry with id=" + jwsdpCurr.getId(), e);
+	    }
+	} // for
+
+	LOGGER.debug("No. of entries in currency map: " + currID2Curr.size());
+    }
+
+    private void initSecurityMap(final KMYMONEYFILE pRootElement) {
+	secID2Sec = new HashMap<>();
+
+	for ( SECURITY jwsdpSec : pRootElement.getSECURITIES().getSECURITY() ) {
+	    try {
+		KMyMoneySecurityImpl sec = createSecurity(jwsdpSec);
+		secID2Sec.put(jwsdpSec.getId(), sec);
+	    } catch (RuntimeException e) {
+		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initSecurityMap: "
+			+ "ignoring illegal Security-Entry with id=" + jwsdpSec.getId(), e);
+	    }
+	} // for
+
+	LOGGER.debug("No. of entries in security map: " + secID2Sec.size());
     }
 
     private void initPayeeMap(final KMYMONEYFILE pRootElement) {
@@ -692,6 +749,24 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     /**
+     * @param jwsdpCurr the JWSDP-peer (parsed xml-element) to fill our object with
+     * @return the new KMyMoneyCurrency to wrap the given JAXB object.
+     */
+    protected KMyMoneyCurrencyImpl createCurrency(final CURRENCY jwsdpCurr) {
+	KMyMoneyCurrencyImpl curr = new KMyMoneyCurrencyImpl(jwsdpCurr, this);
+	return curr;
+    }
+
+    /**
+     * @param jwsdpSec the JWSDP-peer (parsed xml-element) to fill our object with
+     * @return the new KMyMoneySecurity to wrap the given JAXB object.
+     */
+    protected KMyMoneySecurityImpl createSecurity(final SECURITY jwsdpSec) {
+	KMyMoneySecurityImpl sec = new KMyMoneySecurityImpl(jwsdpSec, this);
+	return sec;
+    }
+
+    /**
      * @param jwsdpPye the JWSDP-peer (parsed xml-element) to fill our object with
      * @return the new KMyMoneyPayee to wrap the given JAXB object.
      */
@@ -862,9 +937,147 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
 	KMyMoneyAccount retval = accountID2account.get(id);
 	if (retval == null) {
-	    System.err.println("No Account with id '" + id + "'. We know " + accountID2account.size() + " accounts.");
+	    System.err.println("No Account with ID '" + id + "'. We know " + accountID2account.size() + " accounts.");
 	}
+	
 	return retval;
+    }
+
+    // ---------------------------------------------------------------
+
+    @Override
+    public KMyMoneyCurrency getCurrencyByID(String id) {
+	if (currID2Curr == null) {
+	    throw new IllegalStateException("no root-element loaded");
+	}
+
+	KMyMoneyCurrency retval = currID2Curr.get(id);
+	if (retval == null) {
+	    LOGGER.warn("No Currency with ID '" + id + "'. We know " + currID2Curr.size() + " currencies.");
+	}
+	
+	return retval;
+    }
+
+    @Override
+    public KMyMoneyCurrency getCurrencyByQualifID(KMMCurrID currID) {
+	return getCurrencyByID(currID.getCode());
+    }
+
+    @Override
+    public Collection<KMyMoneyCurrency> getCurrencies() {
+	return currID2Curr.values();
+    }
+
+    // ---------------------------------------------------------------
+
+    @Override
+    public KMyMoneySecurity getSecurityByID(final String id) {
+	if (secID2Sec == null) {
+	    throw new IllegalStateException("no root-element loaded");
+	}
+
+	KMyMoneySecurity retval = secID2Sec.get(id);
+	if (retval == null) {
+	    LOGGER.warn("No Security with ID '" + id + "'. We know " + secID2Sec.size() + " securities.");
+	}
+	
+	return retval;
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityByQualifID(final KMMSecID secID) {
+	return getSecurityByID(secID.getCode());
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityByQualifID(final String qualifID) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+	if (qualifID == null) {
+	    throw new IllegalStateException("null string given");
+	}
+
+	if (qualifID.trim().equals("")) {
+	    throw new IllegalStateException("Search string is empty");
+	}
+
+	KMMSecID secID = new KMMSecID(qualifID);
+	return getSecurityByQualifID(secID);
+    }
+
+//    @Override
+//    public GnucashSecurity getSecurityBySymbol(final String xCode) {
+//	if ( secID2Sec == null ) {
+//	    throw new IllegalStateException("no root-element loaded");
+//	}
+//
+//	if ( cmdtyQualifID2Cmdty.size() != cmdtyXCode2QualifID.size() ) {
+//	    // CAUTION: Don't throw an exception, at least not in all cases,
+//	    // because this is not necessarily an error: Only if the GnuCash
+//	    // file does not contain quotes for foreign currencies (i.e. currency-
+//	    // commodities but only security-commodities is this an error.
+//	    // throw new IllegalStateException("Sizes of root elements are not equal");
+//	    LOGGER.debug("getSecurityByXCode: Sizes of root elements are not equal.");
+//	}
+//	
+//	String qualifIDStr = cmdtyXCode2QualifID.get(xCode);
+//	if (qualifIDStr == null) {
+//	    LOGGER.warn("No Security with X-Code '" + xCode + "'. We know " + cmdtyXCode2QualifID.size() + " commodities in map 2.");
+//	}
+//	
+//	GnucashSecurity retval = cmdtyQualifID2Cmdty.get(qualifIDStr);
+//	if (retval == null) {
+//	    LOGGER.warn("No Security with qualified ID '" + qualifIDStr + "'. We know " + cmdtyQualifID2Cmdty.size() + " commodities in map 1.");
+//	}
+//	
+//	return retval;
+//    }
+
+    @Override
+    public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr) {
+	return getSecuritiesByName(expr, true);
+    }
+    
+    @Override
+    public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed) {
+	if (secID2Sec == null) {
+	    throw new IllegalStateException("no root-element loaded");
+	}
+	
+	Collection<KMyMoneySecurity> result = new ArrayList<KMyMoneySecurity>();
+
+	for ( KMyMoneySecurity sec : getSecurities() ) {
+	    if ( sec.getName() != null ) // yes, that can actually happen! 
+	    {
+		if ( relaxed ) {
+		    if ( sec.getName().trim().toLowerCase().
+			    contains(expr.trim().toLowerCase()) ) {
+			result.add(sec);
+		    }
+		} else {
+		    if ( sec.getName().equals(expr) ) {
+			result.add(sec);
+		    }
+		}
+	    }
+	}
+	
+	return result;
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityByNameUniq(final String expr) throws NoEntryFoundException, TooManyEntriesFoundException {
+	Collection<KMyMoneySecurity> cmdtyList = getSecuritiesByName(expr, false);
+	if ( cmdtyList.size() == 0 )
+	    throw new NoEntryFoundException();
+	else if ( cmdtyList.size() > 1 )
+	    throw new TooManyEntriesFoundException();
+	else
+	    return cmdtyList.iterator().next();
+    }
+    
+    @Override
+    public Collection<KMyMoneySecurity> getSecurities() {
+	return secID2Sec.values();
     }
 
     // ---------------------------------------------------------------
@@ -879,8 +1092,9 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
 	KMyMoneyPayee retval = payeeID2Payee.get(id);
 	if (retval == null) {
-	    LOGGER.warn("No Payee with id '" + id + "'. We know " + payeeID2Payee.size() + " payees.");
+	    LOGGER.warn("No Payee with ID '" + id + "'. We know " + payeeID2Payee.size() + " payees.");
 	}
+	
 	return retval;
     }
 
@@ -907,10 +1121,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     public Collection<KMyMoneyPayee> getPayees() {
 	return payeeID2Payee.values();
     }
-
-    // ---------------------------------------------------------------
-
-    
 
     // ---------------------------------------------------------------
 

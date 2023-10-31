@@ -6,18 +6,15 @@ import java.util.Collection;
 import org.kmymoney.basetypes.InvalidSecCurrIDException;
 import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.basetypes.KMMCurrID;
-import org.kmymoney.basetypes.KMMSecID;
 import org.kmymoney.read.aux.KMMPrice;
 import org.kmymoney.read.impl.UnknownRoundingMethodException;
 import org.kmymoney.read.impl.UnknownSecurityTypeException;
 
-public interface KMyMoneySecurity {
+public interface KMyMoneyCurrency {
 
     String getId();
 
-    KMMSecID getQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
-
-    String getSymbol();
+    KMMCurrID getQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
 
     // ------------------------------------------------------------
 
@@ -25,16 +22,16 @@ public interface KMyMoneySecurity {
     
     String getName();
     
+    String getSymbol();
+
     BigInteger getPP();
     
     KMMSecCurr.RoundingMethod getRoundingMethod() throws UnknownRoundingMethodException;
     
     BigInteger getSAF();
     
-    KMMCurrID getTradingCurrency() throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
-
-    String getTradingMarket();
-
+    BigInteger getSCF();
+    
     // ------------------------------------------------------------
 
     Collection<KMMPrice> getQuotes() throws InvalidSecCurrTypeException;

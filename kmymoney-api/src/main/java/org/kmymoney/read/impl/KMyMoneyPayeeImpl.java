@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public class KMyMoneyPayeeImpl implements KMyMoneyPayee {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyTransactionImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyPayeeImpl.class);
 
     // ---------------------------------------------------------------
 

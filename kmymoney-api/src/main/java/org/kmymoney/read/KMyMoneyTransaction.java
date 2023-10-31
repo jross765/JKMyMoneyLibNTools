@@ -167,7 +167,7 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
      * 
      * @see KMyMoneyTransaction#getBalance()
      */
-    String getBalanceFormatted(Locale loc);
+    String getBalanceFormatted(Locale lcl);
 
     /**
      * The result is in the currency of the transaction.<br/>
@@ -190,5 +190,5 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
      * 
      * @see KMyMoneyTransaction#getNegatedBalance()
      */
-    String getNegatedBalanceFormatted(Locale loc);
+    String getNegatedBalanceFormatted(Locale lcl);
 }
