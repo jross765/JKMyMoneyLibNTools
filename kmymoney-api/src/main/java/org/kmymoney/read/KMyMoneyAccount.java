@@ -1,18 +1,15 @@
 package org.kmymoney.read;
 
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Currency;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import org.kmymoney.basetypes.InvalidSecCurrIDException;
 import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.basetypes.KMMSecCurrID;
-import org.kmymoney.currency.ComplexPriceTable;
 import org.kmymoney.numbers.FixedPointNumber;
+import org.kmymoney.read.impl.UnknownAccountTypeException;
 
 /**
  * An account is a collection of transactions that start or end there. <br>
@@ -77,25 +74,27 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * Stock,                Denotes an security account as sub-account for an investment
      * Equity,               Denotes an equity account e.g. opening/closing balance
     */
+
+    public enum Type {
+	CHECKING,
+	SAVINGS,
+	CASH,
+	CREDIT_CARD,
+	LOAN,
+	CERTIFICATE_DEPOSIT,
+	INVESTMENT,
+	MONEY_MARKET,
+	ASSET,
+	LIABILITY,
+	CURRENCY,
+	INCOME,
+	EXPENSE,
+	ASSET_LOAN,
+	STOCK,
+	EQUITY
+    }
     
-    // ::MAGIC
-    // ::TODO Convert to enum
-    public static final int TYPE_CHECKING            = 1;
-    public static final int TYPE_SAVINGS             = 2;
-    public static final int TYPE_CASH                = 3;
-    public static final int TYPE_CREDIT_CARD         = 4;
-    public static final int TYPE_LOAN                = 5;
-    public static final int TYPE_CERTIFICATE_DEPOSIT = 6;
-    public static final int TYPE_INVESTMENT          = 7;
-    public static final int TYPE_MONEY_MARKET        = 8;
-    public static final int TYPE_ASSET               = 9;
-    public static final int TYPE_LIABILITY           = 10;
-    public static final int TYPE_CURRENCY            = 11;
-    public static final int TYPE_INCOME              = 12;
-    public static final int TYPE_EXPENSE             = 13;
-    public static final int TYPE_ASSET_LOAN          = 14;
-    public static final int TYPE_STOCK               = 15;
-    public static final int TYPE_EQUITY              = 16;
+    // -----------------------------------------------------------------
     
     public static String SEPARATOR = "::";
 
@@ -158,15 +157,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
 
     // ----------------------------
 
-    /**
-     * @return the type-string for this account.
-     * @see #TYPE_ASSET
-     * @see #TYPE_INCOME
-     * @see #TYPE_LIABILITY
-     * @see #TYPE_PAYABLE
-     * @see #TYPE_RECEIVABLE there are other types too
-     */
-    BigInteger getType();
+    Type getType() throws UnknownAccountTypeException;
 
     KMMSecCurrID getSecCurrID() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
 

@@ -23,6 +23,32 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyTransactionSplitImpl.class);
 
+    // ::MAGIC
+    private static final int ACTION_UNKNOWN           = -1;
+    private static final int ACTION_CHECK             = 0;
+    private static final int ACTION_DEPOSIT           = 1;
+    private static final int ACTION_TRANSFER          = 2;
+    private static final int ACTION_WITHDRAWAL        = 3;
+    private static final int ACTION_ATM               = 4;
+    private static final int ACTION_AMORTIZATION      = 5;
+    private static final int ACTION_INTEREST          = 6;
+    private static final int ACTION_BUY_SHARES        = 7;
+    private static final int ACTION_DIVIDEND          = 8;
+    private static final int ACTION_REINVEST_DIVIDEND = 9;
+    private static final int ACTION_YIELD             = 10;
+    private static final int ACTION_ADD_SHARES        = 11;
+    private static final int ACTION_SPLIT_SHARES      = 12;
+    private static final int ACTION_INTEREST_INCOME   = 13;
+    
+    // ::MAGIC
+    public static final int STATE_UNKNOWN        = -1;
+    public static final int STATE_NOT_RECONCILED = 0;
+    public static final int STATE_CLEARED        = 1;
+    public static final int STATE_RECONCILED     = 2;
+    public static final int STATE_FROZEN         = 3;
+    
+    // ---------------------------------------------------------------
+
     /**
      * the JWSDP-object we are facading.
      */
@@ -63,15 +89,63 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 
     // ---------------------------------------------------------------
 
-    /**
-     * @see KMyMoneyTransactionSplit#getAction()
-     */
-    public String getAction() {
-	if (getJwsdpPeer().getAction() == null) {
-	    return "";
-	}
+    public Action getAction() throws UnknownSplitActionException {
+	
+	String actionStr = getJwsdpPeer().getAction();
+	int actionVal = Integer.parseInt(actionStr);
+	
+	if ( actionVal == ACTION_UNKNOWN )
+	    return Action.UNKNOWN;
+	else if ( actionVal == ACTION_CHECK )
+	    return Action.CHECK;
+	else if ( actionVal == ACTION_DEPOSIT )
+	    return Action.DEPOSIT;
+	else if ( actionVal == ACTION_TRANSFER )
+	    return Action.TRANSFER;
+	else if ( actionVal == ACTION_WITHDRAWAL )
+	    return Action.WITHDRAWAL;
+	else if ( actionVal == ACTION_ATM )
+	    return Action.ATM;
+	else if ( actionVal == ACTION_AMORTIZATION )
+	    return Action.AMORTIZATION;
+	else if ( actionVal == ACTION_INTEREST )
+	    return Action.INTEREST;
+	else if ( actionVal == ACTION_BUY_SHARES )
+	    return Action.BUY_SHARES;
+	else if ( actionVal == ACTION_DIVIDEND )
+	    return Action.DIVIDEND;
+	else if ( actionVal == ACTION_REINVEST_DIVIDEND )
+	    return Action.REINVEST_DIVIDEND;
+	else if ( actionVal == ACTION_YIELD )
+	    return Action.YIELD;
+	else if ( actionVal == ACTION_ADD_SHARES )
+	    return Action.ADD_SHARES;
+	else if ( actionVal == ACTION_SPLIT_SHARES )
+	    return Action.SPLIT_SHARES;
+	else if ( actionVal == ACTION_INTEREST_INCOME )
+	    return Action.INTEREST_INCOME;
+	else
+	    throw new UnknownSplitActionException();
+    }
 
-	return getJwsdpPeer().getAction();
+    public State getState() throws UnknownSplitStateException {
+	
+	// ::TODO
+	// int stateVal = jwsdpPeer.getState();
+	int stateVal = STATE_UNKNOWN;
+	
+	if ( stateVal == STATE_UNKNOWN )
+	    return State.UNKNOWN;
+	else if ( stateVal == STATE_NOT_RECONCILED )
+	    return State.NOT_RECONCILED;
+	else if ( stateVal == STATE_CLEARED )
+	    return State.CLEARED;
+	else if ( stateVal == STATE_RECONCILED )
+	    return State.RECONCILED;
+	else if ( stateVal == STATE_FROZEN )
+	    return State.FROZEN;
+	else
+	    throw new UnknownSplitStateException();
     }
 
     /**
@@ -285,8 +359,12 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 	buffer.append(" id: ");
 	buffer.append(getId());
 
-	buffer.append(" Action: '");
-	buffer.append(getAction() + "'");
+	buffer.append(" Action: ");
+	try {
+	    buffer.append(getAction());
+	} catch (UnknownSplitActionException e) {
+	    buffer.append("ERROR");
+	}
 
 	buffer.append(" transaction-id: ");
 	buffer.append(getTransaction().getId());

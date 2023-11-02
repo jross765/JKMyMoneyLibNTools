@@ -29,22 +29,8 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
     public static final int INVEST_TYPE_SPLIT_SHARES      = 7;
     public static final int INVEST_TYPE_INTEREST_INCOME   = 8;
     
-    public static final int ACTION_UNKNOWN           = -1;
-    public static final int ACTION_CHECK             = 0;
-    public static final int ACTION_DEPOSIT           = 1;
-    public static final int ACTION_TRANSFER          = 2;
-    public static final int ACTION_WITHDRAWAL        = 3;
-    public static final int ACTION_ATM               = 4;
-    public static final int ACTION_AMORTIZATION      = 5;
-    public static final int ACTION_INTEREST          = 6;
-    public static final int ACTION_BUY_SHARES        = 7;
-    public static final int ACTION_DIVIDEND          = 8;
-    public static final int ACTION_REINVEST_DIVIDEND = 9;
-    public static final int ACTION_YIELD             = 10;
-    public static final int ACTION_ADD_SHARES        = 11;
-    public static final int ACTION_SPLIT_SHARES      = 12;
-    public static final int ACTION_INTEREST_INCOME   = 13;
-	
+    // ::MAGIC
+    // ::TODO Convert to enum
     public static final int INVEST_ACTION_NONE              = 0;
     public static final int INVEST_ACTION_BUY               = 1;
     public static final int INVEST_ACTION_SELL              = 2;

@@ -5,6 +5,7 @@ import java.util.Locale;
 import org.kmymoney.basetypes.InvalidSecCurrIDException;
 import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.numbers.FixedPointNumber;
+import org.kmymoney.read.impl.UnknownSplitActionException;
 
 /**
  * This denotes a single addition or removal of some
@@ -16,14 +17,32 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     // For the following states cf.:
     // https://github.com/KDE/kmymoney/blob/master/kmymoney/mymoney/mymoneyenums.h
 
-    // ::MAGIC
-    // ::TODO Convert to enum
-    public static final int STATE_UNKNOWN        = -1;
-    public static final int STATE_NOT_RECONCILED = 0;
-    public static final int STATE_CLEARED        = 1;
-    public static final int STATE_RECONCILES     = 2;
-    public static final int STATE_FROZEN         = 3;
+    public enum Action {
+	UNKNOWN,
+	CHECK,
+	DEPOSIT,
+	TRANSFER,
+	WITHDRAWAL,
+	ATM,
+	AMORTIZATION,
+	INTEREST,
+	BUY_SHARES,
+	DIVIDEND,
+	REINVEST_DIVIDEND,
+	YIELD,
+	ADD_SHARES,
+	SPLIT_SHARES,
+	INTEREST_INCOME
+    }
     
+    public enum State {
+	UNKNOWN,
+	NOT_RECONCILED,
+	CLEARED,
+	RECONCILED,
+	FROZEN
+    }
+	
     // ---------------------------------------------------------------
     
     /**
@@ -151,7 +170,8 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * Get the type of association this split has with
      * an invoice's lot.
      * @return null, or one of the ACTION_xyz values defined
+     * @throws UnknownSplitActionException 
      */
-    String getAction();
+    Action getAction() throws UnknownSplitActionException;
 
 }

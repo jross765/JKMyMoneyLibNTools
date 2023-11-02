@@ -160,7 +160,6 @@ public class ComplexPriceTable implements Serializable {
      */
     public void addForNameSpace(final KMMSecCurrID.Type nameSpace, final SimplePriceTable table) {
 	namespace2CurrTab.put(nameSpace, table);
-	System.err.println("NEW ONE: " + table.getClass().getName());
     }
 
     // ---------------------------------------------------------------
