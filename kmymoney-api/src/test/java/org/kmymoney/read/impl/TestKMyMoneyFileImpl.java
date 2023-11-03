@@ -61,19 +61,19 @@ public class TestKMyMoneyFileImpl
   @Test
   public void test01() throws Exception
   {    
-    assertEquals(65, kmmFile.getNofEntriesAccountMap());
+    assertEquals(67, kmmFile.getNofEntriesAccountMap());
   }
 
   @Test
   public void test02() throws Exception
   {    
-    assertEquals(2, kmmFile.getNofEntriesTransactionMap());
+    assertEquals(5, kmmFile.getNofEntriesTransactionMap());
   }
 
   @Test
   public void test03() throws Exception
   {    
-    assertEquals(2, kmmFile.getNofEntriesTransactionSplitsMap());
+    assertEquals(3, kmmFile.getNofEntriesTransactionSplitsMap());
   }
 
 //  @Test

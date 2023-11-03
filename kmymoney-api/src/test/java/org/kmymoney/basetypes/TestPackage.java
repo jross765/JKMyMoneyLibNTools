@@ -1,4 +1,4 @@
-package org.kmymoney;
+package org.kmymoney.basetypes;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -11,14 +11,14 @@ public class TestPackage extends TestCase
     junit.textui.TestRunner.run(suite());
   }
 
+  @SuppressWarnings("exports")
   public static Test suite() throws Exception
   {
     TestSuite suite = new TestSuite();
-
-    // ::TODO
-    suite.addTest(org.kmymoney.basetypes.TestPackage.suite());
-    suite.addTest(org.kmymoney.read.TestPackage.suite());
-//    suite.addTest(org.kmymoney.write.TestPackage.suite());
+    
+    suite.addTest(org.kmymoney.basetypes.TestKMMSecCurrID.suite());
+    suite.addTest(org.kmymoney.basetypes.TestKMMCurrID.suite());
+    suite.addTest(org.kmymoney.basetypes.TestKMMSecID.suite());
 
     return suite;
   }

@@ -188,6 +188,26 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 
     KMyMoneySecurity getSecurityByQualifID(String qualifID) throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
 
+    /**
+     * The symbol is usually the ticker, but need not necessarily be so.
+     * 
+     * @param symb
+     * @return
+     * @throws InvalidSecCurrIDException
+     * @throws InvalidSecCurrTypeException
+     */
+    KMyMoneySecurity getSecurityBySymbol(String symb) throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+
+    /**
+     * By ISIN/CUSIP/SEDOL/WKN...
+     * 
+     * @param code
+     * @return
+     * @throws InvalidSecCurrIDException
+     * @throws InvalidSecCurrTypeException
+     */
+    KMyMoneySecurity getSecurityByCode(String code) throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+
     public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr);
     
     public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed);

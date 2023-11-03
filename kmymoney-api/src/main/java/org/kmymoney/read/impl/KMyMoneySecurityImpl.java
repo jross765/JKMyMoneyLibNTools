@@ -7,6 +7,7 @@ import org.kmymoney.basetypes.InvalidSecCurrIDException;
 import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.basetypes.KMMCurrID;
 import org.kmymoney.basetypes.KMMSecID;
+import org.kmymoney.generated.PAIR;
 import org.kmymoney.generated.SECURITY;
 import org.kmymoney.read.KMMSecCurr;
 import org.kmymoney.read.KMyMoneyFile;
@@ -57,6 +58,20 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
     @Override
     public String getSymbol() {
 	return jwsdpPeer.getSymbol();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getCode() {
+	String result = "";
+	
+	for ( PAIR kvp : jwsdpPeer.getKEYVALUEPAIRS().getPAIR() ) {
+	    if ( kvp.getKey().equals("kmm-security-id") )
+	    result += kvp.getValue();
+	}
+	
+	return result;
     }
 
     // ---------------------------------------------------------------

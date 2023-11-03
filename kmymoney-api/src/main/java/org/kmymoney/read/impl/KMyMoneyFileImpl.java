@@ -389,6 +389,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see KMyMoneySecurityImpl
      */
     protected Map<String, KMyMoneySecurity> secID2Sec;
+    protected Map<String, String> secSymbID2SecID;
+    protected Map<String, String> secCodeID2SecID;
 
     /**
      * All payees indexed by their unique id-String.
@@ -496,12 +498,16 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     private void initSecurityMap(final KMYMONEYFILE pRootElement) {
-	secID2Sec = new HashMap<>();
+	secID2Sec = new HashMap<String, KMyMoneySecurity>();
+	secSymbID2SecID = new HashMap<String, String>();
+	secCodeID2SecID = new HashMap<String, String>();
 
 	for ( SECURITY jwsdpSec : pRootElement.getSECURITIES().getSECURITY() ) {
 	    try {
 		KMyMoneySecurityImpl sec = createSecurity(jwsdpSec);
 		secID2Sec.put(jwsdpSec.getId(), sec);
+		secSymbID2SecID.put(sec.getSymbol(), jwsdpSec.getId());
+		secCodeID2SecID.put(sec.getCode(), jwsdpSec.getId());
 	    } catch (RuntimeException e) {
 		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initSecurityMap: "
 			+ "ignoring illegal Security-Entry with id=" + jwsdpSec.getId(), e);
@@ -1000,37 +1006,67 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	    throw new IllegalStateException("Search string is empty");
 	}
 
-	KMMSecID secID = new KMMSecID(qualifID);
+	KMMSecID secID = KMMSecID.parse(qualifID);
 	return getSecurityByQualifID(secID);
     }
 
-//    @Override
-//    public GnucashSecurity getSecurityBySymbol(final String xCode) {
-//	if ( secID2Sec == null ) {
-//	    throw new IllegalStateException("no root-element loaded");
-//	}
-//
-//	if ( cmdtyQualifID2Cmdty.size() != cmdtyXCode2QualifID.size() ) {
-//	    // CAUTION: Don't throw an exception, at least not in all cases,
-//	    // because this is not necessarily an error: Only if the GnuCash
-//	    // file does not contain quotes for foreign currencies (i.e. currency-
-//	    // commodities but only security-commodities is this an error.
-//	    // throw new IllegalStateException("Sizes of root elements are not equal");
-//	    LOGGER.debug("getSecurityByXCode: Sizes of root elements are not equal.");
-//	}
-//	
-//	String qualifIDStr = cmdtyXCode2QualifID.get(xCode);
-//	if (qualifIDStr == null) {
-//	    LOGGER.warn("No Security with X-Code '" + xCode + "'. We know " + cmdtyXCode2QualifID.size() + " commodities in map 2.");
-//	}
-//	
-//	GnucashSecurity retval = cmdtyQualifID2Cmdty.get(qualifIDStr);
-//	if (retval == null) {
-//	    LOGGER.warn("No Security with qualified ID '" + qualifIDStr + "'. We know " + cmdtyQualifID2Cmdty.size() + " commodities in map 1.");
-//	}
-//	
-//	return retval;
-//    }
+    @Override
+    public KMyMoneySecurity getSecurityBySymbol(final String symb) {
+	if ( secID2Sec == null ) {
+	    throw new IllegalStateException("no root-element loaded");
+	}
+
+	if ( secSymbID2SecID.size() != secID2Sec.size() ) {
+	    // ::CHECK
+	    // CAUTION: Don't throw an exception, at least not in all cases,
+	    // because this is not necessarily an error: Only if the KMyMoney
+	    // file does not contain quotes for foreign currencies (i.e. currency-
+	    // commodities but only security-commodities is this an error.
+	    // throw new IllegalStateException("Sizes of root elements are not equal");
+	    LOGGER.debug("getSecurityBySymbol: Sizes of root elements are not equal.");
+	}
+	
+	String qualifIDStr = secSymbID2SecID.get(symb);
+	if (qualifIDStr == null) {
+	    LOGGER.warn("No Security with symbol '" + symb + "'. We know " + secSymbID2SecID.size() + " securities in map 2.");
+	}
+	
+	KMyMoneySecurity retval = secID2Sec.get(qualifIDStr);
+	if (retval == null) {
+	    LOGGER.warn("No Security with qualified ID '" + qualifIDStr + "'. We know " + secID2Sec.size() + " securities in map 1.");
+	}
+	
+	return retval;
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityByCode(final String code) {
+	if ( secID2Sec == null ) {
+	    throw new IllegalStateException("no root-element loaded");
+	}
+
+	if ( secCodeID2SecID.size() != secID2Sec.size() ) {
+	    // ::CHECK
+	    // CAUTION: Don't throw an exception, at least not in all cases,
+	    // because this is not necessarily an error: Only if the KMyMoney
+	    // file does not contain quotes for foreign currencies (i.e. currency-
+	    // commodities but only security-commodities is this an error.
+	    // throw new IllegalStateException("Sizes of root elements are not equal");
+	    LOGGER.debug("getSecurityBySymbol: Sizes of root elements are not equal.");
+	}
+	
+	String qualifIDStr = secCodeID2SecID.get(code);
+	if (qualifIDStr == null) {
+	    LOGGER.warn("No Security with symbol '" + code + "'. We know " + secCodeID2SecID.size() + " securities in map 2.");
+	}
+	
+	KMyMoneySecurity retval = secID2Sec.get(qualifIDStr);
+	if (retval == null) {
+	    LOGGER.warn("No Security with qualified ID '" + qualifIDStr + "'. We know " + secID2Sec.size() + " securities in map 1.");
+	}
+	
+	return retval;
+    }
 
     @Override
     public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr) {

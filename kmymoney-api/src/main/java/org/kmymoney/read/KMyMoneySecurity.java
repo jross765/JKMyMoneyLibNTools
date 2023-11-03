@@ -19,6 +19,12 @@ public interface KMyMoneySecurity {
 
     String getSymbol();
 
+    /**
+     * ISIN, CUSIP, SEDOL, WKN...
+     * @return
+     */
+    String getCode();
+
     // ------------------------------------------------------------
 
     KMMSecCurr.Type getType() throws UnknownSecurityTypeException;
