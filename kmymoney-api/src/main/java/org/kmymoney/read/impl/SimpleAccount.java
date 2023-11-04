@@ -17,6 +17,7 @@ import java.util.Locale;
 import org.kmymoney.basetypes.InvalidSecCurrIDException;
 import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.basetypes.KMMSecCurrID;
+import org.kmymoney.basetypes.KMMSplitID;
 import org.kmymoney.currency.ComplexPriceTable;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyAccount;
@@ -453,7 +454,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	/**
 	 * @see KMyMoneyAccount#getTransactionSplitByID(java.lang.String)
 	 */
-	public KMyMoneyTransactionSplit getTransactionSplitByID(final String id) {
+	public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMSplitID id) {
 		if (id == null) {
 			throw new IllegalArgumentException("null id given!");
 		}

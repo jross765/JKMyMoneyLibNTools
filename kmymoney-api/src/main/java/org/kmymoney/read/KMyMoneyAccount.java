@@ -8,6 +8,7 @@ import java.util.Locale;
 import org.kmymoney.basetypes.InvalidSecCurrIDException;
 import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.basetypes.KMMSecCurrID;
+import org.kmymoney.basetypes.KMMSplitID;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.impl.UnknownAccountTypeException;
 
@@ -315,7 +316,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * @param id the split-id to look for
      * @return the identified split or null
      */
-    KMyMoneyTransactionSplit getTransactionSplitByID(String id);
+    KMyMoneyTransactionSplit getTransactionSplitByID(KMMSplitID id);
 
     /**
      * @param account the account to test

@@ -33,6 +33,7 @@ import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.basetypes.KMMCurrID;
 import org.kmymoney.basetypes.KMMSecCurrID;
 import org.kmymoney.basetypes.KMMSecID;
+import org.kmymoney.basetypes.KMMSplitID;
 import org.kmymoney.currency.ComplexPriceTable;
 import org.kmymoney.generated.ACCOUNT;
 import org.kmymoney.generated.CURRENCY;
@@ -372,7 +373,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see KMyMoneyTransactionSplit
      * @see KMyMoneyTransactionSplitImpl
      */
-    protected Map<String, KMyMoneyTransactionSplit> transactionSplitID2transactionSplit;
+    protected Map<KMMSplitID, KMyMoneyTransactionSplit> transactionSplitID2transactionSplit;
 
     /**
      * All currencies indexed by their unique id-String.
@@ -446,7 +447,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     private void initAccountMap(final KMYMONEYFILE pRootElement) {
-	accountID2account = new HashMap<>();
+	accountID2account = new HashMap<String, KMyMoneyAccount>();
 
 	for ( ACCOUNT jwsdpAcct : pRootElement.getACCOUNTS().getACCOUNT() ) {
 	    try {
@@ -463,14 +464,14 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
     private void initTransactionMap(final KMYMONEYFILE pRootElement) {
 	transactionID2transaction = new HashMap<>();
-	transactionSplitID2transactionSplit = new HashMap<>();
+	transactionSplitID2transactionSplit = new HashMap<KMMSplitID, KMyMoneyTransactionSplit>();
 
 	for ( TRANSACTION jwsdpTrx : pRootElement.getTRANSACTIONS().getTRANSACTION() ) {
 	    try {
 		KMyMoneyTransactionImpl trx = createTransaction(jwsdpTrx);
 		transactionID2transaction.put(trx.getId(), trx);
 		for (KMyMoneyTransactionSplit splt : trx.getSplits()) {
-		    transactionSplitID2transactionSplit.put(splt.getId(), splt);
+		    transactionSplitID2transactionSplit.put(new KMMSplitID(trx.getId(), splt.getId()), splt);
 		}
 	    } catch (RuntimeException e) {
 		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initTransactionMap: "
@@ -482,7 +483,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     private void initCurrencyMap(final KMYMONEYFILE pRootElement) {
-	currID2Curr = new HashMap<>();
+	currID2Curr = new HashMap<String, KMyMoneyCurrency>();
 
 	for ( CURRENCY jwsdpCurr : pRootElement.getCURRENCIES().getCURRENCY() ) {
 	    try {
@@ -518,7 +519,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     private void initPayeeMap(final KMYMONEYFILE pRootElement) {
-	payeeID2Payee = new HashMap<>();
+	payeeID2Payee = new HashMap<String, KMyMoneyPayee>();
 
 	for ( PAYEE jwsdpPye : pRootElement.getPAYEES().getPAYEE() ) {
 	    try {
@@ -1179,7 +1180,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     /**
      * @see KMyMoneyFile#getTransactionByID(java.lang.String)
      */
-    public KMyMoneyTransactionSplit getTransactionSplitByID(final String id) {
+    public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMSplitID id) {
 	if (transactionSplitID2transactionSplit == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}

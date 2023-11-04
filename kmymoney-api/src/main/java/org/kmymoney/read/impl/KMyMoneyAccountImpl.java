@@ -11,8 +11,8 @@ import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.basetypes.KMMCurrID;
 import org.kmymoney.basetypes.KMMSecCurrID;
 import org.kmymoney.basetypes.KMMSecID;
+import org.kmymoney.basetypes.KMMSplitID;
 import org.kmymoney.generated.ACCOUNT;
-import org.kmymoney.read.KMMSecCurr;
 import org.kmymoney.read.KMyMoneyAccount;
 import org.kmymoney.read.KMyMoneyFile;
 import org.kmymoney.read.KMyMoneyTransactionSplit;
@@ -56,6 +56,8 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 
     // ---------------------------------------------------------------
 
+    // protected KMyMoneyObjectImpl helper;
+
     /**
      * The splits of this transaction. May not be fully initialized during loading
      * of the gnucash-file.
@@ -81,8 +83,8 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 	super(gncFile);
 
 	jwsdpPeer = peer;
-	// ::TODO
-	// file = gncfile;
+	
+	// helper = new KMyMoneyObjectImpl(gncFile);
     }
 
     // ---------------------------------------------------------------
@@ -184,7 +186,8 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      */
     public void addTransactionSplit(final KMyMoneyTransactionSplit split) {
 
-	KMyMoneyTransactionSplit old = getTransactionSplitByID(split.getId());
+	KMMSplitID kmmSpltID = new KMMSplitID(split.getTransaction().getId(), split.getId());
+	KMyMoneyTransactionSplit old = getTransactionSplitByID(kmmSpltID);
 	if (old != null) {
 	    if (old != split) {
 		IllegalStateException ex = new IllegalStateException("DEBUG");

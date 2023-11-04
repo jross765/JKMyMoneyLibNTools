@@ -76,14 +76,14 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 
 	// ::CHECK
 	// ::TODO
-//	KMyMoneyAccount acct = getAccount();
-//	if (acct == null) {
-//	    System.err.println("No such Account id='" + getAccountID() + "' for Transactions-Split with id '" + getId()
-//		    + "' description '" + getMemo() + "' in transaction with id '" + getTransaction().getId()
-//		    + "' description '" + getTransaction().getMemo() + "'");
-//	} else {
-//	    acct.addTransactionSplit(this);
-//	}
+	KMyMoneyAccount acct = getAccount();
+	if (acct == null) {
+	    System.err.println("No such Account id='" + getAccountID() + "' for Transactions-Split with id '" + getId()
+		    + "' description '" + getMemo() + "' in transaction with id '" + getTransaction().getId()
+		    + "' description '" + getTransaction().getMemo() + "'");
+	} else {
+	    acct.addTransactionSplit(this);
+	}
 
     }
 
