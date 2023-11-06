@@ -66,7 +66,7 @@ public class SimpleCurrencyExchRateTable implements SimplePriceTable,
      * @param iso4217CurrencyCode the currency to convert to
      * @return false if the conversion is not possible
      */
-    public boolean convertFromBaseCurrency(final FixedPointNumber value, final String iso4217CurrencyCode) {
+    public boolean convertFromBaseCurrency(FixedPointNumber value, final String iso4217CurrencyCode) {
         FixedPointNumber factor = getConversionFactor(iso4217CurrencyCode);
         if (factor == null) {
             return false;
@@ -80,7 +80,7 @@ public class SimpleCurrencyExchRateTable implements SimplePriceTable,
      * @param iso4217CurrencyCode it's currency
      * @return false if the conversion is not possible
      */
-    public boolean convertToBaseCurrency(final FixedPointNumber value, final String iso4217CurrencyCode) {
+    public boolean convertToBaseCurrency(FixedPointNumber value, final String iso4217CurrencyCode) {
 	FixedPointNumber factor = getConversionFactor(iso4217CurrencyCode);
 	if (factor == null) {
 	    return false;
@@ -94,8 +94,8 @@ public class SimpleCurrencyExchRateTable implements SimplePriceTable,
      * @param pCurrency the currency to convert to
      * @return false if the conversion is not possible
      */
-    public boolean convertToBaseCurrency(final FixedPointNumber value, final Currency pCurrency) {
-	return convertFromBaseCurrency(value, pCurrency.getCurrencyCode());
+    public boolean convertToBaseCurrency(FixedPointNumber value, final Currency pCurrency) {
+	return convertToBaseCurrency(value, pCurrency.getCurrencyCode());
     }
 
     // ---------------------------------------------------------------

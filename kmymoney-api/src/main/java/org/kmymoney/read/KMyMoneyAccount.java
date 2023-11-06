@@ -2,6 +2,7 @@ package org.kmymoney.read;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
@@ -156,11 +157,19 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      */
     Collection<KMyMoneyAccount> getChildren();
 
+    /**
+     * @param account the account to test
+     * @return true if this is a child of us or any child's or us.
+     */
+    boolean isChildAccountRecursive(KMyMoneyAccount account);
+
     // ----------------------------
 
     Type getType() throws UnknownAccountTypeException;
 
     KMMSecCurrID getSecCurrID() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+
+    // -----------------------------------------------------------------
 
     /**
      * The returned list ist sorted by the natural order of the Transaction-Splits.
@@ -171,6 +180,38 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
     List<? extends KMyMoneyTransactionSplit> getTransactionSplits();
 
     /**
+     * @param id the split-id to look for
+     * @return the identified split or null
+     */
+    KMyMoneyTransactionSplit getTransactionSplitByID(final KMMSplitID id);
+
+    /**
+     * Gets the last transaction-split before the given date.
+     *
+     * @param date if null, the last split of all time is returned
+     * @return the last transaction-split before the given date
+     */
+    KMyMoneyTransactionSplit getLastSplitBeforeRecursive(final LocalDate date);
+
+    /**
+     * @param split split to add to this transaction
+     */
+    void addTransactionSplit(final KMyMoneyTransactionSplit split);
+
+    // ----------------------------
+
+    /**
+     * @return true if ${@link #getTransactionSplits()}.size()>0
+     */
+    boolean hasTransactions();
+
+    /**
+     * @return true if ${@link #hasTransactions()} is true for this or any
+     *         sub-accounts
+     */
+    boolean hasTransactionsRecursive();
+
+    /**
      * The returned list ist sorted by the natural order of the Transaction-Splits.
      *
      * @return all splits
@@ -178,10 +219,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      */
     List<KMyMoneyTransaction> getTransactions();
 
-    /**
-     * @param split split to add to this transaction
-     */
-    void addTransactionSplit(KMyMoneyTransactionSplit split);
+    // -----------------------------------------------------------------
 
     /**
      * same as getBalance(new Date()).<br/>
@@ -193,48 +231,31 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
     FixedPointNumber getBalance();
 
     /**
-     * same as getBalanceRecursive(new Date()).<br/>
-     * ignores transactions after the current date+time<br/>
      * Be aware that the result is in the currency of this account!
      *
-     * @return the balance including sub-accounts
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @param date if non-null transactions after this date are ignored in the
+     *             calculation
+     * @return the balance formatted using the current locale
      */
-    FixedPointNumber getBalanceRecursive() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    FixedPointNumber getBalance(final LocalDate date);
 
     /**
-     * @return true if ${@link #hasTransactions()} is true for this or any
-     *         sub-accounts
-     */
-    boolean hasTransactionsRecursive();
-
-    /**
-     * @return true if ${@link #getTransactionSplits()}.size()>0
-     */
-    boolean hasTransactions();
-
-    /**
-     * Ignores accounts for which this conversion is not possible.
+     * Be aware that the result is in the currency of this account!
      *
-     * @param date     ignores transactions after the given date
-     * @param currency the currency the result shall be in
-     * @return Gets the balance including all sub-accounts.
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
-     * @see KMyMoneyAccount#getBalanceRecursive(LocalDate)
+     * @param date  if non-null transactions after this date are ignored in the
+     *              calculation
+     * @param after splits that are after date are added here.
+     * @return the balance formatted using the current locale
      */
-    FixedPointNumber getBalanceRecursive(final LocalDate date, KMMSecCurrID secCurrID) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    FixedPointNumber getBalance(final LocalDate date, Collection<KMyMoneyTransactionSplit> after);
 
     /**
-     * same as getBalanceRecursive(new Date()). ignores transactions after the
-     * current date+time
-     *
-     * @return the balance including sub-accounts formatted using the current locale
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @param lastIncludesSplit last split to be included
+     * @return the balance up to and including the given split
      */
-    String getBalanceRecursiveFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    FixedPointNumber getBalance(final KMyMoneyTransactionSplit lastIncludesSplit);
+
+    // ----------------------------
 
     /**
      * same as getBalance(new Date()). ignores transactions after the current
@@ -255,26 +276,20 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * @throws InvalidSecCurrIDException 
      * @throws InvalidSecCurrTypeException 
      */
-    String getBalanceFormatted(Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    String getBalanceFormatted(final Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+
+    // ----------------------------
 
     /**
+     * same as getBalanceRecursive(new Date()).<br/>
+     * ignores transactions after the current date+time<br/>
      * Be aware that the result is in the currency of this account!
      *
-     * @param date if non-null transactions after this date are ignored in the
-     *             calculation
-     * @return the balance formatted using the current locale
+     * @return the balance including sub-accounts
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
      */
-    FixedPointNumber getBalance(LocalDate date);
-
-    /**
-     * Be aware that the result is in the currency of this account!
-     *
-     * @param date  if non-null transactions after this date are ignored in the
-     *              calculation
-     * @param after splits that are after date are added here.
-     * @return the balance formatted using the current locale
-     */
-    FixedPointNumber getBalance(final LocalDate date, final Collection<KMyMoneyTransactionSplit> after);
+    FixedPointNumber getBalanceRecursive() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
 
     /**
      * Gets the balance including all sub-accounts.
@@ -285,15 +300,43 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * @throws InvalidSecCurrIDException 
      * @throws InvalidSecCurrTypeException 
      */
-    FixedPointNumber getBalanceRecursive(LocalDate date) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    FixedPointNumber getBalanceRecursive(final LocalDate date) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
 
     /**
-     * Gets the last transaction-split before the given date.
+     * Ignores accounts for which this conversion is not possible.
      *
-     * @param date if null, the last split of all time is returned
-     * @return the last transaction-split before the given date
+     * @param date     ignores transactions after the given date
+     * @param currency the currency the result shall be in
+     * @return Gets the balance including all sub-accounts.
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
+     * @see KMyMoneyAccount#getBalanceRecursive(LocalDate)
      */
-    KMyMoneyTransactionSplit getLastSplitBeforeRecursive(LocalDate date);
+    FixedPointNumber getBalanceRecursive(final LocalDate date, final Currency curr) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+
+    /**
+     * Ignores accounts for which this conversion is not possible.
+     *
+     * @param date              ignores transactions after the given date
+     * @param secCurrID         the currency the result shall be in
+     * @return Gets the balance including all sub-accounts.
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidCmdtyCurrTypeException 
+     * @see GnucashAccount#getBalanceRecursive(Date, Currency)
+     */
+    FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMSecCurrID secCurrID) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+
+    // ----------------------------
+
+    /**
+     * same as getBalanceRecursive(new Date()). ignores transactions after the
+     * current date+time
+     *
+     * @return the balance including sub-accounts formatted using the current locale
+     * @throws InvalidSecCurrIDException 
+     * @throws InvalidSecCurrTypeException 
+     */
+    String getBalanceRecursiveFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
 
     /**
      * Gets the balance including all sub-accounts.
@@ -304,26 +347,6 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * @throws InvalidSecCurrIDException 
      * @throws InvalidSecCurrTypeException 
      */
-    String getBalanceRecursiveFormatted(LocalDate date) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
-
-    /**
-     * @param lastIncludesSplit last split to be included
-     * @return the balance up to and including the given split
-     */
-    FixedPointNumber getBalance(KMyMoneyTransactionSplit lastIncludesSplit);
-
-    /**
-     * @param id the split-id to look for
-     * @return the identified split or null
-     */
-    KMyMoneyTransactionSplit getTransactionSplitByID(KMMSplitID id);
-
-    /**
-     * @param account the account to test
-     * @return true if this is a child of us or any child's or us.
-     */
-    boolean isChildAccountRecursive(KMyMoneyAccount account);
-
-    FixedPointNumber getBalance(LocalDate date, KMMSecCurrID secCurrID) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    String getBalanceRecursiveFormatted(final LocalDate date) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
 
 }

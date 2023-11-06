@@ -1,7 +1,5 @@
 package org.kmymoney.read.impl;
 
-//other imports
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.text.NumberFormat;
@@ -16,6 +14,7 @@ import java.util.Locale;
 
 import org.kmymoney.basetypes.InvalidSecCurrIDException;
 import org.kmymoney.basetypes.InvalidSecCurrTypeException;
+import org.kmymoney.basetypes.KMMCurrID;
 import org.kmymoney.basetypes.KMMSecCurrID;
 import org.kmymoney.basetypes.KMMSplitID;
 import org.kmymoney.currency.ComplexPriceTable;
@@ -122,6 +121,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	 */
 	public String getQualifiedName() {
 		KMyMoneyAccount acc = getParentAccount();
+		
 		if ( acc == null || 
 		     acc.getId() == getId() ) {
 			if ( getParentAccountId() == null ||
@@ -131,6 +131,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 
 			return "UNKNOWN" + SEPARATOR + getName();
 		}
+		
 		return acc.getQualifiedName() + SEPARATOR + getName();
 	}
 
@@ -151,6 +152,61 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	 */
 	public Collection<KMyMoneyAccount> getSubAccounts() {
 		return getChildren();
+	}
+
+	/**
+	 * @param date     ignores transactions after the given date
+	 * @param currency the currency the result shall be in (use account-currency if null)
+	 * @return null if the conversion is not possible
+	 * @throws InvalidSecCurrIDException 
+	 * @throws InvalidSecCurrTypeException 
+	 * @see #getBalance(LocalDate)
+	 */
+	public FixedPointNumber getBalance(final LocalDate date, final Currency currency) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+
+		FixedPointNumber retval = getBalance(date);
+
+		if (retval == null) {
+			LOGGER.warn("SimpleAccount.getBalance() - error creating balance!");
+			return null;
+		}
+
+		if (currency == null || retval.equals(new FixedPointNumber())) {
+			return retval;
+		}
+
+		// is conversion needed?
+		if ( getSecCurrID().getType() == KMMSecCurrID.Type.CURRENCY ) {
+		     if ( getSecCurrID().getCode().equals(currency.getCurrencyCode()) ) {
+			 	return retval;
+		     }
+		}
+
+		ComplexPriceTable priceTab = getKMyMoneyFile().getCurrencyTable();
+
+		if (priceTab == null) {
+			LOGGER.warn("SimpleAccount.getBalance() - cannot transfer "
+					+ "to given currency because we have no currency-table!");
+			return null;
+		}
+
+		if ( ! priceTab.convertToBaseCurrency(retval, getSecCurrID()) ) {
+			LOGGER.warn("SimpleAccount.getBalance() - cannot transfer "
+					+ "from our currency '"
+					+ getSecCurrID().toString()
+					+ "' to the base-currency!");
+			return null;
+		}
+
+		if ( ! priceTab.convertFromBaseCurrency(retval, new KMMCurrID(currency)) ) {
+			LOGGER.warn("SimpleAccount.getBalance() - cannot transfer "
+					+ "from base-currenty to given currency '"
+					+ currency
+					+ "'!");
+			return null;
+		}
+
+		return retval;
 	}
 
 	/**
@@ -201,24 +257,54 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 
 		for (Object element : getTransactionSplits()) {
 			KMyMoneyTransactionSplit split = (KMyMoneyTransactionSplit) element;
-			if (date == null || split.getTransaction().getDatePosted().isBefore( date )) {
-				if (lastSplit == null || split.getTransaction().getDatePosted().isAfter(lastSplit.getTransaction().getDatePosted())) {
+			if ( date == null || 
+			     split.getTransaction().getDatePosted().isBefore( date ) ) {
+				if ( lastSplit == null || 
+				     split.getTransaction().getDatePosted().isAfter(lastSplit.getTransaction().getDatePosted()) ) {
 					lastSplit = split;
 				}
 			}
 		}
 
-		for (Iterator iter = getSubAccounts().iterator(); iter.hasNext(); ) {
+		for ( Iterator iter = getSubAccounts().iterator(); iter.hasNext(); ) {
 			KMyMoneyAccount account = (KMyMoneyAccount) iter.next();
 			KMyMoneyTransactionSplit split = account.getLastSplitBeforeRecursive(date);
-			if (split != null && split.getTransaction() != null) {
-				if (lastSplit == null || split.getTransaction().getDatePosted().isAfter(lastSplit.getTransaction().getDatePosted())) {
+			if ( split != null && 
+			     split.getTransaction() != null ) {
+				if ( lastSplit == null || 
+				     split.getTransaction().getDatePosted().isAfter(lastSplit.getTransaction().getDatePosted()) ) {
 					lastSplit = split;
 				}
 			}
 		}
 
 		return lastSplit;
+	}
+
+	/**
+	 * Ignores accounts for wich this conversion is not possible.
+	 *
+	 * @param date     ignores transactions after the given date
+	 * @param currency the currency the result shall be in
+	 * @return Gets the balance including all sub-accounts.
+	 * @throws InvalidSecCurrIDException 
+	 * @throws InvalidSecTypeException 
+	 * @see GnucashAccount#getBalanceRecursive(Date, Currency)
+	 */
+	public FixedPointNumber getBalanceRecursive(final LocalDate date, final Currency currency) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+
+		FixedPointNumber retval = getBalance(date, currency);
+	
+		if (retval == null) {
+			retval = new FixedPointNumber();
+		}
+
+		for (Object element : getChildren()) {
+			KMyMoneyAccount child = (KMyMoneyAccount) element;
+			retval.add(child.getBalanceRecursive(date, currency));
+		}
+
+		return retval;
 	}
 
 	/**
@@ -232,20 +318,26 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	 * @throws InvalidSecCurrTypeException 
 	 * @see KMyMoneyAccount#getBalanceRecursive(Date, Currency)
 	 */
-	public FixedPointNumber getBalanceRecursive(final LocalDate date,
-                                                    final KMMSecCurrID secCurrID) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+	public FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMSecCurrID secCurrID) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
 
-	    FixedPointNumber retval = getBalance(date, secCurrID);
-
-	    if (retval == null) {
-		retval = new FixedPointNumber();
-	    }
-
-	    for ( KMyMoneyAccount child : getChildren() ) {
-		retval.add(child.getBalanceRecursive(date, secCurrID));
-	    }
-
-	    return retval;
+	    // >>>> NO, ABSOLUTE SYMMETRY DOES NOT WORK HERE!
+//	    FixedPointNumber retval = getBalance(date, secCurrID);
+//
+//	    if (retval == null) {
+//		retval = new FixedPointNumber();
+//	    }
+//
+//	    for ( KMyMoneyAccount child : getChildren() ) {
+//		retval.add(child.getBalanceRecursive(date, secCurrID));
+//	    }
+//
+//	    return retval;
+	    // <<<< NO, ABSOLUTE SYMMETRY DOES NOT WORK HERE!
+	    
+	    if ( secCurrID.getType() == KMMSecCurrID.Type.CURRENCY )
+		return getBalanceRecursive(date, new KMMCurrID(secCurrID.getCode()).getCurrency());
+	    else
+		return null; // ::CHECK / TODO
 	}
 
 	/**
@@ -288,27 +380,25 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		FixedPointNumber retval = getBalance(date);
 
 		if (retval == null) {
-			LOGGER.error("SimpleAccount.getBalance() - "
-					+ "error creating balance!");
+			LOGGER.error("SimpleAccount.getBalance() - error creating balance!");
 			return null;
 		}
 
 		// is conversion needed?
-		if ( secCurrID.getType() == KMMSecCurrID.Type.CURRENCY &&
-		     secCurrID.equals(getCurrency().getCurrencyCode()) ) {
+		if ( getSecCurrID().equals(secCurrID) ) {
 			return retval;
 		}
 
-		ComplexPriceTable currencyTable = getKMyMoneyFile().getCurrencyTable();
+		ComplexPriceTable priceTab = getKMyMoneyFile().getCurrencyTable();
 
-		if (currencyTable == null) {
+		if (priceTab == null) {
 			LOGGER.error("SimpleAccount.getBalance() - cannot transfer "
 					+ "to given currency because we have no currency-table!");
 			return null;
 		}
 
-		if (!currencyTable.convertToBaseCurrency(retval, secCurrID)) {
-			Collection<String> currencies = getKMyMoneyFile().getCurrencyTable().getCurrencies(KMMSecCurrID.Type.CURRENCY);
+		if ( ! priceTab.convertToBaseCurrency(retval, secCurrID) ) {
+			Collection<String> currencies = getKMyMoneyFile().getCurrencyTable().getCurrencies(getSecCurrID().getType());
 			LOGGER.error("SimpleAccount.getBalance() - cannot transfer "
 					+ "from our currency '"
 					+ getSecCurrID().toString()
@@ -320,7 +410,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 			return null;
 		}
 
-		if (!currencyTable.convertFromBaseCurrency(retval, secCurrID)) {
+		if ( ! priceTab.convertFromBaseCurrency(retval, secCurrID) ) {
 			LOGGER.error("SimpleAccount.getBalance() - cannot transfer "
 					+ "from base-currenty to given currency '"
 					+ secCurrID.toString()
@@ -361,7 +451,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		}
 
 		    // the currency may have changed
-		if ( this.getSecCurrID().getType() == KMMSecCurrID.Type.CURRENCY ) {
+		if ( getSecCurrID().getType() == KMMSecCurrID.Type.CURRENCY ) {
 			Currency currency = getCurrency();
 			currencyFormat.setCurrency(currency);
 		} else {
@@ -412,7 +502,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	 *
 	 * @see KMyMoneyAccount#getBalance(LocalDate, Collection)
 	 */
-	public FixedPointNumber getBalance(final LocalDate date, final Collection<KMyMoneyTransactionSplit> after) {
+	public FixedPointNumber getBalance(final LocalDate date, Collection<KMyMoneyTransactionSplit> after) {
 
 		FixedPointNumber balance = new FixedPointNumber();
 
@@ -439,7 +529,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 
 		FixedPointNumber balance = new FixedPointNumber();
 		
-		for (KMyMoneyTransactionSplit split : getTransactionSplits()) {
+		for ( KMyMoneyTransactionSplit split : getTransactionSplits() ) {
 			balance.add(split.getShares());
 
 			if (split == lastIncludesSplit) {
@@ -459,7 +549,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 			throw new IllegalArgumentException("null id given!");
 		}
 
-		for (KMyMoneyTransactionSplit split : getTransactionSplits()) {
+		for ( KMyMoneyTransactionSplit split : getTransactionSplits() ) {
 			if (id.equals(split.getId())) {
 				return split;
 			}
@@ -471,7 +561,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 
 	/**
 	 * This is an extension to ${@link #compareNamesTo(Object)}
-	 * that makes shure that NEVER 2 accounts with different
+	 * that makes sure that NEVER 2 accounts with different
 	 * IDs compare to 0.
 	 * Compares our name to o.toString() .<br/>
 	 * If both starts with some digits the resulting

@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import org.kmymoney.basetypes.InvalidSecCurrIDException;
 import org.kmymoney.basetypes.InvalidSecCurrTypeException;
+import org.kmymoney.basetypes.KMMSplitID;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.impl.UnknownSplitActionException;
 
@@ -51,11 +52,13 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      */
     String getId();
 
+    KMMSplitID getQualifId();
+
     /**
      *
      * @return the id of the account we transfer from/to.
      */
-    String getAccountID();
+    String getAccountId();
 
     /**
      * This may be null if an account-id is specified in
@@ -63,6 +66,8 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * @return the account of the account we transfer from/to.
      */
     KMyMoneyAccount getAccount();
+
+    String getTransactionId();
 
     /**
      * @return the transaction this is a split of.

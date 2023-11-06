@@ -8,6 +8,7 @@ import org.kmymoney.basetypes.InvalidSecCurrIDException;
 import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.basetypes.KMMCurrID;
 import org.kmymoney.basetypes.KMMSecCurrID;
+import org.kmymoney.basetypes.KMMSplitID;
 import org.kmymoney.generated.SPLIT;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyAccount;
@@ -78,7 +79,7 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 	// ::TODO
 	KMyMoneyAccount acct = getAccount();
 	if (acct == null) {
-	    System.err.println("No such Account id='" + getAccountID() + "' for Transactions-Split with id '" + getId()
+	    System.err.println("No such Account id='" + getAccountId() + "' for Transactions-Split with id '" + getId()
 		    + "' description '" + getMemo() + "' in transaction with id '" + getTransaction().getId()
 		    + "' description '" + getTransaction().getMemo() + "'");
 	} else {
@@ -88,6 +89,19 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     }
 
     // ---------------------------------------------------------------
+
+    /**
+     * @see KMyMoneyTransactionSplit#getId()
+     */
+    @Override
+    public String getId() {
+	return jwsdpPeer.getId();
+    }
+
+    @Override
+    public KMMSplitID getQualifId() {
+	return new KMMSplitID(getTransactionId(), getId());
+    }
 
     public Action getAction() throws UnknownSplitActionException {
 	
@@ -168,16 +182,9 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     }
 
     /**
-     * @see KMyMoneyTransactionSplit#getId()
+     * @see KMyMoneyTransactionSplit#getAccountId()
      */
-    public String getId() {
-	return jwsdpPeer.getId();
-    }
-
-    /**
-     * @see KMyMoneyTransactionSplit#getAccountID()
-     */
-    public String getAccountID() {
+    public String getAccountId() {
 	String id = jwsdpPeer.getAccount();
 	assert id != null;
 	return id;
@@ -187,12 +194,18 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
      * @see KMyMoneyTransactionSplit#getAccount()
      */
     public KMyMoneyAccount getAccount() {
-	return myTransaction.getKMyMoneyFile().getAccountByID(getAccountID());
+	return myTransaction.getKMyMoneyFile().getAccountByID(getAccountId());
+    }
+
+    @Override
+    public String getTransactionId() {
+	return myTransaction.getId();
     }
 
     /**
      * @see KMyMoneyTransactionSplit#getTransaction()
      */
+    @Override
     public KMyMoneyTransaction getTransaction() {
 	return myTransaction;
     }
@@ -347,50 +360,8 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 	}
 	return jwsdpPeer.getMemo();
     }
-
-    /**
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-	StringBuffer buffer = new StringBuffer();
-	buffer.append("[KMyMoneyTransactionSplitImpl:");
-
-	buffer.append(" id: ");
-	buffer.append(getId());
-
-	buffer.append(" Action: ");
-	try {
-	    buffer.append(getAction());
-	} catch (UnknownSplitActionException e) {
-	    buffer.append("ERROR");
-	}
-
-	buffer.append(" transaction-id: ");
-	buffer.append(getTransaction().getId());
-
-	buffer.append(" accountID: ");
-	buffer.append(getAccountID());
-
-	buffer.append(" account: ");
-	KMyMoneyAccount account = getAccount();
-	buffer.append(account == null ? "null" : "'" + account.getQualifiedName() + "'");
-
-	buffer.append(" memo: '");
-	buffer.append(getMemo() + "'");
-
-	buffer.append(" transaction-description: '");
-	buffer.append(getTransaction().getMemo() + "'");
-
-	buffer.append(" value: ");
-	buffer.append(getValue());
-
-	buffer.append(" shares: ");
-	buffer.append(getShares());
-
-	buffer.append("]");
-	return buffer.toString();
-    }
+    
+    // ---------------------------------------------------------------
 
     /**
      * @see java.lang.Comparable#compareTo(KMyMoneyTransactionSplit)
@@ -423,6 +394,57 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 	    e.printStackTrace();
 	    return 0;
 	}
+    }
+
+    // ---------------------------------------------------------------
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+	StringBuffer buffer = new StringBuffer();
+	buffer.append("[KMyMoneyTransactionSplitImpl:");
+
+	buffer.append(" qualif-id: ");
+	buffer.append(getQualifId());
+
+//	buffer.append(" transaction-id: ");
+//	buffer.append(getTransaction().getId());
+//
+	buffer.append(" Action: ");
+	try {
+	    buffer.append(getAction());
+	} catch (Exception e) {
+	    buffer.append("ERROR");
+	}
+
+	buffer.append(" account-id: ");
+	buffer.append(getAccountId());
+
+	buffer.append(" account: ");
+	try {
+	    KMyMoneyAccount account = getAccount();
+	    buffer.append(account == null ? "null" : "'" + account.getQualifiedName() + "'");
+	} catch (Exception e) {
+	    buffer.append("ERROR");
+	}
+
+	buffer.append(" memo: '");
+	buffer.append(getMemo() + "'");
+
+	// usually not set:
+	// buffer.append(" transaction-description: '");
+	// buffer.append(getTransaction().getMemo() + "'");
+
+	buffer.append(" value: ");
+	buffer.append(getValue());
+
+	buffer.append(" shares: ");
+	buffer.append(getShares());
+
+	buffer.append("]");
+	return buffer.toString();
     }
 
 }

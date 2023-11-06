@@ -248,4 +248,35 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 	return result;
     }
 
+    // -----------------------------------------------------------------
+
+    public String toString() {
+	StringBuffer buffer = new StringBuffer();
+	buffer.append("[KMyMoneyAccountImpl:");
+	
+	buffer.append(" id: ");
+	buffer.append(getId());
+	
+	buffer.append(" type: ");
+	try {
+	    buffer.append(getType());
+	} catch (UnknownAccountTypeException e) {
+	    buffer.append("ERROR");
+	}
+	
+	buffer.append(" qualif-name: '");
+	buffer.append(getQualifiedName() + "'");
+	
+	buffer.append(" security/currency: '");
+	try {
+	    buffer.append(getSecCurrID() + "'");
+	} catch (Exception e) {
+	    buffer.append("ERROR");
+	}
+	
+	buffer.append("]");
+	
+	return buffer.toString();
+    }
+    
 }

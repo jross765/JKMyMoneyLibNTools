@@ -1,4 +1,4 @@
-package org.kmymoney;
+package org.kmymoney.currency;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -11,15 +11,13 @@ public class TestPackage extends TestCase
     junit.textui.TestRunner.run(suite());
   }
 
+  @SuppressWarnings("exports")
   public static Test suite() throws Exception
   {
     TestSuite suite = new TestSuite();
-
-    // ::TODO
-    suite.addTest(org.kmymoney.basetypes.TestPackage.suite());
-    suite.addTest(org.kmymoney.currency.TestPackage.suite());
-    suite.addTest(org.kmymoney.read.TestPackage.suite());
-//    suite.addTest(org.kmymoney.write.TestPackage.suite());
+    
+    suite.addTest(org.kmymoney.currency.TestSimplePriceTable.suite());
+    suite.addTest(org.kmymoney.currency.TestComplexPriceTable.suite());
 
     return suite;
   }

@@ -65,7 +65,7 @@ public class SimpleSecurityQuoteTable implements SimplePriceTable,
      * @return false if the conversion is not possible
      */
     @Override
-    public boolean convertFromBaseCurrency(final FixedPointNumber value, final String secID) {
+    public boolean convertFromBaseCurrency(FixedPointNumber value, final String secID) {
         FixedPointNumber factor = getConversionFactor(secID);
         if (factor == null) {
             return false;
@@ -80,7 +80,7 @@ public class SimpleSecurityQuoteTable implements SimplePriceTable,
      * @return false if the conversion is not possible
      */
     @Override
-    public boolean convertToBaseCurrency(final FixedPointNumber value, final String secID) {
+    public boolean convertToBaseCurrency(FixedPointNumber value, final String secID) {
 	FixedPointNumber factor = getConversionFactor(secID);
 	if (factor == null) {
 	    return false;

@@ -212,7 +212,7 @@ public class ComplexPriceTable implements Serializable {
      * @see SimplePriceTable#convertFromBaseCurrency(FixedPointNumber,
      *      java.lang.String)
      */
-    public boolean convertFromBaseCurrency(final FixedPointNumber pValue, 
+    public boolean convertFromBaseCurrency(FixedPointNumber pValue, 
 	    final KMMSecCurrID secCurrID) {
 
 	SimplePriceTable table = getByNamespace(secCurrID.getType());
@@ -223,7 +223,7 @@ public class ComplexPriceTable implements Serializable {
 	return table.convertFromBaseCurrency(pValue, secCurrID.getCode());
     }
 
-    public boolean convertToBaseCurrency(final FixedPointNumber pValue, 
+    public boolean convertToBaseCurrency(FixedPointNumber pValue, 
 	    final KMMSecCurrID secCurrID) {
 
 	SimplePriceTable table = getByNamespace(secCurrID.getType());

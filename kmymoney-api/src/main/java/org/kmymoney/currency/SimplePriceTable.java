@@ -12,9 +12,9 @@ public interface SimplePriceTable {
 
     // ---------------------------------------------------------------
 
-    public boolean convertFromBaseCurrency(final FixedPointNumber value, final String code);
+    public boolean convertFromBaseCurrency(FixedPointNumber value, final String code);
 
-    public boolean convertToBaseCurrency(final FixedPointNumber value, final String code);
+    public boolean convertToBaseCurrency(FixedPointNumber value, final String code);
 
     // ---------------------------------------------------------------
 

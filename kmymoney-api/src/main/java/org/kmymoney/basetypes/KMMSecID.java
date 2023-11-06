@@ -1,6 +1,5 @@
 package org.kmymoney.basetypes;
 
-import org.kmymoney.basetypes.KMMSecCurrID.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
