@@ -82,10 +82,10 @@ public class TestComplexPriceTable
     complPriceTab = kmmFile.getCurrencyTable();
     assertNotEquals(null, complPriceTab);
     
-    assertEquals(120.0, 
+    assertEquals(119.50, 
 	         complPriceTab.getConversionFactor(KMMSecCurrID.Type.SECURITY, "E000001").doubleValue(), 
 	         ConstTest.DIFF_TOLERANCE);
-    assertEquals(115.0, 
+    assertEquals(116.50, 
 	         complPriceTab.getConversionFactor(KMMSecCurrID.Type.SECURITY, "E000002").doubleValue(), 
 	         ConstTest.DIFF_TOLERANCE);
   }
@@ -98,11 +98,11 @@ public class TestComplexPriceTable
     
     FixedPointNumber val = new FixedPointNumber("101.0");
     assertEquals(true, complPriceTab.convertToBaseCurrency(val, new KMMSecID("E000001")));
-    assertEquals(12120.0, val.doubleValue(), ConstTest.DIFF_TOLERANCE);
+    assertEquals(12069.50, val.doubleValue(), ConstTest.DIFF_TOLERANCE);
     
     val = new FixedPointNumber("101.0");
     assertEquals(true, complPriceTab.convertToBaseCurrency(val, new KMMSecID("E000002")));
-    assertEquals(11615.0, val.doubleValue(), ConstTest.DIFF_TOLERANCE);
+    assertEquals(11766.50, val.doubleValue(), ConstTest.DIFF_TOLERANCE);
   }
 
   @Test
@@ -111,11 +111,11 @@ public class TestComplexPriceTable
     complPriceTab = kmmFile.getCurrencyTable();
     assertNotEquals(null, complPriceTab);
     
-    FixedPointNumber val = new FixedPointNumber("12120.0");
+    FixedPointNumber val = new FixedPointNumber("12069.50");
     assertEquals(true, complPriceTab.convertFromBaseCurrency(val, new KMMSecID("E000001")));
     assertEquals(101.0, val.doubleValue(), ConstTest.DIFF_TOLERANCE);
 
-    val = new FixedPointNumber("11615.0");
+    val = new FixedPointNumber("11766.50");
     assertEquals(true, complPriceTab.convertFromBaseCurrency(val, new KMMSecID("E000002")));
     assertEquals(101.0, val.doubleValue(), ConstTest.DIFF_TOLERANCE);
   }

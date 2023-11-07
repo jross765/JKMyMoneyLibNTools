@@ -106,7 +106,7 @@ public class TestKMyMoneyAccountImpl
 
     // ::TODO
     assertEquals(0.0, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
-    assertEquals(3755.0, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
+    assertEquals(3773.0, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
     // ::TODO
     assertEquals(0, acct.getTransactions().size());

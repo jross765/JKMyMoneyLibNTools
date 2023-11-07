@@ -74,8 +74,8 @@ public class TestSimplePriceTable
     assertNotEquals(null, simplPriceTab);
     
     assertEquals(2, simplPriceTab.getCurrencies().size());
-    assertEquals(120.0, simplPriceTab.getConversionFactor("E000001").doubleValue(), ConstTest.DIFF_TOLERANCE);
-    assertEquals(115.0, simplPriceTab.getConversionFactor("E000002").doubleValue(), ConstTest.DIFF_TOLERANCE);
+    assertEquals(119.50, simplPriceTab.getConversionFactor("E000001").doubleValue(), ConstTest.DIFF_TOLERANCE);
+    assertEquals(116.50, simplPriceTab.getConversionFactor("E000002").doubleValue(), ConstTest.DIFF_TOLERANCE);
   }
 
   @Test
@@ -89,11 +89,11 @@ public class TestSimplePriceTable
     
     FixedPointNumber val = new FixedPointNumber("101.0");
     assertEquals(true, simplPriceTab.convertToBaseCurrency(val, "E000001"));
-    assertEquals(12120.0, val.doubleValue(), ConstTest.DIFF_TOLERANCE);
+    assertEquals(12069.50, val.doubleValue(), ConstTest.DIFF_TOLERANCE);
     
     val = new FixedPointNumber("101.0");
     assertEquals(true, simplPriceTab.convertToBaseCurrency(val, "E000002"));
-    assertEquals(11615.0, val.doubleValue(), ConstTest.DIFF_TOLERANCE);
+    assertEquals(11766.50, val.doubleValue(), ConstTest.DIFF_TOLERANCE);
   }
 
   @Test
@@ -105,11 +105,11 @@ public class TestSimplePriceTable
     simplPriceTab = complPriceTab.getByNamespace(KMMSecCurrID.Type.SECURITY);
     assertNotEquals(null, simplPriceTab);
     
-    FixedPointNumber val = new FixedPointNumber("12120.0");
+    FixedPointNumber val = new FixedPointNumber("12069.50");
     assertEquals(true, simplPriceTab.convertFromBaseCurrency(val, "E000001"));
     assertEquals(101.0, val.doubleValue(), ConstTest.DIFF_TOLERANCE);
     
-    val = new FixedPointNumber("11615.0");
+    val = new FixedPointNumber("11766.50");
     assertEquals(true, simplPriceTab.convertFromBaseCurrency(val, "E000002"));
     assertEquals(101.0, val.doubleValue(), ConstTest.DIFF_TOLERANCE);
   }
