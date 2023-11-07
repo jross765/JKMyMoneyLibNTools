@@ -73,7 +73,7 @@ public class TestKMyMoneyFileImpl
   @Test
   public void test03() throws Exception
   {    
-    assertEquals(3, kmmFile.getNofEntriesTransactionSplitsMap());
+    assertEquals(12, kmmFile.getNofEntriesTransactionSplitsMap());
   }
 
 //  @Test

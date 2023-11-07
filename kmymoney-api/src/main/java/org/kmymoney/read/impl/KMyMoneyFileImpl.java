@@ -778,7 +778,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @return the new KMyMoneyPayee to wrap the given JAXB object.
      */
     protected KMyMoneyPayeeImpl createPayee(final PAYEE jwsdpPye) {
-	KMyMoneyPayeeImpl pye = new KMyMoneyPayeeImpl(jwsdpPye, this);
+	KMyMoneyPayeeImpl pye = new KMyMoneyPayeeImpl(jwsdpPye);
 	return pye;
     }
 

@@ -86,8 +86,8 @@ public class TestKMyMoneyAccountImpl
     assertEquals(7374.50, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
     
     assertEquals(5, acct.getTransactions().size());
-    assertEquals("T000000000000000005", acct.getTransactions().get(0).getId());
-    assertEquals("T000000000000000001", acct.getTransactions().get(1).getId());
+    assertEquals("T000000000000000001", acct.getTransactions().get(0).getId());
+    assertEquals("T000000000000000002", acct.getTransactions().get(1).getId());
   }
 
   @Test

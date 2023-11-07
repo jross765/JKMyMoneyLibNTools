@@ -73,8 +73,8 @@ public class TestKMyMoneyTransactionImpl
     assertEquals(TRX_1_ID, trx.getId());
     assertEquals(0.0, trx.getBalance().getBigDecimal().doubleValue(), ConstTest.DIFF_TOLERANCE);
     assertEquals("", trx.getMemo());
-    assertEquals("2023-01-03", trx.getDatePosted().toString());
-    assertEquals("2023-10-14", trx.getEntryDate().toString());
+    assertEquals("2023-01-01", trx.getDatePosted().toString());
+    assertEquals("2023-11-03", trx.getEntryDate().toString());
         
     assertEquals(2, trx.getSplitsCount());
     assertEquals("S0001", trx.getSplits().get(0).getId());
@@ -90,7 +90,7 @@ public class TestKMyMoneyTransactionImpl
     assertEquals(TRX_2_ID, trx.getId());
     assertEquals(0.0, trx.getBalance().getBigDecimal().doubleValue(), ConstTest.DIFF_TOLERANCE);
     assertEquals("", trx.getMemo());
-    assertEquals("2023-10-14", trx.getDatePosted().toString());
+    assertEquals("2023-01-03", trx.getDatePosted().toString());
     assertEquals("2023-10-14", trx.getEntryDate().toString());
         
     assertEquals(2, trx.getSplitsCount());
