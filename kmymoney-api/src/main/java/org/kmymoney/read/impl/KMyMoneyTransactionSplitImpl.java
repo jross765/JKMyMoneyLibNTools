@@ -374,14 +374,13 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 		return c;
 	    }
 
-	    c = otherSplt.getId().compareTo(getId());
-	    if (c != 0) {
-		return c;
+	    if ( ! otherSplt.getQualifId().equals(getQualifId()) ) {
+		return otherSplt.getId().compareTo(getId());
 	    }
 
 	    if (otherSplt != this) {
-		System.err.println("Duplicate transaction-split-id!! " + otherSplt.getId() + "["
-			+ otherSplt.getClass().getName() + "] and " + getId() + "[" + getClass().getName() + "]\n"
+		System.err.println("Duplicate transaction-split-id!! " + otherSplt.getQualifId() + "["
+			+ otherSplt.getClass().getName() + "] and " + getQualifId() + "[" + getClass().getName() + "]\n"
 			+ "split0=" + otherSplt.toString() + "\n" + "split1=" + toString() + "\n");
 		IllegalStateException x = new IllegalStateException("DEBUG");
 		x.printStackTrace();

@@ -7,7 +7,7 @@ Version 0.0.2 of the library has been tested with KMyMoney 5.1.3 on Linux (local
 
 As far as the author knows, there should be no issues with other locales, but he has not tested it.
 
-# Modules
+# Modules and Further Details
 
 * [API ::TODO](https://github.com/jross765/jkmymoneylib/tree/master/gnucash-api/README.md)
 
@@ -15,6 +15,7 @@ As far as the author knows, there should be no issues with other locales, but he
 ::TODO
 
 # Acknowledgements
+
 Special thanks to: 
 
 * **Marcus Wolschon (Sofware-Design u. Beratung)** and **Deniss Larka** -- they don't / did not contribute directly to this project, but they did the pioneering on and stewardship of the sister project `JGnuCashLib` for quite a few years, long before the author got into it. This project heavily makes use of the approaches and techniques in said project.

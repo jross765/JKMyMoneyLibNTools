@@ -74,6 +74,14 @@ public class KMMSplitID {
 
     @Override
     public String toString() {
+	return toStringShort();
+    }
+
+    public String toStringShort() {
+	return trxID + ":" + spltID;
+    }
+
+    public String toStringLong() {
 	return "KMMSplitID [trxID=" + trxID + ", spltID=" + spltID + "]";
     }
 

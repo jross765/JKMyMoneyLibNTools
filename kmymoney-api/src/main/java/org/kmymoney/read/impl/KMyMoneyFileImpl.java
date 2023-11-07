@@ -471,7 +471,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 		KMyMoneyTransactionImpl trx = createTransaction(jwsdpTrx);
 		transactionID2transaction.put(trx.getId(), trx);
 		for (KMyMoneyTransactionSplit splt : trx.getSplits()) {
-		    transactionSplitID2transactionSplit.put(new KMMSplitID(trx.getId(), splt.getId()), splt);
+		    KMMSplitID spltID = new KMMSplitID(trx.getId(), splt.getId());
+		    transactionSplitID2transactionSplit.put(spltID, splt);
 		}
 	    } catch (RuntimeException e) {
 		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initTransactionMap: "
