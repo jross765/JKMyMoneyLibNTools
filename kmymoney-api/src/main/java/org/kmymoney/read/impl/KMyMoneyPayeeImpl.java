@@ -93,4 +93,11 @@ public class KMyMoneyPayeeImpl implements KMyMoneyPayee {
 	return jwsdpPeer.getMatchignorecase();
     }
 
+    // ---------------------------------------------------------------
+
+    @Override
+    public String toString() {
+	return "KMyMoneyPayeeImpl [jwsdpPeer=" + jwsdpPeer + ", id=" + getId() + ", name=" + getName() + "]";
+    }
+
 }
