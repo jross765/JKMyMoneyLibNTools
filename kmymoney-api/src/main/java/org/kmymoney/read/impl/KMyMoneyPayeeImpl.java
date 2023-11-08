@@ -97,7 +97,7 @@ public class KMyMoneyPayeeImpl implements KMyMoneyPayee {
 
     @Override
     public String toString() {
-	return "KMyMoneyPayeeImpl [jwsdpPeer=" + jwsdpPeer + ", id=" + getId() + ", name=" + getName() + "]";
+	return "KMyMoneyPayeeImpl [id=" + getId() + ", name='" + getName() + "']";
     }
 
 }
