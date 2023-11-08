@@ -1,6 +1,8 @@
 package org.kmymoney.read.impl;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.kmymoney.basetypes.InvalidSecCurrIDException;
@@ -41,6 +43,20 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
 
 	jwsdpPeer = peer;
 	file = gncFile;
+    }
+
+    // ---------------------------------------------------------------
+
+    /**
+     * @return the JWSDP-object we are wrapping.
+     */
+    @SuppressWarnings("exports")
+    public SECURITY getJwsdpPeer() {
+	return jwsdpPeer;
+    }
+
+    public KMyMoneyFile getKMyMoneyFile() {
+	return file;
     }
 
     // ---------------------------------------------------------------
@@ -116,15 +132,36 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
     // ---------------------------------------------------------------
 
     @Override
-    public Collection<KMMPrice> getQuotes() throws InvalidSecCurrTypeException {
-	// TODO Auto-generated method stub
-	return null;
+    public Collection<KMMPrice> getQuotes() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+	Collection<KMMPrice> result = new ArrayList<KMMPrice>();
+	
+	Collection<KMMPrice> prices = getKMyMoneyFile().getPrices();
+	for ( KMMPrice price : prices ) {
+	    try {
+		if ( price.getFromSecCurrQualifId().toString().equals(getQualifId().toString()) ) {
+		    result.add(price);
+		} 
+	    } catch ( Exception exc ) {
+		LOGGER.error("getQuotes: Could not check price " + price.toString());
+	    }
+	}
+	
+	return result;
     }
 
     @Override
-    public KMMPrice getYoungestQuote() throws InvalidSecCurrTypeException {
-	// TODO Auto-generated method stub
-	return null;
+    public KMMPrice getYoungestQuote() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+	KMMPrice result = null;
+
+	LocalDate youngestDate = LocalDate.of(1970, 1, 1); // ::MAGIC
+	for ( KMMPrice price : getQuotes() ) {
+	    if ( price.getDate().isAfter(youngestDate) ) {
+		result = price;
+		youngestDate = price.getDate();
+	    }
+	}
+
+	return result;
     }
 
     // ---------------------------------------------------------------

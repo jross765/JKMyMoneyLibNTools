@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -31,6 +32,7 @@ import org.kmymoney.Const;
 import org.kmymoney.basetypes.InvalidSecCurrIDException;
 import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.basetypes.KMMCurrID;
+import org.kmymoney.basetypes.KMMPriceID;
 import org.kmymoney.basetypes.KMMSecCurrID;
 import org.kmymoney.basetypes.KMMSecID;
 import org.kmymoney.basetypes.KMMSplitID;
@@ -56,6 +58,10 @@ import org.kmymoney.read.KMyMoneyTransaction;
 import org.kmymoney.read.KMyMoneyTransactionSplit;
 import org.kmymoney.read.NoEntryFoundException;
 import org.kmymoney.read.TooManyEntriesFoundException;
+import org.kmymoney.read.aux.KMMPrice;
+import org.kmymoney.read.aux.KMMPricePair;
+import org.kmymoney.read.impl.aux.KMMPriceImpl;
+import org.kmymoney.read.impl.aux.KMMPricePairImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -326,6 +332,44 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     private File file;
 
     /**
+     * {@inheritDoc}
+     */
+    public KMMPrice getPriceByID(String id) {
+        if (priceById == null) {
+            getPrices();
+        }
+        
+        return priceById.get(id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Collection<KMMPrice> getPrices() {
+        if (priceById == null) {
+            priceById = new HashMap<KMMPriceID, KMMPrice>();
+
+            PRICES priceDB = getRootElement().getPRICES();
+            List<PRICEPAIR> prices = priceDB.getPRICEPAIR();
+            for ( PRICEPAIR jwsdpPricePair  : prices ) {
+        	String fromCurr = jwsdpPricePair.getFrom();
+        	String toCurr = jwsdpPricePair.getTo();
+        	KMMPricePair pricePair = new KMMPricePairImpl(jwsdpPricePair, this);
+        	for ( PRICE jwsdpPrice : jwsdpPricePair.getPRICE() ) {
+        	    XMLGregorianCalendar cal = jwsdpPrice.getDate();
+        	    LocalDate date = LocalDate.of(cal.getYear(), cal.getMonth(), cal.getDay());
+        	    String dateStr = date.toString();
+        	    KMMPriceID priceID = new KMMPriceID(fromCurr, toCurr, dateStr);
+        	    KMMPriceImpl price = new KMMPriceImpl(pricePair, jwsdpPrice, this);
+        	    priceById.put(priceID, price);
+        	}
+            }
+        } 
+
+        return priceById.values();
+    }
+
+    /**
      * @param pCmdtySpace the namespace for pCmdtyId
      * @param pCmdtyId    the currency-name
      * @return the latest price-quote in the kmymoney-file in EURO
@@ -400,6 +444,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see KMyMoneyPayeeImpl
      */
     protected Map<String, KMyMoneyPayee> payeeID2Payee;
+
+    protected Map<KMMPriceID, KMMPrice> priceById = null;
 
     /**
      * Helper to implement the {@link KMyMoneyObject}-interface without having the
@@ -980,7 +1026,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     // ---------------------------------------------------------------
 
     @Override
-    public KMyMoneySecurity getSecurityByID(final String id) {
+    public KMyMoneySecurity getSecurityById(final String id) {
 	if (secID2Sec == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
@@ -995,7 +1041,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
     @Override
     public KMyMoneySecurity getSecurityByQualifID(final KMMSecID secID) {
-	return getSecurityByID(secID.getCode());
+	return getSecurityById(secID.getCode());
     }
 
     @Override

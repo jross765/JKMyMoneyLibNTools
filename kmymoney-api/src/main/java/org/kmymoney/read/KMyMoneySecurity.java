@@ -43,8 +43,8 @@ public interface KMyMoneySecurity {
 
     // ------------------------------------------------------------
 
-    Collection<KMMPrice> getQuotes() throws InvalidSecCurrTypeException;
+    Collection<KMMPrice> getQuotes() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
     
-    KMMPrice getYoungestQuote() throws InvalidSecCurrTypeException;
+    KMMPrice getYoungestQuote() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
     
 }

@@ -11,6 +11,7 @@ import org.kmymoney.basetypes.KMMSecID;
 import org.kmymoney.currency.ComplexPriceTable;
 import org.kmymoney.generated.KMYMONEYFILE;
 import org.kmymoney.numbers.FixedPointNumber;
+import org.kmymoney.read.aux.KMMPrice;
 
 /**
  * Interface of a top-level class<br/>
@@ -47,8 +48,6 @@ public interface KMyMoneyFile extends KMyMoneyObject {
     String getDefaultCurrencyID();
 
     // ---------------------------------------------------------------
-
-    FixedPointNumber getLatestPrice(final KMMSecCurrID secCurrID) throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
 
     // public abstract void setFile(File file);
 
@@ -182,7 +181,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param id the unique id of the customer to look for
      * @return the customer or null if it's not found
      */
-    KMyMoneySecurity getSecurityByID(String id);
+    KMyMoneySecurity getSecurityById(String id);
 
     KMyMoneySecurity getSecurityByQualifID(KMMSecID secID);
 
@@ -240,6 +239,27 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      *         returned collection!
      */
     Collection<KMyMoneyPayee> getPayees();
+
+    // ----------------------------
+
+    /**
+     * @param id id of a price
+     * @return the identified price or null
+     */
+    public KMMPrice getPriceByID(String id);
+
+    /**
+     * @return all prices defined in the book
+     * @link GCshPrice
+     */
+    public Collection<KMMPrice> getPrices();
+
+    /**
+     * @param pCmdtySpace the namespace for pCmdtyId
+     * @param pCmdtyId    the currency-name
+     * @return the latest price-quote in the gnucash-file in EURO
+     */
+    public FixedPointNumber getLatestPrice(final KMMSecCurrID secCurrID) throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
 
     // ---------------------------------------------------------------
     // Statistics (for test purposes)

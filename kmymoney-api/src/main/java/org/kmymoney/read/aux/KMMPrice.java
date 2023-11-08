@@ -6,10 +6,9 @@ import org.kmymoney.basetypes.InvalidSecCurrIDException;
 import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.basetypes.KMMCurrID;
 import org.kmymoney.basetypes.KMMCurrPair;
+import org.kmymoney.basetypes.KMMPriceID;
 import org.kmymoney.basetypes.KMMSecCurrID;
 import org.kmymoney.basetypes.KMMSecID;
-import org.kmymoney.generated.PRICEPAIR;
-import org.kmymoney.basetypes.KMMPriceID;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyCurrency;
 import org.kmymoney.read.KMyMoneySecurity;
@@ -34,12 +33,11 @@ public interface KMMPrice {
 	
     // ---------------------------------------------------------------
     
-    KMMPriceID getId();
+    KMMPriceID getId() throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
     
     KMMCurrPair getParentPricePairID() throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
 	
-    @SuppressWarnings("exports")
-    PRICEPAIR getParentPricePair() throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+    KMMPricePair getParentPricePair();
 	
     // ----------------------------
     	

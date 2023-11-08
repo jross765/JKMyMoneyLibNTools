@@ -16,13 +16,12 @@ import org.kmymoney.basetypes.KMMPriceID;
 import org.kmymoney.basetypes.KMMSecCurrID;
 import org.kmymoney.basetypes.KMMSecID;
 import org.kmymoney.generated.PRICE;
-import org.kmymoney.generated.PRICEPAIR;
-import org.kmymoney.generated.PRICES;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyCurrency;
 import org.kmymoney.read.KMyMoneyFile;
 import org.kmymoney.read.KMyMoneySecurity;
 import org.kmymoney.read.aux.KMMPrice;
+import org.kmymoney.read.aux.KMMPricePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +38,8 @@ public class KMMPriceImpl implements KMMPrice {
     private final KMyMoneyFile file;
 
     // -----------------------------------------------------------
+    
+    private KMMPricePair parent = null;
 
     /**
      * The currency-format to use for formatting.<br/>
@@ -51,9 +52,10 @@ public class KMMPriceImpl implements KMMPrice {
      * @param newPeer the JWSDP-object we are wrapping.
      */
     @SuppressWarnings("exports")
-    public KMMPriceImpl(final PRICE newPeer, final KMyMoneyFile file) {
+    public KMMPriceImpl(final KMMPricePair parent, final PRICE newPeer, final KMyMoneyFile file) {
 	super();
 		
+	this.parent    = parent;
 	this.jwsdpPeer = newPeer;
 	this.file      = file;
     }
@@ -61,38 +63,27 @@ public class KMMPriceImpl implements KMMPrice {
     // -----------------------------------------------------------
     
     @Override
-    public KMMPriceID getId() {
-	// TODO
-	return null;
+    public KMMPriceID getId() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+	return new KMMPriceID(parent.getFromSecCurrStr(),
+		              parent.getToCurrStr(),
+		              DATE_FORMAT.format(getDate()));
     }
 
     @Override
     public KMMCurrPair getParentPricePairID() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
-	return new KMMCurrPair(getFromCurrencyCode(), getToCurrencyCode());
+	return parent.getId();
     }
 
-    @SuppressWarnings("exports")
     @Override
-    public PRICEPAIR getParentPricePair() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
-	KMMCurrPair parentID = getParentPricePairID();
-	
-	PRICES priceDB = file.getRootElement().getPRICES();
-	
-	for ( PRICEPAIR pricePair : priceDB.getPRICEPAIR() ) {
-	    if ( pricePair.getFrom().equals(parentID.getFromCurr()) && 
-		 pricePair.getTo().equals(parentID.getToCurr()) ) {
-		return pricePair;
-	    }
-	}
-	
-	return null;
+    public KMMPricePair getParentPricePair() {
+	return parent;
     }
 
     // ----------------------------
     
     @Override
     public KMMSecCurrID getFromSecCurrQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
-	String secCurrID = getParentPricePair().getFrom();
+	String secCurrID = parent.getFromSecCurrStr();
 
 	KMMSecCurrID result = null;
 	if ( secCurrID.startsWith("E0") ) { // ::MAGIC
@@ -149,7 +140,7 @@ public class KMMPriceImpl implements KMMPrice {
     
     @Override
     public KMMCurrID getToCurrencyQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
-	String secCurrID = getParentPricePair().getFrom();
+	String secCurrID = parent.getToCurrStr();
 
 	KMMCurrID result = null;
 	if ( secCurrID.startsWith("E0") ) { // ::MAGIC
@@ -237,7 +228,13 @@ public class KMMPriceImpl implements KMMPrice {
     
     @Override
     public String toString() {
-	String result = "KMMPriceImpl [id=" + getId();
+	String result = "KMMPriceImpl [";
+	
+	try {
+	    result += "id='" + getId() + "'";
+	} catch (Exception e) {
+	    result += "id=" + "ERROR";
+	}
 	
 	try {
 	    result += ", from-sec-curr-qualif-id='" + getFromSecCurrQualifId() + "'";

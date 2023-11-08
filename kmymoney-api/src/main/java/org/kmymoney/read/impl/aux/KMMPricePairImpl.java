@@ -5,7 +5,10 @@ import java.util.Collection;
 
 import org.kmymoney.basetypes.InvalidSecCurrIDException;
 import org.kmymoney.basetypes.InvalidSecCurrTypeException;
+import org.kmymoney.basetypes.KMMCurrID;
 import org.kmymoney.basetypes.KMMCurrPair;
+import org.kmymoney.basetypes.KMMSecCurrID;
+import org.kmymoney.basetypes.KMMSecID;
 import org.kmymoney.generated.PRICE;
 import org.kmymoney.generated.PRICEPAIR;
 import org.kmymoney.read.KMyMoneyFile;
@@ -50,11 +53,44 @@ public class KMMPricePairImpl implements KMMPricePair {
     // -----------------------------------------------------------
     
     @Override
+    public String getFromSecCurrStr() {
+	return jwsdpPeer.getFrom();
+    }
+
+    @Override
+    public String getToCurrStr() {
+	return jwsdpPeer.getTo();
+    }
+
+    // -----------------------------------------------------------
+    
+    @Override
+    public KMMSecCurrID getFromSecCurr() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+	String fromStr = getFromSecCurrStr();
+	
+	KMMSecCurrID result = null;
+	if ( fromStr.startsWith("E0") ) { // ::MAGIC
+	    result = new KMMSecID(fromStr);
+	} else {
+	    result = new KMMCurrID(fromStr);
+	}
+	
+	return result;
+    }
+
+    @Override
+    public KMMCurrID getToCurr() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+	return new KMMCurrID(getToCurrStr());
+    }
+
+    // -----------------------------------------------------------
+    
+    @Override
     public Collection<KMMPrice> getPrices() {
 	Collection<KMMPrice> result = new ArrayList<KMMPrice>();
 	
 	for ( PRICE prc : jwsdpPeer.getPRICE() ) {
-	    KMMPrice newPrc = new KMMPriceImpl(prc, file);
+	    KMMPrice newPrc = new KMMPriceImpl(this, prc, file);
 	    result.add(newPrc);
 	}
 	
@@ -63,6 +99,49 @@ public class KMMPricePairImpl implements KMMPricePair {
 	} catch (Exception e) {
 	    LOGGER.debug("getPrices: Found " + result.size() + " prices for KMMPricePair " + "ERROR");
 	}
+	
+	return result;
+    }
+
+    // -----------------------------------------------------------
+    
+    public boolean equals(KMMPricePair other) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+	if ( ! getFromSecCurr().equals(other.getFromSecCurr()) )
+	    return false;
+
+	if ( ! getToCurr().equals(other.getToCurr()) )
+	    return false;
+	
+	return true;
+    }
+    
+    // -----------------------------------------------------------
+    
+    @Override
+    public String toString() {
+	return toStringShort();
+    }
+
+    public String toStringShort() {
+	return getFromSecCurrStr() + ";" + getToCurrStr();
+    }
+
+    public String toStringLong() {
+	String result = "KMMPricePairImpl [";
+	
+	try {
+	    result += "from-sec-curr=" + getFromSecCurr();
+	} catch (Exception e) {
+	    result += "from-sec-curr=" + "ERROR";
+	}
+
+	try {
+	    result += ", to-curr=" + getToCurr();
+	} catch (Exception e) {
+	    result += ", to-curr=" + "ERROR";
+	}
+	
+	result += "]";
 	
 	return result;
     }

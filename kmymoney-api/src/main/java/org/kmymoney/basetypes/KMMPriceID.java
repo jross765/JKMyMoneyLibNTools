@@ -68,14 +68,23 @@ public class KMMPriceID {
 	    return false;
 	}
 	KMMPriceID other = (KMMPriceID) obj;
-	return Objects.equals(dateStr, other.dateStr) && Objects.equals(fromCurr, other.fromCurr)
-		&& Objects.equals(toCurr, other.toCurr);
+	return Objects.equals(dateStr, other.dateStr) && 
+	       Objects.equals(fromCurr, other.fromCurr) && 
+	       Objects.equals(toCurr, other.toCurr);
     }
 
     // ---------------------------------------------------------------
 
     @Override
     public String toString() {
+	return toStringShort();
+    }
+        
+    public String toStringShort() {
+	return fromCurr + ";" + toCurr + ";" + dateStr;
+    }
+        
+    public String toStringLong() {
 	return "KMMPriceID [fromCurr=" + fromCurr + ", toCurr=" + toCurr + ", dateStr=" + dateStr + "]";
     }
         
