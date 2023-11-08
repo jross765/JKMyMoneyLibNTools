@@ -67,7 +67,7 @@ public class TestKMyMoneyTransactionImpl
   @Test
   public void test01() throws Exception
   {
-    trx = kmmFile.getTransactionByID(TRX_1_ID);
+    trx = kmmFile.getTransactionById(TRX_1_ID);
     assertNotEquals(null, trx);
     
     assertEquals(TRX_1_ID, trx.getId());
@@ -84,7 +84,7 @@ public class TestKMyMoneyTransactionImpl
   @Test
   public void test02() throws Exception
   {
-    trx = kmmFile.getTransactionByID(TRX_2_ID);
+    trx = kmmFile.getTransactionById(TRX_2_ID);
     assertNotEquals(null, trx);
     
     assertEquals(TRX_2_ID, trx.getId());

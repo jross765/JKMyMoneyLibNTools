@@ -57,7 +57,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param id the unique id of the account to look for
      * @return the account or null if it's not found
      */
-    KMyMoneyAccount getAccountByID(String id);
+    KMyMoneyAccount getAccountById(String id);
 
     /**
      * @return a read-only collection of all accounts that have no parent
@@ -68,7 +68,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param id the unique id of the transaction to look for
      * @return the transaction or null if it's not found
      */
-    KMyMoneyTransaction getTransactionByID(String id);
+    KMyMoneyTransaction getTransactionById(String id);
 
     /**
      * @return a (possibly read-only) collection of all transactions Do not modify
@@ -92,12 +92,12 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 
     /**
      * warning: this function has to traverse all accounts. If it much faster to try
-     * getAccountByID first and only call this method if the returned account does
+     * getAccountById first and only call this method if the returned account does
      * not have the right name.
      *
      * @param name the UNQUaLIFIED name to look for
      * @return null if not found
-     * @see #getAccountByID(String)
+     * @see #getAccountById(String)
      */
     Collection<KMyMoneyAccount> getAccountsByName(String expr);
 
@@ -107,14 +107,14 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 
     /**
      * warning: this function has to traverse all accounts. If it much faster to try
-     * getAccountByID first and only call this method if the returned account does
+     * getAccountById first and only call this method if the returned account does
      * not have the right name.
      *
      * @param name the regular expression of the name to look for
      * @return null if not found
      * @throws org.kmymoney.read.TooManyEntriesFoundException 
      * @throws org.kmymoney.read.NoEntryFoundException 
-     * @see #getAccountByID(String)
+     * @see #getAccountById(String)
      * @see #getAccountByName(String)
      */
     KMyMoneyAccount getAccountByNameEx(String name) throws NoEntryFoundException, TooManyEntriesFoundException;
@@ -128,7 +128,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @return null if not found
      * @throws org.kmymoney.read.TooManyEntriesFoundException 
      * @throws org.kmymoney.read.NoEntryFoundException 
-     * @see #getAccountByID(String)
+     * @see #getAccountById(String)
      * @see #getAccountByName(String)
      */
     KMyMoneyAccount getAccountByIDorName(String id, String name) throws NoEntryFoundException, TooManyEntriesFoundException;
@@ -143,7 +143,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @return null if not found
      * @throws org.kmymoney.read.TooManyEntriesFoundException 
      * @throws org.kmymoney.read.NoEntryFoundException 
-     * @see #getAccountByID(String)
+     * @see #getAccountById(String)
      * @see #getAccountByName(String)
      */
     KMyMoneyAccount getAccountByIDorNameEx(String id, String name) throws NoEntryFoundException, TooManyEntriesFoundException;
@@ -154,18 +154,18 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param id the unique id of the customer to look for
      * @return the customer or null if it's not found
      */
-    KMyMoneyCurrency getCurrencyByID(String id);
+    KMyMoneyCurrency getCurrencyById(String id);
 
-    KMyMoneyCurrency getCurrencyByQualifID(KMMCurrID currID);
+    KMyMoneyCurrency getCurrencyByQualifId(KMMCurrID currID);
 
     /**
      * warning: this function has to traverse all securites. If it much faster to
-     * try getCustomerByID first and only call this method if the returned account
+     * try getCustomerById first and only call this method if the returned account
      * does not have the right name.
      *
      * @param name the name to look for
      * @return null if not found
-     * @see #getCustomerByID(String)
+     * @see #getCustomerById(String)
      */
     // Collection<KMyMoneyCurrency> getCurrenciesByName(String name);
 
@@ -221,18 +221,13 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param id the unique id of the customer to look for
      * @return the customer or null if it's not found
      */
-    KMyMoneyPayee getPayeeByID(String id);
+    KMyMoneyPayee getPayeeById(String id);
 
-    /**
-     * warning: this function has to traverse all customers. If it much faster to
-     * try getCustomerByID first and only call this method if the returned account
-     * does not have the right name.
-     *
-     * @param name the name to look for
-     * @return null if not found
-     * @see #getCustomerByID(String)
-     */
-    KMyMoneyPayee getPayeeByName(String name);
+    public Collection<KMyMoneyPayee> getPayeesByName(final String expr);
+    
+    public Collection<KMyMoneyPayee> getPayeesByName(final String expr, final boolean relaxed);
+
+    public KMyMoneyPayee getPayeesByNameUniq(final String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
 
     /**
      * @return a (possibly read-only) collection of all customers Do not modify the
@@ -246,7 +241,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param id id of a price
      * @return the identified price or null
      */
-    public KMMPrice getPriceByID(String id);
+    public KMMPrice getPriceById(String id);
 
     /**
      * @return all prices defined in the book

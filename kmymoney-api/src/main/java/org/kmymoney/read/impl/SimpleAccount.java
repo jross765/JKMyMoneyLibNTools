@@ -144,7 +144,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 			return null;
 		}
 
-		return getKMyMoneyFile().getAccountByID(id);
+		return getKMyMoneyFile().getAccountById(id);
 	}
 
 	/**

@@ -131,7 +131,7 @@ public class KMMPriceImpl implements KMMPrice {
     public KMyMoneyCurrency getFromCurrency() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
 	KMMCurrID currID = getFromCurrencyQualifId();
 	
-	KMyMoneyCurrency curr = file.getCurrencyByQualifID(currID);
+	KMyMoneyCurrency curr = file.getCurrencyByQualifId(currID);
 	
 	return curr;
     }
@@ -161,7 +161,7 @@ public class KMMPriceImpl implements KMMPrice {
     public KMyMoneyCurrency getToCurrency() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
 	KMMCurrID currID = getToCurrencyQualifId();
 	
-	KMyMoneyCurrency curr = file.getCurrencyByQualifID(currID);
+	KMyMoneyCurrency curr = file.getCurrencyByQualifId(currID);
 	
 	return curr;
     }

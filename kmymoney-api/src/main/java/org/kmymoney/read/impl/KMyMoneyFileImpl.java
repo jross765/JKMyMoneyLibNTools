@@ -211,12 +211,12 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	for ( KMyMoneyAccount acct : accountID2account.values() ) {
 	    if ( relaxed ) {
 		if ( qualif ) {
-		    if ( acct.getQualifiedName().trim().toLowerCase().
+		    if ( acct.getQualifiedName().toLowerCase().
 			    contains(expr.trim().toLowerCase()) ) {
 			result.add(acct);
 		    }
 		} else {
-		    if ( acct.getName().trim().toLowerCase().
+		    if ( acct.getName().toLowerCase().
 			    contains(expr.trim().toLowerCase()) ) {
 			result.add(acct);
 		    }
@@ -256,7 +256,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @return null if not found
      * @throws TooManyEntriesFoundException 
      * @throws NoEntryFoundException 
-     * @see #getAccountByID(String)
+     * @see #getAccountById(String)
      * @see #getAccountByName(String)
      */
     public KMyMoneyAccount getAccountByNameEx(final String nameRegEx) throws NoEntryFoundException, TooManyEntriesFoundException {
@@ -290,11 +290,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @return null if not found
      * @throws TooManyEntriesFoundException 
      * @throws NoEntryFoundException 
-     * @see #getAccountByID(String)
+     * @see #getAccountById(String)
      * @see #getAccountByName(String)
      */
     public KMyMoneyAccount getAccountByIDorName(final String id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
-	KMyMoneyAccount retval = getAccountByID(id);
+	KMyMoneyAccount retval = getAccountById(id);
 	if (retval == null) {
 	    retval = getAccountByNameUniq(name, true);
 	}
@@ -312,11 +312,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @return null if not found
      * @throws TooManyEntriesFoundException 
      * @throws NoEntryFoundException 
-     * @see #getAccountByID(String)
+     * @see #getAccountById(String)
      * @see #getAccountByName(String)
      */
     public KMyMoneyAccount getAccountByIDorNameEx(final String id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
-	KMyMoneyAccount retval = getAccountByID(id);
+	KMyMoneyAccount retval = getAccountById(id);
 	if (retval == null) {
 	    retval = getAccountByNameEx(name);
 	}
@@ -334,7 +334,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     /**
      * {@inheritDoc}
      */
-    public KMMPrice getPriceByID(String id) {
+    public KMMPrice getPriceById(String id) {
         if (priceById == null) {
             getPrices();
         }
@@ -982,9 +982,9 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     /**
-     * @see KMyMoneyFile#getAccountByID(java.lang.String)
+     * @see KMyMoneyFile#getAccountById(java.lang.String)
      */
-    public KMyMoneyAccount getAccountByID(final String id) {
+    public KMyMoneyAccount getAccountById(final String id) {
 	if (accountID2account == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
@@ -1000,7 +1000,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     // ---------------------------------------------------------------
 
     @Override
-    public KMyMoneyCurrency getCurrencyByID(String id) {
+    public KMyMoneyCurrency getCurrencyById(String id) {
 	if (currID2Curr == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
@@ -1014,8 +1014,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     @Override
-    public KMyMoneyCurrency getCurrencyByQualifID(KMMCurrID currID) {
-	return getCurrencyByID(currID.getCode());
+    public KMyMoneyCurrency getCurrencyByQualifId(KMMCurrID currID) {
+	return getCurrencyById(currID.getCode());
     }
 
     @Override
@@ -1120,7 +1120,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr) {
 	return getSecuritiesByName(expr, true);
     }
-    
+
     @Override
     public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed) {
 	if (secID2Sec == null) {
@@ -1133,7 +1133,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	    if ( sec.getName() != null ) // yes, that can actually happen! 
 	    {
 		if ( relaxed ) {
-		    if ( sec.getName().trim().toLowerCase().
+		    if ( sec.getName().toLowerCase().
 			    contains(expr.trim().toLowerCase()) ) {
 			result.add(sec);
 		    }
@@ -1169,7 +1169,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     /**
      * @see KMyMoneyFile#getPayeeByID(java.lang.String)
      */
-    public KMyMoneyPayee getPayeeByID(final String id) {
+    @Override
+    public KMyMoneyPayee getPayeeById(final String id) {
 	if (payeeID2Payee == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
@@ -1182,21 +1183,48 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	return retval;
     }
 
-    /**
-     * @see KMyMoneyFile#getPayeeByName(java.lang.String)
-     */
-    public KMyMoneyPayee getPayeeByName(final String name) {
+    @Override
+    public Collection<KMyMoneyPayee> getPayeesByName(String expr) {
+	return getPayeesByName(expr, true);
+    }
 
+    @Override
+    public Collection<KMyMoneyPayee> getPayeesByName(String expr, boolean relaxed) {
 	if (payeeID2Payee == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
+	
+	Collection<KMyMoneyPayee> result = new ArrayList<KMyMoneyPayee>();
 
-	for (KMyMoneyPayee payee : getPayees()) {
-	    if (payee.getName().equals(name)) {
-		return payee;
+	for ( KMyMoneyPayee pye : getPayees() ) {
+	    if ( pye.getName() != null ) 
+	    {
+		if ( relaxed ) {
+		    if ( pye.getName().toLowerCase().
+			    contains(expr.trim().toLowerCase()) ) {
+			result.add(pye);
+		    }
+		} else {
+		    if ( pye.getName().equals(expr) ) {
+			result.add(pye);
+		    }
+		}
 	    }
 	}
-	return null;
+	
+	return result;
+    }
+
+    @Override
+    public KMyMoneyPayee getPayeesByNameUniq(String expr)
+	    throws NoEntryFoundException, TooManyEntriesFoundException {
+	Collection<KMyMoneyPayee> cmdtyList = getPayeesByName(expr, false);
+	if ( cmdtyList.size() == 0 )
+	    throw new NoEntryFoundException();
+	else if ( cmdtyList.size() > 1 )
+	    throw new TooManyEntriesFoundException();
+	else
+	    return cmdtyList.iterator().next();
     }
 
     /**
@@ -1209,9 +1237,9 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     // ---------------------------------------------------------------
 
     /**
-     * @see KMyMoneyFile#getTransactionByID(java.lang.String)
+     * @see KMyMoneyFile#getTransactionById(java.lang.String)
      */
-    public KMyMoneyTransaction getTransactionByID(final String id) {
+    public KMyMoneyTransaction getTransactionById(final String id) {
 	if (transactionID2transaction == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
@@ -1225,7 +1253,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     /**
-     * @see KMyMoneyFile#getTransactionByID(java.lang.String)
+     * @see KMyMoneyFile#getTransactionById(java.lang.String)
      */
     public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMSplitID id) {
 	if (transactionSplitID2transactionSplit == null) {

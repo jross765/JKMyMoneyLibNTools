@@ -194,7 +194,7 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
      * @see KMyMoneyTransactionSplit#getAccount()
      */
     public KMyMoneyAccount getAccount() {
-	return myTransaction.getKMyMoneyFile().getAccountByID(getAccountId());
+	return myTransaction.getKMyMoneyFile().getAccountById(getAccountId());
     }
 
     @Override

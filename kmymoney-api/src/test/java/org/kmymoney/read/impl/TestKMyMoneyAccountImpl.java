@@ -71,7 +71,7 @@ public class TestKMyMoneyAccountImpl
   @Test
   public void test01_1() throws Exception
   {
-    acct = kmmFile.getAccountByID(ACCT_1_ID);
+    acct = kmmFile.getAccountById(ACCT_1_ID);
     
     assertEquals(ACCT_1_ID, acct.getId());
     assertEquals(KMyMoneyAccount.Type.CHECKING, acct.getType());
@@ -93,7 +93,7 @@ public class TestKMyMoneyAccountImpl
   @Test
   public void test01_2() throws Exception
   {
-    acct = kmmFile.getAccountByID(ACCT_2_ID);
+    acct = kmmFile.getAccountById(ACCT_2_ID);
     
     assertEquals(ACCT_2_ID, acct.getId());
     assertEquals(KMyMoneyAccount.Type.INVESTMENT, acct.getType());
