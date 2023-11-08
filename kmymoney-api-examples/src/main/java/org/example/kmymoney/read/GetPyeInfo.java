@@ -11,9 +11,12 @@ import org.kmymoney.read.impl.KMyMoneyFileImpl;
 public class GetPyeInfo {
     // BEGIN Example data -- adapt to your needs
     private static String kmmFileName = null;
+    private static Helper.Mode mode = null;
     private static String pyeID = null;
     private static String name = null;
     // END Example data
+
+    // -----------------------------------------------------------------
 
     public static void main(String[] args) {
 	try {

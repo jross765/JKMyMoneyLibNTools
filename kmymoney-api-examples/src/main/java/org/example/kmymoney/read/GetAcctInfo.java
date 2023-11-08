@@ -11,9 +11,12 @@ import org.kmymoney.read.impl.KMyMoneyFileImpl;
 public class GetAcctInfo {
     // BEGIN Example data -- adapt to your needs
     private static String kmmFileName = null;
+    private static Helper.Mode mode = null;
     private static String acctID = null;
     private static String acctName = null;
     // END Example data
+
+    // -----------------------------------------------------------------
 
     public static void main(String[] args) {
 	try {

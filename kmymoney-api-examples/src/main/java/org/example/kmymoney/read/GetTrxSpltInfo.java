@@ -13,6 +13,8 @@ public class GetTrxSpltInfo {
     private static String spltID = null;
     // END Example data
 
+    // -----------------------------------------------------------------
+
     public static void main(String[] args) {
 	try {
 	    GetTrxSpltInfo tool = new GetTrxSpltInfo();

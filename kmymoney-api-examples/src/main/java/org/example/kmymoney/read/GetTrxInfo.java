@@ -12,6 +12,8 @@ public class GetTrxInfo {
     private static String trxID = null;
     // END Example data
 
+    // -----------------------------------------------------------------
+
     public static void main(String[] args) {
 	try {
 	    GetTrxInfo tool = new GetTrxInfo();

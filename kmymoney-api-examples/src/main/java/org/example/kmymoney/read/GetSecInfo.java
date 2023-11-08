@@ -12,12 +12,24 @@ import org.kmymoney.read.aux.KMMPrice;
 import org.kmymoney.read.impl.KMyMoneyFileImpl;
 
 public class GetSecInfo {
+    public enum Mode
+    {
+      ID,
+      ISIN,
+      NAME
+    }
+    
+    // -----------------------------------------------------------------
+
     // BEGIN Example data -- adapt to your needs
     private static String kmmFileName = null;
+    private static Mode mode = null;
     private static String secID = null;
     private static String isin = null;
     private static String name = null;
     // END Example data
+
+    // -----------------------------------------------------------------
 
     public static void main(String[] args) {
 	try {

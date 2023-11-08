@@ -16,6 +16,8 @@ public class GetCurrInfo {
     private static String symbol = null;
     // END Example data
 
+    // -----------------------------------------------------------------
+
     public static void main(String[] args) {
 	try {
 	    GetCurrInfo tool = new GetCurrInfo();

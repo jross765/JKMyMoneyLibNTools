@@ -10,6 +10,8 @@ public class GetCurrTabInfo {
     private static String gcshFileName = null;
     // END Example data
 
+    // -----------------------------------------------------------------
+
     public static void main(String[] args) {
 	try {
 	    GetCurrTabInfo tool = new GetCurrTabInfo();
