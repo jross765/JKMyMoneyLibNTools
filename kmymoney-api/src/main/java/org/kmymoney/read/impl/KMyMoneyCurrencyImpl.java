@@ -1,17 +1,17 @@
 package org.kmymoney.read.impl;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.kmymoney.basetypes.InvalidSecCurrIDException;
 import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.basetypes.KMMCurrID;
-import org.kmymoney.basetypes.KMMSecID;
 import org.kmymoney.generated.CURRENCY;
 import org.kmymoney.read.KMMSecCurr;
 import org.kmymoney.read.KMyMoneyCurrency;
 import org.kmymoney.read.KMyMoneyFile;
-import org.kmymoney.read.KMyMoneySecurity;
 import org.kmymoney.read.aux.KMMPrice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +45,12 @@ public class KMyMoneyCurrencyImpl implements KMyMoneyCurrency {
 
     // ---------------------------------------------------------------
 
+    public KMyMoneyFile getKMyMoneyFile() {
+	return file;
+    }
+
+    // ---------------------------------------------------------------
+
     @Override
     public String getId() {
 	return jwsdpPeer.getId();
@@ -56,6 +62,13 @@ public class KMyMoneyCurrencyImpl implements KMyMoneyCurrency {
     }
 
     @Override
+    public String getSymbol() {
+	return jwsdpPeer.getSymbol();
+    }
+
+    // ---------------------------------------------------------------
+
+    @Override
     public KMMSecCurr.Type getType() throws UnknownSecurityTypeException {
 	BigInteger typeVal = jwsdpPeer.getType(); 
 	return KMMSecCurrImpl.getType(typeVal.intValue());
@@ -64,11 +77,6 @@ public class KMyMoneyCurrencyImpl implements KMyMoneyCurrency {
     @Override
     public String getName() {
 	return jwsdpPeer.getName();
-    }
-
-    @Override
-    public String getSymbol() {
-	return jwsdpPeer.getSymbol();
     }
 
     @Override
@@ -95,15 +103,36 @@ public class KMyMoneyCurrencyImpl implements KMyMoneyCurrency {
     // ---------------------------------------------------------------
 
     @Override
-    public Collection<KMMPrice> getQuotes() throws InvalidSecCurrTypeException {
-	// TODO Auto-generated method stub
-	return null;
+    public Collection<KMMPrice> getQuotes() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+	Collection<KMMPrice> result = new ArrayList<KMMPrice>();
+	
+	Collection<KMMPrice> prices = getKMyMoneyFile().getPrices();
+	for ( KMMPrice price : prices ) {
+	    try {
+		if ( price.getFromSecCurrQualifId().toString().equals(getQualifId().toString()) ) {
+		    result.add(price);
+		} 
+	    } catch ( Exception exc ) {
+		LOGGER.error("getQuotes: Could not check price " + price.toString());
+	    }
+	}
+
+  	return result;
     }
 
     @Override
-    public KMMPrice getYoungestQuote() throws InvalidSecCurrTypeException {
-	// TODO Auto-generated method stub
-	return null;
+    public KMMPrice getYoungestQuote() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+	KMMPrice result = null;
+
+	LocalDate youngestDate = LocalDate.of(1970, 1, 1); // ::MAGIC
+	for ( KMMPrice price : getQuotes() ) {
+	    if ( price.getDate().isAfter(youngestDate) ) {
+		result = price;
+		youngestDate = price.getDate();
+	    }
+	}
+
+	return result;
     }
 
     // ---------------------------------------------------------------

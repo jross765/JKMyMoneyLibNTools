@@ -16,14 +16,14 @@ public interface KMyMoneyCurrency {
 
     KMMCurrID getQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
 
+    String getSymbol();
+
     // ------------------------------------------------------------
 
     KMMSecCurr.Type getType() throws UnknownSecurityTypeException;
     
     String getName();
     
-    String getSymbol();
-
     BigInteger getPP();
     
     KMMSecCurr.RoundingMethod getRoundingMethod() throws UnknownRoundingMethodException;
@@ -34,8 +34,8 @@ public interface KMyMoneyCurrency {
     
     // ------------------------------------------------------------
 
-    Collection<KMMPrice> getQuotes() throws InvalidSecCurrTypeException;
+    Collection<KMMPrice> getQuotes() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
     
-    KMMPrice getYoungestQuote() throws InvalidSecCurrTypeException;
+    KMMPrice getYoungestQuote() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
     
 }

@@ -47,14 +47,6 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
 
     // ---------------------------------------------------------------
 
-    /**
-     * @return the JWSDP-object we are wrapping.
-     */
-    @SuppressWarnings("exports")
-    public SECURITY getJwsdpPeer() {
-	return jwsdpPeer;
-    }
-
     public KMyMoneyFile getKMyMoneyFile() {
 	return file;
     }
