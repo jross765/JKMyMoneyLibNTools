@@ -15,7 +15,10 @@
 	</properties>
 
 	<modules>
+
 		<module>kmymoney-api</module>
+		<module>kmymoney-api-examples</module>
+
 	</modules>
 
 	<dependencies>

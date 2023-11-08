@@ -142,35 +142,6 @@
 				</configuration>
 			</plugin>
 
-			<!-- 
-			  https://artofcode.wordpress.com/2019/02/28/generating-classes-from-xsd-under-java-11-the-right-way/
-			  https://stackoverflow.com/questions/54305193/how-to-run-xjc-with-java-11-and-maven
-			-->
-			<!--
-			<plugin>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-xjc-plugin</artifactId>
-                <version>3.3.0</version>
-                <executions>
-                    <execution>
-                        <id>xjc</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>xsdtojava</goal>
-                        </goals>
-                        <configuration>
-                            <xsdOptions>
-                                <xsdOption>
-                                    <xsd>${basedir}/src/main/resources/kmymoney.xsd</xsd>
-                                    <packagename>org.kmymoney.generated</packagename>
-                                </xsdOption>
-                            </xsdOptions>
-                        </configuration>
-                    </execution>
-                </executions>                    
-            </plugin>
-			-->
-			
 		</plugins>
 
 	</build>
