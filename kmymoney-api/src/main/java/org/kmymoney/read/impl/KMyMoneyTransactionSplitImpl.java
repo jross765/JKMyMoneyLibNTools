@@ -14,6 +14,8 @@ import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyAccount;
 import org.kmymoney.read.KMyMoneyTransaction;
 import org.kmymoney.read.KMyMoneyTransactionSplit;
+import org.kmymoney.read.UnknownSplitActionException;
+import org.kmymoney.read.UnknownSplitStateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -12,8 +12,8 @@ import org.kmymoney.read.impl.KMyMoneyFileImpl;
 
 public class GetCurrInfo {
     // BEGIN Example data -- adapt to your needs
-    private static String kmmFileName = null;
-    private static String symbol = null;
+    private static String kmmFileName = "example_in.xml";
+    private static String symbol      = "abc";
     // END Example data
 
     // -----------------------------------------------------------------
@@ -38,6 +38,8 @@ public class GetCurrInfo {
 	    System.err.println("Could not find currency with qualif. ID " + currID.toString());
 	    throw new NoEntryFoundException();
 	}
+
+	// ------------------------
 
 	try {
 	    System.out.println("Qualified ID:      '" + curr.getQualifId() + "'");

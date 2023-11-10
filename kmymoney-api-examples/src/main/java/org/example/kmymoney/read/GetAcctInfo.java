@@ -10,10 +10,10 @@ import org.kmymoney.read.impl.KMyMoneyFileImpl;
 
 public class GetAcctInfo {
     // BEGIN Example data -- adapt to your needs
-    private static String kmmFileName = null;
-    private static Helper.Mode mode = null;
-    private static String acctID = null;
-    private static String acctName = null;
+    private static String kmmFileName = "example_in.xml";
+    private static Helper.Mode mode   = Helper.Mode.ID;
+    private static String acctID      = "xyz";
+    private static String acctName    = "abc";
     // END Example data
 
     // -----------------------------------------------------------------
@@ -49,8 +49,10 @@ public class GetAcctInfo {
 		System.err.println("Found several accounts with that name.");
 		System.err.println("Taking first one.");
 	    }
-	    acct = acctList.iterator().next();
+	    acct = acctList.iterator().next(); // first element
 	}
+	
+	// ------------------------
 
 	printAcctInfo(acct, 0);
     }

@@ -12,8 +12,8 @@ import org.kmymoney.read.aux.KMMPrice;
 import org.kmymoney.read.impl.KMyMoneyFileImpl;
 
 public class GetSecInfo {
-    public enum Mode
-    {
+    
+    public enum Mode {
       ID,
       ISIN,
       NAME
@@ -22,11 +22,11 @@ public class GetSecInfo {
     // -----------------------------------------------------------------
 
     // BEGIN Example data -- adapt to your needs
-    private static String kmmFileName = null;
-    private static Mode mode = null;
-    private static String secID = null;
-    private static String isin = null;
-    private static String name = null;
+    private static String kmmFileName = "example_in.xml";
+    private static Mode mode          = Mode.ID;
+    private static String secID       = "xyz";
+    private static String isin        = "abc";
+    private static String secName     = "def";
     // END Example data
 
     // -----------------------------------------------------------------
@@ -46,7 +46,6 @@ public class GetSecInfo {
 	KMyMoneyFileImpl gcshFile = new KMyMoneyFileImpl(new File(kmmFileName));
 
 	KMyMoneySecurity sec = null;
-
 	if (mode == Mode.ID) {
 	    sec = gcshFile.getSecurityById(secID);
 	    if (sec == null) {
@@ -60,7 +59,7 @@ public class GetSecInfo {
 		throw new NoEntryFoundException();
 	    }
 	} else if (mode == Mode.NAME) {
-	    Collection<KMyMoneySecurity> cmdtyList = gcshFile.getSecuritiesByName(name);
+	    Collection<KMyMoneySecurity> cmdtyList = gcshFile.getSecuritiesByName(secName);
 	    if (cmdtyList.size() == 0) {
 		System.err.println("Could not find securities matching this name.");
 		throw new NoEntryFoundException();

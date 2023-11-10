@@ -16,7 +16,9 @@ public class TestPackage extends TestCase
   {
     TestSuite suite = new TestSuite();
     
-    suite.addTest(org.kmymoney.currency.TestSimplePriceTable.suite());
+    // ::TODO
+    // suite.addTest(org.kmymoney.currency.TestSimpleCurrencyExchRateTable.suite());
+    suite.addTest(org.kmymoney.currency.TestSimpleSecurityQuoteTable.suite());
     suite.addTest(org.kmymoney.currency.TestComplexPriceTable.suite());
 
     return suite;

@@ -8,8 +8,8 @@ import org.kmymoney.read.impl.KMyMoneyFileImpl;
 
 public class GetTrxInfo {
     // BEGIN Example data -- adapt to your needs
-    private static String kmmFileName = null;
-    private static String trxID = null;
+    private static String kmmFileName = "example_in.xml";
+    private static String trxID       = "xyz";
     // END Example data
 
     // -----------------------------------------------------------------
@@ -28,7 +28,12 @@ public class GetTrxInfo {
     protected void kernel() throws Exception {
 	KMyMoneyFileImpl kmmFile = new KMyMoneyFileImpl(new File(kmmFileName));
 
+	// You normally would get the transaction-ID by first choosing 
+	// a specific account (cf. GetAcctInfo), getting its list of 
+	// transactions and then choosing from them.
 	KMyMoneyTransaction trx = kmmFile.getTransactionById(trxID);
+
+	// ------------------------
 
 	try {
 	    System.out.println("ID:              " + trx.getId());

@@ -11,7 +11,6 @@ import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.basetypes.KMMSecCurrID;
 import org.kmymoney.basetypes.KMMSplitID;
 import org.kmymoney.numbers.FixedPointNumber;
-import org.kmymoney.read.impl.UnknownAccountTypeException;
 
 /**
  * An account is a collection of transactions that start or end there. <br>

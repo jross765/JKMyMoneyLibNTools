@@ -285,15 +285,15 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	 * Ignores accounts for wich this conversion is not possible.
 	 *
 	 * @param date     ignores transactions after the given date
-	 * @param currency the currency the result shall be in
+	 * @param curr the currency the result shall be in
 	 * @return Gets the balance including all sub-accounts.
 	 * @throws InvalidSecCurrIDException 
 	 * @throws InvalidSecTypeException 
 	 * @see GnucashAccount#getBalanceRecursive(Date, Currency)
 	 */
-	public FixedPointNumber getBalanceRecursive(final LocalDate date, final Currency currency) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+	public FixedPointNumber getBalanceRecursive(final LocalDate date, final Currency curr) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
 
-		FixedPointNumber retval = getBalance(date, currency);
+		FixedPointNumber retval = getBalance(date, curr);
 	
 		if (retval == null) {
 			retval = new FixedPointNumber();
@@ -301,7 +301,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 
 		for (Object element : getChildren()) {
 			KMyMoneyAccount child = (KMyMoneyAccount) element;
-			retval.add(child.getBalanceRecursive(date, currency));
+			retval.add(child.getBalanceRecursive(date, curr));
 		}
 
 		return retval;
@@ -337,7 +337,9 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	    if ( secCurrID.getType() == KMMSecCurrID.Type.CURRENCY )
 		return getBalanceRecursive(date, new KMMCurrID(secCurrID.getCode()).getCurrency());
 	    else
-		return null; // ::CHECK / TODO
+		return getBalance(date, secCurrID); // CAUTION: This assumes that under a stock account,
+                                                    // there are no children (which sounds sensible,
+                                                    // but there might be special cases)
 	}
 
 	/**
@@ -375,8 +377,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	 * @throws InvalidSecCurrTypeException 
 	 * @see #getBalance(LocalDate)
 	 */
-	public FixedPointNumber getBalance(final LocalDate date, 
-		final KMMSecCurrID secCurrID) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+	public FixedPointNumber getBalance(final LocalDate date, final KMMSecCurrID secCurrID) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
 		FixedPointNumber retval = getBalance(date);
 
 		if (retval == null) {
@@ -398,14 +399,14 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		}
 
 		if ( ! priceTab.convertToBaseCurrency(retval, secCurrID) ) {
-			Collection<String> currencies = getKMyMoneyFile().getCurrencyTable().getCurrencies(getSecCurrID().getType());
+			Collection<String> currList = getKMyMoneyFile().getCurrencyTable().getCurrencies(getSecCurrID().getType());
 			LOGGER.error("SimpleAccount.getBalance() - cannot transfer "
 					+ "from our currency '"
 					+ getSecCurrID().toString()
 					+ "' to the base-currency!"
 					+ " \n(we know " + getKMyMoneyFile().getCurrencyTable().getNameSpaces().size()
 					+ " currency-namespaces and "
-					+ (currencies == null ? "no" : "" + currencies.size())
+					+ (currList == null ? "no" : "" + currList.size())
 					+ " currencies in our namespace)");
 			return null;
 		}
@@ -751,7 +752,5 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 			myPropertyChange.removePropertyChangeListener(listener);
 		}
 	}
-
-	//  -------------------------------------------------------
 
 }

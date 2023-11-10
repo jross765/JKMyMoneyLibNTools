@@ -8,9 +8,9 @@ import org.kmymoney.read.impl.KMyMoneyFileImpl;
 
 public class GetTrxSpltInfo {
     // BEGIN Example data -- adapt to your needs
-    private static String kmmFileName = null;
-    private static String trxID = null;
-    private static String spltID = null;
+    private static String kmmFileName = "example_in.xml";
+    private static String trxID       = "xyz";
+    private static String spltID      = "S0001"; 
     // END Example data
 
     // -----------------------------------------------------------------
@@ -29,7 +29,13 @@ public class GetTrxSpltInfo {
     protected void kernel() throws Exception {
 	KMyMoneyFileImpl kmmFile = new KMyMoneyFileImpl(new File(kmmFileName));
 
-	KMyMoneyTransactionSplit splt = kmmFile.getTransactionSplitByID(new KMMSplitID(trxID, spltID));
+	// You normally would get the transaction-split-ID by first choosing
+	// a specific transaction (cf. GetTrxInfo), getting its list of splits
+	// and then choosing from them.
+	KMMSplitID qualifID = new KMMSplitID(trxID, spltID);
+	KMyMoneyTransactionSplit splt = kmmFile.getTransactionSplitByID(qualifID);
+
+	// ------------------------
 
 	try {
 	    System.out.println("Qualif. ID:     " + splt.getQualifId());

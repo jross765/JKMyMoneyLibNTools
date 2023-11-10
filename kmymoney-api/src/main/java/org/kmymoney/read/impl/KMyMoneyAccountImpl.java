@@ -16,6 +16,7 @@ import org.kmymoney.generated.ACCOUNT;
 import org.kmymoney.read.KMyMoneyAccount;
 import org.kmymoney.read.KMyMoneyFile;
 import org.kmymoney.read.KMyMoneyTransactionSplit;
+import org.kmymoney.read.UnknownAccountTypeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

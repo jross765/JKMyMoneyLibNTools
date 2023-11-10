@@ -14,6 +14,8 @@ import org.kmymoney.generated.SECURITY;
 import org.kmymoney.read.KMMSecCurr;
 import org.kmymoney.read.KMyMoneyFile;
 import org.kmymoney.read.KMyMoneySecurity;
+import org.kmymoney.read.UnknownRoundingMethodException;
+import org.kmymoney.read.UnknownSecurityTypeException;
 import org.kmymoney.read.aux.KMMPrice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -15,7 +15,7 @@ import org.kmymoney.read.impl.KMyMoneyFileImpl;
 
 import junit.framework.JUnit4TestAdapter;
 
-public class TestSimplePriceTable
+public class TestSimpleSecurityQuoteTable
 {
   private KMyMoneyFile      kmmFile = null;
   private ComplexPriceTable complPriceTab = null;
@@ -31,7 +31,7 @@ public class TestSimplePriceTable
   @SuppressWarnings("exports")
   public static junit.framework.Test suite() 
   {
-    return new JUnit4TestAdapter(TestSimplePriceTable.class);  
+    return new JUnit4TestAdapter(TestSimpleSecurityQuoteTable.class);  
   }
   
   @Before

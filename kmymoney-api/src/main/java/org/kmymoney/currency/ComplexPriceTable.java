@@ -279,7 +279,7 @@ public class ComplexPriceTable implements Serializable {
     public String toString() {
 	String result = "[ComplexPriceTable: \n";
 	
-	for ( KMMSecCurrID.Type nameSpace : KMMSecCurrID.Type.values() ) {
+	for ( KMMSecCurrID.Type nameSpace : getNameSpaces() ) {
 	    if ( nameSpace != KMMSecCurrID.Type.UNSET ) {
 		result += "=======================================\n";
 		result += "Name space: " + nameSpace + "\n";

@@ -10,10 +10,10 @@ import org.kmymoney.read.impl.KMyMoneyFileImpl;
 
 public class GetPyeInfo {
     // BEGIN Example data -- adapt to your needs
-    private static String kmmFileName = null;
-    private static Helper.Mode mode = null;
-    private static String pyeID = null;
-    private static String name = null;
+    private static String kmmFileName = "example_in.xml";
+    private static Helper.Mode mode   = Helper.Mode.ID;
+    private static String pyeID       = "xyz";
+    private static String pyeName     = "abc";
     // END Example data
 
     // -----------------------------------------------------------------
@@ -33,7 +33,6 @@ public class GetPyeInfo {
 	KMyMoneyFileImpl gcshFile = new KMyMoneyFileImpl(new File(kmmFileName));
 
 	KMyMoneyPayee pye = null;
-
 	if (mode == Helper.Mode.ID) {
 	    pye = gcshFile.getPayeeById(pyeID);
 	    if (pye == null) {
@@ -41,7 +40,7 @@ public class GetPyeInfo {
 		throw new NoEntryFoundException();
 	    }
 	} else if (mode == Helper.Mode.NAME) {
-	    Collection<KMyMoneyPayee> cmdtyList = gcshFile.getPayeesByName(name);
+	    Collection<KMyMoneyPayee> cmdtyList = gcshFile.getPayeesByName(pyeName);
 	    if (cmdtyList.size() == 0) {
 		System.err.println("Could not find securities matching this name.");
 		throw new NoEntryFoundException();

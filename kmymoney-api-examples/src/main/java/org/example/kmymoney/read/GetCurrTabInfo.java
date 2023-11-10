@@ -7,7 +7,7 @@ import org.kmymoney.read.impl.KMyMoneyFileImpl;
 
 public class GetCurrTabInfo {
     // BEGIN Example data -- adapt to your needs
-    private static String gcshFileName = null;
+    private static String gcshFileName = "example_in.xml";
     // END Example data
 
     // -----------------------------------------------------------------

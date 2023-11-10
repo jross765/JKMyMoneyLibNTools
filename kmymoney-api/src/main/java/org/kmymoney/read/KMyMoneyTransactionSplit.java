@@ -6,7 +6,7 @@ import org.kmymoney.basetypes.InvalidSecCurrIDException;
 import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.basetypes.KMMSplitID;
 import org.kmymoney.numbers.FixedPointNumber;
-import org.kmymoney.read.impl.UnknownSplitActionException;
+import org.kmymoney.read.KMyMoneyTransactionSplit.State;
 
 /**
  * This denotes a single addition or removal of some
@@ -179,4 +179,6 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      */
     Action getAction() throws UnknownSplitActionException;
 
+    State getState() throws UnknownSplitStateException;
+    
 }

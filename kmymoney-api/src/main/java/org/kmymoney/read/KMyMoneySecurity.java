@@ -8,8 +8,6 @@ import org.kmymoney.basetypes.InvalidSecCurrTypeException;
 import org.kmymoney.basetypes.KMMCurrID;
 import org.kmymoney.basetypes.KMMSecID;
 import org.kmymoney.read.aux.KMMPrice;
-import org.kmymoney.read.impl.UnknownRoundingMethodException;
-import org.kmymoney.read.impl.UnknownSecurityTypeException;
 
 public interface KMyMoneySecurity {
 

@@ -2,7 +2,6 @@ package org.kmymoney.currency;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Currency;
 import java.util.Hashtable;
 import java.util.Map;
 

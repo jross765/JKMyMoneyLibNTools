@@ -1,4 +1,4 @@
-package org.kmymoney.read.impl;
+package org.kmymoney.read;
 
 public class UnknownSplitStateException extends Exception {
 
