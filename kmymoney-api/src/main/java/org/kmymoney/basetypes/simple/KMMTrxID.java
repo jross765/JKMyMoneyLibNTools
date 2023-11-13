@@ -65,7 +65,8 @@ public class KMMTrxID implements Comparable<Object> {
     public void set(long counter) throws InvalidKMMTrxIDException {
 	int coreLength = STANDARD_LENGTH - PREFIX_LENGTH;
 
-	if (counter < 1 || counter > Math.pow(10, coreLength) - 1)
+	if ( counter < 1 || 
+	     counter > Math.pow(10, coreLength) - 1 )
 	    throw new InvalidKMMTrxIDException();
 
 	String fmtStr = "%0" + coreLength + "d";

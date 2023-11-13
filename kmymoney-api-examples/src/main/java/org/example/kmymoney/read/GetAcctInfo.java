@@ -3,6 +3,7 @@ package org.example.kmymoney.read;
 import java.io.File;
 import java.util.Collection;
 
+import org.kmymoney.currency.KMMComplAcctID;
 import org.kmymoney.read.KMyMoneyAccount;
 import org.kmymoney.read.KMyMoneyTransaction;
 import org.kmymoney.read.NoEntryFoundException;
@@ -34,7 +35,7 @@ public class GetAcctInfo {
 
 	KMyMoneyAccount acct = null;
 	if (mode == Helper.Mode.ID) {
-	    acct = kmmFile.getAccountById(acctID);
+	    acct = kmmFile.getAccountById(new KMMComplAcctID(acctID));
 	    if (acct == null) {
 		System.err.println("Found no account with that name");
 		throw new NoEntryFoundException();

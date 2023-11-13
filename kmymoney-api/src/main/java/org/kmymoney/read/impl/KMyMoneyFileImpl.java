@@ -31,6 +31,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.kmymoney.Const;
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.basetypes.complex.KMMPriceID;
 import org.kmymoney.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
@@ -168,7 +169,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @param id if null, gives all account that have no parent
      * @return the sorted collection of children of that account
      */
-    public Collection<KMyMoneyAccount> getAccountsByParentID(final String id) {
+    public Collection<KMyMoneyAccount> getAccountsByParentID(final KMMComplAcctID id) {
 	if (accountID2account == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
@@ -178,13 +179,13 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	for (Object element : accountID2account.values()) {
 	    KMyMoneyAccount account = (KMyMoneyAccount) element;
 
-	    String parent = account.getParentAccountId();
-	    if (parent == null) {
+	    KMMComplAcctID parentID = account.getParentAccountId();
+	    if (parentID == null) {
 		if (id == null) {
 		    retval.add((KMyMoneyAccount) account);
 		}
 	    } else {
-		if (parent.equals(id)) {
+		if (parentID.equals(id)) {
 		    retval.add((KMyMoneyAccount) account);
 		}
 	    }
@@ -295,7 +296,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see #getAccountById(String)
      * @see #getAccountByName(String)
      */
-    public KMyMoneyAccount getAccountByIDorName(final String id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
+    public KMyMoneyAccount getAccountByIDorName(final KMMComplAcctID id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
 	KMyMoneyAccount retval = getAccountById(id);
 	if (retval == null) {
 	    retval = getAccountByNameUniq(name, true);
@@ -317,7 +318,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see #getAccountById(String)
      * @see #getAccountByName(String)
      */
-    public KMyMoneyAccount getAccountByIDorNameEx(final String id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
+    public KMyMoneyAccount getAccountByIDorNameEx(final KMMComplAcctID id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
 	KMyMoneyAccount retval = getAccountById(id);
 	if (retval == null) {
 	    retval = getAccountByNameEx(name);
@@ -398,7 +399,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see KMyMoneyAccount
      * @see KMyMoneyAccountImpl
      */
-    protected Map<String, KMyMoneyAccount> accountID2account;
+    protected Map<KMMComplAcctID, KMyMoneyAccount> accountID2account;
 
     /**
      * All transactions indexed by their unique id-String.
@@ -490,7 +491,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     private void initAccountMap(final KMYMONEYFILE pRootElement) {
-	accountID2account = new HashMap<String, KMyMoneyAccount>();
+	accountID2account = new HashMap<KMMComplAcctID, KMyMoneyAccount>();
 
 	for ( ACCOUNT jwsdpAcct : pRootElement.getACCOUNTS().getACCOUNT() ) {
 	    try {
@@ -998,7 +999,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     /**
      * @see KMyMoneyFile#getAccountById(java.lang.String)
      */
-    public KMyMoneyAccount getAccountById(final String id) {
+    public KMyMoneyAccount getAccountById(final KMMComplAcctID id) {
 	if (accountID2account == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}

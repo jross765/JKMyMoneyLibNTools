@@ -4,11 +4,13 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.InputStream;
 
-import org.kmymoney.ConstTest;
-import org.kmymoney.read.KMyMoneyAccount;
-import org.kmymoney.read.KMyMoneyFile;
 import org.junit.Before;
 import org.junit.Test;
+import org.kmymoney.ConstTest;
+import org.kmymoney.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.basetypes.simple.KMMAcctID;
+import org.kmymoney.read.KMyMoneyAccount;
+import org.kmymoney.read.KMyMoneyFile;
 
 import junit.framework.JUnit4TestAdapter;
 
@@ -71,16 +73,16 @@ public class TestKMyMoneyAccountImpl
   @Test
   public void test01_1() throws Exception
   {
-    acct = kmmFile.getAccountById(ACCT_1_ID);
+    acct = kmmFile.getAccountById(new KMMComplAcctID(ACCT_1_ID));
     
-    assertEquals(ACCT_1_ID, acct.getId());
+    assertEquals(ACCT_1_ID, acct.getId().toString());
     assertEquals(KMyMoneyAccount.Type.CHECKING, acct.getType());
     assertEquals("Giro RaiBa", acct.getName());
     assertEquals("Asset::Barvermögen::Giro RaiBa", acct.getQualifiedName());
     assertEquals("Girokonto 1", acct.getMemo());
     assertEquals("CURRENCY:EUR", acct.getSecCurrID().toString());
          
-    assertEquals("A000002", acct.getParentAccountId());
+    assertEquals("A000002", acct.getParentAccountId().toString());
     
     assertEquals(7374.50, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
     assertEquals(7374.50, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
@@ -93,16 +95,16 @@ public class TestKMyMoneyAccountImpl
   @Test
   public void test01_2() throws Exception
   {
-    acct = kmmFile.getAccountById(ACCT_2_ID);
+    acct = kmmFile.getAccountById(new KMMComplAcctID(ACCT_2_ID));
     
-    assertEquals(ACCT_2_ID, acct.getId());
+    assertEquals(ACCT_2_ID, acct.getId().toString());
     assertEquals(KMyMoneyAccount.Type.INVESTMENT, acct.getType());
     assertEquals("Depot RaiBa", acct.getName());
     assertEquals("Asset::Finanzanlagen::Depot RaiBa", acct.getQualifiedName());
     assertEquals("Aktiendepot 1", acct.getMemo());
     assertEquals("CURRENCY:EUR", acct.getSecCurrID().toString());
     
-    assertEquals("A000061", acct.getParentAccountId());
+    assertEquals("A000061", acct.getParentAccountId().toString());
 
     // ::TODO
     assertEquals(0.0, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);

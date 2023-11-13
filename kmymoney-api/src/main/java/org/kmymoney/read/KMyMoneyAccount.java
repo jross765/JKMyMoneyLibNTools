@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSplitID;
 import org.kmymoney.numbers.FixedPointNumber;
@@ -104,7 +105,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
     /**
      * @return the unique id for that account (not meaningfull to human users)
      */
-    String getId();
+    KMMComplAcctID getId();
 
     /**
      * @return a user-defined description to acompany the name of the account. Can
@@ -133,7 +134,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
     /**
      * @return null if the account is below the root
      */
-    String getParentAccountId();
+    KMMComplAcctID getParentAccountId();
 
     /**
      * @return the parent-account we are a child of or null if we are a top-level

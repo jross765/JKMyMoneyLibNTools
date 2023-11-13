@@ -14,6 +14,7 @@ import java.util.Locale;
 
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSplitID;
@@ -124,27 +125,35 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		
 		if ( acc == null || 
 		     acc.getId() == getId() ) {
-			if ( getParentAccountId() == null ||
-			     getParentAccountId().equals("") ) {
-				return getName();
-			}
-
-			return "UNKNOWN" + SEPARATOR + getName();
+		    KMMComplAcctID parentID = getParentAccountId(); 
+		    if ( parentID == null ) {
+			return getName();
+		    } else if ( parentID.toString().equals("") ||
+			        parentID.toString().equals("(unset)") ||
+			        parentID.toString().equals("(unknown)") ) {
+			return getName();
+		    } else {
+			return getName();
+		    }
+		} else {
+		    return acc.getQualifiedName() + SEPARATOR + getName();
 		}
-		
-		return acc.getQualifiedName() + SEPARATOR + getName();
 	}
 
 	/**
 	 * @see KMyMoneyAccount#getParentAccount()
 	 */
 	public KMyMoneyAccount getParentAccount() {
-		String id = getParentAccountId();
-		if (id == null) {
-			return null;
+	    	KMMComplAcctID parentID = getParentAccountId();
+		if ( parentID == null ) {
+		    return null;
+		} else if ( parentID.toString().equals("") ||
+			    parentID.toString().equals("(unset)") ||
+			    parentID.toString().equals("(unknown)") ) {
+		    return null;
 		}
-
-		return getKMyMoneyFile().getAccountById(id);
+		
+		return getKMyMoneyFile().getAccountById(parentID);
 	}
 
 	/**
@@ -629,7 +638,8 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 				&&
 				getParentAccountId() != null
 				&&
-				((KMyMoneyAccount) o).getParentAccountId().equalsIgnoreCase(getParentAccountId())) {
+				((KMyMoneyAccount) o).getParentAccountId().toString().
+				equalsIgnoreCase(getParentAccountId().toString())) {
 			other = ((KMyMoneyAccount) o).getName();
 			me = getName();
 		}

@@ -64,7 +64,8 @@ public class KMMInstID implements Comparable<Object> {
     public void set(long counter) throws InvalidKMMInstIDException {
 	int coreLength = STANDARD_LENGTH - PREFIX_LENGTH;
 
-	if (counter < 1 || counter > Math.pow(10, coreLength) - 1)
+	if ( counter < 1 || 
+	     counter > Math.pow(10, coreLength) - 1 )
 	    throw new InvalidKMMInstIDException();
 
 	String fmtStr = "%0" + coreLength + "d";

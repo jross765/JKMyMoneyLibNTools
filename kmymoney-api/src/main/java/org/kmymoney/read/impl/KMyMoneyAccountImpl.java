@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecID;
@@ -93,15 +94,19 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     /**
      * @see KMyMoneyAccount#getId()
      */
-    public String getId() {
-	return jwsdpPeer.getId();
+    public KMMComplAcctID getId() {
+	return new KMMComplAcctID(jwsdpPeer.getId());
     }
 
     /**
      * @see KMyMoneyAccount#getParentAccountId()
      */
-    public String getParentAccountId() {
-	return jwsdpPeer.getParentaccount();
+    public KMMComplAcctID getParentAccountId() {
+	try {
+	    return new KMMComplAcctID(jwsdpPeer.getParentaccount());
+	} catch ( Exception exc ) {
+	    return null;
+	}
     }
 
     /**

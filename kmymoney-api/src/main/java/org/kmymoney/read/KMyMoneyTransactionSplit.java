@@ -4,9 +4,9 @@ import java.util.Locale;
 
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.basetypes.complex.KMMQualifSplitID;
 import org.kmymoney.numbers.FixedPointNumber;
-import org.kmymoney.read.KMyMoneyTransactionSplit.State;
 
 /**
  * This denotes a single addition or removal of some
@@ -58,7 +58,7 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      *
      * @return the id of the account we transfer from/to.
      */
-    String getAccountId();
+    KMMComplAcctID getAccountId();
 
     /**
      * This may be null if an account-id is specified in

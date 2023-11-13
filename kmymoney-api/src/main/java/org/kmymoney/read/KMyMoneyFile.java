@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecID;
@@ -57,7 +58,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param id the unique id of the account to look for
      * @return the account or null if it's not found
      */
-    KMyMoneyAccount getAccountById(String id);
+    KMyMoneyAccount getAccountById(KMMComplAcctID id);
 
     /**
      * @return a read-only collection of all accounts that have no parent
@@ -86,7 +87,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param id if null, gives all account that have no parent
      * @return all accounts with that parent in no particular order
      */
-    Collection<KMyMoneyAccount> getAccountsByParentID(String id);
+    Collection<KMyMoneyAccount> getAccountsByParentID(KMMComplAcctID id);
 
     // ---------------------------------------------------------------
 
@@ -131,7 +132,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @see #getAccountById(String)
      * @see #getAccountByName(String)
      */
-    KMyMoneyAccount getAccountByIDorName(String id, String name) throws NoEntryFoundException, TooManyEntriesFoundException;
+    KMyMoneyAccount getAccountByIDorName(KMMComplAcctID id, String name) throws NoEntryFoundException, TooManyEntriesFoundException;
 
     /**
      * First try to fetch the account by id, then fall back to traversing all
@@ -146,7 +147,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @see #getAccountById(String)
      * @see #getAccountByName(String)
      */
-    KMyMoneyAccount getAccountByIDorNameEx(String id, String name) throws NoEntryFoundException, TooManyEntriesFoundException;
+    KMyMoneyAccount getAccountByIDorNameEx(KMMComplAcctID id, String name) throws NoEntryFoundException, TooManyEntriesFoundException;
 
     // ----------------------------
 

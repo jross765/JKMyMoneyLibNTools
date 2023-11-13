@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSplitID;
@@ -186,10 +187,10 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     /**
      * @see KMyMoneyTransactionSplit#getAccountId()
      */
-    public String getAccountId() {
+    public KMMComplAcctID getAccountId() {
 	String id = jwsdpPeer.getAccount();
 	assert id != null;
-	return id;
+	return new KMMComplAcctID(id);
     }
 
     /**
