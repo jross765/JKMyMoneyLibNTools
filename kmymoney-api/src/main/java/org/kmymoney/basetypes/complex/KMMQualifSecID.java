@@ -1,5 +1,6 @@
 package org.kmymoney.basetypes.complex;
 
+import org.kmymoney.basetypes.simple.KMMSecID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +10,7 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
 
     // ---------------------------------------------------------------
 
-    // ::EMPTY
+    private KMMSecID secID;
 
     // ---------------------------------------------------------------
     
@@ -18,12 +19,31 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
 	type = Type.SECURITY;
     }
 
-    public KMMQualifSecID(String secIDStr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
-	super(Type.SECURITY, secIDStr);
+    public KMMQualifSecID(KMMSecID secID) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+
+	super(Type.SECURITY, secID.toString());
+
+	setType(Type.SECURITY);
+	setSecID(secID);
     }
 
-    public KMMQualifSecID(KMMQualifSecCurrID cmdtyID) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {	
-	super(Type.SECURITY, cmdtyID.getCode());
+    public KMMQualifSecID(String secIDStr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+
+	super(Type.SECURITY, secIDStr);
+
+	setType(Type.SECURITY);
+	setSecID(secIDStr);
+    }
+
+    public KMMQualifSecID(KMMQualifSecCurrID secCurrID) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+
+	super(Type.SECURITY, secCurrID.getCode());
+
+	if ( getType() != Type.SECURITY )
+	    throw new InvalidQualifSecCurrTypeException();
+
+	setType(Type.SECURITY);
+	setSecID(code);
     }
 
     // ---------------------------------------------------------------
@@ -36,6 +56,32 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
         super.setType(type);
     }
     
+    // ---------------------------------------------------------------
+    
+    public KMMSecID getSecID() throws InvalidQualifSecCurrTypeException {
+  	if ( type != Type.SECURITY )
+	    throw new InvalidQualifSecCurrTypeException();
+	
+        return secID;
+    }
+
+    public void setSecID(KMMSecID secID) throws InvalidQualifSecCurrTypeException {
+  	if ( type != Type.SECURITY )
+	    throw new InvalidQualifSecCurrTypeException();
+	
+	if ( secID == null )
+	    throw new IllegalArgumentException("Argument currency is null");
+
+        this.secID = secID;
+    }
+
+    public void setSecID(String secIDStr) {
+  	if ( secIDStr == null )
+	    throw new IllegalArgumentException("Argument string is null");
+
+	setSecID(new KMMSecID(secIDStr));
+    }
+
     // ---------------------------------------------------------------
     
     public static KMMQualifSecID parse(String str) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
@@ -69,7 +115,33 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
     
     // ---------------------------------------------------------------
 
-    // ::EMPTY
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((secID == null) ? 0 : secID.hashCode());
+	result = prime * result + ((type == null) ? 0 : type.hashCode());
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	KMMQualifSecID other = (KMMQualifSecID) obj;
+	if (type != other.type)
+	    return false;
+	if (secID == null) {
+	    if (other.secID != null)
+		return false;
+	} else if (!secID.equals(other.secID))
+	    return false;
+	return true;
+    }
 
     // ---------------------------------------------------------------
     
@@ -78,7 +150,9 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
 	if (type != Type.SECURITY)
 	    return "ERROR";
 
-	String result = super.toString();
+	String result = Type.SECURITY.toString() + 
+			SEPARATOR + 
+			secID.toString();
 
 	return result;
     }

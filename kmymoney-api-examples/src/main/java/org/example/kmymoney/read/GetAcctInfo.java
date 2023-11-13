@@ -3,7 +3,7 @@ package org.example.kmymoney.read;
 import java.io.File;
 import java.util.Collection;
 
-import org.kmymoney.currency.KMMComplAcctID;
+import org.kmymoney.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.read.KMyMoneyAccount;
 import org.kmymoney.read.KMyMoneyTransaction;
 import org.kmymoney.read.NoEntryFoundException;

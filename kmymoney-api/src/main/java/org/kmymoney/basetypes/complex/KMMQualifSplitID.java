@@ -23,6 +23,11 @@ public class KMMQualifSplitID {
 	setSplitID(spltID);
     }
     
+    public KMMQualifSplitID(String trxID, String spltID) {
+	setTransactionID(trxID);
+	setSplitID(spltID);
+    }
+    
     // ---------------------------------------------------------------
 
     public KMMTrxID getTransactionID() {
@@ -31,6 +36,10 @@ public class KMMQualifSplitID {
 
     public void setTransactionID(KMMTrxID trxID) {
         this.trxID = trxID;
+    }
+
+    public void setTransactionID(String trxID) {
+        setTransactionID(new KMMTrxID(trxID));
     }
 
     public String getSplitID() {

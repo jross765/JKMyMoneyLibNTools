@@ -7,11 +7,12 @@ import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.basetypes.simple.KMMSecID;
 import org.kmymoney.read.aux.KMMPrice;
 
 public interface KMyMoneySecurity {
 
-    String getId();
+    KMMSecID getId();
 
     KMMQualifSecID getQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 

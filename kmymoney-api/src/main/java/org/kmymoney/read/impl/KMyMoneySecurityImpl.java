@@ -9,6 +9,7 @@ import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.basetypes.simple.KMMSecID;
 import org.kmymoney.generated.PAIR;
 import org.kmymoney.generated.SECURITY;
 import org.kmymoney.read.KMMSecCurr;
@@ -56,8 +57,8 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
     // ---------------------------------------------------------------
 
     @Override
-    public String getId() {
-	return jwsdpPeer.getId();
+    public KMMSecID getId() {
+	return new KMMSecID(jwsdpPeer.getId());
     }
 
     @Override

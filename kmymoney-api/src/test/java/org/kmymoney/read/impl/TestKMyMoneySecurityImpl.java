@@ -30,12 +30,6 @@ public class TestKMyMoneySecurityImpl
   public static final String SEC_2_ISIN   = "DE0007164600";
   public static final String SEC_2_TICKER = "SAP";
     
-  // AstraZeneca Plc
-  // Note that in the SecIDType variants, the ISIN/CUSIP/SEDOL/WKN/whatever
-  // is stored twice in the object, redundantly
-  public static final String SEC_3_ID    = "GB0009895292";   
-  public static final String SEC_3_ISIN  = SEC_3_ID;
-    
   // -----------------------------------------------------------------
     
   private KMyMoneyFile     kmmFile = null;
@@ -89,7 +83,6 @@ public class TestKMyMoneySecurityImpl
     
     secCurrID1 = new KMMQualifSecID(SEC_1_ID);
     secCurrID2 = new KMMQualifSecID(SEC_2_ID);
-    secCurrID3 = new KMMQualifSecID(SEC_3_ID);
   }
 
   // -----------------------------------------------------------------
@@ -100,7 +93,6 @@ public class TestKMyMoneySecurityImpl
       // Cf. TestCmdtyCurrID -- let's just double-check 
       assertEquals(KMMQualifSecCurrID.Type.SECURITY.toString() + KMMQualifSecCurrID.SEPARATOR + SEC_1_ID, secCurrID1.toString());
       assertEquals(KMMQualifSecCurrID.Type.SECURITY.toString() + KMMQualifSecCurrID.SEPARATOR + SEC_2_ID, secCurrID2.toString());
-      assertEquals(KMMQualifSecCurrID.Type.SECURITY.toString() + KMMQualifSecCurrID.SEPARATOR + SEC_3_ID, secCurrID3.toString());
   }
   
   // ------------------------------

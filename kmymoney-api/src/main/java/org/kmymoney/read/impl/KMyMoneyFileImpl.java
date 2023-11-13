@@ -37,6 +37,7 @@ import org.kmymoney.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.basetypes.complex.KMMQualifSplitID;
+import org.kmymoney.basetypes.simple.KMMSecID;
 import org.kmymoney.basetypes.simple.KMMTrxID;
 import org.kmymoney.currency.ComplexPriceTable;
 import org.kmymoney.generated.ACCOUNT;
@@ -432,9 +433,9 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see KMyMoneySecurity
      * @see KMyMoneySecurityImpl
      */
-    protected Map<String, KMyMoneySecurity> secID2Sec;
-    protected Map<String, String> secSymbID2SecID;
-    protected Map<String, String> secCodeID2SecID;
+    protected Map<KMMSecID, KMyMoneySecurity> secID2Sec;
+    protected Map<String, KMMSecID> secSymbID2SecID;
+    protected Map<String, KMMSecID> secCodeID2SecID;
 
     /**
      * All payees indexed by their unique id-String.
@@ -545,16 +546,16 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     private void initSecurityMap(final KMYMONEYFILE pRootElement) {
-	secID2Sec = new HashMap<String, KMyMoneySecurity>();
-	secSymbID2SecID = new HashMap<String, String>();
-	secCodeID2SecID = new HashMap<String, String>();
+	secID2Sec = new HashMap<KMMSecID, KMyMoneySecurity>();
+	secSymbID2SecID = new HashMap<String, KMMSecID>();
+	secCodeID2SecID = new HashMap<String, KMMSecID>();
 
 	for ( SECURITY jwsdpSec : pRootElement.getSECURITIES().getSECURITY() ) {
 	    try {
 		KMyMoneySecurityImpl sec = createSecurity(jwsdpSec);
-		secID2Sec.put(jwsdpSec.getId(), sec);
-		secSymbID2SecID.put(sec.getSymbol(), jwsdpSec.getId());
-		secCodeID2SecID.put(sec.getCode(), jwsdpSec.getId());
+		secID2Sec.put(sec.getId(), sec);
+		secSymbID2SecID.put(sec.getSymbol(), new KMMSecID(jwsdpSec.getId()));
+		secCodeID2SecID.put(sec.getCode(), new KMMSecID(jwsdpSec.getId()));
 	    } catch (RuntimeException e) {
 		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initSecurityMap: "
 			+ "ignoring illegal Security-Entry with id=" + jwsdpSec.getId(), e);
@@ -1042,7 +1043,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     // ---------------------------------------------------------------
 
     @Override
-    public KMyMoneySecurity getSecurityById(final String id) {
+    public KMyMoneySecurity getSecurityById(final KMMSecID id) {
 	if (secID2Sec == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
@@ -1055,22 +1056,35 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	return retval;
     }
 
+    public KMyMoneySecurity getSecurityById(final String idStr) {
+	if (idStr == null) {
+	    throw new IllegalStateException("null string given");
+	}
+
+	if (idStr.trim().equals("")) {
+	    throw new IllegalStateException("Search string is empty");
+	}
+	
+	KMMSecID secID = new KMMSecID(idStr);
+	return getSecurityById(secID);
+    }
+
     @Override
     public KMyMoneySecurity getSecurityByQualifID(final KMMQualifSecID secID) {
 	return getSecurityById(secID.getCode());
     }
 
     @Override
-    public KMyMoneySecurity getSecurityByQualifID(final String qualifID) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
-	if (qualifID == null) {
+    public KMyMoneySecurity getSecurityByQualifID(final String qualifIDStr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	if (qualifIDStr == null) {
 	    throw new IllegalStateException("null string given");
 	}
 
-	if (qualifID.trim().equals("")) {
+	if (qualifIDStr.trim().equals("")) {
 	    throw new IllegalStateException("Search string is empty");
 	}
 
-	KMMQualifSecID secID = KMMQualifSecID.parse(qualifID);
+	KMMQualifSecID secID = KMMQualifSecID.parse(qualifIDStr);
 	return getSecurityByQualifID(secID);
     }
 
@@ -1090,14 +1104,14 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	    LOGGER.debug("getSecurityBySymbol: Sizes of root elements are not equal.");
 	}
 	
-	String qualifIDStr = secSymbID2SecID.get(symb);
-	if (qualifIDStr == null) {
+	KMMSecID qualifID = secSymbID2SecID.get(symb);
+	if (qualifID == null) {
 	    LOGGER.warn("No Security with symbol '" + symb + "'. We know " + secSymbID2SecID.size() + " securities in map 2.");
 	}
 	
-	KMyMoneySecurity retval = secID2Sec.get(qualifIDStr);
+	KMyMoneySecurity retval = secID2Sec.get(qualifID);
 	if (retval == null) {
-	    LOGGER.warn("No Security with qualified ID '" + qualifIDStr + "'. We know " + secID2Sec.size() + " securities in map 1.");
+	    LOGGER.warn("No Security with qualified ID '" + qualifID + "'. We know " + secID2Sec.size() + " securities in map 1.");
 	}
 	
 	return retval;
@@ -1119,14 +1133,14 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	    LOGGER.debug("getSecurityBySymbol: Sizes of root elements are not equal.");
 	}
 	
-	String qualifIDStr = secCodeID2SecID.get(code);
-	if (qualifIDStr == null) {
+	KMMSecID qualifID = secCodeID2SecID.get(code);
+	if (qualifID == null) {
 	    LOGGER.warn("No Security with symbol '" + code + "'. We know " + secCodeID2SecID.size() + " securities in map 2.");
 	}
 	
-	KMyMoneySecurity retval = secID2Sec.get(qualifIDStr);
+	KMyMoneySecurity retval = secID2Sec.get(qualifID);
 	if (retval == null) {
-	    LOGGER.warn("No Security with qualified ID '" + qualifIDStr + "'. We know " + secID2Sec.size() + " securities in map 1.");
+	    LOGGER.warn("No Security with qualified ID '" + qualifID + "'. We know " + secID2Sec.size() + " securities in map 1.");
 	}
 	
 	return retval;

@@ -36,9 +36,9 @@ public class KMMQualifCurrID extends KMMQualifSecCurrID {
 	setCurrency(currStr);
     }
 
-    public KMMQualifCurrID(KMMQualifSecCurrID cmdtyCurrID) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public KMMQualifCurrID(KMMQualifSecCurrID secCurrID) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	
-	super(Type.CURRENCY, cmdtyCurrID.getCode());
+	super(Type.CURRENCY, secCurrID.getCode());
 
 	if ( getType() != Type.CURRENCY )
 	    throw new InvalidQualifSecCurrTypeException();
