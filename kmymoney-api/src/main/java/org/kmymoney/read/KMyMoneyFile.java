@@ -9,6 +9,7 @@ import org.kmymoney.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.basetypes.simple.KMMTrxID;
 import org.kmymoney.currency.ComplexPriceTable;
 import org.kmymoney.generated.KMYMONEYFILE;
 import org.kmymoney.numbers.FixedPointNumber;
@@ -69,7 +70,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param id the unique id of the transaction to look for
      * @return the transaction or null if it's not found
      */
-    KMyMoneyTransaction getTransactionById(String id);
+    KMyMoneyTransaction getTransactionById(KMMTrxID id);
 
     /**
      * @return a (possibly read-only) collection of all transactions Do not modify

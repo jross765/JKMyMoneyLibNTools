@@ -6,6 +6,7 @@ import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.basetypes.complex.KMMQualifSplitID;
+import org.kmymoney.basetypes.simple.KMMTrxID;
 import org.kmymoney.numbers.FixedPointNumber;
 
 /**
@@ -67,7 +68,7 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      */
     KMyMoneyAccount getAccount();
 
-    String getTransactionId();
+    KMMTrxID getTransactionId();
 
     /**
      * @return the transaction this is a split of.

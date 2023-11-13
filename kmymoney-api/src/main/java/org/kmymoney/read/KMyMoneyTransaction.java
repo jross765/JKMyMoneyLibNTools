@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 
+import org.kmymoney.basetypes.simple.KMMTrxID;
 import org.kmymoney.generated.TRANSACTION;
 import org.kmymoney.numbers.FixedPointNumber;
 
@@ -62,7 +63,7 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
      * @return the unique-id to identify this object with across name- and
      *         hirarchy-changes
      */
-    String getId();
+    KMMTrxID getId();
 
     /**
      * @return the user-defined description for this object (may contain multiple

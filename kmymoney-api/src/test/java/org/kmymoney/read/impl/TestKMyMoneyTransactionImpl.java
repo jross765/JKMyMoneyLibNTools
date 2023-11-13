@@ -8,6 +8,7 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 import org.kmymoney.ConstTest;
+import org.kmymoney.basetypes.simple.KMMTrxID;
 import org.kmymoney.read.KMyMoneyFile;
 import org.kmymoney.read.KMyMoneyTransaction;
 
@@ -67,10 +68,10 @@ public class TestKMyMoneyTransactionImpl
   @Test
   public void test01() throws Exception
   {
-    trx = kmmFile.getTransactionById(TRX_1_ID);
+    trx = kmmFile.getTransactionById(new KMMTrxID(TRX_1_ID));
     assertNotEquals(null, trx);
     
-    assertEquals(TRX_1_ID, trx.getId());
+    assertEquals(TRX_1_ID, trx.getId().toString());
     assertEquals(0.0, trx.getBalance().getBigDecimal().doubleValue(), ConstTest.DIFF_TOLERANCE);
     assertEquals("", trx.getMemo());
     assertEquals("2023-01-01", trx.getDatePosted().toString());
@@ -84,10 +85,10 @@ public class TestKMyMoneyTransactionImpl
   @Test
   public void test02() throws Exception
   {
-    trx = kmmFile.getTransactionById(TRX_2_ID);
+    trx = kmmFile.getTransactionById(new KMMTrxID(TRX_2_ID));
     assertNotEquals(null, trx);
     
-    assertEquals(TRX_2_ID, trx.getId());
+    assertEquals(TRX_2_ID, trx.getId().toString());
     assertEquals(0.0, trx.getBalance().getBigDecimal().doubleValue(), ConstTest.DIFF_TOLERANCE);
     assertEquals("", trx.getMemo());
     assertEquals("2023-01-03", trx.getDatePosted().toString());

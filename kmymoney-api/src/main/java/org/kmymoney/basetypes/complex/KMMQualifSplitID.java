@@ -2,6 +2,8 @@ package org.kmymoney.basetypes.complex;
 
 import java.util.Objects;
 
+import org.kmymoney.basetypes.simple.KMMTrxID;
+
 /**
  * KMyMoney's Split "IDs" are in fact no IDs, because they are only unique within
  * the scope of their respective transaction.
@@ -11,23 +13,23 @@ import java.util.Objects;
  */
 public class KMMQualifSplitID {
     
-    private String trxID;
-    private String spltID;
+    private KMMTrxID trxID;
+    private String   spltID;
     
     // ---------------------------------------------------------------
 
-    public KMMQualifSplitID(String trxID, String spltID) {
+    public KMMQualifSplitID(KMMTrxID trxID, String spltID) {
 	setTransactionID(trxID);
 	setSplitID(spltID);
     }
     
     // ---------------------------------------------------------------
 
-    public String getTransactionID() {
+    public KMMTrxID getTransactionID() {
         return trxID;
     }
 
-    public void setTransactionID(String trxID) {
+    public void setTransactionID(KMMTrxID trxID) {
         this.trxID = trxID;
     }
 
@@ -41,7 +43,7 @@ public class KMMQualifSplitID {
 
     // ---------------------------------------------------------------
     
-    public void set(String trxID, String spltID) {
+    public void set(KMMTrxID trxID, String spltID) {
 	setTransactionID(trxID);
 	setSplitID(spltID);
     }

@@ -14,6 +14,7 @@ import java.util.Locale;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kmymoney.Const;
+import org.kmymoney.basetypes.simple.KMMTrxID;
 import org.kmymoney.generated.SPLIT;
 import org.kmymoney.generated.TRANSACTION;
 import org.kmymoney.numbers.FixedPointNumber;
@@ -195,8 +196,8 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     /**
      * @see KMyMoneyTransaction#getId()
      */
-    public String getId() {
-	return jwsdpPeer.getId();
+    public KMMTrxID getId() {
+	return new KMMTrxID(jwsdpPeer.getId());
     }
 
     /**

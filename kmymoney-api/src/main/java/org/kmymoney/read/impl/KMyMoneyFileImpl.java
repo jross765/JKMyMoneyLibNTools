@@ -37,6 +37,7 @@ import org.kmymoney.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.basetypes.complex.KMMQualifSplitID;
+import org.kmymoney.basetypes.simple.KMMTrxID;
 import org.kmymoney.currency.ComplexPriceTable;
 import org.kmymoney.generated.ACCOUNT;
 import org.kmymoney.generated.CURRENCY;
@@ -407,7 +408,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see KMyMoneyTransaction
      * @see KMyMoneyTransactionImpl
      */
-    protected Map<String, KMyMoneyTransaction> transactionID2transaction;
+    protected Map<KMMTrxID, KMyMoneyTransaction> transactionID2transaction;
 
     /**
      * All transaction-splits indexed by their unique id-String.
@@ -507,7 +508,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     private void initTransactionMap(final KMYMONEYFILE pRootElement) {
-	transactionID2transaction = new HashMap<>();
+	transactionID2transaction = new HashMap<KMMTrxID, KMyMoneyTransaction>();
 	transactionSplitID2transactionSplit = new HashMap<KMMQualifSplitID, KMyMoneyTransactionSplit>();
 
 	for ( TRANSACTION jwsdpTrx : pRootElement.getTRANSACTIONS().getTRANSACTION() ) {
@@ -1254,7 +1255,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     /**
      * @see KMyMoneyFile#getTransactionById(java.lang.String)
      */
-    public KMyMoneyTransaction getTransactionById(final String id) {
+    public KMyMoneyTransaction getTransactionById(final KMMTrxID id) {
 	if (transactionID2transaction == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}

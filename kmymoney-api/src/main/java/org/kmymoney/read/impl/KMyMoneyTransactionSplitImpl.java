@@ -10,6 +10,7 @@ import org.kmymoney.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSplitID;
+import org.kmymoney.basetypes.simple.KMMTrxID;
 import org.kmymoney.generated.SPLIT;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyAccount;
@@ -201,7 +202,7 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     }
 
     @Override
-    public String getTransactionId() {
+    public KMMTrxID getTransactionId() {
 	return myTransaction.getId();
     }
 
