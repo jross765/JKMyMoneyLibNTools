@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.kmymoney.basetypes.KMMSecCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.numbers.FixedPointNumber;
 
 public class ComplexPriceTable implements Serializable {
@@ -27,15 +27,15 @@ public class ComplexPriceTable implements Serializable {
 
     // -----------------------------------------------------------
 
-    private Map<KMMSecCurrID.Type, SimplePriceTable> namespace2CurrTab = null;
+    private Map<KMMQualifSecCurrID.Type, SimplePriceTable> namespace2CurrTab = null;
 
     // -----------------------------------------------------------
 
     public ComplexPriceTable() {
-	namespace2CurrTab = new HashMap<KMMSecCurrID.Type, SimplePriceTable>();
+	namespace2CurrTab = new HashMap<KMMQualifSecCurrID.Type, SimplePriceTable>();
 	
-	addForNameSpace(KMMSecCurrID.Type.CURRENCY, new SimpleCurrencyExchRateTable());
-	addForNameSpace(KMMSecCurrID.Type.SECURITY, new SimpleSecurityQuoteTable());
+	addForNameSpace(KMMQualifSecCurrID.Type.CURRENCY, new SimpleCurrencyExchRateTable());
+	addForNameSpace(KMMQualifSecCurrID.Type.SECURITY, new SimpleSecurityQuoteTable());
     }
 
     // -----------------------------------------------------------
@@ -136,16 +136,16 @@ public class ComplexPriceTable implements Serializable {
      *
      * @param nameSpace the new nameSpace to add.
      */
-    public void addForNameSpace(final KMMSecCurrID.Type nameSpace) {
+    public void addForNameSpace(final KMMQualifSecCurrID.Type nameSpace) {
 	if ( namespace2CurrTab.keySet().contains(nameSpace) ) {
 	    return;
 	}
 
-	if ( nameSpace == KMMSecCurrID.Type.CURRENCY ) {
+	if ( nameSpace == KMMQualifSecCurrID.Type.CURRENCY ) {
 	    SimpleCurrencyExchRateTable table = new SimpleCurrencyExchRateTable();
 	    table.clear();
 	    addForNameSpace(nameSpace, table);
-	} else if ( nameSpace == KMMSecCurrID.Type.SECURITY ) {
+	} else if ( nameSpace == KMMQualifSecCurrID.Type.SECURITY ) {
 	    SimpleSecurityQuoteTable table = new SimpleSecurityQuoteTable();
 	    table.clear();
 	    addForNameSpace(nameSpace, table);
@@ -158,7 +158,7 @@ public class ComplexPriceTable implements Serializable {
      * @param nameSpace the new nameSpace to add.
      * @param table    an initial set of conversion-factors.
      */
-    public void addForNameSpace(final KMMSecCurrID.Type nameSpace, final SimplePriceTable table) {
+    public void addForNameSpace(final KMMQualifSecCurrID.Type nameSpace, final SimplePriceTable table) {
 	namespace2CurrTab.put(nameSpace, table);
     }
 
@@ -167,7 +167,7 @@ public class ComplexPriceTable implements Serializable {
     /**
      * @see SimplePriceTable#setConversionFactor(java.lang.String, FixedPointNumber)
      */
-    public FixedPointNumber getConversionFactor(final KMMSecCurrID.Type nameSpace, final String code) {
+    public FixedPointNumber getConversionFactor(final KMMQualifSecCurrID.Type nameSpace, final String code) {
     
         if (code == null) {
             throw new IllegalArgumentException("null code!");
@@ -186,7 +186,7 @@ public class ComplexPriceTable implements Serializable {
      *
      * @see SimplePriceTable#setConversionFactor(java.lang.String, FixedPointNumber)
      */
-    public void setConversionFactor(final KMMSecCurrID.Type nameSpace, final String code, final FixedPointNumber pFactor) {
+    public void setConversionFactor(final KMMQualifSecCurrID.Type nameSpace, final String code, final FixedPointNumber pFactor) {
 
 	if (code == null) {
 	    throw new IllegalArgumentException("null code given!");
@@ -213,7 +213,7 @@ public class ComplexPriceTable implements Serializable {
      *      java.lang.String)
      */
     public boolean convertFromBaseCurrency(FixedPointNumber pValue, 
-	    final KMMSecCurrID secCurrID) {
+	    final KMMQualifSecCurrID secCurrID) {
 
 	SimplePriceTable table = getByNamespace(secCurrID.getType());
 	if (table == null) {
@@ -224,7 +224,7 @@ public class ComplexPriceTable implements Serializable {
     }
 
     public boolean convertToBaseCurrency(FixedPointNumber pValue, 
-	    final KMMSecCurrID secCurrID) {
+	    final KMMQualifSecCurrID secCurrID) {
 
 	SimplePriceTable table = getByNamespace(secCurrID.getType());
 
@@ -237,7 +237,7 @@ public class ComplexPriceTable implements Serializable {
 
     // ---------------------------------------------------------------
     
-    public Collection<KMMSecCurrID.Type> getNameSpaces() {
+    public Collection<KMMQualifSecCurrID.Type> getNameSpaces() {
 	return namespace2CurrTab.keySet();
     }
 
@@ -245,14 +245,14 @@ public class ComplexPriceTable implements Serializable {
      * @param nameSpace
      * @return
      */
-    protected SimplePriceTable getByNamespace(KMMSecCurrID.Type nameSpace) {
+    protected SimplePriceTable getByNamespace(KMMQualifSecCurrID.Type nameSpace) {
 	return namespace2CurrTab.get(nameSpace);
     }
 
     /**
      * @param nameSpace
      */
-    public Collection<String> getCurrencies(final KMMSecCurrID.Type nameSpace) {
+    public Collection<String> getCurrencies(final KMMQualifSecCurrID.Type nameSpace) {
 	SimplePriceTable table = getByNamespace(nameSpace);
 	if (table == null) {
 	    return new HashSet<String>();
@@ -266,7 +266,7 @@ public class ComplexPriceTable implements Serializable {
      * @see SimplePriceTable#clear()
      */
     public void clear() {
-        for ( KMMSecCurrID.Type nameSpace : namespace2CurrTab.keySet() ) {
+        for ( KMMQualifSecCurrID.Type nameSpace : namespace2CurrTab.keySet() ) {
             namespace2CurrTab.get(nameSpace).clear();
         }
         
@@ -279,8 +279,8 @@ public class ComplexPriceTable implements Serializable {
     public String toString() {
 	String result = "[ComplexPriceTable: \n";
 	
-	for ( KMMSecCurrID.Type nameSpace : getNameSpaces() ) {
-	    if ( nameSpace != KMMSecCurrID.Type.UNSET ) {
+	for ( KMMQualifSecCurrID.Type nameSpace : getNameSpaces() ) {
+	    if ( nameSpace != KMMQualifSecCurrID.Type.UNSET ) {
 		result += "=======================================\n";
 		result += "Name space: " + nameSpace + "\n";
 		result += "=======================================\n";

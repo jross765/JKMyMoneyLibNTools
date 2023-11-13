@@ -2,13 +2,13 @@ package org.kmymoney.read.aux;
 
 import java.time.LocalDate;
 
-import org.kmymoney.basetypes.InvalidSecCurrIDException;
-import org.kmymoney.basetypes.InvalidSecCurrTypeException;
-import org.kmymoney.basetypes.KMMCurrID;
-import org.kmymoney.basetypes.KMMCurrPair;
-import org.kmymoney.basetypes.KMMPriceID;
-import org.kmymoney.basetypes.KMMSecCurrID;
-import org.kmymoney.basetypes.KMMSecID;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMCurrPair;
+import org.kmymoney.basetypes.complex.KMMPriceID;
+import org.kmymoney.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyCurrency;
 import org.kmymoney.read.KMyMoneySecurity;
@@ -33,33 +33,33 @@ public interface KMMPrice {
 	
     // ---------------------------------------------------------------
     
-    KMMPriceID getId() throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+    KMMPriceID getId() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
     
-    KMMCurrPair getParentPricePairID() throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+    KMMCurrPair getParentPricePairID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 	
     KMMPricePair getParentPricePair();
 	
     // ----------------------------
     	
-    KMMSecCurrID getFromSecCurrQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    KMMQualifSecCurrID getFromSecCurrQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
-    KMMSecID getFromSecurityQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    KMMQualifSecID getFromSecurityQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
-    KMMCurrID getFromCurrencyQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    KMMQualifCurrID getFromCurrencyQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
-    KMyMoneySecurity getFromSecurity() throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+    KMyMoneySecurity getFromSecurity() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 
-    String getFromCurrencyCode() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    String getFromCurrencyCode() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
-    KMyMoneyCurrency getFromCurrency() throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+    KMyMoneyCurrency getFromCurrency() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
     
     // ----------------------------
 
-    KMMCurrID getToCurrencyQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    KMMQualifCurrID getToCurrencyQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
-    String getToCurrencyCode() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    String getToCurrencyCode() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
-    KMyMoneyCurrency getToCurrency() throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+    KMyMoneyCurrency getToCurrency() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 
     // ----------------------------
 
@@ -69,6 +69,6 @@ public interface KMMPrice {
 
     FixedPointNumber getValue();
     
-    String getValueFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    String getValueFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     
 }

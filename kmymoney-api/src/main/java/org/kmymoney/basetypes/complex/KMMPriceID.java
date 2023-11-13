@@ -1,4 +1,4 @@
-package org.kmymoney.basetypes;
+package org.kmymoney.basetypes.complex;
 
 import java.util.Objects;
 

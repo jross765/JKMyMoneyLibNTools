@@ -2,15 +2,15 @@ package org.kmymoney.read.aux;
 
 import java.util.Collection;
 
-import org.kmymoney.basetypes.InvalidSecCurrIDException;
-import org.kmymoney.basetypes.InvalidSecCurrTypeException;
-import org.kmymoney.basetypes.KMMCurrID;
-import org.kmymoney.basetypes.KMMCurrPair;
-import org.kmymoney.basetypes.KMMSecCurrID;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMCurrPair;
+import org.kmymoney.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
 
 public interface KMMPricePair {
 
-    KMMCurrPair getId() throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+    KMMCurrPair getId() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
     
     // ---------------------------------------------------------------
     
@@ -20,9 +20,9 @@ public interface KMMPricePair {
     
     // ----------------------------
     
-    KMMSecCurrID getFromSecCurr() throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+    KMMQualifSecCurrID getFromSecCurr() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
     
-    KMMCurrID getToCurr() throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+    KMMQualifCurrID getToCurr() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
     
     // ---------------------------------------------------------------
     

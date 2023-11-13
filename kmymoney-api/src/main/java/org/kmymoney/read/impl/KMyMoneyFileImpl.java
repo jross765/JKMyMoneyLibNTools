@@ -29,13 +29,13 @@ import java.util.zip.GZIPInputStream;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kmymoney.Const;
-import org.kmymoney.basetypes.InvalidSecCurrIDException;
-import org.kmymoney.basetypes.InvalidSecCurrTypeException;
-import org.kmymoney.basetypes.KMMCurrID;
-import org.kmymoney.basetypes.KMMPriceID;
-import org.kmymoney.basetypes.KMMSecCurrID;
-import org.kmymoney.basetypes.KMMSecID;
-import org.kmymoney.basetypes.KMMSplitID;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMPriceID;
+import org.kmymoney.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.basetypes.complex.KMMQualifSplitID;
 import org.kmymoney.currency.ComplexPriceTable;
 import org.kmymoney.generated.ACCOUNT;
 import org.kmymoney.generated.CURRENCY;
@@ -94,11 +94,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @param pFile the file to load and initialize from
      * @throws IOException on low level reading-errors (FileNotFoundException if not
      *                     found)
-     * @throws InvalidSecCurrTypeException 
-     * @throws InvalidSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
      * @see #loadFile(File)
      */
-    public KMyMoneyFileImpl(final File pFile) throws IOException, InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    public KMyMoneyFileImpl(final File pFile) throws IOException, InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	super();
 	loadFile(pFile);
     }
@@ -107,11 +107,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @param pFile the file to load and initialize from
      * @throws IOException on low level reading-errors (FileNotFoundException if not
      *                     found)
-     * @throws InvalidSecCurrTypeException 
-     * @throws InvalidSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
      * @see #loadFile(File)
      */
-    public KMyMoneyFileImpl(final InputStream is) throws IOException, InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    public KMyMoneyFileImpl(final InputStream is) throws IOException, InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	super();
 	loadInputStream(is);
     }
@@ -371,18 +371,18 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
         return priceById.values();
     }
 
-    public FixedPointNumber getLatestPrice(final String secCurrIDStr) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    public FixedPointNumber getLatestPrice(final String secCurrIDStr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	if ( secCurrIDStr.startsWith("E0") ) { // ::MAGIC
-	    return getLatestPrice(new KMMSecID(secCurrIDStr));
+	    return getLatestPrice(new KMMQualifSecID(secCurrIDStr));
 	} else {
-	    return getLatestPrice(new KMMCurrID(secCurrIDStr));
+	    return getLatestPrice(new KMMQualifCurrID(secCurrIDStr));
 	}
     }
 
     /**
      * {@inheritDoc}
      */
-    public FixedPointNumber getLatestPrice(final KMMSecCurrID secCurrID) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    public FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	return getLatestPrice(secCurrID, 0);
     }
 
@@ -414,7 +414,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see KMyMoneyTransactionSplit
      * @see KMyMoneyTransactionSplitImpl
      */
-    protected Map<KMMSplitID, KMyMoneyTransactionSplit> transactionSplitID2transactionSplit;
+    protected Map<KMMQualifSplitID, KMyMoneyTransactionSplit> transactionSplitID2transactionSplit;
 
     /**
      * All currencies indexed by their unique id-String.
@@ -462,10 +462,10 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * Set the new root-element and load all accounts, transactions,... from it.
      *
      * @param pRootElement the new root-element
-     * @throws InvalidSecCurrTypeException 
-     * @throws InvalidSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
      */
-    protected void setRootElement(final KMYMONEYFILE pRootElement) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    protected void setRootElement(final KMYMONEYFILE pRootElement) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	if (pRootElement == null) {
 	    throw new IllegalArgumentException("null not allowed for field this.rootElement");
 	}
@@ -507,14 +507,14 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
     private void initTransactionMap(final KMYMONEYFILE pRootElement) {
 	transactionID2transaction = new HashMap<>();
-	transactionSplitID2transactionSplit = new HashMap<KMMSplitID, KMyMoneyTransactionSplit>();
+	transactionSplitID2transactionSplit = new HashMap<KMMQualifSplitID, KMyMoneyTransactionSplit>();
 
 	for ( TRANSACTION jwsdpTrx : pRootElement.getTRANSACTIONS().getTRANSACTION() ) {
 	    try {
 		KMyMoneyTransactionImpl trx = createTransaction(jwsdpTrx);
 		transactionID2transaction.put(trx.getId(), trx);
 		for (KMyMoneyTransactionSplit splt : trx.getSplits()) {
-		    KMMSplitID spltID = new KMMSplitID(trx.getId(), splt.getId());
+		    KMMQualifSplitID spltID = new KMMQualifSplitID(trx.getId(), splt.getId());
 		    transactionSplitID2transactionSplit.put(spltID, splt);
 		}
 	    } catch (RuntimeException e) {
@@ -612,10 +612,10 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
     /**
      * @param pRootElement the root-element of the KMyMoney-file
-     * @throws InvalidSecCurrTypeException 
-     * @throws InvalidSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
      */
-    private void loadPriceDatabase(final KMYMONEYFILE pRootElement) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    private void loadPriceDatabase(final KMYMONEYFILE pRootElement) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	boolean noPriceDB = true;
 	
 	PRICES priceDB = pRootElement.getPRICES();
@@ -630,7 +630,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	}
     }
 
-    private void loadPriceDatabaseCore(PRICES priceDB) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    private void loadPriceDatabaseCore(PRICES priceDB) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 //  	getCurrencyTable().clear();
 //  	getCurrencyTable().setConversionFactor(KMMSecCurrID.Type.CURRENCY, 
 //  		                               getDefaultCurrencyID(), 
@@ -643,11 +643,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	    // String toCurr      = pricePair.getTo();
 	    
 	    // ::TODO: Try to implement Security type
-	    KMMSecCurrID.Type nameSpace = null;
+	    KMMQualifSecCurrID.Type nameSpace = null;
 	    if ( fromSecCurr.startsWith("E0") ) // ::MAGIC
-		nameSpace = KMMSecCurrID.Type.SECURITY;
+		nameSpace = KMMQualifSecCurrID.Type.SECURITY;
 	    else
-		nameSpace = KMMSecCurrID.Type.CURRENCY;
+		nameSpace = KMMQualifSecCurrID.Type.CURRENCY;
 
 	    // Check if we already have a latest price for this security
 	    // (= currency, fund, ...)
@@ -663,7 +663,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
 	    // get the latest price in the file and insert it into
 	    // our currency table
-	    FixedPointNumber factor = getLatestPrice(new KMMSecCurrID(nameSpace, fromSecCurr));
+	    FixedPointNumber factor = getLatestPrice(new KMMQualifSecCurrID(nameSpace, fromSecCurr));
 
 	    if ( factor != null ) {
 		getCurrencyTable().setConversionFactor(nameSpace, fromSecCurr, factor);
@@ -686,12 +686,12 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      *                    recursive quotes (quotes to other then the base- currency)
      *                    we abort if the depth reached 6.
      * @return the latest price-quote in the kmymoney-file in the default-currency
-     * @throws InvalidSecCurrTypeException 
-     * @throws InvalidSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
      * @see {@link KMyMoneyFile#getLatestPrice(String, String)}
      * @see #getDefaultCurrencyID()
      */
-    private FixedPointNumber getLatestPrice(final KMMSecCurrID secCurrID, final int depth) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    private FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID, final int depth) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	if (secCurrID == null) {
 	    throw new IllegalArgumentException("null parameter 'secCurrID' given");
 	}
@@ -751,7 +751,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 				    + " but in '" + toCurr + "'");
 			    continue;
 			}
-			factor = getLatestPrice(new KMMSecID(toCurr), depth + 1);
+			factor = getLatestPrice(new KMMQualifSecID(toCurr), depth + 1);
 		    } else {
 		      // is currency
 			if ( ! toCurr.equals(getDefaultCurrencyID()) ) {
@@ -760,7 +760,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 					+ " but in '" + toCurr + "'");
 				continue;
 			    }
-			    factor = getLatestPrice(new KMMCurrID(toCurr), depth + 1);
+			    factor = getLatestPrice(new KMMQualifCurrID(toCurr), depth + 1);
 			}
 		    }
 		    // END core
@@ -880,11 +880,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @param pFile the file to read
      * @throws IOException on low level reading-errors (FileNotFoundException if not
      *                     found)
-     * @throws InvalidSecCurrTypeException 
-     * @throws InvalidSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
      * @see #setRootElement(KMYMONEYFILE)
      */
-    protected void loadFile(final File pFile) throws IOException, InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    protected void loadFile(final File pFile) throws IOException, InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 
 	long start = System.currentTimeMillis();
 
@@ -923,7 +923,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 
     }
 
-    protected void loadInputStream(InputStream in) throws UnsupportedEncodingException, IOException, InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    protected void loadInputStream(InputStream in) throws UnsupportedEncodingException, IOException, InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	long start = System.currentTimeMillis();
 
 	NamespaceRemovererReader reader = new NamespaceRemovererReader(new InputStreamReader(in, "utf-8"));
@@ -1028,7 +1028,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     @Override
-    public KMyMoneyCurrency getCurrencyByQualifId(KMMCurrID currID) {
+    public KMyMoneyCurrency getCurrencyByQualifId(KMMQualifCurrID currID) {
 	return getCurrencyById(currID.getCode());
     }
 
@@ -1054,12 +1054,12 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     @Override
-    public KMyMoneySecurity getSecurityByQualifID(final KMMSecID secID) {
+    public KMyMoneySecurity getSecurityByQualifID(final KMMQualifSecID secID) {
 	return getSecurityById(secID.getCode());
     }
 
     @Override
-    public KMyMoneySecurity getSecurityByQualifID(final String qualifID) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    public KMyMoneySecurity getSecurityByQualifID(final String qualifID) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	if (qualifID == null) {
 	    throw new IllegalStateException("null string given");
 	}
@@ -1068,7 +1068,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	    throw new IllegalStateException("Search string is empty");
 	}
 
-	KMMSecID secID = KMMSecID.parse(qualifID);
+	KMMQualifSecID secID = KMMQualifSecID.parse(qualifID);
 	return getSecurityByQualifID(secID);
     }
 
@@ -1269,7 +1269,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     /**
      * @see KMyMoneyFile#getTransactionById(java.lang.String)
      */
-    public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMSplitID id) {
+    public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSplitID id) {
 	if (transactionSplitID2transactionSplit == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}

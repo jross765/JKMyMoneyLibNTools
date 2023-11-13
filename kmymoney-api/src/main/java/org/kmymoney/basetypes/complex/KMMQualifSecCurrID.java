@@ -1,9 +1,9 @@
-package org.kmymoney.basetypes;
+package org.kmymoney.basetypes.complex;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KMMSecCurrID {
+public class KMMQualifSecCurrID {
     
     public enum Type {
 	CURRENCY,
@@ -13,7 +13,7 @@ public class KMMSecCurrID {
     
     // ---------------------------------------------------------------
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMMSecCurrID.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KMMQualifSecCurrID.class);
 
     public static final char SEPARATOR = ':';
 
@@ -24,11 +24,11 @@ public class KMMSecCurrID {
 
     // ---------------------------------------------------------------
     
-    public KMMSecCurrID() {
+    public KMMQualifSecCurrID() {
 	this.type = Type.UNSET;
     }
 
-    public KMMSecCurrID(Type type, String code) throws InvalidSecCurrTypeException {
+    public KMMQualifSecCurrID(Type type, String code) throws InvalidQualifSecCurrTypeException {
 	
 	if ( code == null )
 	    throw new IllegalArgumentException("Security code is null");
@@ -46,7 +46,7 @@ public class KMMSecCurrID {
         return type;
     }
     
-    public void setType(Type type) throws InvalidSecCurrIDException {
+    public void setType(Type type) throws InvalidQualifSecCurrIDException {
         this.type = type;
     }
     
@@ -54,7 +54,7 @@ public class KMMSecCurrID {
         return code;
     }
     
-    public void setCode(String secCode) throws InvalidSecCurrTypeException {
+    public void setCode(String secCode) throws InvalidQualifSecCurrTypeException {
 	if ( secCode == null )
 	    throw new IllegalArgumentException("Security code is null");
 
@@ -66,20 +66,20 @@ public class KMMSecCurrID {
     
     // ---------------------------------------------------------------
     
-    public static KMMSecCurrID parse(String str) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    public static KMMQualifSecCurrID parse(String str) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	if ( str == null )
 	    throw new IllegalArgumentException("Argument string is null");
 
 	if ( str.equals("") )
 	    throw new IllegalArgumentException("Argument string is empty");
 
-	KMMSecCurrID result = new KMMSecCurrID();
+	KMMQualifSecCurrID result = new KMMQualifSecCurrID();
 	
 	int posSep = str.indexOf(SEPARATOR);
 	// Plausi ::MAGIC
 	if ( posSep <= 3 ||
 	     posSep >= str.length() - 2 )
-	    throw new InvalidSecCurrIDException();
+	    throw new InvalidQualifSecCurrIDException();
 	
 	String typeStr = str.substring(0, posSep).trim();
 	String codeStr = str.substring(posSep + 1, str.length()).trim();
@@ -92,7 +92,7 @@ public class KMMSecCurrID {
 	    result.setCode(codeStr);
 	} else {
 	    LOGGER.error("parse: Unknown security/currency type '" + typeStr + "'");
-	    throw new InvalidSecCurrTypeException();
+	    throw new InvalidQualifSecCurrTypeException();
 	}
 	
 	return result;
@@ -117,7 +117,7 @@ public class KMMSecCurrID {
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	KMMSecCurrID other = (KMMSecCurrID) obj;
+	KMMQualifSecCurrID other = (KMMQualifSecCurrID) obj;
 	if (type != other.type)
 	    return false;
 	if (code == null) {

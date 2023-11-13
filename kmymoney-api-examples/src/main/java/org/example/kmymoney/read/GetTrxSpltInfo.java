@@ -2,7 +2,7 @@ package org.example.kmymoney.read;
 
 import java.io.File;
 
-import org.kmymoney.basetypes.KMMSplitID;
+import org.kmymoney.basetypes.complex.KMMQualifSplitID;
 import org.kmymoney.read.KMyMoneyTransactionSplit;
 import org.kmymoney.read.impl.KMyMoneyFileImpl;
 
@@ -32,7 +32,7 @@ public class GetTrxSpltInfo {
 	// You normally would get the transaction-split-ID by first choosing
 	// a specific transaction (cf. GetTrxInfo), getting its list of splits
 	// and then choosing from them.
-	KMMSplitID qualifID = new KMMSplitID(trxID, spltID);
+	KMMQualifSplitID qualifID = new KMMQualifSplitID(trxID, spltID);
 	KMyMoneyTransactionSplit splt = kmmFile.getTransactionSplitByID(qualifID);
 
 	// ------------------------

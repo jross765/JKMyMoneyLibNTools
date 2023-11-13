@@ -3,16 +3,16 @@ package org.kmymoney.read;
 import java.math.BigInteger;
 import java.util.Collection;
 
-import org.kmymoney.basetypes.InvalidSecCurrIDException;
-import org.kmymoney.basetypes.InvalidSecCurrTypeException;
-import org.kmymoney.basetypes.KMMCurrID;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.read.aux.KMMPrice;
 
 public interface KMyMoneyCurrency {
 
     String getId();
 
-    KMMCurrID getQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    KMMQualifCurrID getQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     String getSymbol();
 
@@ -32,8 +32,8 @@ public interface KMyMoneyCurrency {
     
     // ------------------------------------------------------------
 
-    Collection<KMMPrice> getQuotes() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    Collection<KMMPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     
-    KMMPrice getYoungestQuote() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    KMMPrice getYoungestQuote() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     
 }

@@ -8,13 +8,13 @@ import java.util.Currency;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kmymoney.Const;
-import org.kmymoney.basetypes.InvalidSecCurrIDException;
-import org.kmymoney.basetypes.InvalidSecCurrTypeException;
-import org.kmymoney.basetypes.KMMCurrID;
-import org.kmymoney.basetypes.KMMCurrPair;
-import org.kmymoney.basetypes.KMMPriceID;
-import org.kmymoney.basetypes.KMMSecCurrID;
-import org.kmymoney.basetypes.KMMSecID;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMCurrPair;
+import org.kmymoney.basetypes.complex.KMMPriceID;
+import org.kmymoney.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.generated.PRICE;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyCurrency;
@@ -63,14 +63,14 @@ public class KMMPriceImpl implements KMMPrice {
     // -----------------------------------------------------------
     
     @Override
-    public KMMPriceID getId() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    public KMMPriceID getId() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	return new KMMPriceID(parent.getFromSecCurrStr(),
 		              parent.getToCurrStr(),
 		              DATE_FORMAT.format(getDate()));
     }
 
     @Override
-    public KMMCurrPair getParentPricePairID() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    public KMMCurrPair getParentPricePairID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	return parent.getId();
     }
 
@@ -82,40 +82,40 @@ public class KMMPriceImpl implements KMMPrice {
     // ----------------------------
     
     @Override
-    public KMMSecCurrID getFromSecCurrQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    public KMMQualifSecCurrID getFromSecCurrQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	String secCurrID = parent.getFromSecCurrStr();
 
-	KMMSecCurrID result = null;
+	KMMQualifSecCurrID result = null;
 	if ( secCurrID.startsWith("E0") ) { // ::MAGIC
-	    result = new KMMSecID(secCurrID);
+	    result = new KMMQualifSecID(secCurrID);
 	} else {
-	    result = new KMMCurrID(secCurrID);
+	    result = new KMMQualifCurrID(secCurrID);
 	}
 	    
 	return result;
     }
 
     @Override
-    public KMMSecID getFromSecurityQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
-	KMMSecCurrID secCurrID = getFromSecCurrQualifId();
-	if ( secCurrID.getType() != KMMSecCurrID.Type.SECURITY )
-	    throw new InvalidSecCurrTypeException();
+    public KMMQualifSecID getFromSecurityQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	KMMQualifSecCurrID secCurrID = getFromSecCurrQualifId();
+	if ( secCurrID.getType() != KMMQualifSecCurrID.Type.SECURITY )
+	    throw new InvalidQualifSecCurrTypeException();
 	    
-	return new KMMSecID(secCurrID);
+	return new KMMQualifSecID(secCurrID);
     }
 
     @Override
-    public KMMCurrID getFromCurrencyQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
-	KMMSecCurrID secCurrID = getFromSecCurrQualifId();
-	if ( secCurrID.getType() != KMMSecCurrID.Type.CURRENCY )
-	    throw new InvalidSecCurrTypeException();
+    public KMMQualifCurrID getFromCurrencyQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	KMMQualifSecCurrID secCurrID = getFromSecCurrQualifId();
+	if ( secCurrID.getType() != KMMQualifSecCurrID.Type.CURRENCY )
+	    throw new InvalidQualifSecCurrTypeException();
 
-	return new KMMCurrID(secCurrID);
+	return new KMMQualifCurrID(secCurrID);
     }
 
     @Override
-    public KMyMoneySecurity getFromSecurity() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
-	KMMSecID secID = getFromSecurityQualifId();
+    public KMyMoneySecurity getFromSecurity() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	KMMQualifSecID secID = getFromSecurityQualifId();
 	
 	KMyMoneySecurity cmdty = file.getSecurityByQualifID(secID);
 	
@@ -123,13 +123,13 @@ public class KMMPriceImpl implements KMMPrice {
     }
     
     @Override
-    public String getFromCurrencyCode() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    public String getFromCurrencyCode() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	return getFromCurrencyQualifId().getCurrency().getCurrencyCode();
     }
 
     @Override
-    public KMyMoneyCurrency getFromCurrency() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
-	KMMCurrID currID = getFromCurrencyQualifId();
+    public KMyMoneyCurrency getFromCurrency() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	KMMQualifCurrID currID = getFromCurrencyQualifId();
 	
 	KMyMoneyCurrency curr = file.getCurrencyByQualifId(currID);
 	
@@ -139,27 +139,27 @@ public class KMMPriceImpl implements KMMPrice {
     // ----------------------------
     
     @Override
-    public KMMCurrID getToCurrencyQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    public KMMQualifCurrID getToCurrencyQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	String secCurrID = parent.getToCurrStr();
 
-	KMMCurrID result = null;
+	KMMQualifCurrID result = null;
 	if ( secCurrID.startsWith("E0") ) { // ::MAGIC
-	    throw new InvalidSecCurrTypeException();
+	    throw new InvalidQualifSecCurrTypeException();
 	} else {
-	    result = new KMMCurrID(secCurrID);
+	    result = new KMMQualifCurrID(secCurrID);
 	}
 	    
 	return result;
     }
 
     @Override
-    public String getToCurrencyCode() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    public String getToCurrencyCode() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	return getToCurrencyQualifId().getCode();
     }
 
     @Override
-    public KMyMoneyCurrency getToCurrency() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
-	KMMCurrID currID = getToCurrencyQualifId();
+    public KMyMoneyCurrency getToCurrency() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	KMMQualifCurrID currID = getToCurrencyQualifId();
 	
 	KMyMoneyCurrency curr = file.getCurrencyByQualifId(currID);
 	
@@ -170,10 +170,10 @@ public class KMMPriceImpl implements KMMPrice {
     
     /**
      * @return The currency-format to use for formating.
-     * @throws InvalidSecCurrTypeException 
-     * @throws InvalidSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
      */
-    private NumberFormat getCurrencyFormat() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    private NumberFormat getCurrencyFormat() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	if (currencyFormat == null) {
 	    currencyFormat = NumberFormat.getCurrencyInstance();
 	}
@@ -220,7 +220,7 @@ public class KMMPriceImpl implements KMMPrice {
     }
 
     @Override
-    public String getValueFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    public String getValueFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	return getCurrencyFormat().format(getValue());
     }
 

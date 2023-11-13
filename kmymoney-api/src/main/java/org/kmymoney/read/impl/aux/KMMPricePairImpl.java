@@ -3,12 +3,12 @@ package org.kmymoney.read.impl.aux;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.kmymoney.basetypes.InvalidSecCurrIDException;
-import org.kmymoney.basetypes.InvalidSecCurrTypeException;
-import org.kmymoney.basetypes.KMMCurrID;
-import org.kmymoney.basetypes.KMMCurrPair;
-import org.kmymoney.basetypes.KMMSecCurrID;
-import org.kmymoney.basetypes.KMMSecID;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMCurrPair;
+import org.kmymoney.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.generated.PRICE;
 import org.kmymoney.generated.PRICEPAIR;
 import org.kmymoney.read.KMyMoneyFile;
@@ -46,7 +46,7 @@ public class KMMPricePairImpl implements KMMPricePair {
     // -----------------------------------------------------------
     
     @Override
-    public KMMCurrPair getId() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    public KMMCurrPair getId() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	return new KMMCurrPair(jwsdpPeer.getFrom(), jwsdpPeer.getTo());
     }
 
@@ -65,22 +65,22 @@ public class KMMPricePairImpl implements KMMPricePair {
     // -----------------------------------------------------------
     
     @Override
-    public KMMSecCurrID getFromSecCurr() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    public KMMQualifSecCurrID getFromSecCurr() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	String fromStr = getFromSecCurrStr();
 	
-	KMMSecCurrID result = null;
+	KMMQualifSecCurrID result = null;
 	if ( fromStr.startsWith("E0") ) { // ::MAGIC
-	    result = new KMMSecID(fromStr);
+	    result = new KMMQualifSecID(fromStr);
 	} else {
-	    result = new KMMCurrID(fromStr);
+	    result = new KMMQualifCurrID(fromStr);
 	}
 	
 	return result;
     }
 
     @Override
-    public KMMCurrID getToCurr() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
-	return new KMMCurrID(getToCurrStr());
+    public KMMQualifCurrID getToCurr() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	return new KMMQualifCurrID(getToCurrStr());
     }
 
     // -----------------------------------------------------------
@@ -105,7 +105,7 @@ public class KMMPricePairImpl implements KMMPricePair {
 
     // -----------------------------------------------------------
     
-    public boolean equals(KMMPricePair other) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    public boolean equals(KMMPricePair other) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	if ( ! getFromSecCurr().equals(other.getFromSecCurr()) )
 	    return false;
 

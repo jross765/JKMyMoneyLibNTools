@@ -3,7 +3,8 @@ module kmymoney.api {
 	requires java.desktop;
 	requires jakarta.xml.bind;
 	
-	exports org.kmymoney.basetypes;
+	exports org.kmymoney.basetypes.simple;
+	exports org.kmymoney.basetypes.complex;
 	exports org.kmymoney.currency;
 	exports org.kmymoney.numbers;
 	

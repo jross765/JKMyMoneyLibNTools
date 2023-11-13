@@ -3,11 +3,11 @@ package org.kmymoney.read;
 import java.io.File;
 import java.util.Collection;
 
-import org.kmymoney.basetypes.InvalidSecCurrIDException;
-import org.kmymoney.basetypes.InvalidSecCurrTypeException;
-import org.kmymoney.basetypes.KMMCurrID;
-import org.kmymoney.basetypes.KMMSecCurrID;
-import org.kmymoney.basetypes.KMMSecID;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.currency.ComplexPriceTable;
 import org.kmymoney.generated.KMYMONEYFILE;
 import org.kmymoney.numbers.FixedPointNumber;
@@ -156,7 +156,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      */
     KMyMoneyCurrency getCurrencyById(String id);
 
-    KMyMoneyCurrency getCurrencyByQualifId(KMMCurrID currID);
+    KMyMoneyCurrency getCurrencyByQualifId(KMMQualifCurrID currID);
 
     /**
      * warning: this function has to traverse all securites. If it much faster to
@@ -183,29 +183,29 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      */
     KMyMoneySecurity getSecurityById(String id);
 
-    KMyMoneySecurity getSecurityByQualifID(KMMSecID secID);
+    KMyMoneySecurity getSecurityByQualifID(KMMQualifSecID secID);
 
-    KMyMoneySecurity getSecurityByQualifID(String qualifID) throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+    KMyMoneySecurity getSecurityByQualifID(String qualifID) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 
     /**
      * The symbol is usually the ticker, but need not necessarily be so.
      * 
      * @param symb
      * @return
-     * @throws InvalidSecCurrIDException
-     * @throws InvalidSecCurrTypeException
+     * @throws InvalidQualifSecCurrIDException
+     * @throws InvalidQualifSecCurrTypeException
      */
-    KMyMoneySecurity getSecurityBySymbol(String symb) throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+    KMyMoneySecurity getSecurityBySymbol(String symb) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 
     /**
      * By ISIN/CUSIP/SEDOL/WKN...
      * 
      * @param code
      * @return
-     * @throws InvalidSecCurrIDException
-     * @throws InvalidSecCurrTypeException
+     * @throws InvalidQualifSecCurrIDException
+     * @throws InvalidQualifSecCurrTypeException
      */
-    KMyMoneySecurity getSecurityByCode(String code) throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+    KMyMoneySecurity getSecurityByCode(String code) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 
     public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr);
     
@@ -254,7 +254,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param pCmdtyId    the currency-name
      * @return the latest price-quote in the gnucash-file in EURO
      */
-    public FixedPointNumber getLatestPrice(final KMMSecCurrID secCurrID) throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+    public FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 
     // ---------------------------------------------------------------
     // Statistics (for test purposes)

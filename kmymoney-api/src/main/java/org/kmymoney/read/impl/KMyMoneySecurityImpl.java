@@ -5,10 +5,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.kmymoney.basetypes.InvalidSecCurrIDException;
-import org.kmymoney.basetypes.InvalidSecCurrTypeException;
-import org.kmymoney.basetypes.KMMCurrID;
-import org.kmymoney.basetypes.KMMSecID;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.generated.PAIR;
 import org.kmymoney.generated.SECURITY;
 import org.kmymoney.read.KMMSecCurr;
@@ -61,8 +61,8 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
     }
 
     @Override
-    public KMMSecID getQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
-	return new KMMSecID(getId());
+    public KMMQualifSecID getQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	return new KMMQualifSecID(getId());
     }
     
     @Override
@@ -114,8 +114,8 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
     }
 
     @Override
-    public KMMCurrID getTradingCurrency() throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
-	return new KMMCurrID(jwsdpPeer.getTradingCurrency());
+    public KMMQualifCurrID getTradingCurrency() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	return new KMMQualifCurrID(jwsdpPeer.getTradingCurrency());
     }
 
     @Override
@@ -126,7 +126,7 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
     // ---------------------------------------------------------------
 
     @Override
-    public Collection<KMMPrice> getQuotes() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    public Collection<KMMPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	Collection<KMMPrice> result = new ArrayList<KMMPrice>();
 	
 	Collection<KMMPrice> prices = getKMyMoneyFile().getPrices();
@@ -144,7 +144,7 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
     }
 
     @Override
-    public KMMPrice getYoungestQuote() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    public KMMPrice getYoungestQuote() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	KMMPrice result = null;
 
 	LocalDate youngestDate = LocalDate.of(1970, 1, 1); // ::MAGIC

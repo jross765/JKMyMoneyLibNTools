@@ -8,7 +8,7 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 import org.kmymoney.ConstTest;
-import org.kmymoney.basetypes.KMMSecCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyFile;
 import org.kmymoney.read.impl.KMyMoneyFileImpl;
@@ -70,7 +70,7 @@ public class TestSimpleSecurityQuoteTable
     complPriceTab = kmmFile.getCurrencyTable();
     assertNotEquals(null, complPriceTab);
     
-    simplPriceTab = complPriceTab.getByNamespace(KMMSecCurrID.Type.SECURITY);
+    simplPriceTab = complPriceTab.getByNamespace(KMMQualifSecCurrID.Type.SECURITY);
     assertNotEquals(null, simplPriceTab);
     
     assertEquals(2, simplPriceTab.getCurrencies().size());
@@ -84,7 +84,7 @@ public class TestSimpleSecurityQuoteTable
     complPriceTab = kmmFile.getCurrencyTable();
     assertNotEquals(null, complPriceTab);
     
-    simplPriceTab = complPriceTab.getByNamespace(KMMSecCurrID.Type.SECURITY);
+    simplPriceTab = complPriceTab.getByNamespace(KMMQualifSecCurrID.Type.SECURITY);
     assertNotEquals(null, simplPriceTab);
     
     FixedPointNumber val = new FixedPointNumber("101.0");
@@ -102,7 +102,7 @@ public class TestSimpleSecurityQuoteTable
     complPriceTab = kmmFile.getCurrencyTable();
     assertNotEquals(null, complPriceTab);
     
-    simplPriceTab = complPriceTab.getByNamespace(KMMSecCurrID.Type.SECURITY);
+    simplPriceTab = complPriceTab.getByNamespace(KMMQualifSecCurrID.Type.SECURITY);
     assertNotEquals(null, simplPriceTab);
     
     FixedPointNumber val = new FixedPointNumber("12069.50");

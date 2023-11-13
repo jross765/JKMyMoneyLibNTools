@@ -2,9 +2,9 @@ package org.example.kmymoney.read;
 
 import java.io.File;
 
-import org.kmymoney.basetypes.InvalidSecCurrIDException;
-import org.kmymoney.basetypes.InvalidSecCurrTypeException;
-import org.kmymoney.basetypes.KMMCurrID;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.read.KMyMoneyCurrency;
 import org.kmymoney.read.NoEntryFoundException;
 import org.kmymoney.read.aux.KMMPrice;
@@ -32,7 +32,7 @@ public class GetCurrInfo {
     protected void kernel() throws Exception {
 	KMyMoneyFileImpl gcshFile = new KMyMoneyFileImpl(new File(kmmFileName));
 
-	KMMCurrID currID = new KMMCurrID(symbol);
+	KMMQualifCurrID currID = new KMMQualifCurrID(symbol);
 	KMyMoneyCurrency curr = gcshFile.getCurrencyByQualifId(currID);
 	if (curr == null) {
 	    System.err.println("Could not find currency with qualif. ID " + currID.toString());
@@ -102,7 +102,7 @@ public class GetCurrInfo {
 
     // -----------------------------------------------------------------
 
-    private void showQuotes(KMyMoneyCurrency curr) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    private void showQuotes(KMyMoneyCurrency curr) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	System.out.println("");
 	System.out.println("Quotes:");
 

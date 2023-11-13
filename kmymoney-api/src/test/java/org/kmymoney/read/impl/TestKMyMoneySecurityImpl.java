@@ -9,9 +9,9 @@ import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
 import org.kmymoney.ConstTest;
-import org.kmymoney.basetypes.KMMCurrID;
-import org.kmymoney.basetypes.KMMSecCurrID;
-import org.kmymoney.basetypes.KMMSecID;
+import org.kmymoney.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.read.KMMSecCurr;
 import org.kmymoney.read.KMyMoneyFile;
 import org.kmymoney.read.KMyMoneySecurity;
@@ -41,9 +41,9 @@ public class TestKMyMoneySecurityImpl
   private KMyMoneyFile     kmmFile = null;
   private KMyMoneySecurity sec = null;
   
-  private KMMSecCurrID secCurrID1 = null;
-  private KMMSecCurrID secCurrID2 = null;
-  private KMMSecCurrID secCurrID3 = null;
+  private KMMQualifSecCurrID secCurrID1 = null;
+  private KMMQualifSecCurrID secCurrID2 = null;
+  private KMMQualifSecCurrID secCurrID3 = null;
   
   // -----------------------------------------------------------------
   
@@ -87,9 +87,9 @@ public class TestKMyMoneySecurityImpl
     
     // ---
     
-    secCurrID1 = new KMMSecID(SEC_1_ID);
-    secCurrID2 = new KMMSecID(SEC_2_ID);
-    secCurrID3 = new KMMSecID(SEC_3_ID);
+    secCurrID1 = new KMMQualifSecID(SEC_1_ID);
+    secCurrID2 = new KMMQualifSecID(SEC_2_ID);
+    secCurrID3 = new KMMQualifSecID(SEC_3_ID);
   }
 
   // -----------------------------------------------------------------
@@ -98,9 +98,9 @@ public class TestKMyMoneySecurityImpl
   public void test00() throws Exception
   {
       // Cf. TestCmdtyCurrID -- let's just double-check 
-      assertEquals(KMMSecCurrID.Type.SECURITY.toString() + KMMSecCurrID.SEPARATOR + SEC_1_ID, secCurrID1.toString());
-      assertEquals(KMMSecCurrID.Type.SECURITY.toString() + KMMSecCurrID.SEPARATOR + SEC_2_ID, secCurrID2.toString());
-      assertEquals(KMMSecCurrID.Type.SECURITY.toString() + KMMSecCurrID.SEPARATOR + SEC_3_ID, secCurrID3.toString());
+      assertEquals(KMMQualifSecCurrID.Type.SECURITY.toString() + KMMQualifSecCurrID.SEPARATOR + SEC_1_ID, secCurrID1.toString());
+      assertEquals(KMMQualifSecCurrID.Type.SECURITY.toString() + KMMQualifSecCurrID.SEPARATOR + SEC_2_ID, secCurrID2.toString());
+      assertEquals(KMMQualifSecCurrID.Type.SECURITY.toString() + KMMQualifSecCurrID.SEPARATOR + SEC_3_ID, secCurrID3.toString());
   }
   
   // ------------------------------
@@ -108,7 +108,7 @@ public class TestKMyMoneySecurityImpl
   @Test
   public void test01_1() throws Exception
   {
-    sec = kmmFile.getSecurityByQualifID(new KMMSecID(SEC_1_ID));
+    sec = kmmFile.getSecurityByQualifID(new KMMQualifSecID(SEC_1_ID));
     assertNotEquals(null, sec);
     
     assertEquals(secCurrID1.toString(), sec.getQualifId().toString());
@@ -120,7 +120,7 @@ public class TestKMyMoneySecurityImpl
     assertEquals(2, sec.getPP().intValue());
     assertEquals(100, sec.getSAF().intValue());
     assertEquals(KMMSecCurr.RoundingMethod.HALF_UP, sec.getRoundingMethod());
-    assertEquals(new KMMCurrID("EUR"), sec.getTradingCurrency());
+    assertEquals(new KMMQualifCurrID("EUR"), sec.getTradingCurrency());
     assertEquals("XETRA", sec.getTradingMarket());
   }
 
@@ -139,7 +139,7 @@ public class TestKMyMoneySecurityImpl
     assertEquals(2, sec.getPP().intValue());
     assertEquals(100, sec.getSAF().intValue());
     assertEquals(KMMSecCurr.RoundingMethod.HALF_UP, sec.getRoundingMethod());
-    assertEquals(new KMMCurrID("EUR"), sec.getTradingCurrency());
+    assertEquals(new KMMQualifCurrID("EUR"), sec.getTradingCurrency());
     assertEquals("XETRA", sec.getTradingMarket());
   }
   
@@ -158,7 +158,7 @@ public class TestKMyMoneySecurityImpl
     assertEquals(2, sec.getPP().intValue());
     assertEquals(100, sec.getSAF().intValue());
     assertEquals(KMMSecCurr.RoundingMethod.HALF_UP, sec.getRoundingMethod());
-    assertEquals(new KMMCurrID("EUR"), sec.getTradingCurrency());
+    assertEquals(new KMMQualifCurrID("EUR"), sec.getTradingCurrency());
     assertEquals("XETRA", sec.getTradingMarket());
   }
 
@@ -177,7 +177,7 @@ public class TestKMyMoneySecurityImpl
     assertEquals(2, sec.getPP().intValue());
     assertEquals(100, sec.getSAF().intValue());
     assertEquals(KMMSecCurr.RoundingMethod.HALF_UP, sec.getRoundingMethod());
-    assertEquals(new KMMCurrID("EUR"), sec.getTradingCurrency());
+    assertEquals(new KMMQualifCurrID("EUR"), sec.getTradingCurrency());
     assertEquals("XETRA", sec.getTradingMarket());
   }
 

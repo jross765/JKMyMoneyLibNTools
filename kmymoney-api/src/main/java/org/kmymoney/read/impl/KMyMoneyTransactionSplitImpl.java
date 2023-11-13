@@ -4,11 +4,11 @@ import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
 
-import org.kmymoney.basetypes.InvalidSecCurrIDException;
-import org.kmymoney.basetypes.InvalidSecCurrTypeException;
-import org.kmymoney.basetypes.KMMCurrID;
-import org.kmymoney.basetypes.KMMSecCurrID;
-import org.kmymoney.basetypes.KMMSplitID;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSplitID;
 import org.kmymoney.generated.SPLIT;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyAccount;
@@ -101,8 +101,8 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     }
 
     @Override
-    public KMMSplitID getQualifId() {
-	return new KMMSplitID(getTransactionId(), getId());
+    public KMMQualifSplitID getQualifId() {
+	return new KMMQualifSplitID(getTransactionId(), getId());
     }
 
     public Action getAction() throws UnknownSplitActionException {
@@ -221,10 +221,10 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 
     /**
      * @return The currencyFormat for the quantity to use when no locale is given.
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    protected NumberFormat getSharesCurrencyFormat() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    protected NumberFormat getSharesCurrencyFormat() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 
 	return ((KMyMoneyAccountImpl) getAccount()).getCurrencyFormat();
     }
@@ -281,20 +281,20 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     }
 
     /**
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      * @see KMyMoneyTransactionSplit#getAccountBalanceFormatted()
      */
-    public String getAccountBalanceFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    public String getAccountBalanceFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	return ((KMyMoneyAccountImpl) getAccount()).getCurrencyFormat().format(getAccountBalance());
     }
 
     /**
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      * @see KMyMoneyTransactionSplit#getAccountBalanceFormatted(java.util.Locale)
      */
-    public String getAccountBalanceFormatted(final Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    public String getAccountBalanceFormatted(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	return getAccount().getBalanceFormatted(lcl);
     }
 
@@ -307,10 +307,10 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 
     /**
      * The value is in the currency of the account!
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    public String getSharesFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    public String getSharesFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	return getSharesCurrencyFormat().format(getShares());
     }
 
@@ -319,13 +319,13 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
      *
      * @param lcl the locale to format to
      * @return the formatted number
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    public String getSharesFormatted(final Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    public String getSharesFormatted(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	NumberFormat nf = NumberFormat.getCurrencyInstance(lcl);
-	if ( getAccount().getSecCurrID().getType() == KMMSecCurrID.Type.CURRENCY ) {
-	    nf.setCurrency(new KMMCurrID(getAccount().getSecCurrID()).getCurrency());
+	if ( getAccount().getSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
+	    nf.setCurrency(new KMMQualifCurrID(getAccount().getSecCurrID()).getCurrency());
 	    return nf.format(getShares());
 	}
 	else {
@@ -335,19 +335,19 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 
     /**
      * The value is in the currency of the account!
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    public String getSharesFormattedForHTML() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    public String getSharesFormattedForHTML() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	return getSharesFormatted().replaceFirst("€", "&euro;");
     }
 
     /**
      * The value is in the currency of the account!
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    public String getSharesFormattedForHTML(final Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    public String getSharesFormattedForHTML(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	return getSharesFormatted(lcl).replaceFirst("€", "&euro;");
     }
 

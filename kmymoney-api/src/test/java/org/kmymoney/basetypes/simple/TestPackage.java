@@ -1,4 +1,4 @@
-package org.kmymoney.read;
+package org.kmymoney.basetypes.simple;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -13,7 +13,9 @@ public class TestPackage extends TestCase {
     public static Test suite() throws Exception {
 	TestSuite suite = new TestSuite();
 
-	suite.addTest(org.kmymoney.read.impl.TestPackage.suite());
+	suite.addTest(org.kmymoney.basetypes.simple.TestKMMAccID.suite());
+	suite.addTest(org.kmymoney.basetypes.simple.TestKMMSecID.suite());
+	suite.addTest(org.kmymoney.basetypes.simple.TestKMMTrxID.suite());
 
 	return suite;
     }

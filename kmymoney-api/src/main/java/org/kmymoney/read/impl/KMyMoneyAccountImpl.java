@@ -6,12 +6,12 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.kmymoney.basetypes.InvalidSecCurrIDException;
-import org.kmymoney.basetypes.InvalidSecCurrTypeException;
-import org.kmymoney.basetypes.KMMCurrID;
-import org.kmymoney.basetypes.KMMSecCurrID;
-import org.kmymoney.basetypes.KMMSecID;
-import org.kmymoney.basetypes.KMMSplitID;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.basetypes.complex.KMMQualifSplitID;
 import org.kmymoney.generated.ACCOUNT;
 import org.kmymoney.read.KMyMoneyAccount;
 import org.kmymoney.read.KMyMoneyFile;
@@ -187,7 +187,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      */
     public void addTransactionSplit(final KMyMoneyTransactionSplit split) {
 
-	KMMSplitID kmmSpltID = new KMMSplitID(split.getTransaction().getId(), split.getId());
+	KMMQualifSplitID kmmSpltID = new KMMQualifSplitID(split.getTransaction().getId(), split.getId());
 	KMyMoneyTransactionSplit old = getTransactionSplitByID(kmmSpltID);
 	if (old != null) {
 	    if (old != split) {
@@ -236,14 +236,14 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     }
 
     @Override
-    public KMMSecCurrID getSecCurrID() throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    public KMMQualifSecCurrID getSecCurrID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 
-	KMMSecCurrID result = null;
+	KMMQualifSecCurrID result = null;
 
 	if ( jwsdpPeer.getCurrency().startsWith("E0") ) { // ::MAGIC
-	    result = new KMMSecID(jwsdpPeer.getCurrency());
+	    result = new KMMQualifSecID(jwsdpPeer.getCurrency());
 	} else {
-	    result = new KMMCurrID(jwsdpPeer.getCurrency());
+	    result = new KMMQualifCurrID(jwsdpPeer.getCurrency());
 	}
 
 	return result;

@@ -3,17 +3,17 @@ package org.kmymoney.read;
 import java.math.BigInteger;
 import java.util.Collection;
 
-import org.kmymoney.basetypes.InvalidSecCurrIDException;
-import org.kmymoney.basetypes.InvalidSecCurrTypeException;
-import org.kmymoney.basetypes.KMMCurrID;
-import org.kmymoney.basetypes.KMMSecID;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.read.aux.KMMPrice;
 
 public interface KMyMoneySecurity {
 
     String getId();
 
-    KMMSecID getQualifId() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    KMMQualifSecID getQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     String getSymbol();
 
@@ -35,14 +35,14 @@ public interface KMyMoneySecurity {
     
     BigInteger getSAF();
     
-    KMMCurrID getTradingCurrency() throws InvalidSecCurrIDException, InvalidSecCurrTypeException;
+    KMMQualifCurrID getTradingCurrency() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 
     String getTradingMarket();
 
     // ------------------------------------------------------------
 
-    Collection<KMMPrice> getQuotes() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    Collection<KMMPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     
-    KMMPrice getYoungestQuote() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    KMMPrice getYoungestQuote() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     
 }

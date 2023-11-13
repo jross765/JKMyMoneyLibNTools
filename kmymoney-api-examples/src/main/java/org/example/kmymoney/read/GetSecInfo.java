@@ -3,8 +3,8 @@ package org.example.kmymoney.read;
 import java.io.File;
 import java.util.Collection;
 
-import org.kmymoney.basetypes.InvalidSecCurrIDException;
-import org.kmymoney.basetypes.InvalidSecCurrTypeException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.read.KMyMoneySecurity;
 import org.kmymoney.read.NoEntryFoundException;
 import org.kmymoney.read.TooManyEntriesFoundException;
@@ -141,7 +141,7 @@ public class GetSecInfo {
 
     // -----------------------------------------------------------------
 
-    private void showQuotes(KMyMoneySecurity sec) throws InvalidSecCurrTypeException, InvalidSecCurrIDException {
+    private void showQuotes(KMyMoneySecurity sec) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	System.out.println("");
 	System.out.println("Quotes:");
 

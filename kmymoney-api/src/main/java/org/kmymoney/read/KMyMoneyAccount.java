@@ -6,10 +6,10 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
-import org.kmymoney.basetypes.InvalidSecCurrIDException;
-import org.kmymoney.basetypes.InvalidSecCurrTypeException;
-import org.kmymoney.basetypes.KMMSecCurrID;
-import org.kmymoney.basetypes.KMMSplitID;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.basetypes.complex.KMMQualifSplitID;
 import org.kmymoney.numbers.FixedPointNumber;
 
 /**
@@ -166,7 +166,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
 
     Type getType() throws UnknownAccountTypeException;
 
-    KMMSecCurrID getSecCurrID() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    KMMQualifSecCurrID getSecCurrID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     // -----------------------------------------------------------------
 
@@ -182,7 +182,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * @param id the split-id to look for
      * @return the identified split or null
      */
-    KMyMoneyTransactionSplit getTransactionSplitByID(final KMMSplitID id);
+    KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSplitID id);
 
     /**
      * Gets the last transaction-split before the given date.
@@ -261,10 +261,10 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * date+time
      *
      * @return the balance formatted using the current locale
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    String getBalanceFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    String getBalanceFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     /**
      * same as getBalance(new Date()). ignores transactions after the current
@@ -272,10 +272,10 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      *
      * @param lcl the locale to use (does not affect the currency)
      * @return the balance formatted using the given locale
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    String getBalanceFormatted(final Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    String getBalanceFormatted(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     // ----------------------------
 
@@ -285,10 +285,10 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * Be aware that the result is in the currency of this account!
      *
      * @return the balance including sub-accounts
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    FixedPointNumber getBalanceRecursive() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    FixedPointNumber getBalanceRecursive() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     /**
      * Gets the balance including all sub-accounts.
@@ -296,10 +296,10 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * @param date if non-null transactions after this date are ignored in the
      *             calculation
      * @return the balance including all sub-accounts
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    FixedPointNumber getBalanceRecursive(final LocalDate date) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    FixedPointNumber getBalanceRecursive(final LocalDate date) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     /**
      * Ignores accounts for which this conversion is not possible.
@@ -307,11 +307,11 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * @param date     ignores transactions after the given date
      * @param currency the currency the result shall be in
      * @return Gets the balance including all sub-accounts.
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      * @see KMyMoneyAccount#getBalanceRecursive(LocalDate)
      */
-    FixedPointNumber getBalanceRecursive(final LocalDate date, final Currency curr) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    FixedPointNumber getBalanceRecursive(final LocalDate date, final Currency curr) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     /**
      * Ignores accounts for which this conversion is not possible.
@@ -319,11 +319,11 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * @param date              ignores transactions after the given date
      * @param secCurrID         the currency the result shall be in
      * @return Gets the balance including all sub-accounts.
-     * @throws InvalidSecCurrIDException 
+     * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidCmdtyCurrTypeException 
      * @see GnucashAccount#getBalanceRecursive(Date, Currency)
      */
-    FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMSecCurrID secCurrID) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMQualifSecCurrID secCurrID) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     // ----------------------------
 
@@ -332,10 +332,10 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * current date+time
      *
      * @return the balance including sub-accounts formatted using the current locale
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    String getBalanceRecursiveFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    String getBalanceRecursiveFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     /**
      * Gets the balance including all sub-accounts.
@@ -343,9 +343,9 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * @param date if non-null transactions after this date are ignored in the
      *             calculation
      * @return the balance including all sub-accounts
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    String getBalanceRecursiveFormatted(final LocalDate date) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    String getBalanceRecursiveFormatted(final LocalDate date) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
 }

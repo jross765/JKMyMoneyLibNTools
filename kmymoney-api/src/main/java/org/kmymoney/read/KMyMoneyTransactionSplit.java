@@ -2,9 +2,9 @@ package org.kmymoney.read;
 
 import java.util.Locale;
 
-import org.kmymoney.basetypes.InvalidSecCurrIDException;
-import org.kmymoney.basetypes.InvalidSecCurrTypeException;
-import org.kmymoney.basetypes.KMMSplitID;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.basetypes.complex.KMMQualifSplitID;
 import org.kmymoney.numbers.FixedPointNumber;
 import org.kmymoney.read.KMyMoneyTransactionSplit.State;
 
@@ -52,7 +52,7 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      */
     String getId();
 
-    KMMSplitID getQualifId();
+    KMMQualifSplitID getQualifId();
 
     /**
      *
@@ -113,17 +113,17 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     /**
      * @return the balance of the account (in the account's currency)
      *         up to this split.
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    String getAccountBalanceFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    String getAccountBalanceFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     /**
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      * @see KMyMoneyAccount#getBalanceFormatted()
      */
-    String getAccountBalanceFormatted(Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    String getAccountBalanceFormatted(Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     /**
      * The quantity is in the currency of the account!
@@ -134,36 +134,36 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     /**
      * The quantity is in the currency of the account!
      * @return the number of items added to the account
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    String getSharesFormatted() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    String getSharesFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     /**
      * The quantity is in the currency of the account!
      * @param lcl the locale to use
      * @return the number of items added to the account
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    String getSharesFormatted(Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    String getSharesFormatted(Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     /**
      * The quantity is in the currency of the account!
      * @return the number of items added to the account
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    String getSharesFormattedForHTML() throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    String getSharesFormattedForHTML() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     /**
      * The quantity is in the currency of the account!
      * @param lcl the locale to use
      * @return the number of items added to the account
-     * @throws InvalidSecCurrIDException 
-     * @throws InvalidSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
      */
-    String getSharesFormattedForHTML(Locale lcl) throws InvalidSecCurrTypeException, InvalidSecCurrIDException;
+    String getSharesFormattedForHTML(Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     /**
      * @return the user-defined description for this object

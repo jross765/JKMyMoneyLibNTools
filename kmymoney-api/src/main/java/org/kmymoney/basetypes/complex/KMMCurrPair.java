@@ -1,52 +1,52 @@
-package org.kmymoney.basetypes;
+package org.kmymoney.basetypes.complex;
 
 import java.util.Objects;
 
 public class KMMCurrPair {
     
-    private KMMSecCurrID fromSecCurr;
-    private KMMCurrID    toCurr;
+    private KMMQualifSecCurrID fromSecCurr;
+    private KMMQualifCurrID    toCurr;
     
     // ---------------------------------------------------------------
 
-    public KMMCurrPair(KMMSecCurrID fromCurr, KMMCurrID toCurr) {
+    public KMMCurrPair(KMMQualifSecCurrID fromCurr, KMMQualifCurrID toCurr) {
 	this.fromSecCurr = fromCurr;
 	this.toCurr = toCurr;
     }
     
-    public KMMCurrPair(String fromCurr, String toCurr) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    public KMMCurrPair(String fromCurr, String toCurr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	setFromSecCurr(fromCurr);
 	setToCurr(toCurr);
     }
     
     // ---------------------------------------------------------------
 
-    public KMMSecCurrID getFromSecCurr() {
+    public KMMQualifSecCurrID getFromSecCurr() {
         return fromSecCurr;
     }
 
-    public void setFromCurr(KMMSecCurrID fromCurr) {
+    public void setFromCurr(KMMQualifSecCurrID fromCurr) {
         this.fromSecCurr = fromCurr;
     }
 
-    public void setFromSecCurr(String fromCurr) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
+    public void setFromSecCurr(String fromCurr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	if ( fromCurr.startsWith("E0") ) { // ::MAGIC
-	    this.fromSecCurr = new KMMSecID(fromCurr);
+	    this.fromSecCurr = new KMMQualifSecID(fromCurr);
 	} else {
-	    this.fromSecCurr = new KMMCurrID(fromCurr);
+	    this.fromSecCurr = new KMMQualifCurrID(fromCurr);
 	}
     }
 
-    public KMMCurrID getToCurr() {
+    public KMMQualifCurrID getToCurr() {
         return toCurr;
     }
 
-    public void setToCurr(KMMCurrID toCurr) {
+    public void setToCurr(KMMQualifCurrID toCurr) {
         this.toCurr = toCurr;
     }
 
-    public void setToCurr(String toCurr) throws InvalidSecCurrIDException, InvalidSecCurrTypeException {
-        this.toCurr = new KMMCurrID(toCurr);
+    public void setToCurr(String toCurr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+        this.toCurr = new KMMQualifCurrID(toCurr);
     }
 
     // ---------------------------------------------------------------
