@@ -19,8 +19,8 @@ public class TestKMyMoneyTransactionImpl
   private KMyMoneyFile        kmmFile = null;
   private KMyMoneyTransaction trx = null;
   
-  public static final String TRX_1_ID = "T000000000000000001";
-  public static final String TRX_2_ID = "T000000000000000002";
+  public static final KMMTrxID TRX_1_ID = new KMMTrxID("T000000000000000001");
+  public static final KMMTrxID TRX_2_ID = new KMMTrxID("T000000000000000002");
 
   // -----------------------------------------------------------------
   
@@ -68,34 +68,34 @@ public class TestKMyMoneyTransactionImpl
   @Test
   public void test01() throws Exception
   {
-    trx = kmmFile.getTransactionById(new KMMTrxID(TRX_1_ID));
+    trx = kmmFile.getTransactionById(TRX_1_ID);
     assertNotEquals(null, trx);
     
-    assertEquals(TRX_1_ID, trx.getId().toString());
+    assertEquals(TRX_1_ID, trx.getId());
     assertEquals(0.0, trx.getBalance().getBigDecimal().doubleValue(), ConstTest.DIFF_TOLERANCE);
     assertEquals("", trx.getMemo());
     assertEquals("2023-01-01", trx.getDatePosted().toString());
     assertEquals("2023-11-03", trx.getEntryDate().toString());
         
     assertEquals(2, trx.getSplitsCount());
-    assertEquals("S0001", trx.getSplits().get(0).getId());
-    assertEquals("S0002", trx.getSplits().get(1).getId());
+    assertEquals("S0001", trx.getSplits().get(0).getId().toString());
+    assertEquals("S0002", trx.getSplits().get(1).getId().toString());
   }
   
   @Test
   public void test02() throws Exception
   {
-    trx = kmmFile.getTransactionById(new KMMTrxID(TRX_2_ID));
+    trx = kmmFile.getTransactionById(TRX_2_ID);
     assertNotEquals(null, trx);
     
-    assertEquals(TRX_2_ID, trx.getId().toString());
+    assertEquals(TRX_2_ID, trx.getId());
     assertEquals(0.0, trx.getBalance().getBigDecimal().doubleValue(), ConstTest.DIFF_TOLERANCE);
     assertEquals("", trx.getMemo());
     assertEquals("2023-01-03", trx.getDatePosted().toString());
     assertEquals("2023-10-14", trx.getEntryDate().toString());
         
     assertEquals(2, trx.getSplitsCount());
-    assertEquals("S0001", trx.getSplits().get(0).getId());
-    assertEquals("S0002", trx.getSplits().get(1).getId());
+    assertEquals("S0001", trx.getSplits().get(0).getId().toString());
+    assertEquals("S0002", trx.getSplits().get(1).getId().toString());
   }
 }

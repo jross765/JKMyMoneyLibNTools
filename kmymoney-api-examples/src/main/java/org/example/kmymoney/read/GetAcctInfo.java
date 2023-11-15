@@ -11,10 +11,10 @@ import org.kmymoney.read.impl.KMyMoneyFileImpl;
 
 public class GetAcctInfo {
     // BEGIN Example data -- adapt to your needs
-    private static String kmmFileName = "example_in.xml";
-    private static Helper.Mode mode   = Helper.Mode.ID;
-    private static String acctID      = "xyz";
-    private static String acctName    = "abc";
+    private static String kmmFileName    = "example_in.xml";
+    private static Helper.Mode mode      = Helper.Mode.ID;
+    private static KMMComplAcctID acctID = new KMMComplAcctID("xyz");
+    private static String acctName       = "abc";
     // END Example data
 
     // -----------------------------------------------------------------
@@ -35,7 +35,7 @@ public class GetAcctInfo {
 
 	KMyMoneyAccount acct = null;
 	if (mode == Helper.Mode.ID) {
-	    acct = kmmFile.getAccountById(new KMMComplAcctID(acctID));
+	    acct = kmmFile.getAccountById(acctID);
 	    if (acct == null) {
 		System.err.println("Found no account with that name");
 		throw new NoEntryFoundException();

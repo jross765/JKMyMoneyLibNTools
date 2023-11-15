@@ -3,14 +3,16 @@ package org.example.kmymoney.read;
 import java.io.File;
 
 import org.kmymoney.basetypes.complex.KMMQualifSplitID;
+import org.kmymoney.basetypes.simple.KMMSpltID;
+import org.kmymoney.basetypes.simple.KMMTrxID;
 import org.kmymoney.read.KMyMoneyTransactionSplit;
 import org.kmymoney.read.impl.KMyMoneyFileImpl;
 
 public class GetTrxSpltInfo {
     // BEGIN Example data -- adapt to your needs
     private static String kmmFileName = "example_in.xml";
-    private static String trxID       = "xyz";
-    private static String spltID      = "S0001"; 
+    private static KMMTrxID  trxID    = new KMMTrxID("xyz");
+    private static KMMSpltID spltID   = new KMMSpltID("S0001"); 
     // END Example data
 
     // -----------------------------------------------------------------

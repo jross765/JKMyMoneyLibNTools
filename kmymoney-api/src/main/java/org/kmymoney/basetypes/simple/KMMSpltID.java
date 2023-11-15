@@ -3,26 +3,27 @@ package org.kmymoney.basetypes.simple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KMMSecID extends KMMID {
+public class KMMSpltID extends KMMID {
     // Logger
-    private static final Logger logger = LoggerFactory.getLogger(KMMSecID.class);
+    private static final Logger logger = LoggerFactory.getLogger(KMMSpltID.class);
 
-    // E 000 001
-    //   6   3
-    private final static char PREFIX = 'E';
+    // S 0 001
+    //   4 3
+    private final static int  STANDARD_LENGTH = 5;
+    private final static char PREFIX = 'S';
 
     // -----------------------------------------------------------------
 
-    public KMMSecID() {
-	reset();
+    public KMMSpltID() {
+	super();
     }
 
-    public KMMSecID(String idStr) throws InvalidKMMIDException {
+    public KMMSpltID(String idStr) throws InvalidKMMIDException {
 	super(idStr);
 	set(idStr);
     }
 
-    public KMMSecID(long counter) throws InvalidKMMIDException {
+    public KMMSpltID(long counter) throws InvalidKMMIDException {
 	super(counter);
 	set(counter);
     }

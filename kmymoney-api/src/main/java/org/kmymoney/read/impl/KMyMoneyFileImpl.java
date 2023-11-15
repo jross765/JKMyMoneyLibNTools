@@ -37,6 +37,7 @@ import org.kmymoney.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.basetypes.complex.KMMQualifSplitID;
+import org.kmymoney.basetypes.simple.KMMPyeID;
 import org.kmymoney.basetypes.simple.KMMSecID;
 import org.kmymoney.basetypes.simple.KMMTrxID;
 import org.kmymoney.currency.ComplexPriceTable;
@@ -443,7 +444,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see KMyMoneyPayee
      * @see KMyMoneyPayeeImpl
      */
-    protected Map<String, KMyMoneyPayee> payeeID2Payee;
+    protected Map<KMMPyeID, KMyMoneyPayee> payeeID2Payee;
 
     protected Map<KMMPriceID, KMMPrice> priceById = null;
 
@@ -566,7 +567,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     private void initPayeeMap(final KMYMONEYFILE pRootElement) {
-	payeeID2Payee = new HashMap<String, KMyMoneyPayee>();
+	payeeID2Payee = new HashMap<KMMPyeID, KMyMoneyPayee>();
 
 	for ( PAYEE jwsdpPye : pRootElement.getPAYEES().getPAYEE() ) {
 	    try {
@@ -1200,7 +1201,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see KMyMoneyFile#getPayeeByID(java.lang.String)
      */
     @Override
-    public KMyMoneyPayee getPayeeById(final String id) {
+    public KMyMoneyPayee getPayeeById(final KMMPyeID id) {
 	if (payeeID2Payee == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}

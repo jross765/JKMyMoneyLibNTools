@@ -16,6 +16,7 @@ public class TestPackage extends TestCase {
 	suite.addTest(org.kmymoney.basetypes.complex.TestKMMQualifSecCurrID.suite());
 	suite.addTest(org.kmymoney.basetypes.complex.TestKMMQualifCurrID.suite());
 	suite.addTest(org.kmymoney.basetypes.complex.TestKMMQualifSecID.suite());
+	suite.addTest(org.kmymoney.basetypes.complex.TestKMMQualifSpltID.suite());
 
 	return suite;
     }

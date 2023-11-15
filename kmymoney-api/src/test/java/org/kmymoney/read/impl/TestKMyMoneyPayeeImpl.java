@@ -4,12 +4,13 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.InputStream;
 
-import org.kmymoney.ConstTest;
-import org.kmymoney.read.KMyMoneyPayee;
-import org.kmymoney.read.aux.KMMAddress;
-import org.kmymoney.read.KMyMoneyFile;
 import org.junit.Before;
 import org.junit.Test;
+import org.kmymoney.ConstTest;
+import org.kmymoney.basetypes.simple.KMMPyeID;
+import org.kmymoney.read.KMyMoneyFile;
+import org.kmymoney.read.KMyMoneyPayee;
+import org.kmymoney.read.aux.KMMAddress;
 
 import junit.framework.JUnit4TestAdapter;
 
@@ -18,9 +19,9 @@ public class TestKMyMoneyPayeeImpl
   private KMyMoneyFile     kmmFile = null;
   private KMyMoneyPayee pye = null;
   
-  public static final String PYE_1_ID = "P000002"; // Gehalt
-  public static final String PYE_2_ID = "P000003"; // Geldautomat
-  public static final String PYE_3_ID = "P000005"; // Schnorzelmoeller
+  public static final KMMPyeID PYE_1_ID = new KMMPyeID("P000002"); // Gehalt
+  public static final KMMPyeID PYE_2_ID = new KMMPyeID("P000003"); // Geldautomat
+  public static final KMMPyeID PYE_3_ID = new KMMPyeID("P000005"); // Schnorzelmoeller
 
   // -----------------------------------------------------------------
   

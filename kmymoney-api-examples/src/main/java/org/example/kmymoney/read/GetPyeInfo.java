@@ -3,6 +3,7 @@ package org.example.kmymoney.read;
 import java.io.File;
 import java.util.Collection;
 
+import org.kmymoney.basetypes.simple.KMMPyeID;
 import org.kmymoney.read.KMyMoneyPayee;
 import org.kmymoney.read.NoEntryFoundException;
 import org.kmymoney.read.TooManyEntriesFoundException;
@@ -12,7 +13,7 @@ public class GetPyeInfo {
     // BEGIN Example data -- adapt to your needs
     private static String kmmFileName = "example_in.xml";
     private static Helper.Mode mode   = Helper.Mode.ID;
-    private static String pyeID       = "xyz";
+    private static KMMPyeID pyeID     = new KMMPyeID("xyz");
     private static String pyeName     = "abc";
     // END Example data
 

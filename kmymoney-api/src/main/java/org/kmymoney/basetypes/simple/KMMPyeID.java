@@ -3,26 +3,26 @@ package org.kmymoney.basetypes.simple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KMMSecID extends KMMID {
+public class KMMPyeID extends KMMID {
     // Logger
-    private static final Logger logger = LoggerFactory.getLogger(KMMSecID.class);
+    private static final Logger logger = LoggerFactory.getLogger(KMMPyeID.class);
 
-    // E 000 001
+    // P 000 001
     //   6   3
-    private final static char PREFIX = 'E';
+    private final static char PREFIX = 'P';
 
     // -----------------------------------------------------------------
 
-    public KMMSecID() {
-	reset();
+    public KMMPyeID() {
+	super();
     }
 
-    public KMMSecID(String idStr) throws InvalidKMMIDException {
+    public KMMPyeID(String idStr) throws InvalidKMMIDException {
 	super(idStr);
 	set(idStr);
     }
 
-    public KMMSecID(long counter) throws InvalidKMMIDException {
+    public KMMPyeID(long counter) throws InvalidKMMIDException {
 	super(counter);
 	set(counter);
     }
@@ -52,7 +52,7 @@ public class KMMSecID extends KMMID {
 
 	for (int i = PREFIX_LENGTH; i < STANDARD_LENGTH; i++) {
 	    if (!Character.isDigit(kmmID.charAt(i))) {
-		logger.warn("Char '" + kmmID.charAt(i) + "' is invalid in KMMID '" + kmmID + "'");
+		logger.warn("Char '" + kmmID.charAt(i) + "' is invalid in KMMPyeID '" + kmmID + "'");
 		throw new InvalidKMMIDException();
 	    }
 	}

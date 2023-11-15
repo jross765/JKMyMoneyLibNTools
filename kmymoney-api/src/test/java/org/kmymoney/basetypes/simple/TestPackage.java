@@ -13,8 +13,11 @@ public class TestPackage extends TestCase {
     public static Test suite() throws Exception {
 	TestSuite suite = new TestSuite();
 
-	suite.addTest(org.kmymoney.basetypes.simple.TestKMMAccID.suite());
+	suite.addTest(org.kmymoney.basetypes.simple.TestKMMAcctID.suite());
+	suite.addTest(org.kmymoney.basetypes.simple.TestKMMInstID.suite());
+	suite.addTest(org.kmymoney.basetypes.simple.TestKMMPyeID.suite());
 	suite.addTest(org.kmymoney.basetypes.simple.TestKMMSecID.suite());
+	suite.addTest(org.kmymoney.basetypes.simple.TestKMMSpltID.suite());
 	suite.addTest(org.kmymoney.basetypes.simple.TestKMMTrxID.suite());
 
 	return suite;

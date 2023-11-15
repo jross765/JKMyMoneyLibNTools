@@ -37,32 +37,50 @@ public class TestKMMTrxID {
 	assertEquals("T000000000000000123", kmmID.get());
     }
 
-//  @Test
-//  public void test02() throws Exception
-//  {
-//    try
-//    {
-//      kmmID.set(-12);
-//      assertEquals(2, 1);
-//    }
-//    catch ( Exception InvalidKMMTrxIDException )
-//    {
-//      // Muss Exception werfen, wenn er hier landet, ist es richtig
-//      assertEquals(1, 1);
-//    }
-//
+  @Test
+  public void test02() throws Exception
+  {
+    try
+    {
+      kmmID.set(-12);
+      assertEquals(2, 1);
+    }
+    catch ( Exception InvalidKMMTrxIDException )
+    {
+      // Muss Exception werfen, wenn er hier landet, ist es richtig
+      assertEquals(1, 1);
+    }
+
+    // Out of range for long
 //    kmmID.set(999999999999999999);
 //    assertEquals("T999999999999999999", kmmID.get());
-//
-//    try
-//    {
-//      kmmID.set(1000000);
-//      assertEquals(2, 1);
-//    }
-//    catch ( Exception InvalidKMMIDException )
-//    {
-//      // Muss Exception werfen, wenn er hier landet, ist es richtig
-//      assertEquals(1, 1);
-//    }
-//  }
+
+    kmmID.set(999909999);
+    assertEquals("T000000000999909999", kmmID.get());
+  }
+
+    @Test
+    public void test03() throws Exception {
+	kmmID.set("T000000000000000012");
+	assertEquals("T000000000000000012", kmmID.get());
+
+	kmmID.set("T999999999999999999");
+	assertEquals("T999999999999999999", kmmID.get());
+
+	try {
+	    kmmID.set("T00000000000000001"); // invalid string: too short
+	    assertEquals(2, 1);
+	} catch (Exception exc) {
+	    // Muss Exception werfen, wenn er hier landet, ist es richtig
+	    assertEquals(1, 1);
+	}
+
+	try {
+	    kmmID.set("T0000000000000000001"); // invalid string: too long
+	    assertEquals(2, 1);
+	} catch (Exception exc) {
+	    // Muss Exception werfen, wenn er hier landet, ist es richtig
+	    assertEquals(1, 1);
+	}
+    }
 }

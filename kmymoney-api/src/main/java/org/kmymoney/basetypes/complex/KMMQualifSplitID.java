@@ -2,6 +2,7 @@ package org.kmymoney.basetypes.complex;
 
 import java.util.Objects;
 
+import org.kmymoney.basetypes.simple.KMMSpltID;
 import org.kmymoney.basetypes.simple.KMMTrxID;
 
 /**
@@ -13,12 +14,12 @@ import org.kmymoney.basetypes.simple.KMMTrxID;
  */
 public class KMMQualifSplitID {
     
-    private KMMTrxID trxID;
-    private String   spltID;
+    private KMMTrxID  trxID;
+    private KMMSpltID spltID;
     
     // ---------------------------------------------------------------
 
-    public KMMQualifSplitID(KMMTrxID trxID, String spltID) {
+    public KMMQualifSplitID(KMMTrxID trxID, KMMSpltID spltID) {
 	setTransactionID(trxID);
 	setSplitID(spltID);
     }
@@ -38,16 +39,20 @@ public class KMMQualifSplitID {
         this.trxID = trxID;
     }
 
-    public void setTransactionID(String trxID) {
-        setTransactionID(new KMMTrxID(trxID));
+    public void setTransactionID(String trxIDStr) {
+        setTransactionID(new KMMTrxID(trxIDStr));
     }
 
-    public String getSplitID() {
+    public KMMSpltID getSplitID() {
         return spltID;
     }
 
-    public void setSplitID(String spltID) {
+    public void setSplitID(KMMSpltID spltID) {
         this.spltID = spltID;
+    }
+
+    public void setSplitID(String spltIDStr) {
+        setSplitID(new KMMSpltID(spltIDStr));
     }
 
     // ---------------------------------------------------------------
@@ -78,7 +83,8 @@ public class KMMQualifSplitID {
 	    return false;
 	}
 	KMMQualifSplitID other = (KMMQualifSplitID) obj;
-	return Objects.equals(spltID, other.spltID) && Objects.equals(trxID, other.trxID);
+	return Objects.equals(spltID, other.spltID) && 
+	       Objects.equals(trxID, other.trxID);
     }
 
     // ---------------------------------------------------------------

@@ -14,7 +14,9 @@ public class TestPackage extends TestCase {
 	TestSuite suite = new TestSuite();
 
 	suite.addTest(org.kmymoney.read.impl.TestKMyMoneyFileImpl.suite());
+	
 	suite.addTest(org.kmymoney.read.impl.TestKMyMoneyAccountImpl.suite());
+	suite.addTest(org.kmymoney.read.impl.TestKMyMoneyPayeeImpl.suite());
 	suite.addTest(org.kmymoney.read.impl.TestKMyMoneySecurityImpl.suite());
 	suite.addTest(org.kmymoney.read.impl.TestKMyMoneyTransactionImpl.suite());
 	// ::TODO

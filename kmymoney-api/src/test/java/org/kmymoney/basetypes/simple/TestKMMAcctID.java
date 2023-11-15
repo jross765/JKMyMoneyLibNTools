@@ -7,9 +7,9 @@ import org.junit.Test;
 
 import junit.framework.JUnit4TestAdapter;
 
-public class TestKMMSecID {
+public class TestKMMAcctID {
 
-    private static KMMSecID kmmID = null;
+    private static KMMAcctID kmmID = null;
 
     // -----------------------------------------------------------------
 
@@ -18,12 +18,12 @@ public class TestKMMSecID {
     }
 
     public static junit.framework.Test suite() {
-	return new JUnit4TestAdapter(TestKMMSecID.class);
+	return new JUnit4TestAdapter(TestKMMAcctID.class);
     }
 
     @Before
     public void initialize() throws Exception {
-	kmmID = new KMMSecID();
+	kmmID = new KMMAcctID();
     }
 
     // -----------------------------------------------------------------
@@ -31,10 +31,10 @@ public class TestKMMSecID {
     @Test
     public void test01() throws Exception {
 	kmmID.set(1);
-	assertEquals("E000001", kmmID.get());
+	assertEquals("A000001", kmmID.get());
 
 	kmmID.set(123);
-	assertEquals("E000123", kmmID.get());
+	assertEquals("A000123", kmmID.get());
     }
 
     @Test
@@ -42,18 +42,18 @@ public class TestKMMSecID {
 	try {
 	    kmmID.set(-12);
 	    assertEquals(2, 1);
-	} catch (Exception InvalidKMMWPIDException) {
+	} catch (Exception InvalidKMMAccIDException) {
 	    // Muss Exception werfen, wenn er hier landet, ist es richtig
 	    assertEquals(1, 1);
 	}
 
 	kmmID.set(999999);
-	assertEquals("E999999", kmmID.get());
+	assertEquals("A999999", kmmID.get());
 
 	try {
 	    kmmID.set(1000000);
 	    assertEquals(2, 1);
-	} catch (Exception InvalidKMMWPIDException) {
+	} catch (Exception InvalidKMMAccIDException) {
 	    // Muss Exception werfen, wenn er hier landet, ist es richtig
 	    assertEquals(1, 1);
 	}
@@ -61,14 +61,14 @@ public class TestKMMSecID {
 
     @Test
     public void test03() throws Exception {
-	kmmID.set("E000012");
-	assertEquals("E000012", kmmID.get());
+	kmmID.set("A000012");
+	assertEquals("A000012", kmmID.get());
 
-	kmmID.set("E999999");
-	assertEquals("E999999", kmmID.get());
+	kmmID.set("A999999");
+	assertEquals("A999999", kmmID.get());
 
 	try {
-	    kmmID.set("E00001"); // invalid string: too short
+	    kmmID.set("A00001"); // invalid string: too short
 	    assertEquals(2, 1);
 	} catch (Exception exc) {
 	    // Muss Exception werfen, wenn er hier landet, ist es richtig
@@ -76,7 +76,7 @@ public class TestKMMSecID {
 	}
 
 	try {
-	    kmmID.set("E0000001"); // invalid string: too long
+	    kmmID.set("A0000001"); // invalid string: too long
 	    assertEquals(2, 1);
 	} catch (Exception exc) {
 	    // Muss Exception werfen, wenn er hier landet, ist es richtig

@@ -1,7 +1,6 @@
 package org.kmymoney.basetypes.complex;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 import org.kmymoney.basetypes.simple.KMMSecID;

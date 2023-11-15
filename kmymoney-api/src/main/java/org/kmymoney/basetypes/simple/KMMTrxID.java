@@ -3,71 +3,40 @@ package org.kmymoney.basetypes.simple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KMMTrxID implements Comparable<Object> {
+public class KMMTrxID extends KMMID {
     // Logger
     private static final Logger logger = LoggerFactory.getLogger(KMMTrxID.class);
 
     // T 000 000 000 000 000 001
     //   1   1   1   9   6   3
     //   8   5   2
-    private final static int STANDARD_LENGTH = 19;
+    private final static int  STANDARD_LENGTH = 19;
     private final static char PREFIX = 'T';
-    private final static int PREFIX_LENGTH = 1;
-
-    protected String KMMTrxID;
-    private boolean isSet;
 
     // -----------------------------------------------------------------
 
     public KMMTrxID() {
-	reset();
+	super();
     }
 
-    public KMMTrxID(String KMMTrxID) throws InvalidKMMTrxIDException {
-	set(KMMTrxID);
+    public KMMTrxID(String idStr) throws InvalidKMMIDException {
+	super(idStr);
+	set(idStr);
     }
 
-    public KMMTrxID(long counter) throws InvalidKMMTrxIDException {
+    public KMMTrxID(long counter) throws InvalidKMMIDException {
+	super(counter);
 	set(counter);
     }
 
     // -----------------------------------------------------------------
 
-    public void reset() {
-	KMMTrxID = "";
-	isSet = false;
-    }
-
-    public String get() throws KMMTrxIDNotSetException {
-	if (!isSet)
-	    throw new KMMTrxIDNotSetException();
-
-	return KMMTrxID;
-    }
-
-    public boolean isSet() {
-	return isSet;
-    }
-
-    // -----------------------------------------------------------------
-
-    public void set(KMMTrxID value) throws InvalidKMMTrxIDException, KMMTrxIDNotSetException {
-	set(value.get());
-    }
-
-    public void set(String KMMTrxID) throws InvalidKMMTrxIDException {
-	this.KMMTrxID = KMMTrxID;
-	standardize();
-	validate();
-	isSet = true;
-    }
-
-    public void set(long counter) throws InvalidKMMTrxIDException {
+    public void set(long counter) throws InvalidKMMIDException {
 	int coreLength = STANDARD_LENGTH - PREFIX_LENGTH;
 
 	if ( counter < 1 || 
 	     counter > Math.pow(10, coreLength) - 1 )
-	    throw new InvalidKMMTrxIDException();
+	    throw new InvalidKMMIDException();
 
 	String fmtStr = "%0" + coreLength + "d";
 	String coreStr = String.format(fmtStr, counter);
@@ -76,74 +45,28 @@ public class KMMTrxID implements Comparable<Object> {
 
     // -----------------------------------------------------------------
 
-    public void validate() throws InvalidKMMTrxIDException {
-	if (KMMTrxID.length() != STANDARD_LENGTH)
-	    throw new InvalidKMMTrxIDException();
+    public void validate() throws InvalidKMMIDException {
+	if (kmmID.length() != STANDARD_LENGTH)
+	    throw new InvalidKMMIDException();
 
-	if (KMMTrxID.charAt(0) != PREFIX)
-	    throw new InvalidKMMTrxIDException();
+	if (kmmID.charAt(0) != PREFIX)
+	    throw new InvalidKMMIDException();
 
 	for (int i = PREFIX_LENGTH; i < STANDARD_LENGTH; i++) {
-	    if (!Character.isDigit(KMMTrxID.charAt(i))) {
-		logger.warn("Char '" + KMMTrxID.charAt(i) + "' is invalid in KMMTrxID '" + KMMTrxID + "'");
-		throw new InvalidKMMTrxIDException();
+	    if (!Character.isDigit(kmmID.charAt(i))) {
+		logger.warn("Char '" + kmmID.charAt(i) + "' is invalid in KMMTrxID '" + kmmID + "'");
+		throw new InvalidKMMIDException();
 	    }
 	}
     }
 
     // -----------------------------------------------------------------
 
-    public String getPrefix() throws KMMTrxIDNotSetException {
+    public String getPrefix() throws KMMIDNotSetException {
 	if (!isSet)
-	    throw new KMMTrxIDNotSetException();
+	    throw new KMMIDNotSetException();
 
-	return KMMTrxID.substring(0, PREFIX_LENGTH);
+	return kmmID.substring(0, PREFIX_LENGTH);
     }
 
-    public void standardize() {
-	KMMTrxID = KMMTrxID.trim().toUpperCase();
-    }
-
-    // -----------------------------------------------------------------
-
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + (isSet ? 1231 : 1237);
-	result = prime * result + ((KMMTrxID == null) ? 0 : KMMTrxID.hashCode());
-	return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	KMMTrxID other = (KMMTrxID) obj;
-	if (isSet != other.isSet)
-	    return false;
-	if (KMMTrxID == null) {
-	    if (other.KMMTrxID != null)
-		return false;
-	} else if (!KMMTrxID.equals(other.KMMTrxID))
-	    return false;
-	return true;
-    }
-
-    @Override
-    public int compareTo(Object o) {
-	return KMMTrxID.compareTo(o.toString());
-    }
-
-    @Override
-    public String toString() {
-	if (isSet)
-	    return KMMTrxID;
-	else
-	    return "(unset)";
-    }
 }

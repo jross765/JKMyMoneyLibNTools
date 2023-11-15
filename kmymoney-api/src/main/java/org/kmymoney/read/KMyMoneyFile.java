@@ -9,6 +9,7 @@ import org.kmymoney.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.basetypes.simple.KMMPyeID;
 import org.kmymoney.basetypes.simple.KMMSecID;
 import org.kmymoney.basetypes.simple.KMMTrxID;
 import org.kmymoney.currency.ComplexPriceTable;
@@ -226,7 +227,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param id the unique id of the customer to look for
      * @return the customer or null if it's not found
      */
-    KMyMoneyPayee getPayeeById(String id);
+    KMyMoneyPayee getPayeeById(KMMPyeID id);
 
     public Collection<KMyMoneyPayee> getPayeesByName(final String expr);
     

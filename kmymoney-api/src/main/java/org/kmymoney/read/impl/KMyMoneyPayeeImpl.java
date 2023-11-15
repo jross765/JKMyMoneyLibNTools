@@ -2,6 +2,8 @@ package org.kmymoney.read.impl;
 
 import java.math.BigInteger;
 
+import org.kmymoney.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.basetypes.simple.KMMPyeID;
 import org.kmymoney.generated.ADDRESS;
 import org.kmymoney.generated.PAYEE;
 import org.kmymoney.read.KMyMoneyFile;
@@ -34,8 +36,8 @@ public class KMyMoneyPayeeImpl implements KMyMoneyPayee {
     // ---------------------------------------------------------------
 
     @Override
-    public String getId() {
-	return jwsdpPeer.getId();
+    public KMMPyeID getId() {
+	return new KMMPyeID(jwsdpPeer.getId());
     }
 
     @Override
@@ -44,8 +46,11 @@ public class KMyMoneyPayeeImpl implements KMyMoneyPayee {
     }
 
     @Override
-    public String getDefaultAccountId() {
-	return jwsdpPeer.getDefaultaccountid();
+    public KMMComplAcctID getDefaultAccountId() {
+	if ( jwsdpPeer.getDefaultaccountid() == null )
+	    return null;
+	
+	return new KMMComplAcctID(jwsdpPeer.getDefaultaccountid());
     }
     
     @Override

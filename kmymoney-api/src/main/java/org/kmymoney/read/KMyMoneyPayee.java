@@ -2,15 +2,17 @@ package org.kmymoney.read;
 
 import java.math.BigInteger;
 
+import org.kmymoney.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.basetypes.simple.KMMPyeID;
 import org.kmymoney.read.aux.KMMAddress;
 
 public interface KMyMoneyPayee {
     
-    String getId();
+    KMMPyeID getId();
 
     String getName();
 
-    public String getDefaultAccountId();
+    public KMMComplAcctID getDefaultAccountId();
     
     public KMMAddress getAddress();
 
