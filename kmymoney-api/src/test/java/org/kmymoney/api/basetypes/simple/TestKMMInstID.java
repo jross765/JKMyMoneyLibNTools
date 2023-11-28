@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.kmymoney.api.basetypes.simple.KMMInstID;
 
 import junit.framework.JUnit4TestAdapter;
 

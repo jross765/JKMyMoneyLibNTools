@@ -18,7 +18,7 @@ import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.UnknownSplitActionException;
 import org.kmymoney.api.read.UnknownSplitStateException;
-import org.kmymoney.generated.SPLIT;
+import org.kmymoney.api.generated.SPLIT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

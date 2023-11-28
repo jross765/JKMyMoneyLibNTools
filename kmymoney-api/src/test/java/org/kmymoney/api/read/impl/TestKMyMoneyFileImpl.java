@@ -4,11 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.InputStream;
 
-import org.kmymoney.api.ConstTest;
-import org.kmymoney.api.read.KMyMoneyFile;
-import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.junit.Before;
 import org.junit.Test;
+import org.kmymoney.api.ConstTest;
+import org.kmymoney.api.read.KMyMoneyFile;
 
 import junit.framework.JUnit4TestAdapter;
 

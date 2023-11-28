@@ -12,8 +12,8 @@ import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.aux.KMMPrice;
 import org.kmymoney.api.read.aux.KMMPricePair;
-import org.kmymoney.generated.PRICE;
-import org.kmymoney.generated.PRICEPAIR;
+import org.kmymoney.api.generated.PRICE;
+import org.kmymoney.api.generated.PRICEPAIR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

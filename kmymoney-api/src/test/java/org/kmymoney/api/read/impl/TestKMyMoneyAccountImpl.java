@@ -8,10 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kmymoney.api.ConstTest;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.api.basetypes.simple.KMMAcctID;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
-import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 
 import junit.framework.JUnit4TestAdapter;
 

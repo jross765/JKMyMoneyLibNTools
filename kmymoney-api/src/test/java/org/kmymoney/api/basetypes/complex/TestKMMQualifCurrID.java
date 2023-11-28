@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Currency;
 
 import org.junit.Test;
-import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 
 import junit.framework.JUnit4TestAdapter;
 

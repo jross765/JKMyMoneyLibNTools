@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 
 import junit.framework.JUnit4TestAdapter;
 

@@ -21,8 +21,8 @@ import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.SplitNotFoundException;
-import org.kmymoney.generated.SPLIT;
-import org.kmymoney.generated.TRANSACTION;
+import org.kmymoney.api.generated.SPLIT;
+import org.kmymoney.api.generated.TRANSACTION;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

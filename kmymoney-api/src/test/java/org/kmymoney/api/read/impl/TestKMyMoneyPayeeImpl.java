@@ -11,7 +11,6 @@ import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.aux.KMMAddress;
-import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 
 import junit.framework.JUnit4TestAdapter;
 

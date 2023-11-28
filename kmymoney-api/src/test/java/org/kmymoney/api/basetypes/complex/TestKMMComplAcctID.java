@@ -3,7 +3,6 @@ package org.kmymoney.api.basetypes.complex;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.simple.KMMAcctID;
 
 import junit.framework.JUnit4TestAdapter;

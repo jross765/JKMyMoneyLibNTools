@@ -56,18 +56,18 @@ import org.kmymoney.api.read.aux.KMMPrice;
 import org.kmymoney.api.read.aux.KMMPricePair;
 import org.kmymoney.api.read.impl.aux.KMMPriceImpl;
 import org.kmymoney.api.read.impl.aux.KMMPricePairImpl;
-import org.kmymoney.generated.ACCOUNT;
-import org.kmymoney.generated.CURRENCY;
-import org.kmymoney.generated.KEYVALUEPAIRS;
-import org.kmymoney.generated.KMYMONEYFILE;
-import org.kmymoney.generated.ObjectFactory;
-import org.kmymoney.generated.PAIR;
-import org.kmymoney.generated.PAYEE;
-import org.kmymoney.generated.PRICE;
-import org.kmymoney.generated.PRICEPAIR;
-import org.kmymoney.generated.PRICES;
-import org.kmymoney.generated.SECURITY;
-import org.kmymoney.generated.TRANSACTION;
+import org.kmymoney.api.generated.ACCOUNT;
+import org.kmymoney.api.generated.CURRENCY;
+import org.kmymoney.api.generated.KEYVALUEPAIRS;
+import org.kmymoney.api.generated.KMYMONEYFILE;
+import org.kmymoney.api.generated.ObjectFactory;
+import org.kmymoney.api.generated.PAIR;
+import org.kmymoney.api.generated.PAYEE;
+import org.kmymoney.api.generated.PRICE;
+import org.kmymoney.api.generated.PRICEPAIR;
+import org.kmymoney.api.generated.PRICES;
+import org.kmymoney.api.generated.SECURITY;
+import org.kmymoney.api.generated.TRANSACTION;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -984,7 +984,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     protected JAXBContext getJAXBContext() {
 	if (myJAXBContext == null) {
 	    try {
-		myJAXBContext = JAXBContext.newInstance("org.kmymoney.generated", this.getClass().getClassLoader());
+		myJAXBContext = JAXBContext.newInstance("org.kmymoney.api.generated", this.getClass().getClassLoader());
 	    } catch (JAXBException e) {
 		LOGGER.error(e.getMessage(), e);
 	    }

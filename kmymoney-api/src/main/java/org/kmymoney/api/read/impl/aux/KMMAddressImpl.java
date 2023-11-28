@@ -1,7 +1,7 @@
 package org.kmymoney.api.read.impl.aux;
 
 import org.kmymoney.api.read.aux.KMMAddress;
-import org.kmymoney.generated.ADDRESS;
+import org.kmymoney.api.generated.ADDRESS;
 
 public class KMMAddressImpl implements KMMAddress {
 

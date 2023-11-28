@@ -15,7 +15,6 @@ import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneySecurity;
-import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 
 import junit.framework.JUnit4TestAdapter;
 

@@ -6,7 +6,7 @@ import java.util.Locale;
 
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.numbers.FixedPointNumber;
-import org.kmymoney.generated.TRANSACTION;
+import org.kmymoney.api.generated.TRANSACTION;
 
 /**
  * It is comparable and sorts primarily on the date the transaction happened

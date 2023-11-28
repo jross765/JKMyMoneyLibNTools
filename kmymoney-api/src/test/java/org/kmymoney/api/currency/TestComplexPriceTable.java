@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.kmymoney.api.ConstTest;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.api.currency.ComplexPriceTable;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;

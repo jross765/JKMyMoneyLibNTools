@@ -1,7 +1,5 @@
 package org.kmymoney.api;
 
-import org.kmymoney.api.Const;
-
 public class ConstTest extends Const {
 
     public static final String KMM_FILENAME = "test.xml";
