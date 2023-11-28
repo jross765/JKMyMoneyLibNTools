@@ -3,16 +3,16 @@ module kmymoney.api {
 	requires java.desktop;
 	requires jakarta.xml.bind;
 	
-	exports org.kmymoney.basetypes.simple;
-	exports org.kmymoney.basetypes.complex;
-	exports org.kmymoney.currency;
-	exports org.kmymoney.numbers;
+	exports org.kmymoney.api.basetypes.simple;
+	exports org.kmymoney.api.basetypes.complex;
+	exports org.kmymoney.api.currency;
+	exports org.kmymoney.api.numbers;
 	
-	exports org.kmymoney.read;
-	exports org.kmymoney.read.aux;
-	exports org.kmymoney.read.impl;
-	exports org.kmymoney.read.impl.aux;
+	exports org.kmymoney.api.read;
+	exports org.kmymoney.api.read.aux;
+	exports org.kmymoney.api.read.impl;
+	exports org.kmymoney.api.read.impl.aux;
 	
-//	exports org.kmymoney.write;
-//	exports org.kmymoney.write.impl;
+//	exports org.kmymoney.api.write;
+//	exports org.kmymoney.api.write.impl;
 }

@@ -135,7 +135,7 @@
 				</executions>
 				<configuration>
 					<!-- The package of your generated sources -->
-					<packageName>org.kmymoney.generated</packageName>
+					<packageName>org.kmymoney.api.generated</packageName>
 					<sources>
 						<source>src/main/resources</source>
 					</sources>
