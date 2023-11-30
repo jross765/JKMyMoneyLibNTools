@@ -1,0 +1,291 @@
+package org.kmymoney.api.read.impl.hlp;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.api.generated.ACCOUNT;
+import org.kmymoney.api.generated.KMYMONEYFILE;
+import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.NoEntryFoundException;
+import org.kmymoney.api.read.TooManyEntriesFoundException;
+import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
+import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class FileAccountManager {
+    
+    protected static final Logger LOGGER = LoggerFactory.getLogger(FileAccountManager.class);
+
+    // ---------------------------------------------------------------
+
+    private KMyMoneyFileImpl kmmFile;
+
+    private Map<KMMComplAcctID, KMyMoneyAccount> acctMap;
+
+    // ---------------------------------------------------------------
+
+    public FileAccountManager(KMyMoneyFileImpl kmmFile) {
+	this.kmmFile = kmmFile;
+	init(kmmFile.getRootElement());
+    }
+
+    // ---------------------------------------------------------------
+
+    private void init(final KMYMONEYFILE pRootElement) {
+	acctMap = new HashMap<KMMComplAcctID, KMyMoneyAccount>();
+
+	for ( ACCOUNT jwsdpAcct : pRootElement.getACCOUNTS().getACCOUNT() ) {
+	    try {
+		KMyMoneyAccount acct = createAccount(jwsdpAcct);
+		acctMap.put(acct.getId(), acct);
+	    } catch (RuntimeException e) {
+		LOGGER.error("init: [RuntimeException] Problem in " + getClass().getName() + ".init: "
+			+ "ignoring illegal Account-Entry with id=" + jwsdpAcct.getId(), e);
+	    }
+	} // for
+
+	LOGGER.debug("init: No. of entries in account map: " + acctMap.size());
+    }
+
+    /**
+     * @param jwsdpAcct the JWSDP-peer (parsed xml-element) to fill our object with
+     * @return the new KMyMoneyAccount to wrap the given jaxb-object.
+     */
+    protected KMyMoneyAccountImpl createAccount(final ACCOUNT jwsdpAcct) {
+	KMyMoneyAccountImpl acct = new KMyMoneyAccountImpl(jwsdpAcct, kmmFile);
+	return acct;
+    }
+
+    // ---------------------------------------------------------------
+
+    /**
+     * @see KMyMoneyFile#getAccountById(java.lang.String)
+     */
+    public KMyMoneyAccount getAccountById(final KMMComplAcctID id) {
+	if (acctMap == null) {
+	    throw new IllegalStateException("no root-element loaded");
+	}
+
+	KMyMoneyAccount retval = acctMap.get(id);
+	if (retval == null) {
+	    System.err.println("No Account with ID '" + id + "'. We know " + acctMap.size() + " accounts.");
+	}
+	
+	return retval;
+    }
+
+    /**
+     * @param acctID if null, gives all account that have no parent
+     * @return the sorted collection of children of that account
+     */
+    public Collection<KMyMoneyAccount> getAccountsByParentID(final KMMComplAcctID acctID) {
+        if (acctMap == null) {
+            throw new IllegalStateException("no root-element loaded");
+        }
+    
+        SortedSet<KMyMoneyAccount> retval = new TreeSet<KMyMoneyAccount>();
+    
+        for (Object element : acctMap.values()) {
+            KMyMoneyAccount account = (KMyMoneyAccount) element;
+    
+            KMMComplAcctID parentID = account.getParentAccountId();
+            if (parentID == null) {
+        	if (acctID == null) {
+        	    retval.add((KMyMoneyAccount) account);
+        	}
+            } else {
+        	if (parentID.equals(acctID)) {
+        	    retval.add((KMyMoneyAccount) account);
+        	}
+            }
+        }
+    
+        return retval;
+    }
+
+    public Collection<KMyMoneyAccount> getAccountsByName(final String name) {
+	return getAccountsByName(name, true, true);
+    }
+    
+    /**
+     * @see KMyMoneyFile#getAccountsByName(java.lang.String)
+     */
+    public Collection<KMyMoneyAccount> getAccountsByName(final String expr, boolean qualif, boolean relaxed) {
+
+	if (acctMap == null) {
+	    throw new IllegalStateException("no root-element loaded");
+	}
+
+	Collection<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
+	
+	for ( KMyMoneyAccount acct : acctMap.values() ) {
+	    if ( relaxed ) {
+		if ( qualif ) {
+		    if ( acct.getQualifiedName().toLowerCase().
+			    contains(expr.trim().toLowerCase()) ) {
+			result.add(acct);
+		    }
+		} else {
+		    if ( acct.getName().toLowerCase().
+			    contains(expr.trim().toLowerCase()) ) {
+			result.add(acct);
+		    }
+		}
+	    } else {
+		if ( qualif ) {
+		    if ( acct.getQualifiedName().equals(expr) ) {
+			result.add(acct);
+		    }
+		} else {
+		    if ( acct.getName().equals(expr) ) {
+			result.add(acct);
+		    }
+		}
+	    }
+	}
+
+	return result;
+    }
+
+    public KMyMoneyAccount getAccountByNameUniq(final String name, final boolean qualif) throws NoEntryFoundException, TooManyEntriesFoundException {
+	Collection<KMyMoneyAccount> acctList = getAccountsByName(name, qualif, false);
+	if ( acctList.size() == 0 )
+	    throw new NoEntryFoundException();
+	else if ( acctList.size() > 1 )
+	    throw new TooManyEntriesFoundException();
+	else
+	    return acctList.iterator().next();
+    }
+    /**
+     * warning: this function has to traverse all accounts. If it much faster to try
+     * getAccountByID first and only call this method if the returned account does
+     * not have the right name.
+     *
+     * @param nameRegEx the regular expression of the name to look for
+     * @return null if not found
+     * @throws TooManyEntriesFoundException 
+     * @throws NoEntryFoundException 
+     * @see #getAccountById(String)
+     * @see #getAccountByName(String)
+     */
+    public KMyMoneyAccount getAccountByNameEx(final String nameRegEx) throws NoEntryFoundException, TooManyEntriesFoundException {
+
+	if (acctMap == null) {
+	    throw new IllegalStateException("no root-element loaded");
+	}
+
+	KMyMoneyAccount foundAccount = getAccountByNameUniq(nameRegEx, true);
+	if (foundAccount != null) {
+	    return foundAccount;
+	}
+	Pattern pattern = Pattern.compile(nameRegEx);
+
+	for (KMyMoneyAccount account : acctMap.values()) {
+	    Matcher matcher = pattern.matcher(account.getName());
+	    if (matcher.matches()) {
+		return account;
+	    }
+	}
+
+	return null;
+    }
+
+    /**
+     * First try to fetch the account by id, then fall back to traversing all
+     * accounts to get if by it's name.
+     *
+     * @param id   the id to look for
+     * @param name the name to look for if nothing is found for the id
+     * @return null if not found
+     * @throws TooManyEntriesFoundException 
+     * @throws NoEntryFoundException 
+     * @see #getAccountById(String)
+     * @see #getAccountByName(String)
+     */
+    public KMyMoneyAccount getAccountByIDorName(final KMMComplAcctID id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
+	KMyMoneyAccount retval = getAccountById(id);
+	if (retval == null) {
+	    retval = getAccountByNameUniq(name, true);
+	}
+
+	return retval;
+    }
+
+    /**
+     * First try to fetch the account by id, then fall back to traversing all
+     * accounts to get if by it's name.
+     *
+     * @param id   the id to look for
+     * @param name the regular expression of the name to look for if nothing is
+     *             found for the id
+     * @return null if not found
+     * @throws TooManyEntriesFoundException 
+     * @throws NoEntryFoundException 
+     * @see #getAccountById(String)
+     * @see #getAccountByName(String)
+     */
+    public KMyMoneyAccount getAccountByIDorNameEx(final KMMComplAcctID id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
+	KMyMoneyAccount retval = getAccountById(id);
+	if (retval == null) {
+	    retval = getAccountByNameEx(name);
+	}
+
+	return retval;
+    }
+
+    // ---------------------------------------------------------------
+    
+    /**
+     * @return a read-only collection of all accounts
+     */
+    public Collection<KMyMoneyAccount> getAccounts() {
+	if (acctMap == null) {
+	    throw new IllegalStateException("no root-element loaded");
+	}
+
+	return Collections.unmodifiableCollection(new TreeSet<>(acctMap.values()));
+    }
+
+    /**
+     * @return a read-only collection of all accounts that have no parent (the
+     *         result is sorted)
+     */
+    public Collection<? extends KMyMoneyAccount> getRootAccounts() {
+        try {
+            Collection<KMyMoneyAccount> retval = new TreeSet<KMyMoneyAccount>();
+    
+            for (KMyMoneyAccount account : getAccounts()) {
+        	if (account.getParentAccountId() == null) {
+        	    retval.add(account);
+        	}
+    
+            }
+    
+            return retval;
+        } catch (RuntimeException e) {
+            LOGGER.error("Problem getting all root-account", e);
+            throw e;
+        } catch (Throwable e) {
+            LOGGER.error("SERIOUS Problem getting all root-account", e);
+            return new LinkedList<KMyMoneyAccount>();
+        }
+    }
+
+    // ---------------------------------------------------------------
+    
+    public int getNofEntriesAccountMap() {
+	return acctMap.size();
+    }
+    
+}

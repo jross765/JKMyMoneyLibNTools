@@ -262,13 +262,4 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      */
     public FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 
-    // ---------------------------------------------------------------
-    // Statistics (for test purposes)
-
-    public int getNofEntriesAccountMap();
-
-    public int getNofEntriesTransactionMap();
-
-    public int getNofEntriesTransactionSplitsMap();
-
 }

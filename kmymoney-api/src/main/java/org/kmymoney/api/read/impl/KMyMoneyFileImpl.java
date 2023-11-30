@@ -17,13 +17,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -41,22 +36,6 @@ import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.currency.ComplexPriceTable;
-import org.kmymoney.api.numbers.FixedPointNumber;
-import org.kmymoney.api.read.KMyMoneyAccount;
-import org.kmymoney.api.read.KMyMoneyCurrency;
-import org.kmymoney.api.read.KMyMoneyFile;
-import org.kmymoney.api.read.KMyMoneyObject;
-import org.kmymoney.api.read.KMyMoneyPayee;
-import org.kmymoney.api.read.KMyMoneySecurity;
-import org.kmymoney.api.read.KMyMoneyTransaction;
-import org.kmymoney.api.read.KMyMoneyTransactionSplit;
-import org.kmymoney.api.read.NoEntryFoundException;
-import org.kmymoney.api.read.TooManyEntriesFoundException;
-import org.kmymoney.api.read.aux.KMMPrice;
-import org.kmymoney.api.read.aux.KMMPricePair;
-import org.kmymoney.api.read.impl.aux.KMMPriceImpl;
-import org.kmymoney.api.read.impl.aux.KMMPricePairImpl;
-import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.CURRENCY;
 import org.kmymoney.api.generated.KEYVALUEPAIRS;
 import org.kmymoney.api.generated.KMYMONEYFILE;
@@ -68,6 +47,21 @@ import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.PRICES;
 import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.generated.TRANSACTION;
+import org.kmymoney.api.numbers.FixedPointNumber;
+import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneyCurrency;
+import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.KMyMoneyPayee;
+import org.kmymoney.api.read.KMyMoneySecurity;
+import org.kmymoney.api.read.KMyMoneyTransaction;
+import org.kmymoney.api.read.KMyMoneyTransactionSplit;
+import org.kmymoney.api.read.NoEntryFoundException;
+import org.kmymoney.api.read.TooManyEntriesFoundException;
+import org.kmymoney.api.read.aux.KMMPrice;
+import org.kmymoney.api.read.aux.KMMPricePair;
+import org.kmymoney.api.read.impl.aux.KMMPriceImpl;
+import org.kmymoney.api.read.impl.aux.KMMPricePairImpl;
+import org.kmymoney.api.read.impl.hlp.FileAccountManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -81,7 +75,9 @@ import jakarta.xml.bind.Unmarshaller;
  * read but not modify KMyMoney-Files. <br/>
  * @see KMyMoneyFile
  */
-public class KMyMoneyFileImpl implements KMyMoneyFile {
+public class KMyMoneyFileImpl implements KMyMoneyFile,
+                                         KMyMoneyFileStats 
+{
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyFileImpl.class);
 
@@ -91,6 +87,26 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     private final ComplexPriceTable currencyTable = new ComplexPriceTable();
 
     private static final String PADDING_TEMPLATE = "000000";
+
+    // ---------------------------------------------------------------
+
+    private File file;
+    
+    // ----------------------------
+
+    private KMYMONEYFILE rootElement;
+    private KMyMoneyObjectImpl myKMyMoneyObject;
+
+    // ----------------------------
+
+    /**
+     * @see #getObjectFactory()
+     */
+    private volatile ObjectFactory myJAXBFactory;
+
+    // ----------------------------
+    
+    protected FileAccountManager      acctMgr     = null;
 
     // ---------------------------------------------------------------
 
@@ -123,6 +139,110 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     // ---------------------------------------------------------------
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public File getFile() {
+	return file;
+    }
+
+    /**
+     * Internal method, just sets this.file .
+     *
+     * @param pFile the file loaded
+     */
+    protected void setFile(final File pFile) {
+	if (pFile == null) {
+	    throw new IllegalArgumentException("null not allowed for field this.file");
+	}
+	file = pFile;
+    }
+
+    // ----------------------------
+
+    /**
+     * loads the file and calls setRootElement.
+     *
+     * @param pFile the file to read
+     * @throws IOException on low level reading-errors (FileNotFoundException if not
+     *                     found)
+     * @throws InvalidQualifSecCurrTypeException 
+     * @throws InvalidQualifSecCurrIDException 
+     * @see #setRootElement(KMYMONEYFILE)
+     */
+    protected void loadFile(final File pFile) throws IOException, InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+
+	long start = System.currentTimeMillis();
+
+	if (pFile == null) {
+	    throw new IllegalArgumentException("null not allowed for field this.file");
+	}
+
+	if (!pFile.exists()) {
+	    throw new IllegalArgumentException("Given file '" + pFile.getAbsolutePath() + "' does not exist!");
+	}
+
+	setFile(pFile);
+
+	InputStream in = new FileInputStream(pFile);
+	if ( pFile.getName().endsWith(".gz") ||
+	     pFile.getName().endsWith(".kmy") ) {
+	    in = new BufferedInputStream(in);
+	    in = new GZIPInputStream(in);
+	} else {
+	    // determine if it's gzipped by the magic bytes
+	    byte[] magic = new byte[2];
+	    in.read(magic);
+	    in.close();
+
+	    in = new FileInputStream(pFile);
+	    in = new BufferedInputStream(in);
+	    if (magic[0] == 31 && magic[1] == -117) {
+		in = new GZIPInputStream(in);
+	    }
+	}
+
+	loadInputStream(in);
+
+	long end = System.currentTimeMillis();
+	LOGGER.info("loadFile: Took " + (end - start) + " ms (total) ");
+
+    }
+
+    protected void loadInputStream(InputStream in) throws UnsupportedEncodingException, IOException, InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	long start = System.currentTimeMillis();
+
+	NamespaceRemovererReader reader = new NamespaceRemovererReader(new InputStreamReader(in, "utf-8"));
+	try {
+
+	    JAXBContext myContext = getJAXBContext();
+	    if ( myContext == null ) {
+		// ::TODO: make it fatal
+		LOGGER.error("loadInputStream: JAXB context cannot be found/generated");
+		throw new IOException("JAXB context cannot be found/generated");
+	    }
+	    Unmarshaller unmarshaller = myContext.createUnmarshaller();
+
+	    KMYMONEYFILE obj = (KMYMONEYFILE) unmarshaller.unmarshal(new InputSource(new BufferedReader(reader)));
+	    long start2 = System.currentTimeMillis();
+	    setRootElement(obj);
+	    long end = System.currentTimeMillis();
+	    LOGGER.info("loadFileInputStream: Took " + 
+	                (end - start) + " ms (total), " + 
+		        (start2 - start) + " ms (jaxb-loading), " + 
+	                (end - start2) + " ms (building facades)");
+
+	} catch (JAXBException e) {
+	    LOGGER.error("loadInputStream: " + e.getMessage(), e);
+	    throw new IllegalStateException(e);
+	} finally {
+	    reader.close();
+	}
+    }
+
+    // ---------------------------------------------------------------
+
+    /**
      * @return Returns the currencyTable.
      * @link #currencyTable
      */
@@ -131,75 +251,55 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     /**
-     * @return a read-only collection of all accounts
+     * Use a heuristic to determine the defaultcurrency-id. If we cannot find one,
+     * we default to EUR.<br/>
+     * Comodity-stace is fixed as "ISO4217" .
+     *
+     * @return the default-currency to use.
      */
-    public Collection<KMyMoneyAccount> getAccounts() {
-	if (accountID2account == null) {
-	    throw new IllegalStateException("no root-element loaded");
+    public String getDefaultCurrencyID() {
+	KMYMONEYFILE root = getRootElement();
+	if (root == null) {
+	    return Const.DEFAULT_CURRENCY;
 	}
-
-	return Collections.unmodifiableCollection(new TreeSet<>(accountID2account.values()));
+	
+	KEYVALUEPAIRS kvpList = root.getKEYVALUEPAIRS();
+	if (kvpList == null) {
+	    return Const.DEFAULT_CURRENCY;
+	}
+	
+	for ( PAIR kvp : kvpList.getPAIR() ) {
+	    if ( kvp.getKey().equals("kmm-baseCurrency") ) { // ::MAGIC
+		return kvp.getValue();
+	    }
+	}
+	
+	// not found
+	return Const.DEFAULT_CURRENCY;
     }
 
     // ---------------------------------------------------------------
 
     /**
-     * @return a read-only collection of all accounts that have no parent (the
-     *         result is sorted)
+     * @see KMyMoneyFile#getAccountById(java.lang.String)
      */
-    public Collection<? extends KMyMoneyAccount> getRootAccounts() {
-	try {
-	    Collection<KMyMoneyAccount> retval = new TreeSet<KMyMoneyAccount>();
-
-	    for (KMyMoneyAccount account : getAccounts()) {
-		if (account.getParentAccountId() == null) {
-		    retval.add(account);
-		}
-
-	    }
-
-	    return retval;
-	} catch (RuntimeException e) {
-	    LOGGER.error("Problem getting all root-account", e);
-	    throw e;
-	} catch (Throwable e) {
-	    LOGGER.error("SERIOUS Problem getting all root-account", e);
-	    return new LinkedList<KMyMoneyAccount>();
-	}
+    @Override
+    public KMyMoneyAccount getAccountById(final KMMComplAcctID acctID) {
+	return acctMgr.getAccountById(acctID);
     }
 
     /**
-     * @param id if null, gives all account that have no parent
+     * @param acctID if null, gives all account that have no parent
      * @return the sorted collection of children of that account
      */
+    @Override
     public Collection<KMyMoneyAccount> getAccountsByParentID(final KMMComplAcctID id) {
-	if (accountID2account == null) {
-	    throw new IllegalStateException("no root-element loaded");
-	}
-
-	SortedSet<KMyMoneyAccount> retval = new TreeSet<KMyMoneyAccount>();
-
-	for (Object element : accountID2account.values()) {
-	    KMyMoneyAccount account = (KMyMoneyAccount) element;
-
-	    KMMComplAcctID parentID = account.getParentAccountId();
-	    if (parentID == null) {
-		if (id == null) {
-		    retval.add((KMyMoneyAccount) account);
-		}
-	    } else {
-		if (parentID.equals(id)) {
-		    retval.add((KMyMoneyAccount) account);
-		}
-	    }
-	}
-
-	return retval;
+        return acctMgr.getAccountsByParentID(id);
     }
 
     @Override
     public Collection<KMyMoneyAccount> getAccountsByName(final String name) {
-	return getAccountsByName(name, true, true);
+	return acctMgr.getAccountsByName(name);
     }
     
     /**
@@ -207,52 +307,14 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      */
     @Override
     public Collection<KMyMoneyAccount> getAccountsByName(final String expr, boolean qualif, boolean relaxed) {
-
-	if (accountID2account == null) {
-	    throw new IllegalStateException("no root-element loaded");
-	}
-
-	Collection<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
-	
-	for ( KMyMoneyAccount acct : accountID2account.values() ) {
-	    if ( relaxed ) {
-		if ( qualif ) {
-		    if ( acct.getQualifiedName().toLowerCase().
-			    contains(expr.trim().toLowerCase()) ) {
-			result.add(acct);
-		    }
-		} else {
-		    if ( acct.getName().toLowerCase().
-			    contains(expr.trim().toLowerCase()) ) {
-			result.add(acct);
-		    }
-		}
-	    } else {
-		if ( qualif ) {
-		    if ( acct.getQualifiedName().equals(expr) ) {
-			result.add(acct);
-		    }
-		} else {
-		    if ( acct.getName().equals(expr) ) {
-			result.add(acct);
-		    }
-		}
-	    }
-	}
-
-	return result;
+	return acctMgr.getAccountsByName(expr, qualif, relaxed);
     }
 
     @Override
     public KMyMoneyAccount getAccountByNameUniq(final String name, final boolean qualif) throws NoEntryFoundException, TooManyEntriesFoundException {
-	Collection<KMyMoneyAccount> acctList = getAccountsByName(name, qualif, false);
-	if ( acctList.size() == 0 )
-	    throw new NoEntryFoundException();
-	else if ( acctList.size() > 1 )
-	    throw new TooManyEntriesFoundException();
-	else
-	    return acctList.iterator().next();
+	return acctMgr.getAccountByNameUniq(name, qualif);
     }
+    
     /**
      * warning: this function has to traverse all accounts. If it much faster to try
      * getAccountByID first and only call this method if the returned account does
@@ -265,26 +327,9 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see #getAccountById(String)
      * @see #getAccountByName(String)
      */
+    @Override
     public KMyMoneyAccount getAccountByNameEx(final String nameRegEx) throws NoEntryFoundException, TooManyEntriesFoundException {
-
-	if (accountID2account == null) {
-	    throw new IllegalStateException("no root-element loaded");
-	}
-
-	KMyMoneyAccount foundAccount = getAccountByNameUniq(nameRegEx, true);
-	if (foundAccount != null) {
-	    return foundAccount;
-	}
-	Pattern pattern = Pattern.compile(nameRegEx);
-
-	for (KMyMoneyAccount account : accountID2account.values()) {
-	    Matcher matcher = pattern.matcher(account.getName());
-	    if (matcher.matches()) {
-		return account;
-	    }
-	}
-
-	return null;
+	return acctMgr.getAccountByNameEx(nameRegEx);
     }
 
     /**
@@ -299,13 +344,9 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see #getAccountById(String)
      * @see #getAccountByName(String)
      */
+    @Override
     public KMyMoneyAccount getAccountByIDorName(final KMMComplAcctID id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
-	KMyMoneyAccount retval = getAccountById(id);
-	if (retval == null) {
-	    retval = getAccountByNameUniq(name, true);
-	}
-
-	return retval;
+	return acctMgr.getAccountByIDorName(id, name);
     }
 
     /**
@@ -321,22 +362,29 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      * @see #getAccountById(String)
      * @see #getAccountByName(String)
      */
+    @Override
     public KMyMoneyAccount getAccountByIDorNameEx(final KMMComplAcctID id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
-	KMyMoneyAccount retval = getAccountById(id);
-	if (retval == null) {
-	    retval = getAccountByNameEx(name);
-	}
+	return acctMgr.getAccountByIDorNameEx(id, name);
+    }
 
-	return retval;
+    /**
+     * @return a read-only collection of all accounts
+     */
+    @Override
+    public Collection<KMyMoneyAccount> getAccounts() {
+        return acctMgr.getAccounts();
+    }
+
+    /**
+     * @return a read-only collection of all accounts that have no parent (the
+     *         result is sorted)
+     */
+    public Collection<? extends KMyMoneyAccount> getRootAccounts() {
+	return acctMgr.getRootAccounts();
     }
 
     // ---------------------------------------------------------------
-
-    /**
-     * @see #getKMyMoneyFile()
-     */
-    private File file;
-
+    
     /**
      * {@inheritDoc}
      */
@@ -391,20 +439,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     }
 
     /**
-     * the top-level Element of the kmymoney-files parsed and checked for validity by
-     * JAXB.
-     */
-    private KMYMONEYFILE rootElement;
-
-    /**
-     * All accounts indexed by their unique id-String.
-     *
-     * @see KMyMoneyAccount
-     * @see KMyMoneyAccountImpl
-     */
-    protected Map<KMMComplAcctID, KMyMoneyAccount> accountID2account;
-
-    /**
      * All transactions indexed by their unique id-String.
      *
      * @see KMyMoneyTransaction
@@ -449,12 +483,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     protected Map<KMMPriceID, KMMPrice> priceById = null;
 
     /**
-     * Helper to implement the {@link KMyMoneyObject}-interface without having the
-     * same code twice.
-     */
-    private KMyMoneyObjectImpl myKMyMoneyObject;
-
-    /**
      * @return the underlying JAXB-element
      */
     @SuppressWarnings("exports")
@@ -480,7 +508,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	loadPriceDatabase(pRootElement);
 
 	// fill maps
-	initAccountMap(pRootElement);
+	acctMgr = new FileAccountManager(this);
 
 	// transactions refer to invoices, therefore they must be loaded after
 	// them
@@ -491,22 +519,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	initSecurityMap(pRootElement);
 
 	initPayeeMap(pRootElement);
-    }
-
-    private void initAccountMap(final KMYMONEYFILE pRootElement) {
-	accountID2account = new HashMap<KMMComplAcctID, KMyMoneyAccount>();
-
-	for ( ACCOUNT jwsdpAcct : pRootElement.getACCOUNTS().getACCOUNT() ) {
-	    try {
-		KMyMoneyAccount acct = createAccount(jwsdpAcct);
-		accountID2account.put(acct.getId(), acct);
-	    } catch (RuntimeException e) {
-		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initAccountMap: "
-			+ "ignoring illegal Account-Entry with id=" + jwsdpAcct.getId(), e);
-	    }
-	} // for
-
-	LOGGER.debug("No. of entries in account map: " + accountID2account.size());
     }
 
     private void initTransactionMap(final KMYMONEYFILE pRootElement) {
@@ -585,34 +597,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     
 
     // ---------------------------------------------------------------
-
-    /**
-     * Use a heuristic to determine the defaultcurrency-id. If we cannot find one,
-     * we default to EUR.<br/>
-     * Comodity-stace is fixed as "ISO4217" .
-     *
-     * @return the default-currency to use.
-     */
-    public String getDefaultCurrencyID() {
-	KMYMONEYFILE root = getRootElement();
-	if (root == null) {
-	    return Const.DEFAULT_CURRENCY;
-	}
-	
-	KEYVALUEPAIRS kvpList = root.getKEYVALUEPAIRS();
-	if (kvpList == null) {
-	    return Const.DEFAULT_CURRENCY;
-	}
-	
-	for ( PAIR kvp : kvpList.getPAIR() ) {
-	    if ( kvp.getKey().equals("kmm-baseCurrency") ) { // ::MAGIC
-		return kvp.getValue();
-	    }
-	}
-	
-	// not found
-	return Const.DEFAULT_CURRENCY;
-    }
 
     /**
      * @param pRootElement the root-element of the KMyMoney-file
@@ -812,15 +796,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     // ---------------------------------------------------------------
 
     /**
-     * @param jwsdpAcct the JWSDP-peer (parsed xml-element) to fill our object with
-     * @return the new KMyMoneyAccount to wrap the given jaxb-object.
-     */
-    protected KMyMoneyAccountImpl createAccount(final ACCOUNT jwsdpAcct) {
-	KMyMoneyAccountImpl acct = new KMyMoneyAccountImpl(jwsdpAcct, this);
-	return acct;
-    }
-
-    /**
      * @param jwsdpCurr the JWSDP-peer (parsed xml-element) to fill our object with
      * @return the new KMyMoneyCurrency to wrap the given JAXB object.
      */
@@ -855,111 +830,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
 	KMyMoneyTransactionImpl trx = new KMyMoneyTransactionImpl(jwsdpTrx, this);
 	return trx;
     }
-
-    // ----------------------------
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public File getFile() {
-	return file;
-    }
-
-    /**
-     * Internal method, just sets this.file .
-     *
-     * @param pFile the file loaded
-     */
-    protected void setFile(final File pFile) {
-	if (pFile == null) {
-	    throw new IllegalArgumentException("null not allowed for field this.file");
-	}
-	file = pFile;
-    }
-
-    /**
-     * loads the file and calls setRootElement.
-     *
-     * @param pFile the file to read
-     * @throws IOException on low level reading-errors (FileNotFoundException if not
-     *                     found)
-     * @throws InvalidQualifSecCurrTypeException 
-     * @throws InvalidQualifSecCurrIDException 
-     * @see #setRootElement(KMYMONEYFILE)
-     */
-    protected void loadFile(final File pFile) throws IOException, InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
-
-	long start = System.currentTimeMillis();
-
-	if (pFile == null) {
-	    throw new IllegalArgumentException("null not allowed for field this.file");
-	}
-
-	if (!pFile.exists()) {
-	    throw new IllegalArgumentException("Given file '" + pFile.getAbsolutePath() + "' does not exist!");
-	}
-
-	setFile(pFile);
-
-	InputStream in = new FileInputStream(pFile);
-	if ( pFile.getName().endsWith(".gz") ||
-	     pFile.getName().endsWith(".kmy") ) {
-	    in = new BufferedInputStream(in);
-	    in = new GZIPInputStream(in);
-	} else {
-	    // determine if it's gzipped by the magic bytes
-	    byte[] magic = new byte[2];
-	    in.read(magic);
-	    in.close();
-
-	    in = new FileInputStream(pFile);
-	    in = new BufferedInputStream(in);
-	    if (magic[0] == 31 && magic[1] == -117) {
-		in = new GZIPInputStream(in);
-	    }
-	}
-
-	loadInputStream(in);
-
-	long end = System.currentTimeMillis();
-	LOGGER.info("KMyMoneyFileImpl.loadFile took " + (end - start) + " ms (total) ");
-
-    }
-
-    protected void loadInputStream(InputStream in) throws UnsupportedEncodingException, IOException, InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
-	long start = System.currentTimeMillis();
-
-	NamespaceRemovererReader reader = new NamespaceRemovererReader(new InputStreamReader(in, "utf-8"));
-	try {
-
-	    JAXBContext myContext = getJAXBContext();
-	    if ( myContext == null ) {
-		// ::TODO: make it fatal
-		LOGGER.error("loadInputStream: JAXB context cannot be found/generated");
-		throw new IOException("JAXB context cannot be found/generated");
-	    }
-	    Unmarshaller unmarshaller = myContext.createUnmarshaller();
-
-	    KMYMONEYFILE obj = (KMYMONEYFILE) unmarshaller.unmarshal(new InputSource(new BufferedReader(reader)));
-	    long start2 = System.currentTimeMillis();
-	    setRootElement(obj);
-	    long end = System.currentTimeMillis();
-	    LOGGER.info("KMyMoneyFileImpl.loadFileInputStream took " + (end - start) + " ms (total) " + (start2 - start)
-		    + " ms (jaxb-loading)" + (end - start2) + " ms (building facades)");
-
-	} catch (JAXBException e) {
-	    LOGGER.error(e.getMessage(), e);
-	    throw new IllegalStateException(e);
-	} finally {
-	    reader.close();
-	}
-    }
-
-    /**
-     * @see #getObjectFactory()
-     */
-    private volatile ObjectFactory myJAXBFactory;
 
     /**
      * @return the jaxb object-factory used to create new peer-objects to extend
@@ -997,22 +867,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
      */
     protected BigInteger getTransactionCount() {
 	return getRootElement().getTRANSACTIONS().getCount();
-    }
-
-    /**
-     * @see KMyMoneyFile#getAccountById(java.lang.String)
-     */
-    public KMyMoneyAccount getAccountById(final KMMComplAcctID id) {
-	if (accountID2account == null) {
-	    throw new IllegalStateException("no root-element loaded");
-	}
-
-	KMyMoneyAccount retval = accountID2account.get(id);
-	if (retval == null) {
-	    System.err.println("No Account with ID '" + id + "'. We know " + accountID2account.size() + " accounts.");
-	}
-	
-	return retval;
     }
 
     // ---------------------------------------------------------------
@@ -1593,18 +1447,22 @@ public class KMyMoneyFileImpl implements KMyMoneyFile {
     // ---------------------------------------------------------------
     // Statistics (for test purposes)
 
+    @Override
     public int getNofEntriesAccountMap() {
-	return accountID2account.size();
+	return acctMgr.getNofEntriesAccountMap();
     }
 
+    @Override
     public int getNofEntriesTransactionMap() {
 	return transactionID2transaction.size();
     }
 
+    @Override
     public int getNofEntriesTransactionSplitsMap() {
 	return transactionSplitID2transactionSplit.size();
     }
 
+    @Override
     public int getNofEntriesPayeeMap() {
 	return payeeID2Payee.size();
     }

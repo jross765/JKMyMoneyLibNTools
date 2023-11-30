@@ -12,6 +12,7 @@ module kmymoney.api {
 	exports org.kmymoney.api.read.aux;
 	exports org.kmymoney.api.read.impl;
 	exports org.kmymoney.api.read.impl.aux;
+	// exports org.kmymoney.api.read.impl.hlp;
 	
 //	exports org.kmymoney.api.write;
 //	exports org.kmymoney.api.write.impl;

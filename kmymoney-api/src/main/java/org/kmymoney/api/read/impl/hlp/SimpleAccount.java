@@ -1,4 +1,4 @@
-package org.kmymoney.api.read.impl;
+package org.kmymoney.api.read.impl.hlp;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
