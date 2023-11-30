@@ -7,8 +7,10 @@ public interface KMyMoneyFileStats {
 
     int getNofEntriesTransactionMap();
 
-    int getNofEntriesTransactionSplitsMap();
+    int getNofEntriesTransactionSplitMap();
 
     int getNofEntriesPayeeMap();
     
+    int getNofEntriesSecurityMap();
+
 }

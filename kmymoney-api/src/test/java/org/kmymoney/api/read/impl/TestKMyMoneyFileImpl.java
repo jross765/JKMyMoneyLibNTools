@@ -60,7 +60,7 @@ public class TestKMyMoneyFileImpl {
 
     @Test
     public void test03() throws Exception {
-	assertEquals(12, ((KMyMoneyFileStats) kmmFile).getNofEntriesTransactionSplitsMap());
+	assertEquals(12, ((KMyMoneyFileStats) kmmFile).getNofEntriesTransactionSplitMap());
     }
 
     @Test
@@ -68,9 +68,9 @@ public class TestKMyMoneyFileImpl {
 	assertEquals(5, ((KMyMoneyFileStats) kmmFile).getNofEntriesPayeeMap());
     }
 
-//  @Test
-//  public void test07() throws Exception
-//  {    
-//    assertEquals(3, kmmFile.getNofEntriesPayeeMap());
-//  }
+    @Test
+    public void test05() throws Exception {
+	assertEquals(2, ((KMyMoneyFileStats) kmmFile).getNofEntriesSecurityMap());
+    }
+
 }

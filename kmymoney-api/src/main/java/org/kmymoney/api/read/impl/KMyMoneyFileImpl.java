@@ -13,7 +13,6 @@ import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,11 +40,9 @@ import org.kmymoney.api.generated.KEYVALUEPAIRS;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PAIR;
-import org.kmymoney.api.generated.PAYEE;
 import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.PRICES;
-import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -63,6 +60,7 @@ import org.kmymoney.api.read.impl.aux.KMMPriceImpl;
 import org.kmymoney.api.read.impl.aux.KMMPricePairImpl;
 import org.kmymoney.api.read.impl.hlp.FileAccountManager;
 import org.kmymoney.api.read.impl.hlp.FilePayeeManager;
+import org.kmymoney.api.read.impl.hlp.FileSecurityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -107,8 +105,9 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 
     // ----------------------------
     
-    protected FileAccountManager acctMgr = null;
-    protected FilePayeeManager   pyeMgr  = null;
+    protected FileAccountManager  acctMgr = null;
+    protected FilePayeeManager    pyeMgr  = null;
+    protected FileSecurityManager secMgr  = null;
 
     // ---------------------------------------------------------------
 
@@ -464,16 +463,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
      */
     protected Map<String, KMyMoneyCurrency> currID2Curr;
 
-    /**
-     * All securities indexed by their unique id-String.
-     *
-     * @see KMyMoneySecurity
-     * @see KMyMoneySecurityImpl
-     */
-    protected Map<KMMSecID, KMyMoneySecurity> secID2Sec;
-    protected Map<String, KMMSecID> secSymbID2SecID;
-    protected Map<String, KMMSecID> secCodeID2SecID;
-
     protected Map<KMMPriceID, KMMPrice> priceById = null;
 
     /**
@@ -510,7 +499,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 
 	initCurrencyMap(pRootElement);
 
-	initSecurityMap(pRootElement);
+	secMgr  = new FileSecurityManager(this);
 
 	pyeMgr  = new FilePayeeManager(this);
     }
@@ -550,26 +539,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 	} // for
 
 	LOGGER.debug("No. of entries in currency map: " + currID2Curr.size());
-    }
-
-    private void initSecurityMap(final KMYMONEYFILE pRootElement) {
-	secID2Sec = new HashMap<KMMSecID, KMyMoneySecurity>();
-	secSymbID2SecID = new HashMap<String, KMMSecID>();
-	secCodeID2SecID = new HashMap<String, KMMSecID>();
-
-	for ( SECURITY jwsdpSec : pRootElement.getSECURITIES().getSECURITY() ) {
-	    try {
-		KMyMoneySecurityImpl sec = createSecurity(jwsdpSec);
-		secID2Sec.put(sec.getId(), sec);
-		secSymbID2SecID.put(sec.getSymbol(), new KMMSecID(jwsdpSec.getId()));
-		secCodeID2SecID.put(sec.getCode(), new KMMSecID(jwsdpSec.getId()));
-	    } catch (RuntimeException e) {
-		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initSecurityMap: "
-			+ "ignoring illegal Security-Entry with id=" + jwsdpSec.getId(), e);
-	    }
-	} // for
-
-	LOGGER.debug("No. of entries in security map: " + secID2Sec.size());
     }
 
     // ---------------------------------------------------------------
@@ -781,15 +750,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     }
 
     /**
-     * @param jwsdpSec the JWSDP-peer (parsed xml-element) to fill our object with
-     * @return the new KMyMoneySecurity to wrap the given JAXB object.
-     */
-    protected KMyMoneySecurityImpl createSecurity(final SECURITY jwsdpSec) {
-	KMyMoneySecurityImpl sec = new KMyMoneySecurityImpl(jwsdpSec, this);
-	return sec;
-    }
-
-    /**
      * @param jwsdpTrx the JWSDP-peer (parsed xml-element) to fill our object with
      * @return the new KMyMoneyTransaction to wrap the given jaxb-object.
      */
@@ -865,160 +825,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     // ---------------------------------------------------------------
 
     @Override
-    public KMyMoneySecurity getSecurityById(final KMMSecID id) {
-	if (secID2Sec == null) {
-	    throw new IllegalStateException("no root-element loaded");
-	}
-
-	KMyMoneySecurity retval = secID2Sec.get(id);
-	if (retval == null) {
-	    LOGGER.warn("No Security with ID '" + id + "'. We know " + secID2Sec.size() + " securities.");
-	}
-	
-	return retval;
-    }
-
-    public KMyMoneySecurity getSecurityById(final String idStr) {
-	if (idStr == null) {
-	    throw new IllegalStateException("null string given");
-	}
-
-	if (idStr.trim().equals("")) {
-	    throw new IllegalStateException("Search string is empty");
-	}
-	
-	KMMSecID secID = new KMMSecID(idStr);
-	return getSecurityById(secID);
-    }
-
-    @Override
-    public KMyMoneySecurity getSecurityByQualifID(final KMMQualifSecID secID) {
-	return getSecurityById(secID.getCode());
-    }
-
-    @Override
-    public KMyMoneySecurity getSecurityByQualifID(final String qualifIDStr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
-	if (qualifIDStr == null) {
-	    throw new IllegalStateException("null string given");
-	}
-
-	if (qualifIDStr.trim().equals("")) {
-	    throw new IllegalStateException("Search string is empty");
-	}
-
-	KMMQualifSecID secID = KMMQualifSecID.parse(qualifIDStr);
-	return getSecurityByQualifID(secID);
-    }
-
-    @Override
-    public KMyMoneySecurity getSecurityBySymbol(final String symb) {
-	if ( secID2Sec == null ) {
-	    throw new IllegalStateException("no root-element loaded");
-	}
-
-	if ( secSymbID2SecID.size() != secID2Sec.size() ) {
-	    // ::CHECK
-	    // CAUTION: Don't throw an exception, at least not in all cases,
-	    // because this is not necessarily an error: Only if the KMyMoney
-	    // file does not contain quotes for foreign currencies (i.e. currency-
-	    // commodities but only security-commodities is this an error.
-	    // throw new IllegalStateException("Sizes of root elements are not equal");
-	    LOGGER.debug("getSecurityBySymbol: Sizes of root elements are not equal.");
-	}
-	
-	KMMSecID qualifID = secSymbID2SecID.get(symb);
-	if (qualifID == null) {
-	    LOGGER.warn("No Security with symbol '" + symb + "'. We know " + secSymbID2SecID.size() + " securities in map 2.");
-	}
-	
-	KMyMoneySecurity retval = secID2Sec.get(qualifID);
-	if (retval == null) {
-	    LOGGER.warn("No Security with qualified ID '" + qualifID + "'. We know " + secID2Sec.size() + " securities in map 1.");
-	}
-	
-	return retval;
-    }
-
-    @Override
-    public KMyMoneySecurity getSecurityByCode(final String code) {
-	if ( secID2Sec == null ) {
-	    throw new IllegalStateException("no root-element loaded");
-	}
-
-	if ( secCodeID2SecID.size() != secID2Sec.size() ) {
-	    // ::CHECK
-	    // CAUTION: Don't throw an exception, at least not in all cases,
-	    // because this is not necessarily an error: Only if the KMyMoney
-	    // file does not contain quotes for foreign currencies (i.e. currency-
-	    // commodities but only security-commodities is this an error.
-	    // throw new IllegalStateException("Sizes of root elements are not equal");
-	    LOGGER.debug("getSecurityBySymbol: Sizes of root elements are not equal.");
-	}
-	
-	KMMSecID qualifID = secCodeID2SecID.get(code);
-	if (qualifID == null) {
-	    LOGGER.warn("No Security with symbol '" + code + "'. We know " + secCodeID2SecID.size() + " securities in map 2.");
-	}
-	
-	KMyMoneySecurity retval = secID2Sec.get(qualifID);
-	if (retval == null) {
-	    LOGGER.warn("No Security with qualified ID '" + qualifID + "'. We know " + secID2Sec.size() + " securities in map 1.");
-	}
-	
-	return retval;
-    }
-
-    @Override
-    public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr) {
-	return getSecuritiesByName(expr, true);
-    }
-
-    @Override
-    public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed) {
-	if (secID2Sec == null) {
-	    throw new IllegalStateException("no root-element loaded");
-	}
-	
-	Collection<KMyMoneySecurity> result = new ArrayList<KMyMoneySecurity>();
-
-	for ( KMyMoneySecurity sec : getSecurities() ) {
-	    if ( sec.getName() != null ) // yes, that can actually happen! 
-	    {
-		if ( relaxed ) {
-		    if ( sec.getName().toLowerCase().
-			    contains(expr.trim().toLowerCase()) ) {
-			result.add(sec);
-		    }
-		} else {
-		    if ( sec.getName().equals(expr) ) {
-			result.add(sec);
-		    }
-		}
-	    }
-	}
-	
-	return result;
-    }
-
-    @Override
-    public KMyMoneySecurity getSecurityByNameUniq(final String expr) throws NoEntryFoundException, TooManyEntriesFoundException {
-	Collection<KMyMoneySecurity> cmdtyList = getSecuritiesByName(expr, false);
-	if ( cmdtyList.size() == 0 )
-	    throw new NoEntryFoundException();
-	else if ( cmdtyList.size() > 1 )
-	    throw new TooManyEntriesFoundException();
-	else
-	    return cmdtyList.iterator().next();
-    }
-    
-    @Override
-    public Collection<KMyMoneySecurity> getSecurities() {
-	return secID2Sec.values();
-    }
-
-    // ---------------------------------------------------------------
-
-    @Override
     public KMyMoneyPayee getPayeeById(final KMMPyeID id) {
 	return pyeMgr.getPayeeById(id);
     }
@@ -1042,6 +848,58 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     @Override
     public Collection<KMyMoneyPayee> getPayees() {
 	return pyeMgr.getPayees();
+    }
+
+    // ---------------------------------------------------------------
+
+    @Override
+    public KMyMoneySecurity getSecurityById(final KMMSecID secID) {
+	return secMgr.getSecurityById(secID);
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityById(final String idStr) {
+	return secMgr.getSecurityById(idStr);
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityByQualifID(final KMMQualifSecID secID) {
+	return secMgr.getSecurityByQualifID(secID);
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityByQualifID(final String qualifIDStr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	return secMgr.getSecurityByQualifID(qualifIDStr);
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityBySymbol(final String symb) {
+	return secMgr.getSecurityBySymbol(symb);
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityByCode(final String code) {
+	return secMgr.getSecurityByCode(code);
+    }
+
+    @Override
+    public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr) {
+	return secMgr.getSecuritiesByName(expr);
+    }
+
+    @Override
+    public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed) {
+	return secMgr.getSecuritiesByName(expr, relaxed);
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityByNameUniq(final String expr) throws NoEntryFoundException, TooManyEntriesFoundException {
+	return secMgr.getSecurityByNameUniq(expr);
+    }
+    
+    @Override
+    public Collection<KMyMoneySecurity> getSecurities() {
+	return secMgr.getSecurities();
     }
 
     // ---------------------------------------------------------------
@@ -1383,13 +1241,18 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     }
 
     @Override
-    public int getNofEntriesTransactionSplitsMap() {
+    public int getNofEntriesTransactionSplitMap() {
 	return transactionSplitID2transactionSplit.size();
     }
 
     @Override
     public int getNofEntriesPayeeMap() {
 	return pyeMgr.getNofEntriesPayeeMap();
+    }
+
+    @Override
+    public int getNofEntriesSecurityMap() {
+	return secMgr.getNofEntriesSecurityMap();
     }
 
 }
