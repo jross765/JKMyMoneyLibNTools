@@ -62,6 +62,7 @@ import org.kmymoney.api.read.aux.KMMPricePair;
 import org.kmymoney.api.read.impl.aux.KMMPriceImpl;
 import org.kmymoney.api.read.impl.aux.KMMPricePairImpl;
 import org.kmymoney.api.read.impl.hlp.FileAccountManager;
+import org.kmymoney.api.read.impl.hlp.FilePayeeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -106,7 +107,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 
     // ----------------------------
     
-    protected FileAccountManager      acctMgr     = null;
+    protected FileAccountManager acctMgr = null;
+    protected FilePayeeManager   pyeMgr  = null;
 
     // ---------------------------------------------------------------
 
@@ -472,14 +474,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     protected Map<String, KMMSecID> secSymbID2SecID;
     protected Map<String, KMMSecID> secCodeID2SecID;
 
-    /**
-     * All payees indexed by their unique id-String.
-     *
-     * @see KMyMoneyPayee
-     * @see KMyMoneyPayeeImpl
-     */
-    protected Map<KMMPyeID, KMyMoneyPayee> payeeID2Payee;
-
     protected Map<KMMPriceID, KMMPrice> priceById = null;
 
     /**
@@ -518,7 +512,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 
 	initSecurityMap(pRootElement);
 
-	initPayeeMap(pRootElement);
+	pyeMgr  = new FilePayeeManager(this);
     }
 
     private void initTransactionMap(final KMYMONEYFILE pRootElement) {
@@ -577,24 +571,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 
 	LOGGER.debug("No. of entries in security map: " + secID2Sec.size());
     }
-
-    private void initPayeeMap(final KMYMONEYFILE pRootElement) {
-	payeeID2Payee = new HashMap<KMMPyeID, KMyMoneyPayee>();
-
-	for ( PAYEE jwsdpPye : pRootElement.getPAYEES().getPAYEE() ) {
-	    try {
-		KMyMoneyPayeeImpl pye = createPayee(jwsdpPye);
-		payeeID2Payee.put(pye.getId(), pye);
-	    } catch (RuntimeException e) {
-		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initPayeeMap: "
-			+ "ignoring illegal Payee-Entry with id=" + jwsdpPye.getId(), e);
-	    }
-	} // for
-
-	LOGGER.debug("No. of entries in payee map: " + payeeID2Payee.size());
-    }
-
-    
 
     // ---------------------------------------------------------------
 
@@ -811,15 +787,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     protected KMyMoneySecurityImpl createSecurity(final SECURITY jwsdpSec) {
 	KMyMoneySecurityImpl sec = new KMyMoneySecurityImpl(jwsdpSec, this);
 	return sec;
-    }
-
-    /**
-     * @param jwsdpPye the JWSDP-peer (parsed xml-element) to fill our object with
-     * @return the new KMyMoneyPayee to wrap the given JAXB object.
-     */
-    protected KMyMoneyPayeeImpl createPayee(final PAYEE jwsdpPye) {
-	KMyMoneyPayeeImpl pye = new KMyMoneyPayeeImpl(jwsdpPye);
-	return pye;
     }
 
     /**
@@ -1051,72 +1018,30 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 
     // ---------------------------------------------------------------
 
-    /**
-     * @see KMyMoneyFile#getPayeeByID(java.lang.String)
-     */
     @Override
     public KMyMoneyPayee getPayeeById(final KMMPyeID id) {
-	if (payeeID2Payee == null) {
-	    throw new IllegalStateException("no root-element loaded");
-	}
-
-	KMyMoneyPayee retval = payeeID2Payee.get(id);
-	if (retval == null) {
-	    LOGGER.warn("No Payee with ID '" + id + "'. We know " + payeeID2Payee.size() + " payees.");
-	}
-	
-	return retval;
+	return pyeMgr.getPayeeById(id);
     }
 
     @Override
     public Collection<KMyMoneyPayee> getPayeesByName(String expr) {
-	return getPayeesByName(expr, true);
+	return pyeMgr.getPayeesByName(expr);
     }
 
     @Override
     public Collection<KMyMoneyPayee> getPayeesByName(String expr, boolean relaxed) {
-	if (payeeID2Payee == null) {
-	    throw new IllegalStateException("no root-element loaded");
-	}
-	
-	Collection<KMyMoneyPayee> result = new ArrayList<KMyMoneyPayee>();
-
-	for ( KMyMoneyPayee pye : getPayees() ) {
-	    if ( pye.getName() != null ) 
-	    {
-		if ( relaxed ) {
-		    if ( pye.getName().toLowerCase().
-			    contains(expr.trim().toLowerCase()) ) {
-			result.add(pye);
-		    }
-		} else {
-		    if ( pye.getName().equals(expr) ) {
-			result.add(pye);
-		    }
-		}
-	    }
-	}
-	
-	return result;
+	return pyeMgr.getPayeesByName(expr, relaxed);
     }
 
     @Override
     public KMyMoneyPayee getPayeesByNameUniq(String expr)
 	    throws NoEntryFoundException, TooManyEntriesFoundException {
-	Collection<KMyMoneyPayee> cmdtyList = getPayeesByName(expr, false);
-	if ( cmdtyList.size() == 0 )
-	    throw new NoEntryFoundException();
-	else if ( cmdtyList.size() > 1 )
-	    throw new TooManyEntriesFoundException();
-	else
-	    return cmdtyList.iterator().next();
+	return pyeMgr.getPayeesByNameUniq(expr);
     }
 
-    /**
-     * @see KMyMoneyFile#getPayees()
-     */
+    @Override
     public Collection<KMyMoneyPayee> getPayees() {
-	return payeeID2Payee.values();
+	return pyeMgr.getPayees();
     }
 
     // ---------------------------------------------------------------
@@ -1464,7 +1389,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 
     @Override
     public int getNofEntriesPayeeMap() {
-	return payeeID2Payee.size();
+	return pyeMgr.getNofEntriesPayeeMap();
     }
 
 }
