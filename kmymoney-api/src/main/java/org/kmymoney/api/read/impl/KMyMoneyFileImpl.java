@@ -33,7 +33,6 @@ import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.currency.ComplexPriceTable;
-import org.kmymoney.api.generated.CURRENCY;
 import org.kmymoney.api.generated.KEYVALUEPAIRS;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.ObjectFactory;
@@ -56,6 +55,7 @@ import org.kmymoney.api.read.aux.KMMPricePair;
 import org.kmymoney.api.read.impl.aux.KMMPriceImpl;
 import org.kmymoney.api.read.impl.aux.KMMPricePairImpl;
 import org.kmymoney.api.read.impl.hlp.FileAccountManager;
+import org.kmymoney.api.read.impl.hlp.FileCurrencyManager;
 import org.kmymoney.api.read.impl.hlp.FilePayeeManager;
 import org.kmymoney.api.read.impl.hlp.FileSecurityManager;
 import org.kmymoney.api.read.impl.hlp.FileTransactionManager;
@@ -108,6 +108,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     protected FileTransactionManager trxMgr  = null;
     protected FilePayeeManager       pyeMgr  = null;
     protected FileSecurityManager    secMgr  = null;
+    protected FileCurrencyManager    currMgr = null;
 
     // ---------------------------------------------------------------
 
@@ -439,14 +440,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 	return getLatestPrice(secCurrID, 0);
     }
 
-    /**
-     * All currencies indexed by their unique id-String.
-     *
-     * @see KMyMoneyCurrency
-     * @see KMyMoneyCurrencyImpl
-     */
-    protected Map<String, KMyMoneyCurrency> currID2Curr;
-
     protected Map<KMMPriceID, KMMPrice> priceById = null;
 
     /**
@@ -479,27 +472,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 	
 	trxMgr  = new FileTransactionManager(this);
 
-	initCurrencyMap(pRootElement);
-
 	secMgr  = new FileSecurityManager(this);
+	
+	currMgr = new FileCurrencyManager(this);
 
 	pyeMgr  = new FilePayeeManager(this);
-    }
-
-    private void initCurrencyMap(final KMYMONEYFILE pRootElement) {
-	currID2Curr = new HashMap<String, KMyMoneyCurrency>();
-
-	for ( CURRENCY jwsdpCurr : pRootElement.getCURRENCIES().getCURRENCY() ) {
-	    try {
-		KMyMoneyCurrencyImpl curr = createCurrency(jwsdpCurr);
-		currID2Curr.put(jwsdpCurr.getId(), curr);
-	    } catch (RuntimeException e) {
-		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initCurrencyMap: "
-			+ "ignoring illegal Currency-Entry with id=" + jwsdpCurr.getId(), e);
-	    }
-	} // for
-
-	LOGGER.debug("No. of entries in currency map: " + currID2Curr.size());
     }
 
     // ---------------------------------------------------------------
@@ -702,15 +679,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     // ---------------------------------------------------------------
 
     /**
-     * @param jwsdpCurr the JWSDP-peer (parsed xml-element) to fill our object with
-     * @return the new KMyMoneyCurrency to wrap the given JAXB object.
-     */
-    protected KMyMoneyCurrencyImpl createCurrency(final CURRENCY jwsdpCurr) {
-	KMyMoneyCurrencyImpl curr = new KMyMoneyCurrencyImpl(jwsdpCurr, this);
-	return curr;
-    }
-
-    /**
      * @return the jaxb object-factory used to create new peer-objects to extend
      *         this
      */
@@ -751,27 +719,18 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     // ---------------------------------------------------------------
 
     @Override
-    public KMyMoneyCurrency getCurrencyById(String id) {
-	if (currID2Curr == null) {
-	    throw new IllegalStateException("no root-element loaded");
-	}
-
-	KMyMoneyCurrency retval = currID2Curr.get(id);
-	if (retval == null) {
-	    LOGGER.warn("No Currency with ID '" + id + "'. We know " + currID2Curr.size() + " currencies.");
-	}
-	
-	return retval;
+    public KMyMoneyCurrency getCurrencyById(String currID) {
+	return currMgr.getCurrencyById(currID);
     }
 
     @Override
     public KMyMoneyCurrency getCurrencyByQualifId(KMMQualifCurrID currID) {
-	return getCurrencyById(currID.getCode());
+	return currMgr.getCurrencyByQualifId(currID);
     }
 
     @Override
     public Collection<KMyMoneyCurrency> getCurrencies() {
-	return currID2Curr.values();
+	return currMgr.getCurrencies();
     }
 
     // ---------------------------------------------------------------

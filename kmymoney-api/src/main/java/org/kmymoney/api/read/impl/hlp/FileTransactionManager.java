@@ -50,12 +50,12 @@ public class FileTransactionManager {
 		    trxSpltMap.put(spltID, splt);
 		}
 	    } catch (RuntimeException e) {
-		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initTransactionMap: "
+		LOGGER.error("init: [RuntimeException] Problem in " + getClass().getName() + ".init: "
 			+ "ignoring illegal Transaction-Entry with id=" + jwsdpTrx.getId(), e);
 	    }
 	} // for
 
-	LOGGER.debug("No. of entries in transaction map: " + trxMap.size());
+	LOGGER.debug("init: No. of entries in transaction map: " + trxMap.size());
     }
 
     /**
