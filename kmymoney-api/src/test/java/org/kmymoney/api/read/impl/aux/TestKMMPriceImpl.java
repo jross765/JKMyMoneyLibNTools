@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotEquals;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Currency;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,9 +13,10 @@ import org.kmymoney.api.ConstTest;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.api.basetypes.simple.KMMSecID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.aux.KMMPrice;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 
@@ -26,6 +26,7 @@ public class TestKMMPriceImpl
 {
   private static final KMMPriceID PRICE_1_ID = new KMMPriceID("E000001", "EUR", "2023-11-03"); // SAP/EUR
   private static final KMMPriceID PRICE_2_ID = new KMMPriceID("E000002", "EUR", "2023-11-01"); // MBG/EUR
+  private static final KMMPriceID PRICE_3_ID = new KMMPriceID("USD", "EUR", "2023-12-04");
 
   // -----------------------------------------------------------------
   
@@ -35,7 +36,7 @@ public class TestKMMPriceImpl
   KMMQualifSecCurrID secID1 = null;
   KMMQualifSecCurrID secID2 = null;
   
-  Currency currID1   = null;
+  KMMQualifCurrID currID1 = null;
   
   // -----------------------------------------------------------------
   
@@ -82,7 +83,7 @@ public class TestKMMPriceImpl
     secID1 = new KMMQualifSecCurrID(KMMQualifSecCurrID.Type.SECURITY, "E000001");
     secID2 = new KMMQualifSecCurrID(KMMQualifSecCurrID.Type.SECURITY, "E000002");
     
-    currID1   = Currency.getInstance("USD");
+    currID1 = new KMMQualifCurrID("USD");
   }
 
   // -----------------------------------------------------------------
@@ -92,7 +93,7 @@ public class TestKMMPriceImpl
   {
       Collection<KMMPrice> priceList = kmmFile.getPrices();
       
-      assertEquals(4, priceList.size());
+      assertEquals(5, priceList.size());
 
       // ::TODO: Sort array for predictability
 //      Object[] priceArr = priceList.toArray();
@@ -124,6 +125,7 @@ public class TestKMMPriceImpl
       try
       {
 	  KMMQualifCurrID dummy = prc.getFromCurrencyQualifId(); // illegal call in this context
+	  assertEquals(0, 1);
       }
       catch ( Exception exc )
       {
@@ -133,6 +135,7 @@ public class TestKMMPriceImpl
       try
       {
 	  String dummy = prc.getFromCurrencyCode(); // illegal call in this context
+	  assertEquals(0, 1);
       }
       catch ( Exception exc )
       {
@@ -142,6 +145,7 @@ public class TestKMMPriceImpl
       try
       {
 	  KMyMoneyCurrency dummy = prc.getFromCurrency(); // illegal call in this context
+	  assertEquals(0, 1);
       }
       catch ( Exception exc )
       {
@@ -171,6 +175,7 @@ public class TestKMMPriceImpl
       try
       {
 	  KMMQualifCurrID dummy = prc.getFromCurrencyQualifId(); // illegal call in this context
+	  assertEquals(0, 1);
       }
       catch ( Exception exc )
       {
@@ -180,6 +185,7 @@ public class TestKMMPriceImpl
       try
       {
 	  String dummy = prc.getFromCurrencyCode(); // illegal call in this context
+	  assertEquals(0, 1);
       }
       catch ( Exception exc )
       {
@@ -189,6 +195,44 @@ public class TestKMMPriceImpl
       try
       {
 	  KMyMoneyCurrency dummy = prc.getFromCurrency(); // illegal call in this context
+	  assertEquals(0, 1);
+      }
+      catch ( Exception exc )
+      {
+	  assertEquals(0, 0);
+      }
+  }
+
+  @Test
+  public void test02_3() throws Exception
+  {
+      prc = kmmFile.getPriceById(PRICE_3_ID);
+      assertNotEquals(null, prc);
+      
+      assertEquals(PRICE_3_ID, prc.getId());
+      assertEquals(currID1.toString(), prc.getFromSecCurrQualifId().toString());
+      assertEquals(currID1.toString(), prc.getFromCurrencyQualifId().toString());
+      assertEquals("USD", prc.getFromCurrencyCode());
+      assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifId().toString());
+      assertEquals("EUR", prc.getToCurrencyCode());
+      assertEquals("User", prc.getSource());
+      assertEquals(LocalDate.of(2023, 12, 4), prc.getDate());
+      assertEquals(0.92, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
+      
+      try
+      {
+	  KMMQualifSecID dummy = prc.getFromSecurityQualifId(); // illegal call in this context
+	  assertEquals(0, 1);
+      }
+      catch ( Exception exc )
+      {
+	  assertEquals(0, 0);
+      }
+      
+      try
+      {
+	  KMyMoneySecurity dummy = prc.getFromSecurity(); // illegal call in this context
+	  assertEquals(0, 1);
       }
       catch ( Exception exc )
       {

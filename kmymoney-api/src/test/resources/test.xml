@@ -3,16 +3,16 @@
 <KMYMONEY-FILE>
  <FILEINFO>
   <CREATION_DATE date="2023-10-14"/>
-  <LAST_MODIFIED_DATE date="2023-11-07"/>
+  <LAST_MODIFIED_DATE date="2023-12-04"/>
   <VERSION id="1"/>
   <FIXVERSION id="5"/>
  </FILEINFO>
- <USER name="John Doe" email="">
-  <ADDRESS city="" street="" telephone="" zipcode="" county=""/>
+ <USER email="" name="John Doe">
+  <ADDRESS zipcode="" street="" county="" telephone="" city=""/>
  </USER>
  <INSTITUTIONS count="1">
-  <INSTITUTION manager="" name="RaiBa" id="I000001" sortcode="">
-   <ADDRESS city="" street="" telephone="" zip=""/>
+  <INSTITUTION id="I000001" sortcode="" name="RaiBa" manager="">
+   <ADDRESS street="" telephone="" zip="" city=""/>
    <ACCOUNTIDS>
     <ACCOUNTID id="A000004"/>
     <ACCOUNTID id="A000005"/>
@@ -25,37 +25,37 @@
   </INSTITUTION>
  </INSTITUTIONS>
  <PAYEES count="5">
-  <PAYEE matchingenabled="0" name="Eingang" id="P000001" email="" reference="">
-   <ADDRESS postcode="" city="" street="" state="" telephone=""/>
+  <PAYEE reference="" id="P000001" matchingenabled="0" email="" name="Eingang">
+   <ADDRESS street="" telephone="" postcode="" city="" state=""/>
   </PAYEE>
-  <PAYEE matchingenabled="0" name="Gehalt" id="P000002" email="" reference="">
-   <ADDRESS postcode="" city="" street="" state="" telephone=""/>
+  <PAYEE reference="" id="P000002" matchingenabled="0" email="" name="Gehalt">
+   <ADDRESS street="" telephone="" postcode="" city="" state=""/>
   </PAYEE>
-  <PAYEE matchingenabled="0" name="Geldautomat" id="P000003" email="" reference="">
-   <ADDRESS postcode="" city="" street="" state="" telephone=""/>
+  <PAYEE reference="" id="P000003" matchingenabled="0" email="" name="Geldautomat">
+   <ADDRESS street="" telephone="" postcode="" city="" state=""/>
   </PAYEE>
-  <PAYEE matchingenabled="0" name="Eröffnungssaldo" id="P000004" email="" reference="">
-   <ADDRESS postcode="" city="" street="" state="" telephone=""/>
+  <PAYEE reference="" id="P000004" matchingenabled="0" email="" name="Eröffnungssaldo">
+   <ADDRESS street="" telephone="" postcode="" city="" state=""/>
   </PAYEE>
-  <PAYEE matchingenabled="0" notes="Pezi-Bär von der Urania kennt ihn gut" name="Fürchtegott Schnorzelmöller" id="P000005" email="fuerchtegott.schnorzelmoeller@prater.at" reference="">
-   <ADDRESS postcode="1136" city="Wien" street="Krailbacher Gasse 123 a&#xa;Postfach ABC&#xa;Kennwort Kasperlpost" state="Österreich" telephone="+43 - 12 - 277278279"/>
+  <PAYEE reference="" id="P000005" notes="Pezi-Bär von der Urania kennt ihn gut" matchingenabled="0" email="fuerchtegott.schnorzelmoeller@prater.at" name="Fürchtegott Schnorzelmöller">
+   <ADDRESS street="Krailbacher Gasse 123 a&#xa;Postfach ABC&#xa;Kennwort Kasperlpost" telephone="+43 - 12 - 277278279" postcode="1136" city="Wien" state="Österreich"/>
   </PAYEE>
  </PAYEES>
  <COSTCENTERS count="0"/>
  <TAGS count="0"/>
  <ACCOUNTS count="67">
-  <ACCOUNT currency="EUR" opened="" name="Asset" id="AStd::Asset" description="" type="9" lastreconciled="" lastmodified="" institution="" number="" parentaccount="">
+  <ACCOUNT id="AStd::Asset" parentaccount="" currency="EUR" type="9" description="" lastmodified="" number="" institution="" name="Asset" lastreconciled="" opened="">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000002"/>
     <SUBACCOUNT id="A000061"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="" name="Liability" id="AStd::Liability" description="" type="10" lastreconciled="" lastmodified="" institution="" number="" parentaccount="">
+  <ACCOUNT id="AStd::Liability" parentaccount="" currency="EUR" type="10" description="" lastmodified="" number="" institution="" name="Liability" lastreconciled="" opened="">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000058"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="" name="Expense" id="AStd::Expense" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="">
+  <ACCOUNT id="AStd::Expense" parentaccount="" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Expense" lastreconciled="" opened="">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000006"/>
     <SUBACCOUNT id="A000011"/>
@@ -74,7 +74,7 @@
     <SUBACCOUNT id="A000042"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="" name="Income" id="AStd::Income" description="" type="12" lastreconciled="" lastmodified="" institution="" number="" parentaccount="">
+  <ACCOUNT id="AStd::Income" parentaccount="" currency="EUR" type="12" description="" lastmodified="" number="" institution="" name="Income" lastreconciled="" opened="">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000049"/>
     <SUBACCOUNT id="A000052"/>
@@ -82,18 +82,18 @@
     <SUBACCOUNT id="A000054"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="" name="Equity" id="AStd::Equity" description="" type="16" lastreconciled="" lastmodified="" institution="" number="" parentaccount=""/>
-  <ACCOUNT currency="EUR" opened="2023-10-14" name="Barvermögen" id="A000002" description="" type="9" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Asset">
+  <ACCOUNT id="AStd::Equity" parentaccount="" currency="EUR" type="16" description="" lastmodified="" number="" institution="" name="Equity" lastreconciled="" opened=""/>
+  <ACCOUNT id="A000002" parentaccount="AStd::Asset" currency="EUR" type="9" description="" lastmodified="" number="" institution="" name="Barvermögen" lastreconciled="" opened="2023-10-14">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000003"/>
     <SUBACCOUNT id="A000004"/>
     <SUBACCOUNT id="A000005"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="2023-10-14" name="Bargeld" id="A000003" description="" type="3" lastreconciled="" lastmodified="2023-11-02" institution="" number="" parentaccount="A000002"/>
-  <ACCOUNT currency="EUR" opened="2023-01-01" name="Giro RaiBa" id="A000004" description="Girokonto 1" type="1" lastreconciled="" lastmodified="2023-11-03" institution="I000001" number="" parentaccount="A000002"/>
-  <ACCOUNT currency="EUR" opened="2023-10-14" name="Spar RaiBa" id="A000005" description="" type="1" lastreconciled="" lastmodified="" institution="I000001" number="" parentaccount="A000002"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Bildung" id="A000006" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Expense">
+  <ACCOUNT id="A000003" parentaccount="A000002" currency="EUR" type="3" description="" lastmodified="2023-11-02" number="" institution="" name="Bargeld" lastreconciled="" opened="2023-10-14"/>
+  <ACCOUNT id="A000004" parentaccount="A000002" currency="EUR" type="1" description="Girokonto 1" lastmodified="2023-11-03" number="" institution="I000001" name="Giro RaiBa" lastreconciled="" opened="2023-01-01"/>
+  <ACCOUNT id="A000005" parentaccount="A000002" currency="EUR" type="1" description="" lastmodified="" number="" institution="I000001" name="Spar RaiBa" lastreconciled="" opened="2023-10-14"/>
+  <ACCOUNT id="A000006" parentaccount="AStd::Expense" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Bildung" lastreconciled="" opened="1900-01-01">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000007"/>
     <SUBACCOUNT id="A000008"/>
@@ -101,32 +101,32 @@
     <SUBACCOUNT id="A000010"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Abonnements" id="A000007" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000006"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Bücher" id="A000008" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000006"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Büroartikel" id="A000009" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000006"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Zeitungen" id="A000010" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000006"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Computer" id="A000011" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Expense"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Fahrtkosten" id="A000012" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Expense">
+  <ACCOUNT id="A000007" parentaccount="A000006" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Abonnements" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000008" parentaccount="A000006" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Bücher" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000009" parentaccount="A000006" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Büroartikel" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000010" parentaccount="A000006" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Zeitungen" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000011" parentaccount="AStd::Expense" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Computer" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000012" parentaccount="AStd::Expense" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Fahrtkosten" lastreconciled="" opened="1900-01-01">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000013"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Fahrkarten" id="A000013" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000012"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Geschenke" id="A000014" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Expense"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Hobbies" id="A000015" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Expense"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Kleidung" id="A000016" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Expense"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Lebensmittel" id="A000017" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Expense"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Medikamente" id="A000018" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Expense"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Sonstiges" id="A000019" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Expense">
+  <ACCOUNT id="A000013" parentaccount="A000012" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Fahrkarten" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000014" parentaccount="AStd::Expense" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Geschenke" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000015" parentaccount="AStd::Expense" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Hobbies" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000016" parentaccount="AStd::Expense" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Kleidung" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000017" parentaccount="AStd::Expense" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Lebensmittel" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000018" parentaccount="AStd::Expense" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Medikamente" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000019" parentaccount="AStd::Expense" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Sonstiges" lastreconciled="" opened="1900-01-01">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000020"/>
     <SUBACCOUNT id="A000021"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Bankgebühren" id="A000020" description="" type="13" lastreconciled="" lastmodified="2023-11-03" institution="" number="" parentaccount="A000019"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Sonstiges" id="A000021" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000019"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Spenden" id="A000022" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Expense"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Steuern" id="A000023" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Expense">
+  <ACCOUNT id="A000020" parentaccount="A000019" currency="EUR" type="13" description="" lastmodified="2023-11-03" number="" institution="" name="Bankgebühren" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000021" parentaccount="A000019" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Sonstiges" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000022" parentaccount="AStd::Expense" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Spenden" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000023" parentaccount="AStd::Expense" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Steuern" lastreconciled="" opened="1900-01-01">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000024"/>
     <SUBACCOUNT id="A000025"/>
@@ -136,23 +136,23 @@
     <SUBACCOUNT id="A000029"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Einkommensteuer" id="A000024" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000023"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Pflegeversicherung" id="A000025" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000023"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Rentenversicherung" id="A000026" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000023"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Solidaritätszuschlag" id="A000027" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000023"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Sonstige" id="A000028" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000023"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Sozialabgaben" id="A000029" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000023"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Telekommunikation" id="A000030" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Expense">
+  <ACCOUNT id="A000024" parentaccount="A000023" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Einkommensteuer" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000025" parentaccount="A000023" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Pflegeversicherung" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000026" parentaccount="A000023" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Rentenversicherung" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000027" parentaccount="A000023" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Solidaritätszuschlag" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000028" parentaccount="A000023" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Sonstige" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000029" parentaccount="A000023" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Sozialabgaben" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000030" parentaccount="AStd::Expense" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Telekommunikation" lastreconciled="" opened="1900-01-01">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000031"/>
     <SUBACCOUNT id="A000032"/>
     <SUBACCOUNT id="A000033"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Fernsehen" id="A000031" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000030"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Online-Dienste" id="A000032" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000030"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Telefon" id="A000033" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000030"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Unterhaltung" id="A000034" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Expense">
+  <ACCOUNT id="A000031" parentaccount="A000030" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Fernsehen" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000032" parentaccount="A000030" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Online-Dienste" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000033" parentaccount="A000030" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Telefon" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000034" parentaccount="AStd::Expense" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Unterhaltung" lastreconciled="" opened="1900-01-01">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000035"/>
     <SUBACCOUNT id="A000036"/>
@@ -160,26 +160,26 @@
     <SUBACCOUNT id="A000038"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Ausgehen" id="A000035" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000034"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Musik/Kino" id="A000036" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000034"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Reisen" id="A000037" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000034"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Sport" id="A000038" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000034"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Versicherungen" id="A000039" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Expense">
+  <ACCOUNT id="A000035" parentaccount="A000034" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Ausgehen" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000036" parentaccount="A000034" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Musik/Kino" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000037" parentaccount="A000034" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Reisen" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000038" parentaccount="A000034" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Sport" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000039" parentaccount="AStd::Expense" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Versicherungen" lastreconciled="" opened="1900-01-01">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000040"/>
     <SUBACCOUNT id="A000041"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Haftpflicht" id="A000040" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000039"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Krankenversicherung" id="A000041" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000039"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Wohnen" id="A000042" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Expense">
+  <ACCOUNT id="A000040" parentaccount="A000039" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Haftpflicht" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000041" parentaccount="A000039" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Krankenversicherung" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000042" parentaccount="AStd::Expense" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Wohnen" lastreconciled="" opened="1900-01-01">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000043"/>
     <SUBACCOUNT id="A000044"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Miete" id="A000043" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000042"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Nebenkosten" id="A000044" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000042">
+  <ACCOUNT id="A000043" parentaccount="A000042" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Miete" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000044" parentaccount="A000042" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Nebenkosten" lastreconciled="" opened="1900-01-01">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000045"/>
     <SUBACCOUNT id="A000046"/>
@@ -187,37 +187,37 @@
     <SUBACCOUNT id="A000048"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Abfall" id="A000045" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000044"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Gas" id="A000046" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000044"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Strom" id="A000047" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000044"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Wasser" id="A000048" description="" type="13" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000044"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Gehalt" id="A000049" description="" type="12" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Income">
+  <ACCOUNT id="A000045" parentaccount="A000044" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Abfall" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000046" parentaccount="A000044" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Gas" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000047" parentaccount="A000044" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Strom" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000048" parentaccount="A000044" currency="EUR" type="13" description="" lastmodified="" number="" institution="" name="Wasser" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000049" parentaccount="AStd::Income" currency="EUR" type="12" description="" lastmodified="" number="" institution="" name="Gehalt" lastreconciled="" opened="1900-01-01">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000050"/>
     <SUBACCOUNT id="A000051"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Gehalt" id="A000050" description="" type="12" lastreconciled="" lastmodified="2023-11-02" institution="" number="" parentaccount="A000049"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Zulagen" id="A000051" description="" type="12" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000049"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Geschenke" id="A000052" description="" type="12" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Income"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Sonstiges" id="A000053" description="" type="12" lastreconciled="" lastmodified="2023-11-03" institution="" number="" parentaccount="AStd::Income"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Zinsen" id="A000054" description="" type="12" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Income">
+  <ACCOUNT id="A000050" parentaccount="A000049" currency="EUR" type="12" description="" lastmodified="2023-11-02" number="" institution="" name="Gehalt" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000051" parentaccount="A000049" currency="EUR" type="12" description="" lastmodified="" number="" institution="" name="Zulagen" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000052" parentaccount="AStd::Income" currency="EUR" type="12" description="" lastmodified="" number="" institution="" name="Geschenke" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000053" parentaccount="AStd::Income" currency="EUR" type="12" description="" lastmodified="2023-11-03" number="" institution="" name="Sonstiges" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000054" parentaccount="AStd::Income" currency="EUR" type="12" description="" lastmodified="" number="" institution="" name="Zinsen" lastreconciled="" opened="1900-01-01">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000055"/>
     <SUBACCOUNT id="A000056"/>
     <SUBACCOUNT id="A000057"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Girokonto" id="A000055" description="" type="12" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000054"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Sonstige" id="A000056" description="" type="12" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000054"/>
-  <ACCOUNT currency="EUR" opened="1900-01-01" name="Sparkonto" id="A000057" description="" type="12" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000054"/>
-  <ACCOUNT currency="EUR" opened="2023-10-14" name="Barverbindlichkeiten" id="A000058" description="" type="10" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Liability">
+  <ACCOUNT id="A000055" parentaccount="A000054" currency="EUR" type="12" description="" lastmodified="" number="" institution="" name="Girokonto" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000056" parentaccount="A000054" currency="EUR" type="12" description="" lastmodified="" number="" institution="" name="Sonstige" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000057" parentaccount="A000054" currency="EUR" type="12" description="" lastmodified="" number="" institution="" name="Sparkonto" lastreconciled="" opened="1900-01-01"/>
+  <ACCOUNT id="A000058" parentaccount="AStd::Liability" currency="EUR" type="10" description="" lastmodified="" number="" institution="" name="Barverbindlichkeiten" lastreconciled="" opened="2023-10-14">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000059"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="2023-10-14" name="Kreditkarte" id="A000059" description="" type="4" lastreconciled="" lastmodified="" institution="" number="" parentaccount="A000058"/>
-  <ACCOUNT currency="EUR" opened="2023-01-01" name="Finanzanlagen" id="A000061" description="" type="9" lastreconciled="" lastmodified="" institution="" number="" parentaccount="AStd::Asset">
+  <ACCOUNT id="A000059" parentaccount="A000058" currency="EUR" type="4" description="" lastmodified="" number="" institution="" name="Kreditkarte" lastreconciled="" opened="2023-10-14"/>
+  <ACCOUNT id="A000061" parentaccount="AStd::Asset" currency="EUR" type="9" description="" lastmodified="" number="" institution="" name="Finanzanlagen" lastreconciled="" opened="2023-01-01">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000062"/>
    </SUBACCOUNTS>
@@ -225,46 +225,46 @@
     <PAIR key="iban" value=""/>
    </KEYVALUEPAIRS>
   </ACCOUNT>
-  <ACCOUNT currency="EUR" opened="2023-01-01" name="Depot RaiBa" id="A000062" description="Aktiendepot 1" type="7" lastreconciled="" lastmodified="" institution="I000001" number="" parentaccount="A000061">
+  <ACCOUNT id="A000062" parentaccount="A000061" currency="EUR" type="7" description="Aktiendepot 1" lastmodified="" number="" institution="I000001" name="Depot RaiBa" lastreconciled="" opened="2023-01-01">
    <SUBACCOUNTS>
     <SUBACCOUNT id="A000063"/>
     <SUBACCOUNT id="A000064"/>
    </SUBACCOUNTS>
   </ACCOUNT>
-  <ACCOUNT currency="E000001" opened="2023-11-03" name="DE0007164600 SAP" id="A000063" description="" type="15" lastreconciled="" lastmodified="2023-11-03" institution="" number="" parentaccount="A000062"/>
-  <ACCOUNT currency="E000002" opened="2023-10-27" name="DE0007100000 Mercedes-Benz Group AG" id="A000064" description="" type="15" lastreconciled="" lastmodified="2023-11-03" institution="" number="" parentaccount="A000062"/>
+  <ACCOUNT id="A000063" parentaccount="A000062" currency="E000001" type="15" description="" lastmodified="2023-11-03" number="" institution="" name="DE0007164600 SAP" lastreconciled="" opened="2023-11-03"/>
+  <ACCOUNT id="A000064" parentaccount="A000062" currency="E000002" type="15" description="" lastmodified="2023-11-03" number="" institution="" name="DE0007100000 Mercedes-Benz Group AG" lastreconciled="" opened="2023-10-27"/>
  </ACCOUNTS>
  <TRANSACTIONS count="5">
-  <TRANSACTION commodity="EUR" id="T000000000000000001" memo="" entrydate="2023-11-03" postdate="2023-01-01">
+  <TRANSACTION id="T000000000000000001" memo="" entrydate="2023-11-03" postdate="2023-01-01" commodity="EUR">
    <SPLITS>
-    <SPLIT id="S0001" shares="10000/1" price="1/1" memo="" value="10000/1" payee="P000004" action="" account="A000004" number="" bankid="" reconciledate="" reconcileflag="0"/>
-    <SPLIT id="S0002" shares="-10000/1" price="1/1" memo="" value="-10000/1" payee="P000004" action="" account="A000053" number="" bankid="" reconciledate="" reconcileflag="0"/>
+    <SPLIT id="S0001" reconcileflag="0" payee="P000004" memo="" bankid="" number="" shares="10000/1" account="A000004" reconciledate="" action="" value="10000/1" price="1/1"/>
+    <SPLIT id="S0002" reconcileflag="0" payee="P000004" memo="" bankid="" number="" shares="-10000/1" account="A000053" reconciledate="" action="" value="-10000/1" price="1/1"/>
    </SPLITS>
   </TRANSACTION>
-  <TRANSACTION commodity="EUR" id="T000000000000000002" memo="" entrydate="2023-10-14" postdate="2023-01-03">
+  <TRANSACTION id="T000000000000000002" memo="" entrydate="2023-10-14" postdate="2023-01-03" commodity="EUR">
    <SPLITS>
-    <SPLIT id="S0001" shares="1000/1" price="1/1" memo="Unfug und Quatsch GmbH Gehalt" value="1000/1" payee="P000002" action="" account="A000004" number="" bankid="" reconciledate="" reconcileflag="0"/>
-    <SPLIT id="S0002" shares="-1000/1" price="1/1" memo="Unfug und Quatsch GmbH Gehalt" value="-1000/1" payee="P000002" action="" account="A000050" number="" bankid="" reconciledate="" reconcileflag="0"/>
+    <SPLIT id="S0001" reconcileflag="0" payee="P000002" memo="Unfug und Quatsch GmbH Gehalt" bankid="" number="" shares="1000/1" account="A000004" reconciledate="" action="" value="1000/1" price="1/1"/>
+    <SPLIT id="S0002" reconcileflag="0" payee="P000002" memo="Unfug und Quatsch GmbH Gehalt" bankid="" number="" shares="-1000/1" account="A000050" reconciledate="" action="" value="-1000/1" price="1/1"/>
    </SPLITS>
   </TRANSACTION>
-  <TRANSACTION commodity="EUR" id="T000000000000000003" memo="" entrydate="2023-10-14" postdate="2023-10-14">
+  <TRANSACTION id="T000000000000000003" memo="" entrydate="2023-10-14" postdate="2023-10-14" commodity="EUR">
    <SPLITS>
-    <SPLIT id="S0001" shares="150/1" price="1/1" memo="Bargeldauszahlung" value="150/1" payee="P000003" action="" account="A000004" number="" bankid="" reconciledate="" reconcileflag="0"/>
-    <SPLIT id="S0002" shares="-150/1" price="1/1" memo="Bargeldauszahlung" value="-150/1" payee="P000003" action="" account="A000003" number="" bankid="" reconciledate="" reconcileflag="0"/>
+    <SPLIT id="S0001" reconcileflag="0" payee="P000003" memo="Bargeldauszahlung" bankid="" number="" shares="150/1" account="A000004" reconciledate="" action="" value="150/1" price="1/1"/>
+    <SPLIT id="S0002" reconcileflag="0" payee="P000003" memo="Bargeldauszahlung" bankid="" number="" shares="-150/1" account="A000003" reconciledate="" action="" value="-150/1" price="1/1"/>
    </SPLITS>
   </TRANSACTION>
-  <TRANSACTION commodity="EUR" id="T000000000000000004" memo="" entrydate="2023-11-03" postdate="2023-10-27">
+  <TRANSACTION id="T000000000000000004" memo="" entrydate="2023-11-03" postdate="2023-10-27" commodity="EUR">
    <SPLITS>
-    <SPLIT id="S0001" shares="-3931/2" price="1/1" memo="" value="-3931/2" payee="" action="" account="A000004" number="" bankid="" reconciledate="" reconcileflag="0"/>
-    <SPLIT id="S0002" shares="21/2" price="1/1" memo="" value="21/2" payee="" action="" account="A000020" number="" bankid="" reconciledate="" reconcileflag="0"/>
-    <SPLIT id="S0003" shares="17/1" price="115/1" memo="" value="1955/1" payee="" action="Buy" account="A000064" number="" bankid="" reconciledate="" reconcileflag="0"/>
+    <SPLIT id="S0001" reconcileflag="0" payee="" memo="" bankid="" number="" shares="-3931/2" account="A000004" reconciledate="" action="" value="-3931/2" price="1/1"/>
+    <SPLIT id="S0002" reconcileflag="0" payee="" memo="" bankid="" number="" shares="21/2" account="A000020" reconciledate="" action="" value="21/2" price="1/1"/>
+    <SPLIT id="S0003" reconcileflag="0" payee="" memo="" bankid="" number="" shares="17/1" account="A000064" reconciledate="" action="Buy" value="1955/1" price="115/1"/>
    </SPLITS>
   </TRANSACTION>
-  <TRANSACTION commodity="EUR" id="T000000000000000005" memo="" entrydate="2023-11-03" postdate="2023-11-03">
+  <TRANSACTION id="T000000000000000005" memo="" entrydate="2023-11-03" postdate="2023-11-03" commodity="EUR">
    <SPLITS>
-    <SPLIT id="S0001" shares="-1810/1" price="1/1" memo="" value="-1810/1" payee="" action="" account="A000004" number="" bankid="" reconciledate="" reconcileflag="0"/>
-    <SPLIT id="S0002" shares="10/1" price="1/1" memo="" value="10/1" payee="" action="" account="A000020" number="" bankid="" reconciledate="" reconcileflag="0"/>
-    <SPLIT id="S0003" shares="15/1" price="120/1" memo="" value="1800/1" payee="" action="Buy" account="A000063" number="" bankid="" reconciledate="" reconcileflag="0"/>
+    <SPLIT id="S0001" reconcileflag="0" payee="" memo="" bankid="" number="" shares="-1810/1" account="A000004" reconciledate="" action="" value="-1810/1" price="1/1"/>
+    <SPLIT id="S0002" reconcileflag="0" payee="" memo="" bankid="" number="" shares="10/1" account="A000020" reconciledate="" action="" value="10/1" price="1/1"/>
+    <SPLIT id="S0003" reconcileflag="0" payee="" memo="" bankid="" number="" shares="15/1" account="A000063" reconciledate="" action="Buy" value="1800/1" price="120/1"/>
    </SPLITS>
   </TRANSACTION>
  </TRANSACTIONS>
@@ -274,28 +274,32 @@
  </KEYVALUEPAIRS>
  <SCHEDULES count="0"/>
  <SECURITIES count="2">
-  <SECURITY trading-currency="EUR" saf="100" name="SAP AG" id="E000001" type="0" symbol="SAP" trading-market="XETRA" rounding-method="7" pp="2">
+  <SECURITY trading-market="XETRA" id="E000001" symbol="SAP" type="0" saf="100" pp="2" trading-currency="EUR" name="SAP AG" rounding-method="7">
    <KEYVALUEPAIRS>
     <PAIR key="kmm-security-id" value="DE0007164600"/>
    </KEYVALUEPAIRS>
   </SECURITY>
-  <SECURITY trading-currency="EUR" saf="100" name="Mercedes-Benz Group AG" id="E000002" type="0" symbol="MBG" trading-market="XETRA" rounding-method="7" pp="2">
+  <SECURITY trading-market="XETRA" id="E000002" symbol="MBG" type="0" saf="100" pp="2" trading-currency="EUR" name="Mercedes-Benz Group AG" rounding-method="7">
    <KEYVALUEPAIRS>
     <PAIR key="kmm-security-id" value="DE0007100000"/>
    </KEYVALUEPAIRS>
   </SECURITY>
  </SECURITIES>
- <CURRENCIES count="1">
-  <CURRENCY saf="100" scf="100" name="Euro" id="EUR" type="3" symbol="€" rounding-method="7" pp="4"/>
+ <CURRENCIES count="2">
+  <CURRENCY id="EUR" symbol="€" type="3" saf="100" pp="4" name="Euro" rounding-method="7" scf="100"/>
+  <CURRENCY id="USD" symbol="$" type="3" saf="100" pp="4" name="US Dollar" rounding-method="7" scf="100"/>
  </CURRENCIES>
- <PRICES count="2">
+ <PRICES count="3">
   <PRICEPAIR to="EUR" from="E000001">
-   <PRICE price="120/1" date="2023-11-03" source="Transaction"/>
-   <PRICE price="239/2" date="2023-11-07" source="User"/>
+   <PRICE source="Transaction" date="2023-11-03" price="120/1"/>
+   <PRICE source="User" date="2023-11-07" price="239/2"/>
   </PRICEPAIR>
   <PRICEPAIR to="EUR" from="E000002">
-   <PRICE price="115/1" date="2023-10-27" source="Transaction"/>
-   <PRICE price="233/2" date="2023-11-01" source="User"/>
+   <PRICE source="Transaction" date="2023-10-27" price="115/1"/>
+   <PRICE source="User" date="2023-11-01" price="233/2"/>
+  </PRICEPAIR>
+  <PRICEPAIR to="EUR" from="USD">
+   <PRICE source="User" date="2023-12-04" price="23/25"/>
   </PRICEPAIR>
  </PRICES>
  <REPORTS count="0"/>

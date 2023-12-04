@@ -75,12 +75,12 @@ public class TestKMyMoneyFileImpl {
 
     @Test
     public void test06() throws Exception {
-	assertEquals(1, ((KMyMoneyFileStats) kmmFile).getNofEntriesCurrencyMap());
+	assertEquals(2, ((KMyMoneyFileStats) kmmFile).getNofEntriesCurrencyMap());
     }
 
     @Test
     public void test07() throws Exception {
-	assertEquals(4, ((KMyMoneyFileStats) kmmFile).getNofEntriesPriceMap());
+	assertEquals(5, ((KMyMoneyFileStats) kmmFile).getNofEntriesPriceMap());
     }
 
 }
