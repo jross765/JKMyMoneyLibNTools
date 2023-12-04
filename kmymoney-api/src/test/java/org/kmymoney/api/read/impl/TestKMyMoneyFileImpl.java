@@ -73,4 +73,14 @@ public class TestKMyMoneyFileImpl {
 	assertEquals(2, ((KMyMoneyFileStats) kmmFile).getNofEntriesSecurityMap());
     }
 
+    @Test
+    public void test06() throws Exception {
+	assertEquals(1, ((KMyMoneyFileStats) kmmFile).getNofEntriesCurrencyMap());
+    }
+
+    @Test
+    public void test07() throws Exception {
+	assertEquals(4, ((KMyMoneyFileStats) kmmFile).getNofEntriesPriceMap());
+    }
+
 }

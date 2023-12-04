@@ -11,14 +11,8 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.zip.GZIPInputStream;
-
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kmymoney.api.Const;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
@@ -37,7 +31,6 @@ import org.kmymoney.api.generated.KEYVALUEPAIRS;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PAIR;
-import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.PRICES;
 import org.kmymoney.api.numbers.FixedPointNumber;
@@ -51,12 +44,10 @@ import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.NoEntryFoundException;
 import org.kmymoney.api.read.TooManyEntriesFoundException;
 import org.kmymoney.api.read.aux.KMMPrice;
-import org.kmymoney.api.read.aux.KMMPricePair;
-import org.kmymoney.api.read.impl.aux.KMMPriceImpl;
-import org.kmymoney.api.read.impl.aux.KMMPricePairImpl;
 import org.kmymoney.api.read.impl.hlp.FileAccountManager;
 import org.kmymoney.api.read.impl.hlp.FileCurrencyManager;
 import org.kmymoney.api.read.impl.hlp.FilePayeeManager;
+import org.kmymoney.api.read.impl.hlp.FilePriceManager;
 import org.kmymoney.api.read.impl.hlp.FileSecurityManager;
 import org.kmymoney.api.read.impl.hlp.FileTransactionManager;
 import org.kmymoney.api.read.impl.hlp.NamespaceRemoverReader;
@@ -109,6 +100,10 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     protected FilePayeeManager       pyeMgr  = null;
     protected FileSecurityManager    secMgr  = null;
     protected FileCurrencyManager    currMgr = null;
+    
+    // ----------------------------
+
+    protected FilePriceManager       prcMgr = null;
 
     // ---------------------------------------------------------------
 
@@ -388,61 +383,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     // ---------------------------------------------------------------
     
     /**
-     * {@inheritDoc}
-     */
-    public KMMPrice getPriceById(String id) {
-        if (priceById == null) {
-            getPrices();
-        }
-        
-        return priceById.get(id);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Collection<KMMPrice> getPrices() {
-        if (priceById == null) {
-            priceById = new HashMap<KMMPriceID, KMMPrice>();
-
-            PRICES priceDB = getRootElement().getPRICES();
-            List<PRICEPAIR> prices = priceDB.getPRICEPAIR();
-            for ( PRICEPAIR jwsdpPricePair  : prices ) {
-        	String fromCurr = jwsdpPricePair.getFrom();
-        	String toCurr = jwsdpPricePair.getTo();
-        	KMMPricePair pricePair = new KMMPricePairImpl(jwsdpPricePair, this);
-        	for ( PRICE jwsdpPrice : jwsdpPricePair.getPRICE() ) {
-        	    XMLGregorianCalendar cal = jwsdpPrice.getDate();
-        	    LocalDate date = LocalDate.of(cal.getYear(), cal.getMonth(), cal.getDay());
-        	    String dateStr = date.toString();
-        	    KMMPriceID priceID = new KMMPriceID(fromCurr, toCurr, dateStr);
-        	    KMMPriceImpl price = new KMMPriceImpl(pricePair, jwsdpPrice, this);
-        	    priceById.put(priceID, price);
-        	}
-            }
-        } 
-
-        return priceById.values();
-    }
-
-    public FixedPointNumber getLatestPrice(final String secCurrIDStr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
-	if ( secCurrIDStr.startsWith("E0") ) { // ::MAGIC
-	    return getLatestPrice(new KMMQualifSecID(secCurrIDStr));
-	} else {
-	    return getLatestPrice(new KMMQualifCurrID(secCurrIDStr));
-	}
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
-	return getLatestPrice(secCurrID, 0);
-    }
-
-    protected Map<KMMPriceID, KMMPrice> priceById = null;
-
-    /**
      * @return the underlying JAXB-element
      */
     @SuppressWarnings("exports")
@@ -464,6 +404,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 	rootElement = pRootElement;
 
 	// fill prices
+	prcMgr  = new FilePriceManager(this);
 
 	loadPriceDatabase(pRootElement);
 
@@ -549,132 +490,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
      * @see {@link #getLatestPrice(String, String)}
      */
     protected static final DateFormat PRICE_QUOTE_DATE_FORMAT = new SimpleDateFormat(Const.STANDARD_DATE_FORMAT);
-
-    /**
-     * @param pCmdtySpace the namespace for pCmdtyId
-     * @param pCmdtyId    the currency-name
-     * @param depth       used for recursion. Allways call with '0' for aborting
-     *                    recursive quotes (quotes to other then the base- currency)
-     *                    we abort if the depth reached 6.
-     * @return the latest price-quote in the kmymoney-file in the default-currency
-     * @throws InvalidQualifSecCurrTypeException 
-     * @throws InvalidQualifSecCurrIDException 
-     * @see {@link KMyMoneyFile#getLatestPrice(String, String)}
-     * @see #getDefaultCurrencyID()
-     */
-    private FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID, final int depth) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
-	if (secCurrID == null) {
-	    throw new IllegalArgumentException("null parameter 'secCurrID' given");
-	}
-	// System.err.println("depth: " + depth);
-
-	LocalDate latestDate = null;
-	FixedPointNumber latestQuote = null;
-	FixedPointNumber factor = new FixedPointNumber(1); // factor is used if the quote is not to our base-currency
-	final int maxRecursionDepth = 5; // ::MAGIC
-
-	PRICES priceDB = getRootElement().getPRICES();
-	for ( PRICEPAIR pricePair : priceDB.getPRICEPAIR() ) {
-	    String fromSecCurr = pricePair.getFrom();
-	    String toCurr      = pricePair.getTo();
-	    // System.err.println("pricepair: " + fromCurr + " -> " + toCurr);
-		
-	    if ( fromSecCurr == null ) {
-		LOGGER.warn("KMyMoney-file contains price-quotes without from-currency: '"
-			+ pricePair.toString() + "'");
-		continue;
-	    }
-		
-	    if ( toCurr == null ) {
-		LOGGER.warn("KMyMoney file contains price-quotes without to-currency: '"
-			+ pricePair.toString() + "'");
-		continue;
-	    }
-		
-	    for ( PRICE prc : pricePair.getPRICE() ) {
-		    if (prc == null) {
-			LOGGER.warn("KMyMoney file contains null price-quotes - there may be a problem with JWSDP");
-			continue;
-		    }
-		    
-		try {
-		    if (prc.getDate() == null) {
-			LOGGER.warn("KMyMoney file contains price-quotes without date: '"
-				+ pricePair.toString() + "'");
-			continue;
-		    }
-		    
-		    if (prc.getPrice() == null) {
-			LOGGER.warn("KMyMoney file contains price-quotes without price value: '"
-				+ pricePair.toString() + "'");
-			continue;
-		    }
-
-		    if ( ! fromSecCurr.equals(secCurrID.getCode()) ) {
-			continue;
-		    }
-
-		    // BEGIN core
-		    if ( toCurr.startsWith("E0") ) {
-		      // is security
-			if ( depth > maxRecursionDepth ) {
-			    LOGGER.warn("Ignoring price-quote that is not in an ISO4217-currency"
-				    + " but in '" + toCurr + "'");
-			    continue;
-			}
-			factor = getLatestPrice(new KMMQualifSecID(toCurr), depth + 1);
-		    } else {
-		      // is currency
-			if ( ! toCurr.equals(getDefaultCurrencyID()) ) {
-			    if ( depth > maxRecursionDepth ) {
-				LOGGER.warn("Ignoring price-quote that is not in " + getDefaultCurrencyID()
-					+ " but in '" + toCurr + "'");
-				continue;
-			    }
-			    factor = getLatestPrice(new KMMQualifCurrID(toCurr), depth + 1);
-			}
-		    }
-		    // END core
-
-		    XMLGregorianCalendar dateCal = prc.getDate();
-		    LocalDate date = LocalDate.of(dateCal.getYear(), dateCal.getMonth(), dateCal.getDay());
-
-		    if (latestDate == null || latestDate.isBefore(date)) {
-			latestDate = date;
-			latestQuote = new FixedPointNumber(prc.getPrice());
-			LOGGER.debug("getLatestPrice(pSecCurrId='" + secCurrID.toString()
-				+ "') converted " + latestQuote + " <= " + prc.getPrice());
-		    }
-
-		} catch (NumberFormatException e) {
-		    LOGGER.error("[NumberFormatException] Problem in " + getClass().getName()
-			    + ".getLatestPrice(pSecCurrId='" + secCurrID.toString()
-			    + "')! Ignoring a bad price-quote '" + pricePair + "'", e);
-		} catch (NullPointerException e) {
-		    LOGGER.error("[NullPointerException] Problem in " + getClass().getName()
-			    + ".getLatestPrice(pSecCurrId='" + secCurrID.toString()
-			    + "')! Ignoring a bad price-quote '" + pricePair + "'", e);
-		} catch (ArithmeticException e) {
-		    LOGGER.error("[ArithmeticException] Problem in " + getClass().getName()
-			    + ".getLatestPrice(pSecCurrId='" + secCurrID.toString()
-			    + "')! Ignoring a bad price-quote '" + pricePair + "'", e);
-		}
-	    } // for price
-	} // for pricepair
-
-	LOGGER.debug(getClass().getName() + ".getLatestPrice(pSecCurrId='"
-		+ secCurrID.toString() + "')= " + latestQuote + " from " + latestDate);
-
-	if (latestQuote == null) {
-	    return null;
-	}
-
-	if (factor == null) {
-	    factor = new FixedPointNumber(1);
-	}
-
-	return factor.multiply(latestQuote);
-    }
 
     // ---------------------------------------------------------------
 
@@ -839,6 +654,26 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 	return trxMgr.getTransactions();
     }
     
+    // ---------------------------------------------------------------
+    
+    @Override
+    public KMMPrice getPriceById(KMMPriceID prcID) {
+	return prcMgr.getPriceById(prcID);
+    }
+
+    @Override
+    public Collection<KMMPrice> getPrices() {
+	return prcMgr.getPrices();
+    }
+
+    @Override
+    public FixedPointNumber getLatestPrice(KMMQualifSecCurrID secCurrID)
+	    throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	return prcMgr.getLatestPrice(secCurrID);
+    }
+
+    // ---------------------------------------------------------------
+    
     /**
      * {@inheritDoc}
      */
@@ -873,6 +708,18 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     @Override
     public int getNofEntriesSecurityMap() {
 	return secMgr.getNofEntriesSecurityMap();
+    }
+    
+    @Override
+    public int getNofEntriesCurrencyMap() {
+	return currMgr.getNofEntriesCurrencyMap();
+    }
+    
+    // ----------------------------
+
+    @Override
+    public int getNofEntriesPriceMap() {
+	return prcMgr.getNofEntriesPriceMap();
     }
 
 }

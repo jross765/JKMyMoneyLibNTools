@@ -12,5 +12,11 @@ public interface KMyMoneyFileStats {
     int getNofEntriesPayeeMap();
     
     int getNofEntriesSecurityMap();
+    
+    int getNofEntriesCurrencyMap();
+    
+    // ----------------------------
+    
+    int getNofEntriesPriceMap();
 
 }
