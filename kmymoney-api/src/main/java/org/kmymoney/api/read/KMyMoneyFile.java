@@ -9,6 +9,7 @@ import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSplitID;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
@@ -69,10 +70,16 @@ public interface KMyMoneyFile extends KMyMoneyObject {
     Collection<? extends KMyMoneyAccount> getRootAccounts();
 
     /**
-     * @param id the unique id of the transaction to look for
+     * @param trxID the unique id of the transaction to look for
      * @return the transaction or null if it's not found
      */
-    KMyMoneyTransaction getTransactionById(KMMTrxID id);
+    KMyMoneyTransaction getTransactionById(KMMTrxID trxID);
+
+    /**
+     * @param spltID the unique id of the transaction split to look for
+     * @return the transaction or null if it's not found
+     */
+    KMyMoneyTransactionSplit getTransactionSplitByID(KMMQualifSplitID spltID);
 
     /**
      * @return a (possibly read-only) collection of all transactions Do not modify

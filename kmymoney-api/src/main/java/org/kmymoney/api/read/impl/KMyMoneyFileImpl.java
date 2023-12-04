@@ -7,14 +7,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +41,6 @@ import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.PRICES;
-import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyCurrency;
@@ -61,6 +58,8 @@ import org.kmymoney.api.read.impl.aux.KMMPricePairImpl;
 import org.kmymoney.api.read.impl.hlp.FileAccountManager;
 import org.kmymoney.api.read.impl.hlp.FilePayeeManager;
 import org.kmymoney.api.read.impl.hlp.FileSecurityManager;
+import org.kmymoney.api.read.impl.hlp.FileTransactionManager;
+import org.kmymoney.api.read.impl.hlp.NamespaceRemoverReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -105,9 +104,10 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 
     // ----------------------------
     
-    protected FileAccountManager  acctMgr = null;
-    protected FilePayeeManager    pyeMgr  = null;
-    protected FileSecurityManager secMgr  = null;
+    protected FileAccountManager     acctMgr = null;
+    protected FileTransactionManager trxMgr  = null;
+    protected FilePayeeManager       pyeMgr  = null;
+    protected FileSecurityManager    secMgr  = null;
 
     // ---------------------------------------------------------------
 
@@ -213,7 +213,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     protected void loadInputStream(InputStream in) throws UnsupportedEncodingException, IOException, InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	long start = System.currentTimeMillis();
 
-	NamespaceRemovererReader reader = new NamespaceRemovererReader(new InputStreamReader(in, "utf-8"));
+	NamespaceRemoverReader reader = new NamespaceRemoverReader(new InputStreamReader(in, "utf-8"));
 	try {
 
 	    JAXBContext myContext = getJAXBContext();
@@ -440,22 +440,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     }
 
     /**
-     * All transactions indexed by their unique id-String.
-     *
-     * @see KMyMoneyTransaction
-     * @see KMyMoneyTransactionImpl
-     */
-    protected Map<KMMTrxID, KMyMoneyTransaction> transactionID2transaction;
-
-    /**
-     * All transaction-splits indexed by their unique id-String.
-     *
-     * @see KMyMoneyTransactionSplit
-     * @see KMyMoneyTransactionSplitImpl
-     */
-    protected Map<KMMQualifSplitID, KMyMoneyTransactionSplit> transactionSplitID2transactionSplit;
-
-    /**
      * All currencies indexed by their unique id-String.
      *
      * @see KMyMoneyCurrency
@@ -492,37 +476,14 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 
 	// fill maps
 	acctMgr = new FileAccountManager(this);
-
-	// transactions refer to invoices, therefore they must be loaded after
-	// them
-	initTransactionMap(pRootElement);
+	
+	trxMgr  = new FileTransactionManager(this);
 
 	initCurrencyMap(pRootElement);
 
 	secMgr  = new FileSecurityManager(this);
 
 	pyeMgr  = new FilePayeeManager(this);
-    }
-
-    private void initTransactionMap(final KMYMONEYFILE pRootElement) {
-	transactionID2transaction = new HashMap<KMMTrxID, KMyMoneyTransaction>();
-	transactionSplitID2transactionSplit = new HashMap<KMMQualifSplitID, KMyMoneyTransactionSplit>();
-
-	for ( TRANSACTION jwsdpTrx : pRootElement.getTRANSACTIONS().getTRANSACTION() ) {
-	    try {
-		KMyMoneyTransactionImpl trx = createTransaction(jwsdpTrx);
-		transactionID2transaction.put(trx.getId(), trx);
-		for (KMyMoneyTransactionSplit splt : trx.getSplits()) {
-		    KMMQualifSplitID spltID = new KMMQualifSplitID(trx.getId(), splt.getId());
-		    transactionSplitID2transactionSplit.put(spltID, splt);
-		}
-	    } catch (RuntimeException e) {
-		LOGGER.error("[RuntimeException] Problem in " + getClass().getName() + ".initTransactionMap: "
-			+ "ignoring illegal Transaction-Entry with id=" + jwsdpTrx.getId(), e);
-	    }
-	} // for
-
-	LOGGER.debug("No. of entries in transaction map: " + transactionID2transaction.size());
     }
 
     private void initCurrencyMap(final KMYMONEYFILE pRootElement) {
@@ -750,15 +711,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     }
 
     /**
-     * @param jwsdpTrx the JWSDP-peer (parsed xml-element) to fill our object with
-     * @return the new KMyMoneyTransaction to wrap the given jaxb-object.
-     */
-    protected KMyMoneyTransactionImpl createTransaction(final TRANSACTION jwsdpTrx) {
-	KMyMoneyTransactionImpl trx = new KMyMoneyTransactionImpl(jwsdpTrx, this);
-	return trx;
-    }
-
-    /**
      * @return the jaxb object-factory used to create new peer-objects to extend
      *         this
      */
@@ -907,318 +859,27 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     /**
      * @see KMyMoneyFile#getTransactionById(java.lang.String)
      */
-    public KMyMoneyTransaction getTransactionById(final KMMTrxID id) {
-	if (transactionID2transaction == null) {
-	    throw new IllegalStateException("no root-element loaded");
-	}
-
-	KMyMoneyTransaction retval = transactionID2transaction.get(id);
-	if (retval == null) {
-	    LOGGER.warn("No Transaction with id '" + id + "'. We know " + transactionID2transaction.size()
-		    + " transactions.");
-	}
-	return retval;
+    @Override
+    public KMyMoneyTransaction getTransactionById(final KMMTrxID trxID) {
+	return trxMgr.getTransactionById(trxID);
     }
 
     /**
      * @see KMyMoneyFile#getTransactionById(java.lang.String)
      */
-    public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSplitID id) {
-	if (transactionSplitID2transactionSplit == null) {
-	    throw new IllegalStateException("no root-element loaded");
-	}
-
-	KMyMoneyTransactionSplit retval = transactionSplitID2transactionSplit.get(id);
-	if (retval == null) {
-	    LOGGER.warn("No Transaction-Split with id '" + id + "'. We know "
-		    + transactionSplitID2transactionSplit.size() + " transactions.");
-	}
-	return retval;
+    @Override
+    public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSplitID spltID) {
+	return trxMgr.getTransactionSplitByID(spltID);
     }
 
     /**
      * @see KMyMoneyFile#getTransactions()
      */
+    @Override
     public Collection<? extends KMyMoneyTransaction> getTransactions() {
-	if (transactionID2transaction == null) {
-	    throw new IllegalStateException("no root-element loaded");
-	}
-	return Collections.unmodifiableCollection(transactionID2transaction.values());
+	return trxMgr.getTransactions();
     }
-
-    /**
-     * replaces ':' in tag-names and attribute-names by '_' .
-     */
-    public static class NamespaceRemovererReader extends Reader {
-
-	/**
-	 * How much we have reat.
-	 */
-	private long position = 0;
-
-	/**
-	 * @return How much we have reat.
-	 */
-	public long getPosition() {
-	    return position;
-	}
-
-	/**
-	 * @param pInput what to read from.
-	 */
-	public NamespaceRemovererReader(final Reader pInput) {
-	    super();
-	    input = pInput;
-	}
-
-	/**
-	 * @return What to read from.
-	 */
-	public Reader getInput() {
-	    return input;
-	}
-
-	/**
-	 * @param newInput What to read from.
-	 */
-	public void setInput(final Reader newInput) {
-	    if (newInput == null) {
-		throw new IllegalArgumentException("null not allowed for field this.input");
-	    }
-
-	    input = newInput;
-	}
-
-	/**
-	 * What to read from.
-	 */
-	private Reader input;
-
-	/**
-	 * true if we are in a quotation and thus shall not remove any namespaces.
-	 */
-	private boolean isInQuotation = false;
-
-	/**
-	 * true if we are in a quotation and thus shall remove any namespaces.
-	 */
-	private boolean isInTag = false;
-
-	/**
-	 * @see java.io.Reader#close()
-	 */
-	@Override
-	public void close() throws IOException {
-	    input.close();
-	}
-
-	/**
-	 * For debugging.
-	 */
-	public char[] debugLastTeat = new char[255];
-
-	/**
-	 * For debugging.
-	 */
-	public int debugLastReatLength = -1;
-
-	/**
-	 * Log the last chunk of bytes reat for debugging-purposes.
-	 *
-	 * @param cbuf the data
-	 * @param off  where to start in cbuf
-	 * @param reat how much
-	 */
-	private void logReatBytes(final char[] cbuf, final int off, final int reat) {
-	    debugLastReatLength = Math.min(debugLastTeat.length, reat);
-	    try {
-		System.arraycopy(cbuf, off, debugLastTeat, 0, debugLastTeat.length);
-	    } catch (Exception e) {
-		e.printStackTrace();
-		LOGGER.debug("debugLastReatLength=" + debugLastReatLength + "\n" + "off=" + off + "\n" + "reat=" + reat
-			+ "\n" + "cbuf.length=" + cbuf.length + "\n" + "debugLastTeat.length=" + debugLastTeat.length
-			+ "\n");
-	    }
-	}
-
-	/**
-	 * @see java.io.Reader#read(char[], int, int)
-	 */
-	@Override
-	public int read(final char[] cbuf, final int off, final int len) throws IOException {
-
-	    int reat = input.read(cbuf, off, len);
-
-	    logReatBytes(cbuf, off, reat);
-
-	    for (int i = off; i < off + reat; i++) {
-		position++;
-
-		if (isInTag && (cbuf[i] == '"' || cbuf[i] == '\'')) {
-		    toggleIsInQuotation();
-		} else if (cbuf[i] == '<' && !isInQuotation) {
-		    isInTag = true;
-		} else if (cbuf[i] == '>' && !isInQuotation) {
-		    isInTag = false;
-		} else if (cbuf[i] == ':' && isInTag && !isInQuotation) {
-		    cbuf[i] = '_';
-		}
-
-	    }
-
-	    return reat;
-	}
-
-	/**
-	 *
-	 */
-	private void toggleIsInQuotation() {
-	    if (isInQuotation) {
-		isInQuotation = false;
-	    } else {
-		isInQuotation = true;
-	    }
-	}
-    }
-
-    /**
-     * replaces &#164; by the euro-sign .
-     */
-    public static class EuroConverterReader extends Reader {
-
-	/**
-	 * This is "&#164;".length .
-	 */
-	private static final int REPLACESTRINGLENGTH = 5;
-
-	/**
-	 * @param pInput Where to read from.
-	 */
-	public EuroConverterReader(final Reader pInput) {
-	    super();
-	    input = pInput;
-	}
-
-	/**
-	 * @return Where to read from.
-	 */
-	public Reader getInput() {
-	    return input;
-	}
-
-	/**
-	 * @param newInput Where to read from.
-	 */
-	public void setInput(Reader newInput) {
-	    if (newInput == null) {
-		throw new IllegalArgumentException("null not allowed for field this.input");
-	    }
-
-	    input = newInput;
-	}
-
-	/**
-	 * Where to read from.
-	 */
-	private Reader input;
-
-	/**
-	 * @see java.io.Reader#close()
-	 */
-	@Override
-	public void close() throws IOException {
-	    input.close();
-
-	}
-
-	/**
-	 * @see java.io.Reader#read(char[], int, int)
-	 */
-	@Override
-	public int read(final char[] cbuf, final int off, final int len) throws IOException {
-
-	    int reat = input.read(cbuf, off, len);
-
-	    // this does not work if the euro-sign is wrapped around the
-	    // edge of 2 read-call buffers
-
-	    int state = 0;
-
-	    for (int i = off; i < off + reat; i++) {
-
-		switch (state) {
-
-		case 0: {
-		    if (cbuf[i] == '&') {
-			state++;
-		    }
-		    break;
-		}
-
-		case 1: {
-		    if (cbuf[i] == '#') {
-			state++;
-		    } else {
-			state = 0;
-		    }
-		    break;
-		}
-
-		case 2: {
-		    if (cbuf[i] == '1') {
-			state++;
-		    } else {
-			state = 0;
-		    }
-		    break;
-		}
-
-		case REPLACESTRINGLENGTH - 2: {
-		    if (cbuf[i] == '6') {
-			state++;
-		    } else {
-			state = 0;
-		    }
-		    break;
-		}
-
-		case REPLACESTRINGLENGTH - 1: {
-		    if (cbuf[i] == '4') {
-			state++;
-		    } else {
-			state = 0;
-		    }
-		    break;
-		}
-		case REPLACESTRINGLENGTH: {
-		    if (cbuf[i] == ';') {
-			// found it!!!
-			cbuf[i - REPLACESTRINGLENGTH] = '�';
-			if (i != reat - 1) {
-			    System.arraycopy(cbuf, (i + 1), cbuf, (i - (REPLACESTRINGLENGTH - 1)), (reat - i - 1));
-			}
-			int reat2 = input.read(cbuf, reat - REPLACESTRINGLENGTH, REPLACESTRINGLENGTH);
-			if (reat2 != REPLACESTRINGLENGTH) {
-			    reat -= (REPLACESTRINGLENGTH - reat2);
-			}
-			i -= (REPLACESTRINGLENGTH - 1);
-			state = 0;
-		    } else {
-			state = 0;
-		    }
-		    break;
-		}
-
-		default:
-		}
-
-	    }
-	    return reat;
-	}
-
-	;
-    }
-
+    
     /**
      * {@inheritDoc}
      */
@@ -1237,12 +898,12 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 
     @Override
     public int getNofEntriesTransactionMap() {
-	return transactionID2transaction.size();
+	return trxMgr.getNofEntriesTransactionMap();
     }
 
     @Override
     public int getNofEntriesTransactionSplitMap() {
-	return transactionSplitID2transactionSplit.size();
+	return trxMgr.getNofEntriesTransactionSplitMap();
     }
 
     @Override
