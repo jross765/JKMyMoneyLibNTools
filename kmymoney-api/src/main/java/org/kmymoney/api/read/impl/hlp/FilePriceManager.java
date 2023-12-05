@@ -1,5 +1,7 @@
 package org.kmymoney.api.read.impl.hlp;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,6 +10,7 @@ import java.util.Map;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.kmymoney.api.Const;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
@@ -31,6 +34,8 @@ import org.slf4j.LoggerFactory;
 public class FilePriceManager {
     
     protected static final Logger LOGGER = LoggerFactory.getLogger(FilePriceManager.class);
+
+    public static final DateFormat PRICE_QUOTE_DATE_FORMAT = new SimpleDateFormat(Const.STANDARD_DATE_FORMAT);
 
     private static final int RECURS_DEPTH_MAX = 5; // ::MAGIC
 

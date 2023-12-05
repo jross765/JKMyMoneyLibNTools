@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.zip.GZIPInputStream;
 
@@ -70,13 +67,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyFileImpl.class);
 
-    /**
-     * my CurrencyTable.
-     */
-    private final ComplexPriceTable currencyTable = new ComplexPriceTable();
-
-    private static final String PADDING_TEMPLATE = "000000";
-
     // ---------------------------------------------------------------
 
     private File file;
@@ -88,10 +78,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 
     // ----------------------------
 
-    /**
-     * @see #getObjectFactory()
-     */
     private volatile ObjectFactory myJAXBFactory;
+    private volatile JAXBContext myJAXBContext;
 
     // ----------------------------
     
@@ -103,7 +91,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     
     // ----------------------------
 
-    protected FilePriceManager       prcMgr = null;
+    private final ComplexPriceTable  currencyTable = new ComplexPriceTable();
+    protected FilePriceManager       prcMgr        = null;
 
     // ---------------------------------------------------------------
 
@@ -381,6 +370,154 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     }
 
     // ---------------------------------------------------------------
+
+    /**
+     * @see KMyMoneyFile#getTransactionById(java.lang.String)
+     */
+    @Override
+    public KMyMoneyTransaction getTransactionById(final KMMTrxID trxID) {
+	return trxMgr.getTransactionById(trxID);
+    }
+
+    /**
+     * @see KMyMoneyFile#getTransactions()
+     */
+    @Override
+    public Collection<? extends KMyMoneyTransaction> getTransactions() {
+	return trxMgr.getTransactions();
+    }
+    
+    // ---------------------------------------------------------------
+    
+    /**
+     * @see KMyMoneyFile#getTransactionById(java.lang.String)
+     */
+    @Override
+    public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSplitID spltID) {
+	return trxMgr.getTransactionSplitByID(spltID);
+    }
+
+    @Override
+    public Collection<KMyMoneyTransactionSplit> getTransactionSplits() {
+	return trxMgr.getTransactionSplits();
+    }
+
+    // ---------------------------------------------------------------
+
+    @Override
+    public KMyMoneyPayee getPayeeById(final KMMPyeID id) {
+	return pyeMgr.getPayeeById(id);
+    }
+
+    @Override
+    public Collection<KMyMoneyPayee> getPayeesByName(String expr) {
+	return pyeMgr.getPayeesByName(expr);
+    }
+
+    @Override
+    public Collection<KMyMoneyPayee> getPayeesByName(String expr, boolean relaxed) {
+	return pyeMgr.getPayeesByName(expr, relaxed);
+    }
+
+    @Override
+    public KMyMoneyPayee getPayeesByNameUniq(String expr)
+	    throws NoEntryFoundException, TooManyEntriesFoundException {
+	return pyeMgr.getPayeesByNameUniq(expr);
+    }
+
+    @Override
+    public Collection<KMyMoneyPayee> getPayees() {
+	return pyeMgr.getPayees();
+    }
+
+    // ---------------------------------------------------------------
+
+    @Override
+    public KMyMoneySecurity getSecurityById(final KMMSecID secID) {
+	return secMgr.getSecurityById(secID);
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityById(final String idStr) {
+	return secMgr.getSecurityById(idStr);
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityByQualifID(final KMMQualifSecID secID) {
+	return secMgr.getSecurityByQualifID(secID);
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityByQualifID(final String qualifIDStr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	return secMgr.getSecurityByQualifID(qualifIDStr);
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityBySymbol(final String symb) {
+	return secMgr.getSecurityBySymbol(symb);
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityByCode(final String code) {
+	return secMgr.getSecurityByCode(code);
+    }
+
+    @Override
+    public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr) {
+	return secMgr.getSecuritiesByName(expr);
+    }
+
+    @Override
+    public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed) {
+	return secMgr.getSecuritiesByName(expr, relaxed);
+    }
+
+    @Override
+    public KMyMoneySecurity getSecurityByNameUniq(final String expr) throws NoEntryFoundException, TooManyEntriesFoundException {
+	return secMgr.getSecurityByNameUniq(expr);
+    }
+    
+    @Override
+    public Collection<KMyMoneySecurity> getSecurities() {
+	return secMgr.getSecurities();
+    }
+
+    // ---------------------------------------------------------------
+
+    @Override
+    public KMyMoneyCurrency getCurrencyById(String currID) {
+	return currMgr.getCurrencyById(currID);
+    }
+
+    @Override
+    public KMyMoneyCurrency getCurrencyByQualifId(KMMQualifCurrID currID) {
+	return currMgr.getCurrencyByQualifId(currID);
+    }
+
+    @Override
+    public Collection<KMyMoneyCurrency> getCurrencies() {
+	return currMgr.getCurrencies();
+    }
+
+    // ---------------------------------------------------------------
+    
+    @Override
+    public KMMPrice getPriceById(KMMPriceID prcID) {
+	return prcMgr.getPriceById(prcID);
+    }
+
+    @Override
+    public Collection<KMMPrice> getPrices() {
+	return prcMgr.getPrices();
+    }
+
+    @Override
+    public FixedPointNumber getLatestPrice(KMMQualifSecCurrID secCurrID)
+	    throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	return prcMgr.getLatestPrice(secCurrID);
+    }
+
+    // ---------------------------------------------------------------
     
     /**
      * @return the underlying JAXB-element
@@ -468,7 +605,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 	    }
 
 	    if ( fromSecCurr.equals(baseCurrency) ) {
-		LOGGER.warn("Ignoring price-quote for " + baseCurrency 
+		LOGGER.warn("loadPriceDatabaseCore: Ignoring price-quote for " + baseCurrency 
 		    + " because " + baseCurrency + " is our base-currency.");
 		continue;
 	    }
@@ -480,16 +617,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 	    if ( factor != null ) {
 		getCurrencyTable().setConversionFactor(nameSpace, fromSecCurr, factor);
 	    } else {
-		LOGGER.warn("The KMyMoney file defines a factor for a security '" 
+		LOGGER.warn("loadPriceDatabaseCore: The KMyMoney file defines a factor for a security '" 
 			+ fromSecCurr + "' but has no security for it");
 	    }
 	} // for pricePair
     }
-
-    /**
-     * @see {@link #getLatestPrice(String, String)}
-     */
-    protected static final DateFormat PRICE_QUOTE_DATE_FORMAT = new SimpleDateFormat(Const.STANDARD_DATE_FORMAT);
 
     // ---------------------------------------------------------------
 
@@ -506,11 +638,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     }
 
     /**
-     * @see #getJAXBContext()
-     */
-    private volatile JAXBContext myJAXBContext;
-
-    /**
      * @return the JAXB-context
      */
     protected JAXBContext getJAXBContext() {
@@ -518,162 +645,14 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
 	    try {
 		myJAXBContext = JAXBContext.newInstance("org.kmymoney.api.generated", this.getClass().getClassLoader());
 	    } catch (JAXBException e) {
-		LOGGER.error(e.getMessage(), e);
+		LOGGER.error("getJAXBContext: " + e.getMessage(), e);
 	    }
 	}
 	return myJAXBContext;
     }
 
-    /**
-     * @return the number of transactions
-     */
-    protected BigInteger getTransactionCount() {
-	return getRootElement().getTRANSACTIONS().getCount();
-    }
-
     // ---------------------------------------------------------------
 
-    @Override
-    public KMyMoneyCurrency getCurrencyById(String currID) {
-	return currMgr.getCurrencyById(currID);
-    }
-
-    @Override
-    public KMyMoneyCurrency getCurrencyByQualifId(KMMQualifCurrID currID) {
-	return currMgr.getCurrencyByQualifId(currID);
-    }
-
-    @Override
-    public Collection<KMyMoneyCurrency> getCurrencies() {
-	return currMgr.getCurrencies();
-    }
-
-    // ---------------------------------------------------------------
-
-    @Override
-    public KMyMoneyPayee getPayeeById(final KMMPyeID id) {
-	return pyeMgr.getPayeeById(id);
-    }
-
-    @Override
-    public Collection<KMyMoneyPayee> getPayeesByName(String expr) {
-	return pyeMgr.getPayeesByName(expr);
-    }
-
-    @Override
-    public Collection<KMyMoneyPayee> getPayeesByName(String expr, boolean relaxed) {
-	return pyeMgr.getPayeesByName(expr, relaxed);
-    }
-
-    @Override
-    public KMyMoneyPayee getPayeesByNameUniq(String expr)
-	    throws NoEntryFoundException, TooManyEntriesFoundException {
-	return pyeMgr.getPayeesByNameUniq(expr);
-    }
-
-    @Override
-    public Collection<KMyMoneyPayee> getPayees() {
-	return pyeMgr.getPayees();
-    }
-
-    // ---------------------------------------------------------------
-
-    @Override
-    public KMyMoneySecurity getSecurityById(final KMMSecID secID) {
-	return secMgr.getSecurityById(secID);
-    }
-
-    @Override
-    public KMyMoneySecurity getSecurityById(final String idStr) {
-	return secMgr.getSecurityById(idStr);
-    }
-
-    @Override
-    public KMyMoneySecurity getSecurityByQualifID(final KMMQualifSecID secID) {
-	return secMgr.getSecurityByQualifID(secID);
-    }
-
-    @Override
-    public KMyMoneySecurity getSecurityByQualifID(final String qualifIDStr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
-	return secMgr.getSecurityByQualifID(qualifIDStr);
-    }
-
-    @Override
-    public KMyMoneySecurity getSecurityBySymbol(final String symb) {
-	return secMgr.getSecurityBySymbol(symb);
-    }
-
-    @Override
-    public KMyMoneySecurity getSecurityByCode(final String code) {
-	return secMgr.getSecurityByCode(code);
-    }
-
-    @Override
-    public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr) {
-	return secMgr.getSecuritiesByName(expr);
-    }
-
-    @Override
-    public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed) {
-	return secMgr.getSecuritiesByName(expr, relaxed);
-    }
-
-    @Override
-    public KMyMoneySecurity getSecurityByNameUniq(final String expr) throws NoEntryFoundException, TooManyEntriesFoundException {
-	return secMgr.getSecurityByNameUniq(expr);
-    }
-    
-    @Override
-    public Collection<KMyMoneySecurity> getSecurities() {
-	return secMgr.getSecurities();
-    }
-
-    // ---------------------------------------------------------------
-
-    /**
-     * @see KMyMoneyFile#getTransactionById(java.lang.String)
-     */
-    @Override
-    public KMyMoneyTransaction getTransactionById(final KMMTrxID trxID) {
-	return trxMgr.getTransactionById(trxID);
-    }
-
-    /**
-     * @see KMyMoneyFile#getTransactionById(java.lang.String)
-     */
-    @Override
-    public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSplitID spltID) {
-	return trxMgr.getTransactionSplitByID(spltID);
-    }
-
-    /**
-     * @see KMyMoneyFile#getTransactions()
-     */
-    @Override
-    public Collection<? extends KMyMoneyTransaction> getTransactions() {
-	return trxMgr.getTransactions();
-    }
-    
-    // ---------------------------------------------------------------
-    
-    @Override
-    public KMMPrice getPriceById(KMMPriceID prcID) {
-	return prcMgr.getPriceById(prcID);
-    }
-
-    @Override
-    public Collection<KMMPrice> getPrices() {
-	return prcMgr.getPrices();
-    }
-
-    @Override
-    public FixedPointNumber getLatestPrice(KMMQualifSecCurrID secCurrID)
-	    throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
-	return prcMgr.getLatestPrice(secCurrID);
-    }
-
-    // ---------------------------------------------------------------
-    
     /**
      * {@inheritDoc}
      */
@@ -681,7 +660,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     public KMyMoneyFile getKMyMoneyFile() {
 	return this;
     }
-
+    
     // ---------------------------------------------------------------
     // Statistics (for test purposes)
 
@@ -716,10 +695,28 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     }
     
     // ----------------------------
-
+    
     @Override
     public int getNofEntriesPriceMap() {
 	return prcMgr.getNofEntriesPriceMap();
+    }
+
+    // ---------------------------------------------------------------
+    
+    public String toString() {
+	String result = "KMyMoneyFileImpl: [\n";
+	
+	result += "  No. of accounts:           " + getNofEntriesAccountMap() + "\n"; 
+	result += "  No. of transactions:       " + getNofEntriesTransactionMap() + "\n"; 
+	result += "  No. of transaction splits: " + getNofEntriesTransactionSplitMap() + "\n"; 
+	result += "  No. of payees:             " + getNofEntriesPayeeMap() + "\n"; 
+	result += "  No. of securities:         " + getNofEntriesSecurityMap() + "\n"; 
+	result += "  No. of currencies:         " + getNofEntriesCurrencyMap() + "\n";
+	result += "  No. of prices:             " + getNofEntriesPriceMap() + "\n";
+	
+	result += "]";
+	
+	return result;
     }
 
 }

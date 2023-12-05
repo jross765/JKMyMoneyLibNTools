@@ -142,6 +142,18 @@ public class FileTransactionManager {
     }
 
     /**
+     * @see KMyMoneyFile#getTransactions()
+     */
+    public Collection<? extends KMyMoneyTransaction> getTransactions() {
+	if (trxMap == null) {
+	    throw new IllegalStateException("no root-element loaded");
+	}
+	return Collections.unmodifiableCollection(trxMap.values());
+    }
+
+    // ---------------------------------------------------------------
+
+    /**
      * @see KMyMoneyFile#getTransactionById(java.lang.String)
      */
     public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSplitID spltID) {
@@ -159,11 +171,11 @@ public class FileTransactionManager {
     /**
      * @see KMyMoneyFile#getTransactions()
      */
-    public Collection<? extends KMyMoneyTransaction> getTransactions() {
-	if (trxMap == null) {
+    public Collection<KMyMoneyTransactionSplit> getTransactionSplits() {
+	if (trxSpltMap == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
-	return Collections.unmodifiableCollection(trxMap.values());
+	return Collections.unmodifiableCollection(trxSpltMap.values());
     }
 
     // ---------------------------------------------------------------
