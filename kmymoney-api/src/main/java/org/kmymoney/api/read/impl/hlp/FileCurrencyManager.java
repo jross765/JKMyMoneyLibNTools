@@ -21,7 +21,7 @@ public class FileCurrencyManager {
 
     private KMyMoneyFileImpl kmmFile;
 
-    private Map<String, KMyMoneyCurrency> currID2Curr;
+    private Map<String, KMyMoneyCurrency> currMap;
 
     // ---------------------------------------------------------------
 
@@ -33,19 +33,19 @@ public class FileCurrencyManager {
     // ---------------------------------------------------------------
 
     private void init(final KMYMONEYFILE pRootElement) {
-	currID2Curr = new HashMap<String, KMyMoneyCurrency>();
+	currMap = new HashMap<String, KMyMoneyCurrency>();
 
 	for ( CURRENCY jwsdpCurr : pRootElement.getCURRENCIES().getCURRENCY() ) {
 	    try {
 		KMyMoneyCurrencyImpl curr = createCurrency(jwsdpCurr);
-		currID2Curr.put(jwsdpCurr.getId(), curr);
+		currMap.put(jwsdpCurr.getId(), curr);
 	    } catch (RuntimeException e) {
 		LOGGER.error("init: [RuntimeException] Problem in " + getClass().getName() + ".init: "
 			+ "ignoring illegal Currency-Entry with id=" + jwsdpCurr.getId(), e);
 	    }
 	} // for
 
-	LOGGER.debug("init: No. of entries in currency map: " + currID2Curr.size());
+	LOGGER.debug("init: No. of entries in currency map: " + currMap.size());
     }
 
     /**
@@ -59,14 +59,24 @@ public class FileCurrencyManager {
 
     // ---------------------------------------------------------------
 
+    public void addCurrency(KMyMoneyCurrency curr) {
+	currMap.put(curr.getId(), curr);
+    }
+
+    public void removeCurrency(KMyMoneyCurrency curr) {
+	currMap.remove(curr.getId());
+    }
+
+    // ---------------------------------------------------------------
+
     public KMyMoneyCurrency getCurrencyById(String currID) {
-	if (currID2Curr == null) {
+	if (currMap == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
 
-	KMyMoneyCurrency retval = currID2Curr.get(currID);
+	KMyMoneyCurrency retval = currMap.get(currID);
 	if (retval == null) {
-	    LOGGER.warn("No Currency with ID '" + currID + "'. We know " + currID2Curr.size() + " currencies.");
+	    LOGGER.warn("getCurrencyById: No Currency with ID '" + currID + "'. We know " + currMap.size() + " currencies.");
 	}
 	
 	return retval;
@@ -77,13 +87,13 @@ public class FileCurrencyManager {
     }
 
     public Collection<KMyMoneyCurrency> getCurrencies() {
-	return currID2Curr.values();
+	return currMap.values();
     }
 
     // ---------------------------------------------------------------
     
     public int getNofEntriesCurrencyMap() {
-	return currID2Curr.size();
+	return currMap.size();
     }
     
 }

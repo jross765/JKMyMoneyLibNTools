@@ -69,6 +69,16 @@ public class FileAccountManager {
 
     // ---------------------------------------------------------------
 
+    public void addAccount(KMyMoneyAccount acct) {
+	acctMap.put(acct.getId(), acct);
+    }
+
+    public void removeAccount(KMyMoneyAccount acct) {
+	acctMap.remove(acct.getId());
+    }
+
+    // ---------------------------------------------------------------
+
     /**
      * @see KMyMoneyFile#getAccountById(java.lang.String)
      */
@@ -79,7 +89,7 @@ public class FileAccountManager {
 
 	KMyMoneyAccount retval = acctMap.get(id);
 	if (retval == null) {
-	    System.err.println("No Account with ID '" + id + "'. We know " + acctMap.size() + " accounts.");
+	    System.err.println("getAccountById: No Account with ID '" + id + "'. We know " + acctMap.size() + " accounts.");
 	}
 	
 	return retval;
@@ -167,6 +177,7 @@ public class FileAccountManager {
 	else
 	    return acctList.iterator().next();
     }
+    
     /**
      * warning: this function has to traverse all accounts. If it much faster to try
      * getAccountByID first and only call this method if the returned account does
@@ -274,16 +285,16 @@ public class FileAccountManager {
     
             return retval;
         } catch (RuntimeException e) {
-            LOGGER.error("Problem getting all root-account", e);
+            LOGGER.error("getRootAccounts: Problem getting all root-account", e);
             throw e;
         } catch (Throwable e) {
-            LOGGER.error("SERIOUS Problem getting all root-account", e);
+            LOGGER.error("getRootAccounts: SERIOUS Problem getting all root-account", e);
             return new LinkedList<KMyMoneyAccount>();
         }
     }
-
-    // ---------------------------------------------------------------
     
+    // ---------------------------------------------------------------
+
     public int getNofEntriesAccountMap() {
 	return acctMap.size();
     }

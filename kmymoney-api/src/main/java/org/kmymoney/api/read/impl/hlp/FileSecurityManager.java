@@ -41,7 +41,7 @@ public class FileSecurityManager {
     // ---------------------------------------------------------------
 
     private void init(final KMYMONEYFILE pRootElement) {
-	secMap = new HashMap<KMMSecID, KMyMoneySecurity>();
+	secMap  = new HashMap<KMMSecID, KMyMoneySecurity>();
 	symbMap = new HashMap<String, KMMSecID>();
 	codeMap = new HashMap<String, KMMSecID>();
 
@@ -71,6 +71,32 @@ public class FileSecurityManager {
 
     // ---------------------------------------------------------------
 
+    public void addSecurity(KMyMoneySecurity sec) {
+	secMap.put(sec.getId(), sec);
+
+	if ( sec.getSymbol() != null )
+	    symbMap.put(sec.getSymbol(), sec.getQualifId().getSecID());
+
+	if ( sec.getCode() != null )
+	    codeMap.put(sec.getCode(), sec.getQualifId().getSecID());
+    }
+
+    public void removeSecurity(KMyMoneySecurity sec) {
+	secMap.remove(sec.getId());
+
+	for ( String symb : symbMap.keySet() ) {
+	    if ( symbMap.get(symb).equals(sec.getQualifId().getSecID()) )
+		symbMap.remove(symb);
+	}
+
+	for ( String code : codeMap.keySet() ) {
+	    if ( codeMap.get(code).equals(sec.getQualifId().getSecID()) )
+		codeMap.remove(code);
+	}
+    }
+
+    // ---------------------------------------------------------------
+
     public KMyMoneySecurity getSecurityById(final KMMSecID id) {
 	if (secMap == null) {
 	    throw new IllegalStateException("no root-element loaded");
@@ -78,7 +104,7 @@ public class FileSecurityManager {
 
 	KMyMoneySecurity retval = secMap.get(id);
 	if (retval == null) {
-	    LOGGER.warn("No Security with ID '" + id + "'. We know " + secMap.size() + " securities.");
+	    LOGGER.warn("getSecurityById: No Security with ID '" + id + "'. We know " + secMap.size() + " securities.");
 	}
 	
 	return retval;
@@ -131,12 +157,12 @@ public class FileSecurityManager {
 	
 	KMMSecID qualifID = symbMap.get(symb);
 	if (qualifID == null) {
-	    LOGGER.warn("No Security with symbol '" + symb + "'. We know " + symbMap.size() + " securities in map 2.");
+	    LOGGER.warn("getSecurityBySymbol: No Security with symbol '" + symb + "'. We know " + symbMap.size() + " securities in map 2.");
 	}
 	
 	KMyMoneySecurity retval = secMap.get(qualifID);
 	if (retval == null) {
-	    LOGGER.warn("No Security with qualified ID '" + qualifID + "'. We know " + secMap.size() + " securities in map 1.");
+	    LOGGER.warn("getSecurityBySymbol: Security with qualified ID '" + qualifID + "'. We know " + secMap.size() + " securities in map 1.");
 	}
 	
 	return retval;
@@ -154,17 +180,17 @@ public class FileSecurityManager {
 	    // file does not contain quotes for foreign currencies (i.e. currency-
 	    // commodities but only security-commodities is this an error.
 	    // throw new IllegalStateException("Sizes of root elements are not equal");
-	    LOGGER.debug("getSecurityBySymbol: Sizes of root elements are not equal.");
+	    LOGGER.debug("getSecurityByCode: Sizes of root elements are not equal.");
 	}
 	
 	KMMSecID qualifID = codeMap.get(code);
 	if (qualifID == null) {
-	    LOGGER.warn("No Security with symbol '" + code + "'. We know " + codeMap.size() + " securities in map 2.");
+	    LOGGER.warn("getSecurityByCode: No Security with symbol '" + code + "'. We know " + codeMap.size() + " securities in map 2.");
 	}
 	
 	KMyMoneySecurity retval = secMap.get(qualifID);
 	if (retval == null) {
-	    LOGGER.warn("No Security with qualified ID '" + qualifID + "'. We know " + secMap.size() + " securities in map 1.");
+	    LOGGER.warn("getSecurityByCode: No Security with qualified ID '" + qualifID + "'. We know " + secMap.size() + " securities in map 1.");
 	}
 	
 	return retval;

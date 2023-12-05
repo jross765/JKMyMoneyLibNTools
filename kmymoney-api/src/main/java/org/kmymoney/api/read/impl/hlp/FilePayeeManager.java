@@ -63,6 +63,16 @@ public class FilePayeeManager {
 
     // ---------------------------------------------------------------
 
+    public void addPayee(KMyMoneyPayee pye) {
+	pyeMap.put(pye.getId(), pye);
+    }
+
+    public void removePayee(KMyMoneyPayee pye) {
+	pyeMap.remove(pye.getId());
+    }
+
+    // ---------------------------------------------------------------
+
     /**
      * @see KMyMoneyFile#getPayeeByID(java.lang.String)
      */
@@ -73,7 +83,7 @@ public class FilePayeeManager {
 
 	KMyMoneyPayee retval = pyeMap.get(id);
 	if (retval == null) {
-	    LOGGER.warn("No Payee with ID '" + id + "'. We know " + pyeMap.size() + " payees.");
+	    LOGGER.warn("getPayeeById: No Payee with ID '" + id + "'. We know " + pyeMap.size() + " payees.");
 	}
 	
 	return retval;
