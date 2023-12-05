@@ -42,19 +42,22 @@ public class TestKMMComplAcctID {
 
     @Test
     public void test02() throws Exception {
-	KMMComplAcctID acctID = new KMMComplAcctID("AStd::Asset");
+	KMMComplAcctID acctID1 = new KMMComplAcctID("AStd::Asset");
+	KMMComplAcctID acctID2 = KMMComplAcctID.get(KMMComplAcctID.Top.ASSET);
 
-	assertEquals(KMMComplAcctID.Type.SPECIAL, acctID.getType());
-	assertEquals("AStd::Asset", acctID.getSpecID());
+	assertEquals(KMMComplAcctID.Type.SPECIAL, acctID1.getType());
+	assertEquals("AStd::Asset", acctID1.getSpecID());
+	assertEquals("AStd::Asset", acctID2.getSpecID());
+	assertEquals(acctID1.getSpecID(), acctID2.getSpecID());
 	
 	try {
-	    assertEquals("123", acctID.getStdID()); // invalid call
+	    assertEquals("123", acctID1.getStdID()); // invalid call
 	} catch ( Exception exc ) {
 	    assertEquals(0, 0);
 	}
 
 	try {
-	    acctID = new KMMComplAcctID("AStd::Anlagevermoegen"); // invalid string
+	    acctID1 = new KMMComplAcctID("AStd::Anlagevermoegen"); // invalid string
 	} catch ( Exception exc ) {
 	    assertEquals(0, 0);
 	}

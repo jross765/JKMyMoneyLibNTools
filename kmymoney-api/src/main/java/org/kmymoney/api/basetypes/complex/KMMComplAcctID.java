@@ -15,16 +15,49 @@ public class KMMComplAcctID implements Comparable<KMMComplAcctID> {
 	UNSET
     }
 
+    public enum Top {
+	
+	// ::MAGIC
+	ASSET     ( SPEC_PREFIX + "Asset" ),
+	LIABILITY ( SPEC_PREFIX + "Liability" ),
+	INCOME    ( SPEC_PREFIX + "Income" ),
+	EXPENSE   ( SPEC_PREFIX + "Expense" ),
+	EQUITY    ( SPEC_PREFIX + "Equity" );
+
+	// ---
+
+	private String code = "UNSET";
+	
+	// ---
+	
+	Top(String code) {
+	    this.code = code;
+	}
+
+	// ---
+	
+	public String getCode() {
+	    return code;
+	}
+	
+	// no typo!
+	public static Top valueOff(String code) {
+	    for ( Top type : values() ) {
+		if ( type.getCode().equals(code) ) {
+		    return type;
+		}
+	    }
+	    
+	    return null;
+	}
+    }
+
     // -----------------------------------------------------------------
 
     private static final Logger logger = LoggerFactory.getLogger(KMMComplAcctID.class);
     
-    private static final String SPEC_PREFIX = "AStd::";
-    private static final String SPEC_ACCT_ID_1 = SPEC_PREFIX + "Asset";
-    private static final String SPEC_ACCT_ID_2 = SPEC_PREFIX + "Liability";
-    private static final String SPEC_ACCT_ID_3 = SPEC_PREFIX + "Expense";
-    private static final String SPEC_ACCT_ID_4 = SPEC_PREFIX + "Income";
-    private static final String SPEC_ACCT_ID_5 = SPEC_PREFIX + "Equity";
+    // ::MAGIC
+    public static final String SPEC_PREFIX = "AStd::";
 
     // -----------------------------------------------------------------
 
@@ -113,11 +146,11 @@ public class KMMComplAcctID implements Comparable<KMMComplAcctID> {
     }
 
     private boolean checkSpecID(String specID) {
-	if ( specID.equals(SPEC_ACCT_ID_1) ||
-	     specID.equals(SPEC_ACCT_ID_2) ||
-	     specID.equals(SPEC_ACCT_ID_3) ||
-	     specID.equals(SPEC_ACCT_ID_4) ||
-	     specID.equals(SPEC_ACCT_ID_5) )
+	if ( specID.equals(Top.ASSET.getCode()) ||
+	     specID.equals(Top.LIABILITY.getCode()) ||
+	     specID.equals(Top.INCOME.getCode()) ||
+	     specID.equals(Top.EXPENSE.getCode()) ||
+	     specID.equals(Top.EQUITY.getCode()) )
 	{
 	    return true;
 	}
@@ -144,15 +177,13 @@ public class KMMComplAcctID implements Comparable<KMMComplAcctID> {
 	{
 	    try {
 		return stdID.compareTo(o.getStdID());
-	    } catch (InvalidKMMComplAcctIDException e) {
+	    } catch (Exception e) {
 		throw new IllegalStateException("Cannot call compareTo (1)");
 	    }
-	}
-	else if ( type == Type.SPECIAL )
-	{
+	} else if ( type == Type.SPECIAL ) {
 	    try {
 		return specID.compareTo(o.getSpecID());
-	    } catch (InvalidKMMComplAcctIDException e) {
+	    } catch (Exception e) {
 		throw new IllegalStateException("Cannot call compareTo (2)");
 	    }
 	}
@@ -181,6 +212,12 @@ public class KMMComplAcctID implements Comparable<KMMComplAcctID> {
 
     // -----------------------------------------------------------------
 
+    public static KMMComplAcctID get(Top topCode) {
+	return new KMMComplAcctID(topCode.getCode());
+    }
+    
+    // -----------------------------------------------------------------
+
     @Override
     public String toString() {
 	return toStringShort();
@@ -200,5 +237,5 @@ public class KMMComplAcctID implements Comparable<KMMComplAcctID> {
     public String toStringLong() {
 	return "KMMComplAcctID [type=" + type + ", stdID=" + stdID + ", specID=" + specID + "]";
     }
-    
+
 }

@@ -96,7 +96,16 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      * @see KMyMoneyAccount#getId()
      */
     public KMMComplAcctID getId() {
-	return new KMMComplAcctID(jwsdpPeer.getId());
+	// CAUTION: In the KMyMoney file, the prefix for the special top-level accounts
+	// is always "AStd::" (two colons).
+	// However, the method jwsdpPeer.getId() under certain circumstances returns this 
+	// special ID with "__" (two underscores). (I cannot explain why at the moment; 
+	// it actually should not happen.) In these cases, we have to replace the 
+	// double-underscore by double-colon
+	if ( jwsdpPeer.getId().startsWith(KMMComplAcctID.SPEC_PREFIX.replace("::", "__")))
+	    return new KMMComplAcctID(jwsdpPeer.getId().replace("__", "::"));
+	else
+	    return new KMMComplAcctID(jwsdpPeer.getId());
     }
 
     /**

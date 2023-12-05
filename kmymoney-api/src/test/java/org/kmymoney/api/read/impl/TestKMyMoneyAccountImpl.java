@@ -1,6 +1,7 @@
 package org.kmymoney.api.read.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.InputStream;
 
@@ -18,13 +19,19 @@ public class TestKMyMoneyAccountImpl
   private KMyMoneyFile    kmmFile = null;
   private KMyMoneyAccount acct = null;
   
-  private static final String ACCT_1_ID = "A000004"; // Asset::Girokonto
-  private static final String ACCT_2_ID = "A000062"; // Asset::Finanzanlagen::Depot RaiBa
-  private static final String ACCT_3_ID = "5008258df86243ee86d37dee64327c27"; // Root Account::Fremdkapital
-  private static final String ACCT_4_ID = "68a4c19f9a8c48909fc69d0dc18c37a6"; // Root Account::Fremdkapital::Lieferanten::Lieferfanto
-  private static final String ACCT_5_ID = "7e223ee2260d4ba28e8e9e19ce291f43"; // Root Account::Aktiva::Forderungen::Unfug_Quatsch
-  private static final String ACCT_6_ID = "ebc834e7f20e4be38f445d655142d6b1"; // Root Account::Anfangsbestand
-  private static final String ACCT_7_ID = "d49554f33a0340bdb6611a1ab5575998"; // Root Account::Aktiva::Depots::Depot RaiBa::DE0007100000 Mercedes-Benz
+  private static final KMMComplAcctID ACCT_1_ID = new KMMComplAcctID("A000004"); // Asset::Girokonto
+  private static final KMMComplAcctID ACCT_2_ID = new KMMComplAcctID("A000062"); // Asset::Finanzanlagen::Depot RaiBa
+//  private static final KMMComplAcctID ACCT_3_ID = new KMMComplAcctID("xyz"); // Root Account::Fremdkapital
+//  private static final KMMComplAcctID ACCT_4_ID = new KMMComplAcctID("xyz"); // Root Account::Fremdkapital::Lieferanten::Lieferfanto
+//  private static final KMMComplAcctID ACCT_5_ID = new KMMComplAcctID("xyz"); // Root Account::Aktiva::Forderungen::Unfug_Quatsch
+//  private static final KMMComplAcctID ACCT_6_ID = new KMMComplAcctID("xyz"); // Root Account::Anfangsbestand
+//  private static final KMMComplAcctID ACCT_7_ID = new KMMComplAcctID("xyz"); // Root Account::Aktiva::Depots::Depot RaiBa::DE0007100000 Mercedes-Benz
+
+  private static final KMMComplAcctID ACCT_10_ID = KMMComplAcctID.get(KMMComplAcctID.Top.ASSET);
+  private static final KMMComplAcctID ACCT_11_ID = KMMComplAcctID.get(KMMComplAcctID.Top.LIABILITY);
+  private static final KMMComplAcctID ACCT_12_ID = KMMComplAcctID.get(KMMComplAcctID.Top.INCOME);
+  private static final KMMComplAcctID ACCT_13_ID = KMMComplAcctID.get(KMMComplAcctID.Top.EXPENSE);
+  private static final KMMComplAcctID ACCT_14_ID = KMMComplAcctID.get(KMMComplAcctID.Top.EQUITY);
 
   // -----------------------------------------------------------------
   
@@ -72,9 +79,10 @@ public class TestKMyMoneyAccountImpl
   @Test
   public void test01_1() throws Exception
   {
-    acct = kmmFile.getAccountById(new KMMComplAcctID(ACCT_1_ID));
+    acct = kmmFile.getAccountById(ACCT_1_ID);
+    assertNotEquals(null, acct);
     
-    assertEquals(ACCT_1_ID, acct.getId().toString());
+    assertEquals(ACCT_1_ID, acct.getId());
     assertEquals(KMyMoneyAccount.Type.CHECKING, acct.getType());
     assertEquals("Giro RaiBa", acct.getName());
     assertEquals("Asset::Barvermögen::Giro RaiBa", acct.getQualifiedName());
@@ -94,9 +102,10 @@ public class TestKMyMoneyAccountImpl
   @Test
   public void test01_2() throws Exception
   {
-    acct = kmmFile.getAccountById(new KMMComplAcctID(ACCT_2_ID));
+    acct = kmmFile.getAccountById(ACCT_2_ID);
+    assertNotEquals(null, acct);
     
-    assertEquals(ACCT_2_ID, acct.getId().toString());
+    assertEquals(ACCT_2_ID, acct.getId());
     assertEquals(KMyMoneyAccount.Type.INVESTMENT, acct.getType());
     assertEquals("Depot RaiBa", acct.getName());
     assertEquals("Asset::Finanzanlagen::Depot RaiBa", acct.getQualifiedName());
@@ -119,6 +128,7 @@ public class TestKMyMoneyAccountImpl
 //  public void test01_3() throws Exception
 //  {
 //    acct = kmmFile.getAccountByID(ACCT_3_ID);
+//    assertNotEquals(null, acct);
 //    
 //    assertEquals(ACCT_3_ID, acct.getId());
 //    assertEquals(KMyMoneyAccount.Type.LIABILITY, acct.getType());
@@ -142,6 +152,7 @@ public class TestKMyMoneyAccountImpl
 //  public void test01_4() throws Exception
 //  {
 //    acct = kmmFile.getAccountByID(ACCT_4_ID);
+//    assertNotEquals(null, acct);
 //    
 //    assertEquals(ACCT_4_ID, acct.getId());
 //    assertEquals(KMyMoneyAccount.Type.PAYABLE, acct.getType());
@@ -190,6 +201,7 @@ public class TestKMyMoneyAccountImpl
 //  public void test01_6() throws Exception
 //  {
 //    acct = kmmFile.getAccountByID(ACCT_6_ID);
+//    assertNotEquals(null, acct);
 //    
 //    assertEquals(ACCT_6_ID, acct.getId());
 //    assertEquals(KMyMoneyAccount.Type.EQUITY, acct.getType());
@@ -228,4 +240,105 @@ public class TestKMyMoneyAccountImpl
 //    assertEquals(1, acct.getTransactions().size());
 //    assertEquals("cc9fe6a245df45ba9b494660732a7755", acct.getTransactions().get(0).getId());
 //  }
+
+  @Test
+  public void test01_10() throws Exception {
+      acct = kmmFile.getAccountById(ACCT_10_ID);
+      assertNotEquals(null, acct);
+
+      assertEquals(ACCT_10_ID, acct.getId());
+      assertEquals(KMyMoneyAccount.Type.ASSET, acct.getType());
+      assertEquals("Asset", acct.getName());
+      assertEquals("Asset", acct.getQualifiedName());
+      assertEquals("", acct.getMemo());
+      assertEquals("CURRENCY:EUR", acct.getSecCurrID().toString());
+
+      assertEquals(null, acct.getParentAccountId());
+
+      assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
+      assertEquals(10997.50, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
+
+      assertEquals(0, acct.getTransactions().size());
+  }
+
+  @Test
+  public void test01_11() throws Exception {
+      acct = kmmFile.getAccountById(ACCT_11_ID);
+      assertNotEquals(null, acct);
+
+      assertEquals(ACCT_11_ID, acct.getId());
+      assertEquals(KMyMoneyAccount.Type.LIABILITY, acct.getType());
+      assertEquals("Liability", acct.getName());
+      assertEquals("Liability", acct.getQualifiedName());
+      assertEquals("", acct.getMemo());
+      assertEquals("CURRENCY:EUR", acct.getSecCurrID().toString());
+
+      assertEquals(null, acct.getParentAccountId());
+
+      assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
+      assertEquals(0.00, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
+
+      assertEquals(0, acct.getTransactions().size());
+  }
+
+  @Test
+  public void test01_12() throws Exception {
+      acct = kmmFile.getAccountById(ACCT_12_ID);
+      assertNotEquals(null, acct);
+
+      assertEquals(ACCT_12_ID, acct.getId());
+      assertEquals(KMyMoneyAccount.Type.INCOME, acct.getType());
+      assertEquals("Income", acct.getName());
+      assertEquals("Income", acct.getQualifiedName());
+      assertEquals("", acct.getMemo());
+      assertEquals("CURRENCY:EUR", acct.getSecCurrID().toString());
+
+      assertEquals(null, acct.getParentAccountId());
+
+      assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
+      assertEquals(-11000.00, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
+
+      assertEquals(0, acct.getTransactions().size());
+  }
+
+  @Test
+  public void test01_13() throws Exception {
+      acct = kmmFile.getAccountById(ACCT_13_ID);
+      assertNotEquals(null, acct);
+
+      assertEquals(ACCT_13_ID, acct.getId());
+      assertEquals(KMyMoneyAccount.Type.EXPENSE, acct.getType());
+      assertEquals("Expense", acct.getName());
+      assertEquals("Expense", acct.getQualifiedName());
+      assertEquals("", acct.getMemo());
+      assertEquals("CURRENCY:EUR", acct.getSecCurrID().toString());
+
+      assertEquals(null, acct.getParentAccountId());
+
+      assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
+      assertEquals(20.50, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
+
+      assertEquals(0, acct.getTransactions().size());
+  }
+
+  @Test
+  public void test01_14() throws Exception {
+      acct = kmmFile.getAccountById(ACCT_14_ID);
+      assertNotEquals(null, acct);
+
+      assertEquals(ACCT_14_ID, acct.getId());
+      assertEquals("AStd::Equity", acct.getId().toString());
+      assertEquals("Equity", acct.getName());
+      assertEquals("Equity", acct.getQualifiedName());
+      assertEquals("", acct.getMemo());
+      assertEquals("CURRENCY:EUR", acct.getSecCurrID().toString());
+
+      assertEquals(null, acct.getParentAccountId());
+
+      assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
+      assertEquals(0.00, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
+
+      assertEquals(0, acct.getTransactions().size());
+  }
+  
 }
