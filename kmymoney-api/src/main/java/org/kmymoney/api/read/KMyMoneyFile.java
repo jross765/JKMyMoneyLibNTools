@@ -138,8 +138,6 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 
    // ---------------------------------------------------------------
 
-   // ---------------------------------------------------------------
-
     /**
      * @param trxID the unique id of the transaction to look for
      * @return the transaction or null if it's not found

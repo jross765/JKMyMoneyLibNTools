@@ -139,11 +139,36 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		    return acc.getQualifiedName() + SEPARATOR + getName();
 		}
 	}
+	
+	@Override
+	public boolean isRootAccount() {
+	    // The following does not work -- endless loop
+//	    for ( KMyMoneyAccount acct : getKMyMoneyFile().getRootAccounts() ) {
+//		if ( acct.getId().equals(getId()) ) {
+//		    return true;
+//		}
+//	    }
+//	    return false;
+	    
+	    // Instead (and just as good):
+	    if ( getId().equals(KMMComplAcctID.get(KMMComplAcctID.Top.ASSET)) ||
+		 getId().equals(KMMComplAcctID.get(KMMComplAcctID.Top.LIABILITY)) ||
+		 getId().equals(KMMComplAcctID.get(KMMComplAcctID.Top.INCOME)) ||
+		 getId().equals(KMMComplAcctID.get(KMMComplAcctID.Top.EXPENSE)) ||
+		 getId().equals(KMMComplAcctID.get(KMMComplAcctID.Top.EQUITY)) ) {
+		return true;
+	    } else {
+		    return false;
+	    }
+	}
 
 	/**
 	 * @see KMyMoneyAccount#getParentAccount()
 	 */
 	public KMyMoneyAccount getParentAccount() {
+	    	if ( isRootAccount() )
+	    	    return null;
+	    
 	    	KMMComplAcctID parentID = getParentAccountId();
 		if ( parentID == null ) {
 		    return null;

@@ -113,7 +113,11 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      */
     public KMMComplAcctID getParentAccountId() {
 	try {
-	    return new KMMComplAcctID(jwsdpPeer.getParentaccount());
+	    // Cf. getId()
+	    if ( jwsdpPeer.getParentaccount().startsWith(KMMComplAcctID.SPEC_PREFIX.replace("::", "__")))
+		return new KMMComplAcctID(jwsdpPeer.getParentaccount().replace("__", "::"));
+	    else
+		return new KMMComplAcctID(jwsdpPeer.getParentaccount());
 	} catch ( Exception exc ) {
 	    return null;
 	}

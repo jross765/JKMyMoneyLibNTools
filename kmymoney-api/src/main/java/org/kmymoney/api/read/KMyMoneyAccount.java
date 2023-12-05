@@ -135,6 +135,8 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * @return null if the account is below the root
      */
     KMMComplAcctID getParentAccountId();
+    
+    boolean isRootAccount();
 
     /**
      * @return the parent-account we are a child of or null if we are a top-level
