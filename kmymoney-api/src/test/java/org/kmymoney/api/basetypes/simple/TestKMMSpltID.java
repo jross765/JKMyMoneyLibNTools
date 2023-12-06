@@ -69,7 +69,7 @@ public class TestKMMSpltID {
 
 	try {
 	    kmmID.set("S001"); // invalid string: too short
-	    assertEquals(2, 1);
+	    assertEquals(1, 0);
 	} catch (Exception exc) {
 	    // Muss Exception werfen, wenn er hier landet, ist es richtig
 	    assertEquals(1, 1);
@@ -77,7 +77,7 @@ public class TestKMMSpltID {
 
 	try {
 	    kmmID.set("S00001"); // invalid string: too long
-	    assertEquals(2, 1);
+	    assertEquals(1, 0);
 	} catch (Exception exc) {
 	    // Muss Exception werfen, wenn er hier landet, ist es richtig
 	    assertEquals(1, 1);

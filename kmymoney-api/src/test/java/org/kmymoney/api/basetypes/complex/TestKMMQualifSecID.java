@@ -43,6 +43,7 @@ public class TestKMMQualifSecID {
 
 	try {
 	    secID = new KMMQualifSecID("C000001"); // invalid string
+	    assertEquals(1, 0);
 	} catch ( Exception exc ) {
 	    assertEquals(0, 0); 
 	}

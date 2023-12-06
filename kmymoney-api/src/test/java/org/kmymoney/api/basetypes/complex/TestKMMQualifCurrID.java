@@ -42,6 +42,7 @@ public class TestKMMQualifCurrID {
 
 	try {
 	    commCurr = new KMMQualifCurrID(Currency.getInstance("XYZ")); // invalid code
+	    assertEquals(1, 0);
 	} catch (Exception exc) {
 	    // correct behaviour: Throw exception
 	    assertEquals(0, 0);

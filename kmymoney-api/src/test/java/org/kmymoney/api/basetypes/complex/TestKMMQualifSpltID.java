@@ -56,6 +56,7 @@ public class TestKMMQualifSpltID {
 
 	try {
 	    KMMQualifSpltID spltID = new KMMQualifSpltID("C000001", "alexander"); // invalid strings
+	    assertEquals(1, 0);
 	} catch ( Exception exc ) {
 	    assertEquals(0, 0); 
 	}

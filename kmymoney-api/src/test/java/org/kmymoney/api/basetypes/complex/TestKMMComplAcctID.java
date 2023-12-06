@@ -29,12 +29,14 @@ public class TestKMMComplAcctID {
 	
 	try {
 	    assertEquals("123", acctID.getSpecID()); // invalid call
+	    assertEquals(1, 0);
 	} catch ( Exception exc ) {
 	    assertEquals(0, 0);
 	}
 	
 	try {
 	    acctID = new KMMComplAcctID("B000004"); // invalid string
+	    assertEquals(1, 0);
 	} catch ( Exception exc ) {
 	    assertEquals(0, 0);
 	}
@@ -52,12 +54,14 @@ public class TestKMMComplAcctID {
 	
 	try {
 	    assertEquals("123", acctID1.getStdID()); // invalid call
+	    assertEquals(1, 0);
 	} catch ( Exception exc ) {
 	    assertEquals(0, 0);
 	}
 
 	try {
 	    acctID1 = new KMMComplAcctID("AStd::Anlagevermoegen"); // invalid string
+	    assertEquals(1, 0);
 	} catch ( Exception exc ) {
 	    assertEquals(0, 0);
 	}
