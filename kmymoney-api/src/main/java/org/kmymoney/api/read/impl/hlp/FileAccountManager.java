@@ -15,9 +15,11 @@ import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneyAccount.Type;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.NoEntryFoundException;
 import org.kmymoney.api.read.TooManyEntriesFoundException;
+import org.kmymoney.api.read.UnknownAccountTypeException;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.slf4j.Logger;
@@ -255,6 +257,19 @@ public class FileAccountManager {
 	return retval;
     }
 
+    public Collection<KMyMoneyAccount> getAccountsByTypeAndName(Type type, String expr, 
+	                                                        boolean qualif, boolean relaxed) throws UnknownAccountTypeException {
+	Collection<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
+	
+	for ( KMyMoneyAccount acct : getAccountsByName(expr, qualif, relaxed) ) {
+	    if ( acct.getType() == type ) {
+		result.add(acct);
+	    }
+	}
+	
+	return result;
+    }
+    
     // ---------------------------------------------------------------
     
     /**
@@ -298,5 +313,5 @@ public class FileAccountManager {
     public int getNofEntriesAccountMap() {
 	return acctMap.size();
     }
-    
+
 }

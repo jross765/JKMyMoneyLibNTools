@@ -25,6 +25,7 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     // namespace eMyMoney::Split::Action
     public enum Action {
 	
+        // ::MAGIC
 	CHECK             ( "Check" ),
 	DEPOSIT           ( "Deposit" ),
 	TRANSFER          ( "Transfer" ),
@@ -32,13 +33,15 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
 	ATM               ( "ATM" ),
 	AMORTIZATION      ( "Amortization" ),
 	INTEREST          ( "Interest" ),
-	BUY_SHARES        ( "Buy" ),    // actually not used!
-	SELL_SHARES       ( "Sell" ),
+	BUY_SHARES        ( "Buy" ),
+	SELL_SHARES       ( "Sell" ),   // actually not used
+                                        // (instead, BUY_SHARES w/ neg. value)!
 	DIVIDEND          ( "Dividend" ),
 	REINVEST_DIVIDEND ( "Reinvest" ),
 	YIELD             ( "Yield" ),
 	ADD_SHARES        ( "Add" ),
-	REMOVE_SHARES     ( "Remove" ), // actually not used!
+	REMOVE_SHARES     ( "Remove" ), // actually not used
+                                        // (instead, ADD_SHARES w/ neg. value)!
 	SPLIT_SHARES      ( "Split" ),
 	INTEREST_INCOME   ( "IntIncome" );
 	

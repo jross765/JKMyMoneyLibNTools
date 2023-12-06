@@ -40,6 +40,7 @@ import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.NoEntryFoundException;
 import org.kmymoney.api.read.TooManyEntriesFoundException;
+import org.kmymoney.api.read.UnknownAccountTypeException;
 import org.kmymoney.api.read.aux.KMMPrice;
 import org.kmymoney.api.read.impl.hlp.FileAccountManager;
 import org.kmymoney.api.read.impl.hlp.FileCurrencyManager;
@@ -351,6 +352,12 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     @Override
     public KMyMoneyAccount getAccountByIDorNameEx(final KMMComplAcctID id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
 	return acctMgr.getAccountByIDorNameEx(id, name);
+    }
+
+    @Override
+    public Collection<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, 
+	                                                        boolean qualif, boolean relaxed) throws UnknownAccountTypeException {
+	return acctMgr.getAccountsByTypeAndName(type, expr, qualif, relaxed);
     }
 
     /**

@@ -126,6 +126,9 @@ public interface KMyMoneyFile extends KMyMoneyObject {
     */
    KMyMoneyAccount getAccountByIDorNameEx(KMMComplAcctID id, String name) throws NoEntryFoundException, TooManyEntriesFoundException;
    
+   Collection<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, 
+	                                                boolean qualif, boolean relaxed) throws UnknownAccountTypeException;
+
    /**
     * @return all accounts
     */
