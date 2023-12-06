@@ -42,7 +42,7 @@ public class FilePayeeManager {
 	for ( PAYEE jwsdpPye : pRootElement.getPAYEES().getPAYEE() ) {
 	    try {
 		KMyMoneyPayeeImpl pye = createPayee(jwsdpPye);
-		pyeMap.put(pye.getId(), pye);
+		pyeMap.put(pye.getID(), pye);
 	    } catch (RuntimeException e) {
 		LOGGER.error("init: [RuntimeException] Problem in " + getClass().getName() + ".init: "
 			+ "ignoring illegal Payee-Entry with id=" + jwsdpPye.getId(), e);
@@ -64,11 +64,11 @@ public class FilePayeeManager {
     // ---------------------------------------------------------------
 
     public void addPayee(KMyMoneyPayee pye) {
-	pyeMap.put(pye.getId(), pye);
+	pyeMap.put(pye.getID(), pye);
     }
 
     public void removePayee(KMyMoneyPayee pye) {
-	pyeMap.remove(pye.getId());
+	pyeMap.remove(pye.getID());
     }
 
     // ---------------------------------------------------------------
@@ -76,7 +76,7 @@ public class FilePayeeManager {
     /**
      * @see KMyMoneyFile#getPayeeByID(java.lang.String)
      */
-    public KMyMoneyPayee getPayeeById(final KMMPyeID id) {
+    public KMyMoneyPayee getPayeeByID(final KMMPyeID id) {
 	if (pyeMap == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}

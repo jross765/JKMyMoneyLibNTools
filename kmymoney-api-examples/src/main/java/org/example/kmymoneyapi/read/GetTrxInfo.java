@@ -32,12 +32,12 @@ public class GetTrxInfo {
 	// You normally would get the transaction-ID by first choosing 
 	// a specific account (cf. GetAcctInfo), getting its list of 
 	// transactions and then choosing from them.
-	KMyMoneyTransaction trx = kmmFile.getTransactionById(trxID);
+	KMyMoneyTransaction trx = kmmFile.getTransactionByID(trxID);
 
 	// ------------------------
 
 	try {
-	    System.out.println("ID:              " + trx.getId());
+	    System.out.println("ID:              " + trx.getID());
 	} catch (Exception exc) {
 	    System.out.println("ID:              " + "ERROR");
 	}

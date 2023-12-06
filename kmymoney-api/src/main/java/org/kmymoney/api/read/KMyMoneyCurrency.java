@@ -10,9 +10,9 @@ import org.kmymoney.api.read.aux.KMMPrice;
 
 public interface KMyMoneyCurrency {
 
-    String getId();
+    String getID();
 
-    KMMQualifCurrID getQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMMQualifCurrID getQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     String getSymbol();
 

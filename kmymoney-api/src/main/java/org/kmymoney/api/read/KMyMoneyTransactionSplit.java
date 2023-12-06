@@ -52,15 +52,15 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      *
      * @return the unique-id to identify this object with across name- and hirarchy-changes
      */
-    KMMSpltID getId();
+    KMMSpltID getID();
 
-    KMMQualifSplitID getQualifId();
+    KMMQualifSplitID getQualifID();
 
     /**
      *
      * @return the id of the account we transfer from/to.
      */
-    KMMComplAcctID getAccountId();
+    KMMComplAcctID getAccountID();
 
     /**
      * This may be null if an account-id is specified in
@@ -69,7 +69,7 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      */
     KMyMoneyAccount getAccount();
 
-    KMMTrxID getTransactionId();
+    KMMTrxID getTransactionID();
 
     /**
      * @return the transaction this is a split of.

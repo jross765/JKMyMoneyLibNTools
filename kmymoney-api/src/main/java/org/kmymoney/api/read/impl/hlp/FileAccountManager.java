@@ -48,7 +48,7 @@ public class FileAccountManager {
 	for ( ACCOUNT jwsdpAcct : pRootElement.getACCOUNTS().getACCOUNT() ) {
 	    try {
 		KMyMoneyAccount acct = createAccount(jwsdpAcct);
-		acctMap.put(acct.getId(), acct);
+		acctMap.put(acct.getID(), acct);
 	    } catch (RuntimeException e) {
 		LOGGER.error("init: [RuntimeException] Problem in " + getClass().getName() + ".init: "
 			+ "ignoring illegal Account-Entry with id=" + jwsdpAcct.getId(), e);
@@ -70,19 +70,19 @@ public class FileAccountManager {
     // ---------------------------------------------------------------
 
     public void addAccount(KMyMoneyAccount acct) {
-	acctMap.put(acct.getId(), acct);
+	acctMap.put(acct.getID(), acct);
     }
 
     public void removeAccount(KMyMoneyAccount acct) {
-	acctMap.remove(acct.getId());
+	acctMap.remove(acct.getID());
     }
 
     // ---------------------------------------------------------------
 
     /**
-     * @see KMyMoneyFile#getAccountById(java.lang.String)
+     * @see KMyMoneyFile#getAccountByID(java.lang.String)
      */
-    public KMyMoneyAccount getAccountById(final KMMComplAcctID id) {
+    public KMyMoneyAccount getAccountByID(final KMMComplAcctID id) {
 	if (acctMap == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
@@ -109,7 +109,7 @@ public class FileAccountManager {
         for (Object element : acctMap.values()) {
             KMyMoneyAccount account = (KMyMoneyAccount) element;
     
-            KMMComplAcctID parentID = account.getParentAccountId();
+            KMMComplAcctID parentID = account.getParentAccountID();
             if (parentID == null) {
         	if (acctID == null) {
         	    retval.add((KMyMoneyAccount) account);
@@ -187,7 +187,7 @@ public class FileAccountManager {
      * @return null if not found
      * @throws TooManyEntriesFoundException 
      * @throws NoEntryFoundException 
-     * @see #getAccountById(String)
+     * @see #getAccountByID(String)
      * @see #getAccountByName(String)
      */
     public KMyMoneyAccount getAccountByNameEx(final String nameRegEx) throws NoEntryFoundException, TooManyEntriesFoundException {
@@ -221,11 +221,11 @@ public class FileAccountManager {
      * @return null if not found
      * @throws TooManyEntriesFoundException 
      * @throws NoEntryFoundException 
-     * @see #getAccountById(String)
+     * @see #getAccountByID(String)
      * @see #getAccountByName(String)
      */
     public KMyMoneyAccount getAccountByIDorName(final KMMComplAcctID id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
-	KMyMoneyAccount retval = getAccountById(id);
+	KMyMoneyAccount retval = getAccountByID(id);
 	if (retval == null) {
 	    retval = getAccountByNameUniq(name, true);
 	}
@@ -243,11 +243,11 @@ public class FileAccountManager {
      * @return null if not found
      * @throws TooManyEntriesFoundException 
      * @throws NoEntryFoundException 
-     * @see #getAccountById(String)
+     * @see #getAccountByID(String)
      * @see #getAccountByName(String)
      */
     public KMyMoneyAccount getAccountByIDorNameEx(final KMMComplAcctID id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
-	KMyMoneyAccount retval = getAccountById(id);
+	KMyMoneyAccount retval = getAccountByID(id);
 	if (retval == null) {
 	    retval = getAccountByNameEx(name);
 	}
@@ -277,7 +277,7 @@ public class FileAccountManager {
             Collection<KMyMoneyAccount> retval = new TreeSet<KMyMoneyAccount>();
     
             for (KMyMoneyAccount account : getAccounts()) {
-        	if (account.getParentAccountId() == null) {
+        	if (account.getParentAccountID() == null) {
         	    retval.add(account);
         	}
     

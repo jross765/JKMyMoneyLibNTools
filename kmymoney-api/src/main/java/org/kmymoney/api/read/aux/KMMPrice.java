@@ -33,7 +33,7 @@ public interface KMMPrice {
 	
     // ---------------------------------------------------------------
     
-    KMMPriceID getId() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+    KMMPriceID getID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
     
     KMMCurrPair getParentPricePairID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 	
@@ -41,11 +41,11 @@ public interface KMMPrice {
 	
     // ----------------------------
     	
-    KMMQualifSecCurrID getFromSecCurrQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMMQualifSecCurrID getFromSecCurrQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
-    KMMQualifSecID getFromSecurityQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMMQualifSecID getFromSecurityQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
-    KMMQualifCurrID getFromCurrencyQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMMQualifCurrID getFromCurrencyQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     KMyMoneySecurity getFromSecurity() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 
@@ -55,7 +55,7 @@ public interface KMMPrice {
     
     // ----------------------------
 
-    KMMQualifCurrID getToCurrencyQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMMQualifCurrID getToCurrencyQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     String getToCurrencyCode() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 

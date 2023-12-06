@@ -12,9 +12,9 @@ import org.kmymoney.api.read.aux.KMMPrice;
 
 public interface KMyMoneySecurity {
 
-    KMMSecID getId();
+    KMMSecID getID();
 
-    KMMQualifSecID getQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMMQualifSecID getQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     String getSymbol();
 

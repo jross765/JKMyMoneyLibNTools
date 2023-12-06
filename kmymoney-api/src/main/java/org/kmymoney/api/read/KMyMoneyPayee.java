@@ -8,11 +8,11 @@ import org.kmymoney.api.read.aux.KMMAddress;
 
 public interface KMyMoneyPayee {
     
-    KMMPyeID getId();
+    KMMPyeID getID();
 
     String getName();
 
-    public KMMComplAcctID getDefaultAccountId();
+    public KMMComplAcctID getDefaultAccountID();
     
     public KMMAddress getAddress();
 

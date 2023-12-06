@@ -106,11 +106,11 @@ public class FilePriceManager {
     // ---------------------------------------------------------------
 
     public void addPrice(KMMPrice prc) {
-	prcMap.put(prc.getId(), prc);
+	prcMap.put(prc.getID(), prc);
     }
 
     public void removePrice(KMMPrice prc) {
-	prcMap.remove(prc.getId());
+	prcMap.remove(prc.getID());
     }
 
     // ---------------------------------------------------------------
@@ -122,7 +122,7 @@ public class FilePriceManager {
     /**
      * {@inheritDoc}
      */
-    public KMMPrice getPriceById(KMMPriceID prcID) {
+    public KMMPrice getPriceByID(KMMPriceID prcID) {
         if (prcMap == null) {
   	    throw new IllegalStateException("no root-element loaded");
         }

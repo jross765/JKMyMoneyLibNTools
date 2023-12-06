@@ -68,34 +68,34 @@ public class TestKMyMoneyTransactionImpl
   @Test
   public void test01() throws Exception
   {
-    trx = kmmFile.getTransactionById(TRX_1_ID);
+    trx = kmmFile.getTransactionByID(TRX_1_ID);
     assertNotEquals(null, trx);
     
-    assertEquals(TRX_1_ID, trx.getId());
+    assertEquals(TRX_1_ID, trx.getID());
     assertEquals(0.0, trx.getBalance().getBigDecimal().doubleValue(), ConstTest.DIFF_TOLERANCE);
     assertEquals("", trx.getMemo());
     assertEquals("2023-01-01", trx.getDatePosted().toString());
     assertEquals("2023-11-03", trx.getEntryDate().toString());
         
     assertEquals(2, trx.getSplitsCount());
-    assertEquals("S0001", trx.getSplits().get(0).getId().toString());
-    assertEquals("S0002", trx.getSplits().get(1).getId().toString());
+    assertEquals("S0001", trx.getSplits().get(0).getID().toString());
+    assertEquals("S0002", trx.getSplits().get(1).getID().toString());
   }
   
   @Test
   public void test02() throws Exception
   {
-    trx = kmmFile.getTransactionById(TRX_2_ID);
+    trx = kmmFile.getTransactionByID(TRX_2_ID);
     assertNotEquals(null, trx);
     
-    assertEquals(TRX_2_ID, trx.getId());
+    assertEquals(TRX_2_ID, trx.getID());
     assertEquals(0.0, trx.getBalance().getBigDecimal().doubleValue(), ConstTest.DIFF_TOLERANCE);
     assertEquals("", trx.getMemo());
     assertEquals("2023-01-03", trx.getDatePosted().toString());
     assertEquals("2023-10-14", trx.getEntryDate().toString());
         
     assertEquals(2, trx.getSplitsCount());
-    assertEquals("S0001", trx.getSplits().get(0).getId().toString());
-    assertEquals("S0002", trx.getSplits().get(1).getId().toString());
+    assertEquals("S0001", trx.getSplits().get(0).getID().toString());
+    assertEquals("S0002", trx.getSplits().get(1).getID().toString());
   }
 }

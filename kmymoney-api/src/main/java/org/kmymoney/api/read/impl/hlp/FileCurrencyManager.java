@@ -60,16 +60,16 @@ public class FileCurrencyManager {
     // ---------------------------------------------------------------
 
     public void addCurrency(KMyMoneyCurrency curr) {
-	currMap.put(curr.getId(), curr);
+	currMap.put(curr.getID(), curr);
     }
 
     public void removeCurrency(KMyMoneyCurrency curr) {
-	currMap.remove(curr.getId());
+	currMap.remove(curr.getID());
     }
 
     // ---------------------------------------------------------------
 
-    public KMyMoneyCurrency getCurrencyById(String currID) {
+    public KMyMoneyCurrency getCurrencyByID(String currID) {
 	if (currMap == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
@@ -82,8 +82,8 @@ public class FileCurrencyManager {
 	return retval;
     }
 
-    public KMyMoneyCurrency getCurrencyByQualifId(KMMQualifCurrID currID) {
-	return getCurrencyById(currID.getCode());
+    public KMyMoneyCurrency getCurrencyByQualifID(KMMQualifCurrID currID) {
+	return getCurrencyByID(currID.getCode());
     }
 
     public Collection<KMyMoneyCurrency> getCurrencies() {

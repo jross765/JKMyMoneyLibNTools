@@ -47,7 +47,7 @@ public class GetSecInfo {
 
 	KMyMoneySecurity sec = null;
 	if (mode == Mode.ID) {
-	    sec = gcshFile.getSecurityById(secID);
+	    sec = gcshFile.getSecurityByID(secID);
 	    if (sec == null) {
 		System.err.println("Could not find a security with this ID.");
 		throw new NoEntryFoundException();
@@ -75,7 +75,7 @@ public class GetSecInfo {
 	// ----------------------------
 
 	try {
-	    System.out.println("Qualified ID:      '" + sec.getQualifId() + "'");
+	    System.out.println("Qualified ID:      '" + sec.getQualifID() + "'");
 	} catch (Exception exc) {
 	    System.out.println("Qualified ID:      " + "ERROR");
 	}

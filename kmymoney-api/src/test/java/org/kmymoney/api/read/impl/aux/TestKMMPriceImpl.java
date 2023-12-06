@@ -98,25 +98,25 @@ public class TestKMMPriceImpl
       // ::TODO: Sort array for predictability
 //      Object[] priceArr = priceList.toArray();
 //      
-//      assertEquals(PRICE_1_ID, ((KMMPrice) priceArr[0]).getId());
-//      assertEquals(PRICE_2_ID, ((KMMPrice) priceArr[1]).getId());
-//      assertEquals(PRICE_3_ID, ((KMMPrice) priceArr[2]).getId());
+//      assertEquals(PRICE_1_ID, ((KMMPrice) priceArr[0]).getID());
+//      assertEquals(PRICE_2_ID, ((KMMPrice) priceArr[1]).getID());
+//      assertEquals(PRICE_3_ID, ((KMMPrice) priceArr[2]).getID());
   }
 
   @Test
   public void test02_1() throws Exception
   {
-      prc = kmmFile.getPriceById(PRICE_1_ID);
+      prc = kmmFile.getPriceByID(PRICE_1_ID);
       assertNotEquals(null, prc);
       
-      assertEquals(PRICE_1_ID, prc.getId());
-      assertEquals(secID1.toString(), prc.getFromSecCurrQualifId().toString());
-      assertEquals(secID1.toString(), prc.getFromSecurityQualifId().toString());
-      assertEquals(secID1.getCode().toString(), prc.getFromSecurityQualifId().getSecID().toString());
-      assertNotEquals(secID1.getCode(), prc.getFromSecurityQualifId().getSecID()); // sic
-      assertNotEquals(secID1, prc.getFromSecurityQualifId()); // sic
+      assertEquals(PRICE_1_ID, prc.getID());
+      assertEquals(secID1.toString(), prc.getFromSecCurrQualifID().toString());
+      assertEquals(secID1.toString(), prc.getFromSecurityQualifID().toString());
+      assertEquals(secID1.getCode().toString(), prc.getFromSecurityQualifID().getSecID().toString());
+      assertNotEquals(secID1.getCode(), prc.getFromSecurityQualifID().getSecID()); // sic
+      assertNotEquals(secID1, prc.getFromSecurityQualifID()); // sic
       assertEquals("SAP AG", prc.getFromSecurity().getName());
-      assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifId().toString());
+      assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString());
       assertEquals("EUR", prc.getToCurrencyCode());
       assertEquals("Transaction", prc.getSource());
       assertEquals(LocalDate.of(2023, 11, 3), prc.getDate());
@@ -124,7 +124,7 @@ public class TestKMMPriceImpl
       
       try
       {
-	  KMMQualifCurrID dummy = prc.getFromCurrencyQualifId(); // illegal call in this context
+	  KMMQualifCurrID dummy = prc.getFromCurrencyQualifID(); // illegal call in this context
 	  assertEquals(0, 1);
       }
       catch ( Exception exc )
@@ -156,17 +156,17 @@ public class TestKMMPriceImpl
   @Test
   public void test02_2() throws Exception
   {
-      prc = kmmFile.getPriceById(PRICE_2_ID);
+      prc = kmmFile.getPriceByID(PRICE_2_ID);
       assertNotEquals(null, prc);
       
-      assertEquals(PRICE_2_ID, prc.getId());
-      assertEquals(secID2.toString(), prc.getFromSecCurrQualifId().toString());
-      assertEquals(secID2.toString(), prc.getFromSecurityQualifId().toString());
-      assertEquals(secID2.getCode().toString(), prc.getFromSecurityQualifId().getSecID().toString());
-      assertNotEquals(secID2.getCode(), prc.getFromSecurityQualifId().getSecID()); // sic
-      assertNotEquals(secID2, prc.getFromSecurityQualifId()); // sic
+      assertEquals(PRICE_2_ID, prc.getID());
+      assertEquals(secID2.toString(), prc.getFromSecCurrQualifID().toString());
+      assertEquals(secID2.toString(), prc.getFromSecurityQualifID().toString());
+      assertEquals(secID2.getCode().toString(), prc.getFromSecurityQualifID().getSecID().toString());
+      assertNotEquals(secID2.getCode(), prc.getFromSecurityQualifID().getSecID()); // sic
+      assertNotEquals(secID2, prc.getFromSecurityQualifID()); // sic
       assertEquals("Mercedes-Benz Group AG", prc.getFromSecurity().getName());
-      assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifId().toString());
+      assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString());
       assertEquals("EUR", prc.getToCurrencyCode());
       assertEquals("User", prc.getSource());
       assertEquals(LocalDate.of(2023, 11, 1), prc.getDate());
@@ -174,7 +174,7 @@ public class TestKMMPriceImpl
     
       try
       {
-	  KMMQualifCurrID dummy = prc.getFromCurrencyQualifId(); // illegal call in this context
+	  KMMQualifCurrID dummy = prc.getFromCurrencyQualifID(); // illegal call in this context
 	  assertEquals(0, 1);
       }
       catch ( Exception exc )
@@ -206,14 +206,14 @@ public class TestKMMPriceImpl
   @Test
   public void test02_3() throws Exception
   {
-      prc = kmmFile.getPriceById(PRICE_3_ID);
+      prc = kmmFile.getPriceByID(PRICE_3_ID);
       assertNotEquals(null, prc);
       
-      assertEquals(PRICE_3_ID, prc.getId());
-      assertEquals(currID1.toString(), prc.getFromSecCurrQualifId().toString());
-      assertEquals(currID1.toString(), prc.getFromCurrencyQualifId().toString());
+      assertEquals(PRICE_3_ID, prc.getID());
+      assertEquals(currID1.toString(), prc.getFromSecCurrQualifID().toString());
+      assertEquals(currID1.toString(), prc.getFromCurrencyQualifID().toString());
       assertEquals("USD", prc.getFromCurrencyCode());
-      assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifId().toString());
+      assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString());
       assertEquals("EUR", prc.getToCurrencyCode());
       assertEquals("User", prc.getSource());
       assertEquals(LocalDate.of(2023, 12, 4), prc.getDate());
@@ -221,7 +221,7 @@ public class TestKMMPriceImpl
       
       try
       {
-	  KMMQualifSecID dummy = prc.getFromSecurityQualifId(); // illegal call in this context
+	  KMMQualifSecID dummy = prc.getFromSecurityQualifID(); // illegal call in this context
 	  assertEquals(0, 1);
       }
       catch ( Exception exc )

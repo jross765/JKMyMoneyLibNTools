@@ -63,7 +63,7 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
      * @return the unique-id to identify this object with across name- and
      *         hirarchy-changes
      */
-    KMMTrxID getId();
+    KMMTrxID getID();
 
     /**
      * @return the user-defined description for this object (may contain multiple

@@ -46,7 +46,7 @@ public class KMMPricePairImpl implements KMMPricePair {
     // -----------------------------------------------------------
     
     @Override
-    public KMMCurrPair getId() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public KMMCurrPair getID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	return new KMMCurrPair(jwsdpPeer.getFrom(), jwsdpPeer.getTo());
     }
 
@@ -95,7 +95,7 @@ public class KMMPricePairImpl implements KMMPricePair {
 	}
 	
 	try {
-	    LOGGER.debug("getPrices: Found " + result.size() + " prices for KMMPricePair " + getId());
+	    LOGGER.debug("getPrices: Found " + result.size() + " prices for KMMPricePair " + getID());
 	} catch (Exception e) {
 	    LOGGER.debug("getPrices: Found " + result.size() + " prices for KMMPricePair " + "ERROR");
 	}

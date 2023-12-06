@@ -194,9 +194,9 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     }
 
     /**
-     * @see KMyMoneyTransaction#getId()
+     * @see KMyMoneyTransaction#getID()
      */
-    public KMMTrxID getId() {
+    public KMMTrxID getID() {
 	return new KMMTrxID(jwsdpPeer.getId());
     }
 
@@ -259,7 +259,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      */
     public KMyMoneyTransactionSplit getSplitByID(final String id) {
 	for (KMyMoneyTransactionSplit split : getSplits()) {
-	    if (split.getId().equals(id)) {
+	    if (split.getID().equals(id)) {
 		return split;
 	    }
 
@@ -375,7 +375,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
 	buffer.append("[KMyMoneyTransactionImpl:");
 
 	buffer.append(" id: ");
-	buffer.append(getId());
+	buffer.append(getID());
 
 	// ::TODO: That only works in simple cases --
 	// need a more generic approach

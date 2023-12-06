@@ -69,29 +69,29 @@ public class TestKMyMoneyPayeeImpl
   @Test
   public void test01_1() throws Exception
   {
-    pye = kmmFile.getPayeeById(PYE_1_ID);
+    pye = kmmFile.getPayeeByID(PYE_1_ID);
     
-    assertEquals(PYE_1_ID, pye.getId());
+    assertEquals(PYE_1_ID, pye.getID());
     assertEquals("Gehalt", pye.getName());
   }
 
   @Test
   public void test01_2() throws Exception
   {
-    pye = kmmFile.getPayeeById(PYE_2_ID);
+    pye = kmmFile.getPayeeByID(PYE_2_ID);
     
-    assertEquals(PYE_2_ID, pye.getId());
+    assertEquals(PYE_2_ID, pye.getID());
     assertEquals("Geldautomat", pye.getName());
   }
 
   @Test
   public void test01_3() throws Exception
   {
-    pye = kmmFile.getPayeeById(PYE_3_ID);
+    pye = kmmFile.getPayeeByID(PYE_3_ID);
     
-    assertEquals(PYE_3_ID, pye.getId());
+    assertEquals(PYE_3_ID, pye.getID());
     assertEquals("Fürchtegott Schnorzelmöller", pye.getName());
-    assertEquals(null, pye.getDefaultAccountId());
+    assertEquals(null, pye.getDefaultAccountID());
     assertEquals("fuerchtegott.schnorzelmoeller@prater.at", pye.getEmail());
     assertEquals("", pye.getReference()); // sic, not null
     assertEquals("Pezi-Bär von der Urania kennt ihn gut", pye.getNotes());

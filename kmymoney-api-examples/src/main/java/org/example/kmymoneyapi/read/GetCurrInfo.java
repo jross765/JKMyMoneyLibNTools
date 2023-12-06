@@ -33,7 +33,7 @@ public class GetCurrInfo {
 	KMyMoneyFileImpl gcshFile = new KMyMoneyFileImpl(new File(kmmFileName));
 
 	KMMQualifCurrID currID = new KMMQualifCurrID(symbol);
-	KMyMoneyCurrency curr = gcshFile.getCurrencyByQualifId(currID);
+	KMyMoneyCurrency curr = gcshFile.getCurrencyByQualifID(currID);
 	if (curr == null) {
 	    System.err.println("Could not find currency with qualif. ID " + currID.toString());
 	    throw new NoEntryFoundException();
@@ -42,7 +42,7 @@ public class GetCurrInfo {
 	// ------------------------
 
 	try {
-	    System.out.println("Qualified ID:      '" + curr.getQualifId() + "'");
+	    System.out.println("Qualified ID:      '" + curr.getQualifID() + "'");
 	} catch (Exception exc) {
 	    System.out.println("Qualified ID:      " + "ERROR");
 	}

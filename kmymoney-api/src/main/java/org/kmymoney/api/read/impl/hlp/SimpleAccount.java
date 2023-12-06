@@ -124,8 +124,8 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		KMyMoneyAccount acc = getParentAccount();
 		
 		if ( acc == null || 
-		     acc.getId() == getId() ) {
-		    KMMComplAcctID parentID = getParentAccountId(); 
+		     acc.getID() == getID() ) {
+		    KMMComplAcctID parentID = getParentAccountID(); 
 		    if ( parentID == null ) {
 			return getName();
 		    } else if ( parentID.toString().equals("") ||
@@ -144,18 +144,18 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	public boolean isRootAccount() {
 	    // The following does not work -- endless loop
 //	    for ( KMyMoneyAccount acct : getKMyMoneyFile().getRootAccounts() ) {
-//		if ( acct.getId().equals(getId()) ) {
+//		if ( acct.getID().equals(getID()) ) {
 //		    return true;
 //		}
 //	    }
 //	    return false;
 	    
 	    // Instead (and just as good):
-	    if ( getId().equals(KMMComplAcctID.get(KMMComplAcctID.Top.ASSET)) ||
-		 getId().equals(KMMComplAcctID.get(KMMComplAcctID.Top.LIABILITY)) ||
-		 getId().equals(KMMComplAcctID.get(KMMComplAcctID.Top.INCOME)) ||
-		 getId().equals(KMMComplAcctID.get(KMMComplAcctID.Top.EXPENSE)) ||
-		 getId().equals(KMMComplAcctID.get(KMMComplAcctID.Top.EQUITY)) ) {
+	    if ( getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.ASSET)) ||
+		 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.LIABILITY)) ||
+		 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.INCOME)) ||
+		 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.EXPENSE)) ||
+		 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.EQUITY)) ) {
 		return true;
 	    } else {
 		    return false;
@@ -169,7 +169,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	    	if ( isRootAccount() )
 	    	    return null;
 	    
-	    	KMMComplAcctID parentID = getParentAccountId();
+	    	KMMComplAcctID parentID = getParentAccountID();
 		if ( parentID == null ) {
 		    return null;
 		} else if ( parentID.toString().equals("") ||
@@ -178,7 +178,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		    return null;
 		}
 		
-		return getKMyMoneyFile().getAccountById(parentID);
+		return getKMyMoneyFile().getAccountByID(parentID);
 	}
 
 	/**
@@ -585,7 +585,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		}
 
 		for ( KMyMoneyTransactionSplit split : getTransactionSplits() ) {
-			if (id.equals(split.getId())) {
+			if (id.equals(split.getID())) {
 				return split;
 			}
 
@@ -621,7 +621,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		}
 
 		KMyMoneyAccount other = otherAcc;
-		i = other.getId().compareTo(getId());
+		i = other.getID().compareTo(getID());
 		if (i != 0) {
 		  return i;
 		}
@@ -659,12 +659,12 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		// level accounts
 		if (o instanceof KMyMoneyAccount
 				&&
-				((KMyMoneyAccount) o).getParentAccountId() != null
+				((KMyMoneyAccount) o).getParentAccountID() != null
 				&&
-				getParentAccountId() != null
+				getParentAccountID() != null
 				&&
-				((KMyMoneyAccount) o).getParentAccountId().toString().
-				equalsIgnoreCase(getParentAccountId().toString())) {
+				((KMyMoneyAccount) o).getParentAccountID().toString().
+				equalsIgnoreCase(getParentAccountID().toString())) {
 			other = ((KMyMoneyAccount) o).getName();
 			me = getName();
 		}

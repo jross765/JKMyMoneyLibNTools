@@ -44,9 +44,9 @@ public class FileTransactionManager {
 	for ( TRANSACTION jwsdpTrx : pRootElement.getTRANSACTIONS().getTRANSACTION() ) {
 	    try {
 		KMyMoneyTransactionImpl trx = createTransaction(jwsdpTrx);
-		trxMap.put(trx.getId(), trx);
+		trxMap.put(trx.getID(), trx);
 		for (KMyMoneyTransactionSplit splt : trx.getSplits()) {
-		    KMMQualifSplitID spltID = new KMMQualifSplitID(trx.getId(), splt.getId());
+		    KMMQualifSplitID spltID = new KMMQualifSplitID(trx.getID(), splt.getID());
 		    trxSpltMap.put(spltID, splt);
 		}
 	    } catch (RuntimeException e) {
@@ -74,7 +74,7 @@ public class FileTransactionManager {
     }
 
     public void addTransaction(KMyMoneyTransaction trx, boolean withSplt) throws NoSuchFieldException, SecurityException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException {
-	trxMap.put(trx.getId(), trx);
+	trxMap.put(trx.getID(), trx);
 	
 	if ( withSplt ) {
 	    for ( KMyMoneyTransactionSplit splt : trx.getSplits() ) {
@@ -94,7 +94,7 @@ public class FileTransactionManager {
 	    }
 	}
 
-	trxMap.remove(trx.getId());
+	trxMap.remove(trx.getID());
     }
 
     // ---------------------------------------------------------------
@@ -104,7 +104,7 @@ public class FileTransactionManager {
     }
 
     public void addTransactionSplit(KMyMoneyTransactionSplit splt, boolean withInvc) throws NoSuchFieldException, SecurityException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException {
-	trxSpltMap.put(splt.getQualifId(), splt);
+	trxSpltMap.put(splt.getQualifID(), splt);
 
 	if ( withInvc ) {
 	    addTransaction(splt.getTransaction(), false);
@@ -120,15 +120,15 @@ public class FileTransactionManager {
 	    removeTransaction(splt.getTransaction(), false);
 	}
 	
-	trxSpltMap.remove(splt.getQualifId());
+	trxSpltMap.remove(splt.getQualifID());
     }
 
     // ---------------------------------------------------------------
 
     /**
-     * @see KMyMoneyFile#getTransactionById(java.lang.String)
+     * @see KMyMoneyFile#getTransactionByID(java.lang.String)
      */
-    public KMyMoneyTransaction getTransactionById(final KMMTrxID trxID) {
+    public KMyMoneyTransaction getTransactionByID(final KMMTrxID trxID) {
 	if (trxMap == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
@@ -154,7 +154,7 @@ public class FileTransactionManager {
     // ---------------------------------------------------------------
 
     /**
-     * @see KMyMoneyFile#getTransactionById(java.lang.String)
+     * @see KMyMoneyFile#getTransactionByID(java.lang.String)
      */
     public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSplitID spltID) {
 	if (trxSpltMap == null) {

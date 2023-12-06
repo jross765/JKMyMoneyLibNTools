@@ -34,7 +34,7 @@ public class KMyMoneyPayeeImpl implements KMyMoneyPayee {
     // ---------------------------------------------------------------
 
     @Override
-    public KMMPyeID getId() {
+    public KMMPyeID getID() {
 	return new KMMPyeID(jwsdpPeer.getId());
     }
 
@@ -44,7 +44,7 @@ public class KMyMoneyPayeeImpl implements KMyMoneyPayee {
     }
 
     @Override
-    public KMMComplAcctID getDefaultAccountId() {
+    public KMMComplAcctID getDefaultAccountID() {
 	if ( jwsdpPeer.getDefaultaccountid() == null )
 	    return null;
 	
@@ -100,7 +100,7 @@ public class KMyMoneyPayeeImpl implements KMyMoneyPayee {
 
     @Override
     public String toString() {
-	return "KMyMoneyPayeeImpl [id=" + getId() + ", name='" + getName() + "']";
+	return "KMyMoneyPayeeImpl [id=" + getID() + ", name='" + getName() + "']";
     }
 
 }

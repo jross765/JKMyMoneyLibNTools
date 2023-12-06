@@ -93,9 +93,9 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     // ---------------------------------------------------------------
 
     /**
-     * @see KMyMoneyAccount#getId()
+     * @see KMyMoneyAccount#getID()
      */
-    public KMMComplAcctID getId() {
+    public KMMComplAcctID getID() {
 	// CAUTION: In the KMyMoney file, the prefix for the special top-level accounts
 	// is always "AStd::" (two colons).
 	// However, the method jwsdpPeer.getId() under certain circumstances returns this 
@@ -109,11 +109,11 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     }
 
     /**
-     * @see KMyMoneyAccount#getParentAccountId()
+     * @see KMyMoneyAccount#getParentAccountID()
      */
-    public KMMComplAcctID getParentAccountId() {
+    public KMMComplAcctID getParentAccountID() {
 	try {
-	    // Cf. getId()
+	    // Cf. getID()
 	    if ( jwsdpPeer.getParentaccount().startsWith(KMMComplAcctID.SPEC_PREFIX.replace("::", "__")))
 		return new KMMComplAcctID(jwsdpPeer.getParentaccount().replace("__", "::"));
 	    else
@@ -127,7 +127,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      * @see KMyMoneyAccount#getChildren()
      */
     public Collection<KMyMoneyAccount> getChildren() {
-	return getKMyMoneyFile().getAccountsByParentID(getId());
+	return getKMyMoneyFile().getAccountsByParentID(getID());
     }
 
     /**
@@ -206,7 +206,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      */
     public void addTransactionSplit(final KMyMoneyTransactionSplit split) {
 
-	KMMQualifSplitID kmmSpltID = new KMMQualifSplitID(split.getTransaction().getId(), split.getId());
+	KMMQualifSplitID kmmSpltID = new KMMQualifSplitID(split.getTransaction().getID(), split.getID());
 	KMyMoneyTransactionSplit old = getTransactionSplitByID(kmmSpltID);
 	if (old != null) {
 	    if (old != split) {
@@ -275,7 +275,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 	buffer.append("[KMyMoneyAccountImpl:");
 	
 	buffer.append(" id: ");
-	buffer.append(getId());
+	buffer.append(getID());
 	
 	buffer.append(" type: ");
 	try {

@@ -48,7 +48,7 @@ public class FileSecurityManager {
 	for ( SECURITY jwsdpSec : pRootElement.getSECURITIES().getSECURITY() ) {
 	    try {
 		KMyMoneySecurityImpl sec = createSecurity(jwsdpSec);
-		secMap.put(sec.getId(), sec);
+		secMap.put(sec.getID(), sec);
 		symbMap.put(sec.getSymbol(), new KMMSecID(jwsdpSec.getId()));
 		codeMap.put(sec.getCode(), new KMMSecID(jwsdpSec.getId()));
 	    } catch (RuntimeException e) {
@@ -72,32 +72,32 @@ public class FileSecurityManager {
     // ---------------------------------------------------------------
 
     public void addSecurity(KMyMoneySecurity sec) {
-	secMap.put(sec.getId(), sec);
+	secMap.put(sec.getID(), sec);
 
 	if ( sec.getSymbol() != null )
-	    symbMap.put(sec.getSymbol(), sec.getQualifId().getSecID());
+	    symbMap.put(sec.getSymbol(), sec.getQualifID().getSecID());
 
 	if ( sec.getCode() != null )
-	    codeMap.put(sec.getCode(), sec.getQualifId().getSecID());
+	    codeMap.put(sec.getCode(), sec.getQualifID().getSecID());
     }
 
     public void removeSecurity(KMyMoneySecurity sec) {
-	secMap.remove(sec.getId());
+	secMap.remove(sec.getID());
 
 	for ( String symb : symbMap.keySet() ) {
-	    if ( symbMap.get(symb).equals(sec.getQualifId().getSecID()) )
+	    if ( symbMap.get(symb).equals(sec.getQualifID().getSecID()) )
 		symbMap.remove(symb);
 	}
 
 	for ( String code : codeMap.keySet() ) {
-	    if ( codeMap.get(code).equals(sec.getQualifId().getSecID()) )
+	    if ( codeMap.get(code).equals(sec.getQualifID().getSecID()) )
 		codeMap.remove(code);
 	}
     }
 
     // ---------------------------------------------------------------
 
-    public KMyMoneySecurity getSecurityById(final KMMSecID id) {
+    public KMyMoneySecurity getSecurityByID(final KMMSecID id) {
 	if (secMap == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}
@@ -110,7 +110,7 @@ public class FileSecurityManager {
 	return retval;
     }
 
-    public KMyMoneySecurity getSecurityById(final String idStr) {
+    public KMyMoneySecurity getSecurityByID(final String idStr) {
 	if (idStr == null) {
 	    throw new IllegalStateException("null string given");
 	}
@@ -120,11 +120,11 @@ public class FileSecurityManager {
 	}
 	
 	KMMSecID secID = new KMMSecID(idStr);
-	return getSecurityById(secID);
+	return getSecurityByID(secID);
     }
 
     public KMyMoneySecurity getSecurityByQualifID(final KMMQualifSecID secID) {
-	return getSecurityById(secID.getCode());
+	return getSecurityByID(secID.getCode());
     }
 
     public KMyMoneySecurity getSecurityByQualifID(final String qualifIDStr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {

@@ -35,7 +35,7 @@ public class GetPyeInfo {
 
 	KMyMoneyPayee pye = null;
 	if (mode == Helper.Mode.ID) {
-	    pye = gcshFile.getPayeeById(pyeID);
+	    pye = gcshFile.getPayeeByID(pyeID);
 	    if (pye == null) {
 		System.err.println("Could not find a security with this ID.");
 		throw new NoEntryFoundException();
@@ -57,7 +57,7 @@ public class GetPyeInfo {
 	// ----------------------------
 
 	try {
-	    System.out.println("ID:                '" + pye.getId() + "'");
+	    System.out.println("ID:                '" + pye.getID() + "'");
 	} catch (Exception exc) {
 	    System.out.println("ID:                " + "ERROR");
 	}

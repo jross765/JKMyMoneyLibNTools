@@ -10,7 +10,7 @@ import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 
 public interface KMMPricePair {
 
-    KMMCurrPair getId() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+    KMMCurrPair getID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
     
     // ---------------------------------------------------------------
     

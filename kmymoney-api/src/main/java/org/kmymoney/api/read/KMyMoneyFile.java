@@ -59,7 +59,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param id the unique id of the account to look for
      * @return the account or null if it's not found
      */
-    KMyMoneyAccount getAccountById(KMMComplAcctID id);
+    KMyMoneyAccount getAccountByID(KMMComplAcctID id);
 
     /**
     *
@@ -75,7 +75,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
     *
     * @param name the UNQUaLIFIED name to look for
     * @return null if not found
-    * @see #getAccountById(String)
+    * @see #getAccountByID(String)
     */
    Collection<KMyMoneyAccount> getAccountsByName(String expr);
 
@@ -92,7 +92,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
     * @return null if not found
     * @throws org.kmymoney.api.read.TooManyEntriesFoundException 
     * @throws org.kmymoney.api.read.NoEntryFoundException 
-    * @see #getAccountById(String)
+    * @see #getAccountByID(String)
     * @see #getAccountByName(String)
     */
    KMyMoneyAccount getAccountByNameEx(String name) throws NoEntryFoundException, TooManyEntriesFoundException;
@@ -106,7 +106,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
     * @return null if not found
     * @throws org.kmymoney.api.read.TooManyEntriesFoundException 
     * @throws org.kmymoney.api.read.NoEntryFoundException 
-    * @see #getAccountById(String)
+    * @see #getAccountByID(String)
     * @see #getAccountByName(String)
     */
    KMyMoneyAccount getAccountByIDorName(KMMComplAcctID id, String name) throws NoEntryFoundException, TooManyEntriesFoundException;
@@ -121,7 +121,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
     * @return null if not found
     * @throws org.kmymoney.api.read.TooManyEntriesFoundException 
     * @throws org.kmymoney.api.read.NoEntryFoundException 
-    * @see #getAccountById(String)
+    * @see #getAccountByID(String)
     * @see #getAccountByName(String)
     */
    KMyMoneyAccount getAccountByIDorNameEx(KMMComplAcctID id, String name) throws NoEntryFoundException, TooManyEntriesFoundException;
@@ -142,7 +142,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param trxID the unique id of the transaction to look for
      * @return the transaction or null if it's not found
      */
-    KMyMoneyTransaction getTransactionById(KMMTrxID trxID);
+    KMyMoneyTransaction getTransactionByID(KMMTrxID trxID);
 
     /**
      * @return a (possibly read-only) collection of all transactions Do not modify
@@ -166,7 +166,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param id the unique id of the customer to look for
      * @return the customer or null if it's not found
      */
-    KMyMoneyPayee getPayeeById(KMMPyeID id);
+    KMyMoneyPayee getPayeeByID(KMMPyeID id);
 
     Collection<KMyMoneyPayee> getPayeesByName(final String expr);
     
@@ -186,9 +186,9 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param id the unique id of the customer to look for
      * @return the customer or null if it's not found
      */
-    KMyMoneySecurity getSecurityById(KMMSecID id);
+    KMyMoneySecurity getSecurityByID(KMMSecID id);
 
-    KMyMoneySecurity getSecurityById(String id);
+    KMyMoneySecurity getSecurityByID(String id);
 
     KMyMoneySecurity getSecurityByQualifID(KMMQualifSecID secID);
 
@@ -228,9 +228,9 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param id the unique id of the customer to look for
      * @return the customer or null if it's not found
      */
-    KMyMoneyCurrency getCurrencyById(String id);
+    KMyMoneyCurrency getCurrencyByID(String id);
 
-    KMyMoneyCurrency getCurrencyByQualifId(KMMQualifCurrID currID);
+    KMyMoneyCurrency getCurrencyByQualifID(KMMQualifCurrID currID);
 
     /**
      * warning: this function has to traverse all securites. If it much faster to
@@ -239,7 +239,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      *
      * @param name the name to look for
      * @return null if not found
-     * @see #getCustomerById(String)
+     * @see #getCustomerByID(String)
      */
     // Collection<KMyMoneyCurrency> getCurrenciesByName(String name);
 
@@ -255,7 +255,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param prcID id of a price
      * @return the identified price or null
      */
-    KMMPrice getPriceById(KMMPriceID prcID);
+    KMMPrice getPriceByID(KMMPriceID prcID);
 
     /**
      * @return all prices defined in the book

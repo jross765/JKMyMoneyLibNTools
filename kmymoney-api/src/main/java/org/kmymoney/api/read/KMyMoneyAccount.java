@@ -105,7 +105,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
     /**
      * @return the unique id for that account (not meaningfull to human users)
      */
-    KMMComplAcctID getId();
+    KMMComplAcctID getID();
 
     /**
      * @return a user-defined description to acompany the name of the account. Can
@@ -134,7 +134,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
     /**
      * @return null if the account is below the root
      */
-    KMMComplAcctID getParentAccountId();
+    KMMComplAcctID getParentAccountID();
     
     boolean isRootAccount();
 

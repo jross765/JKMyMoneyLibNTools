@@ -54,13 +54,13 @@ public class KMyMoneyCurrencyImpl implements KMyMoneyCurrency {
     // ---------------------------------------------------------------
 
     @Override
-    public String getId() {
+    public String getID() {
 	return jwsdpPeer.getId();
     }
 
     @Override
-    public KMMQualifCurrID getQualifId() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-	return new KMMQualifCurrID(getId());
+    public KMMQualifCurrID getQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	return new KMMQualifCurrID(getID());
     }
 
     @Override
@@ -111,7 +111,7 @@ public class KMyMoneyCurrencyImpl implements KMyMoneyCurrency {
 	Collection<KMMPrice> prices = getKMyMoneyFile().getPrices();
 	for ( KMMPrice price : prices ) {
 	    try {
-		if ( price.getFromSecCurrQualifId().toString().equals(getQualifId().toString()) ) {
+		if ( price.getFromSecCurrQualifID().toString().equals(getQualifID().toString()) ) {
 		    result.add(price);
 		} 
 	    } catch ( Exception exc ) {
@@ -143,7 +143,7 @@ public class KMyMoneyCurrencyImpl implements KMyMoneyCurrency {
     public String toString() {
 	String result = "KMyMoneyCurrencyImpl ";
 	
-	result += "[id=" + getId();
+	result += "[id=" + getID();
 	result += ", symbol='" + getSymbol() + "'";
 	
 	try {

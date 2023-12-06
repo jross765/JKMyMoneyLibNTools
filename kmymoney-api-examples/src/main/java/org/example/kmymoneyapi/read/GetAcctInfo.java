@@ -35,7 +35,7 @@ public class GetAcctInfo {
 
 	KMyMoneyAccount acct = null;
 	if (mode == Helper.Mode.ID) {
-	    acct = kmmFile.getAccountById(acctID);
+	    acct = kmmFile.getAccountByID(acctID);
 	    if (acct == null) {
 		System.err.println("Found no account with that name");
 		throw new NoEntryFoundException();
@@ -62,7 +62,7 @@ public class GetAcctInfo {
 	System.out.println("Depth:           " + depth);
 
 	try {
-	    System.out.println("ID:              " + acct.getId());
+	    System.out.println("ID:              " + acct.getID());
 	} catch (Exception exc) {
 	    System.out.println("ID:              " + "ERROR");
 	}
@@ -127,9 +127,9 @@ public class GetAcctInfo {
 
     private void showParents(KMyMoneyAccount acct, int depth) {
 	// ::MAGIC
-	if (depth <= 0 && !acct.getId().equals("AStd::Asset") && !acct.getId().equals("AStd::Liability")
-		&& !acct.getId().equals("AStd::Expense") && !acct.getId().equals("AStd::Income")
-		&& !acct.getId().equals("AStd::Equity")) {
+	if (depth <= 0 && !acct.getID().equals("AStd::Asset") && !acct.getID().equals("AStd::Liability")
+		&& !acct.getID().equals("AStd::Expense") && !acct.getID().equals("AStd::Income")
+		&& !acct.getID().equals("AStd::Equity")) {
 	    System.out.println("");
 	    System.out.println(">>> BEGIN Parent Account");
 	    printAcctInfo(acct.getParentAccount(), depth - 1);

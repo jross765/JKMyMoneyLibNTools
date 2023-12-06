@@ -40,7 +40,7 @@ public class GetTrxSpltInfo {
 	// ------------------------
 
 	try {
-	    System.out.println("Qualif. ID:     " + splt.getQualifId());
+	    System.out.println("Qualif. ID:     " + splt.getQualifID());
 	} catch (Exception exc) {
 	    System.out.println("Qualif. ID:     " + "ERROR");
 	}
@@ -52,13 +52,13 @@ public class GetTrxSpltInfo {
 	}
 
 	try {
-	    System.out.println("Transaction ID: " + splt.getTransaction().getId());
+	    System.out.println("Transaction ID: " + splt.getTransaction().getID());
 	} catch (Exception exc) {
 	    System.out.println("Transaction ID: " + "ERROR");
 	}
 
 	try {
-	    System.out.println("Account ID:     " + splt.getAccountId());
+	    System.out.println("Account ID:     " + splt.getAccountID());
 	} catch (Exception exc) {
 	    System.out.println("Account ID:     " + "ERROR");
 	}

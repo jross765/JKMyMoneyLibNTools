@@ -84,8 +84,8 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 	// ::TODO
 	KMyMoneyAccount acct = getAccount();
 	if (acct == null) {
-	    System.err.println("No such Account id='" + getAccountId() + "' for Transactions-Split with id '" + getId()
-		    + "' description '" + getMemo() + "' in transaction with id '" + getTransaction().getId()
+	    System.err.println("No such Account id='" + getAccountID() + "' for Transactions-Split with id '" + getID()
+		    + "' description '" + getMemo() + "' in transaction with id '" + getTransaction().getID()
 		    + "' description '" + getTransaction().getMemo() + "'");
 	} else {
 	    acct.addTransactionSplit(this);
@@ -96,16 +96,16 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     // ---------------------------------------------------------------
 
     /**
-     * @see KMyMoneyTransactionSplit#getId()
+     * @see KMyMoneyTransactionSplit#getID()
      */
     @Override
-    public KMMSpltID getId() {
+    public KMMSpltID getID() {
 	return new KMMSpltID(jwsdpPeer.getId());
     }
 
     @Override
-    public KMMQualifSplitID getQualifId() {
-	return new KMMQualifSplitID(getTransactionId(), getId());
+    public KMMQualifSplitID getQualifID() {
+	return new KMMQualifSplitID(getTransactionID(), getID());
     }
 
     public Action getAction() throws UnknownSplitActionException {
@@ -187,9 +187,9 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     }
 
     /**
-     * @see KMyMoneyTransactionSplit#getAccountId()
+     * @see KMyMoneyTransactionSplit#getAccountID()
      */
-    public KMMComplAcctID getAccountId() {
+    public KMMComplAcctID getAccountID() {
 	String id = jwsdpPeer.getAccount();
 	assert id != null;
 	return new KMMComplAcctID(id);
@@ -199,12 +199,12 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
      * @see KMyMoneyTransactionSplit#getAccount()
      */
     public KMyMoneyAccount getAccount() {
-	return myTransaction.getKMyMoneyFile().getAccountById(getAccountId());
+	return myTransaction.getKMyMoneyFile().getAccountByID(getAccountID());
     }
 
     @Override
-    public KMMTrxID getTransactionId() {
-	return myTransaction.getId();
+    public KMMTrxID getTransactionID() {
+	return myTransaction.getID();
     }
 
     /**
@@ -379,13 +379,13 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 		return c;
 	    }
 
-	    if ( ! otherSplt.getQualifId().equals(getQualifId()) ) {
-		return otherSplt.getId().compareTo(getId());
+	    if ( ! otherSplt.getQualifID().equals(getQualifID()) ) {
+		return otherSplt.getID().compareTo(getID());
 	    }
 
 	    if (otherSplt != this) {
-		System.err.println("Duplicate transaction-split-id!! " + otherSplt.getQualifId() + "["
-			+ otherSplt.getClass().getName() + "] and " + getQualifId() + "[" + getClass().getName() + "]\n"
+		System.err.println("Duplicate transaction-split-id!! " + otherSplt.getQualifID() + "["
+			+ otherSplt.getClass().getName() + "] and " + getQualifID() + "[" + getClass().getName() + "]\n"
 			+ "split0=" + otherSplt.toString() + "\n" + "split1=" + toString() + "\n");
 		IllegalStateException x = new IllegalStateException("DEBUG");
 		x.printStackTrace();
@@ -411,10 +411,10 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 	buffer.append("[KMyMoneyTransactionSplitImpl:");
 
 	buffer.append(" qualif-id: ");
-	buffer.append(getQualifId());
+	buffer.append(getQualifID());
 
 //	buffer.append(" transaction-id: ");
-//	buffer.append(getTransaction().getId());
+//	buffer.append(getTransaction().getID());
 //
 	buffer.append(" Action: ");
 	try {
@@ -424,7 +424,7 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 	}
 
 	buffer.append(" account-id: ");
-	buffer.append(getAccountId());
+	buffer.append(getAccountID());
 
 	buffer.append(" account: ");
 	try {

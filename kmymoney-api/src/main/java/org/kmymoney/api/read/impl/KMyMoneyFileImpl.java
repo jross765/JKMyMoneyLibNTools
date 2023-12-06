@@ -267,11 +267,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     // ---------------------------------------------------------------
 
     /**
-     * @see KMyMoneyFile#getAccountById(java.lang.String)
+     * @see KMyMoneyFile#getAccountByID(java.lang.String)
      */
     @Override
-    public KMyMoneyAccount getAccountById(final KMMComplAcctID acctID) {
-	return acctMgr.getAccountById(acctID);
+    public KMyMoneyAccount getAccountByID(final KMMComplAcctID acctID) {
+	return acctMgr.getAccountByID(acctID);
     }
 
     /**
@@ -310,7 +310,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
      * @return null if not found
      * @throws TooManyEntriesFoundException 
      * @throws NoEntryFoundException 
-     * @see #getAccountById(String)
+     * @see #getAccountByID(String)
      * @see #getAccountByName(String)
      */
     @Override
@@ -327,7 +327,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
      * @return null if not found
      * @throws TooManyEntriesFoundException 
      * @throws NoEntryFoundException 
-     * @see #getAccountById(String)
+     * @see #getAccountByID(String)
      * @see #getAccountByName(String)
      */
     @Override
@@ -345,7 +345,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
      * @return null if not found
      * @throws TooManyEntriesFoundException 
      * @throws NoEntryFoundException 
-     * @see #getAccountById(String)
+     * @see #getAccountByID(String)
      * @see #getAccountByName(String)
      */
     @Override
@@ -372,11 +372,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     // ---------------------------------------------------------------
 
     /**
-     * @see KMyMoneyFile#getTransactionById(java.lang.String)
+     * @see KMyMoneyFile#getTransactionByID(java.lang.String)
      */
     @Override
-    public KMyMoneyTransaction getTransactionById(final KMMTrxID trxID) {
-	return trxMgr.getTransactionById(trxID);
+    public KMyMoneyTransaction getTransactionByID(final KMMTrxID trxID) {
+	return trxMgr.getTransactionByID(trxID);
     }
 
     /**
@@ -390,7 +390,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     // ---------------------------------------------------------------
     
     /**
-     * @see KMyMoneyFile#getTransactionById(java.lang.String)
+     * @see KMyMoneyFile#getTransactionByID(java.lang.String)
      */
     @Override
     public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSplitID spltID) {
@@ -405,8 +405,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     // ---------------------------------------------------------------
 
     @Override
-    public KMyMoneyPayee getPayeeById(final KMMPyeID id) {
-	return pyeMgr.getPayeeById(id);
+    public KMyMoneyPayee getPayeeByID(final KMMPyeID id) {
+	return pyeMgr.getPayeeByID(id);
     }
 
     @Override
@@ -433,13 +433,13 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     // ---------------------------------------------------------------
 
     @Override
-    public KMyMoneySecurity getSecurityById(final KMMSecID secID) {
-	return secMgr.getSecurityById(secID);
+    public KMyMoneySecurity getSecurityByID(final KMMSecID secID) {
+	return secMgr.getSecurityByID(secID);
     }
 
     @Override
-    public KMyMoneySecurity getSecurityById(final String idStr) {
-	return secMgr.getSecurityById(idStr);
+    public KMyMoneySecurity getSecurityByID(final String idStr) {
+	return secMgr.getSecurityByID(idStr);
     }
 
     @Override
@@ -485,13 +485,13 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     // ---------------------------------------------------------------
 
     @Override
-    public KMyMoneyCurrency getCurrencyById(String currID) {
-	return currMgr.getCurrencyById(currID);
+    public KMyMoneyCurrency getCurrencyByID(String currID) {
+	return currMgr.getCurrencyByID(currID);
     }
 
     @Override
-    public KMyMoneyCurrency getCurrencyByQualifId(KMMQualifCurrID currID) {
-	return currMgr.getCurrencyByQualifId(currID);
+    public KMyMoneyCurrency getCurrencyByQualifID(KMMQualifCurrID currID) {
+	return currMgr.getCurrencyByQualifID(currID);
     }
 
     @Override
@@ -502,8 +502,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     // ---------------------------------------------------------------
     
     @Override
-    public KMMPrice getPriceById(KMMPriceID prcID) {
-	return prcMgr.getPriceById(prcID);
+    public KMMPrice getPriceByID(KMMPriceID prcID) {
+	return prcMgr.getPriceByID(prcID);
     }
 
     @Override
