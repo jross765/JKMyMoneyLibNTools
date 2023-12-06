@@ -10,7 +10,7 @@ import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSplitID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 
 /**
@@ -185,7 +185,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * @param id the split-id to look for
      * @return the identified split or null
      */
-    KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSplitID id);
+    KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSpltID id);
 
     /**
      * Gets the last transaction-split before the given date.

@@ -5,7 +5,7 @@ import java.util.Locale;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSplitID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.numbers.FixedPointNumber;
@@ -114,7 +114,7 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      */
     KMMSpltID getID();
 
-    KMMQualifSplitID getQualifID();
+    KMMQualifSpltID getQualifID();
 
     /**
      *

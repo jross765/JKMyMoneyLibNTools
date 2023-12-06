@@ -12,19 +12,19 @@ import org.kmymoney.api.basetypes.simple.KMMTrxID;
  * In order to get the ID "real" (like globally unique), we have to pair it
  * with its transaction ID.
  */
-public class KMMQualifSplitID {
+public class KMMQualifSpltID {
     
     private KMMTrxID  trxID;
     private KMMSpltID spltID;
     
     // ---------------------------------------------------------------
 
-    public KMMQualifSplitID(KMMTrxID trxID, KMMSpltID spltID) {
+    public KMMQualifSpltID(KMMTrxID trxID, KMMSpltID spltID) {
 	setTransactionID(trxID);
 	setSplitID(spltID);
     }
     
-    public KMMQualifSplitID(String trxID, String spltID) {
+    public KMMQualifSpltID(String trxID, String spltID) {
 	setTransactionID(trxID);
 	setSplitID(spltID);
     }
@@ -62,7 +62,7 @@ public class KMMQualifSplitID {
 	setSplitID(spltID);
     }
 
-    public void set(KMMQualifSplitID spltID) {
+    public void set(KMMQualifSpltID spltID) {
 	setTransactionID(spltID.getTransactionID());
 	setSplitID(spltID.getSplitID());
     }
@@ -79,10 +79,10 @@ public class KMMQualifSplitID {
 	if (this == obj) {
 	    return true;
 	}
-	if (!(obj instanceof KMMQualifSplitID)) {
+	if (!(obj instanceof KMMQualifSpltID)) {
 	    return false;
 	}
-	KMMQualifSplitID other = (KMMQualifSplitID) obj;
+	KMMQualifSpltID other = (KMMQualifSpltID) obj;
 	return Objects.equals(spltID, other.spltID) && 
 	       Objects.equals(trxID, other.trxID);
     }

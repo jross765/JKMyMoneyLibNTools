@@ -35,7 +35,7 @@ public class TestKMMQualifSpltID {
 
     @Test
     public void test02() throws Exception {
-	KMMQualifSplitID spltID1 = new KMMQualifSplitID(new KMMTrxID("T000000000000000001"), new KMMSpltID("S0001"));
+	KMMQualifSpltID spltID1 = new KMMQualifSpltID(new KMMTrxID("T000000000000000001"), new KMMSpltID("S0001"));
 
 	assertEquals(new KMMTrxID("T000000000000000001"), spltID1.getTransactionID());
 	assertEquals("T000000000000000001", spltID1.getTransactionID().toString());
@@ -43,7 +43,7 @@ public class TestKMMQualifSpltID {
 	assertEquals("S0001", spltID1.getSplitID().toString());
 	assertEquals("T000000000000000001:S0001", spltID1.toString());
 
-	KMMQualifSplitID spltID2 = new KMMQualifSplitID("T000000000000000001", "S0001");
+	KMMQualifSpltID spltID2 = new KMMQualifSpltID("T000000000000000001", "S0001");
 
 	assertEquals(new KMMTrxID("T000000000000000001"), spltID2.getTransactionID());
 	assertEquals("T000000000000000001", spltID2.getTransactionID().toString());
@@ -55,7 +55,7 @@ public class TestKMMQualifSpltID {
 	assertEquals(spltID1, spltID2);
 
 	try {
-	    KMMQualifSplitID spltID = new KMMQualifSplitID("C000001", "alexander"); // invalid strings
+	    KMMQualifSpltID spltID = new KMMQualifSpltID("C000001", "alexander"); // invalid strings
 	} catch ( Exception exc ) {
 	    assertEquals(0, 0); 
 	}

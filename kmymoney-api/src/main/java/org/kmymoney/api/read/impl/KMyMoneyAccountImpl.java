@@ -12,7 +12,7 @@ import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSplitID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
@@ -206,7 +206,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      */
     public void addTransactionSplit(final KMyMoneyTransactionSplit split) {
 
-	KMMQualifSplitID kmmSpltID = new KMMQualifSplitID(split.getTransaction().getID(), split.getID());
+	KMMQualifSpltID kmmSpltID = new KMMQualifSpltID(split.getTransaction().getID(), split.getID());
 	KMyMoneyTransactionSplit old = getTransactionSplitByID(kmmSpltID);
 	if (old != null) {
 	    if (old != split) {

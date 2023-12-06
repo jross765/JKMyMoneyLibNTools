@@ -17,7 +17,7 @@ import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSplitID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.currency.ComplexPriceTable;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -579,7 +579,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	/**
 	 * @see KMyMoneyAccount#getTransactionSplitByID(java.lang.String)
 	 */
-	public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSplitID id) {
+	public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSpltID id) {
 		if (id == null) {
 			throw new IllegalArgumentException("null id given!");
 		}

@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.kmymoney.api.basetypes.complex.KMMQualifSplitID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.TRANSACTION;
@@ -26,7 +26,7 @@ public class FileTransactionManager {
     private KMyMoneyFileImpl kmmFile;
 
     private Map<KMMTrxID, KMyMoneyTransaction>              trxMap;
-    private Map<KMMQualifSplitID, KMyMoneyTransactionSplit> trxSpltMap;
+    private Map<KMMQualifSpltID, KMyMoneyTransactionSplit> trxSpltMap;
 
     // ---------------------------------------------------------------
 
@@ -39,14 +39,14 @@ public class FileTransactionManager {
 
     private void init(final KMYMONEYFILE pRootElement) {
 	trxMap     = new HashMap<KMMTrxID, KMyMoneyTransaction>();
-	trxSpltMap = new HashMap<KMMQualifSplitID, KMyMoneyTransactionSplit>();
+	trxSpltMap = new HashMap<KMMQualifSpltID, KMyMoneyTransactionSplit>();
 
 	for ( TRANSACTION jwsdpTrx : pRootElement.getTRANSACTIONS().getTRANSACTION() ) {
 	    try {
 		KMyMoneyTransactionImpl trx = createTransaction(jwsdpTrx);
 		trxMap.put(trx.getID(), trx);
 		for (KMyMoneyTransactionSplit splt : trx.getSplits()) {
-		    KMMQualifSplitID spltID = new KMMQualifSplitID(trx.getID(), splt.getID());
+		    KMMQualifSpltID spltID = new KMMQualifSpltID(trx.getID(), splt.getID());
 		    trxSpltMap.put(spltID, splt);
 		}
 	    } catch (RuntimeException e) {
@@ -156,7 +156,7 @@ public class FileTransactionManager {
     /**
      * @see KMyMoneyFile#getTransactionByID(java.lang.String)
      */
-    public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSplitID spltID) {
+    public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSpltID spltID) {
 	if (trxSpltMap == null) {
 	    throw new IllegalStateException("no root-element loaded");
 	}

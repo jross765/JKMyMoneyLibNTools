@@ -19,7 +19,7 @@ import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSplitID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
@@ -393,7 +393,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
      * @see KMyMoneyFile#getTransactionByID(java.lang.String)
      */
     @Override
-    public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSplitID spltID) {
+    public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSpltID spltID) {
 	return trxMgr.getTransactionSplitByID(spltID);
     }
 
