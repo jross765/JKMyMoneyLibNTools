@@ -111,40 +111,7 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     public Action getAction() throws UnknownSplitActionException {
 	
 	String actionStr = getJwsdpPeer().getAction();
-	int actionVal = Integer.parseInt(actionStr);
-	
-	if ( actionVal == ACTION_UNKNOWN )
-	    return Action.UNKNOWN;
-	else if ( actionVal == ACTION_CHECK )
-	    return Action.CHECK;
-	else if ( actionVal == ACTION_DEPOSIT )
-	    return Action.DEPOSIT;
-	else if ( actionVal == ACTION_TRANSFER )
-	    return Action.TRANSFER;
-	else if ( actionVal == ACTION_WITHDRAWAL )
-	    return Action.WITHDRAWAL;
-	else if ( actionVal == ACTION_ATM )
-	    return Action.ATM;
-	else if ( actionVal == ACTION_AMORTIZATION )
-	    return Action.AMORTIZATION;
-	else if ( actionVal == ACTION_INTEREST )
-	    return Action.INTEREST;
-	else if ( actionVal == ACTION_BUY_SHARES )
-	    return Action.BUY_SHARES;
-	else if ( actionVal == ACTION_DIVIDEND )
-	    return Action.DIVIDEND;
-	else if ( actionVal == ACTION_REINVEST_DIVIDEND )
-	    return Action.REINVEST_DIVIDEND;
-	else if ( actionVal == ACTION_YIELD )
-	    return Action.YIELD;
-	else if ( actionVal == ACTION_ADD_SHARES )
-	    return Action.ADD_SHARES;
-	else if ( actionVal == ACTION_SPLIT_SHARES )
-	    return Action.SPLIT_SHARES;
-	else if ( actionVal == ACTION_INTEREST_INCOME )
-	    return Action.INTEREST_INCOME;
-	else
-	    throw new UnknownSplitActionException();
+	return Action.valueOff(actionStr);
     }
 
     public State getState() throws UnknownSplitStateException {

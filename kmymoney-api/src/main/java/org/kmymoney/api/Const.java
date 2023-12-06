@@ -1,7 +1,6 @@
 package org.kmymoney.api;
 
-public class Const
-{
+public class Const {
   
   public static final String STANDARD_DATE_FORMAT = "yyyy-MM-dd";
 

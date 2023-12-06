@@ -18,24 +18,56 @@ import org.kmymoney.api.numbers.FixedPointNumber;
 public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransactionSplit> {
 
     // For the following states cf.:
-    // https://github.com/KDE/kmymoney/blob/master/kmymoney/mymoney/mymoneyenums.h
+    //  - https://github.com/KDE/kmymoney/blob/master/kmymoney/mymoney/mymoneyenums.h
+    //  - https://github.com/KDE/kmymoney/blob/master/kmymoney/mymoney/mymoneysplit.cpp
+    //    (for actual strings)
 
+    // namespace eMyMoney::Split::Action
     public enum Action {
-	UNKNOWN,
-	CHECK,
-	DEPOSIT,
-	TRANSFER,
-	WITHDRAWAL,
-	ATM,
-	AMORTIZATION,
-	INTEREST,
-	BUY_SHARES,
-	DIVIDEND,
-	REINVEST_DIVIDEND,
-	YIELD,
-	ADD_SHARES,
-	SPLIT_SHARES,
-	INTEREST_INCOME
+	
+	CHECK             ( "Check" ),
+	DEPOSIT           ( "Deposit" ),
+	TRANSFER          ( "Transfer" ),
+	WITHDRAWAL        ( "Withdrawal" ),
+	ATM               ( "ATM" ),
+	AMORTIZATION      ( "Amortization" ),
+	INTEREST          ( "Interest" ),
+	BUY_SHARES        ( "Buy" ),    // actually not used!
+	SELL_SHARES       ( "Sell" ),
+	DIVIDEND          ( "Dividend" ),
+	REINVEST_DIVIDEND ( "Reinvest" ),
+	YIELD             ( "Yield" ),
+	ADD_SHARES        ( "Add" ),
+	REMOVE_SHARES     ( "Remove" ), // actually not used!
+	SPLIT_SHARES      ( "Split" ),
+	INTEREST_INCOME   ( "IntIncome" );
+	
+	// ---
+	      
+	private String code = "UNSET";
+
+	// ---
+	      
+	Action(String code) {
+	    this.code = code;
+	}
+	      
+	// ---
+		
+	public String getCode() {
+	    return code;
+	}
+		
+	// no typo!
+	public static Action valueOff(String code) {
+	    for ( Action reconStat : values() ) {
+		if ( reconStat.getCode().equals(code) ) {
+		    return reconStat;
+		}
+	    }
+		    
+	    return null;
+	}
     }
     
     public enum State {
