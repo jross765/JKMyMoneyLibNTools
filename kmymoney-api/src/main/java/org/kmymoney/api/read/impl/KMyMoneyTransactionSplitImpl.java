@@ -1,5 +1,6 @@
 package org.kmymoney.api.read.impl;
 
+import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
@@ -29,30 +30,6 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyTransactionSplitImpl.class);
 
-    // ::MAGIC
-    private static final int ACTION_UNKNOWN           = -1;
-    private static final int ACTION_CHECK             = 0;
-    private static final int ACTION_DEPOSIT           = 1;
-    private static final int ACTION_TRANSFER          = 2;
-    private static final int ACTION_WITHDRAWAL        = 3;
-    private static final int ACTION_ATM               = 4;
-    private static final int ACTION_AMORTIZATION      = 5;
-    private static final int ACTION_INTEREST          = 6;
-    private static final int ACTION_BUY_SHARES        = 7;
-    private static final int ACTION_DIVIDEND          = 8;
-    private static final int ACTION_REINVEST_DIVIDEND = 9;
-    private static final int ACTION_YIELD             = 10;
-    private static final int ACTION_ADD_SHARES        = 11;
-    private static final int ACTION_SPLIT_SHARES      = 12;
-    private static final int ACTION_INTEREST_INCOME   = 13;
-    
-    // ::MAGIC
-    public static final int STATE_UNKNOWN        = -1;
-    public static final int STATE_NOT_RECONCILED = 0;
-    public static final int STATE_CLEARED        = 1;
-    public static final int STATE_RECONCILED     = 2;
-    public static final int STATE_FROZEN         = 3;
-    
     // ---------------------------------------------------------------
 
     /**
@@ -109,29 +86,13 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     }
 
     public Action getAction() throws UnknownSplitActionException {
-	
 	String actionStr = getJwsdpPeer().getAction();
 	return Action.valueOff(actionStr);
     }
 
     public State getState() throws UnknownSplitStateException {
-	
-	// ::TODO
-	// int stateVal = jwsdpPeer.getState();
-	int stateVal = STATE_UNKNOWN;
-	
-	if ( stateVal == STATE_UNKNOWN )
-	    return State.UNKNOWN;
-	else if ( stateVal == STATE_NOT_RECONCILED )
-	    return State.NOT_RECONCILED;
-	else if ( stateVal == STATE_CLEARED )
-	    return State.CLEARED;
-	else if ( stateVal == STATE_RECONCILED )
-	    return State.RECONCILED;
-	else if ( stateVal == STATE_FROZEN )
-	    return State.FROZEN;
-	else
-	    throw new UnknownSplitStateException();
+	BigInteger reconFlag = getJwsdpPeer().getReconcileflag();
+	return State.valueOff(reconFlag.intValue());
     }
 
     /**
@@ -380,12 +341,20 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 	buffer.append(" qualif-id: ");
 	buffer.append(getQualifID());
 
-//	buffer.append(" transaction-id: ");
-//	buffer.append(getTransaction().getID());
-//
-	buffer.append(" Action: ");
+	// Part of qualif-id:
+	// buffer.append(" transaction-id: ");
+	// buffer.append(getTransaction().getID());
+
+	buffer.append(" action: ");
 	try {
 	    buffer.append(getAction());
+	} catch (Exception e) {
+	    buffer.append("ERROR");
+	}
+
+	buffer.append(" state: ");
+	try {
+	    buffer.append(getState());
 	} catch (Exception e) {
 	    buffer.append("ERROR");
 	}

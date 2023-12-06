@@ -60,9 +60,9 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
 		
 	// no typo!
 	public static Action valueOff(String code) {
-	    for ( Action reconStat : values() ) {
-		if ( reconStat.getCode().equals(code) ) {
-		    return reconStat;
+	    for ( Action act : values() ) {
+		if ( act.getCode().equals(code) ) {
+		    return act;
 		}
 	    }
 		    
@@ -70,12 +70,40 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
 	}
     }
     
+    // Also called "ReconFlag"
     public enum State {
-	UNKNOWN,
-	NOT_RECONCILED,
-	CLEARED,
-	RECONCILED,
-	FROZEN
+
+	NOT_RECONCILED ( 0 ),
+	CLEARED        ( 1 ),
+	RECONCILED     ( 2 ),
+	FROZEN         ( 3 );
+	
+	// ---
+	      
+	private int index = -1;
+
+	// ---
+	      
+	State(int index) {
+	    this.index = index;
+	}
+	      
+	// ---
+		
+	public int getIndex() {
+	    return index;
+	}
+		
+	// no typo!
+	public static State valueOff(int index) {
+	    for ( State stat : values() ) {
+		if ( stat.getIndex() == index ) {
+		    return stat;
+		}
+	    }
+		    
+	    return null;
+	}
     }
 	
     // ---------------------------------------------------------------
