@@ -79,6 +79,8 @@ public class FileSecurityManager {
 
 	if ( sec.getCode() != null )
 	    codeMap.put(sec.getCode(), sec.getQualifID().getSecID());
+
+	LOGGER.debug("Added security to cache: " + sec.getID());
     }
 
     public void removeSecurity(KMyMoneySecurity sec) {
@@ -93,6 +95,8 @@ public class FileSecurityManager {
 	    if ( codeMap.get(code).equals(sec.getQualifID().getSecID()) )
 		codeMap.remove(code);
 	}
+
+	LOGGER.debug("Removed security from cache: " + sec.getID());
     }
 
     // ---------------------------------------------------------------

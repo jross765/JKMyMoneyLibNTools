@@ -65,10 +65,12 @@ public class FilePayeeManager {
 
     public void addPayee(KMyMoneyPayee pye) {
 	pyeMap.put(pye.getID(), pye);
+	LOGGER.debug("Added payee to cache: " + pye.getID());
     }
 
     public void removePayee(KMyMoneyPayee pye) {
 	pyeMap.remove(pye.getID());
+	LOGGER.debug("Added payee to cache: " + pye.getID());
     }
 
     // ---------------------------------------------------------------

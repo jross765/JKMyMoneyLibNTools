@@ -73,10 +73,12 @@ public class FileAccountManager {
 
     public void addAccount(KMyMoneyAccount acct) {
 	acctMap.put(acct.getID(), acct);
+	LOGGER.debug("Added account to cache: " + acct.getID());
     }
 
     public void removeAccount(KMyMoneyAccount acct) {
 	acctMap.remove(acct.getID());
+	LOGGER.debug("Removed account from cache: " + acct.getID());
     }
 
     // ---------------------------------------------------------------

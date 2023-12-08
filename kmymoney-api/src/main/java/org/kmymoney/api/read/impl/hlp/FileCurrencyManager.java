@@ -61,10 +61,12 @@ public class FileCurrencyManager {
 
     public void addCurrency(KMyMoneyCurrency curr) {
 	currMap.put(curr.getID(), curr);
+	LOGGER.debug("Added currency to cache: " + curr.getID());
     }
 
     public void removeCurrency(KMyMoneyCurrency curr) {
 	currMap.remove(curr.getID());
+	LOGGER.debug("Removed currency from cache: " + curr.getID());
     }
 
     // ---------------------------------------------------------------
