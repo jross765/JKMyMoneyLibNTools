@@ -50,22 +50,22 @@ public class TestKMyMoneyFileImpl {
 
     @Test
     public void test01() throws Exception {
-	assertEquals(67, ((KMyMoneyFileStats) kmmFile).getNofEntriesAccountMap());
+	assertEquals(69, ((KMyMoneyFileStats) kmmFile).getNofEntriesAccountMap());
     }
 
     @Test
     public void test02() throws Exception {
-	assertEquals(5, ((KMyMoneyFileStats) kmmFile).getNofEntriesTransactionMap());
+	assertEquals(18, ((KMyMoneyFileStats) kmmFile).getNofEntriesTransactionMap());
     }
 
     @Test
     public void test03() throws Exception {
-	assertEquals(12, ((KMyMoneyFileStats) kmmFile).getNofEntriesTransactionSplitMap());
+	assertEquals(38, ((KMyMoneyFileStats) kmmFile).getNofEntriesTransactionSplitMap());
     }
 
     @Test
     public void test04() throws Exception {
-	assertEquals(5, ((KMyMoneyFileStats) kmmFile).getNofEntriesPayeeMap());
+	assertEquals(8, ((KMyMoneyFileStats) kmmFile).getNofEntriesPayeeMap());
     }
 
     @Test
