@@ -372,34 +372,34 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     @Override
     public String toString() {
 	StringBuffer buffer = new StringBuffer();
-	buffer.append("[KMyMoneyTransactionImpl:");
+	buffer.append("KMyMoneyTransactionImpl [");
 
-	buffer.append(" id: ");
+	buffer.append("id=");
 	buffer.append(getID());
 
 	// ::TODO: That only works in simple cases --
 	// need a more generic approach
-	buffer.append(" amount: ");
+	buffer.append(", amount=");
 	try {
 	    buffer.append(getFirstSplit().getValueFormatted());
 	} catch (SplitNotFoundException e) {
 	    buffer.append("ERROR");
 	}
 
-	buffer.append(" description: '");
+	buffer.append(", description='");
 	buffer.append(getMemo() + "'");
 
-	buffer.append(" #splits: ");
+	buffer.append(", #splits=");
 	buffer.append(getSplitsCount());
 
-	buffer.append(" post-date: ");
+	buffer.append(", post-date=");
 	try {
 	    buffer.append(getDatePosted().format(DATE_POSTED_FORMAT));
 	} catch (Exception e) {
 	    buffer.append(getDatePosted().toString());
 	}
 
-	buffer.append(" entry-date: ");
+	buffer.append(", entry-date=");
 	try {
 	    buffer.append(getEntryDate().format(DATE_ENTERED_FORMAT));
 	} catch (Exception e) {

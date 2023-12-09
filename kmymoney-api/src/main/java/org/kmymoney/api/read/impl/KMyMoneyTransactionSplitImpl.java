@@ -336,51 +336,51 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     @Override
     public String toString() {
 	StringBuffer buffer = new StringBuffer();
-	buffer.append("[KMyMoneyTransactionSplitImpl:");
+	buffer.append("KMyMoneyTransactionSplitImpl [");
 
-	buffer.append(" qualif-id: ");
+	buffer.append("qualif-id=");
 	buffer.append(getQualifID());
 
 	// Part of qualif-id:
-	// buffer.append(" transaction-id: ");
+	// buffer.append(" transaction-id=");
 	// buffer.append(getTransaction().getID());
 
-	buffer.append(" action: ");
+	buffer.append(", action=");
 	try {
 	    buffer.append(getAction());
 	} catch (Exception e) {
 	    buffer.append("ERROR");
 	}
 
-	buffer.append(" state: ");
+	buffer.append(", state=");
 	try {
 	    buffer.append(getState());
 	} catch (Exception e) {
 	    buffer.append("ERROR");
 	}
 
-	buffer.append(" account-id: ");
+	buffer.append(", account-id=");
 	buffer.append(getAccountID());
 
-	buffer.append(" account: ");
-	try {
-	    KMyMoneyAccount account = getAccount();
-	    buffer.append(account == null ? "null" : "'" + account.getQualifiedName() + "'");
-	} catch (Exception e) {
-	    buffer.append("ERROR");
-	}
+//	buffer.append(", account=");
+//	try {
+//	    KMyMoneyAccount account = getAccount();
+//	    buffer.append(account == null ? "null" : "'" + account.getQualifiedName() + "'");
+//	} catch (Exception e) {
+//	    buffer.append("ERROR");
+//	}
 
-	buffer.append(" memo: '");
+	buffer.append(", memo='");
 	buffer.append(getMemo() + "'");
 
 	// usually not set:
 	// buffer.append(" transaction-description: '");
 	// buffer.append(getTransaction().getMemo() + "'");
 
-	buffer.append(" value: ");
+	buffer.append(", value=");
 	buffer.append(getValue());
 
-	buffer.append(" shares: ");
+	buffer.append(", shares=");
 	buffer.append(getShares());
 
 	buffer.append("]");
