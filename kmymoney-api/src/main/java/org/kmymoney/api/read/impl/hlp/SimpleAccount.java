@@ -457,7 +457,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	}
 
 	/**
-	 * The currency-format to use for formating.<br/>
+	 * The currency-format to use for formatting.<br/>
 	 * Plase access this only via {@link #getCurrencyFormat()}.
 	 */
 	private static NumberFormat currencyFormat = null;
@@ -477,7 +477,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	}
 
 	/**
-	 * @return The currency-format to use for formating.
+	 * @return The currency-format to use for formatting.
 	 * @throws InvalidQualifSecCurrIDException 
 	 */
 	public NumberFormat getCurrencyFormat() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
