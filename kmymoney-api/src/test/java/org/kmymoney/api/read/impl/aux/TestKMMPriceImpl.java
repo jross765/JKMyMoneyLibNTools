@@ -24,9 +24,9 @@ import junit.framework.JUnit4TestAdapter;
 
 public class TestKMMPriceImpl
 {
-  private static final KMMPriceID PRICE_1_ID = new KMMPriceID("E000001", "EUR", "2023-11-03"); // SAP/EUR
-  private static final KMMPriceID PRICE_2_ID = new KMMPriceID("E000002", "EUR", "2023-11-01"); // MBG/EUR
-  private static final KMMPriceID PRICE_3_ID = new KMMPriceID("USD", "EUR", "2023-12-04");
+  static final KMMPriceID PRC_1_ID = new KMMPriceID("E000001", "EUR", "2023-11-03"); // SAP/EUR
+  static final KMMPriceID PRC_2_ID = new KMMPriceID("E000002", "EUR", "2023-11-01"); // MBG/EUR
+  static final KMMPriceID PRC_3_ID = new KMMPriceID("USD", "EUR", "2023-12-04");
 
   // -----------------------------------------------------------------
   
@@ -106,10 +106,10 @@ public class TestKMMPriceImpl
   @Test
   public void test02_1() throws Exception
   {
-      prc = kmmFile.getPriceByID(PRICE_1_ID);
+      prc = kmmFile.getPriceByID(PRC_1_ID);
       assertNotEquals(null, prc);
       
-      assertEquals(PRICE_1_ID, prc.getID());
+      assertEquals(PRC_1_ID, prc.getID());
       assertEquals(secID1.toString(), prc.getFromSecCurrQualifID().toString());
       assertEquals(secID1.toString(), prc.getFromSecurityQualifID().toString());
       assertEquals(secID1.getCode().toString(), prc.getFromSecurityQualifID().getSecID().toString());
@@ -156,10 +156,10 @@ public class TestKMMPriceImpl
   @Test
   public void test02_2() throws Exception
   {
-      prc = kmmFile.getPriceByID(PRICE_2_ID);
+      prc = kmmFile.getPriceByID(PRC_2_ID);
       assertNotEquals(null, prc);
       
-      assertEquals(PRICE_2_ID, prc.getID());
+      assertEquals(PRC_2_ID, prc.getID());
       assertEquals(secID2.toString(), prc.getFromSecCurrQualifID().toString());
       assertEquals(secID2.toString(), prc.getFromSecurityQualifID().toString());
       assertEquals(secID2.getCode().toString(), prc.getFromSecurityQualifID().getSecID().toString());
@@ -206,10 +206,10 @@ public class TestKMMPriceImpl
   @Test
   public void test02_3() throws Exception
   {
-      prc = kmmFile.getPriceByID(PRICE_3_ID);
+      prc = kmmFile.getPriceByID(PRC_3_ID);
       assertNotEquals(null, prc);
       
-      assertEquals(PRICE_3_ID, prc.getID());
+      assertEquals(PRC_3_ID, prc.getID());
       assertEquals(currID1.toString(), prc.getFromSecCurrQualifID().toString());
       assertEquals(currID1.toString(), prc.getFromCurrencyQualifID().toString());
       assertEquals("USD", prc.getFromCurrencyCode());

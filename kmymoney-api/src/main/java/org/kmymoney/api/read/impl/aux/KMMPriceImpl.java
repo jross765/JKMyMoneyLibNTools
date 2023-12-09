@@ -79,7 +79,7 @@ public class KMMPriceImpl implements KMMPrice {
 	return parent;
     }
 
-    // ----------------------------
+    // ---------------------------------------------------------------
     
     @Override
     public KMMQualifSecCurrID getFromSecCurrQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
@@ -166,7 +166,7 @@ public class KMMPriceImpl implements KMMPrice {
 	return curr;
     }
 
-    // ----------------------------
+    // ---------------------------------------------------------------
     
     /**
      * @return The currency-format to use for formating.
