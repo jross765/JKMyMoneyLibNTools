@@ -34,7 +34,7 @@ public class KMMInstID extends KMMID {
 
 	if ( counter < 1 || 
 	     counter > Math.pow(10, coreLength) - 1 )
-	    throw new InvalidKMMIDException();
+	    throw new InvalidKMMIDException("Cannot generate KMM institution ID from long " + counter + ": range error");
 
 	String fmtStr = "%0" + coreLength + "d";
 	String coreStr = String.format(fmtStr, counter);
@@ -45,15 +45,15 @@ public class KMMInstID extends KMMID {
 
     public void validate() throws InvalidKMMIDException {
 	if (kmmID.length() != STANDARD_LENGTH)
-	    throw new InvalidKMMIDException();
+	    throw new InvalidKMMIDException("No valid KMM institution ID string: '" + kmmID + "': wrong string length");
 
 	if (kmmID.charAt(0) != PREFIX)
-	    throw new InvalidKMMIDException();
+	    throw new InvalidKMMIDException("No valid KMM institution ID string: '" + kmmID + "': wrong prefix");
 
 	for (int i = PREFIX_LENGTH; i < STANDARD_LENGTH; i++) {
 	    if (!Character.isDigit(kmmID.charAt(i))) {
-		logger.warn("Char '" + kmmID.charAt(i) + "' is invalid in KMMInstID '" + kmmID + "'");
-		throw new InvalidKMMIDException();
+		logger.error("Char '" + kmmID.charAt(i) + "' is invalid in KMMInstID '" + kmmID + "'");
+		throw new InvalidKMMIDException("No valid KMM institution ID string: '" + kmmID + "': wrong character at pos " + i);
 	    }
 	}
     }
