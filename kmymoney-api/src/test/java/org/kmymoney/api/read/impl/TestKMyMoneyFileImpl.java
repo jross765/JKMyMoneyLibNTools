@@ -7,12 +7,13 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.impl.aux.KMMFileStats;
 
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneyFileImpl {
-    private KMyMoneyFile kmmFile = null;
+    private KMyMoneyFileImpl kmmFile = null;
+    private KMMFileStats     kmmFileStats = null;
 
     // -----------------------------------------------------------------
 
@@ -44,43 +45,61 @@ public class TestKMyMoneyFileImpl {
 	    System.err.println("Cannot parse GnuCash file");
 	    exc.printStackTrace();
 	}
+	
+	kmmFileStats = new KMMFileStats(kmmFile);
     }
 
     // -----------------------------------------------------------------
 
     @Test
     public void test01() throws Exception {
-	assertEquals(69, ((KMyMoneyFileStats) kmmFile).getNofEntriesAccountMap());
+	assertEquals(ConstTest.Stats.NOF_ACCT, kmmFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+	assertEquals(ConstTest.Stats.NOF_ACCT, kmmFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
+	assertEquals(ConstTest.Stats.NOF_ACCT, kmmFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
     }
 
     @Test
     public void test02() throws Exception {
-	assertEquals(18, ((KMyMoneyFileStats) kmmFile).getNofEntriesTransactionMap());
+	assertEquals(ConstTest.Stats.NOF_TRX, kmmFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
+	assertEquals(ConstTest.Stats.NOF_TRX, kmmFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER));
+	assertEquals(ConstTest.Stats.NOF_TRX, kmmFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
     }
 
     @Test
     public void test03() throws Exception {
-	assertEquals(38, ((KMyMoneyFileStats) kmmFile).getNofEntriesTransactionSplitMap());
+	assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW));
+	// This one is an exception:
+	// assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.COUNTER));
+	assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.CACHE));
     }
 
     @Test
     public void test04() throws Exception {
-	assertEquals(8, ((KMyMoneyFileStats) kmmFile).getNofEntriesPayeeMap());
+	assertEquals(ConstTest.Stats.NOF_PYE, kmmFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
+	assertEquals(ConstTest.Stats.NOF_PYE, kmmFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
+	assertEquals(ConstTest.Stats.NOF_PYE, kmmFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
     }
 
     @Test
     public void test05() throws Exception {
-	assertEquals(2, ((KMyMoneyFileStats) kmmFile).getNofEntriesSecurityMap());
+	assertEquals(ConstTest.Stats.NOF_SEC, kmmFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
+	assertEquals(ConstTest.Stats.NOF_SEC, kmmFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
+	assertEquals(ConstTest.Stats.NOF_SEC, kmmFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
     }
 
     @Test
     public void test06() throws Exception {
-	assertEquals(2, ((KMyMoneyFileStats) kmmFile).getNofEntriesCurrencyMap());
+	assertEquals(ConstTest.Stats.NOF_CURR, kmmFileStats.getNofEntriesCurrencies(KMMFileStats.Type.RAW));
+	assertEquals(ConstTest.Stats.NOF_CURR, kmmFileStats.getNofEntriesCurrencies(KMMFileStats.Type.COUNTER));
+	assertEquals(ConstTest.Stats.NOF_CURR, kmmFileStats.getNofEntriesCurrencies(KMMFileStats.Type.CACHE));
     }
 
     @Test
     public void test07() throws Exception {
-	assertEquals(5, ((KMyMoneyFileStats) kmmFile).getNofEntriesPriceMap());
+	assertEquals(ConstTest.Stats.NOF_PRC, kmmFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+	// This one is an exception:
+	// assertEquals(ConstTest.Stats.NOF_PRC, kmmFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+	assertEquals(ConstTest.Stats.NOF_PRC, kmmFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
     }
 
 }

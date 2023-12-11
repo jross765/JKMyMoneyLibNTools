@@ -8,4 +8,19 @@ public class ConstTest extends Const {
 
     public static final String KMM_FILENAME_OUT = "test_out.xml";
 
+    // ---------------------------------------------------------------
+    // Stats for above-mentioned GnuCash test file (before write operations)
+    
+    public class Stats {
+    
+	public static final int NOF_ACCT      = 69;
+	public static final int NOF_TRX       = 18;
+	public static final int NOF_TRX_SPLT  = 38;
+	public static final int NOF_PYE       = 8;
+	public static final int NOF_SEC       = 2;
+	public static final int NOF_CURR      = 2;
+	public static final int NOF_PRC       = 5;
+    
+    }
+
 }

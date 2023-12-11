@@ -42,6 +42,7 @@ import org.kmymoney.api.read.NoEntryFoundException;
 import org.kmymoney.api.read.TooManyEntriesFoundException;
 import org.kmymoney.api.read.UnknownAccountTypeException;
 import org.kmymoney.api.read.aux.KMMPrice;
+import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.api.read.impl.hlp.FileAccountManager;
 import org.kmymoney.api.read.impl.hlp.FileCurrencyManager;
 import org.kmymoney.api.read.impl.hlp.FilePayeeManager;
@@ -62,8 +63,7 @@ import jakarta.xml.bind.Unmarshaller;
  * read but not modify KMyMoney-Files. <br/>
  * @see KMyMoneyFile
  */
-public class KMyMoneyFileImpl implements KMyMoneyFile,
-                                         KMyMoneyFileStats 
+public class KMyMoneyFileImpl implements KMyMoneyFile
 {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyFileImpl.class);
@@ -372,8 +372,19 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
      * @return a read-only collection of all accounts that have no parent (the
      *         result is sorted)
      */
-    public Collection<? extends KMyMoneyAccount> getRootAccounts() {
-	return acctMgr.getRootAccounts();
+    @Override
+    public Collection<? extends KMyMoneyAccount> getParentlessAccounts() {
+	return acctMgr.getParentlessAccounts();
+    }
+
+    @Override
+    public Collection<KMMComplAcctID> getTopAccountIDs() {
+	return acctMgr.getTopAccountIDs();
+    }
+	    
+    @Override    
+    public Collection<KMyMoneyAccount> getTopAccounts() {
+	return acctMgr.getTopAccounts();
     }
 
     // ---------------------------------------------------------------
@@ -669,57 +680,59 @@ public class KMyMoneyFileImpl implements KMyMoneyFile,
     }
     
     // ---------------------------------------------------------------
-    // Statistics (for test purposes)
-
-    @Override
-    public int getNofEntriesAccountMap() {
-	return acctMgr.getNofEntriesAccountMap();
-    }
-
-    @Override
-    public int getNofEntriesTransactionMap() {
-	return trxMgr.getNofEntriesTransactionMap();
-    }
-
-    @Override
-    public int getNofEntriesTransactionSplitMap() {
-	return trxMgr.getNofEntriesTransactionSplitMap();
-    }
-
-    @Override
-    public int getNofEntriesPayeeMap() {
-	return pyeMgr.getNofEntriesPayeeMap();
-    }
-
-    @Override
-    public int getNofEntriesSecurityMap() {
-	return secMgr.getNofEntriesSecurityMap();
+    // Helpers for class FileStats_Cache
+    
+    @SuppressWarnings("exports")
+    public FileAccountManager getAcctMgr() {
+	return acctMgr;
     }
     
-    @Override
-    public int getNofEntriesCurrencyMap() {
-	return currMgr.getNofEntriesCurrencyMap();
+    @SuppressWarnings("exports")
+    public FileTransactionManager getTrxMgr() {
+	return trxMgr;
     }
     
-    // ----------------------------
-    
-    @Override
-    public int getNofEntriesPriceMap() {
-	return prcMgr.getNofEntriesPriceMap();
+    @SuppressWarnings("exports")
+    public FilePayeeManager getPyeMgr() {
+	return pyeMgr;
     }
-
+    
+    @SuppressWarnings("exports")
+    public FileSecurityManager getSecMgr() {
+	return secMgr;
+    }
+    
+    @SuppressWarnings("exports")
+    public FileCurrencyManager getCurrMgr() {
+	return currMgr;
+    }
+    
+    @SuppressWarnings("exports")
+    public FilePriceManager getPrcMgr() {
+	return prcMgr;
+    }
+    
     // ---------------------------------------------------------------
     
     public String toString() {
 	String result = "KMyMoneyFileImpl: [\n";
 	
-	result += "  No. of accounts:           " + getNofEntriesAccountMap() + "\n"; 
-	result += "  No. of transactions:       " + getNofEntriesTransactionMap() + "\n"; 
-	result += "  No. of transaction splits: " + getNofEntriesTransactionSplitMap() + "\n"; 
-	result += "  No. of payees:             " + getNofEntriesPayeeMap() + "\n"; 
-	result += "  No. of securities:         " + getNofEntriesSecurityMap() + "\n"; 
-	result += "  No. of currencies:         " + getNofEntriesCurrencyMap() + "\n";
-	result += "  No. of prices:             " + getNofEntriesPriceMap() + "\n";
+	result += "  Stats (raw):\n"; 
+	KMMFileStats stats;
+	try {
+	    stats = new KMMFileStats(this);
+
+	    result += "    No. of accounts:           " + stats.getNofEntriesAccounts(KMMFileStats.Type.RAW) + "\n"; 
+	    result += "    No. of transactions:       " + stats.getNofEntriesTransactions(KMMFileStats.Type.RAW) + "\n"; 
+	    result += "    No. of transaction splits: " + stats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW) + "\n"; 
+	    result += "    No. of payees:             " + stats.getNofEntriesPayees(KMMFileStats.Type.RAW) + "\n"; 
+	    result += "    No. of securities:         " + stats.getNofEntriesSecurities(KMMFileStats.Type.RAW) + "\n"; 
+	    result += "    No. of currencies:         " + stats.getNofEntriesCurrencies(KMMFileStats.Type.RAW) + "\n";
+	    result += "    No. of price pairs:        " + stats.getNofEntriesPricePairs(KMMFileStats.Type.RAW) + "\n";
+	    result += "    No. of prices:             " + stats.getNofEntriesPrices(KMMFileStats.Type.RAW) + "\n";
+	} catch (Exception e) {
+	    result += "ERROR\n"; 
+	}
 	
 	result += "]";
 	

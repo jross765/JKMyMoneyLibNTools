@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.api.basetypes.complex.KMMComplAcctID.Top;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -289,7 +290,7 @@ public class FileAccountManager {
      * @return a read-only collection of all accounts that have no parent (the
      *         result is sorted)
      */
-    public Collection<? extends KMyMoneyAccount> getRootAccounts() {
+    public Collection<? extends KMyMoneyAccount> getParentlessAccounts() {
         try {
             Collection<KMyMoneyAccount> retval = new TreeSet<KMyMoneyAccount>();
     
@@ -310,6 +311,29 @@ public class FileAccountManager {
         }
     }
     
+    public Collection<KMMComplAcctID> getTopAccountIDs() {
+	Collection<KMMComplAcctID> result = new ArrayList<KMMComplAcctID>();
+
+	result.add( KMMComplAcctID.get(Top.ASSET) ); 
+	result.add( KMMComplAcctID.get(Top.LIABILITY) ); 
+	result.add( KMMComplAcctID.get(Top.INCOME) ); 
+	result.add( KMMComplAcctID.get(Top.EXPENSE) );
+	result.add( KMMComplAcctID.get(Top.EQUITY) );
+	
+	return result;
+    }
+
+    public Collection<KMyMoneyAccount> getTopAccounts() {
+	Collection<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
+
+	for ( KMMComplAcctID acctID : getTopAccountIDs() ) {
+	    KMyMoneyAccount acct = getAccountByID(acctID);
+	    result.add(acct);
+	}
+	
+	return result;
+    }
+
     // ---------------------------------------------------------------
 
     public int getNofEntriesAccountMap() {

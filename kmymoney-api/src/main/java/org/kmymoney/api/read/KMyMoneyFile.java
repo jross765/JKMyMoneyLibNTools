@@ -136,9 +136,14 @@ public interface KMyMoneyFile extends KMyMoneyObject {
    Collection<KMyMoneyAccount> getAccounts();
 
    /**
-    * @return a read-only collection of all accounts that have no parent
+    * @return a read-only collection of all accounts that have no parent (the
+    *         result is sorted)
     */
-   Collection<? extends KMyMoneyAccount> getRootAccounts();
+   Collection<? extends KMyMoneyAccount> getParentlessAccounts();
+
+   Collection<KMMComplAcctID> getTopAccountIDs();
+
+   Collection<KMyMoneyAccount> getTopAccounts();
 
    // ---------------------------------------------------------------
 
