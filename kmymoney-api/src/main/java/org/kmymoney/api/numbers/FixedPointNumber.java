@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * Implementation of Fixed-point numbers that knows the String-format GnuCash
+ * Implementation of Fixed-point numbers that knows the String-format KMyMoney
  * uses and returns true if 2 numbers are compared that are mathematically equal
  * even if they have a different representation (unlike BigInteger). internal
  * format: "2/100" means "0.02"
@@ -298,24 +298,24 @@ public class FixedPointNumber extends BigDecimalWrapper implements Cloneable {
     }
 
     /**
-     * Accepts String in GnuCash-format "5/100" = 0.5 or in the formats "0,5" and
+     * Accepts String in KMyMoney-format "5/100" = 0.5 or in the formats "0,5" and
      * "0.5" and "123". Also ignores currency-symbols like or &euro; .
      *
-     * @param gcshStr the String to parse
+     * @param kmmStr the String to parse
      * @throws NumberFormatException if it cannot be parsed at all
      */
-    public FixedPointNumber(String gcshStr) throws NumberFormatException {
+    public FixedPointNumber(String kmmStr) throws NumberFormatException {
 
-	int dividerIndex = gcshStr.indexOf('/');
+	int dividerIndex = kmmStr.indexOf('/');
 	if (dividerIndex == -1) {
 
-	    int commaIndex = gcshStr.indexOf(',');
+	    int commaIndex = kmmStr.indexOf(',');
 	    if (commaIndex != -1) {
-		gcshStr = gcshStr.replaceAll("\\.", "").replaceAll("'", "");
-		commaIndex = gcshStr.indexOf(',');
+		kmmStr = kmmStr.replaceAll("\\.", "").replaceAll("'", "");
+		commaIndex = kmmStr.indexOf(',');
 	    }
 	    if (commaIndex == -1) {
-		commaIndex = gcshStr.indexOf('.');
+		commaIndex = kmmStr.indexOf('.');
 	    }
 
 	    // int divider = 1;
@@ -323,18 +323,18 @@ public class FixedPointNumber extends BigDecimalWrapper implements Cloneable {
 	    if (commaIndex == -1) {
 		// assume it's an integer
 
-		String rightOfComma = removeCurrency(gcshStr);
+		String rightOfComma = removeCurrency(kmmStr);
 
 		try {
 		    value = new BigDecimal(rightOfComma);
 		} catch (NumberFormatException e) {
 		    throw new NumberFormatException("'" + rightOfComma
-			    + "' cannot be parsed by Biginteger! input was \"" + gcshStr + "\"");
+			    + "' cannot be parsed by Biginteger! input was \"" + kmmStr + "\"");
 		}
 
 	    } else {
-		String leftOfComma = gcshStr.substring(0, commaIndex).trim();
-		String rightOfComma = gcshStr.substring(commaIndex + 1).trim();
+		String leftOfComma = kmmStr.substring(0, commaIndex).trim();
+		String rightOfComma = kmmStr.substring(commaIndex + 1).trim();
 
 		rightOfComma = removeCurrency(rightOfComma);
 
@@ -342,13 +342,13 @@ public class FixedPointNumber extends BigDecimalWrapper implements Cloneable {
 		    value = new BigDecimal(leftOfComma + '.' + rightOfComma);
 		} catch (NumberFormatException e) {
 		    throw new NumberFormatException("'" + leftOfComma + '.' + rightOfComma
-			    + "' cannot be parsed by Biginteger! input was \"" + gcshStr + "\"");
+			    + "' cannot be parsed by Biginteger! input was \"" + kmmStr + "\"");
 		}
 	    }
 
 	} else {
 
-	    String beforeComma = gcshStr.substring(0, dividerIndex).trim();
+	    String beforeComma = kmmStr.substring(0, dividerIndex).trim();
 
 	    int addIndex = beforeComma.indexOf('+');
 	    BigDecimal addMe = null;
@@ -357,7 +357,7 @@ public class FixedPointNumber extends BigDecimalWrapper implements Cloneable {
 		beforeComma = beforeComma.substring(addIndex + 1).trim();
 	    }
 
-	    String divider = gcshStr.substring(dividerIndex + 1).trim();
+	    String divider = kmmStr.substring(dividerIndex + 1).trim();
 
 	    // special handling if the divider ist 100000...
 	    boolean simpleDivider = divider.charAt(0) == '1';
@@ -395,7 +395,7 @@ public class FixedPointNumber extends BigDecimalWrapper implements Cloneable {
 	}
 
 	if (value == null) {
-	    throw new IllegalArgumentException("value is null!!! give string='" + gcshStr + "'");
+	    throw new IllegalArgumentException("value is null!!! give string='" + kmmStr + "'");
 	}
 
     }
