@@ -1,7 +1,6 @@
 package org.kmymoney.api.read.impl.hlp;
 
 import org.kmymoney.api.generated.PRICEPAIR;
-import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.slf4j.Logger;

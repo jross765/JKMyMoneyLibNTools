@@ -66,6 +66,7 @@ public class FileSecurityManager {
      */
     protected KMyMoneySecurityImpl createSecurity(final SECURITY jwsdpSec) {
 	KMyMoneySecurityImpl sec = new KMyMoneySecurityImpl(jwsdpSec, kmmFile);
+	LOGGER.info("Generated new security: " + sec.getID());
 	return sec;
     }
 

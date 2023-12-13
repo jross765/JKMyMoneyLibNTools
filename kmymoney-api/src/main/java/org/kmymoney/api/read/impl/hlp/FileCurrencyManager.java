@@ -54,6 +54,7 @@ public class FileCurrencyManager {
      */
     protected KMyMoneyCurrencyImpl createCurrency(final CURRENCY jwsdpCurr) {
 	KMyMoneyCurrencyImpl curr = new KMyMoneyCurrencyImpl(jwsdpCurr, kmmFile);
+	LOGGER.info("Generated new currency: " + curr.getID());
 	return curr;
     }
 

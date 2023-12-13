@@ -89,8 +89,9 @@ public class FilePriceManager {
      * @return the new KMMPricePair to wrap the given JAXB object.
      */
     protected KMMPricePairImpl createPricePair(final PRICEPAIR jwsdpPricePair) {
-	KMMPricePairImpl prcPair = new KMMPricePairImpl(jwsdpPricePair, kmmFile);
-	return prcPair;
+	KMMPricePairImpl prcPr = new KMMPricePairImpl(jwsdpPricePair, kmmFile);
+	LOGGER.info("Generated new price pair: " + prcPr.getID());
+	return prcPr;
     }
 
     /**
@@ -100,6 +101,7 @@ public class FilePriceManager {
      */
     protected KMMPriceImpl createPrice(final KMMPricePair pricePair, final PRICE jwsdpPrice) {
 	KMMPriceImpl prc = new KMMPriceImpl(pricePair, jwsdpPrice, kmmFile);
+	LOGGER.info("Generated new price: " + prc.getID());
 	return prc;
     }
 
