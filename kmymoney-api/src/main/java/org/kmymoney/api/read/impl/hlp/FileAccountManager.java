@@ -67,7 +67,7 @@ public class FileAccountManager {
      */
     protected KMyMoneyAccountImpl createAccount(final ACCOUNT jwsdpAcct) {
 	KMyMoneyAccountImpl acct = new KMyMoneyAccountImpl(jwsdpAcct, kmmFile);
-	LOGGER.info("Generated new account: " + acct.getID());
+	LOGGER.debug("Generated new account: " + acct.getID());
 	return acct;
     }
 

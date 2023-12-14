@@ -58,7 +58,7 @@ public class FilePayeeManager {
      */
     protected KMyMoneyPayeeImpl createPayee(final PAYEE jwsdpPye) {
 	KMyMoneyPayeeImpl pye = new KMyMoneyPayeeImpl(jwsdpPye);
-	LOGGER.info("Generated new payee: " + pye.getID());
+	LOGGER.debug("Generated new payee: " + pye.getID());
 	return pye;
     }
 

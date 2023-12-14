@@ -90,7 +90,7 @@ public class FilePriceManager {
      */
     protected KMMPricePairImpl createPricePair(final PRICEPAIR jwsdpPricePair) {
 	KMMPricePairImpl prcPr = new KMMPricePairImpl(jwsdpPricePair, kmmFile);
-	LOGGER.info("Generated new price pair: " + prcPr.getID());
+	LOGGER.debug("Generated new price pair: " + prcPr.getID());
 	return prcPr;
     }
 

@@ -64,7 +64,7 @@ public class FileTransactionManager {
      */
     protected KMyMoneyTransactionImpl createTransaction(final TRANSACTION jwsdpTrx) {
 	KMyMoneyTransactionImpl trx = new KMyMoneyTransactionImpl(jwsdpTrx, kmmFile);
-	LOGGER.info("Generated new transaction: " + trx.getID());
+	LOGGER.debug("Generated new transaction: " + trx.getID());
 	return trx;
     }
 
