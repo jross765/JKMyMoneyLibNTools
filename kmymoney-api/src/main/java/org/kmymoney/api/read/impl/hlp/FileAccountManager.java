@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -308,7 +307,7 @@ public class FileAccountManager {
             throw e;
         } catch (Throwable e) {
             LOGGER.error("getRootAccounts: SERIOUS Problem getting all root-account", e);
-            return new LinkedList<KMyMoneyAccount>();
+            return new ArrayList<KMyMoneyAccount>();
         }
     }
     

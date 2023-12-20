@@ -70,11 +70,11 @@ public class FileTransactionManager {
 
     // ---------------------------------------------------------------
 
-    public void addTransaction(KMyMoneyTransaction trx) throws NoSuchFieldException, SecurityException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException {
+    public void addTransaction(KMyMoneyTransaction trx) throws IllegalArgumentException {
 	addTransaction(trx, true);
     }
 
-    public void addTransaction(KMyMoneyTransaction trx, boolean withSplt) throws NoSuchFieldException, SecurityException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException {
+    public void addTransaction(KMyMoneyTransaction trx, boolean withSplt) throws IllegalArgumentException {
 	trxMap.put(trx.getID(), trx);
 	
 	if ( withSplt ) {
@@ -86,11 +86,11 @@ public class FileTransactionManager {
 	LOGGER.debug("Added transaction to cache: " + trx.getID());
     }
 
-    public void removeTransaction(KMyMoneyTransaction trx) throws NoSuchFieldException, SecurityException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException {
+    public void removeTransaction(KMyMoneyTransaction trx) throws IllegalArgumentException {
 	removeTransaction(trx, true);
     }
 
-    public void removeTransaction(KMyMoneyTransaction trx, boolean withSplt) throws NoSuchFieldException, SecurityException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException {
+    public void removeTransaction(KMyMoneyTransaction trx, boolean withSplt) throws IllegalArgumentException {
 	if ( withSplt ) {
 	    for ( KMyMoneyTransactionSplit splt : trx.getSplits() ) {
 		removeTransactionSplit(splt, false);
@@ -104,11 +104,11 @@ public class FileTransactionManager {
 
     // ---------------------------------------------------------------
 
-    public void addTransactionSplit(KMyMoneyTransactionSplit splt) throws NoSuchFieldException, SecurityException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException {
+    public void addTransactionSplit(KMyMoneyTransactionSplit splt) throws IllegalArgumentException {
 	addTransactionSplit(splt, true);
     }
 
-    public void addTransactionSplit(KMyMoneyTransactionSplit splt, boolean withInvc) throws NoSuchFieldException, SecurityException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException {
+    public void addTransactionSplit(KMyMoneyTransactionSplit splt, boolean withInvc) throws IllegalArgumentException {
 	trxSpltMap.put(splt.getQualifID(), splt);
 
 	if ( withInvc ) {
@@ -116,11 +116,11 @@ public class FileTransactionManager {
 	}
     }
 
-    public void removeTransactionSplit(KMyMoneyTransactionSplit splt) throws NoSuchFieldException, SecurityException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException {
+    public void removeTransactionSplit(KMyMoneyTransactionSplit splt) throws IllegalArgumentException {
 	removeTransactionSplit(splt, true);
     }
 
-    public void removeTransactionSplit(KMyMoneyTransactionSplit splt, boolean withInvc) throws NoSuchFieldException, SecurityException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException {
+    public void removeTransactionSplit(KMyMoneyTransactionSplit splt, boolean withInvc) throws IllegalArgumentException {
 	if ( withInvc ) {
 	    removeTransaction(splt.getTransaction(), false);
 	}

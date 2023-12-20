@@ -15,10 +15,9 @@ import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.currency.ComplexPriceTable;
+import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.aux.KMMPrice;
-import org.kmymoney.api.read.aux.KMMPricePair;
-import org.kmymoney.api.generated.KMYMONEYFILE;
 
 /**
  * Interface of a top-level class<br/>

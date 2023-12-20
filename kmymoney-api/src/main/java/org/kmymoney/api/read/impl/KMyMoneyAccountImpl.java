@@ -3,7 +3,7 @@ package org.kmymoney.api.read.impl;
 import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
@@ -67,7 +67,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      *
      * @see #mySplitsNeedSorting
      */
-    private final List<KMyMoneyTransactionSplit> mySplits = new LinkedList<KMyMoneyTransactionSplit>();
+    private final List<KMyMoneyTransactionSplit> mySplits = new ArrayList<KMyMoneyTransactionSplit>();
 
     /**
      * If {@link #mySplits} needs to be sorted because it was modified. Sorting is
