@@ -1,4 +1,4 @@
-package org.kmymoney.api.read.impl.aux;
+package org.kmymoney.api.read.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -12,16 +12,16 @@ import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneySecurity;
-import org.kmymoney.api.read.aux.KMMPrice;
-import org.kmymoney.api.read.aux.KMMPricePair;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 
 import junit.framework.JUnit4TestAdapter;
 
-public class TestKMMPricePairImpl
+public class TestKMyMoneyPricePairImpl
 {
   KMMCurrPair PRCPR_1_ID = new KMMCurrPair("E000001", "EUR"); // SAP/EUR
   KMMCurrPair PRCPR_2_ID = new KMMCurrPair("E000002", "EUR"); // MBG/EUR
@@ -30,8 +30,8 @@ public class TestKMMPricePairImpl
   // -----------------------------------------------------------------
     
   private KMyMoneyFile  kmmFile = null;
-  private KMMPrice      prc     = null;
-  private KMMPricePair  prcPr   = null;
+  private KMyMoneyPrice      prc     = null;
+  private KMyMoneyPricePair  prcPr   = null;
   
   KMMQualifSecCurrID secID1 = null;
   KMMQualifSecCurrID secID2 = null;
@@ -48,7 +48,7 @@ public class TestKMMPricePairImpl
   @SuppressWarnings("exports")
   public static junit.framework.Test suite() 
   {
-    return new JUnit4TestAdapter(TestKMMPricePairImpl.class);  
+    return new JUnit4TestAdapter(TestKMyMoneyPricePairImpl.class);  
   }
   
   @Before
@@ -106,7 +106,7 @@ public class TestKMMPricePairImpl
   @Test
   public void test02_1() throws Exception
   {
-      prc = kmmFile.getPriceByID(TestKMMPriceImpl.PRC_1_ID);
+      prc = kmmFile.getPriceByID(TestKMyMoneyPriceImpl.PRC_1_ID);
       assertNotEquals(null, prc);
       prcPr = prc.getParentPricePair();
       assertNotEquals(null, prcPr);
@@ -155,7 +155,7 @@ public class TestKMMPricePairImpl
   @Test
   public void test02_2() throws Exception
   {
-      prc = kmmFile.getPriceByID(TestKMMPriceImpl.PRC_2_ID);
+      prc = kmmFile.getPriceByID(TestKMyMoneyPriceImpl.PRC_2_ID);
       assertNotEquals(null, prc);
       prcPr = prc.getParentPricePair();
       assertNotEquals(null, prcPr);
@@ -204,7 +204,7 @@ public class TestKMMPricePairImpl
   @Test
   public void test02_3() throws Exception
   {
-      prc = kmmFile.getPriceByID(TestKMMPriceImpl.PRC_3_ID);
+      prc = kmmFile.getPriceByID(TestKMyMoneyPriceImpl.PRC_3_ID);
       assertNotEquals(null, prc);
       prcPr = prc.getParentPricePair();
       assertNotEquals(null, prcPr);

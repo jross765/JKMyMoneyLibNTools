@@ -31,6 +31,7 @@ import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.PRICES;
 import org.kmymoney.api.numbers.FixedPointNumber;
+import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
@@ -41,7 +42,6 @@ import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.NoEntryFoundException;
 import org.kmymoney.api.read.TooManyEntriesFoundException;
 import org.kmymoney.api.read.UnknownAccountTypeException;
-import org.kmymoney.api.read.aux.KMMPrice;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.api.read.impl.hlp.FileAccountManager;
 import org.kmymoney.api.read.impl.hlp.FileCurrencyManager;
@@ -520,12 +520,12 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     // ---------------------------------------------------------------
     
     @Override
-    public KMMPrice getPriceByID(KMMPriceID prcID) {
+    public KMyMoneyPrice getPriceByID(KMMPriceID prcID) {
 	return prcMgr.getPriceByID(prcID);
     }
 
     @Override
-    public Collection<KMMPrice> getPrices() {
+    public Collection<KMyMoneyPrice> getPrices() {
 	return prcMgr.getPrices();
     }
 

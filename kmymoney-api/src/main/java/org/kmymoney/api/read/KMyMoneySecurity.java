@@ -8,7 +8,6 @@ import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
-import org.kmymoney.api.read.aux.KMMPrice;
 
 public interface KMyMoneySecurity {
 
@@ -42,8 +41,8 @@ public interface KMyMoneySecurity {
 
     // ------------------------------------------------------------
 
-    Collection<KMMPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    Collection<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     
-    KMMPrice getYoungestQuote() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMyMoneyPrice getYoungestQuote() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     
 }

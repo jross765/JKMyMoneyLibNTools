@@ -5,10 +5,10 @@ import java.util.Collection;
 
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.NoEntryFoundException;
 import org.kmymoney.api.read.TooManyEntriesFoundException;
-import org.kmymoney.api.read.aux.KMMPrice;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 
 public class GetSecInfo {
@@ -149,7 +149,7 @@ public class GetSecInfo {
 	System.out.println("Number of quotes: " + sec.getQuotes().size());
 
 	System.out.println("");
-	for (KMMPrice prc : sec.getQuotes()) {
+	for (KMyMoneyPrice prc : sec.getQuotes()) {
 	    System.out.println(" - " + prc.toString());
 	}
 

@@ -5,9 +5,9 @@ import java.io.File;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.NoEntryFoundException;
-import org.kmymoney.api.read.aux.KMMPrice;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 
 public class GetCurrInfo {
@@ -110,7 +110,7 @@ public class GetCurrInfo {
 	System.out.println("Number of quotes: " + curr.getQuotes().size());
 
 	System.out.println("");
-	for (KMMPrice prc : curr.getQuotes()) {
+	for (KMyMoneyPrice prc : curr.getQuotes()) {
 	    System.out.println(" - " + prc.toString());
 	}
 

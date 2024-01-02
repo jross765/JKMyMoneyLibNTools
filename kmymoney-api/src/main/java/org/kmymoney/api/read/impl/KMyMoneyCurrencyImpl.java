@@ -8,12 +8,12 @@ import java.util.Collection;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.UnknownRoundingMethodException;
 import org.kmymoney.api.read.UnknownSecurityTypeException;
-import org.kmymoney.api.read.aux.KMMPrice;
 import org.kmymoney.api.generated.CURRENCY;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,11 +105,11 @@ public class KMyMoneyCurrencyImpl implements KMyMoneyCurrency {
     // ---------------------------------------------------------------
 
     @Override
-    public Collection<KMMPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-	Collection<KMMPrice> result = new ArrayList<KMMPrice>();
+    public Collection<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	Collection<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
 	
-	Collection<KMMPrice> prices = getKMyMoneyFile().getPrices();
-	for ( KMMPrice price : prices ) {
+	Collection<KMyMoneyPrice> prices = getKMyMoneyFile().getPrices();
+	for ( KMyMoneyPrice price : prices ) {
 	    try {
 		if ( price.getFromSecCurrQualifID().toString().equals(getQualifID().toString()) ) {
 		    result.add(price);
@@ -123,11 +123,11 @@ public class KMyMoneyCurrencyImpl implements KMyMoneyCurrency {
     }
 
     @Override
-    public KMMPrice getYoungestQuote() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-	KMMPrice result = null;
+    public KMyMoneyPrice getYoungestQuote() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	KMyMoneyPrice result = null;
 
 	LocalDate youngestDate = LocalDate.of(1970, 1, 1); // ::MAGIC
-	for ( KMMPrice price : getQuotes() ) {
+	for ( KMyMoneyPrice price : getQuotes() ) {
 	    if ( price.getDate().isAfter(youngestDate) ) {
 		result = price;
 		youngestDate = price.getDate();

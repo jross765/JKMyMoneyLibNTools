@@ -1,4 +1,4 @@
-package org.kmymoney.api.read.impl.aux;
+package org.kmymoney.api.read.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -14,15 +14,15 @@ import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneySecurity;
-import org.kmymoney.api.read.aux.KMMPrice;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 
 import junit.framework.JUnit4TestAdapter;
 
-public class TestKMMPriceImpl
+public class TestKMyMoneyPriceImpl
 {
   static final KMMPriceID PRC_1_ID = new KMMPriceID("E000001", "EUR", "2023-11-03"); // SAP/EUR
   static final KMMPriceID PRC_2_ID = new KMMPriceID("E000002", "EUR", "2023-11-01"); // MBG/EUR
@@ -31,7 +31,7 @@ public class TestKMMPriceImpl
   // -----------------------------------------------------------------
   
   private KMyMoneyFile  kmmFile = null;
-  private KMMPrice    prc = null;
+  private KMyMoneyPrice    prc = null;
   
   KMMQualifSecCurrID secID1 = null;
   KMMQualifSecCurrID secID2 = null;
@@ -48,7 +48,7 @@ public class TestKMMPriceImpl
   @SuppressWarnings("exports")
   public static junit.framework.Test suite() 
   {
-    return new JUnit4TestAdapter(TestKMMPriceImpl.class);  
+    return new JUnit4TestAdapter(TestKMyMoneyPriceImpl.class);  
   }
   
   @Before
@@ -91,7 +91,7 @@ public class TestKMMPriceImpl
   @Test
   public void test01() throws Exception
   {
-      Collection<KMMPrice> priceList = kmmFile.getPrices();
+      Collection<KMyMoneyPrice> priceList = kmmFile.getPrices();
       
       assertEquals(5, priceList.size());
 

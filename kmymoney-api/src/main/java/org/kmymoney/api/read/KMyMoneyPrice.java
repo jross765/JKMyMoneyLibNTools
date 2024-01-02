@@ -1,4 +1,4 @@
-package org.kmymoney.api.read.aux;
+package org.kmymoney.api.read;
 
 import java.time.LocalDate;
 
@@ -8,7 +8,7 @@ import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 
-public interface KMMPrice extends KMMPricePairCore {
+public interface KMyMoneyPrice extends KMyMoneyPricePairCore {
 
     // ::TODO: these are sitll Gnucash values
     // Cf. https://github.com/Gnucash/gnucash/blob/stable/libgnucash/engine/gnc-pricedb.h
@@ -32,7 +32,7 @@ public interface KMMPrice extends KMMPricePairCore {
     
     KMMCurrPair getParentPricePairID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 	
-    KMMPricePair getParentPricePair();
+    KMyMoneyPricePair getParentPricePair();
 	
     // ----------------------------
 

@@ -1,4 +1,4 @@
-package org.kmymoney.api.read.impl.aux;
+package org.kmymoney.api.read.impl;
 
 import java.text.NumberFormat;
 import java.time.LocalDate;
@@ -16,18 +16,18 @@ import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.numbers.FixedPointNumber;
+import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneySecurity;
-import org.kmymoney.api.read.aux.KMMPrice;
-import org.kmymoney.api.read.aux.KMMPricePair;
 import org.kmymoney.api.generated.PRICE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KMMPriceImpl implements KMMPrice {
+public class KMyMoneyPriceImpl implements KMyMoneyPrice {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMMPriceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyPriceImpl.class);
 
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
     
@@ -39,7 +39,7 @@ public class KMMPriceImpl implements KMMPrice {
 
     // -----------------------------------------------------------
     
-    private KMMPricePair parent = null;
+    private KMyMoneyPricePair parent = null;
 
     /**
      * The currency-format to use for formatting.<br/>
@@ -52,7 +52,7 @@ public class KMMPriceImpl implements KMMPrice {
      * @param newPeer the JWSDP-object we are wrapping.
      */
     @SuppressWarnings("exports")
-    public KMMPriceImpl(final KMMPricePair parent, final PRICE newPeer, final KMyMoneyFile file) {
+    public KMyMoneyPriceImpl(final KMyMoneyPricePair parent, final PRICE newPeer, final KMyMoneyFile file) {
 	super();
 		
 	this.parent    = parent;
@@ -75,7 +75,7 @@ public class KMMPriceImpl implements KMMPrice {
     }
 
     @Override
-    public KMMPricePair getParentPricePair() {
+    public KMyMoneyPricePair getParentPricePair() {
 	return parent;
     }
 

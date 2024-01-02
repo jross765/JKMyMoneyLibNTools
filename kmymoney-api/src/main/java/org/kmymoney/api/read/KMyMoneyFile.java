@@ -17,7 +17,6 @@ import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.currency.ComplexPriceTable;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.numbers.FixedPointNumber;
-import org.kmymoney.api.read.aux.KMMPrice;
 
 /**
  * Interface of a top-level class<br/>
@@ -263,13 +262,13 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @param prcID id of a price
      * @return the identified price or null
      */
-    KMMPrice getPriceByID(KMMPriceID prcID);
+    KMyMoneyPrice getPriceByID(KMMPriceID prcID);
 
     /**
      * @return all prices defined in the book
      * @link GCshPrice
      */
-    Collection<KMMPrice> getPrices();
+    Collection<KMyMoneyPrice> getPrices();
 
     /**
      * @param pCmdtySpace the namespace for pCmdtyId

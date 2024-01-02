@@ -22,12 +22,12 @@ import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.PRICES;
 import org.kmymoney.api.numbers.FixedPointNumber;
+import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneyFile;
-import org.kmymoney.api.read.aux.KMMPrice;
-import org.kmymoney.api.read.aux.KMMPricePair;
+import org.kmymoney.api.read.impl.KMyMoneyPriceImpl;
+import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
-import org.kmymoney.api.read.impl.aux.KMMPriceImpl;
-import org.kmymoney.api.read.impl.aux.KMMPricePairImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +44,7 @@ public class FilePriceManager {
     private KMyMoneyFileImpl kmmFile;
 
     private PRICES                    priceDB = null;
-    private Map<KMMPriceID, KMMPrice> prcMap  = null;
+    private Map<KMMPriceID, KMyMoneyPrice> prcMap  = null;
 
     // ---------------------------------------------------------------
 
@@ -56,21 +56,21 @@ public class FilePriceManager {
     // ---------------------------------------------------------------
 
     private void init(final KMYMONEYFILE pRootElement) {
-	prcMap = new HashMap<KMMPriceID, KMMPrice>();
+	prcMap = new HashMap<KMMPriceID, KMyMoneyPrice>();
 
 	initPriceDB(pRootElement);
         List<PRICEPAIR> prices = priceDB.getPRICEPAIR();
         for ( PRICEPAIR jwsdpPricePair  : prices ) {
             String fromCurr = jwsdpPricePair.getFrom();
             String toCurr = jwsdpPricePair.getTo();
-            KMMPricePair pricePair = createPricePair(jwsdpPricePair);
+            KMyMoneyPricePair pricePair = createPricePair(jwsdpPricePair);
             for ( PRICE jwsdpPrice : jwsdpPricePair.getPRICE() ) {
         	XMLGregorianCalendar cal = jwsdpPrice.getDate();
         	if ( cal != null ) {
         	    LocalDate date = LocalDate.of(cal.getYear(), cal.getMonth(), cal.getDay());
         	    String dateStr = date.toString();
         	    KMMPriceID priceID = new KMMPriceID(fromCurr, toCurr, dateStr);
-        	    KMMPriceImpl price = createPrice(pricePair, jwsdpPrice);
+        	    KMyMoneyPriceImpl price = createPrice(pricePair, jwsdpPrice);
         	    prcMap.put(priceID, price);
         	} else {
         	    LOGGER.error("init: Found Price without or with invalid date: (" + fromCurr + "/" + toCurr + ")");
@@ -88,8 +88,8 @@ public class FilePriceManager {
      * @param jwsdpPricePair 
      * @return the new KMMPricePair to wrap the given JAXB object.
      */
-    protected KMMPricePairImpl createPricePair(final PRICEPAIR jwsdpPricePair) {
-	KMMPricePairImpl prcPr = new KMMPricePairImpl(jwsdpPricePair, kmmFile);
+    protected KMyMoneyPricePairImpl createPricePair(final PRICEPAIR jwsdpPricePair) {
+	KMyMoneyPricePairImpl prcPr = new KMyMoneyPricePairImpl(jwsdpPricePair, kmmFile);
 	LOGGER.debug("Generated new price pair: " + prcPr.getID());
 	return prcPr;
     }
@@ -99,20 +99,20 @@ public class FilePriceManager {
      * @param jwsdpPrice the JWSDP-peer (parsed xml-element) to fill our object with
      * @return the new KMMPrice to wrap the given JAXB object.
      */
-    protected KMMPriceImpl createPrice(final KMMPricePair pricePair, final PRICE jwsdpPrice) {
-	KMMPriceImpl prc = new KMMPriceImpl(pricePair, jwsdpPrice, kmmFile);
+    protected KMyMoneyPriceImpl createPrice(final KMyMoneyPricePair pricePair, final PRICE jwsdpPrice) {
+	KMyMoneyPriceImpl prc = new KMyMoneyPriceImpl(pricePair, jwsdpPrice, kmmFile);
 	LOGGER.info("Generated new price: " + prc.getID());
 	return prc;
     }
 
     // ---------------------------------------------------------------
 
-    public void addPrice(KMMPrice prc) {
+    public void addPrice(KMyMoneyPrice prc) {
 	prcMap.put(prc.getID(), prc);
 	LOGGER.debug("Added price to cache: " + prc.getID());
     }
 
-    public void removePrice(KMMPrice prc) {
+    public void removePrice(KMyMoneyPrice prc) {
 	prcMap.remove(prc.getID());
 	LOGGER.debug("Removed price from cache: " + prc.getID());
     }
@@ -126,7 +126,7 @@ public class FilePriceManager {
     /**
      * {@inheritDoc}
      */
-    public KMMPrice getPriceByID(KMMPriceID prcID) {
+    public KMyMoneyPrice getPriceByID(KMMPriceID prcID) {
         if (prcMap == null) {
   	    throw new IllegalStateException("no root-element loaded");
         }
@@ -137,7 +137,7 @@ public class FilePriceManager {
     /**
      * {@inheritDoc}
      */
-    public Collection<KMMPrice> getPrices() {
+    public Collection<KMyMoneyPrice> getPrices() {
         if (prcMap == null) {
   	    throw new IllegalStateException("no root-element loaded");
         } 
@@ -183,7 +183,7 @@ public class FilePriceManager {
 	FixedPointNumber factor = new FixedPointNumber(1); // factor is used if the quote is not to our base-currency
 	final int maxRecursionDepth = RECURS_DEPTH_MAX;
 
-	for ( KMMPrice prc : prcMap.values() ) {
+	for ( KMyMoneyPrice prc : prcMap.values() ) {
 	    KMMQualifSecCurrID fromSecCurr = prc.getParentPricePairID().getFromSecCurr();
 	    KMMQualifCurrID toCurr         = prc.getParentPricePairID().getToCurr();
 		

@@ -6,7 +6,6 @@ import java.util.Collection;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.api.read.aux.KMMPrice;
 
 public interface KMyMoneyCurrency {
 
@@ -32,8 +31,8 @@ public interface KMyMoneyCurrency {
     
     // ------------------------------------------------------------
 
-    Collection<KMMPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    Collection<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     
-    KMMPrice getYoungestQuote() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMyMoneyPrice getYoungestQuote() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     
 }

@@ -1,4 +1,4 @@
-package org.kmymoney.api.read.impl.aux;
+package org.kmymoney.api.read.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,19 +9,19 @@ import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneySecurity;
-import org.kmymoney.api.read.aux.KMMPrice;
-import org.kmymoney.api.read.aux.KMMPricePair;
 import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KMMPricePairImpl implements KMMPricePair {
+public class KMyMoneyPricePairImpl implements KMyMoneyPricePair {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMMPricePairImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyPricePairImpl.class);
 
     // -----------------------------------------------------------
 
@@ -38,7 +38,7 @@ public class KMMPricePairImpl implements KMMPricePair {
      * @param newPeer the JWSDP-object we are wrapping.
      */
     @SuppressWarnings("exports")
-    public KMMPricePairImpl(final PRICEPAIR newPeer, final KMyMoneyFile file) {
+    public KMyMoneyPricePairImpl(final PRICEPAIR newPeer, final KMyMoneyFile file) {
 	super();
 		
 	this.jwsdpPeer = newPeer;
@@ -154,11 +154,11 @@ public class KMMPricePairImpl implements KMMPricePair {
     // -----------------------------------------------------------
     
     @Override
-    public Collection<KMMPrice> getPrices() {
-	Collection<KMMPrice> result = new ArrayList<KMMPrice>();
+    public Collection<KMyMoneyPrice> getPrices() {
+	Collection<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
 	
 	for ( PRICE prc : jwsdpPeer.getPRICE() ) {
-	    KMMPrice newPrc = new KMMPriceImpl(this, prc, file);
+	    KMyMoneyPrice newPrc = new KMyMoneyPriceImpl(this, prc, file);
 	    result.add(newPrc);
 	}
 	
@@ -173,7 +173,7 @@ public class KMMPricePairImpl implements KMMPricePair {
 
     // -----------------------------------------------------------
     
-    public boolean equals(KMMPricePair other) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public boolean equals(KMyMoneyPricePair other) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	if ( ! getFromSecCurrQualifID().toString().equals(other.getFromSecCurrQualifID().toString()) )
 	    return false;
 
