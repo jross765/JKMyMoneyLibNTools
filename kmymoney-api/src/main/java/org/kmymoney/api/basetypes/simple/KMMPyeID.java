@@ -44,14 +44,14 @@ public class KMMPyeID extends KMMID {
     // -----------------------------------------------------------------
 
     public void validate() throws InvalidKMMIDException {
-	if (kmmID.length() != STANDARD_LENGTH)
+	if ( kmmID.length() != STANDARD_LENGTH )
 	    throw new InvalidKMMIDException("No valid KMM payee ID string: '" + kmmID + "': wrong string length");
 
-	if (kmmID.charAt(0) != PREFIX)
+	if ( kmmID.charAt(0) != PREFIX )
 	    throw new InvalidKMMIDException();
 
-	for (int i = PREFIX_LENGTH; i < STANDARD_LENGTH; i++) {
-	    if (!Character.isDigit(kmmID.charAt(i))) {
+	for ( int i = PREFIX_LENGTH; i < STANDARD_LENGTH; i++ ) {
+	    if ( ! Character.isDigit(kmmID.charAt(i)) ) {
 		logger.error("Char '" + kmmID.charAt(i) + "' is invalid in KMMPyeID '" + kmmID + "'");
 		throw new InvalidKMMIDException("No valid KMM payee ID string: '" + kmmID + "': wrong character at pos " + i);
 	    }

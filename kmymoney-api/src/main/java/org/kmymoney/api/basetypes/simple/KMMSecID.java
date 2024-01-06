@@ -44,14 +44,14 @@ public class KMMSecID extends KMMID {
     // -----------------------------------------------------------------
 
     public void validate() throws InvalidKMMIDException {
-	if (kmmID.length() != STANDARD_LENGTH)
+	if ( kmmID.length() != STANDARD_LENGTH )
 	    throw new InvalidKMMIDException("No valid KMM security ID string: '" + kmmID + "': wrong string length");
 
-	if (kmmID.charAt(0) != PREFIX)
+	if ( kmmID.charAt(0) != PREFIX )
 	    throw new InvalidKMMIDException("No valid KMM security ID string: '" + kmmID + "': wrong prefix");
 
-	for (int i = PREFIX_LENGTH; i < STANDARD_LENGTH; i++) {
-	    if (!Character.isDigit(kmmID.charAt(i))) {
+	for ( int i = PREFIX_LENGTH; i < STANDARD_LENGTH; i++ ) {
+	    if ( ! Character.isDigit(kmmID.charAt(i)) ) {
 		logger.error("Char '" + kmmID.charAt(i) + "' is invalid in KMMID '" + kmmID + "'");
 		throw new InvalidKMMIDException("No valid KMM security ID string: '" + kmmID + "': wrong character at pos " + i);
 	    }
