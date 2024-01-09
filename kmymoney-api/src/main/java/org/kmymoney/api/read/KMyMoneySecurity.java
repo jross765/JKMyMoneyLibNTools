@@ -11,10 +11,21 @@ import org.kmymoney.api.basetypes.simple.KMMSecID;
 
 public interface KMyMoneySecurity {
 
+    /**
+     * @return
+     */
     KMMSecID getID();
 
+    /**
+     * @return
+     * @throws InvalidQualifSecCurrTypeException
+     * @throws InvalidQualifSecCurrIDException
+     */
     KMMQualifSecID getQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
+    /**
+     * @return
+     */
     String getSymbol();
 
     /**
@@ -25,24 +36,58 @@ public interface KMyMoneySecurity {
 
     // ------------------------------------------------------------
 
+    /**
+     * @return
+     * @throws UnknownSecurityTypeException
+     */
+    /**
+     * @return
+     * @throws UnknownSecurityTypeException
+     */
     KMMSecCurr.Type getType() throws UnknownSecurityTypeException;
     
+    /**
+     * @return
+     */
     String getName();
     
+    /**
+     * @return
+     */
     BigInteger getPP();
     
+    /**
+     * @return
+     * @throws UnknownRoundingMethodException
+     */
     KMMSecCurr.RoundingMethod getRoundingMethod() throws UnknownRoundingMethodException;
     
+    /**
+     * @return
+     */
     BigInteger getSAF();
     
     KMMQualifCurrID getTradingCurrency() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 
+    /**
+     * @return
+     */
     String getTradingMarket();
 
     // ------------------------------------------------------------
 
+    /**
+     * @return
+     * @throws InvalidQualifSecCurrTypeException
+     * @throws InvalidQualifSecCurrIDException
+     */
     Collection<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     
+    /**
+     * @return
+     * @throws InvalidQualifSecCurrTypeException
+     * @throws InvalidQualifSecCurrIDException
+     */
     KMyMoneyPrice getYoungestQuote() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     
 }

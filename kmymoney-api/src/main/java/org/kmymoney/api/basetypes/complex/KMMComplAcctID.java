@@ -7,6 +7,9 @@ import org.kmymoney.api.currency.InvalidKMMComplAcctIDException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @see KMMAcctID
+ */
 public class KMMComplAcctID implements Comparable<KMMComplAcctID> {
 
     public enum Type {

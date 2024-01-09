@@ -11,6 +11,7 @@ import org.kmymoney.api.generated.TRANSACTION;
 /**
  * It is comparable and sorts primarily on the date the transaction happened
  * and secondarily on the date it was entered.
+ * @see KMyMoneyTransactionSplit
  */
 public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
 
@@ -63,6 +64,9 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
      * @return the unique-id to identify this object with across name- and
      *         hirarchy-changes
      */
+    /**
+     * @return
+     */
     KMMTrxID getID();
 
     /**
@@ -101,10 +105,10 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
     /**
      * Get a split of this transaction it's id.
      * 
-     * @param id the id to look for
+     * @param spltID the id to look for
      * @return null if not found
      */
-    KMyMoneyTransactionSplit getSplitByID(String id);
+    KMyMoneyTransactionSplit getSplitByID(String spltID);
 
     /**
      *
@@ -144,6 +148,7 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
 
     /**
      * The result is in the currency of the transaction.
+     * @return 
      * 
      * @see KMyMoneyTransaction#getBalance()
      */
@@ -151,6 +156,8 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
 
     /**
      * The result is in the currency of the transaction.
+     * @param lcl 
+     * @return 
      * 
      * @see KMyMoneyTransaction#getBalance()
      */
@@ -167,6 +174,7 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
 
     /**
      * The result is in the currency of the transaction.
+     * @return 
      * 
      * @see KMyMoneyTransaction#getNegatedBalance()
      */
@@ -174,6 +182,8 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
 
     /**
      * The result is in the currency of the transaction.
+     * @param lcl 
+     * @return 
      * 
      * @see KMyMoneyTransaction#getNegatedBalance()
      */

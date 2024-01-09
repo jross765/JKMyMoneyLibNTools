@@ -1,8 +1,12 @@
 package org.kmymoney.api.basetypes.simple;
 
+import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @see KMMComplAcctID
+ */
 public class KMMAcctID extends KMMID {
     // Logger
     private static final Logger logger = LoggerFactory.getLogger(KMMAcctID.class);

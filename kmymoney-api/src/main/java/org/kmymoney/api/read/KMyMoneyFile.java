@@ -26,255 +26,343 @@ import org.kmymoney.api.numbers.FixedPointNumber;
  */
 public interface KMyMoneyFile extends KMyMoneyObject {
 
-    /**
-     *
-     * @return the file on disk we are managing
-     */
-    File getFile();
+	/**
+	 *
+	 * @return the file on disk we are managing
+	 */
+	File getFile();
 
-    @SuppressWarnings("exports")
-    KMYMONEYFILE getRootElement();
+	@SuppressWarnings("exports")
+	KMYMONEYFILE getRootElement();
 
-    /**
-     * The Currency-Table gets initialized with the latest prices found in the
-     * gnucash-file.
-     * 
-     * @return Returns the currencyTable.
-     */
-    ComplexPriceTable getCurrencyTable();
+	/**
+	 * The Currency-Table gets initialized with the latest prices found in the
+	 * gnucash-file.
+	 * 
+	 * @return Returns the currencyTable.
+	 */
+	ComplexPriceTable getCurrencyTable();
 
-    /**
-     * Use a heuristic to determine the defaultcurrency-id. If we cannot find one,
-     * we default to EUR.<br/>
-     * Comodity-stace is fixed as "ISO4217" .
-     * 
-     * @return the default-currencyID to use.
-     */
-    String getDefaultCurrencyID();
+	/**
+	 * Use a heuristic to determine the defaultcurrency-id. If we cannot find one,
+	 * we default to EUR.<br/>
+	 * Comodity-stace is fixed as "ISO4217" .
+	 * 
+	 * @return the default-currencyID to use.
+	 */
+	String getDefaultCurrencyID();
 
-    // ---------------------------------------------------------------
+	// ---------------------------------------------------------------
 
-    /**
-     * @param id the unique id of the account to look for
-     * @return the account or null if it's not found
-     */
-    KMyMoneyAccount getAccountByID(KMMComplAcctID id);
+	/**
+	 * @param acctID the unique id of the account to look for
+	 * @return the account or null if it's not found
+	 */
+	KMyMoneyAccount getAccountByID(KMMComplAcctID acctID);
 
-    /**
-    *
-    * @param id if null, gives all account that have no parent
-    * @return all accounts with that parent in no particular order
-    */
-   Collection<KMyMoneyAccount> getAccountsByParentID(KMMComplAcctID id);
+	/**
+	 *
+	 * @param acctID if null, gives all account that have no parent
+	 * @return all accounts with that parent in no particular order
+	 */
+	Collection<KMyMoneyAccount> getAccountsByParentID(KMMComplAcctID acctID);
 
-   /**
-    * warning: this function has to traverse all accounts. If it much faster to try
-    * getAccountById first and only call this method if the returned account does
-    * not have the right name.
-    *
-    * @param name the UNQUaLIFIED name to look for
-    * @return null if not found
-    * @see #getAccountByID(String)
-    */
-   Collection<KMyMoneyAccount> getAccountsByName(String expr);
+	/**
+	 * warning: this function has to traverse all accounts. If it much faster to try
+	 * getAccountById first and only call this method if the returned account does
+	 * not have the right name.
+	 * 
+	 * @param expr
+	 *
+	 * @param name the UNQUaLIFIED name to look for
+	 * @return null if not found
+	 * @see #getAccountByID(KMMComplAcctID)
+	 * @see #getAccountsByParentID(KMMComplAcctID)
+	 * @see #getAccountsByName(String, boolean, boolean)
+	 */
+	Collection<KMyMoneyAccount> getAccountsByName(String expr);
 
-   Collection<KMyMoneyAccount> getAccountsByName(String expr, boolean qualif, boolean relaxed);
+	/**
+	 * @param expr
+	 * @param qualif
+	 * @param relaxed
+	 * @return
+	 */
+	Collection<KMyMoneyAccount> getAccountsByName(String expr, boolean qualif, boolean relaxed);
 
-   KMyMoneyAccount getAccountByNameUniq(String expr, boolean qualif) throws NoEntryFoundException, TooManyEntriesFoundException;
+	/**
+	 * @param expr
+	 * @param qualif
+	 * @return
+	 * @throws NoEntryFoundException
+	 * @throws TooManyEntriesFoundException
+	 */
+	KMyMoneyAccount getAccountByNameUniq(String expr, boolean qualif)
+			throws NoEntryFoundException, TooManyEntriesFoundException;
 
-   /**
-    * warning: this function has to traverse all accounts. If it much faster to try
-    * getAccountById first and only call this method if the returned account does
-    * not have the right name.
-    *
-    * @param name the regular expression of the name to look for
-    * @return null if not found
-    * @throws org.kmymoney.api.read.TooManyEntriesFoundException 
-    * @throws org.kmymoney.api.read.NoEntryFoundException 
-    * @see #getAccountByID(String)
-    * @see #getAccountByName(String)
-    */
-   KMyMoneyAccount getAccountByNameEx(String name) throws NoEntryFoundException, TooManyEntriesFoundException;
+	/**
+	 * warning: this function has to traverse all accounts. If it much faster to try
+	 * getAccountById first and only call this method if the returned account does
+	 * not have the right name.
+	 *
+	 * @param name the regular expression of the name to look for
+	 * @return null if not found
+	 * @throws org.kmymoney.api.read.TooManyEntriesFoundException
+	 * @throws org.kmymoney.api.read.NoEntryFoundException
+	 * @see #getAccountByID(KMMComplAcctID)
+	 * @see #getAccountsByName(String)
+	 */
+	KMyMoneyAccount getAccountByNameEx(String name) throws NoEntryFoundException, TooManyEntriesFoundException;
 
-   /**
-    * First try to fetch the account by id, then fall back to traversing all
-    * accounts to get if by it's name.
-    *
-    * @param id   the id to look for
-    * @param name the name to look for if nothing is found for the id
-    * @return null if not found
-    * @throws org.kmymoney.api.read.TooManyEntriesFoundException 
-    * @throws org.kmymoney.api.read.NoEntryFoundException 
-    * @see #getAccountByID(String)
-    * @see #getAccountByName(String)
-    */
-   KMyMoneyAccount getAccountByIDorName(KMMComplAcctID id, String name) throws NoEntryFoundException, TooManyEntriesFoundException;
+	/**
+	 * First try to fetch the account by id, then fall back to traversing all
+	 * accounts to get if by it's name.
+	 *
+	 * @param acctID the id to look for
+	 * @param name   the name to look for if nothing is found for the id
+	 * @return null if not found
+	 * @throws org.kmymoney.api.read.TooManyEntriesFoundException
+	 * @throws org.kmymoney.api.read.NoEntryFoundException
+	 * @see #getAccountByID(String)
+	 * @see #getAccountByName(String)
+	 */
+	KMyMoneyAccount getAccountByIDorName(KMMComplAcctID acctID, String name)
+			throws NoEntryFoundException, TooManyEntriesFoundException;
 
-   /**
-    * First try to fetch the account by id, then fall back to traversing all
-    * accounts to get if by it's name.
-    *
-    * @param id   the id to look for
-    * @param name the regular expression of the name to look for if nothing is
-    *             found for the id
-    * @return null if not found
-    * @throws org.kmymoney.api.read.TooManyEntriesFoundException 
-    * @throws org.kmymoney.api.read.NoEntryFoundException 
-    * @see #getAccountByID(String)
-    * @see #getAccountByName(String)
-    */
-   KMyMoneyAccount getAccountByIDorNameEx(KMMComplAcctID id, String name) throws NoEntryFoundException, TooManyEntriesFoundException;
-   
-   Collection<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, 
-	                                                boolean qualif, boolean relaxed) throws UnknownAccountTypeException;
+	/**
+	 * First try to fetch the account by id, then fall back to traversing all
+	 * accounts to get if by it's name.
+	 *
+	 * @param acctID the id to look for
+	 * @param name   the regular expression of the name to look for if nothing is
+	 *               found for the id
+	 * @return null if not found
+	 * @throws org.kmymoney.api.read.TooManyEntriesFoundException
+	 * @throws org.kmymoney.api.read.NoEntryFoundException
+	 * @see #getAccountByID(String)
+	 * @see #getAccountByName(String)
+	 */
+	KMyMoneyAccount getAccountByIDorNameEx(KMMComplAcctID acctID, String name)
+			throws NoEntryFoundException, TooManyEntriesFoundException;
 
-   /**
-    * @return all accounts
-    */
-   Collection<KMyMoneyAccount> getAccounts();
+	/**
+	 * @param type
+	 * @param expr
+	 * @param qualif
+	 * @param relaxed
+	 * @return
+	 * @throws UnknownAccountTypeException
+	 */
+	Collection<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, boolean qualif,
+			boolean relaxed) throws UnknownAccountTypeException;
 
-   /**
-    * @return a read-only collection of all accounts that have no parent (the
-    *         result is sorted)
-    */
-   Collection<? extends KMyMoneyAccount> getParentlessAccounts();
+	/**
+	 * @return all accounts
+	 */
+	Collection<KMyMoneyAccount> getAccounts();
 
-   Collection<KMMComplAcctID> getTopAccountIDs();
+	/**
+	 * @return a read-only collection of all accounts that have no parent (the
+	 *         result is sorted)
+	 */
+	Collection<? extends KMyMoneyAccount> getParentlessAccounts();
 
-   Collection<KMyMoneyAccount> getTopAccounts();
+	Collection<KMMComplAcctID> getTopAccountIDs();
 
-   // ---------------------------------------------------------------
+	Collection<KMyMoneyAccount> getTopAccounts();
 
-    /**
-     * @param trxID the unique id of the transaction to look for
-     * @return the transaction or null if it's not found
-     */
-    KMyMoneyTransaction getTransactionByID(KMMTrxID trxID);
+	// ---------------------------------------------------------------
 
-    /**
-     * @return a (possibly read-only) collection of all transactions Do not modify
-     *         the returned collection!
-     */
-    Collection<? extends KMyMoneyTransaction> getTransactions();
+	/**
+	 * @param trxID the unique id of the transaction to look for
+	 * @return the transaction or null if it's not found
+	 */
+	KMyMoneyTransaction getTransactionByID(KMMTrxID trxID);
 
-    // ---------------------------------------------------------------
+	/**
+	 * @return a (possibly read-only) collection of all transactions Do not modify
+	 *         the returned collection!
+	 */
+	Collection<? extends KMyMoneyTransaction> getTransactions();
 
-    /**
-     * @param spltID the unique id of the transaction split to look for
-     * @return the transaction split or null if it's not found
-     */
-    KMyMoneyTransactionSplit getTransactionSplitByID(KMMQualifSpltID spltID);
+	// ---------------------------------------------------------------
 
-    Collection<KMyMoneyTransactionSplit> getTransactionSplits();
+	/**
+	 * @param spltID the unique id of the transaction split to look for
+	 * @return the transaction split or null if it's not found
+	 */
+	KMyMoneyTransactionSplit getTransactionSplitByID(KMMQualifSpltID spltID);
 
-    // ---------------------------------------------------------------
+	/**
+	 * @return
+	 */
+	Collection<KMyMoneyTransactionSplit> getTransactionSplits();
 
-    /**
-     * @param id the unique id of the customer to look for
-     * @return the customer or null if it's not found
-     */
-    KMyMoneyPayee getPayeeByID(KMMPyeID id);
+	// ---------------------------------------------------------------
 
-    Collection<KMyMoneyPayee> getPayeesByName(final String expr);
-    
-    Collection<KMyMoneyPayee> getPayeesByName(final String expr, final boolean relaxed);
+	/**
+	 * @param id the unique id of the customer to look for
+	 * @return the customer or null if it's not found
+	 */
+	KMyMoneyPayee getPayeeByID(KMMPyeID id);
 
-    KMyMoneyPayee getPayeesByNameUniq(final String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
+	/**
+	 * @param expr
+	 * @return
+	 */
+	Collection<KMyMoneyPayee> getPayeesByName(final String expr);
 
-    /**
-     * @return a (possibly read-only) collection of all customers Do not modify the
-     *         returned collection!
-     */
-    Collection<KMyMoneyPayee> getPayees();
+	/**
+	 * @param expr
+	 * @param relaxed
+	 * @return
+	 */
+	Collection<KMyMoneyPayee> getPayeesByName(final String expr, final boolean relaxed);
 
-    // ---------------------------------------------------------------
+	/**
+	 * @param expr
+	 * @return
+	 * @throws NoEntryFoundException
+	 * @throws TooManyEntriesFoundException
+	 */
+	KMyMoneyPayee getPayeesByNameUniq(final String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
 
-    /**
-     * @param id the unique id of the customer to look for
-     * @return the customer or null if it's not found
-     */
-    KMyMoneySecurity getSecurityByID(KMMSecID id);
+	/**
+	 * @return a (possibly read-only) collection of all customers Do not modify the
+	 *         returned collection!
+	 */
+	Collection<KMyMoneyPayee> getPayees();
 
-    KMyMoneySecurity getSecurityByID(String id);
+	// ---------------------------------------------------------------
 
-    KMyMoneySecurity getSecurityByQualifID(KMMQualifSecID secID);
+	/**
+	 * @param id the unique id of the customer to look for
+	 * @return the customer or null if it's not found
+	 */
+	KMyMoneySecurity getSecurityByID(KMMSecID id);
 
-    KMyMoneySecurity getSecurityByQualifID(String qualifID) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+	/**
+	 * @param id
+	 * @return
+	 */
+	KMyMoneySecurity getSecurityByID(String id);
 
-    /**
-     * The symbol is usually the ticker, but need not necessarily be so.
-     * 
-     * @param symb
-     * @return
-     * @throws InvalidQualifSecCurrIDException
-     * @throws InvalidQualifSecCurrTypeException
-     */
-    KMyMoneySecurity getSecurityBySymbol(String symb) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+	/**
+	 * @param secID
+	 * @return
+	 */
+	KMyMoneySecurity getSecurityByQualifID(KMMQualifSecID secID);
 
-    /**
-     * By ISIN/CUSIP/SEDOL/WKN...
-     * 
-     * @param code
-     * @return
-     * @throws InvalidQualifSecCurrIDException
-     * @throws InvalidQualifSecCurrTypeException
-     */
-    KMyMoneySecurity getSecurityByCode(String code) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+	/**
+	 * @param qualifID
+	 * @return
+	 * @throws InvalidQualifSecCurrIDException
+	 * @throws InvalidQualifSecCurrTypeException
+	 */
+	KMyMoneySecurity getSecurityByQualifID(String qualifID)
+			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 
-    Collection<KMyMoneySecurity> getSecuritiesByName(final String expr);
-    
-    Collection<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed);
+	/**
+	 * The symbol is usually the ticker, but need not necessarily be so.
+	 * 
+	 * @param symb
+	 * @return
+	 * @throws InvalidQualifSecCurrIDException
+	 * @throws InvalidQualifSecCurrTypeException
+	 */
+	KMyMoneySecurity getSecurityBySymbol(String symb)
+			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 
-    KMyMoneySecurity getSecurityByNameUniq(final String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
+	/**
+	 * By ISIN/CUSIP/SEDOL/WKN...
+	 * 
+	 * @param code
+	 * @return
+	 * @throws InvalidQualifSecCurrIDException
+	 * @throws InvalidQualifSecCurrTypeException
+	 */
+	KMyMoneySecurity getSecurityByCode(String code)
+			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 
-    Collection<KMyMoneySecurity> getSecurities();
+	/**
+	 * @param expr
+	 * @return
+	 */
+	Collection<KMyMoneySecurity> getSecuritiesByName(final String expr);
 
-    // ---------------------------------------------------------------
+	/**
+	 * @param expr
+	 * @param relaxed
+	 * @return
+	 */
+	Collection<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed);
 
-    /**
-     * @param id the unique id of the customer to look for
-     * @return the customer or null if it's not found
-     */
-    KMyMoneyCurrency getCurrencyByID(String id);
+	/**
+	 * @param expr
+	 * @return
+	 * @throws NoEntryFoundException
+	 * @throws TooManyEntriesFoundException
+	 */
+	KMyMoneySecurity getSecurityByNameUniq(final String expr)
+			throws NoEntryFoundException, TooManyEntriesFoundException;
 
-    KMyMoneyCurrency getCurrencyByQualifID(KMMQualifCurrID currID);
+	/**
+	 * @return
+	 */
+	Collection<KMyMoneySecurity> getSecurities();
 
-    /**
-     * warning: this function has to traverse all securites. If it much faster to
-     * try getCustomerById first and only call this method if the returned account
-     * does not have the right name.
-     *
-     * @param name the name to look for
-     * @return null if not found
-     * @see #getCustomerByID(String)
-     */
-    // Collection<KMyMoneyCurrency> getCurrenciesByName(String name);
+	// ---------------------------------------------------------------
 
-    /**
-     * @return a (possibly read-only) collection of all customers Do not modify the
-     *         returned collection!
-     */
-    Collection<KMyMoneyCurrency> getCurrencies();
+	/**
+	 * @param id the unique id of the customer to look for
+	 * @return the customer or null if it's not found
+	 */
+	KMyMoneyCurrency getCurrencyByID(String id);
 
-    // ---------------------------------------------------------------
+	/**
+	 * @param currID
+	 * @return
+	 */
+	KMyMoneyCurrency getCurrencyByQualifID(KMMQualifCurrID currID);
 
-    /**
-     * @param prcID id of a price
-     * @return the identified price or null
-     */
-    KMyMoneyPrice getPriceByID(KMMPriceID prcID);
+	/**
+	 * warning: this function has to traverse all securities. If it much faster to
+	 * try getCustomerById first and only call this method if the returned account
+	 * does not have the right name.
+	 *
+	 * @param name the name to look for
+	 * @return null if not found
+	 * @see #getCustomerByID(String)
+	 */
+	// Collection<KMyMoneyCurrency> getCurrenciesByName(String name);
 
-    /**
-     * @return all prices defined in the book
-     * @link GCshPrice
-     */
-    Collection<KMyMoneyPrice> getPrices();
+	/**
+	 * @return a (possibly read-only) collection of all customers Do not modify the
+	 *         returned collection!
+	 */
+	Collection<KMyMoneyCurrency> getCurrencies();
 
-    /**
-     * @param pCmdtySpace the namespace for pCmdtyId
-     * @param pCmdtyId    the currency-name
-     * @return the latest price-quote in the gnucash-file in EURO
-     */
-    FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+	// ---------------------------------------------------------------
+
+	/**
+	 * @param prcID id of a price
+	 * @return the identified price or null
+	 */
+	KMyMoneyPrice getPriceByID(KMMPriceID prcID);
+
+	/**
+	 * @return all prices defined in the book
+	 * @link GCshPrice
+	 */
+	Collection<KMyMoneyPrice> getPrices();
+
+	/**
+	 * @param secCurrID
+	 * @param pCmdtySpace the name space for pCmdtyId
+	 * @param pCmdtyId    the currency-name
+	 * @return the latest price-quote in the gnucash-file in EURO
+	 */
+	FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID)
+			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 
 }

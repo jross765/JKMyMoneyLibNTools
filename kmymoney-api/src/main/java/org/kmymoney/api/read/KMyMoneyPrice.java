@@ -28,20 +28,47 @@ public interface KMyMoneyPrice extends KMyMoneyPricePairCore {
 	
     // ---------------------------------------------------------------
     
+    /**
+     * @return
+     * @throws InvalidQualifSecCurrIDException
+     * @throws InvalidQualifSecCurrTypeException
+     */
     KMMPriceID getID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
     
+    /**
+     * @return
+     * @throws InvalidQualifSecCurrIDException
+     * @throws InvalidQualifSecCurrTypeException
+     */
     KMMCurrPair getParentPricePairID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 	
+    /**
+     * @return
+     */
     KMyMoneyPricePair getParentPricePair();
 	
     // ----------------------------
 
+    /**
+     * @return
+     */
     LocalDate getDate();
 
+    /**
+     * @return
+     */
     String getSource();
 
+    /**
+     * @return
+     */
     FixedPointNumber getValue();
     
+    /**
+     * @return
+     * @throws InvalidQualifSecCurrTypeException
+     * @throws InvalidQualifSecCurrIDException
+     */
     String getValueFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     
 }

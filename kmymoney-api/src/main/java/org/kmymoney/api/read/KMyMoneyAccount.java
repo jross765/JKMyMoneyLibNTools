@@ -308,6 +308,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * Ignores accounts for which this conversion is not possible.
      *
      * @param date     ignores transactions after the given date
+     * @param curr 
      * @param currency the currency the result shall be in
      * @return Gets the balance including all sub-accounts.
      * @throws InvalidQualifSecCurrIDException 
@@ -323,7 +324,6 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
      * @param secCurrID         the currency the result shall be in
      * @return Gets the balance including all sub-accounts.
      * @throws InvalidQualifSecCurrIDException 
-     * @throws InvalidCmdtyCurrTypeException 
      * @see GnucashAccount#getBalanceRecursive(Date, Currency)
      */
     FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMQualifSecCurrID secCurrID) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;

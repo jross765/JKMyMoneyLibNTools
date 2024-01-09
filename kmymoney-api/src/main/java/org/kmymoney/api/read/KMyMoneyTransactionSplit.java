@@ -14,6 +14,7 @@ import org.kmymoney.api.numbers.FixedPointNumber;
  * This denotes a single addition or removal of some
  * value from one account in a transaction made up of
  * multiple such splits.
+ * @see KMyMoneyTransaction
  */
 public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransactionSplit> {
 
@@ -184,6 +185,8 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     String getAccountBalanceFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     /**
+     * @param lcl 
+     * @return 
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      * @see KMyMoneyAccount#getBalanceFormatted()

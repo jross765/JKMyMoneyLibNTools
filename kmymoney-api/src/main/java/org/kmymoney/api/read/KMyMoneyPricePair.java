@@ -8,10 +8,18 @@ import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 
 public interface KMyMoneyPricePair extends KMyMoneyPricePairCore {
 
+    /**
+     * @return
+     * @throws InvalidQualifSecCurrIDException
+     * @throws InvalidQualifSecCurrTypeException
+     */
     KMMCurrPair getID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
     
     // ---------------------------------------------------------------
     
+    /**
+     * @return
+     */
     Collection<KMyMoneyPrice> getPrices();
 	
 }
