@@ -1,8 +1,6 @@
-package org.kmymoney.api.read;
+package org.kmymoney.api.read.hlp;
 
-//automatically created logger for debug and error -output
-//automatically created propertyChangeListener-Support
-
+import org.kmymoney.api.read.KMyMoneyFile;
 
 /**
  * Interface all gnucash-entities implement.

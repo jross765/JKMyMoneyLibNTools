@@ -49,6 +49,7 @@ import org.kmymoney.api.read.impl.hlp.FilePayeeManager;
 import org.kmymoney.api.read.impl.hlp.FilePriceManager;
 import org.kmymoney.api.read.impl.hlp.FileSecurityManager;
 import org.kmymoney.api.read.impl.hlp.FileTransactionManager;
+import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.kmymoney.api.read.impl.hlp.NamespaceRemoverReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

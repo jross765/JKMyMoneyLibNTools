@@ -1,10 +1,10 @@
-package org.kmymoney.api.read.impl;
+package org.kmymoney.api.read.impl.hlp;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import org.kmymoney.api.read.KMyMoneyFile;
-import org.kmymoney.api.read.KMyMoneyObject;
+import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
