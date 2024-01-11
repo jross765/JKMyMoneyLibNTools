@@ -220,6 +220,7 @@ public class ComplexPriceTable implements Serializable {
 	/**
 	 * @param pValue 
 	 * @param secCurrID 
+	 * @return 
 	 * @see SimplePriceTable#convertFromBaseCurrency(FixedPointNumber,
 	 *      java.lang.String)
 	 */

@@ -8,6 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * An extension of the standard account ID ({@link KMMAcctID}):
+ * For some special accounts, KMyMoney does not use the regular prefix-counter-schema
+ * to identify them, but rather a special string.
+ * <br>
+ * This class encapsulates that logic so that <strong>all</strong> accounts
+ * are covered.
+ * 
  * @see KMMAcctID
  */
 public class KMMComplAcctID implements Comparable<KMMComplAcctID> {

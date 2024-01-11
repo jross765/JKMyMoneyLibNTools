@@ -20,7 +20,6 @@ As far as the author knows, there should be no issues with other locales, but he
 * [API](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api/README.md)
 
 * [Example Programs](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api-examples/README.md)
-::TODO
 
 # Sister Project
 This project has a sister project: 

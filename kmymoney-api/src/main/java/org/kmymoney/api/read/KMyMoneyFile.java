@@ -54,7 +54,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param acctID the unique id of the account to look for
+	 * @param acctID the unique ID of the account to look for
 	 * @return the account or null if it's not found
 	 */
 	KMyMoneyAccount getAccountByID(KMMComplAcctID acctID);
@@ -169,7 +169,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param trxID the unique id of the transaction to look for
+	 * @param trxID the unique ID of the transaction to look for
 	 * @return the transaction or null if it's not found
 	 */
 	KMyMoneyTransaction getTransactionByID(KMMTrxID trxID);
@@ -183,7 +183,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param spltID the unique id of the transaction split to look for
+	 * @param spltID the unique ID of the transaction split to look for
 	 * @return the transaction split or null if it's not found
 	 */
 	KMyMoneyTransactionSplit getTransactionSplitByID(KMMQualifSpltID spltID);
@@ -196,7 +196,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param id the unique id of the customer to look for
+	 * @param id the unique ID of the customer to look for
 	 * @return the customer or null if it's not found
 	 */
 	KMyMoneyPayee getPayeeByID(KMMPyeID id);
@@ -231,7 +231,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param id the unique id of the customer to look for
+	 * @param id the unique ID of the customer to look for
 	 * @return the customer or null if it's not found
 	 */
 	KMyMoneySecurity getSecurityByID(KMMSecID id);
@@ -309,7 +309,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param id the unique id of the customer to look for
+	 * @param id the unique ID of the customer to look for
 	 * @return the customer or null if it's not found
 	 */
 	KMyMoneyCurrency getCurrencyByID(String id);
