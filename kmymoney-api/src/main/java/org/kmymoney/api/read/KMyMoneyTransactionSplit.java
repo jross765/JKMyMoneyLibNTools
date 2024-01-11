@@ -11,9 +11,14 @@ import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 
 /**
- * This denotes a single addition or removal of some
- * value from one account in a transaction made up of
- * multiple such splits.
+ * A single addition or removal of a quantity of an account's accounted-for items 
+ * (i.e. currency or security), having a specific value, from that account in a transaction.
+ * <br>
+ * A transaction split never exists alone, but is always grouped in a transaction
+ * together with at least one more split.
+ * <br>
+ * Cf. <a href="https://docs.kde.org/stable5/en/kmymoney/kmymoney/details.ledgers.split.html">KMyMoney handbook</a>
+ * 
  * @see KMyMoneyTransaction
  */
 public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransactionSplit> {

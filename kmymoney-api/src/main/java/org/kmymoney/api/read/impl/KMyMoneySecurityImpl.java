@@ -42,10 +42,10 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
     @SuppressWarnings("exports")
     public KMyMoneySecurityImpl(
 	    final SECURITY peer, 
-	    final KMyMoneyFile gncFile) {
+	    final KMyMoneyFile kmmFile) {
 
 	jwsdpPeer = peer;
-	file = gncFile;
+	file = kmmFile;
     }
 
     // ---------------------------------------------------------------

@@ -20,10 +20,8 @@ import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.hlp.KMyMoneyObject;
 
 /**
- * Interface of a top-level class<br/>
- * that gives access to a gnucash-file <br/>
- * with all it's transactions and accounts,... <br/>
- * <br/>
+ * Interface of a top-level class that gives access to a KMyMoney file
+ * with all its accounts, transactions, etc.
  */
 public interface KMyMoneyFile extends KMyMoneyObject {
 

@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Locale;
 
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
-import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.generated.TRANSACTION;
+import org.kmymoney.api.numbers.FixedPointNumber;
 
 /**
- * It is comparable and sorts primarily on the date the transaction happened
- * and secondarily on the date it was entered.
+ * A financial transaction between two or more accounts.
+ * <br>
+ * A transaction has two or more transaction splits ({@link KMyMoneyTransactionSplit})
+ * whose values normally add up to zero.
+ * 
  * @see KMyMoneyTransactionSplit
  */
 public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {

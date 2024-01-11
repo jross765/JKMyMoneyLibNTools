@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implementation of GnucashAccount that used a
+ * Implementation of KMyMoneyAccount that used a
  * jwsdp-generated backend.
  */
 public class KMyMoneyAccountImpl extends SimpleAccount 
@@ -79,15 +79,15 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 
     /**
      * @param peer    the JWSDP-object we are facading.
-     * @param gncFile the file to register under
+     * @param kmmFile the file to register under
      */
     @SuppressWarnings("exports")
-    public KMyMoneyAccountImpl(final ACCOUNT peer, final KMyMoneyFile gncFile) {
-	super(gncFile);
+    public KMyMoneyAccountImpl(final ACCOUNT peer, final KMyMoneyFile kmmFile) {
+	super(kmmFile);
 
 	jwsdpPeer = peer;
 	
-	// helper = new KMyMoneyObjectImpl(gncFile);
+	// helper = new KMyMoneyObjectImpl(kmmFile);
     }
 
     // ---------------------------------------------------------------

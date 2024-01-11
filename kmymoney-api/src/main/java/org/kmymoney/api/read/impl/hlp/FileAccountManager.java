@@ -16,7 +16,6 @@ import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyAccount.Type;
-import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.NoEntryFoundException;
 import org.kmymoney.api.read.TooManyEntriesFoundException;
 import org.kmymoney.api.read.UnknownAccountTypeException;

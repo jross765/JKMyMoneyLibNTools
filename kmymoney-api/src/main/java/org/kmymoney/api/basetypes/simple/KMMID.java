@@ -3,6 +3,11 @@ package org.kmymoney.api.basetypes.simple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Abstract base class defining a technical entry ID for all KMyMoney entities
+ * (essentially a counter with an entity-specific prefix letter, 
+ * primarily defined for type safety).
+ */
 public abstract class KMMID implements Comparable<Object> {
     // Logger
     private static final Logger logger = LoggerFactory.getLogger(KMMID.class);

@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implementation of GnucashTransaction that uses JWSDP.
+ * Implementation of KMyMoneyTransaction that uses JWSDP.
  */
 public class KMyMoneyTransactionImpl implements KMyMoneyTransaction 
 {
@@ -78,16 +78,15 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      * Create a new Transaction, facading a JWSDP-transaction.
      *
      * @param peer    the JWSDP-object we are facading.
-     * @param gncFile the file to register under
-     * @see #jwsdpPeer
+     * @param kmmFile the file to register under
      */
     @SuppressWarnings("exports")
     public KMyMoneyTransactionImpl(
 	    final TRANSACTION peer, 
-	    final KMyMoneyFile gncFile) {
+	    final KMyMoneyFile kmmFile) {
 
 	jwsdpPeer = peer;
-	file = gncFile;
+	file = kmmFile;
 
     }
 

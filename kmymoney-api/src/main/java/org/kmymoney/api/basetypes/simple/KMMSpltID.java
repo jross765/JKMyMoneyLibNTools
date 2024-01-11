@@ -1,8 +1,15 @@
 package org.kmymoney.api.basetypes.simple;
 
+import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A technical entry ID for all a transaction split
+ * (primarily defined for type safety).
+ * 
+ * @see KMyMoneyTransactionSplit
+ */
 public class KMMSpltID extends KMMID {
     // Logger
     private static final Logger logger = LoggerFactory.getLogger(KMMSpltID.class);

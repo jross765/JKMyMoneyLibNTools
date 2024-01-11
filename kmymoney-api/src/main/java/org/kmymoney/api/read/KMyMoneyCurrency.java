@@ -7,6 +7,13 @@ import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 
+/**
+ * A KMyMoney currency is just that, i.e. it satisfies the standard definition.
+ * <br>
+ * Cf. <a href="https://docs.kde.org/stable5/en/kmymoney/kmymoney/details.currencies.html">KMyMoney handbook</a>
+ * <br>
+ * Cf. <a href="https://en.wikipedia.org/wiki/Currency">Wikipedia</a>
+ */
 public interface KMyMoneyCurrency {
 
     /**

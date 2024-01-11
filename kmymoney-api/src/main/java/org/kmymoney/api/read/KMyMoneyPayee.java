@@ -6,6 +6,11 @@ import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.read.aux.KMMAddress;
 
+/**
+ * Person or entity that is being paid in a transaction.
+ * <br>
+ * Cf. <a href="https://docs.kde.org/stable5/en/kmymoney/kmymoney/makingmostof.mapping.html#makingmostof.mapping.payees">KMyMoney handbook</a>
+ */
 public interface KMyMoneyPayee {
     
     /**

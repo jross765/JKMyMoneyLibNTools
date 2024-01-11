@@ -6,6 +6,14 @@ import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 
+/**
+ * Auxiliary interface that defines methods that -- for practical reasons,
+ * and this is not an error -- <strong>both</strong> the interfaces of 
+ * prices and price pair are being derived from.
+ * 
+ * @see KMyMoneyPrice
+ * @see KMyMoneyPricePair
+ */
 public interface KMyMoneyPricePairCore {
 
     /**

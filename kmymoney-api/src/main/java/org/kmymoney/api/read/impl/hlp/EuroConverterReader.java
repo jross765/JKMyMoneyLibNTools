@@ -15,9 +15,6 @@ public class EuroConverterReader extends Reader {
 
 	// ---------------------------------------------------------------
 
-	/**
-	 * Where to read from.
-	 */
 	private Reader input;
 
 	// ---------------------------------------------------------------

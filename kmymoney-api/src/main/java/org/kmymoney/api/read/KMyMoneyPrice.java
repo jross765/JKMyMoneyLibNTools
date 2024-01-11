@@ -8,6 +8,14 @@ import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 
+/**
+ * A price is an umbrella term comprising:
+ * <ul>
+ *   <li>A currency's exchange rate</li>
+ *   <li>A security's quote</li>
+ *   <li>A pseudo-security's price</li> 
+ * </ul>
+ */
 public interface KMyMoneyPrice extends KMyMoneyPricePairCore {
 
     // ::TODO: these are sitll Gnucash values

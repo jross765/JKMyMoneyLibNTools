@@ -9,7 +9,6 @@ import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.TRANSACTION;
-import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;

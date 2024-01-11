@@ -39,10 +39,10 @@ public class KMyMoneyCurrencyImpl implements KMyMoneyCurrency {
     @SuppressWarnings("exports")
     public KMyMoneyCurrencyImpl(
 	    final CURRENCY peer, 
-	    final KMyMoneyFile gncFile) {
+	    final KMyMoneyFile kmmFile) {
 
 	jwsdpPeer = peer;
-	file = gncFile;
+	file = kmmFile;
     }
 
     // ---------------------------------------------------------------

@@ -1,8 +1,15 @@
 package org.kmymoney.api.basetypes.simple;
 
+import org.kmymoney.api.read.KMyMoneyPayee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A technical entry ID for all a payee
+ * (primarily defined for type safety).
+ * 
+ * @see KMyMoneyPayee
+ */
 public class KMMPyeID extends KMMID {
     // Logger
     private static final Logger logger = LoggerFactory.getLogger(KMMPyeID.class);

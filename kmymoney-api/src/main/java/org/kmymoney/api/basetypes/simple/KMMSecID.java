@@ -1,8 +1,15 @@
 package org.kmymoney.api.basetypes.simple;
 
+import org.kmymoney.api.read.KMyMoneySecurity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A technical entry ID for all a security
+ * (primarily defined for type safety).
+ * 
+ * @see KMyMoneySecurity
+ */
 public class KMMSecID extends KMMID {
     // Logger
     private static final Logger logger = LoggerFactory.getLogger(KMMSecID.class);

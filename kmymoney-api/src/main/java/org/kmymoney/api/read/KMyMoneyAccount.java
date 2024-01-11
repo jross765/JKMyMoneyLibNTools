@@ -14,12 +14,19 @@ import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 
 /**
- * An account is a collection of transactions that start or end there. <br>
- * You can compare it's functionality to an abstracted bank account. <br>
- * It has a balance, may have a parent-account(@see #getParentAccount()) and child-accounts(@see #getSubAccounts()) to form
- * a tree. <br>
- * 
- * @see #getParentAccount()
+ * A KMyMoney account satisfies the "normal" definition of the term in 
+ * accounting (<a href="https://en.wikipedia.org/wiki/Account_(bookkeeping)">Wikipedia</a>).
+ * <br>
+ * You can also see it as a collection of transactions that start or end there. 
+ * <br>
+ * An account has a balance.  
+ * <br>
+ * All accounts taken together define the so-called chart of accounts,
+ * organized in a tree (the top node of the tree being the root account). 
+ * That means that each account may have a parent-account as well as one or 
+ * several child-accounts.
+ * <br>
+ * Cf. <a href="https://docs.kde.org/stable5/en/kmymoney/kmymoney/makingmostof.mapping.html#makingmostof.mapping.accounts">KMyMoney handbook</a>
  */
 public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
 

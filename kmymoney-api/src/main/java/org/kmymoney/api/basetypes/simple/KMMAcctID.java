@@ -1,10 +1,15 @@
 package org.kmymoney.api.basetypes.simple;
 
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.api.read.KMyMoneyAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * A technical entry ID for all an account
+ * (primarily defined for type safety).
+ * 
+ * @see KMyMoneyAccount
  * @see KMMComplAcctID
  */
 public class KMMAcctID extends KMMID {

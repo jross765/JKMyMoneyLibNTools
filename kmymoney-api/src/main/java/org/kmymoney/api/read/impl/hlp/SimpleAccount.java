@@ -27,8 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This is a base-class that helps implementing the GnucashAccount -interface
- * with it's extenive number of convenience-methods.<br/>
+ * This is a base-class that helps implementing the KMyMoneyAccount interface
+ * with its extensive number of convenience-methods.<br/>
  */
 public abstract class SimpleAccount implements KMyMoneyAccount {
 

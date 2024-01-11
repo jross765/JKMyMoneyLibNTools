@@ -8,7 +8,6 @@ import java.util.Map;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.PAYEE;
-import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.NoEntryFoundException;
 import org.kmymoney.api.read.TooManyEntriesFoundException;
