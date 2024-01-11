@@ -137,9 +137,6 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 	return jwsdpPeer.getName();
     }
 
-    /**
-     * @see KMyMoneyAccount#getDescription()
-     */
     public String getMemo() {
 	return jwsdpPeer.getDescription();
     }

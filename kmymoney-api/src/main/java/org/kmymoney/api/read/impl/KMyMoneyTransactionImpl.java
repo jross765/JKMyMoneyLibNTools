@@ -33,15 +33,8 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyTransactionImpl.class);
 
-    /**
-     * format of the dataPosted-field in the xml(jwsdp)-file.
-     */
-    private static final DateTimeFormatter DATE_POSTED_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
-
-    /**
-     * @see KMyMoneyTransaction#getEntryDate()
-     */
-    protected static final DateTimeFormatter DATE_ENTERED_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
+    private static final DateTimeFormatter DATE_POSTED_FORMAT  = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
+    private static final DateTimeFormatter DATE_ENTERED_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
     
     // ---------------------------------------------------------------
 

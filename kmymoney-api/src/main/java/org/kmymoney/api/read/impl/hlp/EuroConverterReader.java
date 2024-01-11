@@ -3,10 +3,17 @@ package org.kmymoney.api.read.impl.hlp;
 import java.io.IOException;
 import java.io.Reader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * replaces &#164; by the euro-sign .
  */
 public class EuroConverterReader extends Reader {
+
+	protected static final Logger LOGGER = LoggerFactory.getLogger(EuroConverterReader.class);
+
+	// ---------------------------------------------------------------
 
 	/**
 	 * This is "&#164;".length .

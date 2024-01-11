@@ -13,9 +13,9 @@ import org.kmymoney.api.basetypes.complex.KMMCurrPair;
  * <ul>
  *   <li>USD to EUR (currency quotes)</li>   
  *   <li>Security MBG.DE (Mercedes-Benz Group AG) to EUR (share prices)</li>
- * <ul>
- * So, <strong>all<strong> USD/EUR quotes are held in the USD-EUR price pair,
- * <strong>all<strong> MBG.DE/EUR quotes are held in the MBG.DE-EUR price pair,
+ * </ul>
+ * So, e.g., <strong>all</strong> USD/EUR quotes are held in the USD-EUR price pair,
+ * <strong>all</strong> MBG.DE/EUR quotes are held in the MBG.DE-EUR price pair,
  * etc.
  */
 public interface KMyMoneyPricePair extends KMyMoneyPricePairCore {

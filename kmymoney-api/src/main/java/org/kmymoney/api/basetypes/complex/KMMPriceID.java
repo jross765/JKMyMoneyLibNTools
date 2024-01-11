@@ -5,10 +5,10 @@ import java.util.Objects;
 /**
  * KMyMoney has no IDs for the price objects (neither on the price-pair level
  * nor on the price level).
- * 
+ * <br>
  * I cannot understand this -- how can you possibly work with hundreds, thousands 
  * or even tens of thousands of prices without properly identifying them?
- * 
+ * <br>
  * Anyway: this fact is the reason why we here have a price object pseudo-ID: 
  * The tuple ( from-currency, to-currency, date ).
  */

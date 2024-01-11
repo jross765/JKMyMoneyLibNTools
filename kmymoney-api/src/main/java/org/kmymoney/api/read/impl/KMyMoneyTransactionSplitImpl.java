@@ -280,11 +280,6 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 	return getSharesFormatted(lcl).replaceFirst("€", "&euro;");
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see KMyMoneyTransactionSplit#getDescription()
-     */
     public String getMemo() {
 	if (jwsdpPeer.getMemo() == null) {
 	    return "";
@@ -294,9 +289,6 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     
     // ---------------------------------------------------------------
 
-    /**
-     * @see java.lang.Comparable#compareTo(KMyMoneyTransactionSplit)
-     */
     public int compareTo(final KMyMoneyTransactionSplit otherSplt) {
 	try {
 	    KMyMoneyTransaction otherTrans = otherSplt.getTransaction();

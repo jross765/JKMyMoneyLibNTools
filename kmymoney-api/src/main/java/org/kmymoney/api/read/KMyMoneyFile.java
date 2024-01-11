@@ -71,7 +71,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * getAccountById first and only call this method if the returned account does
 	 * not have the right name.
 	 * 
-	 * @param expr
+	 * @param expr search expression
 	 *
 	 * @param name the UNQUaLIFIED name to look for
 	 * @return null if not found
@@ -82,7 +82,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	Collection<KMyMoneyAccount> getAccountsByName(String expr);
 
 	/**
-	 * @param expr
+	 * @param expr search expression
 	 * @param qualif
 	 * @param relaxed
 	 * @return
@@ -90,7 +90,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	Collection<KMyMoneyAccount> getAccountsByName(String expr, boolean qualif, boolean relaxed);
 
 	/**
-	 * @param expr
+	 * @param expr search expression
 	 * @param qualif
 	 * @return
 	 * @throws NoEntryFoundException
@@ -122,8 +122,6 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @return null if not found
 	 * @throws org.kmymoney.api.read.TooManyEntriesFoundException
 	 * @throws org.kmymoney.api.read.NoEntryFoundException
-	 * @see #getAccountByID(String)
-	 * @see #getAccountByName(String)
 	 */
 	KMyMoneyAccount getAccountByIDorName(KMMComplAcctID acctID, String name)
 			throws NoEntryFoundException, TooManyEntriesFoundException;
@@ -138,15 +136,13 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @return null if not found
 	 * @throws org.kmymoney.api.read.TooManyEntriesFoundException
 	 * @throws org.kmymoney.api.read.NoEntryFoundException
-	 * @see #getAccountByID(String)
-	 * @see #getAccountByName(String)
 	 */
 	KMyMoneyAccount getAccountByIDorNameEx(KMMComplAcctID acctID, String name)
 			throws NoEntryFoundException, TooManyEntriesFoundException;
 
 	/**
 	 * @param type
-	 * @param expr
+	 * @param expr search expression
 	 * @param qualif
 	 * @param relaxed
 	 * @return
@@ -206,20 +202,20 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	KMyMoneyPayee getPayeeByID(KMMPyeID id);
 
 	/**
-	 * @param expr
+	 * @param expr search expression
 	 * @return
 	 */
 	Collection<KMyMoneyPayee> getPayeesByName(final String expr);
 
 	/**
-	 * @param expr
+	 * @param expr search expression
 	 * @param relaxed
 	 * @return
 	 */
 	Collection<KMyMoneyPayee> getPayeesByName(final String expr, final boolean relaxed);
 
 	/**
-	 * @param expr
+	 * @param expr search expression
 	 * @return
 	 * @throws NoEntryFoundException
 	 * @throws TooManyEntriesFoundException
@@ -284,20 +280,20 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 
 	/**
-	 * @param expr
+	 * @param expr search expression
 	 * @return
 	 */
 	Collection<KMyMoneySecurity> getSecuritiesByName(final String expr);
 
 	/**
-	 * @param expr
+	 * @param expr search expression
 	 * @param relaxed
 	 * @return
 	 */
 	Collection<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed);
 
 	/**
-	 * @param expr
+	 * @param expr search expression
 	 * @return
 	 * @throws NoEntryFoundException
 	 * @throws TooManyEntriesFoundException
@@ -360,6 +356,8 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param pCmdtySpace the name space for pCmdtyId
 	 * @param pCmdtyId    the currency-name
 	 * @return the latest price-quote in the gnucash-file in EURO
+	 * @throws InvalidQualifSecCurrIDException 
+	 * @throws InvalidQualifSecCurrTypeException 
 	 */
 	FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID)
 			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;

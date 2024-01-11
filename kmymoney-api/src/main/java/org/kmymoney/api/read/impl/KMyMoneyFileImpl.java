@@ -232,7 +232,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
     /**
      * @return Returns the currencyTable.
-     * @link #currencyTable
      */
     public ComplexPriceTable getCurrencyTable() {
 	return currencyTable;
@@ -268,9 +267,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
     // ---------------------------------------------------------------
 
-    /**
-     * @see KMyMoneyFile#getAccountByID(java.lang.String)
-     */
     @Override
     public KMyMoneyAccount getAccountByID(final KMMComplAcctID acctID) {
 	return acctMgr.getAccountByID(acctID);
@@ -281,8 +277,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @return the sorted collection of children of that account
      */
     @Override
-    public Collection<KMyMoneyAccount> getAccountsByParentID(final KMMComplAcctID id) {
-        return acctMgr.getAccountsByParentID(id);
+    public Collection<KMyMoneyAccount> getAccountsByParentID(final KMMComplAcctID acctID) {
+        return acctMgr.getAccountsByParentID(acctID);
     }
 
     @Override
@@ -312,8 +308,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @return null if not found
      * @throws TooManyEntriesFoundException 
      * @throws NoEntryFoundException 
-     * @see #getAccountByID(String)
-     * @see #getAccountByName(String)
      */
     @Override
     public KMyMoneyAccount getAccountByNameEx(final String nameRegEx) throws NoEntryFoundException, TooManyEntriesFoundException {
@@ -324,35 +318,31 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * First try to fetch the account by id, then fall back to traversing all
      * accounts to get if by it's name.
      *
-     * @param id   the id to look for
+     * @param acctID   the id to look for
      * @param name the name to look for if nothing is found for the id
      * @return null if not found
      * @throws TooManyEntriesFoundException 
      * @throws NoEntryFoundException 
-     * @see #getAccountByID(String)
-     * @see #getAccountByName(String)
      */
     @Override
-    public KMyMoneyAccount getAccountByIDorName(final KMMComplAcctID id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
-	return acctMgr.getAccountByIDorName(id, name);
+    public KMyMoneyAccount getAccountByIDorName(final KMMComplAcctID acctID, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
+	return acctMgr.getAccountByIDorName(acctID, name);
     }
 
     /**
      * First try to fetch the account by id, then fall back to traversing all
      * accounts to get if by it's name.
      *
-     * @param id   the id to look for
+     * @param acctID   the id to look for
      * @param name the regular expression of the name to look for if nothing is
      *             found for the id
      * @return null if not found
      * @throws TooManyEntriesFoundException 
      * @throws NoEntryFoundException 
-     * @see #getAccountByID(String)
-     * @see #getAccountByName(String)
      */
     @Override
-    public KMyMoneyAccount getAccountByIDorNameEx(final KMMComplAcctID id, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
-	return acctMgr.getAccountByIDorNameEx(id, name);
+    public KMyMoneyAccount getAccountByIDorNameEx(final KMMComplAcctID acctID, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
+	return acctMgr.getAccountByIDorNameEx(acctID, name);
     }
 
     @Override
@@ -390,9 +380,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
     // ---------------------------------------------------------------
 
-    /**
-     * @see KMyMoneyFile#getTransactionByID(java.lang.String)
-     */
     @Override
     public KMyMoneyTransaction getTransactionByID(final KMMTrxID trxID) {
 	return trxMgr.getTransactionByID(trxID);
@@ -408,9 +395,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     
     // ---------------------------------------------------------------
     
-    /**
-     * @see KMyMoneyFile#getTransactionByID(java.lang.String)
-     */
     @Override
     public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSpltID spltID) {
 	return trxMgr.getTransactionSplitByID(spltID);
@@ -424,8 +408,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     // ---------------------------------------------------------------
 
     @Override
-    public KMyMoneyPayee getPayeeByID(final KMMPyeID id) {
-	return pyeMgr.getPayeeByID(id);
+    public KMyMoneyPayee getPayeeByID(final KMMPyeID pyeID) {
+	return pyeMgr.getPayeeByID(pyeID);
     }
 
     @Override
