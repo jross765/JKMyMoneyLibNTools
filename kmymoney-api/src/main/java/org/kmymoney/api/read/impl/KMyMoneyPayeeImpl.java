@@ -13,94 +13,92 @@ import org.slf4j.LoggerFactory;
 
 public class KMyMoneyPayeeImpl implements KMyMoneyPayee {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyPayeeImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyPayeeImpl.class);
 
-    // ---------------------------------------------------------------
+	// ---------------------------------------------------------------
 
-    /**
-     * the JWSDP-object we are facading.
-     */
-    private PAYEE jwsdpPeer;
+	/**
+	 * the JWSDP-object we are facading.
+	 */
+	private PAYEE jwsdpPeer;
 
-    // ---------------------------------------------------------------
+	// ---------------------------------------------------------------
 
-    @SuppressWarnings("exports")
-    public KMyMoneyPayeeImpl(
-	    final PAYEE peer) {
+	@SuppressWarnings("exports")
+	public KMyMoneyPayeeImpl(final PAYEE peer) {
+		jwsdpPeer = peer;
+	}
 
-	jwsdpPeer = peer;
-    }
+	// ---------------------------------------------------------------
 
-    // ---------------------------------------------------------------
+	@Override
+	public KMMPyeID getID() {
+		return new KMMPyeID(jwsdpPeer.getId());
+	}
 
-    @Override
-    public KMMPyeID getID() {
-	return new KMMPyeID(jwsdpPeer.getId());
-    }
+	@Override
+	public String getName() {
+		return jwsdpPeer.getName();
+	}
 
-    @Override
-    public String getName() {
-	return jwsdpPeer.getName();
-    }
+	@Override
+	public KMMComplAcctID getDefaultAccountID() {
+		if ( jwsdpPeer.getDefaultaccountid() == null )
+			return null;
 
-    @Override
-    public KMMComplAcctID getDefaultAccountID() {
-	if ( jwsdpPeer.getDefaultaccountid() == null )
-	    return null;
-	
-	return new KMMComplAcctID(jwsdpPeer.getDefaultaccountid());
-    }
-    
-    @Override
-    public KMMAddress getAddress() {
-	if ( jwsdpPeer.getADDRESS() == null )
-	    return null;
-	
-	return new KMMAddressImpl(jwsdpPeer.getADDRESS());
-    }
+		return new KMMComplAcctID(jwsdpPeer.getDefaultaccountid());
+	}
 
-    @Override
-    public String getEmail() {
-	return jwsdpPeer.getEmail();
-    }
-    
-    @Override
-    public String getReference() {
-	return jwsdpPeer.getReference();
-    }
+	@Override
+	public KMMAddress getAddress() {
+		if ( jwsdpPeer.getADDRESS() == null )
+			return null;
 
-    @Override
-    public String getNotes() {
-	return jwsdpPeer.getNotes();
-    }
-    
-    // ---------------------------------------------------------------
+		return new KMMAddressImpl(jwsdpPeer.getADDRESS());
+	}
 
-    @Override
-    public BigInteger getMatchingEnabled() {
-	return jwsdpPeer.getMatchingenabled();
-    }
+	@Override
+	public String getEmail() {
+		return jwsdpPeer.getEmail();
+	}
 
-    @Override
-    public String getMatchKey() {
-	return jwsdpPeer.getMatchkey();
-    }
+	@Override
+	public String getReference() {
+		return jwsdpPeer.getReference();
+	}
 
-    @Override
-    public BigInteger getUsingMatchKey() {
-	return jwsdpPeer.getUsingmatchkey();
-    }
+	@Override
+	public String getNotes() {
+		return jwsdpPeer.getNotes();
+	}
 
-    @Override
-    public BigInteger getMatchIgnoreCase() {
-	return jwsdpPeer.getMatchignorecase();
-    }
+	// ---------------------------------------------------------------
 
-    // ---------------------------------------------------------------
+	@Override
+	public BigInteger getMatchingEnabled() {
+		return jwsdpPeer.getMatchingenabled();
+	}
 
-    @Override
-    public String toString() {
-	return "KMyMoneyPayeeImpl [id=" + getID() + ", name='" + getName() + "']";
-    }
+	@Override
+	public String getMatchKey() {
+		return jwsdpPeer.getMatchkey();
+	}
+
+	@Override
+	public BigInteger getUsingMatchKey() {
+		return jwsdpPeer.getUsingmatchkey();
+	}
+
+	@Override
+	public BigInteger getMatchIgnoreCase() {
+		return jwsdpPeer.getMatchignorecase();
+	}
+
+	// ---------------------------------------------------------------
+
+	@Override
+	public String toString() {
+		return "KMyMoneyPayeeImpl [id=" + getID() + ", name='" + getName() + "']";
+	}
 
 }

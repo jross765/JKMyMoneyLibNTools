@@ -26,45 +26,45 @@ public interface KMyMoneyPayee {
     /**
      * @return
      */
-    public KMMComplAcctID getDefaultAccountID();
+    KMMComplAcctID getDefaultAccountID();
     
     /**
      * @return
      */
-    public KMMAddress getAddress();
+    KMMAddress getAddress();
 
     /**
      * @return
      */
-    public String getEmail();
+    String getEmail();
     
     /**
      * @return
      */
-    public String getReference();
+    String getReference();
     
     /**
      * @return
      */
-    public String getNotes();
+    String getNotes();
     
     // ---------------------------------------------------------------
 
     /**
      * @return
      */
-    public BigInteger getMatchingEnabled();
+    BigInteger getMatchingEnabled();
 
     /**
      * @return
      */
-    public String getMatchKey();
+    String getMatchKey();
 
     /**
      * @return
      */
-    public BigInteger getUsingMatchKey();
+    BigInteger getUsingMatchKey();
 
-    public BigInteger getMatchIgnoreCase();
+    BigInteger getMatchIgnoreCase();
 
 }

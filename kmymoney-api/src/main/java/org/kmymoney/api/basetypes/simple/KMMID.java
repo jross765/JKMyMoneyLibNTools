@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Abstract base class defining a technical entry ID for all KMyMoney entities
- * except prices.
+ * except currencies and prices.
  * (essentially a counter with an entity-specific prefix letter, 
  * primarily defined for type safety).
  */

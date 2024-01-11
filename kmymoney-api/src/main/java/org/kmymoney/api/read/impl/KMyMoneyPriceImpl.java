@@ -210,7 +210,7 @@ public class KMyMoneyPriceImpl implements KMyMoneyPrice {
     
     @Override
     public String toString() {
-	String result = "KMMPriceImpl [";
+	String result = "KMyMoneyPriceImpl [";
 	
 	try {
 	    result += "id='" + getID() + "'";
