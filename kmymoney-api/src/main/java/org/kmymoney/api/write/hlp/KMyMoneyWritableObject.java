@@ -1,6 +1,5 @@
 package org.kmymoney.api.write.hlp;
 
-import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 
 /**
@@ -11,12 +10,6 @@ public interface KMyMoneyWritableObject {
 	/**
 	 * @return the File we belong to.
 	 */
-	KMyMoneyWritableFile getWritableGnucashFile();
+	KMyMoneyWritableFile getWritableKMyMoneyFile();
 
-	/**
-	 * @param name  the name of the user-defined attribute
-	 * @param value the value or null if not set
-	 * @see {@link KMyMoneyObject#getUserDefinedAttribute(String)}
-	 */
-	void setUserDefinedAttribute(String name, String value);
 }

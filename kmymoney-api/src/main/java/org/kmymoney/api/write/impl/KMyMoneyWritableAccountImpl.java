@@ -10,10 +10,17 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.naming.spi.ObjectFactory;
+
+import org.kmymoney.api.basetypes.simple.KMMAcctID;
+import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
+import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
+import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
+import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,80 +69,65 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	}
 
 	/**
-	 * @see KMyMoneyAccountImpl#KMyMoneyAccountImpl(GncAccount, KMyMoneyFile)
+	 * @param jwsdpPeer 
+	 * @param file 
 	 */
-	public KMyMoneyWritableAccountImpl(final GncAccount jwsdpPeer, final KMyMoneyFileImpl file) {
+	@SuppressWarnings("exports")
+	public KMyMoneyWritableAccountImpl(final ACCOUNT jwsdpPeer, final KMyMoneyFileImpl file) {
 		super(jwsdpPeer, file);
 	}
 
 	/**
-	 * @see KMyMoneyAccountImpl#KMyMoneyAccountImpl(GncAccount, KMyMoneyFile) )
+	 * @param file 
 	 */
 	public KMyMoneyWritableAccountImpl(final KMyMoneyWritableFileImpl file) {
-		super(createAccount(file, file.createGUID()), file);
+		super(createAccount_int(file, file.getNewAccountID()), file);
 	}
 
 	/**
 	 * @param file
 	 * @return
 	 */
-	private static GncAccount createAccount(final KMyMoneyWritableFileImpl file, final String accountguid) {
-		ObjectFactory factory = file.getObjectFactory();
+	private static ACCOUNT createAccount_int(
+			final KMyMoneyWritableFileImpl file, 
+			final KMMAcctID newID) {
+		if ( newID == null ) {
+			throw new IllegalArgumentException("null ID given");
+		}
 
-		GncAccount account = factory.createGncAccount();
+		if ( ! newID.isSet() ) {
+			throw new IllegalArgumentException("empty ID given");
+		}
+
+		ACCOUNT jwsdpAcct = file.createAccountType();
 		// left unset account.setActCode();
-		account.setActCommodityScu(100); // x,yz
-		account.setActDescription("no description yet");
+		jwsdpAcct.setActCommodityScu(100); // x,yz
+		jwsdpAcct.setActDescription("no description yet");
 		// left unset account.setActLots();
-		account.setActName("UNNAMED");
+		jwsdpAcct.setActName("UNNAMED");
 		// left unset account.setActNonStandardScu();
 		// left unset account.setActParent())
-		account.setActType(KMyMoneyAccount.TYPE_BANK);
+		jwsdpAcct.setActType(KMyMoneyAccount.TYPE_BANK);
 
-		account.setVersion(Const.XML_FORMAT_VERSION);
+		jwsdpAcct.setVersion(Const.XML_FORMAT_VERSION);
 
 		{
 			GncAccount.ActCommodity currency = factory.createGncAccountActCommodity();
 			currency.setCmdtyId(file.getDefaultCurrencyID());
 			currency.setCmdtySpace(CurrencyNameSpace.NAMESPACE_CURRENCY);
-			account.setActCommodity(currency);
+			jwsdpAcct.setActCommodity(currency);
 		}
 
 		{
 			GncAccount.ActId guid = factory.createGncAccountActId();
 			guid.setType(Const.XML_DATA_TYPE_GUID);
 			guid.setValue(accountguid);
-			account.setActId(guid);
+			jwsdpAcct.setActId(guid);
 		}
 
-		{
-			SlotsType slots = factory.createSlotsType();
-			account.setActSlots(slots);
-		}
-
-		{
-			Slot slot = factory.createSlot();
-			slot.setSlotKey("placeholder");
-			SlotValue slottype = factory.createSlotValue();
-			slottype.setType("string");
-			slottype.getContent().add("false");
-			slot.setSlotValue(slottype);
-			account.getActSlots().getSlot().add(slot);
-		}
-
-		{
-			Slot slot = factory.createSlot();
-			slot.setSlotKey("notes");
-			SlotValue slottype = factory.createSlotValue();
-			slottype.setType("string");
-			slottype.getContent().add("");
-			slot.setSlotValue(slottype);
-			account.getActSlots().getSlot().add(slot);
-		}
-
-		file.getRootElement().getGncBook().getBookElements().add(account);
+		file.getRootElement().getGncBook().getBookElements().add(jwsdpAcct);
 		file.setModified(true);
-		return account;
+		return jwsdpAcct;
 	}
 
 	/**
@@ -150,7 +142,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalStateException("cannot remove account while it contains child-accounts!");
 		}
 
-		getWritableKMyMoneyFile().getRootElement().getGncBook().getBookElements().remove(getJwsdpPeer());
+		getWritableKMyMoneyFile().getRootElement().getGncBook().getBookElements().remove(jwsdpPeer);
 		getWritableKMyMoneyFile().removeAccount(this);
 	}
 
@@ -201,11 +193,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("null or empty name given!");
 		}
 
-		String oldName = getJwsdpPeer().getActName();
+		String oldName = jwsdpPeer.getName();
 		if ( oldName == name ) {
 			return; // nothing has changed
 		}
-		this.getJwsdpPeer().setActName(name);
+		this.jwsdpPeer.setName(name);
 		setIsModified();
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
@@ -222,11 +214,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("null or empty code given!");
 		}
 
-		String oldCode = getJwsdpPeer().getActCode();
+		String oldCode = jwsdpPeer.getActCode();
 		if ( oldCode == code ) {
 			return; // nothing has changed
 		}
-		this.getJwsdpPeer().setActCode(code);
+		this.jwsdpPeer.setActCode(code);
 		setIsModified();
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
@@ -245,11 +237,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("null or empty currencyID given!");
 		}
 
-		String oldCurrencyId = getJwsdpPeer().getActCommodity().getCmdtyId();
+		String oldCurrencyId = jwsdpPeer.getActCommodity().getCmdtyId();
 		if ( oldCurrencyId == currencyID ) {
 			return; // nothing has changed
 		}
-		this.getJwsdpPeer().getActCommodity().setCmdtyId(currencyID);
+		this.jwsdpPeer.getActCommodity().setCmdtyId(currencyID);
 		setIsModified();
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
@@ -267,11 +259,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("null or empty currencyNameSpace given!");
 		}
 
-		String oldCurrNameSpace = getJwsdpPeer().getActCommodity().getCmdtySpace();
+		String oldCurrNameSpace = jwsdpPeer.getActCommodity().getCmdtySpace();
 		if ( oldCurrNameSpace == currNameSpace ) {
 			return; // nothing has changed
 		}
-		this.getJwsdpPeer().getActCommodity().setCmdtySpace(currNameSpace);
+		this.jwsdpPeer.getActCommodity().setCmdtySpace(currNameSpace);
 		setIsModified();
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
@@ -377,11 +369,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("null or empty description given!");
 		}
 
-		String oldDescr = getJwsdpPeer().getActDescription();
+		String oldDescr = jwsdpPeer.getActDescription();
 		if ( oldDescr == descr ) {
 			return; // nothing has changed
 		}
-		getJwsdpPeer().setActDescription(descr);
+		jwsdpPeer.setActDescription(descr);
 		setIsModified();
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
@@ -398,11 +390,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("null type given!");
 		}
 
-		String oldType = getJwsdpPeer().getActDescription();
+		String oldType = jwsdpPeer.getActDescription();
 		if ( oldType == type ) {
 			return; // nothing has changed
 		}
-		getJwsdpPeer().setActType(type);
+		jwsdpPeer.setActType(type);
 		setIsModified();
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
@@ -428,7 +420,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	public void setParentAccount(final KMyMoneyAccount prntAcct) {
 
 		if ( prntAcct == null ) {
-			this.getJwsdpPeer().setActParent(null);
+			this.jwsdpPeer.setActParent(null);
 			return;
 		}
 
@@ -442,13 +434,13 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		}
 
 		KMyMoneyAccount oldPrntAcct = null;
-		GncAccount.ActParent parent = getJwsdpPeer().getActParent();
+		GncAccount.ActParent parent = jwsdpPeer.getActParent();
 		if ( parent == null ) {
 			parent = ((KMyMoneyWritableFileImpl) getWritableKMyMoneyFile()).getObjectFactory()
 					.createGncAccountActParent();
 			parent.setType(Const.XML_DATA_TYPE_GUID);
 			parent.setValue(prntAcct.getId());
-			getJwsdpPeer().setActParent(parent);
+			jwsdpPeer.setActParent(parent);
 
 		} else {
 			oldPrntAcct = getParentAccount();

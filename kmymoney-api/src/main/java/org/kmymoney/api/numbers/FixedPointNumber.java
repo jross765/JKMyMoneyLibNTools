@@ -423,7 +423,7 @@ public class FixedPointNumber extends BigDecimalWrapper implements Cloneable {
 		return rightOfComma;
 	}
 
-	public String toGnucashString() {
+	public String toKMyMoneyString() {
 		StringBuffer sb = new StringBuffer();
 
 		if ( value.scale() > 5 ) {

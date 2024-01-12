@@ -35,7 +35,7 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     /**
      * the JWSDP-object we are facading.
      */
-    private SPLIT jwsdpPeer;
+    protected SPLIT jwsdpPeer;
 
     /**
      * the transaction this split belongs to.

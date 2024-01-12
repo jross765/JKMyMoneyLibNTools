@@ -8,6 +8,10 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import javax.naming.spi.ObjectFactory;
+
+import org.kmymoney.api.basetypes.simple.KMMTrxID;
+import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.SplitNotFoundException;
@@ -17,6 +21,7 @@ import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
+import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +49,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 * @param jwsdpPeer the JWSDP-object we are facading.
 	 */
 	@SuppressWarnings("exports")
-	public KMyMoneyWritableTransactionImpl(final GncTransaction jwsdpPeer, final KMyMoneyFileImpl file) {
+	public KMyMoneyWritableTransactionImpl(final TRANSACTION jwsdpPeer, final KMyMoneyFileImpl file) {
 		super(jwsdpPeer, file);
 
 		// repair a broken file
@@ -71,18 +76,18 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 * @param file the file we belong to
 	 */
 	public KMyMoneyWritableTransactionImpl(final KMyMoneyWritableFileImpl file) {
-		super(createTransaction(file, file.createGUID()), file);
+		super(createTransaction_int(file, file.getNewTransactionID()), file);
 		file.addTransaction(this);
 	}
 
 	public KMyMoneyWritableTransactionImpl(final KMyMoneyTransaction trx) {
-		super(trx.getJwsdpPeer(), trx.getKMyMoneyFile());
+		super(trx.jwsdpPeer, trx.getKMyMoneyFile());
 
 		// ::TODO
 		System.err.println("NOT IMPLEMENTED YET");
 //	    for ( GnucashTransactionSplit splt : trx.getSplits() ) 
 //	    {
-//		addSplit(new GnucashTransactionSplitImpl(splt.getJwsdpPeer(), trx));
+//		addSplit(new GnucashTransactionSplitImpl(splt.jwsdpPeer, trx));
 //	    }
 	}
 
@@ -137,54 +142,64 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 * Creates a new Transaction and add's it to the given gnucash-file Don't modify
 	 * the ID of the new transaction!
 	 */
-	protected static GncTransaction createTransaction(final KMyMoneyWritableFileImpl file, final String newId) {
+	protected static TRANSACTION createTransaction_int(
+			final KMyMoneyWritableFileImpl file, 
+			final KMMTrxID newID) {
+
+		if ( newID == null ) {
+			throw new IllegalArgumentException("null ID given");
+		}
+
+		if ( ! newID.isSet() ) {
+			throw new IllegalArgumentException("empty ID given");
+		}
 
 		ObjectFactory factory = file.getObjectFactory();
-		GncTransaction transaction = file.createGncTransaction();
+		TRANSACTION jwsdpTrx = file.createTransactionType();
 
 		{
 			GncTransaction.TrnId id = factory.createGncTransactionTrnId();
 			id.setType(Const.XML_DATA_TYPE_GUID);
-			id.setValue(newId);
-			transaction.setTrnId(id);
+			id.setValue(newID);
+			jwsdpTrx.setTrnId(id);
 		}
 
 		{
 			GncTransaction.TrnDateEntered dateEntered = factory.createGncTransactionTrnDateEntered();
 			dateEntered.setTsDate(DATE_ENTERED_FORMAT.format(ZonedDateTime.now()));
-			transaction.setTrnDateEntered(dateEntered);
+			jwsdpTrx.setTrnDateEntered(dateEntered);
 		}
 
 		{
 			GncTransaction.TrnDatePosted datePosted = factory.createGncTransactionTrnDatePosted();
 			datePosted.setTsDate(DATE_ENTERED_FORMAT.format(ZonedDateTime.now()));
-			transaction.setTrnDatePosted(datePosted);
+			jwsdpTrx.setTrnDatePosted(datePosted);
 		}
 
 		{
 			GncTransaction.TrnCurrency currency = factory.createGncTransactionTrnCurrency();
 			currency.setCmdtyId(file.getDefaultCurrencyID());
 			currency.setCmdtySpace(CurrencyNameSpace.NAMESPACE_CURRENCY);
-			transaction.setTrnCurrency(currency);
+			jwsdpTrx.setTrnCurrency(currency);
 		}
 
 		{
 			GncTransaction.TrnSplits splits = factory.createGncTransactionTrnSplits();
-			transaction.setTrnSplits(splits);
+			jwsdpTrx.setTrnSplits(splits);
 		}
 
-		transaction.setVersion(Const.XML_FORMAT_VERSION);
-		transaction.setTrnDescription("-");
+		jwsdpTrx.setVersion(Const.XML_FORMAT_VERSION);
+		jwsdpTrx.setTrnDescription("-");
 
-		return transaction;
+		return jwsdpTrx;
 	}
 
 	/**
 	 * @param impl the split to remove from this transaction
 	 */
 	public void remove(final KMyMoneyWritableTransactionSplit impl) {
-		getJwsdpPeer().getTrnSplits().getTrnSplit()
-				.remove(((KMyMoneyWritableTransactionSplitImpl) impl).getJwsdpPeer());
+		jwsdpPeer.getSPLITS().getSPLIT()
+				.remove(((KMyMoneyWritableTransactionSplitImpl) impl).jwsdpPeer);
 		getWritingFile().setModified(true);
 		if ( mySplits != null ) {
 			mySplits.remove(impl);
@@ -274,23 +289,15 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 * @see {@link KMyMoneyTransaction#getCurrencyID()}
 	 */
 	public void setCurrencyID(final String id) {
-		this.getJwsdpPeer().getTrnCurrency().setCmdtyId(id);
-	}
-
-	/**
-	 * @param id the new namespace
-	 * @see {@link KMyMoneyTransaction#getCurrencyNameSpace()}
-	 */
-	public void setCurrencyNameSpace(final String id) {
-		this.getJwsdpPeer().getTrnCurrency().setCmdtySpace(id);
+		this.jwsdpPeer.setCommodity(id);
 	}
 
 	/**
 	 * @see KMyMoneyWritableTransaction#setDateEntered(LocalDateTime)
 	 */
-	public void setDateEntered(final ZonedDateTime dateEntered) {
+	public void setDateEntered(final LocalDate dateEntered) {
 		this.entryDate = dateEntered;
-		getJwsdpPeer().getTrnDateEntered().setTsDate(DATE_ENTERED_FORMAT.format(dateEntered));
+		jwsdpPeer.setEntrydate(DATE_ENTERED_FORMAT.format(dateEntered));
 		getWritingFile().setModified(true);
 	}
 
@@ -299,7 +306,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 */
 	public void setDatePosted(final LocalDate datePosted) {
 		this.postDate = ZonedDateTime.of(datePosted, LocalTime.MIN, ZoneId.systemDefault());
-		getJwsdpPeer().getTrnDatePosted().setTsDate(DATE_ENTERED_FORMAT.format(this.postDate));
+		jwsdpPeer.setPostdate(DATE_ENTERED_FORMAT.format(this.postDate));
 		getWritingFile().setModified(true);
 	}
 
@@ -312,8 +319,8 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 					"null description given! Please use the empty string instead of null for an empty description");
 		}
 
-		String old = getJwsdpPeer().getTrnDescription();
-		getJwsdpPeer().setTrnDescription(desc);
+		String old = jwsdpPeer.getTrnDescription();
+		jwsdpPeer.setTrnDescription(desc);
 		getWritingFile().setModified(true);
 
 		if ( old == null || !old.equals(desc) ) {
@@ -333,8 +340,8 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 							+ "description");
 		}
 
-		String old = getJwsdpPeer().getTrnNum();
-		getJwsdpPeer().setTrnNum(tnum);
+		String old = jwsdpPeer.getTrnNum();
+		jwsdpPeer.setTrnNum(tnum);
 		getWritingFile().setModified(true);
 
 		if ( old == null || !old.equals(tnum) ) {
@@ -342,11 +349,6 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 				getPropertyChangeSupport().firePropertyChange("transactionNumber", old, tnum);
 			}
 		}
-	}
-
-	@Override
-	public void setDateEntered(LocalDateTime dateEntered) {
-		setDateEntered(dateEntered.atZone(ZoneId.systemDefault()));
 	}
 
 }

@@ -19,7 +19,20 @@ import java.util.List;
 import java.util.TreeSet;
 import java.util.zip.GZIPOutputStream;
 
+import org.kmymoney.api.basetypes.simple.KMMAcctID;
+import org.kmymoney.api.basetypes.simple.KMMInstID;
+import org.kmymoney.api.basetypes.simple.KMMPyeID;
+import org.kmymoney.api.basetypes.simple.KMMSecID;
+import org.kmymoney.api.basetypes.simple.KMMSpltID;
+import org.kmymoney.api.basetypes.simple.KMMTrxID;
+import org.kmymoney.api.generated.ACCOUNT;
+import org.kmymoney.api.generated.CURRENCY;
+import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.PAYEE;
+import org.kmymoney.api.generated.PRICE;
+import org.kmymoney.api.generated.SECURITY;
+import org.kmymoney.api.generated.SPLIT;
+import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
@@ -31,6 +44,7 @@ import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
+import org.kmymoney.api.write.hlp.IDManager;
 import org.kmymoney.api.write.KMyMoneyWritablePayee;
 
 import jakarta.xml.bind.JAXBContext;
@@ -42,7 +56,8 @@ import jakarta.xml.bind.Marshaller;
  * @see KMyMoneyFileImpl
  */
 public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl 
-                                      implements KMyMoneyWritableFile 
+                                      implements KMyMoneyWritableFile,
+                                                 IDManager
 {
 	// ::MAGIC
 	private static final int HEX = 16;
@@ -98,14 +113,6 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * Keep the count-data up to date. The count-data is re-calculated on the fly
 	 * before writing but we like to keep our internal model up-to-date just to be
 	 * defensive. <gnc:count-data cd:type="commodity">2</gnc:count-data>
-	 * <gnc:count-data cd:type="account">394</gnc:count-data>
-	 * <gnc:count-data cd:type="transaction">1576</gnc:count-data>
-	 * <gnc:count-data cd:type="schedxaction">4</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncCustomer">2</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncJob">2</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncTaxTable">2</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncInvoice">5</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncEntry">18</gnc:count-data>
 	 *
 	 * @param type the type to set it for
 	 */
@@ -130,14 +137,6 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * Keep the count-data up to date. The count-data is re-calculated on the fly
 	 * before writing but we like to keep our internal model up-to-date just to be
 	 * defensive. <gnc:count-data cd:type="commodity">2</gnc:count-data>
-	 * <gnc:count-data cd:type="account">394</gnc:count-data>
-	 * <gnc:count-data cd:type="transaction">1576</gnc:count-data>
-	 * <gnc:count-data cd:type="schedxaction">4</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncCustomer">2</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncJob">2</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncTaxTable">2</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncInvoice">5</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncEntry">18</gnc:count-data>
 	 *
 	 * @param type the type to set it for
 	 */
@@ -160,15 +159,6 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 	/**
 	 * keep the count-data up to date.
-	 * <gnc:count-data cd:type="commodity">2</gnc:count-data>
-	 * <gnc:count-data cd:type="account">394</gnc:count-data>
-	 * <gnc:count-data cd:type="transaction">1576</gnc:count-data>
-	 * <gnc:count-data cd:type="schedxaction">4</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncCustomer">2</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncJob">2</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncTaxTable">2</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncInvoice">5</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncEntry">18</gnc:count-data>
 	 *
 	 * @param type  the type to set it for
 	 * @param count the value
@@ -210,28 +200,6 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		setModified(true);
 		transactionID2transaction.put(impl.getId(), impl);
 
-	}
-
-	/**
-	 * @return all TaxTables defined in the book
-	 * @see {@link KMMTaxTable}
-	 */
-	@Override
-	public Collection<KMMTaxTable> getTaxTables() {
-		if ( taxTablesById == null ) {
-
-			taxTablesById = new HashMap<String, KMMTaxTable>();
-			List<Object> bookElements = this.getRootElement().getGncBook().getBookElements();
-			for ( Object bookElement : bookElements ) {
-				if ( bookElement instanceof GncV2.GncBook.GncGncTaxTable ) {
-					GncV2.GncBook.GncGncTaxTable jwsdpPeer = (GncV2.GncBook.GncGncTaxTable) bookElement;
-					KMMTaxTableImpl gnucashTaxTable = new KMMTaxTableImpl(jwsdpPeer, this);
-					taxTablesById.put(gnucashTaxTable.getId(), gnucashTaxTable);
-				}
-			}
-		}
-
-		return taxTablesById.values();
 	}
 
 	/**
@@ -300,83 +268,34 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * Calculate and set the correct valued for all the following count-data.<br/>
 	 * Also check the that only valid elements are in the book-element and that they
 	 * have the correct order.
-	 * <p>
-	 * <gnc:count-data cd:type="commodity">2</gnc:count-data>
-	 * <gnc:count-data cd:type="account">394</gnc:count-data>
-	 * <gnc:count-data cd:type="transaction">1576</gnc:count-data>
-	 * <gnc:count-data cd:type="schedxaction">4</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncCustomer">2</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncJob">2</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncTaxTable">2</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncInvoice">5</gnc:count-data>
-	 * <gnc:count-data cd:type="gnc:GncEntry">18</gnc:count-data>
 	 */
 	private void checkAllCountData() {
 
-		int cntCommodity = 0;
 		int cntAccount = 0;
 		int cntTransaction = 0;
-		int cntCustomer = 0;
-		int cntVendor = 0;
-		int cntJob = 0;
-		int cntTaxTable = 0;
-		int cntInvoice = 0;
-		int cntIncEntry = 0;
+		int cntPayee = 0;
+		int cntSecurity = 0;
 
-		/**
-		 * <p>
-		 * Objects of the following type(s) are allowed in the list
-		 * {@link GncTemplateTransactions} {@link GncGncInvoice} {@link GncGncEntry}
-		 * {@link GncGncJob} {@link GncGncTaxTable} {@link GncCommodity}
-		 * {@link GncGncCustomer} {@link GncSchedxaction} {@link GncBudget}
-		 * {@link GncAccount} {@link GncPricedb} {@link GncTransaction}
-		 */
-		List<Object> bookElements = getRootElement().getGncBook().getBookElements();
-		for ( Object element : bookElements ) {
-			if ( element instanceof GncV2.GncBook.GncCommodity ) {
-				cntCommodity++;
-			} else if ( element instanceof GncAccount ) {
-				cntAccount++;
-			} else if ( element instanceof GncTransaction ) {
-				cntTransaction++;
-			} else if ( element instanceof GncV2.GncBook.GncGncCustomer ) {
-				cntCustomer++;
-			} else if ( element instanceof GncV2.GncBook.GncGncVendor ) {
-				cntVendor++;
-			} else if ( element instanceof GncV2.GncBook.GncGncJob ) {
-				cntJob++;
-			} else if ( element instanceof GncV2.GncBook.GncGncTaxTable ) {
-				cntTaxTable++;
-			} else if ( element instanceof GncV2.GncBook.GncGncInvoice ) {
-				cntInvoice++;
-			} else if ( element instanceof GncV2.GncBook.GncGncEntry ) {
-				cntIncEntry++;
-			} else if ( element instanceof GncV2.GncBook.GncTemplateTransactions ) {
-				// ::TODO
-			} else if ( element instanceof GncV2.GncBook.GncSchedxaction ) {
-				// ::TODO
-			} else if ( element instanceof GncBudget ) {
-				// ::TODO
-			} else if ( element instanceof GncV2.GncBook.GncPricedb ) {
-				// ::TODO
-			} else if ( element instanceof GncV2.GncBook.GncGncEmployee ) {
-				// ::TODO
-			} else if ( element instanceof GncV2.GncBook.GncGncBillTerm ) {
-				// ::TODO
-			} else {
-				throw new IllegalStateException("Unecpected element in GNC:Book found! <" + element.toString() + ">");
-			}
+		for ( ACCOUNT acct : getRootElement().getACCOUNTS().getACCOUNT() ) {
+			cntAccount++;
+		}
+		
+		for ( TRANSACTION acct : getRootElement().getTRANSACTIONS().getTRANSACTION() ) {
+			cntTransaction++;
+		}
+		
+		for ( PAYEE acct : getRootElement().getPAYEES().getPAYEE() ) {
+			cntPayee++;
+		}
+		
+		for ( SECURITY acct : getRootElement().getSECURITIES().getSECURITY() ) {
+			cntSecurity++;
 		}
 
-		setCountDataFor("commodity", cntCommodity);
 		setCountDataFor("account", cntAccount);
 		setCountDataFor("transaction", cntTransaction);
-		setCountDataFor("gnc:GncCustomer", cntCustomer);
-		setCountDataFor("gnc:GncVendor", cntVendor);
-		setCountDataFor("gnc:GncJob", cntJob);
-		setCountDataFor("gnc:GncTaxTable", cntTaxTable);
-		setCountDataFor("gnc:GncInvoice", cntInvoice);
-		setCountDataFor("gnc:GncEntry", cntIncEntry);
+		setCountDataFor("gnc:GncVendor", cntPayee);
+		setCountDataFor("gnc:GncVendor", cntSecurity);
 
 		// make sure the correct sort-order of the entity-types is obeyed in writing.
 		// (we do not enforce this in the xml-schema to allow for reading out of order
@@ -390,72 +309,61 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 */
 	@SuppressWarnings("exports")
 	@Override
-	public GncV2 getRootElement() {
+	public KMYMONEYFILE getRootElement() {
 		return super.getRootElement();
 	}
+	
+	// ---------------------------------------------------------------
 
 	/**
-	 * create a GUID for a new element. (guids are globally unique and not tied to a
-	 * specific kind of entity)
-	 * 
-	 * ::TODO: Change implementation: use Apache commons UUID class.
-	 *
-	 * @return the new gnucash-guid
 	 */
-	public String createGUID() {
-
-		int len = "74e492edf60d6a28b6c1d01cc410c058".length();
-
-		StringBuffer sb = new StringBuffer(Long.toHexString(System.currentTimeMillis()));
-
-		while ( sb.length() < len ) {
-			sb.append(Integer.toHexString((int) (Math.random() * HEX)).charAt(0));
-		}
-
-		return sb.toString();
+	protected ACCOUNT createAccountType() {
+		ACCOUNT retval = getObjectFactory().createACCOUNT();
+		incrementCountDataFor("account");
+		return retval;
 	}
 
 	/**
 	 */
-	protected GncTransaction createGncTransaction() {
-		GncTransaction retval = getObjectFactory().createGncTransaction();
+	protected TRANSACTION createTransactionType() {
+		TRANSACTION retval = getObjectFactory().createTRANSACTION();
 		incrementCountDataFor("transaction");
 		return retval;
 	}
 
 	/**
 	 */
-	protected GncTransaction.TrnSplits.TrnSplit createGncTransactionTypeTrnSplitsTypeTrnSplitType() {
-		GncTransaction.TrnSplits.TrnSplit retval = getObjectFactory().createGncTransactionTrnSplitsTrnSplit();
+	protected SPLIT createSplitType() {
+		SPLIT retval = getObjectFactory().createSPLIT();
 		// incrementCountDataFor();
 		return retval;
 	}
 
 	/**
 	 */
-	protected GncV2.GncBook.GncGncVendor createGncGncPayeeType() {
-		GncV2.GncBook.GncGncVendor retval = getObjectFactory().createGncV2GncBookGncGncVendor();
+	protected PAYEE createPayeeType() {
+		PAYEE retval = getObjectFactory().createPAYEE();
 		incrementCountDataFor("gnc:GncVendor");
 		return retval;
 	}
-
+	
 	/**
-	 * @return the jaxb-job
 	 */
-	@SuppressWarnings("exports")
-	public GncV2.GncBook.GncGncJob createGncGncJobType() {
-		GncV2.GncBook.GncGncJob retval = getObjectFactory().createGncV2GncBookGncGncJob();
-		incrementCountDataFor("gnc:GncJob");
+	protected SECURITY createSecurityType() {
+		SECURITY retval = getObjectFactory().createSECURITY();
+		incrementCountDataFor("gnc:GncVendor");
 		return retval;
 	}
-
+	
 	/**
-	 * @see KMyMoneyFile#getCustomerByID(java.lang.String)
 	 */
-	@Override
-	public KMyMoneyWritableCustomer getCustomerByID(final String arg0) {
-		return (KMyMoneyWritableCustomer) super.getCustomerByID(arg0);
+	protected PRICE createPriceType() {
+		PRICE retval = getObjectFactory().createPRICE();
+		// incrementCountDataFor("price");
+		return retval;
 	}
+	
+	// ---------------------------------------------------------------
 
 	/**
 	 * This overridden method creates the writable version of the returned object.
@@ -463,7 +371,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * @see KMyMoneyFileImpl#createAccount(GncAccount)
 	 */
 	@Override
-	protected KMyMoneyAccount createAccount(final GncAccount jwsdpAccount) {
+	protected KMyMoneyAccount createAccount(final ACCOUNT jwsdpAccount) {
 		KMyMoneyAccount account = new KMyMoneyWritableAccountImpl(jwsdpAccount, this);
 		return account;
 	}
@@ -487,7 +395,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * @see KMyMoneyFileImpl#createTransaction(GncTransaction)
 	 */
 	@Override
-	protected KMyMoneyTransactionImpl createTransaction(final GncTransaction jwsdpTrx) {
+	protected KMyMoneyTransactionImpl createTransaction(final TRANSACTION jwsdpTrx) {
 		KMyMoneyTransactionImpl account = new KMyMoneyWritableTransactionImpl(jwsdpTrx, this);
 		return account;
 	}
@@ -496,8 +404,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * @see KMyMoneyWritableFile#getTransactionByID(java.lang.String)
 	 */
 	@Override
-	public KMyMoneyWritableTransaction getTransactionByID(final String id) {
-		return (KMyMoneyWritableTransaction) super.getTransactionByID(id);
+	public KMyMoneyWritableTransaction getTransactionByID(final KMMTrxID trxID) {
+		return (KMyMoneyWritableTransaction) super.getTransactionByID(trxID);
 	}
 
 	/**
@@ -537,8 +445,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * @see KMyMoneyFile#getAccountByID(String)
 	 */
 	@Override
-	public KMyMoneyWritableAccount getAccountByID(final String id) {
-		return (KMyMoneyWritableAccount) super.getAccountByID(id);
+	public KMyMoneyWritableAccount getAccountByID(final KMMAcctID acctid) {
+		return (KMyMoneyWritableAccount) super.getAccountByID(acctid);
 	}
 
 	/**
@@ -593,7 +501,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		}
 		if ( getCurrencyTable().getConversionFactor(pCmdtySpace, pCmdtyId) == null ) {
 
-			GncV2.GncBook.GncCommodity newCurrency = getObjectFactory().createGncV2GncBookGncCommodity();
+			CURRENCY newCurrency = getObjectFactory().createGncV2GncBookGncCommodity();
 			newCurrency.setCmdtyFraction(pCmdtyNameFraction);
 			newCurrency.setCmdtySpace(pCmdtySpace);
 			newCurrency.setCmdtyId(pCmdtyId);
@@ -603,16 +511,16 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			incrementCountDataFor("commodity");
 		}
 		// add price-quote
-		GncV2.GncBook.GncPricedb.Price.PriceCommodity currency = new GncV2.GncBook.GncPricedb.Price.PriceCommodity();
+		CURRENCY currency = new GncV2.GncBook.GncPricedb.Price.PriceCommodity();
 		currency.setCmdtySpace(pCmdtySpace);
 		currency.setCmdtyId(pCmdtyId);
 
-		GncV2.GncBook.GncPricedb.Price.PriceCurrency baseCurrency = getObjectFactory()
+		CURRENCY baseCurrency = getObjectFactory()
 				.createGncV2GncBookGncPricedbPricePriceCurrency();
 		baseCurrency.setCmdtySpace(CurrencyNameSpace.NAMESPACE_CURRENCY);
 		baseCurrency.setCmdtyId(getDefaultCurrencyID());
 
-		GncV2.GncBook.GncPricedb.Price newQuote = getObjectFactory().createGncV2GncBookGncPricedbPrice();
+		PRICE newQuote = getObjectFactory().createGncV2GncBookGncPricedbPrice();
 		newQuote.setPriceSource("JGnucashLib");
 		newQuote.setPriceId(getObjectFactory().createGncV2GncBookGncPricedbPricePriceId());
 		newQuote.getPriceId().setType(Const.XML_DATA_TYPE_GUID);
@@ -622,9 +530,9 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		newQuote.setPriceTime(getObjectFactory().createGncV2GncBookGncPricedbPricePriceTime());
 		newQuote.getPriceTime().setTsDate(PRICE_QUOTE_DATE_FORMAT.format(new Date()));
 		newQuote.setPriceType("last");
-		newQuote.setPriceValue(conversionFactor.toGnucashString());
+		newQuote.setPriceValue(conversionFactor.toKMyMoneyString());
 
-		List<Object> bookElements = getRootElement().getGncBook().getBookElements();
+		List<Object> bookElements = getRootElement().getBookElements();
 		for ( Object element : bookElements ) {
 			if ( element instanceof GncV2.GncBook.GncPricedb ) {
 				GncV2.GncBook.GncPricedb prices = (GncV2.GncBook.GncPricedb) element;
@@ -812,28 +720,6 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		return this;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setUserDefinedAttribute(final String aName, final String aValue) {
-		List<Slot> slots = getRootElement().getGncBook().getBookSlots().getSlot();
-		for ( Slot slot : slots ) {
-			if ( slot.getSlotKey().equals(aName) ) {
-				slot.getSlotValue().getContent().clear();
-				slot.getSlotValue().getContent().add(aValue);
-				return;
-			}
-		}
-		// create new slot
-		Slot newSlot = getObjectFactory().createSlot();
-		newSlot.setSlotKey(aName);
-		newSlot.setSlotValue(getObjectFactory().createSlotValue());
-		newSlot.getSlotValue().getContent().add(aValue);
-		newSlot.getSlotValue().setType("string");
-		getRootElement().getGncBook().getBookSlots().getSlot().add(newSlot);
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -860,19 +746,57 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 					+ roots.toString());
 			LinkedList<KMyMoneyAccount> rootAccounts2 = new LinkedList<KMyMoneyAccount>();
 			rootAccounts2.add(root);
-			for ( KMyMoneyAccount gnucashAccount : rootAccounts ) {
-				if ( gnucashAccount == null ) {
+			for ( KMyMoneyAccount kmmAcct : rootAccounts ) {
+				if ( kmmAcct == null ) {
 					continue;
 				}
-				if ( gnucashAccount == root ) {
+				if ( kmmAcct == root ) {
 					continue;
 				}
-				((KMyMoneyWritableAccount) gnucashAccount).setParentAccount(root);
+				((KMyMoneyWritableAccount) kmmAcct).setParentAccount(root);
 
 			}
 			rootAccounts = rootAccounts2;
 		}
 		return rootAccounts;
+	}
+
+	// ---------------------------------------------------------------
+	
+	@Override
+	public KMMInstID getNewInstitutionID() {
+		// ::TOIDO
+		return null;
+	}
+
+	@Override
+	public KMMAcctID getNewAccountID() {
+		// ::TOIDO
+		return null;
+	}
+
+	@Override
+	public KMMTrxID getNewTransactionID() {
+		// ::TOIDO
+		return null;
+	}
+
+	@Override
+	public KMMSpltID getNewSplitID() {
+		// ::TOIDO
+		return null;
+	}
+
+	@Override
+	public KMMPyeID getNewPayeeID() {
+		// ::TOIDO
+		return null;
+	}
+
+	@Override
+	public KMMSecID getNewSecurityID() {
+		// ::TOIDO
+		return null;
 	}
 
 }

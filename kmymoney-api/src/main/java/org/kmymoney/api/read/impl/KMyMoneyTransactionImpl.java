@@ -41,7 +41,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     /**
      * the JWSDP-object we are facading.
      */
-    private TRANSACTION jwsdpPeer;
+    protected TRANSACTION jwsdpPeer;
 
     /**
      * The file we belong to.

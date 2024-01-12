@@ -20,7 +20,7 @@ public class KMyMoneyPayeeImpl implements KMyMoneyPayee {
 	/**
 	 * the JWSDP-object we are facading.
 	 */
-	private PAYEE jwsdpPeer;
+	protected PAYEE jwsdpPeer;
 
 	// ---------------------------------------------------------------
 

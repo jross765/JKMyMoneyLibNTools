@@ -42,7 +42,7 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction {
 	 *                    entered into the system
 	 * @see {@link #setDatePosted(LocalDateTime)}
 	 */
-	void setDateEntered(final LocalDateTime dateEntered); // sic, not LocalDate
+	void setDateEntered(final LocalDate dateEntered);
 
 	/**
 	 * @param datePosted the day (time is ignored) that the money was transfered

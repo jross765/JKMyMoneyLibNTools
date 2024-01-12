@@ -4,6 +4,8 @@ import java.beans.PropertyChangeSupport;
 
 import org.kmymoney.api.Const;
 import org.kmymoney.api.basetypes.simple.KMMID;
+import org.kmymoney.api.basetypes.simple.KMMPyeID;
+import org.kmymoney.api.generated.ADDRESS;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PAYEE;
 import org.kmymoney.api.generated.PAYEES;
@@ -12,6 +14,7 @@ import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.read.impl.KMyMoneyPayeeImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritablePayee;
+import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +59,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
      * @param id   the ID we shall have
      */
     protected KMyMoneyWritablePayeeImpl(final KMyMoneyWritableFileImpl file) {
-	super(createPayee_int(file, KMMID.getNew()), file);
+	super(createPayee_int(file, file.getNewPayeeID()), file);
     }
 
     public KMyMoneyWritablePayeeImpl(final KMyMoneyPayeeImpl pye) {
@@ -75,56 +78,39 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
      */
     protected static PAYEE createPayee_int(
 	    final KMyMoneyWritableFileImpl file, 
-	    final KMMID pyeID) {
-	if ( ! pyeID.isSet() ) {
-	    throw new IllegalArgumentException("GUID not set!");
-	}
+	    final KMMPyeID newID) {
+		if ( newID == null ) {
+			throw new IllegalArgumentException("null ID given");
+		}
+
+		if ( ! newID.isSet() ) {
+			throw new IllegalArgumentException("empty ID given");
+		}
     
         ObjectFactory factory = file.getObjectFactory();
     
-        PAYEE jwsdpPye = file.createGncGncPayeeType();
+        PAYEE jwsdpPye = file.createPayeeType();
     
-        jwsdpPye.setPayeeTaxincluded("USEGLOBAL");
-        jwsdpPye.setVersion(Const.XML_FORMAT_VERSION);
-        jwsdpPye.setPayeeUseTt(0);
-        jwsdpPye.setPayeeName("no name given");
+        jwsdpPye.setId(newID.toString());
+        jwsdpPye.setName("no name given");
     
         {
-            GncGncPayee.PayeeGuid id = factory.createGncGncPayeePayeeGuid();
-            id.setType(Const.XML_DATA_TYPE_GUID);
-            id.setValue(pyeID.toString());
-            jwsdpPye.setPayeeGuid(id);
-            jwsdpPye.setPayeeId(id.getValue());
+        	ADDRESS addr = factory.createADDRESS();
+            addr.setCity(null);
+            addr.setCounty("");
+            addr.setPostcode("");
+            addr.setState("");
+            addr.setStreet("");
+            addr.setTelephone("");
+            addr.setZip("");
+            addr.setZipcode("");
+            jwsdpPye.setADDRESS(addr);
         }
-    
-        {
-            org.kmymoney.api.generated.Address addr = factory.createAddress();
-            addr.setAddrAddr1("");
-            addr.setAddrAddr2("");
-            addr.setAddrName("");
-            addr.setAddrAddr3("");
-            addr.setAddrAddr4("");
-            addr.setAddrName("");
-            addr.setAddrEmail("");
-            addr.setAddrFax("");
-            addr.setAddrPhone("");
-            addr.setVersion(Const.XML_FORMAT_VERSION);
-            jwsdpPye.setPayeeAddr(addr);
-        }
-    
-        {
-            GncGncPayee.PayeeCurrency currency = factory.createGncGncPayeePayeeCurrency();
-            currency.setCmdtyId(file.getDefaultCurrencyID());
-            currency.setCmdtySpace(KMMCmdtyCurrNameSpace.CURRENCY);
-            jwsdpPye.setPayeeCurrency(currency);
-        }
-    
-        jwsdpPye.setPayeeActive(1);
     
         file.getRootElement().getGncBook().getBookElements().add(jwsdpPye);
         file.setModified(true);
     
-        LOGGER.debug("createPayee_int: Created new pyeor (core): " + jwsdpPye.getPayeeGuid().getValue());
+        LOGGER.debug("createPayee_int: Created new payee (core): " + jwsdpPye.getPayeeGuid().getValue());
         
         return jwsdpPye;
     }
@@ -136,7 +122,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
      */
     @Override
     public void remove() {
-    	PAYEE peer = getJwsdpPeer();
+    	PAYEE peer = jwsdpPeer;
 	(getKMyMoneyFile()).getRootElement().getGncBook().getBookElements().remove(peer);
 	(getKMyMoneyFile()).removePayee(this);
     }
@@ -179,7 +165,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 	}
 
 	String oldNumber = getNumber();
-	getJwsdpPeer().setPayeeId(number);
+	jwsdpPeer.setPayeeId(number);
 	getKMyMoneyFile().setModified(true);
 
 	PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
@@ -202,7 +188,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 	}
 
 	String oldName = getName();
-	getJwsdpPeer().setPayeeName(name);
+	jwsdpPeer.setPayeeName(name);
 	getKMyMoneyFile().setModified(true);
 
 	PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
@@ -219,23 +205,23 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 
 	/*
 	 * if (adr instanceof AddressImpl) { AddressImpl adrImpl = (AddressImpl) adr;
-	 * getJwsdpPeer().setPyeAddr(adrImpl.getJwsdpPeer()); } else
+	 * jwsdpPeer.setPyeAddr(adrImpl.jwsdpPeer); } else
 	 */
 	
 	{
 
-	    if (getJwsdpPeer().getPayeeAddr() == null) {
-		getJwsdpPeer().setPayeeAddr(getKMyMoneyFile().getObjectFactory().createAddress());
+	    if (jwsdpPeer.getPayeeAddr() == null) {
+		jwsdpPeer.setPayeeAddr(getKMyMoneyFile().getObjectFactory().createAddress());
 	    }
 
-	    getJwsdpPeer().getPayeeAddr().setAddrAddr1(adr.getAddressLine1());
-	    getJwsdpPeer().getPayeeAddr().setAddrAddr2(adr.getAddressLine2());
-	    getJwsdpPeer().getPayeeAddr().setAddrAddr3(adr.getAddressLine3());
-	    getJwsdpPeer().getPayeeAddr().setAddrAddr4(adr.getAddressLine4());
-	    getJwsdpPeer().getPayeeAddr().setAddrName(adr.getAddressName());
-	    getJwsdpPeer().getPayeeAddr().setAddrEmail(adr.getEmail());
-	    getJwsdpPeer().getPayeeAddr().setAddrFax(adr.getFax());
-	    getJwsdpPeer().getPayeeAddr().setAddrPhone(adr.getTel());
+	    jwsdpPeer.getPayeeAddr().setAddrAddr1(adr.getAddressLine1());
+	    jwsdpPeer.getPayeeAddr().setAddrAddr2(adr.getAddressLine2());
+	    jwsdpPeer.getPayeeAddr().setAddrAddr3(adr.getAddressLine3());
+	    jwsdpPeer.getPayeeAddr().setAddrAddr4(adr.getAddressLine4());
+	    jwsdpPeer.getPayeeAddr().setAddrName(adr.getAddressName());
+	    jwsdpPeer.getPayeeAddr().setAddrEmail(adr.getEmail());
+	    jwsdpPeer.getPayeeAddr().setAddrFax(adr.getFax());
+	    jwsdpPeer.getPayeeAddr().setAddrPhone(adr.getTel());
 	}
 
 	getKMyMoneyFile().setModified(true);
@@ -257,7 +243,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 //	}
 
 	String oldNotes = getNotes();
-	getJwsdpPeer().setPayeeNotes(notes);
+	jwsdpPeer.setPayeeNotes(notes);
 	getKMyMoneyFile().setModified(true);
 
 	PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
@@ -273,7 +259,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
      */
     @Override
     public KMMWritableAddress getWritableAddress() {
-	return new KMMWritableAddressImpl(getJwsdpPeer().getPayeeAddr(), getKMyMoneyFile());
+	return new KMMWritableAddressImpl(jwsdpPeer.getPayeeAddr(), getKMyMoneyFile());
     }
 
     /**

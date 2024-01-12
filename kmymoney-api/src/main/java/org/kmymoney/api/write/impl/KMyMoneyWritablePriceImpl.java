@@ -46,7 +46,7 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
     }
 
     public KMyMoneyWritablePriceImpl(final KMyMoneyWritableFileImpl file) {
-	super(createPrice(file, GCshID.getNew()), file);
+	super(createPrice_int(file, file.getNewPriceID()), file);
     }
 
     public KMyMoneyWritablePriceImpl(KMyMoneyPriceImpl prc) {
@@ -84,18 +84,25 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 //	return splt;
 //  }
 
-    private static Price createPrice(
+    private static PRICE createPrice_int(
 	    final KMyMoneyWritableFileImpl file, 
-	    final GCshID prcID) {
+	    final KMMID newID) {
 	
+		if ( newID == null ) {
+			throw new IllegalArgumentException("null ID given");
+		}
+
+		if ( ! newID.isSet() ) {
+			throw new IllegalArgumentException("empty ID given");
+		}
         ObjectFactory factory = file.getObjectFactory();
         
-        Price prc = file.createGncGncPricedbPriceType();
+        Price prc = file.createPriceType();
     
         {
             Price.PriceId gncPrcID = factory.createPricePriceId();
             gncPrcID.setType(Const.XML_DATA_TYPE_GUID);
-            gncPrcID.setValue(prcID.toString());
+            gncPrcID.setValue(newID.toString());
             prc.setPriceId(gncPrcID);
         }
         

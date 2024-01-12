@@ -30,7 +30,7 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
     /**
      * the JWSDP-object we are facading.
      */
-    private SECURITY jwsdpPeer;
+    protected SECURITY jwsdpPeer;
 
     /**
      * The file we belong to.

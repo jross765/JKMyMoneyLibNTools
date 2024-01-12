@@ -55,7 +55,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     /**
      * the JWSDP-object we are facading.
      */
-    private ACCOUNT jwsdpPeer;
+    protected ACCOUNT jwsdpPeer;
 
     // ---------------------------------------------------------------
 

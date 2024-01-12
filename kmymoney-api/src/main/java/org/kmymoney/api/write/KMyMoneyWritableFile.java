@@ -5,10 +5,16 @@ import java.io.IOException;
 import java.util.Collection;
 
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.api.basetypes.simple.KMMAcctID;
+import org.kmymoney.api.basetypes.simple.KMMInstID;
+import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
+import org.kmymoney.api.basetypes.simple.KMMSpltID;
+import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.write.hlp.IDManager;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 
 /**
@@ -20,7 +26,7 @@ import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
  * @see org.kmymoney.write.impl.KMyMoneyWritableFileImpl
  */
 public interface KMyMoneyWritableFile extends KMyMoneyFile, 
-                                              KMyMoneyWritableObject 
+                                              KMyMoneyWritableObject
 {
 
 	/**

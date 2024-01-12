@@ -2,7 +2,11 @@ package org.kmymoney.api.write.impl;
 
 import java.text.ParseException;
 
+import javax.naming.spi.ObjectFactory;
+
 import org.kmymoney.api.Const;
+import org.kmymoney.api.basetypes.simple.KMMSpltID;
+import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransaction;
@@ -13,6 +17,7 @@ import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
+import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
 
 /**
  * Transaction-Split that can be newly created or removed from it's transaction.
@@ -47,7 +52,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	 * @param transaction the transaction we belong to
 	 */
 	@SuppressWarnings("exports")
-	public KMyMoneyWritableTransactionSplitImpl(final GncTransaction.TrnSplits.TrnSplit jwsdpPeer,
+	public KMyMoneyWritableTransactionSplitImpl(final SPLIT jwsdpPeer,
 			final KMyMoneyWritableTransaction transaction) {
 		super(jwsdpPeer, transaction);
 	}
@@ -56,12 +61,13 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	 * create a new split and and add it to the given transaction.
 	 *
 	 * @param transaction transaction the transaction we will belong to
-	 * @param account     the account we take money (or other things) from or give
+	 * @param acct     the account we take money (or other things) from or give
 	 *                    it to
 	 */
-	public KMyMoneyWritableTransactionSplitImpl(final KMyMoneyWritableTransactionImpl transaction,
-			final KMyMoneyAccount account) {
-		super(createTransactionSplit(transaction, account, (transaction.getWritingFile()).createGUID()), transaction);
+	public KMyMoneyWritableTransactionSplitImpl(
+			final KMyMoneyWritableTransactionImpl trx,
+			final KMyMoneyAccount acct) {
+		super(createTransactionSplit_int(trx.getWritingFile(), trx, acct, trx.getNewSplitID()));
 
 		// this is a workaound.
 		// if super does account.addSplit(this) it adds an instance on
@@ -80,19 +86,26 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	 * Creates a new Transaction and add's it to the given gnucash-file Don't modify
 	 * the ID of the new transaction!
 	 */
-	protected static GncTransaction.TrnSplits.TrnSplit createTransactionSplit(
-			final KMyMoneyWritableTransactionImpl transaction, final KMyMoneyAccount account, final String pSplitID) {
+	protected static SPLIT createTransactionSplit_int(
+			final KMyMoneyWritableFileImpl file, 
+			final KMyMoneyWritableTransactionImpl trx, 
+			final KMyMoneyAccount acct, 
+			final KMMSpltID newID) {
 
-		if ( transaction == null ) {
+		if ( trx == null ) {
 			throw new IllegalArgumentException("null transaction given");
 		}
 
-		if ( account == null ) {
+		if ( acct == null ) {
 			throw new IllegalArgumentException("null account given");
 		}
 
-		if ( pSplitID == null || pSplitID.trim().length() == 0 ) {
-			throw new IllegalArgumentException("null or empty pSplitID given");
+		if ( newID == null ) {
+			throw new IllegalArgumentException("null ID given");
+		}
+
+		if ( ! newID.isSet() ) {
+			throw new IllegalArgumentException("empty ID given");
 		}
 
 		// this is needed because transaction.addSplit() later
@@ -101,31 +114,20 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		// thus 2 instances of this GnucashTransactionSplitWritingImpl
 		// will exist. One created in getSplits() from this JAXB-Data
 		// the other is this object.
-		transaction.getSplits();
+		trx.getSplits();
 
-		KMyMoneyWritableFileImpl gnucashFileImpl = transaction.getWritingFile();
-		ObjectFactory factory = gnucashFileImpl.getObjectFactory();
+		ObjectFactory factory = file.getObjectFactory();
 
-		GncTransaction.TrnSplits.TrnSplit split = gnucashFileImpl.createGncTransactionTypeTrnSplitsTypeTrnSplitType();
-		{
-			GncTransaction.TrnSplits.TrnSplit.SplitId id = factory.createGncTransactionTrnSplitsTrnSplitSplitId();
-			id.setType(Const.XML_DATA_TYPE_GUID);
-			id.setValue(pSplitID);
-			split.setSplitId(id);
-		}
-
-		split.setSplitReconciledState(KMyMoneyTransactionSplit.NREC);
-
-		split.setSplitQuantity("0/100");
-		split.setSplitValue("0/100");
-		{
-			GncTransaction.TrnSplits.TrnSplit.SplitAccount splitaccount = factory
-					.createGncTransactionTrnSplitsTrnSplitSplitAccount();
-			splitaccount.setType(Const.XML_DATA_TYPE_GUID);
-			splitaccount.setValue(account.getId());
-			split.setSplitAccount(splitaccount);
-		}
-		return split;
+		SPLIT splt = file.createSplitType();
+		
+		splt.setId(newID.toString());
+		splt.setAccount(acct.getID().toString());
+		splt.setShares(new FixedPointNumber().toKMyMoneyString());
+		splt.setValue(new FixedPointNumber().toKMyMoneyString());
+		
+		trx.addSplit(splt);
+		
+		return splt;
 	}
 
 	/**
@@ -145,33 +147,32 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	/**
 	 * @see KMyMoneyWritableTransactionSplit#setAccount(KMyMoneyAccount)
 	 */
-	public void setAccount(final KMyMoneyAccount account) {
+	public void setAccount(final KMyMoneyAccount acct) {
 		if ( account == null ) {
 			throw new NullPointerException("null account given");
 		}
-		String old = (getJwsdpPeer().getSplitAccount() == null ? null : getJwsdpPeer().getSplitAccount().getValue());
-		getJwsdpPeer().getSplitAccount().setType(Const.XML_DATA_TYPE_GUID);
-		getJwsdpPeer().getSplitAccount().setValue(account.getId());
+		String old = (getJwsdpPeer().getAccount() == null ? null : getJwsdpPeer().getAccount());
+		jwsdpPeer.setAccount(acct.getId());
 		((KMyMoneyWritableFile) getKMyMoneyFile()).setModified(true);
 
-		if ( old == null || !old.equals(account.getId()) ) {
+		if ( old == null || !old.equals(acct.getId()) ) {
 			if ( getPropertyChangeSupport() != null ) {
-				getPropertyChangeSupport().firePropertyChange("accountID", old, account.getId());
+				getPropertyChangeSupport().firePropertyChange("accountID", old, acct.getId());
 			}
 		}
 
 	}
 
 	/**
-	 * @see KMyMoneyWritableTransactionSplit#setQuantity(FixedPointNumber)
+	 * @see KMyMoneyWritableTransactionSplit#setShares(FixedPointNumber)
 	 */
-	public void setQuantity(final String n) {
+	public void setShares(final String n) {
 		try {
-			this.setQuantity(new FixedPointNumber(n.toLowerCase().replaceAll("&euro;", "").replaceAll("&pound;", "")));
+			this.setShares(new FixedPointNumber(n.toLowerCase().replaceAll("&euro;", "").replaceAll("&pound;", "")));
 		} catch (NumberFormatException e) {
 			try {
-				Number parsed = this.getQuantityCurrencyFormat().parse(n);
-				this.setQuantity(new FixedPointNumber(parsed.toString()));
+				Number parsed = this.getSharesCurrencyFormat().parse(n);
+				this.setShares(new FixedPointNumber(parsed.toString()));
 			} catch (NumberFormatException e1) {
 				throw e;
 			} catch (ParseException e1) {
@@ -204,27 +205,27 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	}
 
 	/**
-	 * @see KMyMoneyWritableTransactionSplit#setQuantity(FixedPointNumber)
+	 * @see KMyMoneyWritableTransactionSplit#setShares(FixedPointNumber)
 	 */
-	public void setQuantity(final FixedPointNumber n) {
+	public void setShares(final FixedPointNumber n) {
 		if ( n == null ) {
 			throw new NullPointerException("null quantity given");
 		}
 
-		String old = getJwsdpPeer().getSplitQuantity();
-		getJwsdpPeer().setSplitQuantity(n.toGnucashString());
+		String old = getJwsdpPeer().getShares();
+		jwsdpPeer.setShares(n.toKMyMoneyString());
 		((KMyMoneyWritableFile) getKMyMoneyFile()).setModified(true);
 		if ( isCurrencyMatching() ) {
-			String oldvalue = getJwsdpPeer().getSplitValue();
-			getJwsdpPeer().setSplitValue(n.toGnucashString());
-			if ( old == null || !old.equals(n.toGnucashString()) ) {
+			String oldvalue = getJwsdpPeer().getValue();
+			getJwsdpPeer().setValue(n.toKMyMoneyString());
+			if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
 				if ( getPropertyChangeSupport() != null ) {
 					getPropertyChangeSupport().firePropertyChange("value", new FixedPointNumber(oldvalue), n);
 				}
 			}
 		}
 
-		if ( old == null || !old.equals(n.toGnucashString()) ) {
+		if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
 			if ( getPropertyChangeSupport() != null ) {
 				getPropertyChangeSupport().firePropertyChange("quantity", new FixedPointNumber(old), n);
 			}
@@ -256,20 +257,20 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		if ( n == null ) {
 			throw new NullPointerException("null value given");
 		}
-		String old = getJwsdpPeer().getSplitValue();
-		getJwsdpPeer().setSplitValue(n.toGnucashString());
+		String old = getJwsdpPeer().getValue();
+		jwsdpPeer.setValue(n.toKMyMoneyString());
 		((KMyMoneyWritableFile) getKMyMoneyFile()).setModified(true);
 		if ( isCurrencyMatching() ) {
-			String oldquantity = getJwsdpPeer().getSplitQuantity();
-			getJwsdpPeer().setSplitQuantity(n.toGnucashString());
-			if ( old == null || !old.equals(n.toGnucashString()) ) {
+			String oldquantity = getJwsdpPeer().getShares();
+			getJwsdpPeer().setShares(n.toKMyMoneyString());
+			if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
 				if ( getPropertyChangeSupport() != null ) {
 					getPropertyChangeSupport().firePropertyChange("quantity", new FixedPointNumber(oldquantity), n);
 				}
 			}
 		}
 
-		if ( old == null || !old.equals(n.toGnucashString()) ) {
+		if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
 			if ( getPropertyChangeSupport() != null ) {
 				getPropertyChangeSupport().firePropertyChange("value", new FixedPointNumber(old), n);
 			}
@@ -287,8 +288,8 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 					"null description given! Please use the empty string instead of null for an empty description");
 		}
 
-		String old = getJwsdpPeer().getSplitMemo();
-		getJwsdpPeer().setSplitMemo(desc);
+		String old = getJwsdpPeer().getMemo();
+		jwsdpPeer.setMemo(desc);
 		((KMyMoneyWritableFile) getKMyMoneyFile()).setModified(true);
 
 		if ( old == null || !old.equals(desc) ) {
@@ -315,7 +316,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 //		}
 
 		String old = getJwsdpPeer().getSplitAction();
-		getJwsdpPeer().setSplitAction(action);
+		jwsdpPeer.setSplitAction(action);
 		((KMyMoneyWritableFile) getKMyMoneyFile()).setModified(true);
 
 		if ( old == null || !old.equals(action) ) {
@@ -325,44 +326,13 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		}
 	}
 
-	public void setLotID(final String lotID) {
-
-		KMyMoneyWritableTransactionImpl transaction = (KMyMoneyWritableTransactionImpl) getTransaction();
-		KMyMoneyWritableFileImpl writingFile = transaction.getWritingFile();
-		ObjectFactory factory = writingFile.getObjectFactory();
-
-		if ( getJwsdpPeer().getSplitLot() == null ) {
-			GncTransaction.TrnSplits.TrnSplit.SplitLot lot = factory.createGncTransactionTrnSplitsTrnSplitSplitLot();
-			getJwsdpPeer().setSplitLot(lot);
-		}
-		getJwsdpPeer().getSplitLot().setValue(lotID);
-		getJwsdpPeer().getSplitLot().setType(Const.XML_DATA_TYPE_GUID);
-
-		// if we have a lot, and if we are a paying transaction, then check the slots
-		SlotsType slots = getJwsdpPeer().getSplitSlots();
-		if ( slots == null ) {
-			slots = factory.createSlotsType();
-			getJwsdpPeer().setSplitSlots(slots);
-		}
-		if ( slots.getSlot() == null ) {
-			Slot slot = factory.createSlot();
-			slot.setSlotKey("trans-txn-type");
-			SlotValue value = factory.createSlotValue();
-			value.setType("string");
-			value.getContent().add(KMyMoneyTransaction.TYPE_PAYMENT);
-			slot.setSlotValue(value);
-			slots.getSlot().add(slot);
-		}
-
-	}
-
 	// --------------------- support for propertyChangeListeners ---------------
 
 	/**
-	 * @see KMyMoneyWritableTransactionSplit#setQuantityFormattedForHTML(java.lang.String)
+	 * @see KMyMoneyWritableTransactionSplit#setSharesFormattedForHTML(java.lang.String)
 	 */
-	public void setQuantityFormattedForHTML(final String n) {
-		this.setQuantity(n);
+	public void setSharesFormattedForHTML(final String n) {
+		this.setShares(n);
 	}
 
 	/**

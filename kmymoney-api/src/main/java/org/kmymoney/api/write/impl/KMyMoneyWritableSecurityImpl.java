@@ -1,8 +1,20 @@
 package org.kmymoney.api.write.impl;
 
+import java.math.BigInteger;
+
 import org.kmymoney.api.Const;
+import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.api.basetypes.simple.KMMSecID;
+import org.kmymoney.api.generated.SECURITY;
+import org.kmymoney.api.read.KMMSecCurr.RoundingMethod;
+import org.kmymoney.api.read.KMMSecCurr.Type;
+import org.kmymoney.api.read.KMMSecCurr;
+import org.kmymoney.api.read.UnknownRoundingMethodException;
+import org.kmymoney.api.read.UnknownSecurityTypeException;
 import org.kmymoney.api.read.impl.KMyMoneySecurityImpl;
+import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
+import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +40,7 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 	 * @param jwsdpPeer the JWSDP-object we are facading.
 	 */
 	@SuppressWarnings("exports")
-	public KMyMoneyWritableSecurityImpl(final GncSecurity jwsdpPeer, final KMyMoneyWritableFileImpl file) {
+	public KMyMoneyWritableSecurityImpl(final SECURITY jwsdpPeer, final KMyMoneyWritableFileImpl file) {
 		super(jwsdpPeer, file);
 	}
 
@@ -39,26 +51,22 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 	 * @param id   the ID we shall have
 	 */
 	protected KMyMoneyWritableSecurityImpl(final KMyMoneyWritableFileImpl file) {
-		super(createSecurity_int(file, GCshID.getNew()), file);
+		super(createSecurity_int(file, file.getNewSecurityID()), file);
 	}
 
 	public KMyMoneyWritableSecurityImpl(KMyMoneySecurityImpl sec) {
-		super(sec.getJwsdpPeer(), sec.getKMyMoneyFile());
+		super(sec.jwsdpPeer, sec.getKMyMoneyFile());
 	}
 
 	// ---------------------------------------------------------------
 
 	/**
-	 * Delete this commodity and remove it from the file.
-	 * 
-	 * @throws InvalidCmdtyCurrIDException
-	 * @throws ObjectCascadeException
-	 * @throws InvalidCmdtyCurrTypeException
+	 * Delete this security and remove it from the file.
 	 *
 	 * @see KMyMoneyWritableSecurity#remove()
 	 */
-	public void remove() throws InvalidCmdtyCurrTypeException, ObjectCascadeException, InvalidCmdtyCurrIDException {
-		GncSecurity peer = getJwsdpPeer();
+	public void remove() throws InvalidSecCurrTypeException, ObjectCascadeException, InvalidSecCurrIDException {
+		SECURITY peer = jwsdpPeer;
 		(getKMyMoneyFile()).getRootElement().getGncBook().getBookElements().remove(peer);
 		(getKMyMoneyFile()).removeSecurity(this);
 	}
@@ -73,55 +81,60 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 	 * @param guid the ID we shall have
 	 * @return a new jwsdp-peer already entered into th jwsdp-peer of the file
 	 */
-	protected static GncSecurity createSecurity_int(final KMyMoneyWritableFileImpl file, final GCshID cmdtID) {
-		if ( !cmdtID.isSet() ) {
-			throw new IllegalArgumentException("GUID not set!");
+	protected static SECURITY createSecurity_int(
+			final KMyMoneyWritableFileImpl file, 
+			final KMMSecID newID) {
+		if ( newID == null ) {
+			throw new IllegalArgumentException("null ID given");
 		}
 
-		GncSecurity jwsdpCmdty = file.createGncGncSecurityType();
+		if ( ! newID.isSet() ) {
+			throw new IllegalArgumentException("empty ID given");
+		}
 
-		jwsdpCmdty.setCmdtyFraction(Const.CMDTY_FRACTION_DEFAULT);
-		jwsdpCmdty.setVersion(Const.XML_FORMAT_VERSION);
-		jwsdpCmdty.setCmdtyName("no name given");
-		jwsdpCmdty.setCmdtySpace(GCshCmdtyCurrNameSpace.Exchange.EURONEXT.toString()); // ::TODO : soft
-		jwsdpCmdty.setCmdtyId("XYZ"); // ::TODO
-		jwsdpCmdty.setCmdtyXcode(Const.CMDTY_XCODE_DEFAULT);
+		SECURITY jwsdpSec = file.createSecurityType();
 
-		file.getRootElement().getGncBook().getBookElements().add(jwsdpCmdty);
+		jwsdpSec.setSecFraction(Const.CMDTY_FRACTION_DEFAULT);
+		jwsdpSec.setVersion(Const.XML_FORMAT_VERSION);
+		jwsdpSec.setSecName("no name given");
+		jwsdpSec.setSecSpace(GCshSecCurrNameSpace.Exchange.EURONEXT.toString()); // ::TODO : soft
+		jwsdpSec.setSecId("XYZ"); // ::TODO
+		jwsdpSec.setSecXcode(Const.CMDTY_XCODE_DEFAULT);
+
+		file.getSecurities().add(jwsdpSec);
 		file.setModified(true);
 
-		LOGGER.debug("createSecurity_int: Created new commodity (core): " + jwsdpCmdty.getCmdtySpace() + ":"
-				+ jwsdpCmdty.getCmdtyId());
+		LOGGER.debug("createSecurity_int: Created new security (core):" + jwsdpSec.getId());
 
-		return jwsdpCmdty;
+		return jwsdpSec;
 	}
 
 	// ---------------------------------------------------------------
 
 	@Override
-	public void setQualifID(GCshCmdtyCurrID qualifId) throws InvalidCmdtyCurrTypeException {
-		if ( qualifId == null ) {
-			throw new IllegalArgumentException("null qualif-ID given!");
+	public void setSymbol(final String symb) {
+		if ( symb == null ) {
+			throw new IllegalArgumentException("null symbol given!");
 		}
 
-		getJwsdpPeer().setCmdtySpace(qualifId.getNameSpace());
-		getJwsdpPeer().setCmdtyId(qualifId.getCode());
+		if ( symb.trim().length() == 0 ) {
+			throw new IllegalArgumentException("empty symbol given!");
+		}
 
+		jwsdpPeer.setSymbol(symb);
 		getKMyMoneyFile().setModified(true);
 	}
 
 	@Override
-	public void setXCode(String xCode) {
-		if ( xCode == null ) {
-			throw new IllegalArgumentException("null x-code given!");
-		}
+	public void setCode(final String code) {
+		
+	}
 
-		if ( xCode.trim().length() == 0 ) {
-			throw new IllegalArgumentException("empty x-code given!");
-		}
+	// ---------------------------------------------------------------
 
-		getJwsdpPeer().setCmdtyXcode(xCode);
-		getKMyMoneyFile().setModified(true);
+	@Override
+	public void setType(final KMMSecCurr.Type type) {
+		
 	}
 
 	@Override
@@ -134,17 +147,64 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 			throw new IllegalArgumentException("empty name given!");
 		}
 
-		getJwsdpPeer().setCmdtyName(name);
+		jwsdpPeer.setName(name);
 		getKMyMoneyFile().setModified(true);
 	}
 
 	@Override
-	public void setFraction(Integer fract) {
-		if ( fract <= 0 ) {
-			throw new IllegalArgumentException("Fraction is <= 0");
+	public void setPP(final BigInteger pp) {
+		if ( pp == null ) {
+			throw new IllegalArgumentException("null PP given!");
 		}
 
-		getJwsdpPeer().setCmdtyFraction(fract);
+		if ( pp.intValue() <= 0 ) {
+			throw new IllegalArgumentException("PP is <= 0");
+		}
+		
+		jwsdpPeer.setPp(pp.intValue());
+		getKMyMoneyFile().setModified(true);
+	}
+
+	@Override
+	public void setRoundingMethod(final KMMSecCurr.RoundingMethod meth) {
+		// TODO
+	}
+
+	@Override
+	public void setSAF(final BigInteger saf) {
+		if ( saf == null ) {
+			throw new IllegalArgumentException("null SAF given!");
+		}
+
+		if ( saf.intValue() <= 0 ) {
+			throw new IllegalArgumentException("SAF is <= 0");
+		}
+		
+		jwsdpPeer.setPp(saf.intValue());
+		getKMyMoneyFile().setModified(true);
+	}
+
+	@Override
+	public void setTradingCurrency(final KMMQualifCurrID currID) {
+		if ( currID == null ) {
+			throw new IllegalArgumentException("null trading currency given!");
+		}
+
+		jwsdpPeer.setTradingCurrency(currID.getCurrency().getCurrencyCode());
+		getKMyMoneyFile().setModified(true);
+	}
+
+	@Override
+	public void setTradingMarket(final String mkt) {
+		if ( mkt == null ) {
+			throw new IllegalArgumentException("null trading market given!");
+		}
+
+		if ( mkt.trim().length() == 0 ) {
+			throw new IllegalArgumentException("empty trading market given!");
+		}
+
+		jwsdpPeer.setTradingMarket(mkt);
 		getKMyMoneyFile().setModified(true);
 	}
 
@@ -188,22 +248,40 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 	// -----------------------------------------------------------------
 
 	@Override
-	public String toString() {
-
-		String result = "KMyMoneyWritableSecurityImpl [";
-
-		try {
-			result += "qualif-id='" + getQualifID().toString() + "'";
-		} catch (InvalidCmdtyCurrTypeException e) {
-			result += "qualif-id=" + "ERROR";
-		}
-
-		result += ", namespace='" + getNameSpace() + "'";
-		result += ", name='" + getName() + "'";
-		result += ", x-code='" + getXCode() + "'";
-		result += ", fraction=" + getFraction() + "]";
-
-		return result;
+    public String toString() {
+	String result = "KMyMoneyWritableSecurityImpl ";
+	
+	result += "[id=" + getID();
+	result += ", symbol='" + getSymbol() + "'";
+	
+	try {
+	    result += ", type=" + getType();
+	} catch (UnknownSecurityTypeException e) {
+	    result += ", type=" + "ERROR";
 	}
+	
+	result += ", name='" + getName() + "'";
+	result += ", pp=" + getPP();
+	
+	try {
+	    result += ", rounding-method=" + getRoundingMethod();
+	} catch (UnknownRoundingMethodException e) {
+	    result += ", rounding-method=" + "ERROR";
+	}
+	
+	result += ", saf=" + getSAF();
+	
+	try {
+	    result += ", trading-curr=" + getTradingCurrency();
+	} catch (Exception e) {
+	    result += ", trading-curr=" + "ERROR";
+	}
+	
+	result += ", trading-mkt='" + getTradingMarket() + "'";
+	
+	result += "]";
+	
+	return result;
+    }
 
 }
