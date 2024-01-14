@@ -49,10 +49,15 @@ public class KMyMoneyPriceImpl implements KMyMoneyPrice {
     // -----------------------------------------------------------
 
     /**
+     * @param parent 
      * @param newPeer the JWSDP-object we are wrapping.
+     * @param file 
      */
     @SuppressWarnings("exports")
-    public KMyMoneyPriceImpl(final KMyMoneyPricePair parent, final PRICE newPeer, final KMyMoneyFile file) {
+    public KMyMoneyPriceImpl(
+    		final KMyMoneyPricePair parent, 
+    		final PRICE newPeer, 
+    		final KMyMoneyFile file) {
 	super();
 		
 	this.parent    = parent;

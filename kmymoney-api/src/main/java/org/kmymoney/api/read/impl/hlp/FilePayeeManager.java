@@ -22,7 +22,7 @@ public class FilePayeeManager {
 
 	// ---------------------------------------------------------------
 
-	private KMyMoneyFileImpl kmmFile;
+	protected KMyMoneyFileImpl kmmFile;
 
 	private Map<KMMPyeID, KMyMoneyPayee> pyeMap;
 
@@ -52,7 +52,7 @@ public class FilePayeeManager {
 	}
 
 	protected KMyMoneyPayeeImpl createPayee(final PAYEE jwsdpPye) {
-		KMyMoneyPayeeImpl pye = new KMyMoneyPayeeImpl(jwsdpPye);
+		KMyMoneyPayeeImpl pye = new KMyMoneyPayeeImpl(jwsdpPye, kmmFile);
 		LOGGER.debug("Generated new payee: " + pye.getID());
 		return pye;
 	}

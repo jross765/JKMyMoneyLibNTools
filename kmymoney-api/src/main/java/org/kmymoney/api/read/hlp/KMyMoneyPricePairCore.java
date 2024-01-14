@@ -1,10 +1,14 @@
-package org.kmymoney.api.read;
+package org.kmymoney.api.read.hlp;
 
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.api.read.KMyMoneyCurrency;
+import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.read.KMyMoneyPricePair;
+import org.kmymoney.api.read.KMyMoneySecurity;
 
 /**
  * Auxiliary interface that defines methods that -- for practical reasons,

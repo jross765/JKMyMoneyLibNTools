@@ -22,7 +22,7 @@ public class FileTransactionManager {
 
 	// ---------------------------------------------------------------
 
-	private KMyMoneyFileImpl kmmFile;
+	protected KMyMoneyFileImpl kmmFile;
 
 	private Map<KMMTrxID, KMyMoneyTransaction>             trxMap;
 	private Map<KMMQualifSpltID, KMyMoneyTransactionSplit> trxSpltMap;

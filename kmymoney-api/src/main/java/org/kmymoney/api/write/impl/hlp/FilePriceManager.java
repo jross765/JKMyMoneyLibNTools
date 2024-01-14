@@ -1,9 +1,13 @@
 package org.kmymoney.api.write.impl.hlp;
 
 import org.kmymoney.api.generated.PRICE;
+import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.impl.KMyMoneyPriceImpl;
+import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
+import org.kmymoney.api.write.KMyMoneyWritablePricePair;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritablePriceImpl;
+import org.kmymoney.api.write.impl.KMyMoneyWritablePricePairImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +27,18 @@ public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceMa
 	 * Creates the writable version of the returned object.
 	 */
 	@Override
-	protected KMyMoneyPriceImpl createPrice(final PRICE jwsdpPrc) {
-		KMyMoneyWritablePriceImpl prc = new KMyMoneyWritablePriceImpl(jwsdpPrc, (KMyMoneyWritableFileImpl) kmmFile);
+	protected KMyMoneyPriceImpl createPrice(final KMyMoneyPricePair pricePair, final PRICE jwsdpPrc) {
+		KMyMoneyWritablePriceImpl prc = new KMyMoneyWritablePriceImpl(
+				new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) pricePair), 
+				jwsdpPrc, (KMyMoneyWritableFileImpl) kmmFile);
+		LOGGER.debug("Generated new writable price: " + prc.getID());
+		return prc;
+	}
+
+	protected KMyMoneyPriceImpl createPrice(final KMyMoneyWritablePricePair pricePair, final PRICE jwsdpPrc) {
+		KMyMoneyWritablePriceImpl prc = new KMyMoneyWritablePriceImpl(
+				pricePair, 
+				jwsdpPrc, (KMyMoneyWritableFileImpl) kmmFile);
 		LOGGER.debug("Generated new writable price: " + prc.getID());
 		return prc;
 	}

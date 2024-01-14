@@ -30,7 +30,7 @@ public class FileAccountManager {
 
 	// ---------------------------------------------------------------
 
-	private KMyMoneyFileImpl kmmFile;
+	protected KMyMoneyFileImpl kmmFile;
 
 	private Map<KMMComplAcctID, KMyMoneyAccount> acctMap;
 

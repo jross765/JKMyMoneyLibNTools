@@ -5,13 +5,17 @@ import java.math.BigInteger;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.generated.PAYEE;
+import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.read.impl.aux.KMMAddressImpl;
+import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KMyMoneyPayeeImpl implements KMyMoneyPayee {
+public class KMyMoneyPayeeImpl extends KMyMoneyObjectImpl
+                               implements KMyMoneyPayee 
+{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyPayeeImpl.class);
 
@@ -25,9 +29,20 @@ public class KMyMoneyPayeeImpl implements KMyMoneyPayee {
 	// ---------------------------------------------------------------
 
 	@SuppressWarnings("exports")
-	public KMyMoneyPayeeImpl(final PAYEE peer) {
+	public KMyMoneyPayeeImpl(final PAYEE peer, final KMyMoneyFile kmmFile) {
+		super(kmmFile);
 		jwsdpPeer = peer;
 	}
+
+	// ---------------------------------------------------------------
+
+    /**
+     * @return the JWSDP-object we are wrapping.
+     */
+    @SuppressWarnings("exports")
+    public PAYEE getJwsdpPeer() {
+	return jwsdpPeer;
+    }
 
 	// ---------------------------------------------------------------
 

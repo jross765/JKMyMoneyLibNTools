@@ -14,6 +14,7 @@ import javax.naming.spi.ObjectFactory;
 
 import org.kmymoney.api.basetypes.simple.KMMAcctID;
 import org.kmymoney.api.generated.ACCOUNT;
+import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
@@ -83,6 +84,12 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	public KMyMoneyWritableAccountImpl(final KMyMoneyWritableFileImpl file) {
 		super(createAccount_int(file, file.getNewAccountID()), file);
 	}
+	
+	public KMyMoneyWritableAccountImpl(KMyMoneyAccountImpl acct) {
+		super(acct.getJwsdpPeer(), acct.getKMyMoneyFile());
+	}
+
+	// ---------------------------------------------------------------
 
 	/**
 	 * @param file
@@ -101,7 +108,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 
 		ACCOUNT jwsdpAcct = file.createAccountType();
 		// left unset account.setActCode();
-		jwsdpAcct.setActCommodityScu(100); // x,yz
+		jwsdpAcct.setActSecurityScu(100); // x,yz
 		jwsdpAcct.setActDescription("no description yet");
 		// left unset account.setActLots();
 		jwsdpAcct.setActName("UNNAMED");
@@ -112,10 +119,10 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		jwsdpAcct.setVersion(Const.XML_FORMAT_VERSION);
 
 		{
-			GncAccount.ActCommodity currency = factory.createGncAccountActCommodity();
+			GncAccount.ActSecurity currency = factory.createGncAccountActSecurity();
 			currency.setCmdtyId(file.getDefaultCurrencyID());
 			currency.setCmdtySpace(CurrencyNameSpace.NAMESPACE_CURRENCY);
-			jwsdpAcct.setActCommodity(currency);
+			jwsdpAcct.setActSecurity(currency);
 		}
 
 		{
@@ -237,11 +244,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("null or empty currencyID given!");
 		}
 
-		String oldCurrencyId = jwsdpPeer.getActCommodity().getCmdtyId();
+		String oldCurrencyId = jwsdpPeer.getActSecurity().getCmdtyId();
 		if ( oldCurrencyId == currencyID ) {
 			return; // nothing has changed
 		}
-		this.jwsdpPeer.getActCommodity().setCmdtyId(currencyID);
+		this.jwsdpPeer.getActSecurity().setCmdtyId(currencyID);
 		setIsModified();
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
@@ -259,11 +266,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("null or empty currencyNameSpace given!");
 		}
 
-		String oldCurrNameSpace = jwsdpPeer.getActCommodity().getCmdtySpace();
+		String oldCurrNameSpace = jwsdpPeer.getSecurity().getCmdtySpace();
 		if ( oldCurrNameSpace == currNameSpace ) {
 			return; // nothing has changed
 		}
-		this.jwsdpPeer.getActCommodity().setCmdtySpace(currNameSpace);
+		this.jwsdpPeer.getSecurity().setCmdtySpace(currNameSpace);
 		setIsModified();
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
@@ -390,11 +397,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("null type given!");
 		}
 
-		String oldType = jwsdpPeer.getActDescription();
+		String oldType = jwsdpPeer.getDescription();
 		if ( oldType == type ) {
 			return; // nothing has changed
 		}
-		jwsdpPeer.setActType(type);
+		jwsdpPeer.setType(type);
 		setIsModified();
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
@@ -420,7 +427,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	public void setParentAccount(final KMyMoneyAccount prntAcct) {
 
 		if ( prntAcct == null ) {
-			this.jwsdpPeer.setActParent(null);
+			this.jwsdpPeer.setParent(null);
 			return;
 		}
 
@@ -428,13 +435,13 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("I cannot be my own parent!");
 		}
 
-		// check if newparent is a child-account recusively
+		// check if newparent is a child-account recursively
 		if ( isChildAccountRecursive(prntAcct) ) {
 			throw new IllegalArgumentException("I cannot be my own (grand-)parent!");
 		}
 
 		KMyMoneyAccount oldPrntAcct = null;
-		GncAccount.ActParent parent = jwsdpPeer.getActParent();
+		GncAccount.ActParent parent = jwsdpPeer.getParent();
 		if ( parent == null ) {
 			parent = ((KMyMoneyWritableFileImpl) getWritableKMyMoneyFile()).getObjectFactory()
 					.createGncAccountActParent();

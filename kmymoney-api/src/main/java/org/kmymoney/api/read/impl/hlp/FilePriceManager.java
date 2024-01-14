@@ -41,7 +41,7 @@ public class FilePriceManager {
 
 	// ---------------------------------------------------------------
 
-	private KMyMoneyFileImpl kmmFile;
+	protected KMyMoneyFileImpl kmmFile;
 
 	private PRICES                         priceDB = null;
 	private Map<KMMPriceID, KMyMoneyPrice> prcMap  = null;

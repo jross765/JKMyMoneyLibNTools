@@ -2,8 +2,14 @@ package org.kmymoney.api.write.impl.hlp;
 
 import java.util.Comparator;
 
+import org.kmymoney.api.generated.ACCOUNTS;
+import org.kmymoney.api.generated.BUDGETS;
+import org.kmymoney.api.generated.PAYEE;
 import org.kmymoney.api.generated.PRICE;
+import org.kmymoney.api.generated.PRICES;
 import org.kmymoney.api.generated.SCHEDULEDTX;
+import org.kmymoney.api.generated.SECURITIES;
+import org.kmymoney.api.generated.TRANSACTIONS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

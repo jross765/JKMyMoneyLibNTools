@@ -25,7 +25,7 @@ public class FileSecurityManager {
 
 	// ---------------------------------------------------------------
 
-	private KMyMoneyFileImpl kmmFile;
+	protected KMyMoneyFileImpl kmmFile;
 
 	private Map<KMMSecID, KMyMoneySecurity> secMap;
 	private Map<String, KMMSecID>           symbMap;

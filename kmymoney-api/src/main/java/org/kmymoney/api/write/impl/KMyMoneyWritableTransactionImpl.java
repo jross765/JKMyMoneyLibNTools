@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import javax.naming.spi.ObjectFactory;
 
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
+import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransaction;
@@ -81,7 +82,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	}
 
 	public KMyMoneyWritableTransactionImpl(final KMyMoneyTransaction trx) {
-		super(trx.jwsdpPeer, trx.getKMyMoneyFile());
+		super(trx.getJwsdpPeer(), trx.getKMyMoneyFile());
 
 		// ::TODO
 		System.err.println("NOT IMPLEMENTED YET");
@@ -157,34 +158,24 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		ObjectFactory factory = file.getObjectFactory();
 		TRANSACTION jwsdpTrx = file.createTransactionType();
 
+		jwsdpTrx.setId(newID.toString());
+
 		{
-			GncTransaction.TrnId id = factory.createGncTransactionTrnId();
-			id.setType(Const.XML_DATA_TYPE_GUID);
-			id.setValue(newID);
-			jwsdpTrx.setTrnId(id);
+			String dateEntered = DATE_ENTERED_FORMAT.format(LocalDateTime.now());
+			jwsdpTrx.setEntrydate(dateEntered);
 		}
 
 		{
-			GncTransaction.TrnDateEntered dateEntered = factory.createGncTransactionTrnDateEntered();
-			dateEntered.setTsDate(DATE_ENTERED_FORMAT.format(ZonedDateTime.now()));
-			jwsdpTrx.setTrnDateEntered(dateEntered);
+			String datePosted = DATE_ENTERED_FORMAT.format(LocalDateTime.now());
+			jwsdpTrx.setPostdate(datePosted);
 		}
 
 		{
-			GncTransaction.TrnDatePosted datePosted = factory.createGncTransactionTrnDatePosted();
-			datePosted.setTsDate(DATE_ENTERED_FORMAT.format(ZonedDateTime.now()));
-			jwsdpTrx.setTrnDatePosted(datePosted);
+			jwsdpTrx.setCommodity(file.getDefaultCurrencyID());
 		}
 
 		{
-			GncTransaction.TrnCurrency currency = factory.createGncTransactionTrnCurrency();
-			currency.setCmdtyId(file.getDefaultCurrencyID());
-			currency.setCmdtySpace(CurrencyNameSpace.NAMESPACE_CURRENCY);
-			jwsdpTrx.setTrnCurrency(currency);
-		}
-
-		{
-			GncTransaction.TrnSplits splits = factory.createGncTransactionTrnSplits();
+			SPLIT splits = factory.createTransactionTrnSplits();
 			jwsdpTrx.setTrnSplits(splits);
 		}
 

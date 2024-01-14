@@ -11,7 +11,7 @@ import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneySecurity;
-import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
+import org.kmymoney.api.write.hlp.KMyMoneyWritablePricePairCore;
 
 /**
  * Price that can be modified.
@@ -19,7 +19,7 @@ import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
  * @see KMyMoneyPrice
  */
 public interface KMyMoneyWritablePrice extends KMyMoneyPrice, 
-                                               KMyMoneyWritableObject
+                                               KMyMoneyWritablePricePairCore
 {
 
     void setFromSecCurrQualifID(KMMQualifSecCurrID qualifID);

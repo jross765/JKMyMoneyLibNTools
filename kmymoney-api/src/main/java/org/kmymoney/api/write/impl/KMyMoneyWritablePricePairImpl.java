@@ -13,11 +13,13 @@ import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PRICE;
+import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyPriceImpl;
+import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritablePrice;
 import org.kmymoney.api.write.KMyMoneyWritablePricePair;
@@ -30,10 +32,10 @@ import org.slf4j.LoggerFactory;
  * Extension of KMMPriceImpl to allow read-write access instead of
  * read-only access.
  */
-public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl 
-                                       implements KMyMoneyWritablePrice 
+public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl 
+                                           implements KMyMoneyWritablePricePair 
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritablePriceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritablePricePairImpl.class);
 
     // ---------------------------------------------------------------
 
@@ -45,19 +47,18 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
     // ---------------------------------------------------------------
 
     @SuppressWarnings("exports")
-    public KMyMoneyWritablePriceImpl(
-    		final KMyMoneyWritablePricePair parent,
-    		final PRICE jwsdpPeer,
+    public KMyMoneyWritablePricePairImpl(
+    		final PRICEPAIR jwsdpPeer,
     		final KMyMoneyWritableFile file) {
-    	super(parent, jwsdpPeer, file);
+    	super(jwsdpPeer, file);
     }
 
-    public KMyMoneyWritablePriceImpl(final KMyMoneyWritableFileImpl file) {
+    public KMyMoneyWritablePricePairImpl(final KMyMoneyWritableFileImpl file) {
 	super(createPrice_int(file, file.getNewPriceID()), file);
     }
 
-    public KMyMoneyWritablePriceImpl(KMyMoneyPriceImpl prc) {
-	super(prc.getJwsdpPeer(), prc.getKMyMoneyFile());
+    public KMyMoneyWritablePricePairImpl(KMyMoneyPricePairImpl prcPair) {
+	super(prcPair.getJwsdpPeer(), prcPair.getKMyMoneyFile());
     }
 
     // ---------------------------------------------------------------

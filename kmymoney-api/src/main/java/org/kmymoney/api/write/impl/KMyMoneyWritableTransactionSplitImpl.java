@@ -185,23 +185,19 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	 * @return true if the currency of transaction and account match
 	 */
 	private boolean isCurrencyMatching() {
-		KMyMoneyAccount account = getAccount();
-		if ( account == null ) {
+		KMyMoneyAccount acct = getAccount();
+		if ( acct == null ) {
 			return false;
 		}
-		KMyMoneyWritableTransaction transaction = getTransaction();
-		if ( transaction == null ) {
+		KMyMoneyWritableTransaction trx = getTransaction();
+		if ( trx == null ) {
 			return false;
 		}
-		String actCID = account.getCurrencyID();
-		if ( actCID == null ) {
+		String secCurrID = acct.getSecCurrID();
+		if ( secCurrID == null ) {
 			return false;
 		}
-		String actCNS = account.getCurrencyNameSpace();
-		if ( actCNS == null ) {
-			return false;
-		}
-		return (actCID.equals(transaction.getCurrencyID()) && actCNS.equals(transaction.getCurrencyNameSpace()));
+		return (secCurrID.equals(trx.getCommodity()) && actCNS.equals(trx.getCurrencyNameSpace()));
 	}
 
 	/**

@@ -8,17 +8,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.zip.GZIPOutputStream;
 
+import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.api.basetypes.complex.KMMPriceID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.simple.KMMAcctID;
 import org.kmymoney.api.basetypes.simple.KMMInstID;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
@@ -36,16 +36,25 @@ import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.KMyMoneyPayee;
+import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.api.read.impl.KMyMoneyPayeeImpl;
+import org.kmymoney.api.read.impl.KMyMoneyPriceImpl;
+import org.kmymoney.api.read.impl.KMyMoneySecurityImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionImpl;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
+import org.kmymoney.api.write.KMyMoneyWritablePayee;
+import org.kmymoney.api.write.KMyMoneyWritablePrice;
+import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import org.kmymoney.api.write.hlp.IDManager;
-import org.kmymoney.api.write.KMyMoneyWritablePayee;
+import org.kmymoney.api.write.impl.hlp.BookElementsSorter;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -239,7 +248,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 		OutputStream out = new FileOutputStream(file);
 		out = new BufferedOutputStream(out);
-		if ( file.getName().endsWith(".gz") ) {
+		if ( file.getName().endsWith(".gz") ||
+             file.getName().endsWith(".kmy") ) {
 			out = new GZIPOutputStream(out);
 		}
 
@@ -294,8 +304,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 		setCountDataFor("account", cntAccount);
 		setCountDataFor("transaction", cntTransaction);
-		setCountDataFor("gnc:GncVendor", cntPayee);
-		setCountDataFor("gnc:GncVendor", cntSecurity);
+		setCountDataFor("gnc:GncPayee", cntPayee);
+		setCountDataFor("gnc:GncPayee", cntSecurity);
 
 		// make sure the correct sort-order of the entity-types is obeyed in writing.
 		// (we do not enforce this in the xml-schema to allow for reading out of order
@@ -343,7 +353,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 */
 	protected PAYEE createPayeeType() {
 		PAYEE retval = getObjectFactory().createPAYEE();
-		incrementCountDataFor("gnc:GncVendor");
+		incrementCountDataFor("gnc:GncPayee");
 		return retval;
 	}
 	
@@ -351,7 +361,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 */
 	protected SECURITY createSecurityType() {
 		SECURITY retval = getObjectFactory().createSECURITY();
-		incrementCountDataFor("gnc:GncVendor");
+		incrementCountDataFor("gnc:GncPayee");
 		return retval;
 	}
 	
@@ -370,23 +380,9 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 *
 	 * @see KMyMoneyFileImpl#createAccount(GncAccount)
 	 */
-	@Override
-	protected KMyMoneyAccount createAccount(final ACCOUNT jwsdpAccount) {
-		KMyMoneyAccount account = new KMyMoneyWritableAccountImpl(jwsdpAccount, this);
+	protected KMyMoneyAccountImpl createAccount(final ACCOUNT jwsdpAcct) {
+		KMyMoneyAccountImpl account = new KMyMoneyWritableAccountImpl(jwsdpAcct, this);
 		return account;
-	}
-
-	/**
-	 * This overridden method creates the writable version of the returned object.
-	 *
-	 * @param jwsdpCust the jwsdp-object the customer shall wrap
-	 * @return the new customer
-	 * @see KMyMoneyFileImpl#createCustomer(GncV2.GncBook.GncGncCustomer)
-	 */
-	@Override
-	protected KMyMoneyVendorImpl createPayee(final PAYEE jwsdpPye) {
-		KMyMoneyVendorImpl vend = new KMyMoneyWritableVendorImpl(jwsdpPye, this);
-		return vend;
 	}
 
 	/**
@@ -394,60 +390,12 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 *
 	 * @see KMyMoneyFileImpl#createTransaction(GncTransaction)
 	 */
-	@Override
 	protected KMyMoneyTransactionImpl createTransaction(final TRANSACTION jwsdpTrx) {
 		KMyMoneyTransactionImpl account = new KMyMoneyWritableTransactionImpl(jwsdpTrx, this);
 		return account;
 	}
-
-	/**
-	 * @see KMyMoneyWritableFile#getTransactionByID(java.lang.String)
-	 */
-	@Override
-	public KMyMoneyWritableTransaction getTransactionByID(final KMMTrxID trxID) {
-		return (KMyMoneyWritableTransaction) super.getTransactionByID(trxID);
-	}
-
-	/**
-	 * @param type the type to look for
-	 * @return A changable version of all accounts of that type.
-	 * @see {@link KMyMoneyWritableFile#getAccountsByType(String)}
-	 */
-	public Collection<KMyMoneyWritableAccount> getAccountsByType(final String type) {
-		Collection<KMyMoneyWritableAccount> retval = new LinkedList<KMyMoneyWritableAccount>();
-		for ( KMyMoneyWritableAccount acct : getWritableAccounts() ) {
-
-			if ( acct.getType() == null ) {
-				if ( type == null ) {
-					retval.add(acct);
-				}
-			} else if ( acct.getType().equals(type) ) {
-				retval.add(acct);
-			}
-
-		}
-		return retval;
-	}
-
-	/**
-	 * @param name the name of the account
-	 * @return A changable version of the first account with that name.
-	 * @see KMyMoneyFile#getAccountByName(String)
-	 */
-	@Override
-	public KMyMoneyWritableAccount getAccountByName(final String name) {
-		return (KMyMoneyWritableAccount) super.getAccountByName(name);
-	}
-
-	/**
-	 * @param id the unique account-id
-	 * @return A changable version of the account or null if not found.
-	 * @see KMyMoneyFile#getAccountByID(String)
-	 */
-	@Override
-	public KMyMoneyWritableAccount getAccountByID(final KMMAcctID acctid) {
-		return (KMyMoneyWritableAccount) super.getAccountByID(acctid);
-	}
+	
+	// ---------------------------------------------------------------
 
 	/**
 	 * @see KMyMoneyWritableFile#getWritableTransactions()
@@ -460,17 +408,17 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	/**
 	 * @param impl what to remove
 	 */
-	public void removeTransaction(final KMyMoneyWritableTransaction impl) {
+	public void removeTransaction(final KMyMoneyWritableTransaction trx) {
 
 		Collection<KMyMoneyWritableTransactionSplit> c = new LinkedList<KMyMoneyWritableTransactionSplit>();
-		c.addAll(impl.getWritingSplits());
+		c.addAll(trx.getWritingSplits());
 		for ( KMyMoneyWritableTransactionSplit element : c ) {
 			element.remove();
 		}
 
-		getRootElement().getGncBook().getBookElements().remove(((KMyMoneyWritableTransactionImpl) impl).getJwsdpPeer());
+		super.trxMgr.removeTransaction(trx);
+		getRootElement().getTRANSACTIONS().getTRANSACTION().remove(((KMyMoneyWritableTransactionImpl) trx).getJwsdpPeer());
 		setModified(true);
-		transactionID2transaction.remove(impl.getId());
 
 	}
 
@@ -499,6 +447,9 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		if ( pCmdtyName == null ) {
 			throw new IllegalArgumentException("null comodity-name given");
 		}
+		
+		/*
+		 * ::TODO
 		if ( getCurrencyTable().getConversionFactor(pCmdtySpace, pCmdtyId) == null ) {
 
 			CURRENCY newCurrency = getObjectFactory().createGncV2GncBookGncCommodity();
@@ -542,130 +493,27 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			}
 		}
 		throw new IllegalStateException("No priceDB in Book in Gnucash-file");
+		*/
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public KMyMoneyWritableTransaction createWritableTransaction() {
-		return new KMyMoneyWritableTransactionImpl(this);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public KMyMoneyWritableTransaction createWritableTransaction(final String id) {
-		return new KMyMoneyWritableTransactionImpl(this);
+		KMyMoneyWritableTransactionImpl trx = new KMyMoneyWritableTransactionImpl(this);
+		super.trxMgr.addTransaction(trx);
+		return trx;
 	}
 
 	// ----------------------------
-
-	/**
-	 * FOR USE BY EXTENSIONS ONLY!
-	 * 
-	 * @throws WrongInvoiceTypeException
-	 * @throws WrongOwnerTypeException
-	 * @throws
-	 * @see KMyMoneyWritableFile#createWritableTransaction()
-	 */
-	public KMyMoneyWritableCustomerInvoice createWritableCustomerInvoice(final String number,
-			final KMyMoneyCustomer cust, final KMyMoneyAccount incomeAcct, final KMyMoneyAccount receivableAcct,
-			final LocalDate openedDate, final LocalDate postDate, final LocalDate dueDate)
-			throws WrongInvoiceTypeException, WrongOwnerTypeException {
-		if ( cust == null ) {
-			throw new IllegalArgumentException("null customer given");
-		}
-
-		KMyMoneyWritableCustomerInvoice retval = new KMyMoneyWritableCustomerInvoiceImpl(this, number, cust,
-				(KMyMoneyAccountImpl) incomeAcct, (KMyMoneyAccountImpl) receivableAcct, openedDate, postDate, dueDate);
-
-		invoiceID2invoice.put(retval.getId(), retval);
-		return retval;
-	}
-
-	/**
-	 * FOR USE BY EXTENSIONS ONLY!
-	 * 
-	 * @throws WrongInvoiceTypeException
-	 * @throws WrongOwnerTypeException
-	 *
-	 * @see KMyMoneyWritableFile#createWritableTransaction()
-	 */
-	public KMyMoneyWritableVendorBill createWritableVendorBill(final String number, final KMyMoneyVendor vend,
-			final KMyMoneyAccount expensesAcct, final KMyMoneyAccount payableAcct, final LocalDate openedDate,
-			final LocalDate postDate, final LocalDate dueDate)
-			throws WrongInvoiceTypeException, WrongOwnerTypeException {
-		if ( vend == null ) {
-			throw new IllegalArgumentException("null vendor given");
-		}
-
-		KMyMoneyWritableVendorBill retval = new KMyMoneyWritableVendorBillImpl(this, number, vend,
-				(KMyMoneyAccountImpl) expensesAcct, (KMyMoneyAccountImpl) payableAcct, openedDate, postDate, dueDate);
-
-		invoiceID2invoice.put(retval.getId(), retval);
-		return retval;
-	}
-
-	/**
-	 * FOR USE BY EXTENSIONS ONLY!
-	 * 
-	 * @throws WrongInvoiceTypeException
-	 * @throws WrongOwnerTypeException
-	 *
-	 * @see KMyMoneyWritableFile#createWritableTransaction()
-	 */
-	public KMyMoneyWritableJobInvoice createWritableJobInvoice(final String number, final KMyMoneyGenerJob job,
-			final KMyMoneyAccount incExpAcct, final KMyMoneyAccount recvblPayblAcct, final LocalDate openedDate,
-			final LocalDate postDate, final LocalDate dueDate)
-			throws WrongInvoiceTypeException, WrongOwnerTypeException {
-		if ( job == null ) {
-			throw new IllegalArgumentException("null job given");
-		}
-
-		KMyMoneyWritableJobInvoice retval = new KMyMoneyWritableJobInvoiceImpl(this, number, job,
-				(KMyMoneyAccountImpl) incExpAcct, (KMyMoneyAccountImpl) recvblPayblAcct, openedDate, postDate, dueDate);
-
-		invoiceID2invoice.put(retval.getId(), retval);
-		return retval;
-	}
-
-	// ----------------------------
-
-	/**
-	 * @see KMyMoneyWritableFile#createWritableCustomer()
-	 */
-	public KMyMoneyWritableCustomer createWritableCustomer() {
-		KMyMoneyWritableCustomerImpl cust = new KMyMoneyWritableCustomerImpl(this);
-		super.customerID2customer.put(cust.getId(), cust);
-		return cust;
-	}
 
 	/**
 	 * @param impl what to remove
 	 */
-	public void removeCustomer(final KMyMoneyWritableCustomer impl) {
-		customerID2customer.remove(impl.getId());
-		getRootElement().getGncBook().getBookElements().remove(((KMyMoneyWritableCustomerImpl) impl).getJwsdpPeer());
-		setModified(true);
-	}
-
-	// ----------------------------
-
-	/**
-	 * @see KMyMoneyWritableFile#createWritableCustomer()
-	 */
-	public KMyMoneyWritableVendor createWritableVendor() {
-		KMyMoneyWritableVendorImpl vend = new KMyMoneyWritableVendorImpl(this);
-		super.vendorID2vendor.put(vend.getId(), vend);
-		return vend;
-	}
-
-	/**
-	 * @param impl what to remove
-	 */
-	public void removeVendor(final KMyMoneyWritableVendor impl) {
-		vendorID2vendor.remove(impl.getId());
-		getRootElement().getGncBook().getBookElements().remove(((KMyMoneyWritableVendorImpl) impl).getJwsdpPeer());
+	@Override
+	public void removePayee(final KMyMoneyWritablePayee pye) {
+		super.pyeMgr.removePayee(pye);
+		getRootElement().getPAYEES().getPAYEE().remove(((KMyMoneyWritablePayeeImpl) pye).getJwsdpPeer());
 		setModified(true);
 	}
 
@@ -675,8 +523,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * @see KMyMoneyWritableFile#createWritableAccount()
 	 */
 	public KMyMoneyWritableAccount createWritableAccount() {
-		KMyMoneyWritableAccount acct = new KMyMoneyWritableAccountImpl(this);
-		super.accountID2account.put(acct.getId(), acct);
+		KMyMoneyWritableAccountImpl acct = new KMyMoneyWritableAccountImpl(this);
+		super.acctMgr.addAccount(acct);
 		return acct;
 	}
 
@@ -723,7 +571,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.gnucash.write.jwsdpimpl.GnucashFileImpl#getRootAccounts()
+	 * @see org.kmm.write.jwsdpimpl.GnucashFileImpl#getRootAccounts()
 	 */
 	@Override
 	public Collection<? extends KMyMoneyAccount> getRootAccounts() {
@@ -732,15 +580,15 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		if ( rootAccounts.size() > 1 ) {
 			KMyMoneyAccount root = null;
 			StringBuilder roots = new StringBuilder();
-			for ( KMyMoneyAccount gnucashAccount : rootAccounts ) {
-				if ( gnucashAccount == null ) {
+			for ( KMyMoneyAccount kmmAccount : rootAccounts ) {
+				if ( kmmAccount == null ) {
 					continue;
 				}
-				if ( gnucashAccount.getType() != null && gnucashAccount.getType().equals(KMyMoneyAccount.TYPE_ROOT) ) {
-					root = gnucashAccount;
+				if ( kmmAccount.getType() != null && kmmAccount.getType().equals(KMyMoneyAccount.TYPE_ROOT) ) {
+					root = kmmAccount;
 					continue;
 				}
-				roots.append(gnucashAccount.getId()).append("=\"").append(gnucashAccount.getName()).append("\" ");
+				roots.append(kmmAccount.getId()).append("=\"").append(kmmAccount.getName()).append("\" ");
 			}
 			LOGGER.warn("File has more then one root-account! Attaching excess accounts to root-account: "
 					+ roots.toString());
@@ -759,6 +607,168 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			rootAccounts = rootAccounts2;
 		}
 		return rootAccounts;
+	}
+
+	@Override
+	public KMyMoneyWritableFile getWritableKMyMoneyFile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	// ---------------------------------------------------------------
+
+	@Override
+	public KMyMoneyWritableAccount getWritableAccountByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<KMyMoneyWritableAccount> getWritableAccountsByType(String type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public KMyMoneyWritableAccount getWritableAccountByID(final KMMComplAcctID acctID) {
+		if ( acctID == null ) {
+			throw new IllegalArgumentException("null account ID given");
+		}
+
+		if ( ! acctID.isSet() ) {
+			throw new IllegalArgumentException("account ID is not set");
+		}
+
+		KMyMoneyAccount acct = super.getAccountByID(acctID);
+		return new KMyMoneyWritableAccountImpl((KMyMoneyAccountImpl) acct);
+	}
+
+	@Override
+	public KMyMoneyWritableTransaction getWritableTransactionByID(KMMTrxID trxID) {
+		if ( trxID == null ) {
+			throw new IllegalArgumentException("null transaction ID given");
+		}
+
+		if ( ! trxID.isSet() ) {
+			throw new IllegalArgumentException("transaction ID is not set");
+		}
+
+		KMyMoneyTransaction trx = super.getTransactionByID(trxID);
+		return new KMyMoneyWritableTransactionImpl((KMyMoneyTransactionImpl) trx);
+	}
+
+	@Override
+	public KMyMoneyWritablePayee getWritablePayeeByID(KMMPyeID pyeID) {
+		if ( pyeID == null ) {
+			throw new IllegalArgumentException("null payee ID given");
+		}
+
+		if ( ! pyeID.isSet() ) {
+			throw new IllegalArgumentException("payee ID is not set");
+		}
+
+		KMyMoneyPayee trx = super.getPayeeByID(pyeID);
+		return new KMyMoneyWritablePayeeImpl((KMyMoneyPayeeImpl) trx);
+	}
+
+	/**
+	 * This overridden method creates the writable version of the returned object.
+	 *
+	 * @param jwsdpCust the jwsdp-object the customer shall wrap
+	 * @return the new customer
+	 * @see KMyMoneyFileImpl#createCustomer(GncV2.GncBook.GncGncCustomer)
+	 */
+	@Override
+	public KMyMoneyWritablePayee createWritablePayee() {
+		KMyMoneyWritablePayeeImpl pye = new KMyMoneyWritablePayeeImpl(this);
+		super.pyeMgr.addPayee(pye);
+		return pye;
+	}
+
+	// ---------------------------------------------------------------
+
+	@Override
+	public KMyMoneyWritableSecurity getWritableSecurityByID(KMMSecID secID) {
+		if ( secID == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+
+		if ( ! secID.isSet() ) {
+			throw new IllegalArgumentException("security ID is not set");
+		}
+
+		KMyMoneySecurity sec = super.getSecurityByID(secID);
+		return new KMyMoneyWritableSecurityImpl((KMyMoneySecurityImpl) sec);
+	}
+
+	@Override
+	public KMyMoneyWritableSecurity getWritableSecurityByQualifID(KMMQualifSecID qualifID) {
+		if ( qualifID == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+
+		if ( ! qualifID.isSet() ) {
+			throw new IllegalArgumentException("security ID is not set");
+		}
+
+		KMyMoneySecurity sec = super.getSecurityByQualifID(qualifID);
+		return new KMyMoneyWritableSecurityImpl((KMyMoneySecurityImpl) sec);
+	}
+
+	@Override
+	public Collection<KMyMoneyWritableSecurity> getWritableSecurities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public KMyMoneyWritableSecurity createWritableSecurity() {
+		KMyMoneyWritableSecurityImpl sec = new KMyMoneyWritableSecurityImpl(this);
+		super.secMgr.addSecurity(sec);
+		return sec;
+	}
+
+	@Override
+	public void removeSecurity(KMyMoneyWritableSecurity sec) {
+		super.secMgr.removeSecurity(sec);
+		getRootElement().getSECURITIES().getSECURITY().remove(((KMyMoneyWritableSecurityImpl) sec).getJwsdpPeer());
+		setModified(true);
+	}
+
+	// ---------------------------------------------------------------
+
+	@Override
+	public KMyMoneyWritablePrice getWritablePriceByID(KMMPriceID prcID) {
+		if ( prcID == null ) {
+			throw new IllegalArgumentException("null price ID given");
+		}
+
+		if ( ! prcID.isSet() ) {
+			throw new IllegalArgumentException("price ID is not set");
+		}
+
+		KMyMoneyPrice prc = super.getPriceByID(prcID);
+		return new KMyMoneyWritablePriceImpl((KMyMoneyPriceImpl) prc);
+	}
+
+	@Override
+	public Collection<KMyMoneyWritablePrice> getWritablePrices() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public KMyMoneyWritablePrice createWritablePrice() {
+		KMyMoneyWritablePriceImpl prc = new KMyMoneyWritablePriceImpl(this);
+		super.prcMgr.addPrice(prc);
+		return prc;
+	}
+
+	@Override
+	public void removePrice(KMyMoneyWritablePrice prc) {
+		super.prcMgr.removePrice(prc);
+		getRootElement().getPRICES().getPRICE().remove(((KMyMoneyWritablePriceImpl) prc).getJwsdpPeer());
+		setModified(true);
 	}
 
 	// ---------------------------------------------------------------

@@ -17,6 +17,7 @@ import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.UnknownRoundingMethodException;
 import org.kmymoney.api.read.UnknownSecurityTypeException;
 import org.kmymoney.api.generated.PAIR;
+import org.kmymoney.api.generated.PAYEE;
 import org.kmymoney.api.generated.SECURITY;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,15 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
 	file = kmmFile;
     }
 
-    // ---------------------------------------------------------------
+	// ---------------------------------------------------------------
+
+    /**
+     * @return the JWSDP-object we are wrapping.
+     */
+    @SuppressWarnings("exports")
+    public SECURITY getJwsdpPeer() {
+	return jwsdpPeer;
+    }
 
     public KMyMoneyFile getKMyMoneyFile() {
 	return file;

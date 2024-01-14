@@ -55,7 +55,7 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 	}
 
 	public KMyMoneyWritableSecurityImpl(KMyMoneySecurityImpl sec) {
-		super(sec.jwsdpPeer, sec.getKMyMoneyFile());
+		super(sec.getJwsdpPeer(), sec.getKMyMoneyFile());
 	}
 
 	// ---------------------------------------------------------------

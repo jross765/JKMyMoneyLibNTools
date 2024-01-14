@@ -4,17 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.api.basetypes.simple.KMMAcctID;
-import org.kmymoney.api.basetypes.simple.KMMInstID;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
-import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyFile;
-import org.kmymoney.api.write.hlp.IDManager;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 
 /**
@@ -86,7 +84,7 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * @param id the id of the account to fetch
 	 * @return A changable version of the account or null of not found.
 	 */
-	KMyMoneyWritableAccount getWritableAccountByID(String id);
+	KMyMoneyWritableAccount getWritableAccountByID(KMMComplAcctID acctID);
 
 	/**
 	 *
@@ -121,7 +119,7 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * @see KMyMoneyFile#getTransactionByID(String)
 	 * @return A changable version of the transaction.
 	 */
-	KMyMoneyWritableTransaction getWritableTransactionByID(String id);
+	KMyMoneyWritableTransaction getWritableTransactionByID(KMMTrxID trxID);
 	
 	/**
 	 * @see KMyMoneyFile#getTransactions()
@@ -148,7 +146,7 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * @param id the unique id of the customer to look for
 	 * @return the customer or null if it's not found
 	 */
-	KMyMoneyWritablePayee getWritablePayeeByID(String id);
+	KMyMoneyWritablePayee getWritablePayeeByID(KMMPyeID pyeID);
 
 	// ----------------------------
 
@@ -200,5 +198,32 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 */
 	public void addCurrency(final String pCmdtySpace, final String pCmdtyId, final FixedPointNumber conversionFactor,
 			final int pCmdtyNameFraction, final String pCmdtyName);
+
+	// ---------------------------------------------------------------
+
+	/**
+	 * @see KMyMoneyFile#getPriceByID(KMMPriceID)
+	 * @return A changable version of the transaction.
+	 */
+	KMyMoneyWritablePrice getWritablePriceByID(KMMPriceID prcID);
+	
+	/**
+	 * @see KMyMoneyFile#getPrices()
+	 * @return writable versions of all prices in the book.
+	 */
+	Collection<KMyMoneyWritablePrice> getWritablePrices();
+
+	// ----------------------------
+
+	/**
+	 * @return a new price with no splits that is already added to this file
+	 */
+	KMyMoneyWritablePrice createWritablePrice();
+
+	/**
+	 *
+	 * @param sec the transaction to remove.
+	 */
+	void removePrice(KMyMoneyWritablePrice prc);
 
 }

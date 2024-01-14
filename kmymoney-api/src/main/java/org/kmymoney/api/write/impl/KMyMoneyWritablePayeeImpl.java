@@ -165,7 +165,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 	}
 
 	String oldNumber = getNumber();
-	jwsdpPeer.setPayeeId(number);
+	jwsdpPeer.setId(number);
 	getKMyMoneyFile().setModified(true);
 
 	PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
@@ -188,7 +188,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 	}
 
 	String oldName = getName();
-	jwsdpPeer.setPayeeName(name);
+	jwsdpPeer.setName(name);
 	getKMyMoneyFile().setModified(true);
 
 	PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
@@ -210,18 +210,18 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 	
 	{
 
-	    if (jwsdpPeer.getPayeeAddr() == null) {
-		jwsdpPeer.setPayeeAddr(getKMyMoneyFile().getObjectFactory().createAddress());
+	    if (jwsdpPeer.getADDRESS() == null) {
+		jwsdpPeer.setADDRESS(getKMyMoneyFile().getObjectFactory().createADDRESS());
 	    }
 
-	    jwsdpPeer.getPayeeAddr().setAddrAddr1(adr.getAddressLine1());
-	    jwsdpPeer.getPayeeAddr().setAddrAddr2(adr.getAddressLine2());
-	    jwsdpPeer.getPayeeAddr().setAddrAddr3(adr.getAddressLine3());
-	    jwsdpPeer.getPayeeAddr().setAddrAddr4(adr.getAddressLine4());
-	    jwsdpPeer.getPayeeAddr().setAddrName(adr.getAddressName());
-	    jwsdpPeer.getPayeeAddr().setAddrEmail(adr.getEmail());
-	    jwsdpPeer.getPayeeAddr().setAddrFax(adr.getFax());
-	    jwsdpPeer.getPayeeAddr().setAddrPhone(adr.getTel());
+	    jwsdpPeer.getADDRESS().setCity(adr.getCity());
+	    jwsdpPeer.getADDRESS().setCounty(adr.getCounty());
+	    jwsdpPeer.getADDRESS().setPostcode(adr.getPostCode());
+	    jwsdpPeer.getADDRESS().setState(adr.getState());
+	    jwsdpPeer.getADDRESS().setStreet(adr.getStreet());
+	    jwsdpPeer.getADDRESS().setTelephone(adr.getTelephone());
+	    jwsdpPeer.getADDRESS().setZip(adr.getZip());
+	    jwsdpPeer.getADDRESS().setZipcode(adr.getZipCode());
 	}
 
 	getKMyMoneyFile().setModified(true);
@@ -243,7 +243,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 //	}
 
 	String oldNotes = getNotes();
-	jwsdpPeer.setPayeeNotes(notes);
+	jwsdpPeer.setNotes(notes);
 	getKMyMoneyFile().setModified(true);
 
 	PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
@@ -285,9 +285,6 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 	
 	buffer.append("id=");
 	buffer.append(getID());
-	
-	buffer.append(", number='");
-	buffer.append(getNumber() + "'");
 	
 	buffer.append(", name='");
 	buffer.append(getName() + "'");

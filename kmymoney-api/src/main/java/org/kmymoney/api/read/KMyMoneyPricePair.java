@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.read.hlp.KMyMoneyPricePairCore;
 
 /**
  * In KMyMoney, a price pair is a data structure which holds all the 

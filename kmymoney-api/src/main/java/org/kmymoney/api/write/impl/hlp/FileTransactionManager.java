@@ -7,7 +7,7 @@ import org.kmymoney.api.write.impl.KMyMoneyWritableTransactionImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FileTransactionManager extends org.gnucash.api.read.impl.hlp.FileTransactionManager {
+public class FileTransactionManager extends org.kmymoney.api.read.impl.hlp.FileTransactionManager {
 
 	protected static final Logger LOGGER = LoggerFactory.getLogger(FileTransactionManager.class);
 
