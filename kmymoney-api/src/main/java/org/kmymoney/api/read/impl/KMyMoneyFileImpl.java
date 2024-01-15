@@ -31,11 +31,11 @@ import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.PRICES;
 import org.kmymoney.api.numbers.FixedPointNumber;
-import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPayee;
+import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
@@ -230,6 +230,38 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
     // ---------------------------------------------------------------
 
+	/**
+	 * Get count data for specific type.
+	 *
+	 * @param type  the type to set it for
+	 */
+	protected int getCountDataFor(final String type) {
+	
+		if ( type == null ) {
+			throw new IllegalArgumentException("null type given");
+		}
+	
+		if ( type.trim().length() == 0 ) {
+			throw new IllegalArgumentException("empty type given");
+		}
+		
+		if ( type.trim().equals("account")  ) {
+			return getRootElement().getACCOUNTS().getCount().intValue();
+		} else if ( type.trim().equals("transaction")  ) {
+			return getRootElement().getTRANSACTIONS().getCount().intValue();
+		} else if ( type.trim().equals("payee")  ) {
+			return getRootElement().getPAYEES().getCount().intValue();
+		} else if ( type.trim().equals("security")  ) {
+			return getRootElement().getSECURITIES().getCount().intValue();
+		} else if ( type.trim().equals("pricepair")  ) {
+			return getRootElement().getPRICES().getCount().intValue();
+		} else {
+			throw new IllegalArgumentException("Unknown type '" + type + "'");
+		}
+	}
+
+    // ---------------------------------------------------------------
+
     /**
      * @return Returns the currencyTable.
      */
@@ -362,19 +394,29 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     /**
      * @return a read-only collection of all accounts that have no parent (the
      *         result is sorted)
+     * @throws UnknownAccountTypeException 
      */
     @Override
-    public Collection<? extends KMyMoneyAccount> getParentlessAccounts() {
+    public KMyMoneyAccount getRootAccount() throws UnknownAccountTypeException {
+	return null;
+    }
+
+    /**
+     * @return a read-only collection of all accounts that have no parent (the
+     *         result is sorted)
+     */
+    @Override
+    public Collection<? extends KMyMoneyAccount> getParentlessAccounts() throws UnknownAccountTypeException {
 	return acctMgr.getParentlessAccounts();
     }
 
     @Override
-    public Collection<KMMComplAcctID> getTopAccountIDs() {
+    public Collection<KMMComplAcctID> getTopAccountIDs() throws UnknownAccountTypeException {
 	return acctMgr.getTopAccountIDs();
     }
-	    
-    @Override    
-    public Collection<KMyMoneyAccount> getTopAccounts() {
+
+    @Override
+    public Collection<KMyMoneyAccount> getTopAccounts() throws UnknownAccountTypeException {
 	return acctMgr.getTopAccounts();
     }
 

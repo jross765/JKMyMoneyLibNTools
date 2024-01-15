@@ -11,6 +11,7 @@ import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
+import org.kmymoney.api.basetypes.simple.KMMAcctID;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
@@ -156,15 +157,30 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 */
 	Collection<KMyMoneyAccount> getAccounts();
 
-	/**
-	 * @return a read-only collection of all accounts that have no parent (the
-	 *         result is sorted)
-	 */
-	Collection<? extends KMyMoneyAccount> getParentlessAccounts();
+    /**
+     * @return
+     * @throws UnknownAccountTypeException
+     */
+	KMyMoneyAccount getRootAccount() throws UnknownAccountTypeException;
 
-	Collection<KMMComplAcctID> getTopAccountIDs();
+    /**
+     * @return a read-only collection of all accounts that have no parent (the
+     *         result is sorted)
+     * @throws UnknownAccountTypeException 
+     */
+    Collection<? extends KMyMoneyAccount> getParentlessAccounts() throws UnknownAccountTypeException;
 
-	Collection<KMyMoneyAccount> getTopAccounts();
+    /**
+     * @return
+     * @throws UnknownAccountTypeException
+     */
+    Collection<KMMComplAcctID> getTopAccountIDs() throws UnknownAccountTypeException;
+
+    /**
+     * @return
+     * @throws UnknownAccountTypeException
+     */
+    Collection<KMyMoneyAccount> getTopAccounts() throws UnknownAccountTypeException;
 
 	// ---------------------------------------------------------------
 

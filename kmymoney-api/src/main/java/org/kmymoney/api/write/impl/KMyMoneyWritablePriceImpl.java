@@ -7,12 +7,16 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import javax.swing.JWindow;
+
 import org.kmymoney.api.Const;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PRICE;
+import org.kmymoney.api.generated.PRICES;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyPricePair;
@@ -57,7 +61,7 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
     }
 
     public KMyMoneyWritablePriceImpl(KMyMoneyPriceImpl prc) {
-	super(prc.getJwsdpPeer(), prc.getKMyMoneyFile());
+	super(prc.getParentPricePair(), prc.getJwsdpPeer(), prc.getKMyMoneyFile());
     }
 
     // ---------------------------------------------------------------
@@ -67,7 +71,6 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
      *
      * @return the file we are associated with
      */
-    @Override
     public KMyMoneyWritableFileImpl getWritableKMyMoneyFile() {
 	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
     }
@@ -139,8 +142,9 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
         prc.setPriceValue("1");
         
         // file.getRootElement().getGncBook().getBookElements().add(prc);
-        GncPricedb priceDB = file.getPrcMgr().getPriceDB();
-	priceDB.getPrice().add(prc);
+        PRICES priceDB = file.getPrcMgr().getPriceDB();
+        int prcPairIdx = 123; // ::TODOIO
+        priceDB.getPRICEPAIR().get(prcPairIdx).getPRICE().add(prc);
         file.setModified(true);
     
         return prc;
@@ -149,21 +153,20 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
     // ---------------------------------------------------------------
 
     @Override
-    public void setFromSecCurrQualifID(KMMSecCurrID qualifID) {
+    public void setFromSecCurrQualifID(KMMQualifSecCurrID qualifID) {
+    	jwsdpPeer.PriceSecurity().setSecId(qualifID.getCode());
+    	getWritableKMyMoneyFile().setModified(true);
+    }
+
+    @Override
+    public void setFromSecurityQualifID(KMMQualifSecID qualifID) {
 	jwsdpPeer.getPriceSecurity().setSecSpace(qualifID.getNameSpace());
 	jwsdpPeer.getPriceSecurity().setSecId(qualifID.getCode());
 	getWritableKMyMoneyFile().setModified(true);
     }
 
     @Override
-    public void setFromSecurityQualifID(GKSecID qualifID) {
-	jwsdpPeer.getPriceSecurity().setSecSpace(qualifID.getNameSpace());
-	jwsdpPeer.getPriceSecurity().setSecId(qualifID.getCode());
-	getWritableKMyMoneyFile().setModified(true);
-    }
-
-    @Override
-    public void setFromCurrencyQualifID(KMMCurrID qualifID) {
+    public void setFromCurrencyQualifID(KMMQualifCurrID qualifID) {
 	jwsdpPeer.getPriceSecurity().setSecSpace(qualifID.getNameSpace());
 	jwsdpPeer.getPriceSecurity().setSecId(qualifID.getCode());
 	getWritableKMyMoneyFile().setModified(true);

@@ -101,17 +101,6 @@ public class KMyMoneyWritableObjectImpl implements KMyMoneyWritableObject
 			}
 		}
 
-		ObjectFactory objectFactory = new ObjectFactory();
-		Slot newSlot = objectFactory.createSlot();
-		newSlot.setSlotKey(name);
-		SlotValue newValue = objectFactory.createSlotValue();
-		newValue.setType(Const.XML_DATA_TYPE_STRING);
-		newValue.getContent().add(value);
-		newSlot.setSlotValue(newValue);
-		LOGGER.debug("setUserDefinedAttribute: (name=" + name + ", value=" + value + ") - adding new slot ");
-
-		slots.add(newSlot);
-
 		getFile().setModified(true);
 	}
 

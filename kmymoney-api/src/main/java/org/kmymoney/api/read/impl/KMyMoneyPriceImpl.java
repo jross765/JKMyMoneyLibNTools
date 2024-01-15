@@ -21,6 +21,7 @@ import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneySecurity;
+import org.kmymoney.api.generated.PAYEE;
 import org.kmymoney.api.generated.PRICE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class KMyMoneyPriceImpl implements KMyMoneyPrice {
     
     // -----------------------------------------------------------
 
-    private final PRICE jwsdpPeer;
+    protected final PRICE jwsdpPeer;
 
     private final KMyMoneyFile file;
 
@@ -63,6 +64,20 @@ public class KMyMoneyPriceImpl implements KMyMoneyPrice {
 	this.parent    = parent;
 	this.jwsdpPeer = newPeer;
 	this.file      = file;
+    }
+
+	// ---------------------------------------------------------------
+
+    /**
+     * @return the JWSDP-object we are wrapping.
+     */
+    @SuppressWarnings("exports")
+    public PRICE getJwsdpPeer() {
+	return jwsdpPeer;
+    }
+
+    public KMyMoneyFile getKMyMoneyFile() {
+	return file;
     }
 
     // -----------------------------------------------------------

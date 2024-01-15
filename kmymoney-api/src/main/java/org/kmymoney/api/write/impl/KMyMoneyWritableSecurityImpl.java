@@ -3,6 +3,8 @@ package org.kmymoney.api.write.impl;
 import java.math.BigInteger;
 
 import org.kmymoney.api.Const;
+import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.generated.SECURITY;
@@ -65,9 +67,9 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 	 *
 	 * @see KMyMoneyWritableSecurity#remove()
 	 */
-	public void remove() throws InvalidSecCurrTypeException, ObjectCascadeException, InvalidSecCurrIDException {
+	public void remove() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 		SECURITY peer = jwsdpPeer;
-		(getKMyMoneyFile()).getRootElement().getGncBook().getBookElements().remove(peer);
+		(getKMyMoneyFile()).getRootElement().getSECURITIES().getSECURITY().remove(peer);
 		(getKMyMoneyFile()).removeSecurity(this);
 	}
 
@@ -78,7 +80,7 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 	 * modify the ID of the new transaction!
 	 *
 	 * @param file the file we will belong to
-	 * @param guid the ID we shall have
+	 * @param newID the ID we shall have
 	 * @return a new jwsdp-peer already entered into th jwsdp-peer of the file
 	 */
 	protected static SECURITY createSecurity_int(
@@ -94,12 +96,15 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 
 		SECURITY jwsdpSec = file.createSecurityType();
 
-		jwsdpSec.setSecFraction(Const.CMDTY_FRACTION_DEFAULT);
-		jwsdpSec.setVersion(Const.XML_FORMAT_VERSION);
-		jwsdpSec.setSecName("no name given");
-		jwsdpSec.setSecSpace(GCshSecCurrNameSpace.Exchange.EURONEXT.toString()); // ::TODO : soft
-		jwsdpSec.setSecId("XYZ"); // ::TODO
-		jwsdpSec.setSecXcode(Const.CMDTY_XCODE_DEFAULT);
+		jwsdpSec.setType(null);
+		jwsdpSec.setSymbol(Const.SEC_SYMBOL_DEFAULT);
+		jwsdpSec.setName("no name given");;
+		jwsdpSec.setPp(BigInteger.valueOf(Const.SEC_PP_DEFAULT));
+		jwsdpSec.setSaf(BigInteger.valueOf(Const.SEC_SAF_DEFAULT));
+		jwsdpSec.setTradingMarket(null);
+		jwsdpSec.setTradingCurrency(file.getDefaultCurrencyID());
+		
+		// ::TODO: Key-value pair for ISIN
 
 		file.getSecurities().add(jwsdpSec);
 		file.setModified(true);

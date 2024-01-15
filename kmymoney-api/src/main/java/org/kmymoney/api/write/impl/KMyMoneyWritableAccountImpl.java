@@ -132,7 +132,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			jwsdpAcct.setActId(guid);
 		}
 
-		file.getRootElement().getGncBook().getBookElements().add(jwsdpAcct);
+		file.getRootElement().getACCOUNTS().getACCOUNT().add(jwsdpAcct);
 		file.setModified(true);
 		return jwsdpAcct;
 	}
@@ -149,7 +149,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalStateException("cannot remove account while it contains child-accounts!");
 		}
 
-		getWritableKMyMoneyFile().getRootElement().getGncBook().getBookElements().remove(jwsdpPeer);
+		getWritableKMyMoneyFile().getRootElement().getACCOUNTS().getACCOUNT().remove(jwsdpPeer);
 		getWritableKMyMoneyFile().removeAccount(this);
 	}
 

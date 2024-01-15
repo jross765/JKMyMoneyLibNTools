@@ -1,6 +1,5 @@
 package org.kmymoney.api.write;
 
-import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.write.hlp.KMyMoneyWritablePricePairCore;
 
@@ -9,7 +8,7 @@ import org.kmymoney.api.write.hlp.KMyMoneyWritablePricePairCore;
  * 
  * @see KMyMoneyPricePair
  */
-public interface KMyMoneyWritablePricePair extends KMyMoneyPrice, 
+public interface KMyMoneyWritablePricePair extends KMyMoneyPricePair, 
                                                    KMyMoneyWritablePricePairCore
 {
 

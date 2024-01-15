@@ -106,12 +106,10 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 */
 	KMyMoneyWritableAccount createWritableAccount();
 
-	// -----------------------------------------------------------
-
 	/**
-	 * @param impl the account to remove
+	 * @param acct the account to remove
 	 */
-	void removeAccount(KMyMoneyWritableAccount impl);
+	void removeAccount(KMyMoneyWritableAccount acct);
 
 	// ---------------------------------------------------------------
 
@@ -136,9 +134,9 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 
 	/**
 	 *
-	 * @param impl the transaction to remove.
+	 * @param trx the transaction to remove.
 	 */
-	void removeTransaction(KMyMoneyWritableTransaction impl);
+	void removeTransaction(KMyMoneyWritableTransaction trx);
 
 	// ---------------------------------------------------------------
 
@@ -154,6 +152,12 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * @return a new customer with no values that is already added to this file
 	 */
 	KMyMoneyWritablePayee createWritablePayee();
+
+	/**
+	 *
+	 * @param pye the transaction to remove.
+	 */
+	void removePayee(KMyMoneyWritablePayee pye);
 
 	// ---------------------------------------------------------------
 

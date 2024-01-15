@@ -4,14 +4,11 @@ import java.text.ParseException;
 
 import javax.naming.spi.ObjectFactory;
 
-import org.kmymoney.api.Const;
 import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.numbers.FixedPointNumber;
-import org.kmymoney.api.read.KMyMoneyAccount;
-import org.kmymoney.api.read.KMyMoneyTransaction;
-import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.IllegalTransactionSplitActionException;
+import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
@@ -148,12 +145,12 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	 * @see KMyMoneyWritableTransactionSplit#setAccount(KMyMoneyAccount)
 	 */
 	public void setAccount(final KMyMoneyAccount acct) {
-		if ( account == null ) {
+		if ( acct == null ) {
 			throw new NullPointerException("null account given");
 		}
 		String old = (getJwsdpPeer().getAccount() == null ? null : getJwsdpPeer().getAccount());
-		jwsdpPeer.setAccount(acct.getId());
-		((KMyMoneyWritableFile) getKMyMoneyFile()).setModified(true);
+		jwsdpPeer.setAccount(acct.getID().toString());
+		((KMyMoneyWritableFile) getWritableKMyMoneyFile()).setModified(true);
 
 		if ( old == null || !old.equals(acct.getId()) ) {
 			if ( getPropertyChangeSupport() != null ) {
@@ -298,10 +295,10 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	/**
 	 * Set the type of association this split has with an invoice's lot.
 	 *
-	 * @param action null, or one of the defined ACTION_xyz values
+	 * @param act null, or one of the defined ACTION_xyz values
 	 * @throws IllegalTransactionSplitActionException
 	 */
-	public void setSplitAction(final String action) throws IllegalTransactionSplitActionException {
+	public void setSplitAction(final String act) throws IllegalTransactionSplitActionException {
 //		if ( action != null &&
 //             ! action.equals(ACTION_PAYMENT) &&
 //             ! action.equals(ACTION_INVOICE) &&
@@ -311,13 +308,13 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 //                throw new IllegalSplitActionException();
 //		}
 
-		String old = getJwsdpPeer().getSplitAction();
-		jwsdpPeer.setSplitAction(action);
+		String old = getJwsdpPeer().getAction();
+		jwsdpPeer.setAction(act);
 		((KMyMoneyWritableFile) getKMyMoneyFile()).setModified(true);
 
-		if ( old == null || !old.equals(action) ) {
+		if ( old == null || !old.equals(act) ) {
 			if ( getPropertyChangeSupport() != null ) {
-				getPropertyChangeSupport().firePropertyChange("splitAction", old, action);
+				getPropertyChangeSupport().firePropertyChange("splitAction", old, act);
 			}
 		}
 	}

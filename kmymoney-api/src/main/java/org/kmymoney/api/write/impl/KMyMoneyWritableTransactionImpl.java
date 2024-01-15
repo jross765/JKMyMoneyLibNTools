@@ -186,18 +186,18 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	}
 
 	/**
-	 * @param impl the split to remove from this transaction
+	 * @param splt the split to remove from this transaction
 	 */
-	public void remove(final KMyMoneyWritableTransactionSplit impl) {
+	public void remove(final KMyMoneyWritableTransactionSplit splt) {
 		jwsdpPeer.getSPLITS().getSPLIT()
-				.remove(((KMyMoneyWritableTransactionSplitImpl) impl).jwsdpPeer);
+			.remove(((KMyMoneyWritableTransactionSplitImpl) splt).jwsdpPeer);
 		getWritingFile().setModified(true);
 		if ( mySplits != null ) {
-			mySplits.remove(impl);
+			mySplits.remove(splt);
 		}
-		KMyMoneyWritableAccountImpl account = (KMyMoneyWritableAccountImpl) impl.getAccount();
+		KMyMoneyWritableAccountImpl account = (KMyMoneyWritableAccountImpl) splt.getAccount();
 		if ( account != null ) {
-			account.removeTransactionSplit(impl);
+			account.removeTransactionSplit(splt);
 		}
 
 		// there is no count for splits up to now
@@ -310,8 +310,8 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 					"null description given! Please use the empty string instead of null for an empty description");
 		}
 
-		String old = jwsdpPeer.getTrnDescription();
-		jwsdpPeer.setTrnDescription(desc);
+		String old = jwsdpPeer.getMemo();
+		jwsdpPeer.setMemo(desc);
 		getWritingFile().setModified(true);
 
 		if ( old == null || !old.equals(desc) ) {

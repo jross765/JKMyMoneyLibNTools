@@ -107,7 +107,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
             jwsdpPye.setADDRESS(addr);
         }
     
-        file.getRootElement().getGncBook().getBookElements().add(jwsdpPye);
+        file.getRootElement().getPAYEES().getPAYEE().add(jwsdpPye);
         file.setModified(true);
     
         LOGGER.debug("createPayee_int: Created new payee (core): " + jwsdpPye.getPayeeGuid().getValue());
@@ -123,8 +123,8 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
     @Override
     public void remove() {
     	PAYEE peer = jwsdpPeer;
-	(getKMyMoneyFile()).getRootElement().getGncBook().getBookElements().remove(peer);
-	(getKMyMoneyFile()).removePayee(this);
+    	(getKMyMoneyFile()).getRootElement().getPAYEES().getPAYEE().remove(peer);
+    	(getKMyMoneyFile()).removePayee(this);
     }
 
     // ---------------------------------------------------------------

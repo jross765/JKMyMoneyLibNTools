@@ -264,10 +264,10 @@ public class FileAccountManager {
 
 			return retval;
 		} catch (RuntimeException e) {
-			LOGGER.error("getRootAccounts: Problem getting all root-account", e);
+			LOGGER.error("getParentlessAccounts: Problem getting all root-account", e);
 			throw e;
 		} catch (Throwable e) {
-			LOGGER.error("getRootAccounts: SERIOUS Problem getting all root-account", e);
+			LOGGER.error("getParentlessAccounts: SERIOUS Problem getting all root-account", e);
 			return new ArrayList<KMyMoneyAccount>();
 		}
 	}

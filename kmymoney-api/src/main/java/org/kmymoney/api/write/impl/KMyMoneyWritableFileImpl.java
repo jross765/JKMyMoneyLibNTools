@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -30,6 +31,7 @@ import org.kmymoney.api.generated.CURRENCY;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.PAYEE;
 import org.kmymoney.api.generated.PRICE;
+import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.generated.TRANSACTION;
@@ -38,8 +40,10 @@ import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.KMyMoneyTransaction;
+import org.kmymoney.api.read.UnknownAccountTypeException;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPayeeImpl;
@@ -117,6 +121,53 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		// if (propertyChange != null)
 		// propertyChange.firePropertyChange("modified", old, pModified);
 	}
+	
+	// ---------------------------------------------------------------
+
+	/**
+	 * keep the count-data up to date.
+	 *
+	 * @param type  the type to set it for
+	 * @param val the value
+	 */
+	protected void setCountDataFor(final String type, final int val) {
+	
+		if ( type == null ) {
+			throw new IllegalArgumentException("null type given");
+		}
+	
+		if ( type.trim().length() == 0 ) {
+			throw new IllegalArgumentException("empty type given");
+		}
+		
+		if ( val < 0 ) {
+			throw new IllegalArgumentException("val < 0 given");
+		}
+	
+		if ( type.trim().equals("account")  ) {
+			getRootElement().getACCOUNTS().setCount(BigInteger.valueOf(val));
+			setModified(true);
+			return;
+		} else if ( type.trim().equals("transaction")  ) {
+			getRootElement().getTRANSACTIONS().setCount(BigInteger.valueOf(val));
+			setModified(true);
+			return;
+		} else if ( type.trim().equals("payee")  ) {
+			getRootElement().getPAYEES().setCount(BigInteger.valueOf(val));
+			setModified(true);
+			return;
+		} else if ( type.trim().equals("security")  ) {
+			getRootElement().getSECURITIES().setCount(BigInteger.valueOf(val));
+			setModified(true);
+			return;
+		} else if ( type.trim().equals("pricepair")  ) {
+			getRootElement().getPRICES().setCount(BigInteger.valueOf(val));
+			setModified(true);
+			return;
+		} else {
+			throw new IllegalArgumentException("Unknown type '" + type + "'");
+		}
+	}
 
 	/**
 	 * Keep the count-data up to date. The count-data is re-calculated on the fly
@@ -130,16 +181,12 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		if ( type == null ) {
 			throw new IllegalArgumentException("null type given");
 		}
-
-		List<GncCountData> l = getRootElement().getGncBook().getGncCountData();
-		for ( Iterator<GncCountData> iter = l.iterator(); iter.hasNext(); ) {
-			GncCountData gncCountData = (GncCountData) iter.next();
-
-			if ( type.equals(gncCountData.getCdType()) ) {
-				gncCountData.setValue(gncCountData.getValue() + 1);
-				setModified(true);
-			}
+		
+		if ( type.trim().length() == 0 ) {
+			throw new IllegalArgumentException("empty type given");
 		}
+		
+		incrementCountDataForCore(type, 1);
 	}
 
 	/**
@@ -155,37 +202,35 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throw new IllegalArgumentException("null type given");
 		}
 
-		List<GncCountData> l = getRootElement().getGncBook().getGncCountData();
-		for ( Iterator<GncCountData> iter = l.iterator(); iter.hasNext(); ) {
-			GncCountData gncCountData = (GncCountData) iter.next();
-
-			if ( type.equals(gncCountData.getCdType()) ) {
-				gncCountData.setValue(gncCountData.getValue() - 1);
-				setModified(true);
-			}
+		if ( type.trim().length() == 0 ) {
+			throw new IllegalArgumentException("empty type given");
 		}
+		
+		incrementCountDataForCore(type, -1);
 	}
 
 	/**
-	 * keep the count-data up to date.
+	 * Keep the count-data up to date. The count-data is re-calculated on the fly
+	 * before writing but we like to keep our internal model up-to-date just to be
+	 * defensive. <gnc:count-data cd:type="commodity">2</gnc:count-data>
 	 *
-	 * @param type  the type to set it for
-	 * @param count the value
+	 * @param type the type to set it for
 	 */
-	protected void setCountDataFor(final String type, final int count) {
+	private void incrementCountDataForCore(final String type, final int delta) {
 
 		if ( type == null ) {
 			throw new IllegalArgumentException("null type given");
 		}
 
-		List<GncCountData> l = getRootElement().getGncBook().getGncCountData();
-		for ( GncCountData gncCountData : l ) {
-			if ( type.equals(gncCountData.getCdType()) ) {
-				gncCountData.setValue(count);
-				setModified(true);
-			}
+		if ( type.trim().length() == 0 ) {
+			throw new IllegalArgumentException("empty type given");
 		}
+
+		int currCnt = getCountDataFor(type);
+		setCountDataFor(type, currCnt + delta);
 	}
+
+	// ---------------------------------------------------------------
 
 	/**
 	 * @param file the file to load
@@ -202,13 +247,12 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 *
 	 * @see KMyMoneyTransactionImpl#createSplit(GncTransaction.TrnSplits.TrnSplit)
 	 */
-	protected void addTransaction(final KMyMoneyTransactionImpl impl) {
+	protected void addTransaction(final KMyMoneyTransactionImpl trx) {
 		incrementCountDataFor("transaction");
 
-		getRootElement().getGncBook().getBookElements().add(impl.getJwsdpPeer());
+		getRootElement().getTRANSACTIONS().getTRANSACTION().add(trx.getJwsdpPeer());
 		setModified(true);
-		transactionID2transaction.put(impl.getId(), impl);
-
+		super.trxMgr.addTransaction(trx);
 	}
 
 	/**
@@ -285,32 +329,38 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		int cntTransaction = 0;
 		int cntPayee = 0;
 		int cntSecurity = 0;
+		int cntPricePair = 0;
 
 		for ( ACCOUNT acct : getRootElement().getACCOUNTS().getACCOUNT() ) {
 			cntAccount++;
 		}
 		
-		for ( TRANSACTION acct : getRootElement().getTRANSACTIONS().getTRANSACTION() ) {
+		for ( TRANSACTION trx : getRootElement().getTRANSACTIONS().getTRANSACTION() ) {
 			cntTransaction++;
 		}
 		
-		for ( PAYEE acct : getRootElement().getPAYEES().getPAYEE() ) {
+		for ( PAYEE pye : getRootElement().getPAYEES().getPAYEE() ) {
 			cntPayee++;
 		}
 		
-		for ( SECURITY acct : getRootElement().getSECURITIES().getSECURITY() ) {
+		for ( SECURITY sec : getRootElement().getSECURITIES().getSECURITY() ) {
 			cntSecurity++;
+		}
+
+		for ( PRICEPAIR prc : getRootElement().getPRICES().getPRICEPAIR() ) {
+			cntPricePair++;
 		}
 
 		setCountDataFor("account", cntAccount);
 		setCountDataFor("transaction", cntTransaction);
-		setCountDataFor("gnc:GncPayee", cntPayee);
-		setCountDataFor("gnc:GncPayee", cntSecurity);
+		setCountDataFor("payee", cntPayee);
+		setCountDataFor("security", cntSecurity);
+		setCountDataFor("pricepair", cntPricePair);
 
 		// make sure the correct sort-order of the entity-types is obeyed in writing.
 		// (we do not enforce this in the xml-schema to allow for reading out of order
 		// files)
-		java.util.Collections.sort(bookElements, new BookElementsSorter());
+		java.util.Collections.sort(getRootElement(), new BookElementsSorter());
 	}
 
 	/**
@@ -361,7 +411,15 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 */
 	protected SECURITY createSecurityType() {
 		SECURITY retval = getObjectFactory().createSECURITY();
-		incrementCountDataFor("gnc:GncPayee");
+		incrementCountDataFor("payee");
+		return retval;
+	}
+	
+	/**
+	 */
+	protected PRICEPAIR createPricePairType() {
+		PRICEPAIR retval = getObjectFactory().createPRICEPAIR();
+		incrementCountDataFor("pricepair");
 		return retval;
 	}
 	
@@ -508,7 +566,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	// ----------------------------
 
 	/**
-	 * @param impl what to remove
+	 * @param pye what to remove
 	 */
 	@Override
 	public void removePayee(final KMyMoneyWritablePayee pye) {
@@ -529,24 +587,25 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
 
 	/**
-	 * @param impl what to remove
+	 * @param acct what to remove
 	 */
-	public void removeAccount(final KMyMoneyWritableAccount impl) {
-		if ( impl.getTransactionSplits().size() > 0 ) {
+	public void removeAccount(final KMyMoneyWritableAccount acct) {
+		if ( acct.getTransactionSplits().size() > 0 ) {
 			throw new IllegalStateException("cannot remove account while it contains transaction-splits!");
 		}
 
-		getRootElement().getGncBook().getBookElements().remove(((KMyMoneyWritableAccountImpl) impl).getJwsdpPeer());
+		getRootElement().getACCOUNTS().getACCOUNT().remove(((KMyMoneyWritableAccountImpl) acct).getJwsdpPeer());
 		setModified(true);
-		super.accountID2account.remove(impl.getId());
+		super.acctMgr.removeAccount(acct);
 	}
 
 	/**
 	 * @return a read-only collection of all accounts that have no parent
+	 * @throws UnknownAccountTypeException 
 	 */
 	@SuppressWarnings("unchecked")
-	public Collection<? extends KMyMoneyWritableAccount> getWritableRootAccounts() {
-		return (Collection<? extends KMyMoneyWritableAccount>) getRootAccounts();
+	public Collection<? extends KMyMoneyWritableAccount> getWritableParentlessAccounts() throws UnknownAccountTypeException {
+		return (Collection<? extends KMyMoneyWritableAccount>) getParentlessAccounts();
 	}
 
 	/**
@@ -560,23 +619,15 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		return retval;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public KMyMoneyWritableFile getWritableGnucashFile() {
-		return this;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see org.kmm.write.jwsdpimpl.GnucashFileImpl#getRootAccounts()
 	 */
 	@Override
-	public Collection<? extends KMyMoneyAccount> getRootAccounts() {
+	public Collection<? extends KMyMoneyAccount> getParentlessAccounts() throws UnknownAccountTypeException {
 		// TODO Auto-generated method stub
-		Collection<? extends KMyMoneyAccount> rootAccounts = super.getRootAccounts();
+		Collection<? extends KMyMoneyAccount> rootAccounts = super.getParentlessAccounts();
 		if ( rootAccounts.size() > 1 ) {
 			KMyMoneyAccount root = null;
 			StringBuilder roots = new StringBuilder();
@@ -584,11 +635,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 				if ( kmmAccount == null ) {
 					continue;
 				}
-				if ( kmmAccount.getType() != null && kmmAccount.getType().equals(KMyMoneyAccount.TYPE_ROOT) ) {
+				if ( kmmAccount.getParentAccountID() == null ) {
 					root = kmmAccount;
 					continue;
 				}
-				roots.append(kmmAccount.getId()).append("=\"").append(kmmAccount.getName()).append("\" ");
+				roots.append(kmmAccount.getID()).append("=\"").append(kmmAccount.getName()).append("\" ");
 			}
 			LOGGER.warn("File has more then one root-account! Attaching excess accounts to root-account: "
 					+ roots.toString());
@@ -611,8 +662,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 	@Override
 	public KMyMoneyWritableFile getWritableKMyMoneyFile() {
-		// TODO Auto-generated method stub
-		return null;
+		return this;
 	}
 	
 	// ---------------------------------------------------------------
@@ -635,9 +685,10 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throw new IllegalArgumentException("null account ID given");
 		}
 
-		if ( ! acctID.isSet() ) {
-			throw new IllegalArgumentException("account ID is not set");
-		}
+		// ::TODO
+//		if ( ! acctID.isSet() ) {
+//			throw new IllegalArgumentException("account ID is not set");
+//		}
 
 		KMyMoneyAccount acct = super.getAccountByID(acctID);
 		return new KMyMoneyWritableAccountImpl((KMyMoneyAccountImpl) acct);
@@ -707,9 +758,10 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throw new IllegalArgumentException("null security ID given");
 		}
 
-		if ( ! qualifID.isSet() ) {
-			throw new IllegalArgumentException("security ID is not set");
-		}
+		// ::TODO
+//		if ( ! qualifID.isSet() ) {
+//			throw new IllegalArgumentException("security ID is not set");
+//		}
 
 		KMyMoneySecurity sec = super.getSecurityByQualifID(qualifID);
 		return new KMyMoneyWritableSecurityImpl((KMyMoneySecurityImpl) sec);
@@ -743,9 +795,10 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throw new IllegalArgumentException("null price ID given");
 		}
 
-		if ( ! prcID.isSet() ) {
-			throw new IllegalArgumentException("price ID is not set");
-		}
+		// ::TODO
+//		if ( ! prcID.isSet() ) {
+//			throw new IllegalArgumentException("price ID is not set");
+//		}
 
 		KMyMoneyPrice prc = super.getPriceByID(prcID);
 		return new KMyMoneyWritablePriceImpl((KMyMoneyPriceImpl) prc);
@@ -766,8 +819,34 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 	@Override
 	public void removePrice(KMyMoneyWritablePrice prc) {
+		// 1) remove avatar in price manager
 		super.prcMgr.removePrice(prc);
-		getRootElement().getPRICES().getPRICE().remove(((KMyMoneyWritablePriceImpl) prc).getJwsdpPeer());
+		
+		// 2) remove price
+		KMyMoneyPricePair prcPair = prc.getParentPricePair();
+		
+		for ( PRICEPAIR jwsdpPrcPair : getRootElement().getPRICES().getPRICEPAIR() ) {
+			if ( jwsdpPrcPair.getFrom().equals(prcPair.getFromCurrencyCode()) &&
+				 jwsdpPrcPair.getTo().equals(prcPair.getToCurrencyCode()) ) {
+				// CAUTION concurrency ::CHECK
+				jwsdpPrcPair.getPRICE().remove(((KMyMoneyWritablePriceImpl) prc).getJwsdpPeer());
+				break;
+			}
+		}
+		
+		// 3) remove price pair, if no prices left
+		for ( PRICEPAIR jwsdpPrcPair : getRootElement().getPRICES().getPRICEPAIR() ) {
+			if ( jwsdpPrcPair.getFrom().equals(prcPair.getFromCurrencyCode()) &&
+				 jwsdpPrcPair.getTo().equals(prcPair.getToCurrencyCode()) ) {
+				if ( jwsdpPrcPair.getPRICE().size() == 0 ) {
+					// CAUTION concurrency ::CHECK
+					getRootElement().getPRICES().getPRICEPAIR().remove(jwsdpPrcPair);
+					break;
+				}
+			}
+		}
+		
+		// 4) set 'modified' flag
 		setModified(true);
 	}
 
