@@ -1,27 +1,34 @@
 package org.kmymoney.api.write.impl;
 
 import java.beans.PropertyChangeSupport;
+import java.util.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.GregorianCalendar;
 
 import javax.swing.JWindow;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kmymoney.api.Const;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PRICE;
+import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.PRICES;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyPriceImpl;
+import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritablePrice;
 import org.kmymoney.api.write.KMyMoneyWritablePricePair;
@@ -41,6 +48,8 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 
     // ---------------------------------------------------------------
 
+    private KMyMoneyWritablePricePair wrtblParent = null;
+
     /**
      * Our helper to implement the KMyMoneyWritableObject-interface.
      */
@@ -54,14 +63,19 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
     		final PRICE jwsdpPeer,
     		final KMyMoneyWritableFile file) {
     	super(parent, jwsdpPeer, file);
+    	this.wrtblParent = parent;
     }
 
-    public KMyMoneyWritablePriceImpl(final KMyMoneyWritableFileImpl file) {
-	super(createPrice_int(file, file.getNewPriceID()), file);
+    public KMyMoneyWritablePriceImpl(
+    		final KMyMoneyPricePairImpl parent,
+    		final KMyMoneyWritableFileImpl file) {
+    	super(parent, createPrice_int(parent, file), file);
+    	this.wrtblParent = new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) parent);
     }
 
     public KMyMoneyWritablePriceImpl(KMyMoneyPriceImpl prc) {
-	super(prc.getParentPricePair(), prc.getJwsdpPeer(), prc.getKMyMoneyFile());
+    	super(prc.getParentPricePair(), prc.getJwsdpPeer(), prc.getKMyMoneyFile());
+    	this.wrtblParent = new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) prc.getParentPricePair());
     }
 
     // ---------------------------------------------------------------
@@ -95,183 +109,159 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 //  }
 
     private static PRICE createPrice_int(
-	    final KMyMoneyWritableFileImpl file, 
-	    final KMMID newID) {
+    	final KMyMoneyPricePairImpl prntPrcPair,
+	    final KMyMoneyWritableFileImpl file) {
 	
-		if ( newID == null ) {
-			throw new IllegalArgumentException("null ID given");
-		}
-
-		if ( ! newID.isSet() ) {
-			throw new IllegalArgumentException("empty ID given");
-		}
         ObjectFactory factory = file.getObjectFactory();
         
-        PRICE prc = file.createPriceType();
-    
-        {
-            Price.PriceId gncPrcID = factory.createPricePriceId();
-            gncPrcID.setType(Const.XML_DATA_TYPE_GUID);
-            gncPrcID.setValue(newID.toString());
-            prc.setPriceId(gncPrcID);
-        }
+        PRICE jwsdpPrc = file.createPriceType();
         
-        {
-            Price.PriceSecurity cmdty = factory.createPricePriceSecurity();
-            cmdty.setSecSpace("xxx");
-            cmdty.setSecId("yyy");
-            prc.setPriceSecurity(cmdty);
-        }
-    
-        {
-            Price.PriceCurrency curr = factory.createPricePriceCurrency();
-            curr.setSecSpace(KMMSecCurrNameSpace.CURRENCY);
-            curr.setSecId(file.getDefaultCurrencyID());
-            prc.setPriceCurrency(curr);
-        }
+        jwsdpPrc.setSource(Source.USER_PRICE.toString());
+        // https://stackoverflow.com/questions/835889/java-util-date-to-xmlgregoriancalendar
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(new Date());
+        XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+        jwsdpPrc.setDate(xmlCal);
+        jwsdpPrc.setPrice("1");
         
-        {
-            Price.PriceTime prcTim = factory.createPricePriceTime();
-            LocalDate tsDate = LocalDate.now(); // ::TODO
-            prcTim.setTsDate(tsDate.toString());
-            prc.setPriceTime(prcTim);
-        }
-        
-        prc.setPriceType(Type.LAST.getCode());
-        prc.setPriceSource(Source.USER_PRICE.getCode());
-        prc.setPriceValue("1");
-        
-        // file.getRootElement().getGncBook().getBookElements().add(prc);
-        PRICES priceDB = file.getPrcMgr().getPriceDB();
-        int prcPairIdx = 123; // ::TODOIO
-        priceDB.getPRICEPAIR().get(prcPairIdx).getPRICE().add(prc);
+        prntPrcPair.getJwsdpPeer().getPRICE().add(jwsdpPrc); // <-- NOT parent (yet)!
         file.setModified(true);
     
-        return prc;
+        KMMPriceID prcID = new KMMPriceID(prntPrcPair, jwsdpPrc.getDate().toString());
+        LOGGER.debug("createPrice_int: Created new price (core): " + prcID.toString());
+        
+        return jwsdpPrc;
     }
 
     // ---------------------------------------------------------------
 
+    public KMyMoneyWritablePricePair getWritableParentPricePair() {
+	return wrtblParent;
+    }
+    
+    // ---------------------------------------------------------------
+
     @Override
-    public void setFromSecCurrQualifID(KMMQualifSecCurrID qualifID) {
-    	jwsdpPeer.PriceSecurity().setSecId(qualifID.getCode());
+    public void setFromSecCurrQualifID(final KMMQualifSecCurrID qualifID) {
+    	wrtblParent.setFromSecCurrQualifID(qualifID);
     	getWritableKMyMoneyFile().setModified(true);
     }
 
     @Override
-    public void setFromSecurityQualifID(KMMQualifSecID qualifID) {
-	jwsdpPeer.getPriceSecurity().setSecSpace(qualifID.getNameSpace());
-	jwsdpPeer.getPriceSecurity().setSecId(qualifID.getCode());
-	getWritableKMyMoneyFile().setModified(true);
+    public void setFromSecurityQualifID(final KMMQualifSecID qualifID) {
+    	wrtblParent.setFromSecurityQualifID(qualifID);
+    	getWritableKMyMoneyFile().setModified(true);
     }
 
     @Override
-    public void setFromCurrencyQualifID(KMMQualifCurrID qualifID) {
-	jwsdpPeer.getPriceSecurity().setSecSpace(qualifID.getNameSpace());
-	jwsdpPeer.getPriceSecurity().setSecId(qualifID.getCode());
-	getWritableKMyMoneyFile().setModified(true);
+    public void setFromCurrencyQualifID(final KMMQualifCurrID qualifID) {
+    	wrtblParent.setFromCurrencyQualifID(qualifID);
+    	getWritableKMyMoneyFile().setModified(true);
     }
 
     @Override
-    public void setFromSecurity(KMyMoneySecurity cmdty) {
-	setFromSecCurrQualifID(cmdty.getQualifID());
+    public void setFromSecurity(final KMyMoneySecurity sec) {
+    	wrtblParent.setFromSecurity(sec);
+    	getWritableKMyMoneyFile().setModified(true);
     }
 
     @Override
-    public void setFromCurrencyCode(String code) {
-	setFromCurrencyQualifID(new KMMCurrID(code));
+    public void setFromCurrencyCode(final String code) {
+    	wrtblParent.setFromCurrencyCode(code);
+    	getWritableKMyMoneyFile().setModified(true);
     }
 
     @Override
-    public void setFromCurrency(KMyMoneySecurity curr) {
-	setFromSecurity(curr);	
+    public void setFromCurrency(final KMyMoneyCurrency curr) {
+    	wrtblParent.setFromCurrency(curr);
+    	getWritableKMyMoneyFile().setModified(true);
     }
     
     // ----------------------------
 
     @Override
-    public void setToCurrencyQualifID(KMMQualifSecCurrID qualifID) {
-    	if ( qualifID == 0 )
-    	    throw new IllegalArgumentException("null ID given");
-    	
-	if ( qualifID.getType() != KMMQualifSecCurrID.Type.CURRENCY )
-	    throw new InvalidQualifSecCurrTypeException("Is not a currency: " + qualifID.toString());
-	
-	jwsdpPeer.getPriceCurrency().setSecId(qualifID.getCode());
-	getWritableKMyMoneyFile().setModified(true);
-    }
-
-    @Override
     public void setToCurrencyQualifID(KMMQualifCurrID qualifID) {
-	jwsdpPeer.getPriceCurrency().setSecSpace(qualifID.getNameSpace());
-	jwsdpPeer.getPriceCurrency().setSecId(qualifID.getCode());
-	getWritableKMyMoneyFile().setModified(true);
+    	wrtblParent.setToCurrencyQualifID(qualifID);
+    	getWritableKMyMoneyFile().setModified(true);
     }
 
     @Override
     public void setToCurrencyCode(String code) {
-	setToCurrencyQualifID(new KMMQualifCurrID(code));
+    	wrtblParent.setToCurrencyCode(code);
+    	getWritableKMyMoneyFile().setModified(true);
     }
 
     @Override
     public void setToCurrency(KMyMoneyCurrency curr) {
-	setToCurrencyQualifID(curr.getQualifID());
+    	wrtblParent.setToCurrency(curr);
+    	getWritableKMyMoneyFile().setModified(true);
     }
     
-    // ----------------------------
+    // ---------------------------------------------------------------
 
     @Override
-    public void setDate(LocalDate date) {
-	LocalDate oldDate = getDate();
-	this.dateTime = ZonedDateTime.of(date, LocalTime.MIN, ZoneId.systemDefault());
-	String datePostedStr = this.dateTime.format(DATE_FORMAT);
-	jwsdpPeer.getPriceTime().setTsDate(datePostedStr);
-	getWritableKMyMoneyFile().setModified(true);
+	public void setDate(LocalDate date) {
+		if ( date == null )
+			throw new IllegalArgumentException("null date given");
 
-	PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
-	if (propertyChangeSupport != null) {
-	    propertyChangeSupport.firePropertyChange("price", oldDate, date);
+		LocalDate oldDate = getDate();
+		
+		this.date = LocalDate.now();
+		String datePostedStr = this.date.format(DATE_FORMAT);
+		jwsdpPeer.setDate(datePostedStr);
+		getWritableKMyMoneyFile().setModified(true);
+
+		PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
+		if ( propertyChangeSupport != null ) {
+			propertyChangeSupport.firePropertyChange("price", oldDate, date);
+		}
 	}
-    }
 
     @Override
     public void setDateTime(LocalDateTime dateTime) {
-	LocalDate oldDate = getDate();
-	this.dateTime = ZonedDateTime.of(dateTime, ZoneId.systemDefault());
-	String datePostedStr = this.dateTime.format(DATE_FORMAT);
-	jwsdpPeer.getPriceTime().setTsDate(datePostedStr);
-	getWritableKMyMoneyFile().setModified(true);
+		if ( dateTime == null )
+			throw new IllegalArgumentException("null code given");
 
-	PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
-	if (propertyChangeSupport != null) {
-	    propertyChangeSupport.firePropertyChange("price", oldDate, dateTime);
+		setDate(dateTime.toLocalDate());
 	}
-    }
 
     @Override
     public void setSource(Source src) {
-	setSourceStr(src.getCode());
+		setSourceStr(src.toString());
     }
 
-    public void setSourceStr(String str) {
-	jwsdpPeer.setPriceSource(str);
-	getWritableKMyMoneyFile().setModified(true);
-    }
+    public void setSourceStr(String srcStr) {
+		if ( srcStr == null )
+			throw new IllegalArgumentException("null source given");
 
-    @Override
-    public void setType(Type type) {
-	setTypeStr(type.getCode());
-    }
+		if ( srcStr.trim().length() == 0 )
+			throw new IllegalArgumentException("empty source given");
 
-    public void setTypeStr(String typeStr) {
-	jwsdpPeer.setPriceType(typeStr);
-	getWritableKMyMoneyFile().setModified(true);
+		String oldSrc = getSource();
+
+		jwsdpPeer.setSource(srcStr);
+		getWritableKMyMoneyFile().setModified(true);
+
+		PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
+		if ( propertyChangeSupport != null ) {
+			propertyChangeSupport.firePropertyChange("price", oldSrc, srcStr);
+		}
     }
 
     @Override
     public void setValue(FixedPointNumber val) {
-	jwsdpPeer.setPriceValue(val.toKMyMoneyString());
-	getWritableKMyMoneyFile().setModified(true);
+		if ( val == null )
+			throw new IllegalArgumentException("null value given");
+
+		FixedPointNumber oldVal = getValue();
+
+		jwsdpPeer.setPrice(val.toKMyMoneyString());
+		getWritableKMyMoneyFile().setModified(true);
+
+		PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
+		if ( propertyChangeSupport != null ) {
+			propertyChangeSupport.firePropertyChange("price", oldVal, val);
+		}
     }
 
     // ---------------------------------------------------------------

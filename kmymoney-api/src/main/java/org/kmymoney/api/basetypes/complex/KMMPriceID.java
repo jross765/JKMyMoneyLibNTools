@@ -2,6 +2,8 @@ package org.kmymoney.api.basetypes.complex;
 
 import java.util.Objects;
 
+import org.kmymoney.api.read.KMyMoneyPricePair;
+
 /**
  * KMyMoney has no IDs for the price objects (neither on the price-pair level
  * nor on the price level).
@@ -20,11 +22,17 @@ public class KMMPriceID {
     
     // ---------------------------------------------------------------
 
-    public KMMPriceID(String fromCurr, String toCurr, String dateStr) {
-	this.fromCurr = fromCurr;
-	this.toCurr = toCurr;
-	this.dateStr = dateStr;
-    }
+	public KMMPriceID(String fromCurr, String toCurr, String dateStr) {
+		this.fromCurr = fromCurr;
+		this.toCurr = toCurr;
+		this.dateStr = dateStr;
+	}
+
+	public KMMPriceID(KMyMoneyPricePair prcPair, String dateStr) {
+		this.fromCurr = prcPair.getFromSecCurrStr();
+		this.toCurr = prcPair.getToCurrStr();
+		this.dateStr = dateStr;
+	}
     
     // ---------------------------------------------------------------
 

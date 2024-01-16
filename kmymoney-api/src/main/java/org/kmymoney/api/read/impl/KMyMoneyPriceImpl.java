@@ -2,6 +2,7 @@ package org.kmymoney.api.read.impl;
 
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Currency;
 
@@ -15,14 +16,13 @@ import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.numbers.FixedPointNumber;
-import org.kmymoney.api.read.KMyMoneyPrice;
-import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
-import org.kmymoney.api.generated.PAYEE;
-import org.kmymoney.api.generated.PRICE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +30,7 @@ public class KMyMoneyPriceImpl implements KMyMoneyPrice {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyPriceImpl.class);
 
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
+    protected static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
     
     // -----------------------------------------------------------
 
@@ -40,9 +40,11 @@ public class KMyMoneyPriceImpl implements KMyMoneyPrice {
 
     // -----------------------------------------------------------
     
-    private KMyMoneyPricePair parent = null;
+    protected KMyMoneyPricePair parent = null;
 
-    /**
+	protected LocalDate date;
+
+	/**
      * The currency-format to use for formatting.<br/>
      */
     private NumberFormat currencyFormat = null;

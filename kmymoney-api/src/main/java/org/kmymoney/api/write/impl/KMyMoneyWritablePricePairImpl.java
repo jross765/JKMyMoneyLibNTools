@@ -55,11 +55,11 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
     }
 
     public KMyMoneyWritablePricePairImpl(final KMyMoneyWritableFileImpl file) {
-	super(createPricePair_int(file, file.getNewPricePairID()), file);
+    	super(createPricePair_int(file), file);
     }
 
     public KMyMoneyWritablePricePairImpl(KMyMoneyPricePairImpl prcPair) {
-	super(prcPair.getJwsdpPeer(), prcPair.getKMyMoneyFile());
+    	super(prcPair.getJwsdpPeer(), prcPair.getKMyMoneyFile());
     }
 
     // ---------------------------------------------------------------
@@ -92,100 +92,144 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 //	return splt;
 //  }
 
-    private static PRICEPAIR createPricePair_int(
-	    final KMyMoneyWritableFileImpl file, 
-	    final KMMID newID) {
+    private static PRICEPAIR createPricePair_int(final KMyMoneyWritableFileImpl file) {
 	
-		if ( newID == null ) {
-			throw new IllegalArgumentException("null ID given");
-		}
-
-		if ( ! newID.isSet() ) {
-			throw new IllegalArgumentException("empty ID given");
-		}
-		
         ObjectFactory factory = file.getObjectFactory();
         
-        PRICEPAIR prcPair = file.createPricePairType();
+        PRICEPAIR jwsdpPrcPair = file.createPricePairType();
+        
+        // ::EMPTY
+        // set nothing (sic)
     
-        // file.getRootElement().getGncBook().getBookElements().add(prc);
-        PRICES priceDB = file.getPrcMgr().getPriceDB();
-        priceDB.getPRICEPAIR().add(prcPair);
+        file.getRootElement().getPRICES().getPRICEPAIR().add(jwsdpPrcPair);
         file.setModified(true);
     
-        return prcPair;
+        LOGGER.debug("createPricePair_int: Created new price pair (core): " + 
+                     jwsdpPrcPair.getFrom() + "/" + jwsdpPrcPair.getTo());
+    
+        return jwsdpPrcPair;
     }
 
     // ---------------------------------------------------------------
 
-    // ---------------------------------------------------------------
+	@Override
+    public void setFromSecCurrQualifID(final KMMQualifSecCurrID qualifID) {
+		if ( qualifID == null )
+			throw new IllegalArgumentException("null ID given");
+
+		// ::TODO
+//		if ( ! qualifID.isSet() )
+//			throw new IllegalArgumentException("unset ID given");
+
+    	jwsdpPeer.setFrom(qualifID.toString());
+    	getWritableKMyMoneyFile().setModified(true);
+    }
+
+	@Override
+	public void setFromSecurityQualifID(final KMMQualifSecID qualifID) {
+		if ( qualifID == null )
+			throw new IllegalArgumentException("null ID given");
+
+		// ::TODO
+//		if ( ! qualifID.isSet() )
+//			throw new IllegalArgumentException("unset ID given");
+
+		jwsdpPeer.setFrom(qualifID.toString());
+		getWritableKMyMoneyFile().setModified(true);
+	}
+
+	@Override
+	public void setFromCurrencyQualifID(final KMMQualifCurrID qualifID) {
+		if ( qualifID == null )
+			throw new IllegalArgumentException("null ID given");
+
+		// ::TODO
+//		if ( ! qualifID.isSet() )
+//			throw new IllegalArgumentException("unset ID given");
+
+		jwsdpPeer.setFrom(qualifID.toString());
+		getWritableKMyMoneyFile().setModified(true);
+	}
+
+	@Override
+	public void setFromSecurity(final KMyMoneySecurity sec) {
+		if ( sec == null )
+			throw new IllegalArgumentException("null ID given");
+
+		// ::TODO
+//		if ( ! sec.isSet() )
+//			throw new IllegalArgumentException("unset ID given");
+
+		jwsdpPeer.setFrom(sec.toString());
+		getWritableKMyMoneyFile().setModified(true);
+	}
+
+	@Override
+	public void setFromCurrencyCode(final String code) {
+		if ( code == null )
+			throw new IllegalArgumentException("null code given");
+
+		if ( code.trim().length() == 0 )
+			throw new IllegalArgumentException("empty code given");
+
+		setFromCurrencyQualifID(new KMMQualifCurrID(code));
+	}
+
+	@Override
+	public void setFromCurrency(final KMyMoneyCurrency curr) {
+		if ( curr == null )
+			throw new IllegalArgumentException("null ID given");
+
+		// ::TODO
+//		if ( ! curr.isSet() )
+//			throw new IllegalArgumentException("unset ID given");
+
+		jwsdpPeer.setFrom(curr.toString());
+		getWritableKMyMoneyFile().setModified(true);
+	}
+
+    // ----------------------------
     
 	@Override
-	public void setFromSecCurrStr(String curr) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setToCurrStr(String curr) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setFromSecCurrQualifID(KMMQualifSecCurrID qualifID) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setFromSecurityQualifID(KMMQualifSecID qualifID) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setFromCurrencyQualifID(KMMQualifCurrID qualifID) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setFromSecurity(KMyMoneySecurity sec) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setFromCurrencyCode(String code) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setFromCurrency(KMyMoneyCurrency curr) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void setToCurrencyQualifID(KMMQualifCurrID qualifID) {
-		// TODO Auto-generated method stub
-		
+		if ( qualifID == null )
+			throw new IllegalArgumentException("null ID given");
+
+		// ::TODO
+//		if ( ! qualifID.isSet() )
+//			throw new IllegalArgumentException("unset ID given");
+
+		if ( qualifID.getType() != KMMQualifSecCurrID.Type.CURRENCY )
+			throw new InvalidQualifSecCurrTypeException("Is not a currency: " + qualifID.toString());
+
+		jwsdpPeer.setTo(qualifID.getCode());
+		getWritableKMyMoneyFile().setModified(true);
 	}
 
 	@Override
 	public void setToCurrencyCode(String code) {
-		// TODO Auto-generated method stub
-		
+		if ( code == null )
+			throw new IllegalArgumentException("null code given");
+
+		if ( code.trim().length() == 0 )
+			throw new IllegalArgumentException("empty code given");
+
+		setToCurrencyQualifID(new KMMQualifCurrID(code));
 	}
 
 	@Override
 	public void setToCurrency(KMyMoneyCurrency curr) {
-		// TODO Auto-generated method stub
-		
+		if ( curr == null )
+			throw new IllegalArgumentException("null ID given");
+
+		// ::TODO
+//		if ( ! curr.isSet() )
+//			throw new IllegalArgumentException("unset ID given");
+
+		jwsdpPeer.setTo(curr.toString());
+		setToCurrencyQualifID(curr.getQualifID());
 	}
-    
+
     // ---------------------------------------------------------------
     
     @Override

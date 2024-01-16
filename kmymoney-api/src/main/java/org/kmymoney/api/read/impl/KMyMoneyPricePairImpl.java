@@ -9,14 +9,13 @@ import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.api.read.KMyMoneyPrice;
-import org.kmymoney.api.read.KMyMoneyPricePair;
-import org.kmymoney.api.read.KMyMoneyCurrency;
-import org.kmymoney.api.read.KMyMoneyFile;
-import org.kmymoney.api.read.KMyMoneySecurity;
-import org.kmymoney.api.generated.PAYEE;
 import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.generated.PRICEPAIR;
+import org.kmymoney.api.read.KMyMoneyCurrency;
+import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.read.KMyMoneyPricePair;
+import org.kmymoney.api.read.KMyMoneySecurity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,9 +28,9 @@ public class KMyMoneyPricePairImpl implements KMyMoneyPricePair {
     /**
      * The JWSDP-object we are wrapping.
      */
-    private final PRICEPAIR jwsdpPeer;
+    protected final PRICEPAIR jwsdpPeer;
 
-    private final KMyMoneyFile file;
+    protected final KMyMoneyFile file;
 
     // -----------------------------------------------------------
 

@@ -15,6 +15,8 @@ import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Transaction-Split that can be newly created or removed from it's transaction.
@@ -22,6 +24,7 @@ import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
 public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSplitImpl 
                                                  implements KMyMoneyWritableTransactionSplit 
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableTransactionImpl.class);
 
 	/**
 	 * Our helper to implement the GnucashWritableObject-interface.
@@ -46,25 +49,27 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 
 	/**
 	 * @param jwsdpPeer   the JWSDP-object we are facading.
-	 * @param transaction the transaction we belong to
+	 * @param trx the transaction we belong to
 	 */
 	@SuppressWarnings("exports")
 	public KMyMoneyWritableTransactionSplitImpl(final SPLIT jwsdpPeer,
-			final KMyMoneyWritableTransaction transaction) {
-		super(jwsdpPeer, transaction);
+			final KMyMoneyWritableTransaction trx) {
+		super(jwsdpPeer, trx);
 	}
 
 	/**
 	 * create a new split and and add it to the given transaction.
-	 *
-	 * @param transaction transaction the transaction we will belong to
+	 * @param trx transaction the transaction we will belong to
 	 * @param acct     the account we take money (or other things) from or give
 	 *                    it to
 	 */
 	public KMyMoneyWritableTransactionSplitImpl(
 			final KMyMoneyWritableTransactionImpl trx,
 			final KMyMoneyAccount acct) {
-		super(createTransactionSplit_int(trx.getWritingFile(), trx, acct, trx.getNewSplitID()));
+		super(createTransactionSplit_int(trx.getWritingFile(), 
+				                         trx, acct, 
+				                         trx.getNewSplitID()),
+		      trx);
 
 		// this is a workaound.
 		// if super does account.addSplit(this) it adds an instance on
@@ -76,7 +81,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		// ((GnucashAccountImpl)account).replaceTransactionSplit(account.getTransactionSplitByID(getId()),
 		// GnucashTransactionSplitWritingImpl.this);
 
-		transaction.addSplit(this);
+		trx.addSplit(this);
 	}
 
 	/**
@@ -113,18 +118,23 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		// the other is this object.
 		trx.getSplits();
 
-		ObjectFactory factory = file.getObjectFactory();
+		// ObjectFactory factory = file.getObjectFactory();
 
-		SPLIT splt = file.createSplitType();
+		SPLIT jwsdpSplt = file.createSplitType();
 		
-		splt.setId(newID.toString());
-		splt.setAccount(acct.getID().toString());
-		splt.setShares(new FixedPointNumber().toKMyMoneyString());
-		splt.setValue(new FixedPointNumber().toKMyMoneyString());
+		jwsdpSplt.setId(newID.toString());
+		jwsdpSplt.setAccount(acct.getID().toString());
+		jwsdpSplt.setShares(new FixedPointNumber().toKMyMoneyString());
+		jwsdpSplt.setValue(new FixedPointNumber().toKMyMoneyString());
 		
-		trx.addSplit(splt);
+		trx.addSplit(new KMyMoneyWritableTransactionSplitImpl(jwsdpSplt, trx));
+		// No:
+		// trx.getJwsdpPeer().getSPLITS().getSPLIT().add(jwsdpSplt);
+		file.setModified(true);
+    
+        LOGGER.debug("createTransactionSplit_int: Created new transaction split (core): " + jwsdpSplt.getId());
 		
-		return splt;
+        return jwsdpSplt;
 	}
 
 	/**

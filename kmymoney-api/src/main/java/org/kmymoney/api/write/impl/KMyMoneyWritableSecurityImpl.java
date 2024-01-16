@@ -106,7 +106,7 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 		
 		// ::TODO: Key-value pair for ISIN
 
-		file.getSecurities().add(jwsdpSec);
+        file.getRootElement().getSECURITIES().getSECURITY().add(jwsdpSec);
 		file.setModified(true);
 
 		LOGGER.debug("createSecurity_int: Created new security (core):" + jwsdpSec.getId());
@@ -166,7 +166,7 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 			throw new IllegalArgumentException("PP is <= 0");
 		}
 		
-		jwsdpPeer.setPp(pp.intValue());
+		jwsdpPeer.setPp(pp);
 		getKMyMoneyFile().setModified(true);
 	}
 
@@ -185,7 +185,7 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 			throw new IllegalArgumentException("SAF is <= 0");
 		}
 		
-		jwsdpPeer.setPp(saf.intValue());
+		jwsdpPeer.setSaf(saf);
 		getKMyMoneyFile().setModified(true);
 	}
 

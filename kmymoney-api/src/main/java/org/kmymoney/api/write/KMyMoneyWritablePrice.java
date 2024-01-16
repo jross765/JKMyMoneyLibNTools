@@ -28,7 +28,7 @@ public interface KMyMoneyWritablePrice extends KMyMoneyPrice,
 
     void setFromCurrencyQualifID(KMMQualifCurrID qualifID);
 
-    void setFromSecurity(KMyMoneySecurity cmdty);
+    void setFromSecurity(KMyMoneySecurity sec);
 
     void setFromCurrencyCode(String code);
 

@@ -1,8 +1,10 @@
 package org.kmymoney.api.write.impl;
 
 import java.beans.PropertyChangeSupport;
+import java.math.BigInteger;
 
 import org.kmymoney.api.Const;
+import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.simple.KMMID;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.generated.ADDRESS;
@@ -14,6 +16,8 @@ import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.read.impl.KMyMoneyPayeeImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritablePayee;
+import org.kmymoney.api.write.aux.KMMWritableAddress;
+import org.kmymoney.api.write.impl.aux.KMMWritableAddressImpl;
 import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,7 +114,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
         file.getRootElement().getPAYEES().getPAYEE().add(jwsdpPye);
         file.setModified(true);
     
-        LOGGER.debug("createPayee_int: Created new payee (core): " + jwsdpPye.getPayeeGuid().getValue());
+        LOGGER.debug("createPayee_int: Created new payee (core): " + jwsdpPye.getId());
         
         return jwsdpPye;
     }
@@ -150,29 +154,6 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
     }
 
     // ---------------------------------------------------------------
-
-    /**
-     * @see KMyMoneyWritablePayee#setNumber(java.lang.String)
-     */
-    @Override
-    public void setNumber(final String number) {
-	if ( number == null ) {
-	    throw new IllegalArgumentException("null number given!");
-	}
-
-	if ( number.trim().length() == 0 ) {
-	    throw new IllegalArgumentException("empty number given!");
-	}
-
-	String oldNumber = getNumber();
-	jwsdpPeer.setId(number);
-	getKMyMoneyFile().setModified(true);
-
-	PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
-	if (propertyChangeSupport != null) {
-	    propertyChangeSupport.firePropertyChange("PayeeNumber", oldNumber, number);
-	}
-    }
 
     /**
      * @see KMyMoneyWritablePayee#setName(java.lang.String)
@@ -252,14 +233,55 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 	}
     }
 
+	@Override
+	public void setDefaultAccountID(KMMComplAcctID acctID) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setEmail(String eml) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setReference(String ref) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setMatchingEnabled(BigInteger enbl) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setMatchKey(String key) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setUsingMatchKey(BigInteger key) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setMatchIgnoreCase(BigInteger val) {
+		// TODO Auto-generated method stub
+		
+	}
+
     // ---------------------------------------------------------------
 
     /**
      * @see KMyMoneyWritablePayee#getWritableAddress()
      */
-    @Override
     public KMMWritableAddress getWritableAddress() {
-	return new KMMWritableAddressImpl(jwsdpPeer.getPayeeAddr(), getKMyMoneyFile());
+	return new KMMWritableAddressImpl(jwsdpPeer.getADDRESS());
     }
 
     /**

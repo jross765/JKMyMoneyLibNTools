@@ -10,11 +10,13 @@ import java.util.LinkedList;
 
 import javax.naming.spi.ObjectFactory;
 
+import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransaction;
+import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.SplitNotFoundException;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionImpl;
@@ -52,23 +54,6 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	@SuppressWarnings("exports")
 	public KMyMoneyWritableTransactionImpl(final TRANSACTION jwsdpPeer, final KMyMoneyFileImpl file) {
 		super(jwsdpPeer, file);
-
-		// repair a broken file
-		if ( jwsdpPeer.getTrnDatePosted() == null ) {
-			LOGGER.warn("repairing broken transaction " + jwsdpPeer.getTrnId() + " with no date-posted!");
-			// we use our own ObjectFactory because: Exception in thread "AWT-EventQueue-0"
-			// java.lang.IllegalAccessError: tried to access
-			// method org.gnucash.write.jwsdpimpl.GnucashFileImpl.getObjectFactory()
-			// Lbiz/wolschon/fileformats/gnucash/jwsdpimpl/generated/ObjectFactory; from
-			// class org.gnucash.write.jwsdpimpl
-			// .GnucashTransactionWritingImpl
-			// ObjectFactory factory = file.getObjectFactory();
-			ObjectFactory factory = new ObjectFactory();
-			GncTransaction.TrnDatePosted datePosted = factory.createGncTransactionTrnDatePosted();
-			datePosted.setTsDate(jwsdpPeer.getTrnDateEntered().getTsDate());
-			jwsdpPeer.setTrnDatePosted(datePosted);
-		}
-
 	}
 
 	/**
@@ -182,7 +167,12 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		jwsdpTrx.setVersion(Const.XML_FORMAT_VERSION);
 		jwsdpTrx.setTrnDescription("-");
 
-		return jwsdpTrx;
+        file.getRootElement().getTRANSACTIONS().getTRANSACTION().add(jwsdpTrx);
+        file.setModified(true);
+    
+        LOGGER.debug("createTransaction_int: Created new transaction (core): " + jwsdpTrx.getId());
+        
+        return jwsdpTrx;
 	}
 
 	/**
@@ -296,8 +286,8 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 * @see KMyMoneyWritableTransaction#setDatePosted(LocalDateTime)
 	 */
 	public void setDatePosted(final LocalDate datePosted) {
-		this.postDate = ZonedDateTime.of(datePosted, LocalTime.MIN, ZoneId.systemDefault());
-		jwsdpPeer.setPostdate(DATE_ENTERED_FORMAT.format(this.postDate));
+		this.postDate = datePosted;
+		jwsdpPeer.setPostdate(DATE_ENTERED_FORMAT.format(datePosted));
 		getWritingFile().setModified(true);
 	}
 
@@ -340,6 +330,20 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 				getPropertyChangeSupport().firePropertyChange("transactionNumber", old, tnum);
 			}
 		}
+	}
+	
+	// ---------------------------------------------------------------
+	
+	KMMSpltID getNewSplitID() {
+		
+		int maxSpltNo = 1; // sic, in case there are no splits yet
+		for ( KMyMoneyTransactionSplit splt : getSplits() ) {
+			if ( Integer.parseInt( splt.getID().get() ) >= maxSpltNo ) {
+				maxSpltNo = Integer.parseInt( splt.getID().get() );
+			}
+		}
+		
+		return new KMMSpltID(maxSpltNo);
 	}
 
 }
