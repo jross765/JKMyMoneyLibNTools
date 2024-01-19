@@ -4,6 +4,7 @@ import java.text.ParseException;
 
 import javax.naming.spi.ObjectFactory;
 
+import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.numbers.FixedPointNumber;
@@ -22,22 +23,14 @@ import org.slf4j.LoggerFactory;
  * Transaction-Split that can be newly created or removed from it's transaction.
  */
 public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSplitImpl 
-                                                 implements KMyMoneyWritableTransactionSplit 
+                                                  implements KMyMoneyWritableTransactionSplit 
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableTransactionImpl.class);
 
 	/**
 	 * Our helper to implement the GnucashWritableObject-interface.
 	 */
-	private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(this);
-
-	/**
-	 * @see KMyMoneyWritableObject#setUserDefinedAttribute(java.lang.String,
-	 *      java.lang.String)
-	 */
-	public void setUserDefinedAttribute(final String name, final String value) {
-		helper.setUserDefinedAttribute(name, value);
-	}
+	private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
 	/**
 	 * @see KMyMoneyTransactionSplitImpl#getTransaction()
@@ -49,12 +42,15 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 
 	/**
 	 * @param jwsdpPeer   the JWSDP-object we are facading.
+	 * @param kmmFile 
 	 * @param trx the transaction we belong to
 	 */
 	@SuppressWarnings("exports")
-	public KMyMoneyWritableTransactionSplitImpl(final SPLIT jwsdpPeer,
+	public KMyMoneyWritableTransactionSplitImpl(
+			final SPLIT jwsdpPeer,
+			final KMyMoneyWritableFile kmmFile,
 			final KMyMoneyWritableTransaction trx) {
-		super(jwsdpPeer, trx);
+		super(jwsdpPeer, kmmFile, trx);
 	}
 
 	/**
@@ -147,8 +143,8 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	/**
 	 * @see KMyMoneyWritableTransactionSplit#setAccount(KMyMoneyAccount)
 	 */
-	public void setAccountID(final String accountId) {
-		setAccount(getTransaction().getKMyMoneyFile().getAccountByID(accountId));
+	public void setAccountID(final String acctID) {
+		setAccount(getTransaction().getKMyMoneyFile().getAccountByID(acctID));
 	}
 
 	/**
@@ -162,9 +158,9 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		jwsdpPeer.setAccount(acct.getID().toString());
 		((KMyMoneyWritableFile) getWritableKMyMoneyFile()).setModified(true);
 
-		if ( old == null || !old.equals(acct.getId()) ) {
-			if ( getPropertyChangeSupport() != null ) {
-				getPropertyChangeSupport().firePropertyChange("accountID", old, acct.getId());
+		if ( old == null || !old.equals(acct.getID()) ) {
+			if ( helper.getPropertyChangeSupport() != null ) {
+				helper.getPropertyChangeSupport().firePropertyChange("accountID", old, acct.getID().toString());
 			}
 		}
 
@@ -200,11 +196,11 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		if ( trx == null ) {
 			return false;
 		}
-		String secCurrID = acct.getSecCurrID();
+		KMMQualifSecCurrID secCurrID = acct.getSecCurrID();
 		if ( secCurrID == null ) {
 			return false;
 		}
-		return (secCurrID.equals(trx.getCommodity()) && actCNS.equals(trx.getCurrencyNameSpace()));
+		return secCurrID.equals(trx.getSecurity());
 	}
 
 	/**
@@ -222,15 +218,15 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 			String oldvalue = getJwsdpPeer().getValue();
 			getJwsdpPeer().setValue(n.toKMyMoneyString());
 			if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
-				if ( getPropertyChangeSupport() != null ) {
-					getPropertyChangeSupport().firePropertyChange("value", new FixedPointNumber(oldvalue), n);
+				if ( helper.getPropertyChangeSupport() != null ) {
+					helper.getPropertyChangeSupport().firePropertyChange("value", new FixedPointNumber(oldvalue), n);
 				}
 			}
 		}
 
 		if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
-			if ( getPropertyChangeSupport() != null ) {
-				getPropertyChangeSupport().firePropertyChange("quantity", new FixedPointNumber(old), n);
+			if ( helper.getPropertyChangeSupport() != null ) {
+				helper.getPropertyChangeSupport().firePropertyChange("quantity", new FixedPointNumber(old), n);
 			}
 		}
 	}
@@ -267,15 +263,15 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 			String oldquantity = getJwsdpPeer().getShares();
 			getJwsdpPeer().setShares(n.toKMyMoneyString());
 			if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
-				if ( getPropertyChangeSupport() != null ) {
-					getPropertyChangeSupport().firePropertyChange("quantity", new FixedPointNumber(oldquantity), n);
+				if ( helper.getPropertyChangeSupport() != null ) {
+					helper.getPropertyChangeSupport().firePropertyChange("quantity", new FixedPointNumber(oldquantity), n);
 				}
 			}
 		}
 
 		if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
-			if ( getPropertyChangeSupport() != null ) {
-				getPropertyChangeSupport().firePropertyChange("value", new FixedPointNumber(old), n);
+			if ( helper.getPropertyChangeSupport() != null ) {
+				helper.getPropertyChangeSupport().firePropertyChange("value", new FixedPointNumber(old), n);
 			}
 		}
 	}
@@ -296,8 +292,8 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		((KMyMoneyWritableFile) getKMyMoneyFile()).setModified(true);
 
 		if ( old == null || !old.equals(desc) ) {
-			if ( getPropertyChangeSupport() != null ) {
-				getPropertyChangeSupport().firePropertyChange("description", old, desc);
+			if ( helper.getPropertyChangeSupport() != null ) {
+				helper.getPropertyChangeSupport().firePropertyChange("description", old, desc);
 			}
 		}
 	}
@@ -323,8 +319,8 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		((KMyMoneyWritableFile) getKMyMoneyFile()).setModified(true);
 
 		if ( old == null || !old.equals(act) ) {
-			if ( getPropertyChangeSupport() != null ) {
-				getPropertyChangeSupport().firePropertyChange("splitAction", old, act);
+			if ( helper.getPropertyChangeSupport() != null ) {
+				helper.getPropertyChangeSupport().firePropertyChange("splitAction", old, act);
 			}
 		}
 	}

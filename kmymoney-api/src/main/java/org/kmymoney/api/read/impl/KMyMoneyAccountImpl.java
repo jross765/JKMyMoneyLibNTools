@@ -1,9 +1,9 @@
 package org.kmymoney.api.read.impl;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
@@ -13,12 +13,14 @@ import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
+import org.kmymoney.api.generated.ACCOUNT;
+import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.UnknownAccountTypeException;
+import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
 import org.kmymoney.api.read.impl.hlp.SimpleAccount;
-import org.kmymoney.api.generated.ACCOUNT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -264,6 +266,26 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 
 	return result;
     }
+    
+    // ---------------------------------------------------------------
+
+	/**
+	 * @param name the name of the user-defined attribute
+	 * @return the value or null if not set
+	 */
+	public String getUserDefinedAttribute(final String name) {
+		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
+		return HasUserDefinedAttributesImpl.getUserDefinedAttributeCore(kvpList, name);
+	}
+
+    /**
+     * @return all keys that can be used with
+     *         ${@link #getUserDefinedAttribute(String)}}.
+     */
+	public Collection<String> getUserDefinedAttributeKeys() {
+		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
+		return HasUserDefinedAttributesImpl.getUserDefinedAttributeKeysCore(kvpList);
+	}
 
     // -----------------------------------------------------------------
 

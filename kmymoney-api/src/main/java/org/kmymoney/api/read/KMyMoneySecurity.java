@@ -8,6 +8,8 @@ import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
+import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
+import org.kmymoney.api.read.hlp.KMyMoneyObject;
 
 /**
  * In KMyMoney lingo, "security" is an umbrella term for
@@ -19,7 +21,7 @@ import org.kmymoney.api.basetypes.simple.KMMSecID;
  * <br>
  * Cf. <a href="https://docs.kde.org/stable5/en/kmymoney/kmymoney/details.investments.ledger.html#idm2349">KMyMoney handbook</a>
  */
-public interface KMyMoneySecurity {
+public interface KMyMoneySecurity extends HasUserDefinedAttributes {
 
     /**
      * @return

@@ -1,5 +1,6 @@
 package org.kmymoney.api.write.impl;
 
+import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -32,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * JWSDP-Implmentation of a Transaction that can be changed.
  */
 public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl 
-                                            implements KMyMoneyWritableTransaction 
+                                             implements KMyMoneyWritableTransaction 
 {
 
 	/**
@@ -43,17 +44,17 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	/**
 	 * Our helper to implement the GnucashWritableObject-interface.
 	 */
-	private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(this);
+	private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
 	// -----------------------------------------------------------
 
 	/**
-	 * @param file      the file we belong to
+	 * @param kmmFile      the file we belong to
 	 * @param jwsdpPeer the JWSDP-object we are facading.
 	 */
 	@SuppressWarnings("exports")
-	public KMyMoneyWritableTransactionImpl(final TRANSACTION jwsdpPeer, final KMyMoneyFileImpl file) {
-		super(jwsdpPeer, file);
+	public KMyMoneyWritableTransactionImpl(final TRANSACTION jwsdpPeer, final KMyMoneyFileImpl kmmFile) {
+		super(jwsdpPeer, kmmFile);
 	}
 
 	/**
@@ -84,7 +85,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 *      java.lang.String)
 	 */
 	public void setUserDefinedAttribute(final String name, final String value) {
-		helper.setUserDefinedAttribute(name, value);
+		setUserDefinedAttribute(name, value);
 	}
 
 	/**
@@ -99,15 +100,15 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	/**
 	 * Create a new split for a split found in the jaxb-data.
 	 *
-	 * @param element the jaxb-data
+	 * @param splt the jaxb-data
 	 * @return the new split-instance
 	 */
 	@Override
-	protected KMyMoneyTransactionSplitImpl createSplit(final GncTransaction.TrnSplits.TrnSplit element) {
+	protected KMyMoneyTransactionSplitImpl createSplit(final SPLIT splt) {
 		KMyMoneyWritableTransactionSplitImpl gnucashTransactionSplitWritingImpl = new KMyMoneyWritableTransactionSplitImpl(
-				element, this);
-		if ( getPropertyChangeSupport() != null ) {
-			getPropertyChangeSupport().firePropertyChange("splits", null, getWritingSplits());
+				splt, this);
+		if ( helper.getPropertyChangeSupport() != null ) {
+			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritingSplits());
 		}
 		return gnucashTransactionSplitWritingImpl;
 	}
@@ -115,11 +116,11 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	/**
 	 * @see KMyMoneyWritableTransaction#createWritingSplit(KMyMoneyAccount)
 	 */
-	public KMyMoneyWritableTransactionSplit createWritingSplit(final KMyMoneyAccount account) {
-		KMyMoneyWritableTransactionSplitImpl splt = new KMyMoneyWritableTransactionSplitImpl(this, account);
+	public KMyMoneyWritableTransactionSplit createWritingSplit(final KMyMoneyAccount acct) {
+		KMyMoneyWritableTransactionSplitImpl splt = new KMyMoneyWritableTransactionSplitImpl(this, acct);
 		addSplit(splt);
-		if ( getPropertyChangeSupport() != null ) {
-			getPropertyChangeSupport().firePropertyChange("splits", null, getWritingSplits());
+		if ( helper.getPropertyChangeSupport() != null ) {
+			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritingSplits());
 		}
 		return splt;
 	}
@@ -140,7 +141,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 			throw new IllegalArgumentException("empty ID given");
 		}
 
-		ObjectFactory factory = file.getObjectFactory();
+		org.kmymoney.api.generated.ObjectFactory factory = file.getObjectFactory();
 		TRANSACTION jwsdpTrx = file.createTransactionType();
 
 		jwsdpTrx.setId(newID.toString());
@@ -160,12 +161,11 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		}
 
 		{
-			SPLIT splits = factory.createTransactionTrnSplits();
-			jwsdpTrx.setTrnSplits(splits);
+			SPLIT splits = factory.createTransactionSplits();
+			jwsdpTrx.setSplits(splits);
 		}
 
-		jwsdpTrx.setVersion(Const.XML_FORMAT_VERSION);
-		jwsdpTrx.setTrnDescription("-");
+		jwsdpTrx.setMemo("-");
 
         file.getRootElement().getTRANSACTIONS().getTRANSACTION().add(jwsdpTrx);
         file.setModified(true);
@@ -180,7 +180,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 */
 	public void remove(final KMyMoneyWritableTransactionSplit splt) {
 		jwsdpPeer.getSPLITS().getSPLIT()
-			.remove(((KMyMoneyWritableTransactionSplitImpl) splt).jwsdpPeer);
+			.remove(((KMyMoneyWritableTransactionSplitImpl) splt).getJwsdpPeer());
 		getWritingFile().setModified(true);
 		if ( mySplits != null ) {
 			mySplits.remove(splt);
@@ -193,8 +193,8 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		// there is no count for splits up to now
 		// getWritingFile().decrementCountDataFor()
 
-		if ( getPropertyChangeSupport() != null ) {
-			getPropertyChangeSupport().firePropertyChange("splits", null, getWritingSplits());
+		if ( helper.getPropertyChangeSupport() != null ) {
+			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritingSplits());
 		}
 	}
 
@@ -305,33 +305,44 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		getWritingFile().setModified(true);
 
 		if ( old == null || !old.equals(desc) ) {
-			if ( getPropertyChangeSupport() != null ) {
-				getPropertyChangeSupport().firePropertyChange("description", old, desc);
+			if ( helper.getPropertyChangeSupport() != null ) {
+				helper.getPropertyChangeSupport().firePropertyChange("description", old, desc);
 			}
 		}
 	}
 
-	/**
-	 * @see KMyMoneyWritableTransaction#setNumber(java.lang.String)
-	 */
-	public void setNumber(final String tnum) {
-		if ( tnum == null ) {
-			throw new IllegalArgumentException(
-					"null transaction-number given! Please use the empty string instead of null for an empty "
-							+ "description");
-		}
-
-		String old = jwsdpPeer.getTrnNum();
-		jwsdpPeer.setTrnNum(tnum);
-		getWritingFile().setModified(true);
-
-		if ( old == null || !old.equals(tnum) ) {
-			if ( getPropertyChangeSupport() != null ) {
-				getPropertyChangeSupport().firePropertyChange("transactionNumber", old, tnum);
-			}
-		}
-	}
+	// ---------------------------------------------------------------
 	
+	@Override
+	public void setCurrencyNameSpace(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	// ---------------------------------------------------------------
 	
 	KMMSpltID getNewSplitID() {

@@ -1,22 +1,24 @@
 package org.kmymoney.api.write.impl;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import org.kmymoney.api.Const;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
+import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.generated.SECURITY;
-import org.kmymoney.api.read.KMMSecCurr.RoundingMethod;
-import org.kmymoney.api.read.KMMSecCurr.Type;
 import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.UnknownRoundingMethodException;
 import org.kmymoney.api.read.UnknownSecurityTypeException;
+import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.kmymoney.api.read.impl.KMyMoneySecurityImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
+import org.kmymoney.api.write.impl.hlp.HasWritableUserDefinedAttributesImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -237,17 +239,15 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 	// ---------------------------------------------------------------
 
 	/**
-	 * @see KMyMoneyWritableObject#setUserDefinedAttribute(java.lang.String,
-	 *      java.lang.String)
+	 * @param name  the name of the user-defined attribute
+	 * @param value the value or null if not set
+	 * @see {@link KMyMoneyObject#getUserDefinedAttribute(String)}
 	 */
-	// ::TODO ?
 	public void setUserDefinedAttribute(final String name, final String value) {
-		// ::EMPTY
-	}
-
-	// ::TODO
-	public void clean() {
-		// helper.cleanSlots();
+		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
+		HasWritableUserDefinedAttributesImpl
+			.setUserDefinedAttributeCore(kvpList, getWritableKMyMoneyFile(), 
+			                             name, value);
 	}
 
 	// -----------------------------------------------------------------

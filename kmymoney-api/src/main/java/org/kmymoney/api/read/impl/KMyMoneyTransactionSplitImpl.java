@@ -13,13 +13,14 @@ import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
+import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.UnknownSplitActionException;
 import org.kmymoney.api.read.UnknownSplitStateException;
-import org.kmymoney.api.generated.SPLIT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +37,11 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
      * the JWSDP-object we are facading.
      */
     protected SPLIT jwsdpPeer;
+    
+    /**
+     * The file we belong to.
+     */
+    private final KMyMoneyFile kmmFile;
 
     /**
      * the transaction this split belongs to.
@@ -46,14 +52,17 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 
     /**
      * @param peer the JWSDP-object we are facading.
+     * @param kmmFile 
      * @param trx  the transaction this split belongs to
      */
     @SuppressWarnings("exports")
     public KMyMoneyTransactionSplitImpl(
-	    final SPLIT peer, 
+	    final SPLIT peer,
+	    final KMyMoneyFile kmmFile,
 	    final KMyMoneyTransaction trx) {
-	jwsdpPeer = peer;
-	myTransaction = trx;
+	this.jwsdpPeer = peer;
+	this.kmmFile = kmmFile;
+	this.myTransaction = trx;
 
 	// ::CHECK
 	// ::TODO
@@ -67,6 +76,13 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 	}
 
     }
+
+    // ---------------------------------------------------------------
+
+	@Override
+	public KMyMoneyFile getKMyMoneyFile() {
+		return kmmFile;
+	}
 
     // ---------------------------------------------------------------
 
@@ -179,8 +195,8 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     public String getValueFormatted(final Locale lcl) {
 
 	NumberFormat cf = NumberFormat.getInstance(lcl);
-	if (getTransaction().getCommodity().equals("XYZ")) { // ::TODO: is currency, not security 
-	    cf.setCurrency(Currency.getInstance(getTransaction().getCommodity()));
+	if (getTransaction().getSecurity().equals("XYZ")) { // ::TODO: is currency, not security 
+	    cf.setCurrency(Currency.getInstance(getTransaction().getSecurity()));
 	} else {
 	    cf = NumberFormat.getNumberInstance(lcl);
 	}

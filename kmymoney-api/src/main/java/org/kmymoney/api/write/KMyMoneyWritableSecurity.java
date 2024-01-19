@@ -3,17 +3,18 @@ package org.kmymoney.api.write;
 import java.math.BigInteger;
 
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneySecurity;
+import org.kmymoney.api.write.hlp.HasWritableUserDefinedAttributes;
+import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 
 /**
  * Security that can be modified.
  * 
  * @see KMyMoneySecurity
  */
-public interface KMyMoneyWritableSecurity extends KMyMoneySecurity
+public interface KMyMoneyWritableSecurity extends KMyMoneySecurity,
+                                                  HasWritableUserDefinedAttributes
 {
 
 	void remove();

@@ -33,8 +33,8 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyTransactionImpl.class);
 
-    private static final DateTimeFormatter DATE_POSTED_FORMAT  = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
-    private static final DateTimeFormatter DATE_ENTERED_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
+    protected static final DateTimeFormatter DATE_POSTED_FORMAT  = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
+    protected static final DateTimeFormatter DATE_ENTERED_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
     
     // ---------------------------------------------------------------
 
@@ -46,7 +46,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     /**
      * The file we belong to.
      */
-    private final KMyMoneyFile file;
+    private final KMyMoneyFile kmmFile;
 
     // ---------------------------------------------------------------
 
@@ -78,15 +78,15 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
 	    final TRANSACTION peer, 
 	    final KMyMoneyFile kmmFile) {
 
-	jwsdpPeer = peer;
-	file = kmmFile;
+	this.jwsdpPeer = peer;
+	this.kmmFile = kmmFile;
 
     }
 
     // Copy-constructor
     public KMyMoneyTransactionImpl(final KMyMoneyTransaction trx) {
 	jwsdpPeer = trx.getJwsdpPeer();
-	file = trx.getKMyMoneyFile();
+	kmmFile = trx.getKMyMoneyFile();
     }
 
     // ---------------------------------------------------------------
@@ -103,7 +103,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     /**
      * @see KMyMoneyAccount#getCurrencyID()
      */
-    public String getCommodity() {
+    public String getSecurity() {
 	return jwsdpPeer.getCommodity();
     }
 
@@ -141,8 +141,8 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     public String getBalanceFormatted(final Locale loc) {
 
 	NumberFormat cf = NumberFormat.getInstance(loc);
-	if (getCommodity().equals("XYZ")) { // ::TODO is currency, not security
-	    cf.setCurrency(Currency.getInstance(getCommodity()));
+	if (getSecurity().equals("XYZ")) { // ::TODO is currency, not security
+	    cf.setCurrency(Currency.getInstance(getSecurity()));
 	} else {
 	    cf.setCurrency(null);
 	}
@@ -176,8 +176,8 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      */
     public String getNegatedBalanceFormatted(final Locale loc) throws NumberFormatException {
 	NumberFormat cf = NumberFormat.getInstance(loc);
-	if (getCommodity().equals("XYZ")) { // ::TODO is currency, not security
-	    cf.setCurrency(Currency.getInstance(getCommodity()));
+	if (getSecurity().equals("XYZ")) { // ::TODO is currency, not security
+	    cf.setCurrency(Currency.getInstance(getSecurity()));
 	} else {
 	    cf.setCurrency(null);
 	}
@@ -214,7 +214,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      */
     @Override
     public KMyMoneyFile getKMyMoneyFile() {
-	return file;
+	return kmmFile;
     }
 
     // ----------------------------
@@ -302,11 +302,11 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     /**
      * Create a new split for a split found in the jaxb-data.
      *
-     * @param element the jaxb-data
+     * @param jwsdpSplt the jaxb-data
      * @return the new split-instance
      */
-    protected KMyMoneyTransactionSplitImpl createSplit(final SPLIT element) {
-	return new KMyMoneyTransactionSplitImpl(element, this);
+    protected KMyMoneyTransactionSplitImpl createSplit(final SPLIT jwsdpSplt) {
+	return new KMyMoneyTransactionSplitImpl(jwsdpSplt, kmmFile, this);
     }
 
     /**
@@ -329,8 +329,8 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     protected NumberFormat getCurrencyFormat() {
 	if (currencyFormat == null) {
 	    currencyFormat = NumberFormat.getCurrencyInstance();
-	    if (getCommodity().equals("XYZ")) { // ::TODO is currency, not security 
-		currencyFormat.setCurrency(Currency.getInstance(getCommodity()));
+	    if (getSecurity().equals("XYZ")) { // ::TODO is currency, not security 
+		currencyFormat.setCurrency(Currency.getInstance(getSecurity()));
 	    } else {
 		currencyFormat = NumberFormat.getInstance();
 	    }

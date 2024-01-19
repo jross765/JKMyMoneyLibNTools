@@ -1,14 +1,15 @@
 package org.kmymoney.api.write.hlp;
 
+import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 
 /**
  * Interface that all interfaces for writable gnucash-entities shall implement
  */
-public interface KMyMoneyWritableObject {
+public interface KMyMoneyWritableObject extends KMyMoneyObject {
 
 	/**
-	 * @return the File we belong to.
+	 * @return the file we belong to.
 	 */
 	KMyMoneyWritableFile getWritableKMyMoneyFile();
 

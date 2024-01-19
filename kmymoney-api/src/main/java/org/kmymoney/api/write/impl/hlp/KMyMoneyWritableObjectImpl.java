@@ -2,9 +2,7 @@ package org.kmymoney.api.write.impl.hlp;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.List;
 
-import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
@@ -15,7 +13,8 @@ import org.slf4j.LoggerFactory;
  * Extension of KMyMoneyObjectImpl to allow read-write access instead of
  * read-only access.
  */
-public class KMyMoneyWritableObjectImpl implements KMyMoneyWritableObject 
+public class KMyMoneyWritableObjectImpl extends KMyMoneyObjectImpl
+                                        implements KMyMoneyWritableObject 
 {
 
 	/**
@@ -35,17 +34,18 @@ public class KMyMoneyWritableObjectImpl implements KMyMoneyWritableObject
 
 	// ---------------------------------------------------------------
 
-	public KMyMoneyWritableObjectImpl() {
-		super();
+	public KMyMoneyWritableObjectImpl(final KMyMoneyWritableFile myFile) {
+		super(myFile);
 		// TODO implement constructor for KMyMoneyWritableObjectHelper
 	}
 
 	/**
-	 * @param aKMyMoneyObject the object we are helping with
+	 * @param myFile 
+	 * @param obj the object we are helping with
 	 */
-	public KMyMoneyWritableObjectImpl(final KMyMoneyObjectImpl aKMyMoneyObject) {
-		super();
-		setKMyMoneyObject(aKMyMoneyObject);
+	public KMyMoneyWritableObjectImpl(final KMyMoneyWritableFile myFile, final KMyMoneyObjectImpl obj) {
+		super(myFile);
+		setKMyMoneyObject(obj);
 	}
 
 	// ---------------------------------------------------------------
@@ -65,53 +65,14 @@ public class KMyMoneyWritableObjectImpl implements KMyMoneyWritableObject
 		// return ((KMyMoneyWritableObject) getKMyMoneyObject()).getWritableKMyMoneyFile();
 	}
 
-	/**
-	 * Remove slots with dummy content
-	 */
-	public void cleanSlots() {
-		if ( kmmObj.getSlots() == null )
-			return;
-
-		for ( Slot slot : kmmObj.getSlots().getSlot() ) {
-			if ( slot.getSlotKey().equals(Const.SLOT_KEY_DUMMY) ) {
-				kmmObj.getSlots().getSlot().remove(slot);
-				break;
-			}
-		}
-	}
-
 	// ---------------------------------------------------------------
-
-	/**
-	 * @param name  the name of the user-defined attribute
-	 * @param value the value or null if not set
-	 * @see {@link KMyMoneyObject#getUserDefinedAttribute(String)}
-	 */
-	public void setUserDefinedAttribute(final String name, final String value) {
-		List<Slot> slots = getKMyMoneyObject().getSlots().getSlot();
-		for ( Slot slot : slots ) {
-			if ( slot.getSlotKey().equals(name) ) {
-				LOGGER.debug("setUserDefinedAttribute: (name=" + name + ", value=" + value
-						+ ") - overwriting existing slot ");
-
-				slot.getSlotValue().getContent().clear();
-				slot.getSlotValue().getContent().add(value);
-				getFile().setModified(true);
-				return;
-			}
-		}
-
-		getFile().setModified(true);
-	}
-
-	// ------------------------ support for propertyChangeListeners
 
 	/**
 	 * Returned value may be null if we never had listeners.
 	 *
 	 * @return Our support for firing PropertyChangeEvents
 	 */
-	protected PropertyChangeSupport getPropertyChangeSupport() {
+	public PropertyChangeSupport getPropertyChangeSupport() {
 		return myPtyChg;
 	}
 
@@ -121,7 +82,6 @@ public class KMyMoneyWritableObjectImpl implements KMyMoneyWritableObject
 	 *
 	 * @param listener The PropertyChangeListener to be added
 	 */
-	@SuppressWarnings("exports")
 	public final void addPropertyChangeListener(final PropertyChangeListener listener) {
 		if ( myPtyChg == null ) {
 			myPtyChg = new PropertyChangeSupport(this);
@@ -136,7 +96,6 @@ public class KMyMoneyWritableObjectImpl implements KMyMoneyWritableObject
 	 * @param ptyName  The name of the property to listen on.
 	 * @param listener The PropertyChangeListener to be added
 	 */
-	@SuppressWarnings("exports")
 	public final void addPropertyChangeListener(final String ptyName, final PropertyChangeListener listener) {
 		if ( myPtyChg == null ) {
 			myPtyChg = new PropertyChangeSupport(this);
@@ -150,7 +109,6 @@ public class KMyMoneyWritableObjectImpl implements KMyMoneyWritableObject
 	 * @param ptyName  The name of the property that was listened on.
 	 * @param listener The PropertyChangeListener to be removed
 	 */
-	@SuppressWarnings("exports")
 	public final void removePropertyChangeListener(final String ptyName, final PropertyChangeListener listener) {
 		if ( myPtyChg != null ) {
 			myPtyChg.removePropertyChangeListener(ptyName, listener);
@@ -163,7 +121,6 @@ public class KMyMoneyWritableObjectImpl implements KMyMoneyWritableObject
 	 *
 	 * @param listener The PropertyChangeListener to be removed
 	 */
-	@SuppressWarnings("exports")
 	public synchronized void removePropertyChangeListener(final PropertyChangeListener listener) {
 		if ( myPtyChg != null ) {
 			myPtyChg.removePropertyChangeListener(listener);
@@ -174,7 +131,6 @@ public class KMyMoneyWritableObjectImpl implements KMyMoneyWritableObject
 
 	/**
 	 * @return Returns the gnucashObject.
-	 * @see {@link #kmmObj}
 	 */
 	public KMyMoneyObjectImpl getKMyMoneyObject() {
 		return kmmObj;
@@ -182,7 +138,6 @@ public class KMyMoneyWritableObjectImpl implements KMyMoneyWritableObject
 
 	/**
 	 * @param obj The gnucashObject to set.
-	 * @see {@link #kmmObj}
 	 */
 	public void setKMyMoneyObject(final KMyMoneyObjectImpl obj) {
 		if ( obj == null ) {

@@ -138,7 +138,7 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
      */
     boolean isBalanced();
 
-    String getCommodity();
+    String getSecurity();
 
     /**
      * The result is in the currency of the transaction.<br/>

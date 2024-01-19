@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
@@ -16,6 +17,7 @@ import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.UnknownRoundingMethodException;
 import org.kmymoney.api.read.UnknownSecurityTypeException;
+import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
 import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.generated.PAYEE;
 import org.kmymoney.api.generated.SECURITY;
@@ -167,6 +169,26 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
 
 	return result;
     }
+
+    // ---------------------------------------------------------------
+
+	/**
+	 * @param name the name of the user-defined attribute
+	 * @return the value or null if not set
+	 */
+	public String getUserDefinedAttribute(final String name) {
+		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
+		return HasUserDefinedAttributesImpl.getUserDefinedAttributeCore(kvpList, name);
+	}
+
+    /**
+     * @return all keys that can be used with
+     *         ${@link #getUserDefinedAttribute(String)}}.
+     */
+	public Collection<String> getUserDefinedAttributeKeys() {
+		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
+		return HasUserDefinedAttributesImpl.getUserDefinedAttributeKeysCore(kvpList);
+	}
 
     // ---------------------------------------------------------------
 

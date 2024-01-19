@@ -43,7 +43,7 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
     /**
      * Our helper to implement the KMyMoneyWritableObject-interface.
      */
-    private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(this);
+    private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
     // ---------------------------------------------------------------
 

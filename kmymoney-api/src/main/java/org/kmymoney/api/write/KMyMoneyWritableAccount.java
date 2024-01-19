@@ -3,9 +3,10 @@ package org.kmymoney.api.write;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 
+import org.kmymoney.api.basetypes.simple.KMMInstID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
-import org.kmymoney.api.read.hlp.KMyMoneyObject;
+import org.kmymoney.api.write.hlp.HasWritableUserDefinedAttributes;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 
 
@@ -23,14 +24,14 @@ import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
  * </ul>
  */
 public interface KMyMoneyWritableAccount extends KMyMoneyAccount, 
-                                                 KMyMoneyObject,
-                                                 KMyMoneyWritableObject 
+                                                 KMyMoneyWritableObject,
+                                                 HasWritableUserDefinedAttributes
 {
 
 	/**
 	 * @return the file we belong to
 	 */
-	KMyMoneyWritableFile getWritableGnucashFile();
+	KMyMoneyWritableFile getWritableKMyMoneyFile();
 
 	/**
 	 * Change the user-definable name. It should contain no newlines but may contain
@@ -46,7 +47,7 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 	 *
 	 * @param code the new code (not null)
 	 */
-	void setAccountCode(String code);
+	void setInstitutionID(KMMInstID instID);
 
 	/**
 	 * @param desc the user-defined description (may contain multiple lines and
@@ -71,20 +72,16 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 	 * @param type the new type.
 	 * @see {@link KMyMoneyAccount#getType()}
 	 */
-	void setType(String type);
+	void setType(KMyMoneyAccount.Type type);
+
+	void setTypeStr(String typeStr);
 
 	/**
 	 * @param id the new currency
 	 * @see #setCurrencyNameSpace(String)
 	 * @see {@link KMyMoneyAccount#getCurrencyID()}
 	 */
-	void setCurrencyID(final String id);
-
-	/**
-	 * @param id the new namespace
-	 * @see {@link KMyMoneyAccount#getCurrencyNameSpace()}
-	 */
-	void setCurrencyNameSpace(final String id);
+	void setCurrencyID(final String currID);
 
 	/**
 	 * @param newparent the new account or null to make it a top-level-account
@@ -103,6 +100,8 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 	 * Throws IllegalStateException if this account has splits or childres.
 	 */
 	void remove();
+	
+	// ---------------------------------------------------------------
 
 	/**
 	 * Add a PropertyChangeListener to the listener list. The listener is registered
@@ -137,10 +136,4 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 	 */
 	void removePropertyChangeListener(PropertyChangeListener listener);
 
-	/**
-	 * @param name  the name of the user-defined attribute
-	 * @param value the value or null if not set
-	 * @see {@link KMyMoneyObject#getUserDefinedAttribute(String)}
-	 */
-	void setUserDefinedAttribute(final String name, final String value);
 }

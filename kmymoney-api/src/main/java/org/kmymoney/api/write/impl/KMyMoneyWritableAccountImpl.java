@@ -10,18 +10,20 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.naming.spi.ObjectFactory;
-
 import org.kmymoney.api.basetypes.simple.KMMAcctID;
+import org.kmymoney.api.basetypes.simple.KMMInstID;
 import org.kmymoney.api.generated.ACCOUNT;
+import org.kmymoney.api.generated.PAIR;
+import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
+import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
-import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
+import org.kmymoney.api.write.impl.hlp.HasWritableUserDefinedAttributesImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,26 +50,6 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	 * Our logger for debug- and error-ourput.
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableAccountImpl.class);
-
-	/**
-	 * Our helper to implement the KMyMoneyWritableObject-interface.
-	 */
-	private KMyMoneyWritableObjectImpl helper;
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @see KMyMoneyWritableObject#setUserDefinedAttribute(java.lang.String,
-	 *      java.lang.String)
-	 */
-	public void setUserDefinedAttribute(final String name, final String value) {
-		if ( helper == null ) {
-			helper = new KMyMoneyWritableObjectImpl(super.helper);
-		}
-		LOGGER.debug("KMyMoneyAccountWritingImpl[account-id=" + getId() + " name=" + getName()
-				+ "].setUserDefinedAttribute(name=" + name + ", value=" + value + ")");
-		helper.setUserDefinedAttribute(name, value);
-	}
 
 	/**
 	 * @param jwsdpPeer 
@@ -107,30 +89,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		}
 
 		ACCOUNT jwsdpAcct = file.createAccountType();
-		// left unset account.setActCode();
-		jwsdpAcct.setActSecurityScu(100); // x,yz
-		jwsdpAcct.setActDescription("no description yet");
-		// left unset account.setActLots();
-		jwsdpAcct.setActName("UNNAMED");
-		// left unset account.setActNonStandardScu();
-		// left unset account.setActParent())
-		jwsdpAcct.setActType(KMyMoneyAccount.TYPE_BANK);
-
-		jwsdpAcct.setVersion(Const.XML_FORMAT_VERSION);
-
-		{
-			GncAccount.ActSecurity currency = factory.createGncAccountActSecurity();
-			currency.setCmdtyId(file.getDefaultCurrencyID());
-			currency.setCmdtySpace(CurrencyNameSpace.NAMESPACE_CURRENCY);
-			jwsdpAcct.setActSecurity(currency);
-		}
-
-		{
-			GncAccount.ActId guid = factory.createGncAccountActId();
-			guid.setType(Const.XML_DATA_TYPE_GUID);
-			guid.setValue(accountguid);
-			jwsdpAcct.setActId(guid);
-		}
+		jwsdpAcct.setId(newID.toString());
+		jwsdpAcct.setType(KMyMoneyAccount.Type.ASSET.toString());
+		jwsdpAcct.setName("UNNAMED");
+		jwsdpAcct.setDescription("no description yet");
+		jwsdpAcct.setCurrency(file.getDefaultCurrencyID());
 
 		file.getRootElement().getACCOUNTS().getACCOUNT().add(jwsdpAcct);
 		file.setModified(true);
@@ -216,21 +179,25 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	/**
 	 * @see KMyMoneyWritableAccount#setAccountCode(java.lang.String)
 	 */
-	public void setAccountCode(final String code) {
-		if ( code == null || code.trim().length() == 0 ) {
-			throw new IllegalArgumentException("null or empty code given!");
+	public void setInstitutionID(final KMMInstID instID) {
+		if ( instID == null ) {
+			throw new IllegalArgumentException("null institution-ID given!");
 		}
 
-		String oldCode = jwsdpPeer.getActCode();
-		if ( oldCode == code ) {
+		if ( ! instID.isSet() ) {
+			throw new IllegalArgumentException("unset institution-ID given!");
+		}
+
+		String oldInstID = jwsdpPeer.getInstitution();
+		if ( oldInstID == instID.toString() ) {
 			return; // nothing has changed
 		}
-		this.jwsdpPeer.setActCode(code);
+		this.jwsdpPeer.setInstitution(instID.toString());
 		setIsModified();
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
-			propertyChangeFirer.firePropertyChange("code", oldCode, code);
+			propertyChangeFirer.firePropertyChange("code", oldInstID, instID);
 		}
 	}
 
@@ -239,43 +206,21 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	 * @see #setCurrencyNameSpace(String)
 	 * @see {@link KMyMoneyAccount#getCurrencyID()}
 	 */
-	public void setCurrencyID(final String currencyID) {
-		if ( currencyID == null ) {
+	public void setCurrencyID(final String currID) {
+		if ( currID == null ) {
 			throw new IllegalArgumentException("null or empty currencyID given!");
 		}
 
-		String oldCurrencyId = jwsdpPeer.getActSecurity().getCmdtyId();
-		if ( oldCurrencyId == currencyID ) {
+		String oldCurrId = jwsdpPeer.getCurrency();
+		if ( oldCurrId == currID ) {
 			return; // nothing has changed
 		}
-		this.jwsdpPeer.getActSecurity().setCmdtyId(currencyID);
+		this.jwsdpPeer.setCurrency(currID);
 		setIsModified();
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
-			propertyChangeFirer.firePropertyChange("currencyID", oldCurrencyId, currencyID);
-		}
-	}
-
-	/**
-	 * @param currNameSpace the new namespace
-	 * @see {@link KMyMoneyAccount#getCurrencyNameSpace()}
-	 */
-	public void setCurrencyNameSpace(final String currNameSpace) {
-		if ( currNameSpace == null ) {
-			throw new IllegalArgumentException("null or empty currencyNameSpace given!");
-		}
-
-		String oldCurrNameSpace = jwsdpPeer.getSecurity().getCmdtySpace();
-		if ( oldCurrNameSpace == currNameSpace ) {
-			return; // nothing has changed
-		}
-		this.jwsdpPeer.getSecurity().setCmdtySpace(currNameSpace);
-		setIsModified();
-		// <<insert code to react further to this change here
-		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
-		if ( propertyChangeFirer != null ) {
-			propertyChangeFirer.firePropertyChange("currencyNameSpace", oldCurrNameSpace, currNameSpace);
+			propertyChangeFirer.firePropertyChange("currencyID", oldCurrId, currID);
 		}
 	}
 
@@ -376,11 +321,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("null or empty description given!");
 		}
 
-		String oldDescr = jwsdpPeer.getActDescription();
+		String oldDescr = jwsdpPeer.getDescription();
 		if ( oldDescr == descr ) {
 			return; // nothing has changed
 		}
-		jwsdpPeer.setActDescription(descr);
+		jwsdpPeer.setDescription(descr);
 		setIsModified();
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
@@ -392,21 +337,25 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	/**
 	 * @see KMyMoneyWritableAccount#setInvcType(java.lang.String)
 	 */
-	public void setType(final String type) {
-		if ( type == null ) {
+	public void setType(final KMyMoneyAccount.Type type) {
+		setTypeStr(type.toString());
+	}
+
+	public void setTypeStr(final String typeStr) {
+		if ( typeStr == null ) {
 			throw new IllegalArgumentException("null type given!");
 		}
 
-		String oldType = jwsdpPeer.getDescription();
-		if ( oldType == type ) {
+		String oldTypeStr = jwsdpPeer.getDescription();
+		if ( oldTypeStr == typeStr ) {
 			return; // nothing has changed
 		}
-		jwsdpPeer.setType(type);
+		jwsdpPeer.setType(typeStr);
 		setIsModified();
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
-			propertyChangeFirer.firePropertyChange("type", oldType, type);
+			propertyChangeFirer.firePropertyChange("type", oldTypeStr, typeStr);
 		}
 	}
 
@@ -427,7 +376,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	public void setParentAccount(final KMyMoneyAccount prntAcct) {
 
 		if ( prntAcct == null ) {
-			this.jwsdpPeer.setParent(null);
+			this.jwsdpPeer.setParentaccount(null);
 			return;
 		}
 
@@ -441,18 +390,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		}
 
 		KMyMoneyAccount oldPrntAcct = null;
-		GncAccount.ActParent parent = jwsdpPeer.getParent();
-		if ( parent == null ) {
-			parent = ((KMyMoneyWritableFileImpl) getWritableKMyMoneyFile()).getObjectFactory()
-					.createGncAccountActParent();
-			parent.setType(Const.XML_DATA_TYPE_GUID);
-			parent.setValue(prntAcct.getId());
-			jwsdpPeer.setActParent(parent);
-
-		} else {
-			oldPrntAcct = getParentAccount();
-			parent.setValue(prntAcct.getId());
-		}
+		jwsdpPeer.setParentaccount(prntAcct.getID().toString());
 		setIsModified();
 
 		// <<insert code to react further to this change here
@@ -489,5 +427,17 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	}
 
 	// -------------------------------------------------------
+
+	/**
+	 * @param name  the name of the user-defined attribute
+	 * @param value the value or null if not set
+	 * @see {@link KMyMoneyObject#getUserDefinedAttribute(String)}
+	 */
+	public void setUserDefinedAttribute(final String name, final String value) {
+		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
+		HasWritableUserDefinedAttributesImpl
+			.setUserDefinedAttributeCore(kvpList, getWritableKMyMoneyFile(), 
+			                             name, value);
+	}
 
 }

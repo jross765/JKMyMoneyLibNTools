@@ -12,6 +12,7 @@ import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.numbers.FixedPointNumber;
+import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
 
 /**
  * A KMyMoney account satisfies the "normal" definition of the term in 
@@ -28,7 +29,9 @@ import org.kmymoney.api.numbers.FixedPointNumber;
  * <br>
  * Cf. <a href="https://docs.kde.org/stable5/en/kmymoney/kmymoney/makingmostof.mapping.html#makingmostof.mapping.accounts">KMyMoney handbook</a>
  */
-public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount> {
+public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
+                                         HasUserDefinedAttributes
+{
 
     // For the following types cf.:
     // https://github.com/KDE/kmymoney/blob/master/kmymoney/mymoney/mymoneyaccount.h

@@ -9,13 +9,15 @@ import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.SplitNotFoundException;
 import org.kmymoney.api.read.hlp.KMyMoneyObject;
+import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 
 /**
  * Transaction that can be modified.<br/>
  * For PropertyChange-Listeners we support the properties: "description" and
  * "splits".
  */
-public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction {
+public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction
+{
 
 	/**
 	 * @param id the new currency
@@ -52,19 +54,20 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction {
 
 	void setDescription(final String desc);
 
-	void setNumber(String string);
-
 	/**
+	 * @return 
 	 * @see KMyMoneyTransaction#getFirstSplit()
 	 */
 	KMyMoneyWritableTransactionSplit getWritingFirstSplit() throws SplitNotFoundException;
 
 	/**
+	 * @return 
 	 * @see KMyMoneyTransaction#getSecondSplit()
 	 */
 	KMyMoneyWritableTransactionSplit getWritingSecondSplit() throws SplitNotFoundException;
 
 	/**
+	 * @return 
 	 * @see KMyMoneyTransaction#getSplitByID(String)
 	 */
 	KMyMoneyWritableTransactionSplit getWritingSplitByID(String id);
@@ -81,6 +84,7 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction {
 	KMyMoneyWritableTransactionSplit getSecondSplit() throws SplitNotFoundException;
 
 	/**
+	 * @return 
 	 * @see KMyMoneyTransaction#getSplits()
 	 */
 	Collection<? extends KMyMoneyWritableTransactionSplit> getWritingSplits();

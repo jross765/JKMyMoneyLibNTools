@@ -39,7 +39,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
     /**
      * Our helper to implement the KMyMoneyWritableObject-interface.
      */
-    private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(this);
+    private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
     // ---------------------------------------------------------------
 
@@ -172,7 +172,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 	jwsdpPeer.setName(name);
 	getKMyMoneyFile().setModified(true);
 
-	PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
+	PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
 	if (propertyChangeSupport != null) {
 	    propertyChangeSupport.firePropertyChange("name", oldName, name);
 	}
@@ -227,7 +227,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 	jwsdpPeer.setNotes(notes);
 	getKMyMoneyFile().setModified(true);
 
-	PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
+	PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
 	if (propertyChangeSupport != null) {
 	    propertyChangeSupport.firePropertyChange("notes", oldNotes, notes);
 	}
@@ -287,16 +287,10 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
     /**
      * @see KMyMoneyPayee#getAddress()
      */
-    @Override
-    public KMMWritableAddress getAddress() {
-	return getWritableAddress();
-    }
-
-    // ---------------------------------------------------------------
-
-	public void clean() {
-		helper.cleanSlots();
-	}
+//    @Override
+//    public KMMWritableAddress getAddress() {
+//	return getWritableAddress();
+//    }
 
     // -----------------------------------------------------------------
 

@@ -8,7 +8,7 @@ import org.kmymoney.api.read.KMyMoneyFile;
 public interface KMyMoneyObject {
 
     /**
-     * @return the File we belong to.
+     * @return the file we belong to.
      */
     KMyMoneyFile getKMyMoneyFile();
 

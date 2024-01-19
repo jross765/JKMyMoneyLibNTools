@@ -12,7 +12,7 @@ import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
  * 
  * @see KMyMoneyPayee
  */
-public interface KMyMoneyWritablePayee extends KMyMoneyPayee, 
+public interface KMyMoneyWritablePayee extends KMyMoneyPayee,
                                                KMyMoneyWritableObject 
 {
 

@@ -13,8 +13,8 @@ import org.kmymoney.api.read.IllegalTransactionSplitActionException;
  * For propertyChange we support the properties "value", "quantity"
  * "description",  "splitAction" and "accountID".
  */
-public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSplit, 
-                                                          KMyMoneyWritableObject 
+public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSplit,
+                                                          KMyMoneyWritableObject
 {
 
 	/**
