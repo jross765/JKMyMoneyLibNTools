@@ -3,17 +3,19 @@ package org.kmymoney.api.write.impl;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
-import javax.naming.spi.ObjectFactory;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
+import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.SPLIT;
+import org.kmymoney.api.generated.SPLITS;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransaction;
@@ -67,7 +69,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		file.addTransaction(this);
 	}
 
-	public KMyMoneyWritableTransactionImpl(final KMyMoneyTransaction trx) {
+	public KMyMoneyWritableTransactionImpl(final KMyMoneyTransactionImpl trx) {
 		super(trx.getJwsdpPeer(), trx.getKMyMoneyFile());
 
 		// ::TODO
@@ -105,12 +107,12 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 */
 	@Override
 	protected KMyMoneyTransactionSplitImpl createSplit(final SPLIT splt) {
-		KMyMoneyWritableTransactionSplitImpl gnucashTransactionSplitWritingImpl = new KMyMoneyWritableTransactionSplitImpl(
+		KMyMoneyWritableTransactionSplitImpl kmmTrxSplt = new KMyMoneyWritableTransactionSplitImpl(
 				splt, this);
 		if ( helper.getPropertyChangeSupport() != null ) {
 			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritingSplits());
 		}
-		return gnucashTransactionSplitWritingImpl;
+		return kmmTrxSplt;
 	}
 
 	/**
@@ -141,7 +143,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 			throw new IllegalArgumentException("empty ID given");
 		}
 
-		org.kmymoney.api.generated.ObjectFactory factory = file.getObjectFactory();
+		ObjectFactory fact = file.getObjectFactory();
 		TRANSACTION jwsdpTrx = file.createTransactionType();
 
 		jwsdpTrx.setId(newID.toString());
@@ -152,8 +154,12 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		}
 
 		{
-			String datePosted = DATE_ENTERED_FORMAT.format(LocalDateTime.now());
-			jwsdpTrx.setPostdate(datePosted);
+			LocalDateTime dateTime = LocalDateTime.now();
+	        // https://stackoverflow.com/questions/835889/java-util-date-to-xmlgregoriancalendar
+	        GregorianCalendar cal = new GregorianCalendar();
+	        cal.setTime(new Date(dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth()));
+	        XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+			jwsdpTrx.setPostdate(xmlCal);
 		}
 
 		{
@@ -161,8 +167,14 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		}
 
 		{
-			SPLIT splits = factory.createTransactionSplits();
-			jwsdpTrx.setSplits(splits);
+			SPLITS splits = file.createSplitsType();
+			
+//			{
+//				SPLIT splt = file.createSplitType();
+//				splits.getSPLIT().add(splt);
+//			}
+
+			jwsdpTrx.setSPLITS(splits);
 		}
 
 		jwsdpTrx.setMemo("-");
@@ -287,7 +299,11 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 */
 	public void setDatePosted(final LocalDate datePosted) {
 		this.postDate = datePosted;
-		jwsdpPeer.setPostdate(DATE_ENTERED_FORMAT.format(datePosted));
+        // https://stackoverflow.com/questions/835889/java-util-date-to-xmlgregoriancalendar
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(new Date(datePosted.getYear(), datePosted.getMonthValue(), datePosted.getDayOfMonth()));
+        XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+		jwsdpPeer.setPostdate(xmlCal);
 		getWritingFile().setModified(true);
 	}
 

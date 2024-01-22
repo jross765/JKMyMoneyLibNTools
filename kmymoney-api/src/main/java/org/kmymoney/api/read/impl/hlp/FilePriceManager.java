@@ -13,6 +13,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.kmymoney.api.Const;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
@@ -22,12 +23,12 @@ import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.PRICES;
 import org.kmymoney.api.numbers.FixedPointNumber;
+import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
-import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPriceImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
-import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,8 +44,9 @@ public class FilePriceManager {
 
 	protected KMyMoneyFileImpl kmmFile;
 
-	private PRICES                         priceDB = null;
-	private Map<KMMPriceID, KMyMoneyPrice> prcMap  = null;
+	private PRICES                              priceDB = null;
+	private Map<KMMCurrPair, KMyMoneyPricePair> prcPairMap  = null;
+	private Map<KMMPriceID, KMyMoneyPrice>      prcMap  = null;
 
 	// ---------------------------------------------------------------
 
@@ -63,7 +65,9 @@ public class FilePriceManager {
 		for ( PRICEPAIR jwsdpPricePair : prices ) {
 			String fromCurr = jwsdpPricePair.getFrom();
 			String toCurr = jwsdpPricePair.getTo();
+			KMMCurrPair currPair = new KMMCurrPair(fromCurr, toCurr);
 			KMyMoneyPricePair pricePair = createPricePair(jwsdpPricePair);
+			prcPairMap.put(currPair, pricePair);
 			for ( PRICE jwsdpPrice : jwsdpPricePair.getPRICE() ) {
 				XMLGregorianCalendar cal = jwsdpPrice.getDate();
 				if ( cal != null ) {
@@ -78,7 +82,8 @@ public class FilePriceManager {
 			}
 		}
 
-		LOGGER.debug("init: No. of entries in security map: " + prcMap.size());
+		LOGGER.debug("init: No. of entries in price pair map: " + prcPairMap.size());
+		LOGGER.debug("init: No. of entries in price map: " + prcMap.size());
 	}
 
 	private void initPriceDB(final KMYMONEYFILE pRootElement) {
@@ -99,12 +104,62 @@ public class FilePriceManager {
 
 	// ---------------------------------------------------------------
 
+	public void addPricePair(KMyMoneyPricePair prcPair) {
+		addPricePair(prcPair, true);
+	}
+
+	public void addPricePair(KMyMoneyPricePair prcPair, boolean withPrc) {
+		prcPairMap.put(prcPair.getID(), prcPair);
+
+		if ( withPrc ) {
+			for ( KMyMoneyPrice splt : prcPair.getPrices() ) {
+				addPrice(splt, false);
+			}
+		}
+
+		LOGGER.debug("Added price pair to cache: " + prcPair.getID());
+	}
+
+	public void removePricePair(KMyMoneyPricePair prcPair) {
+		removePricePair(prcPair, true);
+	}
+
+	public void removePricePair(KMyMoneyPricePair prcPair, boolean withPrc) {
+		if ( withPrc ) {
+			for ( KMyMoneyPrice splt : prcPair.getPrices() ) {
+				removePrice(splt, false);
+			}
+		}
+
+		prcPairMap.remove(prcPair.getID());
+
+		LOGGER.debug("Removed price pair from cache: " + prcPair.getID());
+	}
+
+	// ---------------------------------------------------------------
+
 	public void addPrice(KMyMoneyPrice prc) {
+		addPrice(prc, true);
+	}
+
+	public void addPrice(KMyMoneyPrice prc, boolean withPrcPair) {
 		prcMap.put(prc.getID(), prc);
 		LOGGER.debug("Added price to cache: " + prc.getID());
+
+		if ( withPrcPair ) {
+			addPricePair(prc.getParentPricePair(), false);
+		}
 	}
 
 	public void removePrice(KMyMoneyPrice prc) {
+		removePrice(prc, true);
+	}
+
+	public void removePrice(KMyMoneyPrice prc, boolean withPrcPair) {
+		if ( withPrcPair ) {
+			removePricePair(prc.getParentPricePair(), false);
+		}
+
 		prcMap.remove(prc.getID());
 		LOGGER.debug("Removed price from cache: " + prc.getID());
 	}
@@ -114,6 +169,26 @@ public class FilePriceManager {
 	public PRICES getPriceDB() {
 		return priceDB;
 	}
+	
+	// ----------------------------
+
+	public KMyMoneyPricePair getPricePairByID(KMMCurrPair prcPairID) {
+		if ( prcPairMap == null ) {
+			throw new IllegalStateException("no root-element loaded");
+		}
+
+		return prcPairMap.get(prcPairID);
+	}
+
+	public Collection<KMyMoneyPricePair> getPricePairs() {
+		if ( prcPairMap == null ) {
+			throw new IllegalStateException("no root-element loaded");
+		}
+
+		return prcPairMap.values();
+	}
+
+	// ----------------------------
 
 	public KMyMoneyPrice getPriceByID(KMMPriceID prcID) {
 		if ( prcMap == null ) {
@@ -144,6 +219,8 @@ public class FilePriceManager {
 			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 		return getLatestPrice(secCurrID, 0);
 	}
+
+	// ----------------------------
 
 	/**
 	 * @param pCmdtySpace the name space for pCmdtyId

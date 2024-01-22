@@ -1,8 +1,10 @@
 package org.kmymoney.api.write;
 
 import java.beans.PropertyChangeListener;
+import java.math.BigInteger;
 import java.time.LocalDate;
 
+import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.simple.KMMInstID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -74,7 +76,7 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 	 */
 	void setType(KMyMoneyAccount.Type type);
 
-	void setTypeStr(String typeStr);
+	void setTypeInt(BigInteger typeInt);
 
 	/**
 	 * @param id the new currency
@@ -93,7 +95,7 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 	 *
 	 * @see {@link #setParentAccount(KMyMoneyAccount)}
 	 */
-	void setParentAccountId(String newparent);
+	void setParentAccountId(KMMComplAcctID prntAcctID);
 
 	/**
 	 * Remove this account from the sytem.<br/>

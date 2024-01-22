@@ -9,15 +9,15 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.zip.GZIPOutputStream;
 
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.simple.KMMAcctID;
@@ -27,17 +27,16 @@ import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.ACCOUNT;
-import org.kmymoney.api.generated.CURRENCY;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.PAYEE;
 import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.generated.SPLIT;
+import org.kmymoney.api.generated.SPLITS;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
-import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
@@ -48,17 +47,18 @@ import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPayeeImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPriceImpl;
+import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.read.impl.KMyMoneySecurityImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionImpl;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritablePayee;
 import org.kmymoney.api.write.KMyMoneyWritablePrice;
+import org.kmymoney.api.write.KMyMoneyWritablePricePair;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import org.kmymoney.api.write.hlp.IDManager;
-import org.kmymoney.api.write.impl.hlp.BookElementsSorter;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -269,7 +269,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 */
 	@SuppressWarnings("exports")
 	@Override
-	public void setRootElement(final GncV2 rootElement) {
+	public void setRootElement(final KMYMONEYFILE rootElement) {
 		super.setRootElement(rootElement);
 	}
 
@@ -360,7 +360,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		// make sure the correct sort-order of the entity-types is obeyed in writing.
 		// (we do not enforce this in the xml-schema to allow for reading out of order
 		// files)
-		java.util.Collections.sort(getRootElement(), new BookElementsSorter());
+		// java.util.Collections.sort(getRootElement(), new BookElementsSorter());
 	}
 
 	/**
@@ -388,6 +388,14 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	protected TRANSACTION createTransactionType() {
 		TRANSACTION retval = getObjectFactory().createTRANSACTION();
 		incrementCountDataFor("transaction");
+		return retval;
+	}
+
+	/**
+	 */
+	protected SPLITS createSplitsType() {
+		SPLITS retval = getObjectFactory().createSPLITS();
+		// incrementCountDataFor();
 		return retval;
 	}
 
@@ -619,6 +627,28 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		return retval;
 	}
 
+	@Override
+	public Collection<? extends KMyMoneyWritableAccount> getWritableRootAccounts() {
+		List<KMyMoneyWritableAccount> result = new ArrayList<KMyMoneyWritableAccount>();
+		
+		KMyMoneyWritableAccount acct1 = getWritableAccountByID(KMMComplAcctID.get(KMMComplAcctID.Top.ASSET));
+		result.add(acct1);
+		
+		KMyMoneyWritableAccount acct2 = getWritableAccountByID(KMMComplAcctID.get(KMMComplAcctID.Top.LIABILITY));
+		result.add(acct2);
+		
+		KMyMoneyWritableAccount acct3 = getWritableAccountByID(KMMComplAcctID.get(KMMComplAcctID.Top.INCOME));
+		result.add(acct3);
+		
+		KMyMoneyWritableAccount acct4 = getWritableAccountByID(KMMComplAcctID.get(KMMComplAcctID.Top.EXPENSE));
+		result.add(acct4);
+		
+		KMyMoneyWritableAccount acct5 = getWritableAccountByID(KMMComplAcctID.get(KMMComplAcctID.Top.EQUITY));
+		result.add(acct5);
+		
+		return result;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -790,6 +820,57 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	// ---------------------------------------------------------------
 
 	@Override
+	public KMyMoneyWritablePricePair getWritablePricePairByID(KMMCurrPair prcPairID) {
+		if ( prcPairID == null ) {
+			throw new IllegalArgumentException("null price pair ID given");
+		}
+
+		// ::TODO
+//		if ( ! prcPairID.isSet() ) {
+//			throw new IllegalArgumentException("price ID is not set");
+//		}
+
+		KMyMoneyPricePair prcPair = super.getPricePairByID(prcPairID);
+		return new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) prcPair);
+	}
+
+	@Override
+	public Collection<KMyMoneyWritablePricePair> getWritablePricePairs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public KMyMoneyWritablePricePair createWritablePricePair() {
+		KMyMoneyWritablePricePairImpl prc = new KMyMoneyWritablePricePairImpl(this);
+		super.prcMgr.addPricePair(prc);
+		return prc;
+	}
+
+	@Override
+	public void removePricePair(KMyMoneyWritablePricePair prcPair) {
+		// 1) remove avatar in price manager
+		super.prcMgr.removePricePair(prcPair);
+		
+		// 2) remove price pair, if no prices left
+		for ( PRICEPAIR jwsdpPrcPair : getRootElement().getPRICES().getPRICEPAIR() ) {
+			if ( jwsdpPrcPair.getFrom().equals(prcPair.getFromCurrencyCode()) &&
+				 jwsdpPrcPair.getTo().equals(prcPair.getToCurrencyCode()) ) {
+				if ( jwsdpPrcPair.getPRICE().size() == 0 ) {
+					// CAUTION concurrency ::CHECK
+					getRootElement().getPRICES().getPRICEPAIR().remove(jwsdpPrcPair);
+					break;
+				}
+			}
+		}
+		
+		// 4) set 'modified' flag
+		setModified(true);
+	}
+
+	// ---------------------------------------------------------------
+
+	@Override
 	public KMyMoneyWritablePrice getWritablePriceByID(KMMPriceID prcID) {
 		if ( prcID == null ) {
 			throw new IllegalArgumentException("null price ID given");
@@ -811,8 +892,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
 
 	@Override
-	public KMyMoneyWritablePrice createWritablePrice() {
-		KMyMoneyWritablePriceImpl prc = new KMyMoneyWritablePriceImpl(this);
+	public KMyMoneyWritablePrice createWritablePrice(KMyMoneyPricePairImpl prcPair) {
+		KMyMoneyWritablePriceImpl prc = new KMyMoneyWritablePriceImpl(prcPair, this);
 		super.prcMgr.addPrice(prc);
 		return prc;
 	}

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
@@ -13,6 +14,7 @@ import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 
 /**
@@ -207,7 +209,34 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 
 	/**
 	 * @see KMyMoneyFile#getPriceByID(KMMPriceID)
-	 * @return A changable version of the transaction.
+	 * @return A changeable version of the transaction.
+	 */
+	KMyMoneyWritablePricePair getWritablePricePairByID(KMMCurrPair prcPairID);
+	
+	/**
+	 * @see KMyMoneyFile#getPricePairs()
+	 * @return writable versions of all prices in the book.
+	 */
+	Collection<KMyMoneyWritablePricePair> getWritablePricePairs();
+
+	// ----------------------------
+
+	/**
+	 * @return a new price pair with no splits that is already added to this file
+	 */
+	KMyMoneyWritablePricePair createWritablePricePair();
+
+	/**
+	 *
+	 * @param prcPair 
+	 */
+	void removePricePair(KMyMoneyWritablePricePair prcPair);
+
+	// ---------------------------------------------------------------
+
+	/**
+	 * @see KMyMoneyFile#getPriceByID(KMMPriceID)
+	 * @return A changeable version of the transaction.
 	 */
 	KMyMoneyWritablePrice getWritablePriceByID(KMMPriceID prcID);
 	
@@ -220,9 +249,10 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	// ----------------------------
 
 	/**
+	 * @param prcPair 
 	 * @return a new price with no splits that is already added to this file
 	 */
-	KMyMoneyWritablePrice createWritablePrice();
+	KMyMoneyWritablePrice createWritablePrice(KMyMoneyPricePairImpl prcPair);
 
 	/**
 	 *

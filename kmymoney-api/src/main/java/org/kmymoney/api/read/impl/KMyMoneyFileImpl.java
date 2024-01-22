@@ -15,6 +15,7 @@ import org.kmymoney.api.Const;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
@@ -36,6 +37,7 @@ import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
@@ -542,6 +544,18 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public Collection<KMyMoneyCurrency> getCurrencies() {
 	return currMgr.getCurrencies();
+    }
+
+    // ---------------------------------------------------------------
+    
+    @Override
+    public KMyMoneyPricePair getPricePairByID(KMMCurrPair prcPairID) {
+	return prcMgr.getPricePairByID(prcPairID);
+    }
+
+    @Override
+    public Collection<KMyMoneyPricePair> getPricePairs() {
+	return prcMgr.getPricePairs();
     }
 
     // ---------------------------------------------------------------

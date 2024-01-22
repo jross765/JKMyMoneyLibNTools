@@ -1,5 +1,6 @@
 package org.kmymoney.api.read;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Currency;
@@ -88,22 +89,55 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
     */
 
     public enum Type {
-	CHECKING,
-	SAVINGS,
-	CASH,
-	CREDIT_CARD,
-	LOAN,
-	CERTIFICATE_DEPOSIT,
-	INVESTMENT,
-	MONEY_MARKET,
-	ASSET,
-	LIABILITY,
-	CURRENCY,
-	INCOME,
-	EXPENSE,
-	ASSET_LOAN,
-	STOCK,
-	EQUITY
+    	
+        // ::MAGIC
+    	CHECKING            (  1 ),
+    	SAVINGS             (  2 ),
+    	CASH                (  3 ),
+    	CREDIT_CARD         (  4 ),
+    	LOAN                (  5 ),
+    	CERTIFICATE_DEPOSIT (  6 ),
+    	INVESTMENT          (  7 ),
+    	MONEY_MARKET        (  8 ),
+    	ASSET               (  9 ),
+    	LIABILITY           ( 10 ),
+    	CURRENCY            ( 11 ),
+    	INCOME              ( 12 ),
+    	EXPENSE             ( 13 ),
+    	ASSET_LOAN          ( 14 ),
+    	STOCK               ( 15 ),
+    	EQUITY              ( 16 );
+
+    	// ---
+	      
+    	private int code = 0;
+
+    	// ---
+    	      
+    	Type(int code) {
+    	    this.code = code;
+    	}
+    	      
+    	// ---
+    		
+    	public int getCode() {
+    	    return code;
+    	}
+    		
+    	public BigInteger getCodeBig() {
+    	    return BigInteger.valueOf(getCode());
+    	}
+    		
+    	// no typo!
+    	public static Type valueOff(int code) {
+    	    for ( Type type : values() ) {
+    		if ( type.getCode() == code ) {
+    		    return type;
+    		}
+    	    }
+    		    
+    	    return null;
+    	}
     }
     
     // -----------------------------------------------------------------

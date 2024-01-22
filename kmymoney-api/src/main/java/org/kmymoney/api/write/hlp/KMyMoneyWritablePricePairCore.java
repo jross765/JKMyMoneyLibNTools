@@ -19,7 +19,7 @@ import org.kmymoney.api.write.KMyMoneyWritablePricePair;
  */
 public interface KMyMoneyWritablePricePairCore extends KMyMoneyPricePairCore {
 
-    void setFromSecCurrStr(String curr);
+    void setFromSecCurrStr(String secCurr);
     
     void setToCurrStr(String curr);
     

@@ -10,6 +10,7 @@ import java.time.ZonedDateTime;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
@@ -58,13 +59,13 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
     	super(createPricePair_int(file), file);
     }
 
-    public KMyMoneyWritablePricePairImpl(KMyMoneyPricePairImpl prcPair) {
+    public KMyMoneyWritablePricePairImpl(final KMyMoneyPricePairImpl prcPair) {
     	super(prcPair.getJwsdpPeer(), prcPair.getKMyMoneyFile());
     }
 
     // ---------------------------------------------------------------
 
-    /**
+	/**
      * The KMyMoney file is the top-level class to contain everything.
      *
      * @return the file we are associated with
@@ -104,14 +105,38 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
         file.getRootElement().getPRICES().getPRICEPAIR().add(jwsdpPrcPair);
         file.setModified(true);
     
-        LOGGER.debug("createPricePair_int: Created new price pair (core): " + 
-                     jwsdpPrcPair.getFrom() + "/" + jwsdpPrcPair.getTo());
+        KMMCurrPair prcPairID = new KMMCurrPair(jwsdpPrcPair.getFrom(), jwsdpPrcPair.getTo());
+        LOGGER.debug("createPricePair_int: Created new price pair (core): " + prcPairID.toString());
     
         return jwsdpPrcPair;
     }
 
     // ---------------------------------------------------------------
 
+	@Override
+	public void setFromSecCurrStr(String secCurr) {
+		if ( secCurr == null )
+			throw new IllegalArgumentException("null security/currency given");
+
+		if ( secCurr.trim().length() == 0 )
+			throw new IllegalArgumentException("empty security/currency given");
+
+		setFromCurrencyQualifID(new KMMQualifCurrID(secCurr));
+	}
+
+	@Override
+	public void setToCurrStr(String curr) {
+		if ( curr == null )
+			throw new IllegalArgumentException("null currency given");
+
+		if ( curr.trim().length() == 0 )
+			throw new IllegalArgumentException("empty currency given");
+
+		setToCurrencyQualifID(new KMMQualifCurrID(curr));
+	}
+
+    // ----------------------------
+    
 	@Override
     public void setFromSecCurrQualifID(final KMMQualifSecCurrID qualifID) {
 		if ( qualifID == null )

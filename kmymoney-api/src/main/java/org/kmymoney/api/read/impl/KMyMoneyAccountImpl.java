@@ -34,26 +34,6 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 
     // ---------------------------------------------------------------
 
-    // ::MAGIC
-    private static final int TYPE_CHECKING            = 1;
-    private static final int TYPE_SAVINGS             = 2;
-    private static final int TYPE_CASH                = 3;
-    private static final int TYPE_CREDIT_CARD         = 4;
-    private static final int TYPE_LOAN                = 5;
-    private static final int TYPE_CERTIFICATE_DEPOSIT = 6;
-    private static final int TYPE_INVESTMENT          = 7;
-    private static final int TYPE_MONEY_MARKET        = 8;
-    private static final int TYPE_ASSET               = 9;
-    private static final int TYPE_LIABILITY           = 10;
-    private static final int TYPE_CURRENCY            = 11;
-    private static final int TYPE_INCOME              = 12;
-    private static final int TYPE_EXPENSE             = 13;
-    private static final int TYPE_ASSET_LOAN          = 14;
-    private static final int TYPE_STOCK               = 15;
-    private static final int TYPE_EQUITY              = 16;
-    
-    // ---------------------------------------------------------------
-
     /**
      * the JWSDP-object we are facading.
      */
@@ -151,40 +131,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 	
 	BigInteger typeVal = jwsdpPeer.getType();
 	
-	if ( typeVal.intValue() == TYPE_CHECKING )
-	    return Type.CHECKING;
-	else if ( typeVal.intValue() == TYPE_SAVINGS )
-	    return Type.SAVINGS;
-	else if ( typeVal.intValue() == TYPE_CASH )
-	    return Type.CASH;
-	else if ( typeVal.intValue() == TYPE_CREDIT_CARD )
-	    return Type.CREDIT_CARD;
-	else if ( typeVal.intValue() == TYPE_LOAN )
-	    return Type.LOAN;
-	else if ( typeVal.intValue() == TYPE_CERTIFICATE_DEPOSIT )
-	    return Type.CERTIFICATE_DEPOSIT;
-	else if ( typeVal.intValue() == TYPE_INVESTMENT )
-	    return Type.INVESTMENT;
-	else if ( typeVal.intValue() == TYPE_MONEY_MARKET )
-	    return Type.MONEY_MARKET;
-	else if ( typeVal.intValue() == TYPE_ASSET )
-	    return Type.ASSET;
-	else if ( typeVal.intValue() == TYPE_LIABILITY )
-	    return Type.LIABILITY;
-	else if ( typeVal.intValue() == TYPE_CURRENCY )
-	    return Type.CURRENCY;
-	else if ( typeVal.intValue() == TYPE_INCOME )
-	    return Type.INCOME;
-	else if ( typeVal.intValue() == TYPE_EXPENSE )
-	    return Type.EXPENSE;
-	else if ( typeVal.intValue() == TYPE_ASSET_LOAN )
-	    return Type.ASSET_LOAN;
-	else if ( typeVal.intValue() == TYPE_STOCK )
-	    return Type.STOCK;
-	else if ( typeVal.intValue() == TYPE_EQUITY )
-	    return Type.EQUITY;
-	else
-	    throw new UnknownAccountTypeException();
+	return Type.valueOff(typeVal.intValue());
     }
 
     /**

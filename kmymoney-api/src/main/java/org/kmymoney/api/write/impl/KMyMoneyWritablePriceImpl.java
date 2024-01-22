@@ -67,20 +67,20 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
     }
 
     public KMyMoneyWritablePriceImpl(
-    		final KMyMoneyPricePairImpl parent,
+    		final KMyMoneyPricePairImpl prcPair,
     		final KMyMoneyWritableFileImpl file) {
-    	super(parent, createPrice_int(parent, file), file);
-    	this.wrtblParent = new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) parent);
+    	super(prcPair, createPrice_int(prcPair, file), file);
+    	this.wrtblParent = new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) prcPair);
     }
 
-    public KMyMoneyWritablePriceImpl(KMyMoneyPriceImpl prc) {
+    public KMyMoneyWritablePriceImpl(final KMyMoneyPriceImpl prc) {
     	super(prc.getParentPricePair(), prc.getJwsdpPeer(), prc.getKMyMoneyFile());
     	this.wrtblParent = new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) prc.getParentPricePair());
     }
 
     // ---------------------------------------------------------------
 
-    /**
+	/**
      * The kmymoney-file is the top-level class to contain everything.
      *
      * @return the file we are associated with
@@ -140,6 +140,30 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
     }
     
     // ---------------------------------------------------------------
+
+	@Override
+	public void setFromSecCurrStr(String secCurr) {
+		if ( secCurr == null )
+			throw new IllegalArgumentException("null security/currency given");
+
+		if ( secCurr.trim().length() == 0 )
+			throw new IllegalArgumentException("empty security/currency given");
+
+		setFromCurrencyQualifID(new KMMQualifCurrID(secCurr));
+	}
+
+	@Override
+	public void setToCurrStr(String curr) {
+		if ( curr == null )
+			throw new IllegalArgumentException("null currency given");
+
+		if ( curr.trim().length() == 0 )
+			throw new IllegalArgumentException("empty currency given");
+
+		setToCurrencyQualifID(new KMMQualifCurrID(curr));
+	}
+    
+    // ----------------------------
 
     @Override
     public void setFromSecCurrQualifID(final KMMQualifSecCurrID qualifID) {
@@ -207,11 +231,15 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 		LocalDate oldDate = getDate();
 		
 		this.date = LocalDate.now();
-		String datePostedStr = this.date.format(DATE_FORMAT);
-		jwsdpPeer.setDate(datePostedStr);
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(new Date(this.date.getYear(),
+        		             this.date.getMonthValue(),
+        		             this.date.getDayOfMonth()));
+        XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+		jwsdpPeer.setDate(xmlCal);
 		getWritableKMyMoneyFile().setModified(true);
 
-		PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
+		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
 		if ( propertyChangeSupport != null ) {
 			propertyChangeSupport.firePropertyChange("price", oldDate, date);
 		}
@@ -242,7 +270,7 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 		jwsdpPeer.setSource(srcStr);
 		getWritableKMyMoneyFile().setModified(true);
 
-		PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
+		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
 		if ( propertyChangeSupport != null ) {
 			propertyChangeSupport.firePropertyChange("price", oldSrc, srcStr);
 		}
@@ -258,7 +286,7 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 		jwsdpPeer.setPrice(val.toKMyMoneyString());
 		getWritableKMyMoneyFile().setModified(true);
 
-		PropertyChangeSupport propertyChangeSupport = getPropertyChangeSupport();
+		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
 		if ( propertyChangeSupport != null ) {
 			propertyChangeSupport.firePropertyChange("price", oldVal, val);
 		}
@@ -300,5 +328,5 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 	
 	return result;
     }
-    
+
 }

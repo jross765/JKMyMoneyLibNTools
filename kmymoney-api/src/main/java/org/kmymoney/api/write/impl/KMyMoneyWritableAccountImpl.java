@@ -3,6 +3,7 @@ package org.kmymoney.api.write.impl;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -10,6 +11,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.simple.KMMAcctID;
 import org.kmymoney.api.basetypes.simple.KMMInstID;
 import org.kmymoney.api.generated.ACCOUNT;
@@ -30,17 +32,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Extension of KMyMoneyAccountImpl to allow writing instead of
  * read-only access.<br/>
- * Supported properties for the propertyChangeListeners:
- * <ul>
- * <li>name</li>
- * <li>code</li>
- * <li>currencyID</li>
- * <li>currencyNameSpace</li>
- * <li>description</li>
- * <li>type</li>
- * <li>parentAccount</li>
- * <li>transactionSplits (not giving the old value of the list)</li>
- * </ul>
  */
 public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl 
                                          implements KMyMoneyWritableAccount 
@@ -67,7 +58,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		super(createAccount_int(file, file.getNewAccountID()), file);
 	}
 	
-	public KMyMoneyWritableAccountImpl(KMyMoneyAccountImpl acct) {
+	public KMyMoneyWritableAccountImpl(final KMyMoneyAccountImpl acct) {
 		super(acct.getJwsdpPeer(), acct.getKMyMoneyFile());
 	}
 
@@ -90,7 +81,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 
 		ACCOUNT jwsdpAcct = file.createAccountType();
 		jwsdpAcct.setId(newID.toString());
-		jwsdpAcct.setType(KMyMoneyAccount.Type.ASSET.toString());
+		jwsdpAcct.setType(KMyMoneyAccount.Type.ASSET.getCodeBig());
 		jwsdpAcct.setName("UNNAMED");
 		jwsdpAcct.setDescription("no description yet");
 		jwsdpAcct.setCurrency(file.getDefaultCurrencyID());
@@ -338,36 +329,46 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	 * @see KMyMoneyWritableAccount#setInvcType(java.lang.String)
 	 */
 	public void setType(final KMyMoneyAccount.Type type) {
-		setTypeStr(type.toString());
+		setTypeInt(type.getCodeBig());
 	}
 
-	public void setTypeStr(final String typeStr) {
-		if ( typeStr == null ) {
+	public void setTypeInt(final BigInteger typeInt) {
+		if ( typeInt == null ) {
 			throw new IllegalArgumentException("null type given!");
 		}
 
-		String oldTypeStr = jwsdpPeer.getDescription();
-		if ( oldTypeStr == typeStr ) {
+		if ( typeInt.intValue() <= 0 ) {
+			throw new IllegalArgumentException("type <= 0 given!");
+		}
+
+		BigInteger oldTypeInt = jwsdpPeer.getType();
+		if ( oldTypeInt == typeInt ) {
 			return; // nothing has changed
 		}
-		jwsdpPeer.setType(typeStr);
+		jwsdpPeer.setType(typeInt);
 		setIsModified();
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
-			propertyChangeFirer.firePropertyChange("type", oldTypeStr, typeStr);
+			propertyChangeFirer.firePropertyChange("type", oldTypeInt, typeInt);
 		}
 	}
 
 	/**
 	 * @see KMyMoneyWritableAccount#setParentAccount(KMyMoneyAccount)
 	 */
-	public void setParentAccountId(final String newParent) {
-		if ( newParent == null || newParent.trim().length() == 0 ) {
+	public void setParentAccountId(final KMMComplAcctID prntAcctID) {
+		if ( prntAcctID == null ) {
 			setParentAccount(null);
-		} else {
-			setParentAccount(getKMyMoneyFile().getAccountByID(newParent));
+			return;
 		}
+
+		// ::TODO
+//		if ( ! prntAcctID.isSet() ) {
+//			throw new IllegalArgumentException("unset account ID given!");
+//		}
+
+		setParentAccount(getKMyMoneyFile().getAccountByID(prntAcctID));
 	}
 
 	/**
@@ -413,15 +414,15 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		FixedPointNumber retval = new FixedPointNumber();
 
 		for ( Object element : getTransactionSplits() ) {
-			KMyMoneyTransactionSplit split = (KMyMoneyTransactionSplit) element;
-			LocalDateTime whenHappened = split.getTransaction().getDatePosted().toLocalDateTime();
-			if ( !whenHappened.isBefore(to.atStartOfDay()) ) {
+			KMyMoneyTransactionSplit splt = (KMyMoneyTransactionSplit) element;
+			LocalDate whenHappened = splt.getTransaction().getDatePosted();
+			if ( !whenHappened.isBefore(to) ) {
 				continue;
 			}
-			if ( whenHappened.isBefore(from.atStartOfDay()) ) {
+			if ( whenHappened.isBefore(from) ) {
 				continue;
 			}
-			retval = retval.add(split.getShares());
+			retval = retval.add(splt.getShares());
 		}
 		return retval;
 	}

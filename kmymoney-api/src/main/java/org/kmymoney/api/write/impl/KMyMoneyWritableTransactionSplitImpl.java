@@ -2,8 +2,6 @@ package org.kmymoney.api.write.impl;
 
 import java.text.ParseException;
 
-import javax.naming.spi.ObjectFactory;
-
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.generated.SPLIT;
@@ -40,6 +38,8 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		return (KMyMoneyWritableTransaction) super.getTransaction();
 	}
 
+	// ---------------------------------------------------------------
+	
 	/**
 	 * @param jwsdpPeer   the JWSDP-object we are facading.
 	 * @param kmmFile 
@@ -80,6 +80,8 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		trx.addSplit(this);
 	}
 
+	// ---------------------------------------------------------------
+	
 	/**
 	 * Creates a new Transaction and add's it to the given gnucash-file Don't modify
 	 * the ID of the new transaction!
@@ -123,7 +125,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		jwsdpSplt.setShares(new FixedPointNumber().toKMyMoneyString());
 		jwsdpSplt.setValue(new FixedPointNumber().toKMyMoneyString());
 		
-		trx.addSplit(new KMyMoneyWritableTransactionSplitImpl(jwsdpSplt, trx));
+		trx.addSplit(new KMyMoneyWritableTransactionSplitImpl(jwsdpSplt, trx.getKMyMoneyFile(), trx));
 		// No:
 		// trx.getJwsdpPeer().getSPLITS().getSPLIT().add(jwsdpSplt);
 		file.setModified(true);

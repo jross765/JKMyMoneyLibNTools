@@ -1,6 +1,7 @@
 package org.kmymoney.api.write.impl.hlp;
 
 import org.kmymoney.api.generated.PRICE;
+import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.impl.KMyMoneyPriceImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
@@ -22,6 +23,18 @@ public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceMa
 	}
 
 	// ---------------------------------------------------------------
+
+	/*
+	 * Creates the writable version of the returned object.
+	 */
+	@Override
+	protected KMyMoneyPricePairImpl createPricePair(final PRICEPAIR jwsdpPricePair) {
+		KMyMoneyWritablePricePairImpl prcPair = new KMyMoneyWritablePricePairImpl((KMyMoneyWritableFileImpl) kmmFile);
+		LOGGER.debug("Generated new writable price pair: " + prcPair.getID());
+		return prcPair;
+	}
+
+	// ----------------------------
 
 	/*
 	 * Creates the writable version of the returned object.
