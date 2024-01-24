@@ -221,7 +221,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * The returned list ist sorted by the natural order of the Transaction-Splits.
      *
      * @return all splits
-     * @link GnucashTransactionSplit
+     * @link KMyMoneyTransactionSplit
      */
     List<? extends KMyMoneyTransactionSplit> getTransactionSplits();
 
@@ -261,7 +261,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * The returned list ist sorted by the natural order of the Transaction-Splits.
      *
      * @return all splits
-     * @link GnucashTransaction
+     * @link KMyMoneyTransaction
      */
     List<KMyMoneyTransaction> getTransactions();
 
@@ -368,7 +368,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @param secCurrID         the currency the result shall be in
      * @return Gets the balance including all sub-accounts.
      * @throws InvalidQualifSecCurrIDException 
-     * @see GnucashAccount#getBalanceRecursive(Date, Currency)
+     * @see KMyMoneyAccount#getBalanceRecursive(Date, Currency)
      */
     FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMQualifSecCurrID secCurrID) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 

@@ -9,7 +9,7 @@ public class ConstTest extends Const {
     public static final String KMM_FILENAME_OUT = "test_out.xml";
 
     // ---------------------------------------------------------------
-    // Stats for above-mentioned GnuCash test file (before write operations)
+    // Stats for above-mentioned KMyMoney test file (before write operations)
     
     public class Stats {
     

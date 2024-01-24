@@ -94,7 +94,7 @@ class NamespaceAdderWriter extends Writer {
         output.write(cbuf, off, len);
 
         // this is a quick hack to add the missing xmlns-declarations
-        if (len == 7 && new String(cbuf, off, len).equals("<gnc-v2")) {
+        if (len == 7 && new String(cbuf, off, len).equals("<KMYMONEY-FILE")) {
     	output.write("");
         }
 

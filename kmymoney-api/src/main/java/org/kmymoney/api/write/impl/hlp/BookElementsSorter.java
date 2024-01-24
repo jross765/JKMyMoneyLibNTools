@@ -32,7 +32,7 @@ public class BookElementsSorter implements Comparator<Object> {
 	//
 	// The order numbers defined in this function do not absolutely have to be
 	// defined as they have been -- it just makes things easier as this is
-	// how GnuCash normally stores them (it can handle other variants as well,
+	// how KMyMoney normally stores them (it can handle other variants as well,
 	// however).
 	private int getTypeOrder(final Object element) {
 		if ( element instanceof SECURITIES ) {

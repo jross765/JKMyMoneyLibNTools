@@ -18,7 +18,7 @@ import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 
 /**
- * Extension of GnucashFile that allows writing. <br/>
+ * Extension of KMyMoneyFile that allows writing. <br/>
  * All the instances for accounts,... it returns can be assumed
  * to implement the respetive *Writable-interfaces.
  *

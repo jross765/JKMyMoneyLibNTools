@@ -14,7 +14,7 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 /**
- * Helper class needed for writing Gnucash-Files that are binary-identical to
+ * Helper class needed for writing KMyMoney files that are binary-identical to
  * what KMyMoney itself writes.
  */
 public class WritingContentHandler implements ContentHandler {
@@ -59,7 +59,7 @@ public class WritingContentHandler implements ContentHandler {
 			wrt.write("\n\n");
 			wrt.write("<!-- Local variables: -->\n");
 			wrt.write("<!-- mode: xml        -->\n");
-			wrt.write("<!-- End: Written by JGnuCashLib, " + LocalDateTime.now() + " -->\n");
+			wrt.write("<!-- End: Written by JKMyMoneyLib, " + LocalDateTime.now() + " -->\n");
 		} catch (IOException e) {
 			LOGGER.error("endDocument: Problem", e);
 		}

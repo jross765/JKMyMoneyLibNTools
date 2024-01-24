@@ -58,6 +58,7 @@ public class FilePriceManager {
 	// ---------------------------------------------------------------
 
 	private void init(final KMYMONEYFILE pRootElement) {
+		prcPairMap = new HashMap<KMMCurrPair, KMyMoneyPricePair>();
 		prcMap = new HashMap<KMMPriceID, KMyMoneyPrice>();
 
 		initPriceDB(pRootElement);

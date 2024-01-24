@@ -48,7 +48,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableTransactionImpl.class);
 
 	/**
-	 * Our helper to implement the GnucashWritableObject-interface.
+	 * Our helper to implement the KMyMoneyWritableObject-interface.
 	 */
 	private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
@@ -78,9 +78,9 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 
 		// ::TODO
 		System.err.println("NOT IMPLEMENTED YET");
-//	    for ( GnucashTransactionSplit splt : trx.getSplits() ) 
+//	    for ( KMyMoeneyTransactionSplit splt : trx.getSplits() ) 
 //	    {
-//		addSplit(new GnucashTransactionSplitImpl(splt.jwsdpPeer, trx));
+//		addSplit(new KMyMoneyTransactionSplitImpl(splt.jwsdpPeer, trx));
 //	    }
 	}
 

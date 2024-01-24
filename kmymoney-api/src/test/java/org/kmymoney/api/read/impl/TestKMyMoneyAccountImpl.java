@@ -48,7 +48,7 @@ public class TestKMyMoneyAccountImpl {
 	public void initialize() throws Exception {
 		ClassLoader classLoader = getClass().getClassLoader();
 		// URL kmmFileURL = classLoader.getResource(Const.GCSH_FILENAME);
-		// System.err.println("GnuCash test file resource: '" + kmmFileURL + "'");
+		// System.err.println("KMyMoney test file resource: '" + kmmFileURL + "'");
 		InputStream kmmFileStream = null;
 		try {
 			kmmFileStream = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME);
@@ -60,7 +60,7 @@ public class TestKMyMoneyAccountImpl {
 		try {
 			kmmFile = new KMyMoneyFileImpl(kmmFileStream);
 		} catch (Exception exc) {
-			System.err.println("Cannot parse GnuCash file");
+			System.err.println("Cannot parse KMyMoney file");
 			exc.printStackTrace();
 		}
 	}

@@ -19,8 +19,7 @@ import org.kmymoney.api.read.hlp.KMyMoneyPricePairCore;
  */
 public interface KMyMoneyPrice extends KMyMoneyPricePairCore {
 
-    // ::TODO: these are sitll Gnucash values
-    // Cf. https://github.com/Gnucash/gnucash/blob/stable/libgnucash/engine/gnc-pricedb.h
+    // ::TODO: these are still KMyMoney values
     public enum Source {
 	EDIT_DLG,         // "user:price-editor"
 	FQ,               // "Finance::Quote"

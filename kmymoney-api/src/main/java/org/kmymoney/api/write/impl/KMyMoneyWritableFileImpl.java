@@ -66,7 +66,7 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 
 /**
- * Implementation of GnucashWritableFile based on GnucashFileImpl.
+ * Implementation of KMyMoneyWritableFile based on GnucashFileImpl.
  * @see KMyMoneyFileImpl
  */
 public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl 
@@ -173,7 +173,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	/**
 	 * Keep the count-data up to date. The count-data is re-calculated on the fly
 	 * before writing but we like to keep our internal model up-to-date just to be
-	 * defensive. <gnc:count-data cd:type="commodity">2</gnc:count-data>
+	 * defensive.
 	 *
 	 * @param type the type to set it for
 	 */
@@ -193,7 +193,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	/**
 	 * Keep the count-data up to date. The count-data is re-calculated on the fly
 	 * before writing but we like to keep our internal model up-to-date just to be
-	 * defensive. <gnc:count-data cd:type="commodity">2</gnc:count-data>
+	 * defensive.
 	 *
 	 * @param type the type to set it for
 	 */
@@ -213,7 +213,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	/**
 	 * Keep the count-data up to date. The count-data is re-calculated on the fly
 	 * before writing but we like to keep our internal model up-to-date just to be
-	 * defensive. <gnc:count-data cd:type="commodity">2</gnc:count-data>
+	 * defensive.
 	 *
 	 * @param type the type to set it for
 	 */
@@ -243,7 +243,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
 
 	/**
-	 * Used by GnucashTransactionImpl.createTransaction to add a new Transaction to
+	 * Used by KMyMoneyTransactionImpl.createTransaction to add a new Transaction to
 	 * this file.
 	 *
 	 * @see KMyMoneyTransactionImpl#createSplit(GncTransaction.TrnSplits.TrnSplit)
@@ -412,7 +412,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 */
 	protected PAYEE createPayeeType() {
 		PAYEE retval = getObjectFactory().createPAYEE();
-		incrementCountDataFor("gnc:GncPayee");
+		incrementCountDataFor("payee");
 		return retval;
 	}
 	
@@ -420,7 +420,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 */
 	protected SECURITY createSecurityType() {
 		SECURITY retval = getObjectFactory().createSECURITY();
-		incrementCountDataFor("payee");
+		incrementCountDataFor("security");
 		return retval;
 	}
 	
@@ -539,7 +539,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		baseCurrency.setCmdtyId(getDefaultCurrencyID());
 
 		PRICE newQuote = getObjectFactory().createGncV2GncBookGncPricedbPrice();
-		newQuote.setPriceSource("JGnucashLib");
+		newQuote.setPriceSource("JKMyMoneyLib");
 		newQuote.setPriceId(getObjectFactory().createGncV2GncBookGncPricedbPricePriceId());
 		newQuote.getPriceId().setType(Const.XML_DATA_TYPE_GUID);
 		newQuote.getPriceId().setValue(createGUID());
@@ -559,7 +559,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 				return;
 			}
 		}
-		throw new IllegalStateException("No priceDB in Book in Gnucash-file");
+		throw new IllegalStateException("No priceDB in Book in KMyMoney file");
 		*/
 	}
 
@@ -653,7 +653,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.kmm.write.jwsdpimpl.GnucashFileImpl#getRootAccounts()
+	 * @see org.kmm.write.jwsdpimpl.KMyMoneyFileImpl#getRootAccounts()
 	 */
 	@Override
 	public Collection<? extends KMyMoneyAccount> getParentlessAccounts() throws UnknownAccountTypeException {
