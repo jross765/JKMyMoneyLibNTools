@@ -80,7 +80,7 @@ public class FileStats_Cache implements FileStats {
 
 	@Override
 	public int getNofEntriesPricePairs() {
-		return ERROR; // n/a
+		return prcMgr.getNofEntriesPricePairMap();
 	}
 
 	@Override

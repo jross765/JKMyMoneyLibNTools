@@ -1,0 +1,407 @@
+package org.kmymoney.api.write.impl;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.kmymoney.api.ConstTest;
+import org.kmymoney.api.basetypes.simple.KMMPyeID;
+import org.kmymoney.api.read.KMyMoneyPayee;
+import org.kmymoney.api.read.aux.KMMAddress;
+import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.api.read.impl.TestKMyMoneyPayeeImpl;
+import org.kmymoney.api.read.impl.aux.KMMFileStats;
+import org.kmymoney.api.write.KMyMoneyWritablePayee;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import junit.framework.JUnit4TestAdapter;
+
+public class TestKMyMoneyWritablePayeeImpl {
+    public static final KMMPyeID PYE_1_ID = TestKMyMoneyPayeeImpl.PYE_1_ID;
+    public static final KMMPyeID PYE_2_ID = TestKMyMoneyPayeeImpl.PYE_2_ID;
+    public static final KMMPyeID PYE_3_ID = TestKMyMoneyPayeeImpl.PYE_3_ID;
+
+    // -----------------------------------------------------------------
+
+    private KMyMoneyWritableFileImpl kmmInFile = null;
+    private KMyMoneyFileImpl kmmOutFile = null;
+
+    private KMMFileStats kmmInFileStats = null;
+    private KMMFileStats kmmOutFileStats = null;
+
+    private KMMPyeID newID = null;
+
+    // https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
+    @SuppressWarnings("exports")
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+
+    // -----------------------------------------------------------------
+
+    public static void main(String[] args) throws Exception {
+	junit.textui.TestRunner.run(suite());
+    }
+
+    @SuppressWarnings("exports")
+    public static junit.framework.Test suite() {
+	return new JUnit4TestAdapter(TestKMyMoneyWritablePayeeImpl.class);
+    }
+
+    @Before
+    public void initialize() throws Exception {
+	ClassLoader classLoader = getClass().getClassLoader();
+	// URL kmmFileURL = classLoader.getResource(Const.KMM_FILENAME);
+	// System.err.println("KMyMoney test file resource: '" + kmmFileURL + "'");
+	InputStream kmmInFileStream = null;
+	try {
+	    kmmInFileStream = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME_IN);
+	} catch (Exception exc) {
+	    System.err.println("Cannot generate input stream from resource");
+	    return;
+	}
+
+	try {
+	    kmmInFile = new KMyMoneyWritableFileImpl(kmmInFileStream);
+	} catch (Exception exc) {
+	    System.err.println("Cannot parse KMyMoney in-file");
+	    exc.printStackTrace();
+	}
+    }
+
+    // -----------------------------------------------------------------
+    // PART 1: Read existing objects as modifiable ones
+    // (and see whether they are fully symmetrical to their read-only
+    // counterparts)
+    // -----------------------------------------------------------------
+    // Cf. TestKMyMoneyPayeeImpl.test01_1/02_1
+    //
+    // Check whether the KMyMoneyWritablePayee objects returned by
+    // KMyMoneyWritableFileImpl.getWritablePayeeByID() are actually
+    // complete (as complete as returned be KMyMoneyFileImpl.getPayeeByID().
+
+	@Test
+	public void test01_1() throws Exception {
+		KMyMoneyWritablePayee pye = kmmInFile.getWritablePayeeByID(PYE_1_ID);
+
+		assertEquals(PYE_1_ID, pye.getID());
+		assertEquals("Gehalt", pye.getName());
+	}
+
+	@Test
+	public void test01_2() throws Exception {
+		KMyMoneyWritablePayee pye = kmmInFile.getWritablePayeeByID(PYE_2_ID);
+
+		assertEquals(PYE_2_ID, pye.getID());
+		assertEquals("Geldautomat", pye.getName());
+	}
+
+	@Test
+	public void test01_3() throws Exception {
+		KMyMoneyWritablePayee pye = kmmInFile.getWritablePayeeByID(PYE_3_ID);
+
+		assertEquals(PYE_3_ID, pye.getID());
+		assertEquals("Fürchtegott Schnorzelmöller", pye.getName());
+		assertEquals(null, pye.getDefaultAccountID());
+		assertEquals("fuerchtegott.schnorzelmoeller@prater.at", pye.getEmail());
+		assertEquals("", pye.getReference()); // sic, not null
+		assertEquals("Pezi-Bär von der Urania kennt ihn gut", pye.getNotes());
+
+		KMMAddress addr = pye.getAddress();
+		assertEquals("Krailbacher Gasse 123 a\n" + "Postfach ABC\n" + "Kennwort Kasperlpost", addr.getStreet());
+		assertEquals("Wien", addr.getCity());
+		assertEquals(null, addr.getCounty());
+		assertEquals("1136", addr.getPostCode());
+		assertEquals("Österreich", addr.getState());
+		assertEquals(null, addr.getZip());
+		assertEquals(null, addr.getZipCode());
+		assertEquals("+43 - 12 - 277278279", addr.getTelephone());
+	}
+
+    // -----------------------------------------------------------------
+    // PART 2: Modify existing objects
+    // -----------------------------------------------------------------
+    // Check whether the KMyMoneyWritablePayee objects returned by
+    // can actually be modified -- both in memory and persisted in file.
+
+    @Test
+    public void test02_1() throws Exception {
+	kmmInFileStats = new KMMFileStats(kmmInFile);
+
+	assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
+	assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
+	assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
+
+	KMyMoneyWritablePayee pye = kmmInFile.getWritablePayeeByID(PYE_1_ID);
+	assertNotEquals(null, pye);
+
+	assertEquals(PYE_1_ID, pye.getID());
+
+	// ----------------------------
+	// Modify the object
+
+	pye.setName("Rantanplan");
+	pye.setNotes("World's most intelligent canine being");
+
+	// ----------------------------
+	// Check whether the object can has actually be modified
+	// (in memory, not in the file yet).
+
+	test02_1_check_memory(pye);
+
+	// ----------------------------
+	// Now, check whether the modified object can be written to the
+	// output file, then re-read from it, and whether is is what
+	// we expect it is.
+
+	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+	// + outFile.getPath() + "'");
+	outFile.delete(); // sic, the temp. file is already generated (empty),
+			  // and the GnuCash file writer does not like that.
+	kmmInFile.writeFile(outFile);
+
+	test02_1_check_persisted(outFile);
+    }
+
+    @Test
+    public void test02_2() throws Exception {
+	// ::TODO
+    }
+
+    private void test02_1_check_memory(KMyMoneyWritablePayee pye) throws Exception {
+	assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
+	assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
+	assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
+
+	assertEquals(PYE_1_ID, pye.getID()); // unchanged
+	assertEquals("Rantanplan", pye.getName()); // changed
+	assertEquals("World's most intelligent canine being", pye.getNotes()); // changed
+    }
+
+    private void test02_1_check_persisted(File outFile) throws Exception {
+	kmmOutFile = new KMyMoneyFileImpl(outFile);
+	kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+	assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
+	assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
+	assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
+
+	KMyMoneyPayee pye = kmmOutFile.getPayeeByID(PYE_1_ID);
+	assertNotEquals(null, pye);
+
+	assertEquals(PYE_1_ID, pye.getID()); // unchanged
+	assertEquals("Rantanplan", pye.getName()); // changed
+	assertEquals("World's most intelligent canine being", pye.getNotes()); // changed
+    }
+
+    // -----------------------------------------------------------------
+    // PART 3: Create new objects
+    // -----------------------------------------------------------------
+
+    // ------------------------------
+    // PART 3.1: High-Level
+    // ------------------------------
+
+    @Test
+    public void test03_1_1() throws Exception {
+	kmmInFileStats = new KMMFileStats(kmmInFile);
+
+	assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
+	assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
+	assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
+
+	KMyMoneyWritablePayee pye = kmmInFile.createWritablePayee();
+	pye.setName("Norma Jean Baker");
+
+	// ----------------------------
+	// Check whether the object can has actually be created
+	// (in memory, not in the file yet).
+
+	test03_1_1_check_memory(pye);
+
+	// ----------------------------
+	// Now, check whether the created object can be written to the
+	// output file, then re-read from it, and whether is is what
+	// we expect it is.
+
+	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+	// + outFile.getPath() + "'");
+	outFile.delete(); // sic, the temp. file is already generated (empty),
+			  // and the GnuCash file writer does not like that.
+	kmmInFile.writeFile(outFile);
+
+	test03_1_1_check_persisted(outFile);
+    }
+
+    private void test03_1_1_check_memory(KMyMoneyWritablePayee pye) throws Exception {
+	assertEquals(ConstTest.Stats.NOF_PYE + 1, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
+	assertEquals(ConstTest.Stats.NOF_PYE + 1, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
+	assertEquals(ConstTest.Stats.NOF_PYE + 1, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
+
+	newID = pye.getID();
+	assertEquals("Norma Jean Baker", pye.getName());
+    }
+
+    private void test03_1_1_check_persisted(File outFile) throws Exception {
+	kmmOutFile = new KMyMoneyFileImpl(outFile);
+	kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+	assertEquals(ConstTest.Stats.NOF_PYE + 1, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
+	assertEquals(ConstTest.Stats.NOF_PYE + 1, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
+	assertEquals(ConstTest.Stats.NOF_PYE + 1, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
+
+	KMyMoneyPayee pye = kmmOutFile.getPayeeByID(newID);
+	assertNotEquals(null, pye);
+
+	assertEquals(newID, pye.getID());
+	assertEquals("Norma Jean Baker", pye.getName());
+    }
+
+    // ------------------------------
+    // PART 3.2: Low-Level
+    // ------------------------------
+
+    @Test
+    public void test03_2_1() throws Exception {
+	KMyMoneyWritablePayee pye = kmmInFile.createWritablePayee();
+	pye.setName("Norma Jean Baker");
+
+	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+	// System.err.println("Outfile for TestKMyMoneyWritablePayeeImpl.test01_1: '" +
+	// outFile.getPath() + "'");
+	outFile.delete(); // sic, the temp. file is already generated (empty),
+			  // and the GnuCash file writer does not like that.
+	kmmInFile.writeFile(outFile);
+
+	test03_2_1_check(outFile);
+    }
+
+    // -----------------------------------------------------------------
+
+//  @Test
+//  public void test03_2_2() throws Exception
+//  {
+//      assertNotEquals(null, outFileGlob);
+//      assertEquals(true, outFileGlob.exists());
+//
+//      // Check if generated document is valid
+//      // ::TODO: in fact, not even the input document is.
+//      // Build document
+//      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//      DocumentBuilder builder = factory.newDocumentBuilder(); 
+//      Document document = builder.parse(outFileGlob);
+//      System.err.println("xxxx XML parsed");
+//
+//      // https://howtodoinjava.com/java/xml/read-xml-dom-parser-example/
+//      Schema schema = null;
+//      String language = XMLConstants.W3C_XML_SCHEMA_NS_URI;
+//      SchemaFactory factory1 = SchemaFactory.newInstance(language);
+//      schema = factory1.newSchema(outFileGlob);
+//
+//      Validator validator = schema.newValidator();
+//      DOMResult validResult = null; 
+//      validator.validate(new DOMSource(document), validResult);
+//      System.out.println("yyy: " + validResult);
+//      // assertEquals(validResult);
+//  }
+
+    private void test03_2_1_check(File outFile) throws Exception {
+	assertNotEquals(null, outFile);
+	assertEquals(true, outFile.exists());
+
+	// Build document
+	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	DocumentBuilder builder = factory.newDocumentBuilder();
+	Document document = builder.parse(outFile);
+//      System.err.println("xxxx XML parsed");
+
+	// Normalize the XML structure
+	document.getDocumentElement().normalize();
+//      System.err.println("xxxx XML normalized");
+
+	NodeList nList = document.getElementsByTagName("PAYEE");
+	assertEquals(ConstTest.Stats.NOF_PYE + 1, nList.getLength());
+
+	// Last (new) node
+	Node lastNode = nList.item(nList.getLength() - 1);
+	assertEquals(lastNode.getNodeType(), Node.ELEMENT_NODE);
+	Element elt = (Element) lastNode;
+	assertEquals("Norma Jean Baker", elt.getAttribute("name"));
+	assertEquals("P000009", elt.getAttribute("id"));
+    }
+
+    // -----------------------------------------------------------------
+
+    @Test
+    public void test03_2_4() throws Exception {
+	KMyMoneyWritablePayee pye1 = kmmInFile.createWritablePayee();
+	pye1.setName("Norma Jean Baker");
+
+	KMyMoneyWritablePayee pye2 = kmmInFile.createWritablePayee();
+	pye2.setName("Madonna Louise Ciccone");
+
+	KMyMoneyWritablePayee pye3 = kmmInFile.createWritablePayee();
+	pye3.setName("Rowan Atkinson");
+
+	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+//      System.err.println("Outfile for TestKMyMoneyWritablePayeeImpl.test02_1: '" + outFile.getPath() + "'");
+	outFile.delete(); // sic, the temp. file is already generated (empty),
+			  // and the GnuCash file writer does not like that.
+	kmmInFile.writeFile(outFile);
+
+	test03_2_4_check(outFile);
+    }
+
+    private void test03_2_4_check(File outFile) throws Exception {
+	assertNotEquals(null, outFile);
+	assertEquals(true, outFile.exists());
+
+	// Build document
+	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	DocumentBuilder builder = factory.newDocumentBuilder();
+	Document document = builder.parse(outFile);
+//      System.err.println("xxxx XML parsed");
+
+	// Normalize the XML structure
+	document.getDocumentElement().normalize();
+//      System.err.println("xxxx XML normalized");
+
+	NodeList nList = document.getElementsByTagName("PAYEE");
+	assertEquals(ConstTest.Stats.NOF_PYE + 3, nList.getLength());
+
+	// Last three nodes (the new ones)
+	Node node = nList.item(nList.getLength() - 3);
+	assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+	Element elt = (Element) node;
+	assertEquals("Norma Jean Baker", elt.getAttribute("name"));
+	assertEquals("P000009", elt.getAttribute("id"));
+
+	node = nList.item(nList.getLength() - 2);
+	assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+	elt = (Element) node;
+	assertEquals("Madonna Louise Ciccone", elt.getAttribute("name"));
+	assertEquals("P000010", elt.getAttribute("id"));
+
+	node = nList.item(nList.getLength() - 1);
+	assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+	elt = (Element) node;
+	assertEquals("Rowan Atkinson", elt.getAttribute("name"));
+	assertEquals("P000011", elt.getAttribute("id"));
+    }
+
+}

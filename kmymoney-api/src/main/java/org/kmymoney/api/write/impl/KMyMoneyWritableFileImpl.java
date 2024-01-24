@@ -42,6 +42,7 @@ import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.KMyMoneyTransaction;
+import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.UnknownAccountTypeException;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
@@ -936,38 +937,110 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	
 	@Override
 	public KMMInstID getNewInstitutionID() {
-		// ::TOIDO
+		// ::TODO
 		return null;
 	}
 
 	@Override
 	public KMMAcctID getNewAccountID() {
-		// ::TOIDO
-		return null;
+		int counter = 0;
+		
+		for ( KMyMoneyAccount trx : getAccounts() ) {
+			try {
+				if ( trx.getID().getType() == KMMComplAcctID.Type.STANDARD ) {
+					String coreID = trx.getID().getStdID().get().substring(1);
+					if ( Integer.parseInt(coreID) > counter ) {
+						counter = Integer.parseInt(coreID);
+					}
+				}
+			} catch (Exception e) {
+				throw new CannotGenerateKMMIDException();
+			}
+		}
+		
+		counter++;
+		
+		return new KMMAcctID(counter);
 	}
 
 	@Override
 	public KMMTrxID getNewTransactionID() {
-		// ::TOIDO
-		return null;
+		int counter = 0;
+		
+		for ( KMyMoneyTransaction trx : getTransactions() ) {
+			try {
+				String coreID = trx.getID().get().substring(1);
+				if ( Integer.parseInt(coreID) > counter ) {
+					counter = Integer.parseInt(coreID);
+				}
+			} catch (Exception e) {
+				throw new CannotGenerateKMMIDException();
+			}
+		}
+		
+		counter++;
+		
+		return new KMMTrxID(counter);
 	}
 
 	@Override
 	public KMMSpltID getNewSplitID() {
-		// ::TOIDO
-		return null;
+		int counter = 0;
+		
+		for ( KMyMoneyTransactionSplit splt : getTransactionSplits() ) {
+			try {
+				String coreID = splt.getID().get().substring(1);
+				if ( Integer.parseInt(coreID) > counter ) {
+					counter = Integer.parseInt(coreID);
+				}
+			} catch (Exception e) {
+				throw new CannotGenerateKMMIDException();
+			}
+		}
+		
+		counter++;
+		
+		return new KMMSpltID(counter);
 	}
 
 	@Override
 	public KMMPyeID getNewPayeeID() {
-		// ::TOIDO
-		return null;
+		int counter = 0;
+		
+		for ( KMyMoneyPayee pye : getPayees() ) {
+			try {
+				String coreID = pye.getID().get().substring(1);
+				if ( Integer.parseInt(coreID) > counter ) {
+					counter = Integer.parseInt(coreID);
+				}
+			} catch (Exception e) {
+				throw new CannotGenerateKMMIDException();
+			}
+		}
+		
+		counter++;
+		
+		return new KMMPyeID(counter);
 	}
 
 	@Override
 	public KMMSecID getNewSecurityID() {
-		// ::TOIDO
-		return null;
+		int counter = 0;
+		
+		for ( KMyMoneySecurity sec : getSecurities() ) {
+			try {
+				String coreID = sec.getID().get().substring(1);
+				if ( Integer.parseInt(coreID) > counter ) {
+					counter = Integer.parseInt(coreID);
+				}
+			} catch (Exception e) {
+				throw new CannotGenerateKMMIDException();
+			}
+		}
+		
+		counter++;
+		
+		return new KMMSecID(counter);
 	}
 
 }

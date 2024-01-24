@@ -5,7 +5,6 @@ import java.io.Writer;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
-import org.kmymoney.api.Const;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
@@ -44,7 +43,11 @@ public class WritingContentHandler implements ContentHandler {
     int last_was = 0;
     private char[] spaces;
     
-    boolean isTrnDescription = false;
+    boolean isAcct = false;
+    boolean isTrx  = false;
+    boolean isSplt = false;
+    boolean isPye  = false;
+    boolean isSec  = false;
 
     // ---------------------------------------------------------------
 
@@ -83,7 +86,27 @@ public class WritingContentHandler implements ContentHandler {
 			if ( last_was == LAST_WAS_CLOSE_ELEMENT ) {
 				return;
 			}
+			
+			charactersCore(ch, start, length);
 
+			// String s = sb.toString();
+			// if(s.indexOf("bis 410") != -1) {
+			// System.err.println(s+"---"+Integer.toHexString(s.charAt(s.length()-1)));
+			// }
+
+			last_was = LAST_WAS_CHARACTER_DATA;
+		} catch (IOException e) {
+			LOGGER.error("characters: Problem", e);
+		}
+
+	}
+
+	public void charactersCore(String str) throws SAXException {
+		charactersCore(str.toCharArray(), 0, str.length());
+	}
+	
+	public void charactersCore(char[] ch, int start, int length) throws SAXException {
+		try {
 				StringBuffer sb = new StringBuffer();
 				sb.append(ch, start, length);
 
@@ -93,21 +116,13 @@ public class WritingContentHandler implements ContentHandler {
 						sb.replace(index, index + encodeme[j].length(), encoded[j]);
 						index += encoded[j].length() - encodeme[j].length() + 1;
 					}
-
 				}
-
-				// String s = sb.toString();
-				// if(s.indexOf("bis 410") != -1) {
-				// System.err.println(s+"---"+Integer.toHexString(s.charAt(s.length()-1)));
-				// }
 
 				wrt.write(sb.toString());
 
-			last_was = LAST_WAS_CHARACTER_DATA;
 		} catch (IOException e) {
 			LOGGER.error("characters: Problem", e);
 		}
-
 	}
 
 	public void ignorableWhitespace(final char[] ch, final int start, final int length) {
@@ -153,9 +168,11 @@ public class WritingContentHandler implements ContentHandler {
 
 	public void endElement(final String namespaceURI, final String localName, final String qName) throws SAXException {
 		try {
-			// create <slot:value type="string"></slot:value> instead of <slot:value
-			// type="string"/>
-			if ( ( isTrnDescription ) && 
+			if ( ( isAcct ||
+				   isTrx  ||
+				   isSplt ||
+				   isPye  ||
+				   isSec ) && 
 				 last_was != LAST_WAS_CHARACTER_DATA ) {
 				characters(new char[0], 0, 0);
 			}
@@ -199,9 +216,24 @@ public class WritingContentHandler implements ContentHandler {
 
 			wrt.write("<" + qName);
 
-			isTrnDescription = qName.equals("trn_description");
+			isAcct = qName.equals("ACCOUNT");
+			isTrx  = qName.equals("TRANSACTION");
+			isSplt = qName.equals("SPLIT");
+			isPye  = qName.equals("PAYEE");
+			isSec  = qName.equals("SECURITY");
 			for ( int i = 0; i < atts.getLength(); i++ ) {
-				wrt.write(" " + atts.getQName(i) + "=\"" + atts.getValue(i) + "\"");
+				if ( isAcct && atts.getQName(i).equals("name") ||
+					 isAcct && atts.getQName(i).equals("description") || 
+					 isTrx  && atts.getQName(i).equals("memo") || 
+					 isSplt && atts.getQName(i).equals("memo") || 
+					 isPye  && atts.getQName(i).equals("name") ||
+					 isSec  && atts.getQName(i).equals("name") ) {
+					wrt.write(" " + atts.getQName(i) + "=\"");
+					charactersCore(atts.getValue(i));
+					wrt.write("\"");
+				} else {
+					wrt.write(" " + atts.getQName(i) + "=\"" + atts.getValue(i) + "\"");
+				}
 			}
 			depth += 2;
 

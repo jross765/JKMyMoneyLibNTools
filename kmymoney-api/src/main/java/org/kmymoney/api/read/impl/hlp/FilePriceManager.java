@@ -448,6 +448,10 @@ public class FilePriceManager {
 
 	// ---------------------------------------------------------------
 
+	public int getNofEntriesPricePairMap() {
+		return prcPairMap.size();
+	}
+
 	public int getNofEntriesPriceMap() {
 		return prcMap.size();
 	}
