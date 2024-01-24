@@ -44,10 +44,7 @@ public class WritingContentHandler implements ContentHandler {
     int last_was = 0;
     private char[] spaces;
     
-    boolean isGUID = false;
-    boolean isSlotvalueTypeString = false;
     boolean isTrnDescription = false;
-    boolean insideGncTemplateTransactions = false;
 
     // ---------------------------------------------------------------
 
@@ -64,7 +61,7 @@ public class WritingContentHandler implements ContentHandler {
 			wrt.write("<!-- mode: xml        -->\n");
 			wrt.write("<!-- End: Written by JGnuCashLib, " + LocalDateTime.now() + " -->\n");
 		} catch (IOException e) {
-			LOGGER.error("endDocument: Problem in WritingContentHandler", e);
+			LOGGER.error("endDocument: Problem", e);
 		}
 
 	}
@@ -73,7 +70,7 @@ public class WritingContentHandler implements ContentHandler {
 		try {
 			wrt.write("<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n");
 		} catch (IOException e) {
-			LOGGER.error("Problem in WritingContentHandler", e);
+			LOGGER.error("startDocument: Problem", e);
 		}
 	}
 
@@ -86,12 +83,6 @@ public class WritingContentHandler implements ContentHandler {
 			if ( last_was == LAST_WAS_CLOSE_ELEMENT ) {
 				return;
 			}
-
-			// make shure GUIDs are written with non-capital letters
-			if ( isGUID ) {
-				String s = new String(ch, start, length);
-				wrt.write(s.toLowerCase());
-			} else {
 
 				StringBuffer sb = new StringBuffer();
 				sb.append(ch, start, length);
@@ -111,11 +102,10 @@ public class WritingContentHandler implements ContentHandler {
 				// }
 
 				wrt.write(sb.toString());
-			}
 
 			last_was = LAST_WAS_CHARACTER_DATA;
 		} catch (IOException e) {
-			LOGGER.error("characters: Problem in WritingContentHandler", e);
+			LOGGER.error("characters: Problem", e);
 		}
 
 	}
@@ -123,7 +113,7 @@ public class WritingContentHandler implements ContentHandler {
 	public void ignorableWhitespace(final char[] ch, final int start, final int length) {
 		/*
 		 * try { writer.write(ch, start, length); last_was = LAST_WAS_CHARACTERDATA; }
-		 * catch (IOException e) { LOGGER.error("Problem in WritingContentHandler", e);
+		 * catch (IOException e) { LOGGER.error("ignorableWhitespace: Problem", e);
 		 * }
 		 */
 
@@ -165,14 +155,9 @@ public class WritingContentHandler implements ContentHandler {
 		try {
 			// create <slot:value type="string"></slot:value> instead of <slot:value
 			// type="string"/>
-			if ( ( isTrnDescription || 
-				   isSlotvalueTypeString ) && 
+			if ( ( isTrnDescription ) && 
 				 last_was != LAST_WAS_CHARACTER_DATA ) {
 				characters(new char[0], 0, 0);
-			}
-
-			if ( qName.equals("gnc_template-transactions") ) {
-				insideGncTemplateTransactions = false;
 			}
 
 			depth -= 2;
@@ -193,7 +178,7 @@ public class WritingContentHandler implements ContentHandler {
 
 			last_was = LAST_WAS_CLOSE_ELEMENT;
 		} catch (IOException e) {
-			LOGGER.error("endElement: Problem in WritingContentHandler", e);
+			LOGGER.error("endElement: Problem", e);
 		}
 
 	}
@@ -214,31 +199,15 @@ public class WritingContentHandler implements ContentHandler {
 
 			wrt.write("<" + qName);
 
-			if ( qName.equals("gnc_template-transactions") ) {
-				insideGncTemplateTransactions = true;
-			}
-
 			isTrnDescription = qName.equals("trn_description");
-			isGUID = false;
-			isSlotvalueTypeString = false;
 			for ( int i = 0; i < atts.getLength(); i++ ) {
 				wrt.write(" " + atts.getQName(i) + "=\"" + atts.getValue(i) + "\"");
-
-				if ( atts.getQName(i).equals("type") && atts.getValue(i).equals(Const.XML_DATA_TYPE_GUID) ) {
-					isGUID = true;
-				}
-
-				if ( qName.equals("slot_value") && atts.getQName(i).equals("type") && 
-					 atts.getValue(i).equals(Const.XML_DATA_TYPE_STRING) ) {
-					isSlotvalueTypeString = true;
-				}
-
 			}
 			depth += 2;
 
 			last_was = LAST_WAS_OPEN_ELEMENT;
 		} catch (IOException e) {
-			LOGGER.error("Problem in WritingContentHandler", e);
+			LOGGER.error("startElement: Problem", e);
 		}
 
 	}
@@ -246,15 +215,6 @@ public class WritingContentHandler implements ContentHandler {
 	// ---------------------------------------------------------------
 
 	private void writeSpaces() throws IOException {
-
-		if ( insideGncTemplateTransactions ) {
-			if ( depth < MAX_DEPTH_2 ) {
-				return;
-			}
-
-			wrt.write(getSpaces(), 0, depth - 6);
-			return;
-		}
 
 		if ( depth < MAX_DEPTH_1 ) {
 			return;

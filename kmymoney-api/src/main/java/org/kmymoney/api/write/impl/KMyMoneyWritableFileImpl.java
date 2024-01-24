@@ -59,6 +59,7 @@ import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import org.kmymoney.api.write.hlp.IDManager;
+import org.kmymoney.api.write.impl.hlp.WritingContentHandler;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -477,7 +478,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	public void removeTransaction(final KMyMoneyWritableTransaction trx) {
 
 		Collection<KMyMoneyWritableTransactionSplit> c = new LinkedList<KMyMoneyWritableTransactionSplit>();
-		c.addAll(trx.getWritingSplits());
+		c.addAll(trx.getWritableSplits());
 		for ( KMyMoneyWritableTransactionSplit element : c ) {
 			element.remove();
 		}

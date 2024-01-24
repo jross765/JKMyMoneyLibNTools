@@ -14,6 +14,7 @@ import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
  * @see KMyMoneySecurity
  */
 public interface KMyMoneyWritableSecurity extends KMyMoneySecurity,
+                                                  KMyMoneyWritableObject,
                                                   HasWritableUserDefinedAttributes
 {
 

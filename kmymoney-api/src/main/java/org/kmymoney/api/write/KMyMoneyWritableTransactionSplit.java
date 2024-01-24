@@ -2,6 +2,7 @@ package org.kmymoney.api.write;
 
 import java.beans.PropertyChangeListener;
 
+import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
@@ -33,7 +34,7 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 * 
 	 * @param acctID the new account to give this money to/take it from.
 	 */
-	void setAccountID(final String acctID);
+	void setAccountID(KMMComplAcctID acctID);
 
 	/**
 	 * Does not convert the quantity to another currency if the new account has
@@ -45,26 +46,26 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 
 	/**
 	 * If the currencies of transaction and account match, this also does
-	 * ${@link #setQuantity(FixedPointNumber)}.
+	 * ${@link #setShares(FixedPointNumber)}.
 	 * 
 	 * @param n the new quantity (in the currency of the account)
 	 */
-	void setQuantity(String n);
+	void setShares(String n);
 
 	/**
-	 * Same as ${@link #setQuantity(String)}.
+	 * Same as ${@link #setShares(String)}.
 	 * 
 	 * @param n the new quantity (in the currency of the account)
 	 */
-	void setQuantityFormattedForHTML(String n);
+	void setSharesFormattedForHTML(String n);
 
 	/**
 	 * If the currencies of transaction and account match, this also does
-	 * ${@link #setQuantity(FixedPointNumber)}.
+	 * ${@link #setShares(FixedPointNumber)}.
 	 * 
 	 * @param n the new quantity (in the currency of the account)
 	 */
-	void setQuantity(FixedPointNumber n);
+	void setShares(FixedPointNumber n);
 
 	/**
 	 * If the currencies of transaction and account match, this also does
@@ -110,6 +111,7 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 *
 	 * @param listener The PropertyChangeListener to be added
 	 */
+	@SuppressWarnings("exports")
 	void addPropertyChangeListener(PropertyChangeListener listener);
 
 	/**
@@ -119,6 +121,7 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 * @param ptyName The name of the property to listen on.
 	 * @param listener     The PropertyChangeListener to be added
 	 */
+	@SuppressWarnings("exports")
 	void addPropertyChangeListener(String ptyName, PropertyChangeListener listener);
 
 	/**
@@ -127,6 +130,7 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 * @param propertyName The name of the property that was listened on.
 	 * @param listener     The PropertyChangeListener to be removed
 	 */
+	@SuppressWarnings("exports")
 	void removePropertyChangeListener(String ptyName, PropertyChangeListener listener);
 
 	/**
@@ -135,5 +139,6 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 *
 	 * @param listener The PropertyChangeListener to be removed
 	 */
+	@SuppressWarnings("exports")
 	void removePropertyChangeListener(PropertyChangeListener listener);
 }

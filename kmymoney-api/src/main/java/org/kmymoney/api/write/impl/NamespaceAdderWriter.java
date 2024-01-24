@@ -95,7 +95,7 @@ class NamespaceAdderWriter extends Writer {
 
         // this is a quick hack to add the missing xmlns-declarations
         if (len == 7 && new String(cbuf, off, len).equals("<gnc-v2")) {
-    	output.write(""");
+    	output.write("");
         }
 
     }

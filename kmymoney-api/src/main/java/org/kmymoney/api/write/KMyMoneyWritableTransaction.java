@@ -16,7 +16,8 @@ import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
  * For PropertyChange-Listeners we support the properties: "description" and
  * "splits".
  */
-public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction
+public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
+                                                     KMyMoneyWritableObject
 {
 
 	/**
@@ -37,7 +38,7 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction
 	 * 
 	 * @return the file we are associated with
 	 */
-	KMyMoneyWritableFile getWritingFile();
+	KMyMoneyWritableFile getWritableFile();
 
 	/**
 	 * @param dateEntered the day (time is ignored) that this transaction has been
@@ -58,19 +59,19 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction
 	 * @return 
 	 * @see KMyMoneyTransaction#getFirstSplit()
 	 */
-	KMyMoneyWritableTransactionSplit getWritingFirstSplit() throws SplitNotFoundException;
+	KMyMoneyWritableTransactionSplit getWritableFirstSplit() throws SplitNotFoundException;
 
 	/**
 	 * @return 
 	 * @see KMyMoneyTransaction#getSecondSplit()
 	 */
-	KMyMoneyWritableTransactionSplit getWritingSecondSplit() throws SplitNotFoundException;
+	KMyMoneyWritableTransactionSplit getWritableSecondSplit() throws SplitNotFoundException;
 
 	/**
 	 * @return 
 	 * @see KMyMoneyTransaction#getSplitByID(String)
 	 */
-	KMyMoneyWritableTransactionSplit getWritingSplitByID(String id);
+	KMyMoneyWritableTransactionSplit getWritableSplitByID(String id);
 
 	/**
 	 *
@@ -87,7 +88,7 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction
 	 * @return 
 	 * @see KMyMoneyTransaction#getSplits()
 	 */
-	Collection<? extends KMyMoneyWritableTransactionSplit> getWritingSplits();
+	Collection<? extends KMyMoneyWritableTransactionSplit> getWritableSplits();
 
 	/**
 	 * Create a new split, already atached to this transaction.
@@ -95,7 +96,7 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction
 	 * @param account the account for the new split
 	 * @return a new split, already atached to this transaction
 	 */
-	KMyMoneyWritableTransactionSplit createWritingSplit(KMyMoneyAccount account);
+	KMyMoneyWritableTransactionSplit createWritableSplit(KMyMoneyAccount account);
 
 	/**
 	 * Also removes the split from it's account.
@@ -115,6 +116,7 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction
 	 *
 	 * @param listener The PropertyChangeListener to be added
 	 */
+	@SuppressWarnings("exports")
 	void addPropertyChangeListener(PropertyChangeListener listener);
 
 	/**
@@ -124,6 +126,7 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction
 	 * @param propertyName The name of the property to listen on.
 	 * @param listener     The PropertyChangeListener to be added
 	 */
+	@SuppressWarnings("exports")
 	void addPropertyChangeListener(String propertyName, PropertyChangeListener listener);
 
 	/**
@@ -132,6 +135,7 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction
 	 * @param propertyName The name of the property that was listened on.
 	 * @param listener     The PropertyChangeListener to be removed
 	 */
+	@SuppressWarnings("exports")
 	void removePropertyChangeListener(String propertyName, PropertyChangeListener listener);
 
 	/**
@@ -140,6 +144,7 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction
 	 *
 	 * @param listener The PropertyChangeListener to be removed
 	 */
+	@SuppressWarnings("exports")
 	void removePropertyChangeListener(PropertyChangeListener listener);
 
 	/**

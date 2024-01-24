@@ -3,7 +3,6 @@ package org.kmymoney.api.write.impl.hlp;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
@@ -25,11 +24,14 @@ public class KMyMoneyWritableObjectImpl extends KMyMoneyObjectImpl
 
 	// ---------------------------------------------------------------
 
+	private Object obj;
+
 	/**
 	 * support for firing PropertyChangeEvents. (gets initialized only if we really
 	 * have listeners)
 	 */
 	private volatile PropertyChangeSupport myPtyChg = null;
+	
 
 	// ---------------------------------------------------------------
 
@@ -38,14 +40,14 @@ public class KMyMoneyWritableObjectImpl extends KMyMoneyObjectImpl
 		// TODO implement constructor for KMyMoneyWritableObjectHelper
 	}
 
-//	/**
-//	 * @param myFile 
-//	 * @param obj the object we are helping with
-//	 */
-//	public KMyMoneyWritableObjectImpl(final KMyMoneyWritableFile myFile, final KMyMoneyObject obj) {
-//		super(myFile);
-//		// setKMyMoneyObject(obj);
-//	}
+	/**
+	 * @param myFile 
+	 * @param obj the object we are helping with
+	 */
+	public KMyMoneyWritableObjectImpl(final KMyMoneyWritableFile myFile, final Object obj) {
+		super(myFile);
+		this.obj = obj;
+	}
 
 	// ---------------------------------------------------------------
 
@@ -117,36 +119,6 @@ public class KMyMoneyWritableObjectImpl extends KMyMoneyObjectImpl
 			myPtyChg.removePropertyChangeListener(listener);
 		}
 	}
-
-	// ---------------------------------------------------------------
-
-//	/**
-//	 * @return Returns the kmymoneyObject.
-//	 */
-//	public KMyMoneyObjectImpl get() {
-//		return kmmObj;
-//	}
-//
-//	/**
-//	 * @param obj The kmymoneyObject to set.
-//	 */
-//	public void set(final KMyMoneyObjectImpl obj) {
-//		if ( obj == null ) {
-//			throw new IllegalArgumentException("null KMyMoney-object given!");
-//		}
-//
-//		KMyMoneyObjectImpl oldObj = this.kmmObj;
-//		if ( oldObj == obj ) {
-//			return; // nothing has changed
-//		}
-//
-//		this.kmmObj = obj;
-//		// <<insert code to react further to this change here
-//		PropertyChangeSupport ptyChgFirer = getPropertyChangeSupport();
-//		if ( ptyChgFirer != null ) {
-//			ptyChgFirer.firePropertyChange("kmymoneyObject", oldObj, obj);
-//		}
-//	}
 
 	// ---------------------------------------------------------------
 

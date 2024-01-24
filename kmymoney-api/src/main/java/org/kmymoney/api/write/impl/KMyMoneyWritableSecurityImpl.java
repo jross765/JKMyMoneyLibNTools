@@ -1,5 +1,6 @@
 package org.kmymoney.api.write.impl;
 
+import java.beans.PropertyChangeSupport;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -17,8 +18,8 @@ import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.kmymoney.api.read.impl.KMyMoneySecurityImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
-import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 import org.kmymoney.api.write.impl.hlp.HasWritableUserDefinedAttributesImpl;
+import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,13 +28,19 @@ import org.slf4j.LoggerFactory;
  * read-only access.
  */
 public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl 
-                                          implements KMyMoneyWritableSecurity,
-                                                     KMyMoneyWritableObject
+                                          implements KMyMoneyWritableSecurity
 {
 	/**
 	 * Automatically created logger for debug and error-output.
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableSecurityImpl.class);
+
+    // ---------------------------------------------------------------
+
+    /**
+     * Our helper to implement the KMyMoneyWritableObject-interface.
+     */
+    private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
 	// ---------------------------------------------------------------
 
@@ -141,7 +148,7 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 
 	@Override
 	public void setType(final KMMSecCurr.Type type) {
-		
+		// ::TODO
 	}
 
 	@Override
@@ -154,8 +161,14 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 			throw new IllegalArgumentException("empty name given!");
 		}
 
+		String oldName = getName();
 		jwsdpPeer.setName(name);
 		getKMyMoneyFile().setModified(true);
+
+		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+		if (propertyChangeSupport != null) {
+		    propertyChangeSupport.firePropertyChange("pp", oldName, name);
+		}
 	}
 
 	@Override
@@ -168,8 +181,14 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 			throw new IllegalArgumentException("PP is <= 0");
 		}
 		
+		BigInteger oldPP = getPP();
 		jwsdpPeer.setPp(pp);
 		getKMyMoneyFile().setModified(true);
+
+		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+		if (propertyChangeSupport != null) {
+		    propertyChangeSupport.firePropertyChange("pp", oldPP, pp);
+		}
 	}
 
 	@Override
@@ -187,8 +206,14 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 			throw new IllegalArgumentException("SAF is <= 0");
 		}
 		
+		BigInteger oldSAF = getSAF();
 		jwsdpPeer.setSaf(saf);
 		getKMyMoneyFile().setModified(true);
+
+		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+		if (propertyChangeSupport != null) {
+		    propertyChangeSupport.firePropertyChange("saf", oldSAF, saf);
+		}
 	}
 
 	@Override
@@ -197,8 +222,14 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 			throw new IllegalArgumentException("null trading currency given!");
 		}
 
+		KMMQualifCurrID oldCurrID = getTradingCurrency();
 		jwsdpPeer.setTradingCurrency(currID.getCurrency().getCurrencyCode());
 		getKMyMoneyFile().setModified(true);
+
+		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+		if (propertyChangeSupport != null) {
+		    propertyChangeSupport.firePropertyChange("tradingcurrency", oldCurrID, currID);
+		}
 	}
 
 	@Override
@@ -211,8 +242,14 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 			throw new IllegalArgumentException("empty trading market given!");
 		}
 
+		String oldMkt = getTradingMarket();
 		jwsdpPeer.setTradingMarket(mkt);
 		getKMyMoneyFile().setModified(true);
+
+		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+		if (propertyChangeSupport != null) {
+		    propertyChangeSupport.firePropertyChange("tradingmarket", oldMkt, mkt);
+		}
 	}
 
 	// ---------------------------------------------------------------

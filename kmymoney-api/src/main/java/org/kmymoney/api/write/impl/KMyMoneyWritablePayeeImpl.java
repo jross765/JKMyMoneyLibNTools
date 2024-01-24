@@ -3,14 +3,11 @@ package org.kmymoney.api.write.impl;
 import java.beans.PropertyChangeSupport;
 import java.math.BigInteger;
 
-import org.kmymoney.api.Const;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.api.basetypes.simple.KMMID;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.generated.ADDRESS;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PAYEE;
-import org.kmymoney.api.generated.PAYEES;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.read.impl.KMyMoneyPayeeImpl;

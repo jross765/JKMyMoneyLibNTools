@@ -3,14 +3,18 @@ package org.kmymoney.api.write.impl;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
+import java.util.List;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.kmymoney.api.basetypes.simple.KMMIDNotSetException;
 import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.ObjectFactory;
@@ -95,7 +99,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 *
 	 * @return the file we are associated with
 	 */
-	public KMyMoneyWritableFileImpl getWritingFile() {
+	public KMyMoneyWritableFileImpl getWritableFile() {
 		return (KMyMoneyWritableFileImpl) getKMyMoneyFile();
 	}
 
@@ -107,22 +111,23 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 */
 	@Override
 	protected KMyMoneyTransactionSplitImpl createSplit(final SPLIT splt) {
-		KMyMoneyWritableTransactionSplitImpl kmmTrxSplt = new KMyMoneyWritableTransactionSplitImpl(
-				splt, this);
+		KMyMoneyWritableTransactionSplitImpl kmmTrxSplt = 
+				new KMyMoneyWritableTransactionSplitImpl(splt, 
+						                                 getWritableKMyMoneyFile(), this);
 		if ( helper.getPropertyChangeSupport() != null ) {
-			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritingSplits());
+			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableSplits());
 		}
 		return kmmTrxSplt;
 	}
 
 	/**
-	 * @see KMyMoneyWritableTransaction#createWritingSplit(KMyMoneyAccount)
+	 * @see KMyMoneyWritableTransaction#createWritableSplit(KMyMoneyAccount)
 	 */
-	public KMyMoneyWritableTransactionSplit createWritingSplit(final KMyMoneyAccount acct) {
+	public KMyMoneyWritableTransactionSplit createWritableSplit(final KMyMoneyAccount acct) {
 		KMyMoneyWritableTransactionSplitImpl splt = new KMyMoneyWritableTransactionSplitImpl(this, acct);
 		addSplit(splt);
 		if ( helper.getPropertyChangeSupport() != null ) {
-			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritingSplits());
+			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableSplits());
 		}
 		return splt;
 	}
@@ -153,13 +158,17 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 			jwsdpTrx.setEntrydate(dateEntered);
 		}
 
-		{
+		try {
 			LocalDateTime dateTime = LocalDateTime.now();
 	        // https://stackoverflow.com/questions/835889/java-util-date-to-xmlgregoriancalendar
 	        GregorianCalendar cal = new GregorianCalendar();
-	        cal.setTime(new Date(dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth()));
+	        cal.setTime(new Date(dateTime.getYear(), 
+	        		             dateTime.getMonthValue(), 
+	        		             dateTime.getDayOfMonth()));
 	        XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
 			jwsdpTrx.setPostdate(xmlCal);
+		} catch ( DatatypeConfigurationException exc ) {
+			throw new DateMappingException();
 		}
 
 		{
@@ -193,7 +202,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	public void remove(final KMyMoneyWritableTransactionSplit splt) {
 		jwsdpPeer.getSPLITS().getSPLIT()
 			.remove(((KMyMoneyWritableTransactionSplitImpl) splt).getJwsdpPeer());
-		getWritingFile().setModified(true);
+		getWritableFile().setModified(true);
 		if ( mySplits != null ) {
 			mySplits.remove(splt);
 		}
@@ -203,16 +212,16 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		}
 
 		// there is no count for splits up to now
-		// getWritingFile().decrementCountDataFor()
+		// getWritableFile().decrementCountDataFor()
 
 		if ( helper.getPropertyChangeSupport() != null ) {
-			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritingSplits());
+			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableSplits());
 		}
 	}
 
 	/**
 	 * @throws SplitNotFoundException
-	 * @see KMyMoneyWritableTransaction#getWritingFirstSplit()
+	 * @see KMyMoneyWritableTransaction#getWritableFirstSplit()
 	 */
 	@Override
 	public KMyMoneyWritableTransactionSplit getFirstSplit() throws SplitNotFoundException {
@@ -220,14 +229,14 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	}
 
 	/**
-	 * @see KMyMoneyWritableTransaction#getWritingFirstSplit()
+	 * @see KMyMoneyWritableTransaction#getWritableFirstSplit()
 	 */
-	public KMyMoneyWritableTransactionSplit getWritingFirstSplit() throws SplitNotFoundException {
+	public KMyMoneyWritableTransactionSplit getWritableFirstSplit() throws SplitNotFoundException {
 		return (KMyMoneyWritableTransactionSplit) super.getFirstSplit();
 	}
 
 	/**
-	 * @see KMyMoneyWritableTransaction#getWritingSecondSplit()
+	 * @see KMyMoneyWritableTransaction#getWritableSecondSplit()
 	 */
 	@Override
 	public KMyMoneyWritableTransactionSplit getSecondSplit() throws SplitNotFoundException {
@@ -235,25 +244,32 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	}
 
 	/**
-	 * @see KMyMoneyWritableTransaction#getWritingSecondSplit()
+	 * @see KMyMoneyWritableTransaction#getWritableSecondSplit()
 	 */
-	public KMyMoneyWritableTransactionSplit getWritingSecondSplit() throws SplitNotFoundException {
+	public KMyMoneyWritableTransactionSplit getWritableSecondSplit() throws SplitNotFoundException {
 		return (KMyMoneyWritableTransactionSplit) super.getSecondSplit();
 	}
 
 	/**
-	 * @see KMyMoneyWritableTransaction#getWritingSplitByID(java.lang.String)
+	 * @see KMyMoneyWritableTransaction#getWritableSplitByID(java.lang.String)
 	 */
-	public KMyMoneyWritableTransactionSplit getWritingSplitByID(final String id) {
+	public KMyMoneyWritableTransactionSplit getWritableSplitByID(final String id) {
 		return (KMyMoneyWritableTransactionSplit) super.getSplitByID(id);
 	}
 
 	/**
-	 * @see KMyMoneyWritableTransaction#getWritingSplits()
+	 * @see KMyMoneyWritableTransaction#getWritableSplits()
 	 */
 	@SuppressWarnings("unchecked")
-	public Collection<? extends KMyMoneyWritableTransactionSplit> getWritingSplits() {
-		return (Collection<? extends KMyMoneyWritableTransactionSplit>) super.getSplits();
+	public Collection<? extends KMyMoneyWritableTransactionSplit> getWritableSplits() {
+		List<KMyMoneyWritableTransactionSplit> result = new ArrayList<KMyMoneyWritableTransactionSplit>();
+		
+		for ( KMyMoneyTransactionSplit split : super.getSplits() ) {
+			KMyMoneyWritableTransactionSplit newSplit = new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) split);
+		    result.add(newSplit);
+		}
+
+		return result;
 	}
 
 	/**
@@ -267,9 +283,9 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 * @see KMyMoneyWritableTransaction#remove()
 	 */
 	public void remove() {
-		getWritingFile().removeTransaction(this);
+		getWritableFile().removeTransaction(this);
 		Collection<KMyMoneyWritableTransactionSplit> c = new LinkedList<KMyMoneyWritableTransactionSplit>();
-		c.addAll(getWritingSplits());
+		c.addAll(getWritableSplits());
 		for ( KMyMoneyWritableTransactionSplit element : c ) {
 			element.remove();
 		}
@@ -291,7 +307,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	public void setDateEntered(final LocalDate dateEntered) {
 		this.entryDate = dateEntered;
 		jwsdpPeer.setEntrydate(DATE_ENTERED_FORMAT.format(dateEntered));
-		getWritingFile().setModified(true);
+		getWritableFile().setModified(true);
 	}
 
 	/**
@@ -299,12 +315,20 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 */
 	public void setDatePosted(final LocalDate datePosted) {
 		this.postDate = datePosted;
-        // https://stackoverflow.com/questions/835889/java-util-date-to-xmlgregoriancalendar
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(new Date(datePosted.getYear(), datePosted.getMonthValue(), datePosted.getDayOfMonth()));
-        XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
-		jwsdpPeer.setPostdate(xmlCal);
-		getWritingFile().setModified(true);
+		
+		try {
+	        // https://stackoverflow.com/questions/835889/java-util-date-to-xmlgregoriancalendar
+	        GregorianCalendar cal = new GregorianCalendar();
+	        cal.setTime(new Date(datePosted.getYear(), 
+	        		             datePosted.getMonthValue(), 
+	        		             datePosted.getDayOfMonth()));
+	        XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+			jwsdpPeer.setPostdate(xmlCal);
+		} catch ( DatatypeConfigurationException exc ) {
+			throw new DateMappingException();
+		}
+
+		getWritableFile().setModified(true);
 	}
 
 	/**
@@ -318,7 +342,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 
 		String old = jwsdpPeer.getMemo();
 		jwsdpPeer.setMemo(desc);
-		getWritingFile().setModified(true);
+		getWritableFile().setModified(true);
 
 		if ( old == null || !old.equals(desc) ) {
 			if ( helper.getPropertyChangeSupport() != null ) {
@@ -335,24 +359,28 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		
 	}
 
+	@SuppressWarnings("exports")
 	@Override
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	@SuppressWarnings("exports")
 	@Override
 	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	@SuppressWarnings("exports")
 	@Override
 	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	@SuppressWarnings("exports")
 	@Override
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		// TODO Auto-generated method stub
@@ -365,12 +393,37 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		
 		int maxSpltNo = 1; // sic, in case there are no splits yet
 		for ( KMyMoneyTransactionSplit splt : getSplits() ) {
-			if ( Integer.parseInt( splt.getID().get() ) >= maxSpltNo ) {
-				maxSpltNo = Integer.parseInt( splt.getID().get() );
+			try {
+				if ( Integer.parseInt( splt.getID().get() ) >= maxSpltNo ) {
+					maxSpltNo = Integer.parseInt( splt.getID().get() );
+				}
+			} catch ( KMMIDNotSetException exc ) {
+				throw new CannotGenerateKMMIDException();
 			}
 		}
 		
 		return new KMMSpltID(maxSpltNo);
+	}
+
+	// ---------------------------------------------------------------
+
+	/**
+	 * The kmymoney-file is the top-level class to contain everything.
+	 *
+	 * @return the file we are associated with
+	 */
+	public KMyMoneyWritableFileImpl getWritableKMyMoneyFile() {
+		return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+	}
+
+	/**
+	 * The kmymoney-file is the top-level class to contain everything.
+	 *
+	 * @return the file we are associated with
+	 */
+	@Override
+	public KMyMoneyWritableFileImpl getKMyMoneyFile() {
+		return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
 	}
 
 }

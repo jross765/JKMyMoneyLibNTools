@@ -1,7 +1,9 @@
 package org.kmymoney.api.write.impl;
 
+import java.beans.PropertyChangeListener;
 import java.text.ParseException;
 
+import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.generated.SPLIT;
@@ -12,7 +14,6 @@ import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
-import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableTransactionImpl.class);
 
 	/**
-	 * Our helper to implement the GnucashWritableObject-interface.
+	 * Our helper to implement the KMyMoneyWritableObject-interface.
 	 */
 	private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
@@ -62,23 +63,28 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	public KMyMoneyWritableTransactionSplitImpl(
 			final KMyMoneyWritableTransactionImpl trx,
 			final KMyMoneyAccount acct) {
-		super(createTransactionSplit_int(trx.getWritingFile(), 
+		super(createTransactionSplit_int(trx.getWritableFile(), 
 				                         trx, acct, 
 				                         trx.getNewSplitID()),
+			  trx.getWritableKMyMoneyFile(),
 		      trx);
 
 		// this is a workaound.
 		// if super does account.addSplit(this) it adds an instance on
-		// GnucashTransactionSplitImpl that is "!=
-		// (GnucashTransactionSplitWritingImpl)this";
+		// KMyMoneyTransactionSplitImpl that is "!=
+		// (KMyMoneyTransactionSplitWritingImpl)this";
 		// thus we would get warnings about dublicate split-ids and can no longer
 		// compare splits by instance.
 		// if(account!=null)
-		// ((GnucashAccountImpl)account).replaceTransactionSplit(account.getTransactionSplitByID(getId()),
-		// GnucashTransactionSplitWritingImpl.this);
+		// ((KMyMoneyAccountImpl)account).replaceTransactionSplit(account.getTransactionSplitByID(getId()),
+		// KMyMoneyTransactionSplitWritingImpl.this);
 
 		trx.addSplit(this);
 	}
+
+    public KMyMoneyWritableTransactionSplitImpl(final KMyMoneyTransactionSplitImpl splt) throws IllegalArgumentException {
+	super(splt.getJwsdpPeer(), splt.getKMyMoneyFile(), splt.getTransaction());
+    }
 
 	// ---------------------------------------------------------------
 	
@@ -111,7 +117,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		// this is needed because transaction.addSplit() later
 		// must have an already build List of splits.
 		// if not it will create the list from the JAXB-Data
-		// thus 2 instances of this GnucashTransactionSplitWritingImpl
+		// thus 2 instances of this KMyMoneyTransactionSplitWritingImpl
 		// will exist. One created in getSplits() from this JAXB-Data
 		// the other is this object.
 		trx.getSplits();
@@ -145,7 +151,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	/**
 	 * @see KMyMoneyWritableTransactionSplit#setAccount(KMyMoneyAccount)
 	 */
-	public void setAccountID(final String acctID) {
+	public void setAccountID(final KMMComplAcctID acctID) {
 		setAccount(getTransaction().getKMyMoneyFile().getAccountByID(acctID));
 	}
 
@@ -156,6 +162,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		if ( acct == null ) {
 			throw new NullPointerException("null account given");
 		}
+		
 		String old = (getJwsdpPeer().getAccount() == null ? null : getJwsdpPeer().getAccount());
 		jwsdpPeer.setAccount(acct.getID().toString());
 		((KMyMoneyWritableFile) getWritableKMyMoneyFile()).setModified(true);
@@ -327,7 +334,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		}
 	}
 
-	// --------------------- support for propertyChangeListeners ---------------
+	// ---------------------------------------------------------------
 
 	/**
 	 * @see KMyMoneyWritableTransactionSplit#setSharesFormattedForHTML(java.lang.String)
@@ -343,10 +350,55 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		this.setValue(n);
 	}
 
+	// ---------------------------------------------------------------
+
 	/**
-	 * ${@inheritDoc}.
+	 * The kmymoney-file is the top-level class to contain everything.
+	 *
+	 * @return the file we are associated with
 	 */
-	public KMyMoneyWritableFile getWritableGnucashFile() {
-		return (KMyMoneyWritableFile) getKMyMoneyFile();
+	public KMyMoneyWritableFileImpl getWritableKMyMoneyFile() {
+		return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
 	}
+
+	/**
+	 * The kmymoney-file is the top-level class to contain everything.
+	 *
+	 * @return the file we are associated with
+	 */
+	@Override
+	public KMyMoneyWritableFileImpl getKMyMoneyFile() {
+		return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+	}
+
+	// ---------------------------------------------------------------
+
+	@SuppressWarnings("exports")
+	@Override
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@SuppressWarnings("exports")
+	@Override
+	public void addPropertyChangeListener(String ptyName, PropertyChangeListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@SuppressWarnings("exports")
+	@Override
+	public void removePropertyChangeListener(String ptyName, PropertyChangeListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@SuppressWarnings("exports")
+	@Override
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
