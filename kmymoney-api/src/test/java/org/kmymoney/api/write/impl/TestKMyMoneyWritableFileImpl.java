@@ -99,7 +99,7 @@ public class TestKMyMoneyWritableFileImpl {
 
     // ------------------------------
     @Test
-    public void test07() throws Exception {
+    public void test04() throws Exception {
 	assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
 	assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
 	assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
@@ -108,7 +108,7 @@ public class TestKMyMoneyWritableFileImpl {
     // ------------------------------
 
     @Test
-    public void test10() throws Exception {
+    public void test05() throws Exception {
 	// CAUTION: This one is an exception:
 	// There is one additional security object on the "raw" level:
 	// the "template".
@@ -118,10 +118,18 @@ public class TestKMyMoneyWritableFileImpl {
     }
 
     @Test
-    public void test11() throws Exception {
+    public void test06() throws Exception {
 	assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
 	assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
 	assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
+    }
+
+    @Test
+    public void test07() throws Exception {
+	assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+	// n/a:
+	// assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
+	assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
     }
 
     // -----------------------------------------------------------------
