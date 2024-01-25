@@ -397,7 +397,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 */
 	protected SPLITS createSplitsType() {
 		SPLITS retval = getObjectFactory().createSPLITS();
-		// incrementCountDataFor();
+		// incrementCountDataFor("splits");
 		return retval;
 	}
 
@@ -405,7 +405,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 */
 	protected SPLIT createSplitType() {
 		SPLIT retval = getObjectFactory().createSPLIT();
-		// incrementCountDataFor();
+		// incrementCountDataFor("split");
 		return retval;
 	}
 

@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID.Top;
+import org.kmymoney.api.basetypes.simple.KMMAcctID;
+import org.kmymoney.api.currency.InvalidKMMComplAcctIDException;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -83,18 +85,22 @@ public class FileAccountManager {
 
 	// ---------------------------------------------------------------
 
-	public KMyMoneyAccount getAccountByID(final KMMComplAcctID id) {
+	public KMyMoneyAccount getAccountByID(final KMMComplAcctID acctID) {
 		if ( acctMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
 
-		KMyMoneyAccount retval = acctMap.get(id);
+		KMyMoneyAccount retval = acctMap.get(acctID);
 		if ( retval == null ) {
 			System.err.println(
-					"getAccountById: No Account with ID '" + id + "'. We know " + acctMap.size() + " accounts.");
+					"getAccountById: No Account with ID '" + acctID + "'. We know " + acctMap.size() + " accounts.");
 		}
 
 		return retval;
+	}
+
+	public KMyMoneyAccount getAccountByID(final KMMAcctID acctID) {
+		return getAccountByID(new KMMComplAcctID(acctID));
 	}
 
 	public Collection<KMyMoneyAccount> getAccountsByParentID(final KMMComplAcctID acctID) {
@@ -122,6 +128,10 @@ public class FileAccountManager {
 		return retval;
 	}
 
+	public Collection<KMyMoneyAccount> getAccountsByParentID(final KMMAcctID acctID) {
+		return getAccountsByParentID(new KMMComplAcctID(acctID));
+	}
+	
 	public Collection<KMyMoneyAccount> getAccountsByName(final String name) {
 		return getAccountsByName(name, true, true);
 	}
@@ -204,9 +214,9 @@ public class FileAccountManager {
 	 * First try to fetch the account by id, then fall back to traversing all
 	 * accounts to get if by it's name.
 	 */
-	public KMyMoneyAccount getAccountByIDorName(final KMMComplAcctID id, final String name)
+	public KMyMoneyAccount getAccountByIDorName(final KMMComplAcctID acctID, final String name)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
-		KMyMoneyAccount retval = getAccountByID(id);
+		KMyMoneyAccount retval = getAccountByID(acctID);
 		if ( retval == null ) {
 			retval = getAccountByNameUniq(name, true);
 		}
@@ -214,6 +224,11 @@ public class FileAccountManager {
 		return retval;
 	}
 
+	public KMyMoneyAccount getAccountByIDorName(final KMMAcctID acctID, final String name)
+			throws NoEntryFoundException, TooManyEntriesFoundException {
+		return getAccountByIDorName(new KMMComplAcctID(acctID), name);
+	}
+	
 	/*
 	 * First try to fetch the account by id, then fall back to traversing all
 	 * accounts to get if by it's name.
@@ -228,6 +243,11 @@ public class FileAccountManager {
 		return retval;
 	}
 
+	public KMyMoneyAccount getAccountByIDorNameEx(final KMMAcctID acctID, final String name)
+			throws NoEntryFoundException, TooManyEntriesFoundException {
+		return getAccountByIDorNameEx(new KMMComplAcctID(acctID), name);
+	}
+	
 	public Collection<KMyMoneyAccount> getAccountsByTypeAndName(Type type, String expr, boolean qualif, boolean relaxed)
 			throws UnknownAccountTypeException {
 		Collection<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();

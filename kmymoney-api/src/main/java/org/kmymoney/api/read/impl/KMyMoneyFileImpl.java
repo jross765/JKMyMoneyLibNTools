@@ -21,6 +21,7 @@ import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
+import org.kmymoney.api.basetypes.simple.KMMAcctID;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
@@ -303,6 +304,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
     @Override
     public KMyMoneyAccount getAccountByID(final KMMComplAcctID acctID) {
+	return acctMgr.getAccountByID(acctID);
+    }
+
+    @Override
+    public KMyMoneyAccount getAccountByID(final KMMAcctID acctID) {
 	return acctMgr.getAccountByID(acctID);
     }
 

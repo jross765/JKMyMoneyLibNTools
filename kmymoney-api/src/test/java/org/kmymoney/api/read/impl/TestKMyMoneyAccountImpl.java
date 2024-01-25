@@ -18,9 +18,9 @@ public class TestKMyMoneyAccountImpl {
 	private KMyMoneyFile kmmFile = null;
 	private KMyMoneyAccount acct = null;
 
-	private static final KMMComplAcctID ACCT_1_ID = new KMMComplAcctID("A000004"); // Asset::Girokonto
-	private static final KMMComplAcctID ACCT_2_ID = new KMMComplAcctID("A000062"); // Asset::Finanzanlagen::Depot RaiBa
-	private static final KMMComplAcctID ACCT_3_ID = new KMMComplAcctID("A000049"); // Root Account::Fremdkapital
+	public static final KMMComplAcctID ACCT_1_ID = new KMMComplAcctID("A000004"); // Asset::Girokonto
+	public static final KMMComplAcctID ACCT_2_ID = new KMMComplAcctID("A000062"); // Asset::Finanzanlagen::Depot RaiBa
+	public static final KMMComplAcctID ACCT_3_ID = new KMMComplAcctID("A000049"); // Root Account::Fremdkapital
 //  private static final KMMComplAcctID ACCT_4_ID = new KMMComplAcctID("xyz"); // Root Account::Fremdkapital::Lieferanten::Lieferfanto
 //  private static final KMMComplAcctID ACCT_5_ID = new KMMComplAcctID("xyz"); // Root Account::Aktiva::Forderungen::Unfug_Quatsch
 //  private static final KMMComplAcctID ACCT_6_ID = new KMMComplAcctID("xyz"); // Root Account::Anfangsbestand

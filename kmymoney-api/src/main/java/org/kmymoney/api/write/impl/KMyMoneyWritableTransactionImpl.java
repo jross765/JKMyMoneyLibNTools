@@ -1,8 +1,12 @@
 package org.kmymoney.api.write.impl;
 
 import java.beans.PropertyChangeListener;
+import java.nio.charset.CoderResult;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -148,7 +152,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 			throw new IllegalArgumentException("empty ID given");
 		}
 
-		ObjectFactory fact = file.getObjectFactory();
+		// ObjectFactory fact = file.getObjectFactory();
 		TRANSACTION jwsdpTrx = file.createTransactionType();
 
 		jwsdpTrx.setId(newID.toString());
@@ -161,10 +165,12 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		try {
 			LocalDateTime dateTime = LocalDateTime.now();
 	        // https://stackoverflow.com/questions/835889/java-util-date-to-xmlgregoriancalendar
+			// https://simplesolution.dev/java-convert-localdate-to-calendar/
 	        GregorianCalendar cal = new GregorianCalendar();
-	        cal.setTime(new Date(dateTime.getYear(), 
-	        		             dateTime.getMonthValue(), 
-	        		             dateTime.getDayOfMonth()));
+	        ZonedDateTime zonedDateTime = ZonedDateTime.of(dateTime, ZoneId.systemDefault());
+	        Instant instant = zonedDateTime.toInstant();
+	        Date date = Date.from(instant);
+	        cal.setTime(date);
 	        XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
 			jwsdpTrx.setPostdate(xmlCal);
 		} catch ( DatatypeConfigurationException exc ) {
@@ -318,10 +324,12 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		
 		try {
 	        // https://stackoverflow.com/questions/835889/java-util-date-to-xmlgregoriancalendar
+			// https://simplesolution.dev/java-convert-localdate-to-calendar/
 	        GregorianCalendar cal = new GregorianCalendar();
-	        cal.setTime(new Date(datePosted.getYear(), 
-	        		             datePosted.getMonthValue(), 
-	        		             datePosted.getDayOfMonth()));
+	        ZonedDateTime zonedDateTime = datePosted.atStartOfDay(ZoneId.systemDefault());
+	        Instant instant = zonedDateTime.toInstant();
+	        Date date = Date.from(instant);
+	        cal.setTime(date);
 	        XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
 			jwsdpPeer.setPostdate(xmlCal);
 		} catch ( DatatypeConfigurationException exc ) {
@@ -394,8 +402,9 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		int maxSpltNo = 1; // sic, in case there are no splits yet
 		for ( KMyMoneyTransactionSplit splt : getSplits() ) {
 			try {
-				if ( Integer.parseInt( splt.getID().get() ) >= maxSpltNo ) {
-					maxSpltNo = Integer.parseInt( splt.getID().get() );
+				String coreID = splt.getID().get().substring(1);
+				if ( Integer.parseInt(coreID) >= maxSpltNo ) {
+					maxSpltNo = Integer.parseInt(coreID);
 				}
 			} catch ( KMMIDNotSetException exc ) {
 				throw new CannotGenerateKMMIDException();

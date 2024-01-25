@@ -103,7 +103,15 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 * @param action null, or one of the ACTION_xyz values defined
 	 * @throws IllegalTransactionSplitActionException
 	 */
-	void setSplitAction(String action) throws IllegalTransactionSplitActionException;
+	void setAction(Action act) throws IllegalTransactionSplitActionException;
+
+	/**
+	 * Set the type of association this split has with an invoice's lot.
+	 * 
+	 * @param action null, or one of the ACTION_xyz values defined
+	 * @throws IllegalTransactionSplitActionException
+	 */
+	// void setActionStr(String actStr) throws IllegalTransactionSplitActionException;
 
 	/**
 	 * Add a PropertyChangeListener to the listener list. The listener is registered

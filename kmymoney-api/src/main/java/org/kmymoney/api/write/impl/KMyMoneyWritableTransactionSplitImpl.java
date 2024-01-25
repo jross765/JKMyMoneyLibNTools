@@ -307,29 +307,32 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		}
 	}
 
+	public void setAction(final Action act) throws IllegalTransactionSplitActionException {
+		setActionStr(act.getCode());
+	}
+	
 	/**
 	 * Set the type of association this split has with an invoice's lot.
 	 *
-	 * @param act null, or one of the defined ACTION_xyz values
+	 * @param actStr null, or one of the defined ACTION_xyz values
 	 * @throws IllegalTransactionSplitActionException
 	 */
-	public void setSplitAction(final String act) throws IllegalTransactionSplitActionException {
-//		if ( action != null &&
-//             ! action.equals(ACTION_PAYMENT) &&
-//             ! action.equals(ACTION_INVOICE) &&
-//             ! action.equals(ACTION_BILL) && 
-//             ! action.equals(ACTION_BUY) && 
-//             ! action.equals(ACTION_SELL) ) {
-//                throw new IllegalSplitActionException();
-//		}
+	public void setActionStr(final String actStr) throws IllegalTransactionSplitActionException {
+		if ( actStr == null ) {
+			throw new IllegalArgumentException("null action given");
+		}
+
+		if ( actStr.trim().length() == 0 ) {
+			throw new IllegalArgumentException("empty action given");
+		}
 
 		String old = getJwsdpPeer().getAction();
-		jwsdpPeer.setAction(act);
+		jwsdpPeer.setAction(actStr);
 		((KMyMoneyWritableFile) getKMyMoneyFile()).setModified(true);
 
-		if ( old == null || !old.equals(act) ) {
+		if ( old == null || !old.equals(actStr) ) {
 			if ( helper.getPropertyChangeSupport() != null ) {
-				helper.getPropertyChangeSupport().firePropertyChange("splitAction", old, act);
+				helper.getPropertyChangeSupport().firePropertyChange("splitAction", old, actStr);
 			}
 		}
 	}

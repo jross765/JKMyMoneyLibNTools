@@ -61,6 +61,8 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 */
 	KMyMoneyAccount getAccountByID(KMMComplAcctID acctID);
 
+	KMyMoneyAccount getAccountByID(KMMAcctID acctID);
+	
 	/**
 	 *
 	 * @param acctID if null, gives all account that have no parent
