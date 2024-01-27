@@ -93,13 +93,13 @@ public class FilePriceManager {
 
 	protected KMyMoneyPricePairImpl createPricePair(final PRICEPAIR jwsdpPricePair) {
 		KMyMoneyPricePairImpl prcPr = new KMyMoneyPricePairImpl(jwsdpPricePair, kmmFile);
-		LOGGER.debug("Generated new price pair: " + prcPr.getID());
+		LOGGER.debug("createPricePair: Generated new price pair: " + prcPr.getID());
 		return prcPr;
 	}
 
 	protected KMyMoneyPriceImpl createPrice(final KMyMoneyPricePair pricePair, final PRICE jwsdpPrice) {
 		KMyMoneyPriceImpl prc = new KMyMoneyPriceImpl(pricePair, jwsdpPrice, kmmFile);
-		LOGGER.info("Generated new price: " + prc.getID());
+		LOGGER.info("createPrice: Generated new price: " + prc.getID());
 		return prc;
 	}
 
@@ -118,7 +118,7 @@ public class FilePriceManager {
 			}
 		}
 
-		LOGGER.debug("Added price pair to cache: " + prcPair.getID());
+		LOGGER.debug("addPricePair: Added price pair to cache: " + prcPair.getID());
 	}
 
 	public void removePricePair(KMyMoneyPricePair prcPair) {
@@ -134,7 +134,7 @@ public class FilePriceManager {
 
 		prcPairMap.remove(prcPair.getID());
 
-		LOGGER.debug("Removed price pair from cache: " + prcPair.getID());
+		LOGGER.debug("removePricePair: Removed price pair from cache: " + prcPair.getID());
 	}
 
 	// ---------------------------------------------------------------
@@ -145,7 +145,7 @@ public class FilePriceManager {
 
 	public void addPrice(KMyMoneyPrice prc, boolean withPrcPair) {
 		prcMap.put(prc.getID(), prc);
-		LOGGER.debug("Added price to cache: " + prc.getID());
+		LOGGER.debug("addPrice: Added price to cache: " + prc.getID());
 
 		if ( withPrcPair ) {
 			addPricePair(prc.getParentPricePair(), false);
@@ -162,7 +162,7 @@ public class FilePriceManager {
 		}
 
 		prcMap.remove(prc.getID());
-		LOGGER.debug("Removed price from cache: " + prc.getID());
+		LOGGER.debug("removePrice: Removed price from cache: " + prc.getID());
 	}
 
 	// ---------------------------------------------------------------
@@ -315,8 +315,7 @@ public class FilePriceManager {
 			}
 		} // for
 
-		LOGGER.debug(
-				"getLatestPrice: pSecCurrId='" + secCurrID.toString() + "'= " + latestQuote + " from " + latestDate);
+		LOGGER.debug("getLatestPrice: pSecCurrId='" + secCurrID.toString() + "'= " + latestQuote + " from " + latestDate);
 
 		if ( latestQuote == null ) {
 			return null;

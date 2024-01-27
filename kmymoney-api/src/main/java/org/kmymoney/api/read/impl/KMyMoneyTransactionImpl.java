@@ -289,14 +289,18 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      */
     public List<KMyMoneyTransactionSplit> getSplits() {
 	if (mySplits == null) {
+	    initSplits();
+	}
+	return mySplits;
+    }
+
+    private void initSplits() {
 	    List<SPLIT> jwsdpSplits = jwsdpPeer.getSPLITS().getSPLIT();
 
-	    mySplits = new ArrayList<KMyMoneyTransactionSplit>(jwsdpSplits.size());
+	    mySplits = new ArrayList<KMyMoneyTransactionSplit>();
 	    for (SPLIT element : jwsdpSplits) {
 		mySplits.add(createSplit(element));
 	    }
-	}
-	return mySplits;
     }
 
     /**

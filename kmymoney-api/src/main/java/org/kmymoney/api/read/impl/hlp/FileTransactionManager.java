@@ -82,7 +82,7 @@ public class FileTransactionManager {
 			}
 		}
 
-		LOGGER.debug("Added transaction to cache: " + trx.getID());
+		LOGGER.debug("addTransaction: Added transaction to cache: " + trx.getID());
 	}
 
 	public void removeTransaction(KMyMoneyTransaction trx) throws IllegalArgumentException {
@@ -98,7 +98,7 @@ public class FileTransactionManager {
 
 		trxMap.remove(trx.getID());
 
-		LOGGER.debug("Removed transaction from cache: " + trx.getID());
+		LOGGER.debug("removeTransaction: Removed transaction from cache: " + trx.getID());
 	}
 
 	// ---------------------------------------------------------------
@@ -137,7 +137,7 @@ public class FileTransactionManager {
 
 		KMyMoneyTransaction retval = trxMap.get(trxID);
 		if ( retval == null ) {
-			LOGGER.warn("No Transaction with ID '" + trxID + "'. We know " + trxMap.size() + " transactions.");
+			LOGGER.warn("getTransactionByID: No Transaction with ID '" + trxID + "'. We know " + trxMap.size() + " transactions.");
 		}
 
 		return retval;
@@ -159,8 +159,7 @@ public class FileTransactionManager {
 
 		KMyMoneyTransactionSplit retval = trxSpltMap.get(spltID);
 		if ( retval == null ) {
-			LOGGER.warn(
-					"No Transaction-Split with ID '" + spltID + "'. We know " + trxSpltMap.size() + " transactions.");
+			LOGGER.warn("getTransactionSplitByID: No Transaction-Split with ID '" + spltID + "'. We know " + trxSpltMap.size() + " transactions.");
 		}
 		return retval;
 	}

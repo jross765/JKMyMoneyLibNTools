@@ -62,7 +62,7 @@ public class FileSecurityManager {
 
 	protected KMyMoneySecurityImpl createSecurity(final SECURITY jwsdpSec) {
 		KMyMoneySecurityImpl sec = new KMyMoneySecurityImpl(jwsdpSec, kmmFile);
-		LOGGER.debug("Generated new security: " + sec.getID());
+		LOGGER.debug("createSecurity: Generated new security: " + sec.getID());
 		return sec;
 	}
 
@@ -77,7 +77,7 @@ public class FileSecurityManager {
 		if ( sec.getCode() != null )
 			codeMap.put(sec.getCode(), sec.getQualifID().getSecID());
 
-		LOGGER.debug("Added security to cache: " + sec.getID());
+		LOGGER.debug("addSecurity: Added security to cache: " + sec.getID());
 	}
 
 	public void removeSecurity(KMyMoneySecurity sec) {
@@ -93,7 +93,7 @@ public class FileSecurityManager {
 				codeMap.remove(code);
 		}
 
-		LOGGER.debug("Removed security from cache: " + sec.getID());
+		LOGGER.debug("removeSecurity: Removed security from cache: " + sec.getID());
 	}
 
 	// ---------------------------------------------------------------

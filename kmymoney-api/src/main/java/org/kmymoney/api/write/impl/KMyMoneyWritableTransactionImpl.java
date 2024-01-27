@@ -1,7 +1,6 @@
 package org.kmymoney.api.write.impl;
 
 import java.beans.PropertyChangeListener;
-import java.nio.charset.CoderResult;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,7 +20,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.kmymoney.api.basetypes.simple.KMMIDNotSetException;
 import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
-import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.generated.SPLITS;
 import org.kmymoney.api.generated.TRANSACTION;
@@ -74,7 +72,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 */
 	public KMyMoneyWritableTransactionImpl(final KMyMoneyWritableFileImpl file) {
 		super(createTransaction_int(file, file.getNewTransactionID()), file);
-		file.addTransaction(this);
+		// file.addTransaction(this); NO! Redundant
 	}
 
 	public KMyMoneyWritableTransactionImpl(final KMyMoneyTransactionImpl trx) {
@@ -196,7 +194,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 
         file.getRootElement().getTRANSACTIONS().getTRANSACTION().add(jwsdpTrx);
         file.setModified(true);
-    
+
         LOGGER.debug("createTransaction_int: Created new transaction (core): " + jwsdpTrx.getId());
         
         return jwsdpTrx;

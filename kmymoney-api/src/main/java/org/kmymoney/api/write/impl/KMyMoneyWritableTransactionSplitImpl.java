@@ -131,7 +131,8 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		jwsdpSplt.setShares(new FixedPointNumber().toKMyMoneyString());
 		jwsdpSplt.setValue(new FixedPointNumber().toKMyMoneyString());
 		
-		trx.addSplit(new KMyMoneyWritableTransactionSplitImpl(jwsdpSplt, trx.getKMyMoneyFile(), trx));
+		// NO, not here but in the calling method:
+		// trx.addSplit(new KMyMoneyWritableTransactionSplitImpl(jwsdpSplt, trx.getKMyMoneyFile(), trx));
 		// No:
 		// trx.getJwsdpPeer().getSPLITS().getSPLIT().add(jwsdpSplt);
 		file.setModified(true);

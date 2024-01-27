@@ -53,7 +53,7 @@ public class FilePayeeManager {
 
 	protected KMyMoneyPayeeImpl createPayee(final PAYEE jwsdpPye) {
 		KMyMoneyPayeeImpl pye = new KMyMoneyPayeeImpl(jwsdpPye, kmmFile);
-		LOGGER.debug("Generated new payee: " + pye.getID());
+		LOGGER.debug("createPayee: Generated new payee: " + pye.getID());
 		return pye;
 	}
 
@@ -61,12 +61,12 @@ public class FilePayeeManager {
 
 	public void addPayee(KMyMoneyPayee pye) {
 		pyeMap.put(pye.getID(), pye);
-		LOGGER.debug("Added payee to cache: " + pye.getID());
+		LOGGER.debug("addPayee: Added payee to cache: " + pye.getID());
 	}
 
 	public void removePayee(KMyMoneyPayee pye) {
 		pyeMap.remove(pye.getID());
-		LOGGER.debug("Added payee to cache: " + pye.getID());
+		LOGGER.debug("removePayee: Added payee to cache: " + pye.getID());
 	}
 
 	// ---------------------------------------------------------------

@@ -67,7 +67,7 @@ public class FileAccountManager {
 	 */
 	protected KMyMoneyAccountImpl createAccount(final ACCOUNT jwsdpAcct) {
 		KMyMoneyAccountImpl acct = new KMyMoneyAccountImpl(jwsdpAcct, kmmFile);
-		LOGGER.debug("Generated new account: " + acct.getID());
+		LOGGER.debug("createAccount: Generated new account: " + acct.getID());
 		return acct;
 	}
 
@@ -75,12 +75,12 @@ public class FileAccountManager {
 
 	public void addAccount(KMyMoneyAccount acct) {
 		acctMap.put(acct.getID(), acct);
-		LOGGER.debug("Added account to cache: " + acct.getID());
+		LOGGER.debug("addAccount: Added account to cache: " + acct.getID());
 	}
 
 	public void removeAccount(KMyMoneyAccount acct) {
 		acctMap.remove(acct.getID());
-		LOGGER.debug("Removed account from cache: " + acct.getID());
+		LOGGER.debug("removeAccount: Removed account from cache: " + acct.getID());
 	}
 
 	// ---------------------------------------------------------------
@@ -92,8 +92,7 @@ public class FileAccountManager {
 
 		KMyMoneyAccount retval = acctMap.get(acctID);
 		if ( retval == null ) {
-			System.err.println(
-					"getAccountById: No Account with ID '" + acctID + "'. We know " + acctMap.size() + " accounts.");
+			System.err.println("getAccountById: No Account with ID '" + acctID + "'. We know " + acctMap.size() + " accounts.");
 		}
 
 		return retval;
