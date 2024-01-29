@@ -14,6 +14,8 @@ import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.NoEntryFoundException;
+import org.kmymoney.api.read.TooManyEntriesFoundException;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 
@@ -171,6 +173,14 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	
 	KMyMoneyWritableSecurity getWritableSecurityByQualifID(KMMQualifSecID qualifID);
 	
+	KMyMoneyWritableSecurity getWritableSecurityBySymbol(String symb);
+
+    Collection<KMyMoneyWritableSecurity> getWritableSecuritiesByName(String expr);
+
+    Collection<KMyMoneyWritableSecurity> getWritableSecuritiesByName(String expr, boolean relaxed);
+    
+    KMyMoneyWritableSecurity getWritableSecurityByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
+    
 	/**
 	 * @see KMyMoneyFile#getTransactions()
 	 * @return writable versions of all transactions in the book.

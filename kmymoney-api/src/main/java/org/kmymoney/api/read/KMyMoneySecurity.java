@@ -9,7 +9,6 @@ import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
-import org.kmymoney.api.read.hlp.KMyMoneyObject;
 
 /**
  * In KMyMoney lingo, "security" is an umbrella term for

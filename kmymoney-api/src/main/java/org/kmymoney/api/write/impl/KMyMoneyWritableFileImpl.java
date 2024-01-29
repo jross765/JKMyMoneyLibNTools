@@ -43,6 +43,8 @@ import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
+import org.kmymoney.api.read.NoEntryFoundException;
+import org.kmymoney.api.read.TooManyEntriesFoundException;
 import org.kmymoney.api.read.UnknownAccountTypeException;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
@@ -800,9 +802,52 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
 
 	@Override
+	public KMyMoneyWritableSecurity getWritableSecurityBySymbol(final String symb) {
+		KMyMoneySecurity sec = super.getSecurityBySymbol(symb);
+		return new KMyMoneyWritableSecurityImpl((KMyMoneySecurityImpl) sec);
+	}
+
+	@Override
+	public Collection<KMyMoneyWritableSecurity> getWritableSecuritiesByName(final String expr) {
+		Collection<KMyMoneyWritableSecurity> result = new ArrayList<KMyMoneyWritableSecurity>();
+
+		for ( KMyMoneySecurity sec : super.getSecuritiesByName(expr) ) {
+			KMyMoneyWritableSecurity newSec = new KMyMoneyWritableSecurityImpl((KMyMoneySecurityImpl) sec);
+			result.add(newSec);
+		}
+
+		return result;
+    }
+
+	@Override
+	public Collection<KMyMoneyWritableSecurity> getWritableSecuritiesByName(final String expr, final boolean relaxed) {
+		Collection<KMyMoneyWritableSecurity> result = new ArrayList<KMyMoneyWritableSecurity>();
+
+		for ( KMyMoneySecurity sec : super.getSecuritiesByName(expr, relaxed) ) {
+			KMyMoneyWritableSecurity newSec = new KMyMoneyWritableSecurityImpl((KMyMoneySecurityImpl) sec);
+			result.add(newSec);
+		}
+
+		return result;
+	}
+    
+	@Override
+	public KMyMoneyWritableSecurity getWritableSecurityByNameUniq(final String expr) 
+			throws NoEntryFoundException, TooManyEntriesFoundException {
+		KMyMoneySecurity sec = super.getSecurityByNameUniq(expr);
+		return new KMyMoneyWritableSecurityImpl((KMyMoneySecurityImpl) sec);
+	}
+    
+	@Override
 	public Collection<KMyMoneyWritableSecurity> getWritableSecurities() {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<KMyMoneyWritableSecurity> result = new ArrayList<KMyMoneyWritableSecurity>();
+
+		for ( KMyMoneySecurity sec : super.getSecurities() ) {
+			KMyMoneyWritableSecurity newSec = new KMyMoneyWritableSecurityImpl((KMyMoneySecurityImpl) sec);
+			result.add(newSec);
+		}
+
+		return result;
 	}
 
 	@Override
