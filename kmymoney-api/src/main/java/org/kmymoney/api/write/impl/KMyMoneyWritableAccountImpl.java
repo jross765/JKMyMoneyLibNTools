@@ -79,6 +79,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		}
 
 		ACCOUNT jwsdpAcct = file.createAccountType();
+		
 		jwsdpAcct.setId(newID.toString());
 		jwsdpAcct.setType(KMyMoneyAccount.Type.ASSET.getCodeBig());
 		jwsdpAcct.setName("UNNAMED");

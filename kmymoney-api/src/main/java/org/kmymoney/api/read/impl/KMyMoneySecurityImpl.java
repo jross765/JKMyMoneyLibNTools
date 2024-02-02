@@ -11,16 +11,15 @@ import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
-import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.generated.PAIR;
+import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.UnknownRoundingMethodException;
 import org.kmymoney.api.read.UnknownSecurityTypeException;
 import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
-import org.kmymoney.api.generated.PAIR;
-import org.kmymoney.api.generated.PAYEE;
-import org.kmymoney.api.generated.SECURITY;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,6 +86,10 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
      */
     public String getCode() {
 	String result = "";
+	
+	if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
+		return null;
+	}
 	
 	for ( PAIR kvp : jwsdpPeer.getKEYVALUEPAIRS().getPAIR() ) {
 	    if ( kvp.getKey().equals("kmm-security-id") )

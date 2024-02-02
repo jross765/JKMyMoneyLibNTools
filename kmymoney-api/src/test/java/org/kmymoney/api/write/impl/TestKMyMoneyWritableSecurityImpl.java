@@ -3,6 +3,7 @@ package org.kmymoney.api.write.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Collection;
 
@@ -12,6 +13,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneySecurityImpl;
@@ -31,13 +33,13 @@ public class TestKMyMoneyWritableSecurityImpl {
 
     // ---------------------------------------------------------------
 
-    private KMyMoneyWritableFileImpl gcshInFile = null;
-    private KMyMoneyFileImpl gcshOutFile = null;
+    private KMyMoneyWritableFileImpl kmmInFile = null;
+    private KMyMoneyFileImpl kmmOutFile = null;
 
-    private KMMFileStats gcshInFileStats = null;
-    private KMMFileStats gcshOutFileStats = null;
+    private KMMFileStats kmmInFileStats = null;
+    private KMMFileStats kmmOutFileStats = null;
 
-    // private KMMSecID newID = KMyMoneyWritableFile.getNewSecurityID();
+    private KMMSecID newID = new KMMSecID();
 
     private KMMQualifSecID secID1 = null;
     private KMMQualifSecID secID2 = null;
@@ -62,18 +64,18 @@ public class TestKMyMoneyWritableSecurityImpl {
     @Before
     public void initialize() throws Exception {
 	ClassLoader classLoader = getClass().getClassLoader();
-	// URL gcshFileURL = classLoader.getResource(Const.KMM_FILENAME);
-	// System.err.println("KMyMoney test file resource: '" + gcshFileURL + "'");
-	InputStream gcshInFileStream = null;
+	// URL kmmFileURL = classLoader.getResource(Const.KMM_FILENAME);
+	// System.err.println("KMyMoney test file resource: '" + kmmFileURL + "'");
+	InputStream kmmInFileStream = null;
 	try {
-	    gcshInFileStream = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME_IN);
+	    kmmInFileStream = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME_IN);
 	} catch (Exception exc) {
 	    System.err.println("Cannot generate input stream from resource");
 	    return;
 	}
 
 	try {
-	    gcshInFile = new KMyMoneyWritableFileImpl(gcshInFileStream);
+	    kmmInFile = new KMyMoneyWritableFileImpl(kmmInFileStream);
 	} catch (Exception exc) {
 	    System.err.println("Cannot parse KMyMoney in-file");
 	    exc.printStackTrace();
@@ -98,7 +100,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 
     @Test
     public void test01_1() throws Exception {
-	KMyMoneyWritableSecurity sec = gcshInFile.getWritableSecurityByQualifID(secID1);
+	KMyMoneyWritableSecurity sec = kmmInFile.getWritableSecurityByQualifID(secID1);
 	assertNotEquals(null, sec);
 
 	assertEquals(secID1.toString(), sec.getQualifID().toString());
@@ -114,7 +116,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 
     @Test
     public void test01_2() throws Exception {
-	Collection<KMyMoneyWritableSecurity> secList = gcshInFile.getWritableSecuritiesByName("mercedes");
+	Collection<KMyMoneyWritableSecurity> secList = kmmInFile.getWritableSecuritiesByName("mercedes");
 	assertNotEquals(null, secList);
 	assertEquals(1, secList.size());
 
@@ -128,7 +130,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 	assertEquals(SEC_1_TICKER, ((KMyMoneySecurity) secList.toArray()[0]).getSymbol());
 	assertEquals("Mercedes-Benz Group AG", ((KMyMoneySecurity) secList.toArray()[0]).getName());
 
-	secList = gcshInFile.getWritableSecuritiesByName("BENZ");
+	secList = kmmInFile.getWritableSecuritiesByName("BENZ");
 	assertNotEquals(null, secList);
 	assertEquals(1, secList.size());
 	assertEquals(secID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
@@ -136,7 +138,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 //    assertEquals(secCurrID1, 
 //	         ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
 
-	secList = gcshInFile.getWritableSecuritiesByName(" MeRceDeS-bEnZ  ");
+	secList = kmmInFile.getWritableSecuritiesByName(" MeRceDeS-bEnZ  ");
 	assertNotEquals(null, secList);
 	assertEquals(1, secList.size());
 	assertEquals(secID1.toString(), ((KMyMoneySecurity) secList.toArray()[0]).getQualifID().toString());
@@ -162,70 +164,70 @@ public class TestKMyMoneyWritableSecurityImpl {
     // PART 3.1: High-Level
     // ------------------------------
 
-//    @Test
-//    public void test03_1_1() throws Exception {
-//	gcshInFileStats = new KMMFileStats(gcshInFile);
-//
-//	assertEquals(ConstTest.Stats.NOF_SEC_ALL + 1, gcshInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic + 1 for template
-//	assertEquals(ConstTest.Stats.NOF_SEC_ALL, gcshInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // sic, NOT + 1 yet
-//	assertEquals(ConstTest.Stats.NOF_SEC_ALL, gcshInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
-//
-//	KMyMoneyWritableSecurity sec = gcshInFile.createWritableSecurity();
-//	sec.setQualifID(newID);
-//	sec.setName("Best Corp Ever");
-//
-//	// ----------------------------
-//	// Check whether the object can has actually be created
-//	// (in memory, not in the file yet).
-//
-//	test03_1_1_check_memory(sec);
-//
-//	// ----------------------------
-//	// Now, check whether the created object can be written to the
-//	// output file, then re-read from it, and whether is is what
-//	// we expect it is.
-//
-//	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
-//	// System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test01_1: '"
-//	// + outFile.getPath() + "'");
-//	outFile.delete(); // sic, the temp. file is already generated (empty),
-//			  // and the KMyMoney file writer does not like that.
-//	gcshInFile.writeFile(outFile);
-//
-//	test03_1_1_check_persisted(outFile);
-//    }
-//
-//    private void test03_1_1_check_memory(KMyMoneyWritableSecurity sec) throws Exception {
-//	assertEquals(ConstTest.Stats.NOF_SEC_ALL + 1 + 1, gcshInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic + 1 for template
-//	assertEquals(ConstTest.Stats.NOF_SEC_ALL + 1, gcshInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // sic, NOT + 1 yet
-//	assertEquals(ConstTest.Stats.NOF_SEC_ALL + 1, gcshInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
-//
-//	assertEquals(newID.toString(), sec.getQualifID().toString());
-//	assertEquals("Best Corp Ever", sec.getName());
-//    }
-//
-//    private void test03_1_1_check_persisted(File outFile) throws Exception {
-//	gcshOutFile = new KMyMoneyFileImpl(outFile);
-//	gcshOutFileStats = new KMMFileStats(gcshOutFile);
-//
-//	assertEquals(ConstTest.Stats.NOF_SEC + 1 + 1, gcshInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic + 1 for template
-//	assertEquals(ConstTest.Stats.NOF_SEC + 1, gcshInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // dto.
-//	assertEquals(ConstTest.Stats.NOF_SEC + 1, gcshInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
-//
-//	KMyMoneySecurity sec = gcshOutFile.getSecurityByQualifID(newID);
-//	assertNotEquals(null, sec);
-//
-//	assertEquals(newID.toString(), sec.getQualifID().toString());
-//	assertEquals("Best Corp Ever", sec.getName());
-//    }
-//
-//    // ------------------------------
-//    // PART 3.2: Low-Level
-//    // ------------------------------
-//
+    @Test
+    public void test03_1_1() throws Exception {
+	kmmInFileStats = new KMMFileStats(kmmInFile);
+
+	assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic + 1 for template
+	assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // sic, NOT + 1 yet
+	assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
+
+	KMyMoneyWritableSecurity sec = kmmInFile.createWritableSecurity();
+	newID.set(sec.getID());
+	sec.setName("Best Corp Ever");
+
+	// ----------------------------
+	// Check whether the object can has actually be created
+	// (in memory, not in the file yet).
+
+	test03_1_1_check_memory(sec);
+
+	// ----------------------------
+	// Now, check whether the created object can be written to the
+	// output file, then re-read from it, and whether is is what
+	// we expect it is.
+
+	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+	// System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test01_1: '"
+	// + outFile.getPath() + "'");
+	outFile.delete(); // sic, the temp. file is already generated (empty),
+			  // and the KMyMoney file writer does not like that.
+	kmmInFile.writeFile(outFile);
+
+	test03_1_1_check_persisted(outFile);
+    }
+
+    private void test03_1_1_check_memory(KMyMoneyWritableSecurity sec) throws Exception {
+	assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic + 1 for template
+	assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // sic, NOT + 1 yet
+	assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
+
+	assertEquals(newID.toString(), sec.getID().toString());
+	assertEquals("Best Corp Ever", sec.getName());
+    }
+
+    private void test03_1_1_check_persisted(File outFile) throws Exception {
+	kmmOutFile = new KMyMoneyFileImpl(outFile);
+	kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+	assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic + 1 for template
+	assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // dto.
+	assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
+
+	KMyMoneySecurity sec = kmmOutFile.getSecurityByID(newID);
+	assertNotEquals(null, sec);
+
+	assertEquals(newID.toString(), sec.getID().toString());
+	assertEquals("Best Corp Ever", sec.getName());
+    }
+
+    // ------------------------------
+    // PART 3.2: Low-Level
+    // ------------------------------
+
 //    @Test
 //    public void test03_2_1() throws Exception {
-//	KMyMoneyWritableSecurity sec = gcshInFile.createWritableSecurity();
+//	KMyMoneyWritableSecurity sec = kmmInFile.createWritableSecurity();
 //	sec.setQualifID(new KMMSecID_Exchange(KMMSecCurrNameSpace.Exchange.NASDAQ, "SCAM"));
 //	sec.setName("Scam and Screw Corp.");
 //
@@ -233,7 +235,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 ////      System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test01_1: '" + outFile.getPath() + "'");
 //	outFile.delete(); // sic, the temp. file is already generated (empty),
 //			  // and the KMyMoney file writer does not like that.
-//	gcshInFile.writeFile(outFile);
+//	kmmInFile.writeFile(outFile);
 //
 //	test03_2_1_check(outFile);
 //    }
@@ -299,22 +301,22 @@ public class TestKMyMoneyWritableSecurityImpl {
 //
 //    @Test
 //    public void test03_2_2() throws Exception {
-//	KMyMoneyWritableSecurity sec1 = gcshInFile.createWritableSecurity();
+//	KMyMoneyWritableSecurity sec1 = kmmInFile.createWritableSecurity();
 //	sec1.setQualifID(new KMMSecID_Exchange(KMMSecCurrNameSpace.Exchange.NASDAQ, "SCAM"));
 //	sec1.setName("Scam and Screw Corp.");
 //	sec1.setXCode("US0123456789");
 //
-//	KMyMoneyWritableSecurity sec2 = gcshInFile.createWritableSecurity();
+//	KMyMoneyWritableSecurity sec2 = kmmInFile.createWritableSecurity();
 //	sec2.setQualifID(new KMMSecID_MIC(KMMSecCurrNameSpace.MIC.XBRU, "CHOC"));
 //	sec2.setName("Chocolaterie de la Grande Place");
 //	sec2.setXCode("BE0123456789");
 //
-//	KMyMoneyWritableSecurity sec3 = gcshInFile.createWritableSecurity();
+//	KMyMoneyWritableSecurity sec3 = kmmInFile.createWritableSecurity();
 //	sec3.setQualifID(new KMMSecID_Exchange(KMMSecCurrNameSpace.Exchange.EURONEXT, "FOUS"));
 //	sec3.setName("Ils sont fous ces dingos!");
 //	sec3.setXCode("FR0123456789");
 //
-//	KMyMoneyWritableSecurity sec4 = gcshInFile.createWritableSecurity();
+//	KMyMoneyWritableSecurity sec4 = kmmInFile.createWritableSecurity();
 //	sec4.setQualifID(new KMMSecID_SecIdType(KMMSecCurrNameSpace.SecIdType.ISIN, "GB10000A2222"));
 //	sec4.setName("Ye Ole National British Trade Company Ltd.");
 //	sec4.setXCode("GB10000A2222"); // sic, has to be set redundantly
@@ -324,7 +326,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 //	// + outFile.getPath() + "'");
 //	outFile.delete(); // sic, the temp. file is already generated (empty),
 //			  // and the KMyMoney file writer does not like that.
-//	gcshInFile.writeFile(outFile);
+//	kmmInFile.writeFile(outFile);
 //
 //	test03_2_2_check(outFile);
 //    }

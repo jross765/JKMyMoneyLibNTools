@@ -105,6 +105,7 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 
 		SECURITY jwsdpSec = file.createSecurityType();
 
+		jwsdpSec.setId(newID.toString());
 		jwsdpSec.setType(null);
 		jwsdpSec.setSymbol(Const.SEC_SYMBOL_DEFAULT);
 		jwsdpSec.setName("no name given");;
