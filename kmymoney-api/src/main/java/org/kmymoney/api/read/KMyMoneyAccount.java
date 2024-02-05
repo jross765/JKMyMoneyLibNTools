@@ -12,6 +12,8 @@ import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
+import org.kmymoney.api.basetypes.simple.KMMIDNotSetException;
+import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
 
@@ -142,7 +144,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
     
     // -----------------------------------------------------------------
     
-    public static String SEPARATOR = "::";
+    public static String SEPARATOR = ":";
 
     // -----------------------------------------------------------------
 
@@ -203,6 +205,8 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      */
     Collection<KMyMoneyAccount> getChildren();
 
+    Collection<KMyMoneyAccount> getChildrenRecursive();
+
     /**
      * @param account the account to test
      * @return true if this is a child of us or any child's or us.
@@ -223,13 +227,13 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @return all splits
      * @link KMyMoneyTransactionSplit
      */
-    List<? extends KMyMoneyTransactionSplit> getTransactionSplits();
+    List<KMyMoneyTransactionSplit> getTransactionSplits();
 
     /**
      * @param id the split-id to look for
      * @return the identified split or null
      */
-    KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSpltID id);
+    KMyMoneyTransactionSplit getTransactionSplitByID(KMMQualifSpltID id);
 
     /**
      * Gets the last transaction-split before the given date.
@@ -237,12 +241,12 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @param date if null, the last split of all time is returned
      * @return the last transaction-split before the given date
      */
-    KMyMoneyTransactionSplit getLastSplitBeforeRecursive(final LocalDate date);
+    KMyMoneyTransactionSplit getLastSplitBeforeRecursive(LocalDate date);
 
     /**
      * @param split split to add to this transaction
      */
-    void addTransactionSplit(final KMyMoneyTransactionSplit split);
+    void addTransactionSplit(KMyMoneyTransactionSplit split);
 
     // ----------------------------
 
@@ -283,7 +287,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      *             calculation
      * @return the balance formatted using the current locale
      */
-    FixedPointNumber getBalance(final LocalDate date);
+    FixedPointNumber getBalance(LocalDate date);
 
     /**
      * Be aware that the result is in the currency of this account!
@@ -293,13 +297,17 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @param after splits that are after date are added here.
      * @return the balance formatted using the current locale
      */
-    FixedPointNumber getBalance(final LocalDate date, Collection<KMyMoneyTransactionSplit> after);
+    FixedPointNumber getBalance(LocalDate date, Collection<KMyMoneyTransactionSplit> after);
+
+    FixedPointNumber getBalance(LocalDate date, KMMQualifSecCurrID secCurrID);
+
+    FixedPointNumber getBalance(LocalDate date, Currency curr);
 
     /**
      * @param lastIncludesSplit last split to be included
      * @return the balance up to and including the given split
      */
-    FixedPointNumber getBalance(final KMyMoneyTransactionSplit lastIncludesSplit);
+    FixedPointNumber getBalance(KMyMoneyTransactionSplit lastIncludesSplit);
 
     // ----------------------------
 
@@ -322,7 +330,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
-    String getBalanceFormatted(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    String getBalanceFormatted(Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     // ----------------------------
 
@@ -346,7 +354,18 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
-    FixedPointNumber getBalanceRecursive(final LocalDate date) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    FixedPointNumber getBalanceRecursive(LocalDate date) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+
+    /**
+     * Ignores accounts for which this conversion is not possible.
+     *
+     * @param date              ignores transactions after the given date
+     * @param secCurrID         the currency the result shall be in
+     * @return Gets the balance including all sub-accounts.
+     * @throws InvalidQualifSecCurrIDException 
+     * @see KMyMoneyAccount#getBalanceRecursive(Date, Currency)
+     */
+    FixedPointNumber getBalanceRecursive(LocalDate date, KMMQualifSecCurrID secCurrID) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     /**
      * Ignores accounts for which this conversion is not possible.
@@ -359,18 +378,18 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @throws InvalidQualifSecCurrTypeException 
      * @see KMyMoneyAccount#getBalanceRecursive(LocalDate)
      */
-    FixedPointNumber getBalanceRecursive(final LocalDate date, final Currency curr) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    FixedPointNumber getBalanceRecursive(LocalDate date, Currency curr) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     /**
-     * Ignores accounts for which this conversion is not possible.
-     *
-     * @param date              ignores transactions after the given date
-     * @param secCurrID         the currency the result shall be in
-     * @return Gets the balance including all sub-accounts.
-     * @throws InvalidQualifSecCurrIDException 
-     * @see KMyMoneyAccount#getBalanceRecursive(Date, Currency)
+     * 
+     * @param date
+     * @param secID
+     * @return
+     * @throws InvalidQualifSecCurrTypeException
+     * @throws InvalidQualifSecCurrIDException
+     * @throws KMMIDNotSetException 
      */
-    FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMQualifSecCurrID secCurrID) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    FixedPointNumber getBalanceRecursive(LocalDate date, KMMSecID secID) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException, KMMIDNotSetException;
 
     // ----------------------------
 
@@ -393,6 +412,6 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
-    String getBalanceRecursiveFormatted(final LocalDate date) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    String getBalanceRecursiveFormatted(LocalDate date) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
 }

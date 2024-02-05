@@ -455,6 +455,14 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 	return trxMgr.getTransactionSplits();
     }
 
+    public Collection<KMyMoneyTransactionSplitImpl> getTransactionSplits_readAfresh() {
+	return trxMgr.getTransactionSplits_readAfresh();
+    }
+
+    public Collection<KMyMoneyTransactionSplitImpl> getTransactionSplits_readAfresh(final KMMTrxID trxID) {
+	return trxMgr.getTransactionSplits_readAfresh(trxID);
+    }
+
     // ---------------------------------------------------------------
 
     @Override

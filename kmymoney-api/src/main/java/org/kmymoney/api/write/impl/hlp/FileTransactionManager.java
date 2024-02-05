@@ -25,7 +25,7 @@ public class FileTransactionManager extends org.kmymoney.api.read.impl.hlp.FileT
 	@Override
 	protected KMyMoneyTransactionImpl createTransaction(final TRANSACTION jwsdpTrx) {
 		KMyMoneyWritableTransactionImpl trx = new KMyMoneyWritableTransactionImpl(jwsdpTrx, kmmFile);
-		LOGGER.debug("Generated new writable transaction: " + trx.getID());
+		LOGGER.debug("createTransaction: Generated new writable transaction: " + trx.getID());
 		return trx;
 	}
 
@@ -38,7 +38,7 @@ public class FileTransactionManager extends org.kmymoney.api.read.impl.hlp.FileT
 //	    final boolean addSpltToInvc)  throws IllegalArgumentException {
 //	KMyMoneyWritableTransactionSplitImpl splt = new KMyMoneyWritableTransactionSplitImpl(jwsdpTrxSplt, trx, 
 //                								           addSpltToAcct, addSpltToInvc);
-//	LOGGER.debug("Generated new writable transaction split: " + splt.getID());
+//	LOGGER.debug("createTransactionSplit: Generated new writable transaction split: " + splt.getID());
 //	return splt;
 //    }
 

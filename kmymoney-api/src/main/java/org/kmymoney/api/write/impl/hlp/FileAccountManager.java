@@ -25,7 +25,7 @@ public class FileAccountManager extends org.kmymoney.api.read.impl.hlp.FileAccou
 	@Override
 	protected KMyMoneyAccountImpl createAccount(final ACCOUNT jwsdpAcct) {
 		KMyMoneyWritableAccountImpl acct = new KMyMoneyWritableAccountImpl(jwsdpAcct, (KMyMoneyWritableFileImpl) kmmFile);
-		LOGGER.debug("Generated new writable account: " + acct.getID());
+		LOGGER.debug("createAccount: Generated new writable account: " + acct.getID());
 		return acct;
 	}
 

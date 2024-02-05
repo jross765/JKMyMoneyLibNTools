@@ -288,18 +288,23 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      * @see KMyMoneyTransaction#getSplits()
      */
     public List<KMyMoneyTransactionSplit> getSplits() {
+    	return getSplits(false);
+    }
+
+    public List<KMyMoneyTransactionSplit> getSplits(final boolean addToAcct) {
 	if (mySplits == null) {
-	    initSplits();
+	    initSplits(addToAcct);
 	}
 	return mySplits;
     }
 
-    private void initSplits() {
+    private void initSplits(final boolean addToAcct) {
 	    List<SPLIT> jwsdpSplits = jwsdpPeer.getSPLITS().getSPLIT();
 
 	    mySplits = new ArrayList<KMyMoneyTransactionSplit>();
 	    for (SPLIT element : jwsdpSplits) {
-		mySplits.add(createSplit(element));
+		mySplits.add(createSplit(element,
+								 addToAcct));
 	    }
     }
 
@@ -309,8 +314,11 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      * @param jwsdpSplt the jaxb-data
      * @return the new split-instance
      */
-    protected KMyMoneyTransactionSplitImpl createSplit(final SPLIT jwsdpSplt) {
-	return new KMyMoneyTransactionSplitImpl(jwsdpSplt, kmmFile, this);
+    protected KMyMoneyTransactionSplitImpl createSplit(
+    		final SPLIT jwsdpSplt, 
+    		final boolean addToAcct) {
+	return new KMyMoneyTransactionSplitImpl(jwsdpSplt, this, 
+											addToAcct);
     }
 
     /**

@@ -31,6 +31,12 @@ public class KMMQualifSpltID {
     
     // ---------------------------------------------------------------
 
+	public boolean isSet() {
+		return ( trxID.isSet() && spltID.isSet() );
+	}
+
+    // ---------------------------------------------------------------
+
     public KMMTrxID getTransactionID() {
         return trxID;
     }

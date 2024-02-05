@@ -30,7 +30,7 @@ public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceMa
 	@Override
 	protected KMyMoneyPricePairImpl createPricePair(final PRICEPAIR jwsdpPricePair) {
 		KMyMoneyWritablePricePairImpl prcPair = new KMyMoneyWritablePricePairImpl((KMyMoneyWritableFileImpl) kmmFile);
-		LOGGER.debug("Generated new writable price pair: " + prcPair.getID());
+		LOGGER.debug("createPricePair: Generated new writable price pair: " + prcPair.getID());
 		return prcPair;
 	}
 
@@ -44,7 +44,7 @@ public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceMa
 		KMyMoneyWritablePriceImpl prc = new KMyMoneyWritablePriceImpl(
 				new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) pricePair), 
 				jwsdpPrc, (KMyMoneyWritableFileImpl) kmmFile);
-		LOGGER.debug("Generated new writable price: " + prc.getID());
+		LOGGER.debug("createPrice: Generated new writable price: " + prc.getID());
 		return prc;
 	}
 
@@ -52,7 +52,7 @@ public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceMa
 		KMyMoneyWritablePriceImpl prc = new KMyMoneyWritablePriceImpl(
 				pricePair, 
 				jwsdpPrc, (KMyMoneyWritableFileImpl) kmmFile);
-		LOGGER.debug("Generated new writable price: " + prc.getID());
+		LOGGER.debug("createPrice: Generated new writable price: " + prc.getID());
 		return prc;
 	}
 

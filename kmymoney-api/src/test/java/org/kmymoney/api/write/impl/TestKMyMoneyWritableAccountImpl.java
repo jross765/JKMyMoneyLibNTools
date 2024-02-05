@@ -1,4 +1,4 @@
-package org.kmymoney.api.read.impl;
+package org.kmymoney.api.write.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -8,69 +8,94 @@ import java.time.LocalDate;
 import java.util.Currency;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.api.basetypes.simple.KMMAcctID;
 import org.kmymoney.api.read.KMyMoneyAccount;
-import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.api.read.impl.TestKMyMoneyAccountImpl;
+import org.kmymoney.api.read.impl.aux.KMMFileStats;
+import org.kmymoney.api.write.KMyMoneyWritableAccount;
 
 import junit.framework.JUnit4TestAdapter;
 
-public class TestKMyMoneyAccountImpl {
-	public static final KMMComplAcctID ACCT_1_ID = new KMMComplAcctID("A000004"); // Asset:Girokonto
-	public static final KMMComplAcctID ACCT_2_ID = new KMMComplAcctID("A000062"); // Asset:Finanzanlagen::Depot RaiBa
-	public static final KMMComplAcctID ACCT_3_ID = new KMMComplAcctID("A000049"); // Fremdkapital
-	public static final KMMComplAcctID ACCT_4_ID = new KMMComplAcctID("A000064"); // Aktiva:Depots:Depot RaiBa:DE0007100000 Mercedes-Benz
-
+public class TestKMyMoneyWritableAccountImpl {
+    public static final KMMComplAcctID ACCT_1_ID = TestKMyMoneyAccountImpl.ACCT_1_ID;
+    public static final KMMComplAcctID ACCT_2_ID = TestKMyMoneyAccountImpl.ACCT_2_ID;
+    public static final KMMComplAcctID ACCT_3_ID = TestKMyMoneyAccountImpl.ACCT_3_ID;
+    public static final KMMComplAcctID ACCT_4_ID = TestKMyMoneyAccountImpl.ACCT_4_ID;
+    
 	// Top-level accounts
-	public static final KMMComplAcctID ACCT_10_ID = KMMComplAcctID.get(KMMComplAcctID.Top.ASSET);
-	public static final KMMComplAcctID ACCT_11_ID = KMMComplAcctID.get(KMMComplAcctID.Top.LIABILITY);
-	public static final KMMComplAcctID ACCT_12_ID = KMMComplAcctID.get(KMMComplAcctID.Top.INCOME);
-	public static final KMMComplAcctID ACCT_13_ID = KMMComplAcctID.get(KMMComplAcctID.Top.EXPENSE);
-	public static final KMMComplAcctID ACCT_14_ID = KMMComplAcctID.get(KMMComplAcctID.Top.EQUITY);
+    public static final KMMComplAcctID ACCT_10_ID = TestKMyMoneyAccountImpl.ACCT_10_ID;
+    public static final KMMComplAcctID ACCT_11_ID = TestKMyMoneyAccountImpl.ACCT_11_ID;
+    public static final KMMComplAcctID ACCT_12_ID = TestKMyMoneyAccountImpl.ACCT_12_ID;
+    public static final KMMComplAcctID ACCT_13_ID = TestKMyMoneyAccountImpl.ACCT_13_ID;
+    public static final KMMComplAcctID ACCT_14_ID = TestKMyMoneyAccountImpl.ACCT_14_ID;
 
-	// -----------------------------------------------------------------
+    // -----------------------------------------------------------------
 
-	private KMyMoneyFile kmmFile = null;
-	private KMyMoneyAccount acct = null;
+    private KMyMoneyWritableFileImpl kmmInFile = null;
+    private KMyMoneyFileImpl kmmOutFile = null;
 
-	// -----------------------------------------------------------------
+    private KMMFileStats kmmInFileStats = null;
+    private KMMFileStats kmmOutFileStats = null;
 
-	public static void main(String[] args) throws Exception {
-		junit.textui.TestRunner.run(suite());
+    private KMMAcctID newID = null;
+
+    // https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
+    @SuppressWarnings("exports")
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+
+    // -----------------------------------------------------------------
+
+    public static void main(String[] args) throws Exception {
+	junit.textui.TestRunner.run(suite());
+    }
+
+    @SuppressWarnings("exports")
+    public static junit.framework.Test suite() {
+	return new JUnit4TestAdapter(TestKMyMoneyWritableAccountImpl.class);
+    }
+
+    @Before
+    public void initialize() throws Exception {
+	ClassLoader classLoader = getClass().getClassLoader();
+	// URL kmmFileURL = classLoader.getResource(Const.KMM_FILENAME);
+	// System.err.println("KMyMoney test file resource: '" + kmmFileURL + "'");
+	InputStream kmmInFileStream = null;
+	try {
+	    kmmInFileStream = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME_IN);
+	} catch (Exception exc) {
+	    System.err.println("Cannot generate input stream from resource");
+	    return;
 	}
 
-	@SuppressWarnings("exports")
-	public static junit.framework.Test suite() {
-		return new JUnit4TestAdapter(TestKMyMoneyAccountImpl.class);
+	try {
+	    kmmInFile = new KMyMoneyWritableFileImpl(kmmInFileStream);
+	} catch (Exception exc) {
+	    System.err.println("Cannot parse KMyMoney in-file");
+	    exc.printStackTrace();
 	}
+    }
 
-	@Before
-	public void initialize() throws Exception {
-		ClassLoader classLoader = getClass().getClassLoader();
-		// URL kmmFileURL = classLoader.getResource(Const.GCSH_FILENAME);
-		// System.err.println("KMyMoney test file resource: '" + kmmFileURL + "'");
-		InputStream kmmFileStream = null;
-		try {
-			kmmFileStream = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME);
-		} catch (Exception exc) {
-			System.err.println("Cannot generate input stream from resource");
-			return;
-		}
-
-		try {
-			kmmFile = new KMyMoneyFileImpl(kmmFileStream);
-		} catch (Exception exc) {
-			System.err.println("Cannot parse KMyMoney file");
-			exc.printStackTrace();
-		}
-	}
-
-	// -----------------------------------------------------------------
+    // -----------------------------------------------------------------
+    // PART 1: Read existing objects as modifiable ones
+    // (and see whether they are fully symmetrical to their read-only
+    // counterparts)
+    // -----------------------------------------------------------------
+    // Cf. TestKMyMoneyAccountImpl.test01_xyz
+    //
+    // Check whether the KMyMoneyWritableAccount objects returned by
+    // KMyMoneyWritableFileImpl.getWritableAccountByID() are actually
+    // complete (as complete as returned be KMyMoneyFileImpl.getAccountByID().
 
 	@Test
 	public void test01_1() throws Exception {
-		acct = kmmFile.getAccountByID(ACCT_1_ID);
+		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_1_ID);
 		assertNotEquals(null, acct);
 
 		assertEquals(ACCT_1_ID, acct.getID());
@@ -93,7 +118,7 @@ public class TestKMyMoneyAccountImpl {
 
 	@Test
 	public void test01_2() throws Exception {
-		acct = kmmFile.getAccountByID(ACCT_2_ID);
+		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_2_ID);
 		assertNotEquals(null, acct);
 
 		assertEquals(ACCT_2_ID, acct.getID());
@@ -121,7 +146,7 @@ public class TestKMyMoneyAccountImpl {
 
 	@Test
 	public void test01_3() throws Exception {
-		acct = kmmFile.getAccountByID(ACCT_3_ID);
+		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_3_ID);
 		assertNotEquals(null, acct);
 
 		assertEquals(ACCT_3_ID, acct.getID());
@@ -146,7 +171,7 @@ public class TestKMyMoneyAccountImpl {
 
 	@Test
 	public void test01_4() throws Exception {
-		acct = kmmFile.getAccountByID(ACCT_4_ID);
+		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_4_ID);
 		assertNotEquals(null, acct);
 
 		assertEquals(ACCT_4_ID, acct.getID());
@@ -169,10 +194,10 @@ public class TestKMyMoneyAccountImpl {
 
 	// -----------------------------------------------------------------
 	// Top-level accounts
-
+	
 	@Test
 	public void test01_10() throws Exception {
-		acct = kmmFile.getAccountByID(ACCT_10_ID);
+		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_10_ID);
 		assertNotEquals(null, acct);
 
 		assertEquals(ACCT_10_ID, acct.getID());
@@ -187,7 +212,7 @@ public class TestKMyMoneyAccountImpl {
 		Object[] acctArr = acct.getChildren().toArray();
 		assertEquals("A000002", ((KMyMoneyAccount) acctArr[0]).getID().toString());
 		assertEquals("A000061", ((KMyMoneyAccount) acctArr[1]).getID().toString());
-
+		
 		assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals(15597.50, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
@@ -196,7 +221,7 @@ public class TestKMyMoneyAccountImpl {
 
 	@Test
 	public void test01_11() throws Exception {
-		acct = kmmFile.getAccountByID(ACCT_11_ID);
+		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_11_ID);
 		assertNotEquals(null, acct);
 
 		assertEquals(ACCT_11_ID, acct.getID());
@@ -219,7 +244,7 @@ public class TestKMyMoneyAccountImpl {
 
 	@Test
 	public void test01_12() throws Exception {
-		acct = kmmFile.getAccountByID(ACCT_12_ID);
+		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_12_ID);
 		assertNotEquals(null, acct);
 
 		assertEquals(ACCT_12_ID, acct.getID());
@@ -246,7 +271,7 @@ public class TestKMyMoneyAccountImpl {
 
 	@Test
 	public void test01_13() throws Exception {
-		acct = kmmFile.getAccountByID(ACCT_13_ID);
+		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_13_ID);
 		assertNotEquals(null, acct);
 
 		assertEquals(ACCT_13_ID, acct.getID());
@@ -273,7 +298,7 @@ public class TestKMyMoneyAccountImpl {
 
 	@Test
 	public void test01_14() throws Exception {
-		acct = kmmFile.getAccountByID(ACCT_14_ID);
+		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_14_ID);
 		assertNotEquals(null, acct);
 
 		assertEquals(ACCT_14_ID, acct.getID());
@@ -291,5 +316,23 @@ public class TestKMyMoneyAccountImpl {
 
 		assertEquals(0, acct.getTransactions().size());
 	}
+
+    // -----------------------------------------------------------------
+    // PART 2: Modify existing objects
+    // -----------------------------------------------------------------
+    // Check whether the KMyMoneyWritableAccount objects returned by
+    // can actually be modified -- both in memory and persisted in file.
+	
+	// ::TODO
+
+    // -----------------------------------------------------------------
+    // PART 3: Create new objects
+    // -----------------------------------------------------------------
+
+    // ------------------------------
+    // PART 3.1: High-Level
+    // ------------------------------
+
+	// ::TODO
 
 }

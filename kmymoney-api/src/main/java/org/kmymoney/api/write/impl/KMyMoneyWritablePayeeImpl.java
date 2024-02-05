@@ -85,7 +85,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 		}
 
 		if ( ! newID.isSet() ) {
-			throw new IllegalArgumentException("empty ID given");
+			throw new IllegalArgumentException("unset ID given");
 		}
     
         ObjectFactory factory = file.getObjectFactory();

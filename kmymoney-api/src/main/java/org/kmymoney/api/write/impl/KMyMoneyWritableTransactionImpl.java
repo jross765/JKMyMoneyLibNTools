@@ -112,10 +112,12 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 * @return the new split-instance
 	 */
 	@Override
-	protected KMyMoneyTransactionSplitImpl createSplit(final SPLIT splt) {
+	protected KMyMoneyTransactionSplitImpl createSplit(
+			final SPLIT splt,
+		    final boolean addToAcct) {
 		KMyMoneyWritableTransactionSplitImpl kmmTrxSplt = 
-				new KMyMoneyWritableTransactionSplitImpl(splt, 
-						                                 getWritableKMyMoneyFile(), this);
+				new KMyMoneyWritableTransactionSplitImpl(splt, this,
+						                                 addToAcct);
 		if ( helper.getPropertyChangeSupport() != null ) {
 			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableSplits());
 		}
@@ -147,7 +149,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		}
 
 		if ( ! newID.isSet() ) {
-			throw new IllegalArgumentException("empty ID given");
+			throw new IllegalArgumentException("unset ID given");
 		}
 
 		// ObjectFactory fact = file.getObjectFactory();
@@ -432,5 +434,50 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	public KMyMoneyWritableFileImpl getKMyMoneyFile() {
 		return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
 	}
+	
+	// ---------------------------------------------------------------
+
+    @Override
+    public String toString() {
+	StringBuffer buffer = new StringBuffer();
+	buffer.append("KMyMoneyWritableTransactionImpl [");
+
+	buffer.append("id=");
+	buffer.append(getID());
+
+	// ::TODO: That only works in simple cases --
+	// need a more generic approach
+	buffer.append(", amount=");
+	try {
+	    buffer.append(getFirstSplit().getValueFormatted());
+	} catch (SplitNotFoundException e) {
+	    buffer.append("ERROR");
+	}
+
+	buffer.append(", description='");
+	buffer.append(getMemo() + "'");
+
+	buffer.append(", #splits=");
+	buffer.append(getSplitsCount());
+
+	buffer.append(", post-date=");
+	try {
+	    buffer.append(getDatePosted().format(DATE_POSTED_FORMAT));
+	} catch (Exception e) {
+	    buffer.append(getDatePosted().toString());
+	}
+
+	buffer.append(", entry-date=");
+	try {
+	    buffer.append(getEntryDate().format(DATE_ENTERED_FORMAT));
+	} catch (Exception e) {
+	    buffer.append(getEntryDate().toString());
+	}
+
+	buffer.append("]");
+
+	return buffer.toString();
+    }
+
 
 }

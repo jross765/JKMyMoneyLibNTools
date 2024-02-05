@@ -8,6 +8,7 @@ import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
@@ -142,6 +143,17 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 */
 	void removeTransaction(KMyMoneyWritableTransaction trx);
 
+	// ---------------------------------------------------------------
+
+	/**
+	 * 
+	 * @param spltID
+	 * @return
+	 */
+	KMyMoneyWritableTransactionSplit getWritableTransactionSplitByID(KMMQualifSpltID spltID);
+	
+	// ::TODO
+	
 	// ---------------------------------------------------------------
 
 	/**

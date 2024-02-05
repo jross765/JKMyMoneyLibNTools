@@ -109,17 +109,17 @@ public class FileAccountManager {
 
 		SortedSet<KMyMoneyAccount> retval = new TreeSet<KMyMoneyAccount>();
 
-		for ( Object element : acctMap.values() ) {
-			KMyMoneyAccount account = (KMyMoneyAccount) element;
-
-			KMMComplAcctID parentID = account.getParentAccountID();
-			if ( parentID == null ) {
+		for ( KMyMoneyAccount acct : acctMap.values() ) {
+			KMMComplAcctID prntID = acct.getParentAccountID();
+			if ( prntID == null ) {
 				if ( acctID == null ) {
-					retval.add((KMyMoneyAccount) account);
+					retval.add((KMyMoneyAccount) acct);
+//				} else /* if ( ! acctID.isSet() ) ::TODO */ {
+//					retval.add((KMyMoneyAccount) acct);
 				}
 			} else {
-				if ( parentID.equals(acctID) ) {
-					retval.add((KMyMoneyAccount) account);
+				if ( prntID.equals(acctID) ) {
+					retval.add((KMyMoneyAccount) acct);
 				}
 			}
 		}
@@ -199,10 +199,10 @@ public class FileAccountManager {
 		}
 		Pattern pattern = Pattern.compile(nameRegEx);
 
-		for ( KMyMoneyAccount account : acctMap.values() ) {
-			Matcher matcher = pattern.matcher(account.getName());
+		for ( KMyMoneyAccount acct : acctMap.values() ) {
+			Matcher matcher = pattern.matcher(acct.getName());
 			if ( matcher.matches() ) {
-				return account;
+				return acct;
 			}
 		}
 
@@ -274,9 +274,9 @@ public class FileAccountManager {
 		try {
 			Collection<KMyMoneyAccount> retval = new TreeSet<KMyMoneyAccount>();
 
-			for ( KMyMoneyAccount account : getAccounts() ) {
-				if ( account.getParentAccountID() == null ) {
-					retval.add(account);
+			for ( KMyMoneyAccount acct : getAccounts() ) {
+				if ( acct.getParentAccountID() == null ) {
+					retval.add(acct);
 				}
 
 			}

@@ -100,7 +100,7 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 		}
 
 		if ( ! newID.isSet() ) {
-			throw new IllegalArgumentException("empty ID given");
+			throw new IllegalArgumentException("unset ID given");
 		}
 
 		SECURITY jwsdpSec = file.createSecurityType();

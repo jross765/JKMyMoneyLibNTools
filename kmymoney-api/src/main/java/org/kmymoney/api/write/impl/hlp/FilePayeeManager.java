@@ -25,7 +25,7 @@ public class FilePayeeManager extends org.kmymoney.api.read.impl.hlp.FilePayeeMa
 	@Override
 	protected KMyMoneyPayeeImpl createPayee(final PAYEE jwsdpPye) {
 		KMyMoneyWritablePayeeImpl pye = new KMyMoneyWritablePayeeImpl(jwsdpPye, (KMyMoneyWritableFileImpl) kmmFile);
-		LOGGER.debug("Generated new writable payee: " + pye.getID());
+		LOGGER.debug("createPayee: Generated new writable payee: " + pye.getID());
 		return pye;
 	}
 

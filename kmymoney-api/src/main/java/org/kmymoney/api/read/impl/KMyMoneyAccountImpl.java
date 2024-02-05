@@ -12,7 +12,6 @@ import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -28,9 +27,11 @@ import org.slf4j.LoggerFactory;
  * Implementation of KMyMoneyAccount that used a
  * jwsdp-generated backend.
  */
-public class KMyMoneyAccountImpl extends SimpleAccount 
+public class KMyMoneyAccountImpl extends SimpleAccount
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyAccountImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyAccountImpl.class);
+
+    private static final String PREFIX_SECURITY = "E0";  // ::MAGIC
 
     // ---------------------------------------------------------------
 
@@ -75,113 +76,6 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     // ---------------------------------------------------------------
 
     /**
-     * @see KMyMoneyAccount#getID()
-     */
-    public KMMComplAcctID getID() {
-	// CAUTION: In the KMyMoney file, the prefix for the special top-level accounts
-	// is always "AStd::" (two colons).
-	// However, the method jwsdpPeer.getId() under certain circumstances returns this 
-	// special ID with "__" (two underscores). (I cannot explain why at the moment; 
-	// it actually should not happen.) In these cases, we have to replace the 
-	// double-underscore by double-colon
-	if ( jwsdpPeer.getId().startsWith(KMMComplAcctID.SPEC_PREFIX.replace("::", "__")))
-	    return new KMMComplAcctID(jwsdpPeer.getId().replace("__", "::"));
-	else
-	    return new KMMComplAcctID(jwsdpPeer.getId());
-    }
-
-    /**
-     * @see KMyMoneyAccount#getParentAccountID()
-     */
-    public KMMComplAcctID getParentAccountID() {
-	try {
-	    // Cf. getID()
-	    if ( jwsdpPeer.getParentaccount().startsWith(KMMComplAcctID.SPEC_PREFIX.replace("::", "__")))
-		return new KMMComplAcctID(jwsdpPeer.getParentaccount().replace("__", "::"));
-	    else
-		return new KMMComplAcctID(jwsdpPeer.getParentaccount());
-	} catch ( Exception exc ) {
-	    return null;
-	}
-    }
-
-    /**
-     * @see KMyMoneyAccount#getChildren()
-     */
-    public Collection<KMyMoneyAccount> getChildren() {
-	return getKMyMoneyFile().getAccountsByParentID(getID());
-    }
-
-    /**
-     * @see KMyMoneyAccount#getName()
-     */
-    public String getName() {
-	return jwsdpPeer.getName();
-    }
-
-    public String getMemo() {
-	return jwsdpPeer.getDescription();
-    }
-
-    public String getNumber() {
-	return jwsdpPeer.getNumber();
-    }
-
-    public Type getType() throws UnknownAccountTypeException {
-	
-	BigInteger typeVal = jwsdpPeer.getType();
-	
-	return Type.valueOff(typeVal.intValue());
-    }
-
-    /**
-     * @see KMyMoneyAccount#getTransactionSplits()
-     */
-    public List<KMyMoneyTransactionSplit> getTransactionSplits() {
-
-	if (mySplitsNeedSorting) {
-	    Collections.sort(mySplits);
-	    mySplitsNeedSorting = false;
-	}
-
-	return mySplits;
-    }
-
-    /**
-     * @see KMyMoneyAccount#addTransactionSplit(KMyMoneyTransactionSplit)
-     */
-    public void addTransactionSplit(final KMyMoneyTransactionSplit split) {
-
-	KMMQualifSpltID kmmSpltID = new KMMQualifSpltID(split.getTransaction().getID(), split.getID());
-	KMyMoneyTransactionSplit old = getTransactionSplitByID(kmmSpltID);
-	if (old != null) {
-	    if (old != split) {
-		IllegalStateException ex = new IllegalStateException("DEBUG");
-		ex.printStackTrace();
-		replaceTransactionSplit(old, split);
-	    }
-	} else {
-	    mySplits.add(split);
-	    mySplitsNeedSorting = true;
-	}
-    }
-
-    /**
-     * For internal use only.
-     *
-     * @param transactionSplitByID -
-     * @param impl                 -
-     */
-    private void replaceTransactionSplit(final KMyMoneyTransactionSplit transactionSplitByID,
-	    final KMyMoneyTransactionSplit impl) {
-	if (!mySplits.remove(transactionSplitByID)) {
-	    throw new IllegalArgumentException("old object not found!");
-	}
-
-	mySplits.add(impl);
-    }
-
-    /**
      * @return the JWSDP-object we are wrapping.
      */
     @SuppressWarnings("exports")
@@ -200,20 +94,168 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 	jwsdpPeer = newPeer;
     }
 
+    // ---------------------------------------------------------------
+
+    /**
+     * @see KMyMoneyAccount#getID()
+     */
+    public KMMComplAcctID getID() {
+    	// CAUTION: In the KMyMoney file, the prefix for the special top-level accounts
+    	// is always "AStd::" (two colons).
+    	// However, the method jwsdpPeer.getId() under certain circumstances returns this 
+    	// special ID with "__" (two underscores). (I cannot explain why at the moment; 
+    	// it actually should not happen.) In these cases, we have to replace the 
+    	// double-underscore by double-colon
+    	if ( jwsdpPeer.getId().startsWith(KMMComplAcctID.SPEC_PREFIX.replace("::", "__")))
+    		return new KMMComplAcctID(jwsdpPeer.getId().replace("__", "::"));
+    	else
+    		return new KMMComplAcctID(jwsdpPeer.getId());
+    }
+    
+    // ---------------------------------------------------------------
+
+    /**
+     * @see KMyMoneyAccount#getParentAccountID()
+     */
+    public KMMComplAcctID getParentAccountID() {
+    	try {
+    		// Cf. getID()
+    		if ( jwsdpPeer.getParentaccount().startsWith(KMMComplAcctID.SPEC_PREFIX.replace("::", "__")))
+    			return new KMMComplAcctID(jwsdpPeer.getParentaccount().replace("__", "::"));
+    		else
+    			return new KMMComplAcctID(jwsdpPeer.getParentaccount());
+    	} catch ( Exception exc ) {
+    		return null;
+    	}
+    }
+
+    /**
+     * @see KMyMoneyAccount#getChildren()
+     */
     @Override
-    public KMMQualifSecCurrID getSecCurrID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public Collection<KMyMoneyAccount> getChildren() {
+    	return getKMyMoneyFile().getAccountsByParentID(getID());
+    }
 
+    @Override
+    public Collection<KMyMoneyAccount> getChildrenRecursive() {
+    	return getChildrenRecursiveCore(getChildren());
+    }
+
+    private static Collection<KMyMoneyAccount> getChildrenRecursiveCore(Collection<KMyMoneyAccount> accts) {
+    	Collection<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
+    	
+    	for ( KMyMoneyAccount acct : accts ) {
+    		result.add(acct);
+    		for ( KMyMoneyAccount childAcct : getChildrenRecursiveCore(acct.getChildren()) ) {
+    			result.add(childAcct);
+    		}
+    	}
+    	
+    	return result;
+    }
+
+    // ---------------------------------------------------------------
+
+    /**
+     * @see KMyMoneyAccount#getName()
+     */
+    public String getName() {
+    	return jwsdpPeer.getName();
+    }
+
+    public String getMemo() {
+    	return jwsdpPeer.getDescription();
+    }
+
+    public String getNumber() {
+    	return jwsdpPeer.getNumber();
+    }
+
+    private BigInteger getTypeBigInt() throws UnknownAccountTypeException {
+    	return jwsdpPeer.getType();
+    }
+
+    public Type getType() throws UnknownAccountTypeException {
+    	try {
+    	    Type result = Type.valueOff( getTypeBigInt().intValue() );
+    	    return result;
+    	} catch ( Exception exc ) {
+    	    throw new UnknownAccountTypeException();
+    	}
+    }
+
+    @Override
+	public KMMQualifSecCurrID getSecCurrID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	
 	KMMQualifSecCurrID result = null;
-
-	if ( jwsdpPeer.getCurrency().startsWith("E0") ) { // ::MAGIC
+	
+	if ( jwsdpPeer.getCurrency().startsWith(PREFIX_SECURITY) ) {
 	    result = new KMMQualifSecID(jwsdpPeer.getCurrency());
 	} else {
 	    result = new KMMQualifCurrID(jwsdpPeer.getCurrency());
 	}
-
+	
 	return result;
+	}
+
+	/**
+     * @see KMyMoneyAccount#getTransactionSplits()
+     */
+    @Override
+    public List<KMyMoneyTransactionSplit> getTransactionSplits() {
+
+    	if (mySplitsNeedSorting) {
+    		Collections.sort(mySplits);
+    		mySplitsNeedSorting = false;
+    	}
+
+    	return mySplits;
     }
-    
+
+    /**
+     * @see KMyMoneyAccount#addTransactionSplit(KMyMoneyTransactionSplit)
+     */
+    public void addTransactionSplit(final KMyMoneyTransactionSplit splt) {
+	KMyMoneyTransactionSplit old = getTransactionSplitByID(splt.getQualifID());
+	if ( old != null ) {
+	    // There already is a split with that ID
+	    if ( ! old.equals(splt) ) {
+			System.err.println("addTransactionSplit: New Transaction Split object with same ID, needs to be replaced: " + 
+					splt.getQualifID() + "[" + splt.getClass().getName() + "] and " + 
+					old.getQualifID() + "[" + old.getClass().getName() + "]\n" + 
+					"new=" + splt.toString() + "\n" + 
+					"old=" + old.toString());
+			LOGGER.error("addTransactionSplit: New Transaction Split object with same ID, needs to be replaced: " + 
+					splt.getQualifID() + "[" + splt.getClass().getName() + "] and " + 
+					old.getQualifID() + "[" + old.getClass().getName() + "]\n" + 
+					"new=" + splt.toString() + "\n" + 
+					"old=" + old.toString());
+			IllegalStateException exc = new IllegalStateException("DEBUG");
+			exc.printStackTrace();
+			replaceTransactionSplit(old, splt);
+	    }
+	} else {
+	    // There is no split with that ID yet
+	    mySplits.add(splt);
+	    mySplitsNeedSorting = true;
+	}
+    }
+
+    /**
+     * For internal use only.
+     *
+     * @param splt
+     */
+    private void replaceTransactionSplit(final KMyMoneyTransactionSplit splt,
+	    final KMyMoneyTransactionSplit impl) {
+    	if ( ! mySplits.remove(splt) ) {
+    		throw new IllegalArgumentException("old object not found!");
+    	}
+
+    	mySplits.add(impl);
+    }
+
     // ---------------------------------------------------------------
 
 	/**

@@ -22,8 +22,7 @@ import org.kmymoney.api.read.hlp.KMyMoneyObject;
  * 
  * @see KMyMoneyTransaction
  */
-public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransactionSplit>,
-                                                  KMyMoneyObject
+public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransactionSplit>
 {
 
     // For the following states cf.:

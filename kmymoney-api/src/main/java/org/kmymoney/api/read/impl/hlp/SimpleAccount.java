@@ -17,6 +17,8 @@ import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
+import org.kmymoney.api.basetypes.simple.KMMIDNotSetException;
+import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.currency.ComplexPriceTable;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -41,6 +43,8 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	// ----------------------------
 
 	private static NumberFormat currencyFormat = null;
+
+	private volatile PropertyChangeSupport myPtyChg = null;
 
 	// ---------------------------------------------------------------
 
@@ -76,8 +80,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 			return true;
 		}
 
-		for ( Object element : getChildren() ) {
-			KMyMoneyAccount child = (KMyMoneyAccount) element;
+		for ( KMyMoneyAccount child : getChildren() ) {
 			if ( this == child ) {
 				return true;
 			}
@@ -93,12 +96,8 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		return getQualifiedName();
 	}
 
-	public FixedPointNumber getBalance() {
-		return getBalance(LocalDate.now());
-	}
-
 	/**
-	 * Get name including the name of the parent.accounts.
+	 * Get name including the name of the parent accounts.
 	 */
 	public String getQualifiedName() {
 		KMyMoneyAccount acc = getParentAccount();
@@ -108,8 +107,9 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 			KMMComplAcctID parentID = getParentAccountID();
 			if ( parentID == null ) {
 				return getName();
-			} else if ( parentID.toString().equals("") || parentID.toString().equals("(unset)")
-					|| parentID.toString().equals("(unknown)") ) {
+			} else if ( parentID.toString().equals("") ||
+						parentID.toString().equals("(unset)") ||
+						parentID.toString().equals("(unknown)") ) {
 				return getName();
 			} else {
 				return getName();
@@ -130,11 +130,11 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 //	    return false;
 
 		// Instead (and just as good):
-		if ( getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.ASSET))
-				|| getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.LIABILITY))
-				|| getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.INCOME))
-				|| getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.EXPENSE))
-				|| getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.EQUITY)) ) {
+		if ( getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.ASSET)) || 
+			 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.LIABILITY)) || 
+			 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.INCOME)) || 
+			 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.EXPENSE)) || 
+			 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.EQUITY)) ) {
 			return true;
 		} else {
 			return false;
@@ -148,8 +148,9 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		KMMComplAcctID parentID = getParentAccountID();
 		if ( parentID == null ) {
 			return null;
-		} else if ( parentID.toString().equals("") || parentID.toString().equals("(unset)")
-				|| parentID.toString().equals("(unknown)") ) {
+		} else if ( parentID.toString().equals("") || 
+				    parentID.toString().equals("(unset)") || 
+				    parentID.toString().equals("(unknown)") ) {
 			return null;
 		}
 
@@ -160,23 +161,101 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		return getChildren();
 	}
 
-	public FixedPointNumber getBalance(final LocalDate date, final Currency currency)
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	@Override
+	public FixedPointNumber getBalance() {
+		return getBalance(LocalDate.now());
+	}
 
+	@Override
+	public FixedPointNumber getBalance(final LocalDate date) {
+		return getBalance(date, (Collection<KMyMoneyTransactionSplit>) null);
+	}
+
+	/**
+	 * The currency will be the one of this account.
+	 */
+	@Override
+	public FixedPointNumber getBalance(final LocalDate date, Collection<KMyMoneyTransactionSplit> after) {
+	
+		FixedPointNumber balance = new FixedPointNumber();
+	
+		for ( KMyMoneyTransactionSplit splt : getTransactionSplits() ) {
+			if ( date != null && 
+				 after != null ) {
+				if ( splt.getTransaction().getDatePosted().isAfter(date) ) {
+					after.add(splt);
+					continue;
+				}
+			}
+	
+			// the currency of the quantity is the one of the account
+			balance.add(splt.getShares());
+		}
+	
+		return balance;
+	}
+
+	@Override
+	public FixedPointNumber getBalance(final LocalDate date, final KMMQualifSecCurrID secCurrID)
+			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 		FixedPointNumber retval = getBalance(date);
 
 		if ( retval == null ) {
-			LOGGER.warn("SimpleAccount.getBalance() - error creating balance!");
+			LOGGER.error("getBalance: Error creating balance!");
 			return null;
 		}
 
-		if ( currency == null || retval.equals(new FixedPointNumber()) ) {
+		// is conversion needed?
+		if ( getSecCurrID().equals(secCurrID) ) {
+			return retval;
+		}
+	
+		ComplexPriceTable priceTab = getKMyMoneyFile().getCurrencyTable();
+
+		if ( priceTab == null ) {
+			LOGGER.error("getBalance: Cannot transfer "
+					+ "to given currency because we have no currency-table!");
+			return null;
+		}
+	
+		if ( ! priceTab.convertToBaseCurrency(retval, secCurrID) ) {
+			Collection<String> currList = getKMyMoneyFile().getCurrencyTable()
+					.getCurrencies(getSecCurrID().getType());
+			LOGGER.error("getBalance: Cannot transfer " + "from our currency '"
+					+ getSecCurrID().toString() + "' to the base-currency!" + " \n(we know "
+					+ getKMyMoneyFile().getCurrencyTable().getNameSpaces().size() + " currency-namespaces and "
+					+ (currList == null ? "no" : "" + currList.size()) + " currencies in our namespace)");
+			return null;
+		}
+	
+		if ( ! priceTab.convertFromBaseCurrency(retval, secCurrID) ) {
+			LOGGER.error("getBalance: Cannot transfer " + "from base-currenty to given currency '"
+					+ secCurrID.toString() + "'!");
+			return null;
+		}
+	
+		return retval;
+	}
+
+	@Override
+	public FixedPointNumber getBalance(final LocalDate date, final Currency curr)
+			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+
+		FixedPointNumber retval = getBalance(date);
+		
+		if ( retval == null ) {
+			LOGGER.warn("getBalance: Error creating balance!");
+			return null;
+		}
+
+		if ( curr == null ||
+			 retval.equals(new FixedPointNumber()) ) {
 			return retval;
 		}
 
 		// is conversion needed?
 		if ( getSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
-			if ( getSecCurrID().getCode().equals(currency.getCurrencyCode()) ) {
+			if ( getSecCurrID().getCode().equals(curr.getCurrencyCode()) ) {
 				return retval;
 			}
 		}
@@ -184,34 +263,52 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		ComplexPriceTable priceTab = getKMyMoneyFile().getCurrencyTable();
 
 		if ( priceTab == null ) {
-			LOGGER.warn("SimpleAccount.getBalance() - cannot transfer "
+			LOGGER.warn("getBalance: Cannot transfer "
 					+ "to given currency because we have no currency-table!");
 			return null;
 		}
 
-		if ( !priceTab.convertToBaseCurrency(retval, getSecCurrID()) ) {
-			LOGGER.warn("SimpleAccount.getBalance() - cannot transfer " + "from our currency '"
+		if ( ! priceTab.convertToBaseCurrency(retval, getSecCurrID()) ) {
+			LOGGER.warn("getBalance: Cannot transfer " + "from our currency '"
 					+ getSecCurrID().toString() + "' to the base-currency!");
 			return null;
 		}
 
-		if ( !priceTab.convertFromBaseCurrency(retval, new KMMQualifCurrID(currency)) ) {
-			LOGGER.warn("SimpleAccount.getBalance() - cannot transfer " + "from base-currenty to given currency '"
-					+ currency + "'!");
+		if ( ! priceTab.convertFromBaseCurrency(retval, new KMMQualifCurrID(curr)) ) {
+			LOGGER.warn("getBalance: Cannot transfer " + "from base-currenty to given currency '"
+					+ curr + "'!");
 			return null;
 		}
 
 		return retval;
 	}
 
-	public String getBalanceRecursiveFormatted(final LocalDate date)
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-		return getCurrencyFormat().format(getBalanceRecursive(date));
+	@Override
+	public FixedPointNumber getBalance(final KMyMoneyTransactionSplit lastIncludesSplit) {
+	
+		FixedPointNumber balance = new FixedPointNumber();
+	
+		for ( KMyMoneyTransactionSplit split : getTransactionSplits() ) {
+			balance.add(split.getShares());
+	
+			if ( split == lastIncludesSplit ) {
+				break;
+			}
+	
+		}
+	
+		return balance;
 	}
 
-	public String getBalanceRecursiveFormatted()
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-		return getCurrencyFormat().format(getBalanceRecursive());
+	public String getBalanceFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+		return getCurrencyFormat().format(getBalance());
+	}
+
+	public String getBalanceFormatted(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	
+		NumberFormat cf = NumberFormat.getCurrencyInstance(lcl);
+		cf.setCurrency(getCurrency());
+		return cf.format(getBalance());
 	}
 
 	public FixedPointNumber getBalanceRecursive()
@@ -224,37 +321,35 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		return getBalanceRecursive(date, getSecCurrID());
 	}
 
-	public KMyMoneyTransactionSplit getLastSplitBeforeRecursive(final LocalDate date) {
+	public FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMQualifSecCurrID secCurrID)
+			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 
-		KMyMoneyTransactionSplit lastSplit = null;
+		// BEGIN OLD IMPL
+//	    FixedPointNumber retval = getBalance(date, secCurrID);
+//
+//	    if (retval == null) {
+//		retval = new FixedPointNumber();
+//	    }
+//
+//	    for ( KMyMoneyAccount child : getChildren() ) {
+//		retval.add(child.getBalanceRecursive(date, cmdtyCurrID));
+//	    }
+//
+//	    return retval;
+		// END OLD IMPL
 
-		for ( Object element : getTransactionSplits() ) {
-			KMyMoneyTransactionSplit split = (KMyMoneyTransactionSplit) element;
-			if ( date == null || split.getTransaction().getDatePosted().isBefore(date) ) {
-				if ( lastSplit == null || split.getTransaction().getDatePosted()
-						.isAfter(lastSplit.getTransaction().getDatePosted()) ) {
-					lastSplit = split;
-				}
-			}
+		if ( secCurrID.getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
+			return getBalanceRecursive(date, new KMMQualifCurrID(secCurrID.getCode()).getCurrency());
 		}
-
-		for ( Iterator iter = getSubAccounts().iterator(); iter.hasNext(); ) {
-			KMyMoneyAccount account = (KMyMoneyAccount) iter.next();
-			KMyMoneyTransactionSplit split = account.getLastSplitBeforeRecursive(date);
-			if ( split != null && split.getTransaction() != null ) {
-				if ( lastSplit == null || split.getTransaction().getDatePosted()
-						.isAfter(lastSplit.getTransaction().getDatePosted()) ) {
-					lastSplit = split;
-				}
-			}
+		else {
+//			return new FixedPointNumber(999999).negate();
+			return getBalance(date, secCurrID); // CAUTION: This assumes that under a stock account,
+												// there are no children (which sounds sensible,
+												// but there might be special cases)
 		}
-
-		return lastSplit;
 	}
 
-	/*
-	 * Ignores accounts for which this conversion is not possible.
-	 */
+	@Override
 	public FixedPointNumber getBalanceRecursive(final LocalDate date, final Currency curr)
 			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 
@@ -264,106 +359,93 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 			retval = new FixedPointNumber();
 		}
 
-		for ( Object element : getChildren() ) {
-			KMyMoneyAccount child = (KMyMoneyAccount) element;
-			retval.add(child.getBalanceRecursive(date, curr));
+		// CAUTION: As opposed to the sister project JGnucashLib, the following three lines 
+		// work for read-branch (KMyMoneyAccountImpl) but *not* for write-branch 
+		// (KMyMoneyWritableAccountImpl). Don'nt know why, can't explain it...
+//		for ( KMyMoneyAccount child : getChildren() ) {
+//			retval.add(child.getBalanceRecursive(date, curr));
+//		}
+
+		// So here is another implementation which works for both read- and write-branch:
+		for ( KMyMoneyAccount child : getChildrenRecursive() ) {
+			retval.add( child.getBalance(date, curr) );
 		}
 
 		return retval;
 	}
 
-	/**
-	 * Ignores accounts for which this conversion is not possible.
-	 */
-	public FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMQualifSecCurrID secCurrID)
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-
-		// >>>> NO, ABSOLUTE SYMMETRY DOES NOT WORK HERE!
-//	    FixedPointNumber retval = getBalance(date, secCurrID);
-//
-//	    if (retval == null) {
-//		retval = new FixedPointNumber();
-//	    }
-//
-//	    for ( KMyMoneyAccount child : getChildren() ) {
-//		retval.add(child.getBalanceRecursive(date, secCurrID));
-//	    }
-//
-//	    return retval;
-		// <<<< NO, ABSOLUTE SYMMETRY DOES NOT WORK HERE!
-
-		if ( secCurrID.getType() == KMMQualifSecCurrID.Type.CURRENCY )
-			return getBalanceRecursive(date, new KMMQualifCurrID(secCurrID.getCode()).getCurrency());
-		else
-			return getBalance(date, secCurrID); // CAUTION: This assumes that under a stock account,
-												// there are no children (which sounds sensible,
-												// but there might be special cases)
+	@Override
+	public FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMSecID secID)
+			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException, KMMIDNotSetException {
+		// CAUTION: This assumes that under a stock account,
+		// there are no children (which sounds sensible,
+		// but there might be special cases)
+		return getBalance(date, new KMMQualifSecCurrID(KMMQualifSecCurrID.Type.SECURITY, secID.get())); 
 	}
 
-	/**
-	 * @return true if ${@link #hasTransactions()} is true for this or any
-	 *         sub-accounts
-	 */
+	@Override
+	public String getBalanceRecursiveFormatted()
+			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+		return getCurrencyFormat().format(getBalanceRecursive());
+	}
+
+	@Override
+	public String getBalanceRecursiveFormatted(final LocalDate date)
+			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+		return getCurrencyFormat().format(getBalanceRecursive(date));
+	}
+
+	@Override
+	public KMyMoneyTransactionSplit getLastSplitBeforeRecursive(final LocalDate date) {
+	
+		KMyMoneyTransactionSplit lastSplit = null;
+	
+		for ( KMyMoneyTransactionSplit split : getTransactionSplits() ) {
+			if ( date == null || 
+				 split.getTransaction().getDatePosted()
+				 	.isBefore(date) ) {
+				if ( lastSplit == null ||
+					 split.getTransaction().getDatePosted()
+						.isAfter(lastSplit.getTransaction().getDatePosted()) ) {
+					lastSplit = split;
+				}
+			}
+		}
+
+		for ( Iterator<KMyMoneyAccount> iter = getSubAccounts().iterator(); iter.hasNext(); ) {
+			KMyMoneyAccount account = (KMyMoneyAccount) iter.next();
+			KMyMoneyTransactionSplit split = account.getLastSplitBeforeRecursive(date);
+			if ( split != null && 
+				 split.getTransaction() != null ) {
+				if ( lastSplit == null ||
+					 split.getTransaction().getDatePosted()
+						.isAfter(lastSplit.getTransaction().getDatePosted()) ) {
+					lastSplit = split;
+				}
+			}
+		}
+
+		return lastSplit;
+	}
+
+	@Override
+	public boolean hasTransactions() {
+		return this.getTransactionSplits().size() > 0;
+	}
+
+	@Override
 	public boolean hasTransactionsRecursive() {
 		if ( this.hasTransactions() ) {
 			return true;
 		}
 
-		for ( Object element : getChildren() ) {
-			KMyMoneyAccount child = (KMyMoneyAccount) element;
+		for ( KMyMoneyAccount child : getChildren() ) {
 			if ( child.hasTransactionsRecursive() ) {
 				return true;
 			}
 		}
 
 		return false;
-	}
-
-	/**
-	 * @return true if ${@link #getTransactionSplits()}.size()>0
-	 */
-	public boolean hasTransactions() {
-		return this.getTransactionSplits().size() > 0;
-	}
-
-	public FixedPointNumber getBalance(final LocalDate date, final KMMQualifSecCurrID secCurrID)
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-		FixedPointNumber retval = getBalance(date);
-
-		if ( retval == null ) {
-			LOGGER.error("SimpleAccount.getBalance() - error creating balance!");
-			return null;
-		}
-
-		// is conversion needed?
-		if ( getSecCurrID().equals(secCurrID) ) {
-			return retval;
-		}
-
-		ComplexPriceTable priceTab = getKMyMoneyFile().getCurrencyTable();
-
-		if ( priceTab == null ) {
-			LOGGER.error("SimpleAccount.getBalance() - cannot transfer "
-					+ "to given currency because we have no currency-table!");
-			return null;
-		}
-
-		if ( !priceTab.convertToBaseCurrency(retval, secCurrID) ) {
-			Collection<String> currList = getKMyMoneyFile().getCurrencyTable().getCurrencies(getSecCurrID().getType());
-			LOGGER.error("SimpleAccount.getBalance() - cannot transfer " + "from our currency '"
-					+ getSecCurrID().toString() + "' to the base-currency!" + " \n(we know "
-					+ getKMyMoneyFile().getCurrencyTable().getNameSpaces().size() + " currency-namespaces and "
-					+ (currList == null ? "no" : "" + currList.size()) + " currencies in our namespace)");
-			return null;
-		}
-
-		if ( !priceTab.convertFromBaseCurrency(retval, secCurrID) ) {
-			LOGGER.error("SimpleAccount.getBalance() - cannot transfer " + "from base-currenty to given currency '"
-					+ secCurrID.toString() + "'!");
-			return null;
-		}
-
-		return retval;
 	}
 
 	/**
@@ -380,10 +462,6 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		return Currency.getInstance(kmmCurrID);
 	}
 
-	/**
-	 * @return The currency-format to use for formatting.
-	 * @throws InvalidQualifSecCurrIDException
-	 */
 	public NumberFormat getCurrencyFormat() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 		if ( currencyFormat == null ) {
 			currencyFormat = NumberFormat.getCurrencyInstance();
@@ -400,95 +478,15 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		return currencyFormat;
 	}
 
-	/**
-	 * same as {@link #getBalance(LocalDate)}. <br/>
-	 * ignores transactions after the current date+time.
-	 * 
-	 * @throws InvalidQualifSecCurrIDException
-	 * @throws InvalidQualifSecCurrTypeException
-	 *
-	 * @see #getBalance(LocalDate)
-	 */
-	public String getBalanceFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-		return getCurrencyFormat().format(getBalance());
-	}
-
-	/**
-	 * same as {@link #getBalance(LocalDate)}. <br/>
-	 * ignores transactions after the current date+time.
-	 * 
-	 * @throws InvalidQualifSecCurrIDException
-	 * @throws InvalidQualifSecCurrTypeException
-	 *
-	 * @see #getBalance(LocalDate)
-	 */
-	public String getBalanceFormatted(final Locale lcl)
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-
-		NumberFormat cf = NumberFormat.getCurrencyInstance(lcl);
-		cf.setCurrency(getCurrency());
-		return cf.format(getBalance());
-	}
-
-	/**
-	 * The currency will be the one of this account.
-	 *
-	 * @see KMyMoneyAccount#getBalance(LocalDate)
-	 */
-	public FixedPointNumber getBalance(final LocalDate date) {
-		return getBalance(date, (Collection<KMyMoneyTransactionSplit>) null);
-	}
-
-	/**
-	 * The currency will be the one of this account.
-	 *
-	 * @see KMyMoneyAccount#getBalance(LocalDate, Collection)
-	 */
-	public FixedPointNumber getBalance(final LocalDate date, Collection<KMyMoneyTransactionSplit> after) {
-
-		FixedPointNumber balance = new FixedPointNumber();
-
-		for ( KMyMoneyTransactionSplit split : getTransactionSplits() ) {
-			if ( date != null && after != null ) {
-				if ( split.getTransaction().getDatePosted().isAfter(date) ) {
-					after.add(split);
-					continue;
-				}
-			}
-
-			// the currency of the quantity is the one of the account
-			balance.add(split.getShares());
-		}
-
-		return balance;
-	}
-
-	/**
-	 * @see KMyMoneyAccount#getBalance(KMyMoneyTransactionSplit)
-	 */
-	public FixedPointNumber getBalance(final KMyMoneyTransactionSplit lastIncludesSplit) {
-
-		FixedPointNumber balance = new FixedPointNumber();
-
-		for ( KMyMoneyTransactionSplit split : getTransactionSplits() ) {
-			balance.add(split.getShares());
-
-			if ( split == lastIncludesSplit ) {
-				break;
-			}
-
-		}
-
-		return balance;
-	}
-
-	/**
-	 * @see KMyMoneyAccount#getTransactionSplitByID(java.lang.String)
-	 */
 	public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSpltID id) {
 		if ( id == null ) {
 			throw new IllegalArgumentException("null id given!");
 		}
+
+		// ::TODO
+//		if ( ! id.isSet() ) {
+//			throw new IllegalArgumentException("ID not set!");
+//		}
 
 		for ( KMyMoneyTransactionSplit split : getTransactionSplits() ) {
 			if ( id.equals(split.getID()) ) {
@@ -500,7 +498,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		return null;
 	}
 
-	/**
+	/*
 	 * This is an extension to ${@link #compareNamesTo(Object)} that makes sure that
 	 * NEVER 2 accounts with different IDs compare to 0. Compares our name to
 	 * o.toString() .<br/>
@@ -509,15 +507,9 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	 * If one starts with a number and the other does not, the one starting with a
 	 * number is "bigger"<br/>
 	 * else and if both integers are equals a normals comparison of the
-	 * ${@link java.lang.String} is done. *
-	 *
-	 * @param o the Object to be compared.
-	 * @return a negative integer, zero, or a positive integer as this object is
-	 *         less than, equal to, or greater than the specified object.
-	 * @throws ClassCastException if the specified object's type prevents it from
-	 *                            being compared to this Object.
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 * ${@link java.lang.String} is done.
 	 */
+	@Override
 	public int compareTo(final KMyMoneyAccount otherAcc) {
 
 		int i = compareNamesTo(otherAcc);
@@ -526,7 +518,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		}
 
 		KMyMoneyAccount other = otherAcc;
-		i = other.getID().compareTo(getID());
+		i = other.getID().toString().compareTo(getID().toString());
 		if ( i != 0 ) {
 			return i;
 		}
@@ -555,8 +547,10 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		// for numbers is used within our parent-
 		// account too and not just in the top-
 		// level accounts
-		if ( o instanceof KMyMoneyAccount && ((KMyMoneyAccount) o).getParentAccountID() != null
-				&& getParentAccountID() != null && ((KMyMoneyAccount) o).getParentAccountID().toString()
+		if ( o instanceof KMyMoneyAccount && 
+				((KMyMoneyAccount) o).getParentAccountID() != null && 
+				getParentAccountID() != null && 
+				((KMyMoneyAccount) o).getParentAccountID().toString()
 						.equalsIgnoreCase(getParentAccountID().toString()) ) {
 			other = ((KMyMoneyAccount) o).getName();
 			me = getName();
@@ -593,22 +587,11 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		if ( digitCount == 0 ) {
 			return null;
 		}
-		return new Long(s.substring(0, digitCount));
+		return Long.valueOf(s.substring(0, digitCount));
 	}
 
 	// ------------------------ support for propertyChangeListeners
 
-	/**
-	 * support for firing PropertyChangeEvents. (gets initialized only if we really
-	 * have listeners)
-	 */
-	private volatile PropertyChangeSupport myPtyChg = null;
-
-	/**
-	 * Returned value may be null if we never had listeners.
-	 *
-	 * @return Our support for firing PropertyChangeEvents
-	 */
 	protected PropertyChangeSupport getPropertyChangeSupport() {
 		return myPtyChg;
 	}

@@ -18,6 +18,7 @@ import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
+import org.kmymoney.api.read.UnknownAccountTypeException;
 import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
@@ -25,21 +26,40 @@ import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import org.kmymoney.api.write.impl.hlp.HasWritableUserDefinedAttributesImpl;
+import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Extension of KMyMoneyAccountImpl to allow writing instead of
- * read-only access.<br/>
+ * read-only access.
  */
 public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl 
                                          implements KMyMoneyWritableAccount 
 {
-
 	/**
-	 * Our logger for debug- and error-ourput.
+	 * Our logger for debug- and error-output.
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableAccountImpl.class);
+
+    // ---------------------------------------------------------------
+
+    /**
+     * Our helper to implement the KMyMoneyWritableObject-interface.
+     */
+    private KMyMoneyWritableObjectImpl helper;
+    
+	/**
+	 * Used by ${@link #getBalance()} to cache the result.
+	 */
+	private FixedPointNumber myBalanceCached = null;
+
+	/**
+	 * Used by ${@link #getBalance()} to cache the result.
+	 */
+	private PropertyChangeListener myBalanceCachedInvalidtor = null;
+
+    // ---------------------------------------------------------------
 
 	/**
 	 * @param jwsdpPeer 
@@ -57,8 +77,20 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		super(createAccount_int(file, file.getNewAccountID()), file);
 	}
 	
-	public KMyMoneyWritableAccountImpl(final KMyMoneyAccountImpl acct) {
+	public KMyMoneyWritableAccountImpl(final KMyMoneyAccountImpl acct, final boolean addSplits) {
 		super(acct.getJwsdpPeer(), acct.getKMyMoneyFile());
+
+		if (addSplits) {
+		    for ( KMyMoneyTransactionSplit splt : ((KMyMoneyFileImpl) acct.getKMyMoneyFile()).getTransactionSplits_readAfresh() ) {
+		    	if ( ! acct.isRootAccount() &&
+		    		 splt.getAccountID().equals(acct.getID()) ) {
+		    		super.addTransactionSplit(splt);
+			    // NO:
+//				    addTransactionSplit(new KMyMoneyTransactionSplitImpl(splt.getJwsdpPeer(), splt.getTransaction(), 
+//		                                false, false));
+		    	}
+		    }
+		}
 	}
 
 	// ---------------------------------------------------------------
@@ -75,7 +107,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		}
 
 		if ( ! newID.isSet() ) {
-			throw new IllegalArgumentException("empty ID given");
+			throw new IllegalArgumentException("unset ID given");
 		}
 
 		ACCOUNT jwsdpAcct = file.createAccountType();
@@ -97,10 +129,10 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	 */
 	public void remove() {
 		if ( getTransactionSplits().size() > 0 ) {
-			throw new IllegalStateException("cannot remove account while it contains transaction-splits!");
+			throw new IllegalStateException("Cannot remove account while it contains transaction-splits!");
 		}
 		if ( this.getChildren().size() > 0 ) {
-			throw new IllegalStateException("cannot remove account while it contains child-accounts!");
+			throw new IllegalStateException("Cannot remove account while it contains child-accounts!");
 		}
 
 		getWritableKMyMoneyFile().getRootElement().getACCOUNTS().getACCOUNT().remove(jwsdpPeer);
@@ -115,6 +147,8 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	public KMyMoneyWritableFile getWritableKMyMoneyFile() {
 		return (KMyMoneyWritableFileImpl) getKMyMoneyFile();
 	}
+
+	// ---------------------------------------------------------------
 
 	/**
 	 * @see KMyMoneyAccount#addTransactionSplit(KMyMoneyTransactionSplit)
@@ -135,7 +169,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	 * @param impl the split to remove
 	 */
 	protected void removeTransactionSplit(final KMyMoneyWritableTransactionSplit impl) {
-		List transactionSplits = getTransactionSplits();
+		List<KMyMoneyTransactionSplit> transactionSplits = getTransactionSplits();
 		transactionSplits.remove(impl);
 
 		setIsModified();
@@ -145,6 +179,8 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			propertyChangeFirer.firePropertyChange("transactionSplits", null, transactionSplits);
 		}
 	}
+
+	// ---------------------------------------------------------------
 
 	/**
 	 * @see KMyMoneyWritableAccount#setName(java.lang.String)
@@ -223,15 +259,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		writableFile.setModified(true);
 	}
 
-	/**
-	 * Used by ${@link #getBalance()} to cache the result.
-	 */
-	private FixedPointNumber myBalanceCached = null;
-
-	/**
-	 * Used by ${@link #getBalance()} to cache the result.
-	 */
-	private PropertyChangeListener myBalanceCachedInvalidtor = null;
+	// ---------------------------------------------------------------
 
 	/**
 	 * same as getBalance(new Date()).<br/>
@@ -263,38 +291,37 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 						myBalanceCached = null;
 
 						// we don't handle the case of removing an account
-						// because that happenes seldomly enough
+						// because that happens seldomly enough
 
-						if ( evt.getPropertyName().equals("account")
-								&& evt.getSource() instanceof KMyMoneyWritableTransactionSplit ) {
-							KMyMoneyWritableTransactionSplit splitw = (KMyMoneyWritableTransactionSplit) evt
-									.getSource();
+						if ( evt.getPropertyName().equals("account") && 
+							 evt.getSource() instanceof KMyMoneyWritableTransactionSplit ) {
+							KMyMoneyWritableTransactionSplit splitw = (KMyMoneyWritableTransactionSplit) evt.getSource();
 							if ( splitw.getAccount() != KMyMoneyWritableAccountImpl.this ) {
 								splitw.removePropertyChangeListener("account", this);
-								splitw.removePropertyChangeListener("quantity", this);
+								splitw.removePropertyChangeListener("shares", this);
 								splitw.getTransaction().removePropertyChangeListener("datePosted", this);
 								splitsWeAreAddedTo.remove(splitw);
-
 							}
 
 						}
+						
 						if ( evt.getPropertyName().equals("transactionSplits") ) {
-							Collection<KMyMoneyTransactionSplit> splits = (Collection<KMyMoneyTransactionSplit>) evt
-									.getNewValue();
+							Collection<KMyMoneyTransactionSplit> splits = (Collection<KMyMoneyTransactionSplit>) evt.getNewValue();
 							for ( KMyMoneyTransactionSplit split : splits ) {
-								if ( !(split instanceof KMyMoneyWritableTransactionSplit)
-										|| splitsWeAreAddedTo.contains(split) ) {
+								if ( ! (split instanceof KMyMoneyWritableTransactionSplit) || 
+									 splitsWeAreAddedTo.contains(split) ) {
 									continue;
 								}
 								KMyMoneyWritableTransactionSplit splitw = (KMyMoneyWritableTransactionSplit) split;
 								splitw.addPropertyChangeListener("account", this);
-								splitw.addPropertyChangeListener("quantity", this);
+								splitw.addPropertyChangeListener("shares", this);
 								splitw.getTransaction().addPropertyChangeListener("datePosted", this);
 								splitsWeAreAddedTo.add(splitw);
 							}
 						}
 					}
 				};
+				
 				addPropertyChangeListener("currencyID", myBalanceCachedInvalidtor);
 				addPropertyChangeListener("currencyNameSpace", myBalanceCachedInvalidtor);
 				addPropertyChangeListener("transactionSplits", myBalanceCachedInvalidtor);
@@ -303,6 +330,36 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 
 		return balance;
 	}
+
+	/**
+	 * Get the sum of all transaction-splits affecting this account in the given
+	 * time-frame.
+	 *
+	 * @param from when to start, inclusive
+	 * @param to   when to stop, exlusive.
+	 * @return the sum of all transaction-splits affecting this account in the given
+	 *         time-frame.
+	 */
+	public FixedPointNumber getBalanceChange(final LocalDate from, final LocalDate to) {
+		FixedPointNumber retval = new FixedPointNumber();
+	
+		for ( KMyMoneyTransactionSplit splt : getTransactionSplits() ) {
+			LocalDate whenHappened = splt.getTransaction().getDatePosted();
+			
+			if ( !whenHappened.isBefore(to) ) {
+				continue;
+			}
+			
+			if ( whenHappened.isBefore(from) ) {
+				continue;
+			}
+			
+			retval = retval.add(splt.getShares());
+		}
+		return retval;
+	}
+	
+	// ---------------------------------------------------------------
 
 	/**
 	 * @see KMyMoneyWritableAccount#setName(java.lang.String)
@@ -401,32 +458,6 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		}
 	}
 
-	/**
-	 * Get the sum of all transaction-splits affecting this account in the given
-	 * time-frame.
-	 *
-	 * @param from when to start, inclusive
-	 * @param to   when to stop, exlusive.
-	 * @return the sum of all transaction-splits affecting this account in the given
-	 *         time-frame.
-	 */
-	public FixedPointNumber getBalanceChange(final LocalDate from, final LocalDate to) {
-		FixedPointNumber retval = new FixedPointNumber();
-
-		for ( Object element : getTransactionSplits() ) {
-			KMyMoneyTransactionSplit splt = (KMyMoneyTransactionSplit) element;
-			LocalDate whenHappened = splt.getTransaction().getDatePosted();
-			if ( !whenHappened.isBefore(to) ) {
-				continue;
-			}
-			if ( whenHappened.isBefore(from) ) {
-				continue;
-			}
-			retval = retval.add(splt.getShares());
-		}
-		return retval;
-	}
-
 	// -------------------------------------------------------
 
 	/**
@@ -441,4 +472,35 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			                             name, value);
 	}
 
+    // -----------------------------------------------------------------
+
+    public String toString() {
+	StringBuffer buffer = new StringBuffer();
+	buffer.append("KMyMoneyWritableAccountImpl [");
+	
+	buffer.append("id=");
+	buffer.append(getID());
+	
+	buffer.append(", type=");
+	try {
+	    buffer.append(getType());
+	} catch (UnknownAccountTypeException e) {
+	    buffer.append("ERROR");
+	}
+	
+	buffer.append(", qualif-name='");
+	buffer.append(getQualifiedName() + "'");
+	
+	buffer.append(", security/currency='");
+	try {
+	    buffer.append(getSecCurrID() + "'");
+	} catch (Exception e) {
+	    buffer.append("ERROR");
+	}
+	
+	buffer.append("]");
+	
+	return buffer.toString();
+    }
+    
 }

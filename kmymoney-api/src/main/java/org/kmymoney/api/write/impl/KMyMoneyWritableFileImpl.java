@@ -20,6 +20,7 @@ import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.basetypes.simple.KMMAcctID;
 import org.kmymoney.api.basetypes.simple.KMMInstID;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
@@ -53,6 +54,7 @@ import org.kmymoney.api.read.impl.KMyMoneyPriceImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.read.impl.KMyMoneySecurityImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionImpl;
+import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritablePayee;
@@ -94,26 +96,51 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 	// ---------------------------------------------------------------
 
-	public KMyMoneyWritableFileImpl(final InputStream is) throws IOException {
+	/**
+	 * @param file the file to load
+	 * @throws IOException                   on bsic io-problems such as a
+	 *                                       FileNotFoundException
+	 * @throws InvalidCmdtyCurrIDException
+	 * @throws InvalidCmdtyCurrTypeException
+	 */
+	public KMyMoneyWritableFileImpl(final File file)
+			throws IOException {
+		super(file);
+		setModified(false);
+
+		acctMgr = new org.kmymoney.api.write.impl.hlp.FileAccountManager(this);
+		trxMgr  = new org.kmymoney.api.write.impl.hlp.FileTransactionManager(this);
+
+		pyeMgr  = new org.kmymoney.api.write.impl.hlp.FilePayeeManager(this);
+
+		secMgr  = new org.kmymoney.api.write.impl.hlp.FileSecurityManager(this);
+		// ::TODO
+		// prcMgr  = new org.kmymoney.api.write.impl.hlp.FilePriceManager(this);
+	}
+
+	public KMyMoneyWritableFileImpl(final InputStream is)
+			throws IOException {
 		super(is);
+
+		acctMgr = new org.kmymoney.api.write.impl.hlp.FileAccountManager(this);
+		trxMgr  = new org.kmymoney.api.write.impl.hlp.FileTransactionManager(this);
+
+		pyeMgr  = new org.kmymoney.api.write.impl.hlp.FilePayeeManager(this);
+
+		secMgr  = new org.kmymoney.api.write.impl.hlp.FileSecurityManager(this);
+		// ::TODO
+		// prcMgr  = new org.kmymoney.api.write.impl.hlp.FilePriceManager(this);
 	}
 
 	// ---------------------------------------------------------------
+	// ::TODO Description
+	// ---------------------------------------------------------------
+	
+	// ::TODO
 
-	/**
-	 * @return true if this file has been modified
-	 */
-	public boolean isModified() {
-		return modified;
-	}
-
-	/**
-	 * @return the time in ms (compatible with File.lastModified) of the last
-	 *         write-operation
-	 */
-	public long getLastWriteTime() {
-		return lastWriteTime;
-	}
+	// ---------------------------------------------------------------
+	// ::TODO Description
+	// ---------------------------------------------------------------
 
 	/**
 	 * @param pModified true if this file has been modified false after save, load
@@ -125,139 +152,15 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		// if (propertyChange != null)
 		// propertyChange.firePropertyChange("modified", old, pModified);
 	}
-	
-	// ---------------------------------------------------------------
 
 	/**
-	 * keep the count-data up to date.
-	 *
-	 * @param type  the type to set it for
-	 * @param val the value
+	 * {@inheritDoc}
 	 */
-	protected void setCountDataFor(final String type, final int val) {
-	
-		if ( type == null ) {
-			throw new IllegalArgumentException("null type given");
-		}
-	
-		if ( type.trim().length() == 0 ) {
-			throw new IllegalArgumentException("empty type given");
-		}
-		
-		if ( val < 0 ) {
-			throw new IllegalArgumentException("val < 0 given");
-		}
-	
-		if ( type.trim().equals("account")  ) {
-			getRootElement().getACCOUNTS().setCount(BigInteger.valueOf(val));
-			setModified(true);
-			return;
-		} else if ( type.trim().equals("transaction")  ) {
-			getRootElement().getTRANSACTIONS().setCount(BigInteger.valueOf(val));
-			setModified(true);
-			return;
-		} else if ( type.trim().equals("payee")  ) {
-			getRootElement().getPAYEES().setCount(BigInteger.valueOf(val));
-			setModified(true);
-			return;
-		} else if ( type.trim().equals("security")  ) {
-			getRootElement().getSECURITIES().setCount(BigInteger.valueOf(val));
-			setModified(true);
-			return;
-		} else if ( type.trim().equals("pricepair")  ) {
-			getRootElement().getPRICES().setCount(BigInteger.valueOf(val));
-			setModified(true);
-			return;
-		} else {
-			throw new IllegalArgumentException("Unknown type '" + type + "'");
-		}
-	}
-
-	/**
-	 * Keep the count-data up to date. The count-data is re-calculated on the fly
-	 * before writing but we like to keep our internal model up-to-date just to be
-	 * defensive.
-	 *
-	 * @param type the type to set it for
-	 */
-	protected void incrementCountDataFor(final String type) {
-
-		if ( type == null ) {
-			throw new IllegalArgumentException("null type given");
-		}
-		
-		if ( type.trim().length() == 0 ) {
-			throw new IllegalArgumentException("empty type given");
-		}
-		
-		incrementCountDataForCore(type, 1);
-	}
-
-	/**
-	 * Keep the count-data up to date. The count-data is re-calculated on the fly
-	 * before writing but we like to keep our internal model up-to-date just to be
-	 * defensive.
-	 *
-	 * @param type the type to set it for
-	 */
-	protected void decrementCountDataFor(final String type) {
-
-		if ( type == null ) {
-			throw new IllegalArgumentException("null type given");
-		}
-
-		if ( type.trim().length() == 0 ) {
-			throw new IllegalArgumentException("empty type given");
-		}
-		
-		incrementCountDataForCore(type, -1);
-	}
-
-	/**
-	 * Keep the count-data up to date. The count-data is re-calculated on the fly
-	 * before writing but we like to keep our internal model up-to-date just to be
-	 * defensive.
-	 *
-	 * @param type the type to set it for
-	 */
-	private void incrementCountDataForCore(final String type, final int delta) {
-
-		if ( type == null ) {
-			throw new IllegalArgumentException("null type given");
-		}
-
-		if ( type.trim().length() == 0 ) {
-			throw new IllegalArgumentException("empty type given");
-		}
-
-		int currCnt = getCountDataFor(type);
-		setCountDataFor(type, currCnt + delta);
+	public boolean isModified() {
+		return modified;
 	}
 
 	// ---------------------------------------------------------------
-
-	/**
-	 * @param file the file to load
-	 * @throws IOException on bsic io-problems such as a FileNotFoundException
-	 */
-	public KMyMoneyWritableFileImpl(final File file) throws IOException {
-		super(file);
-		setModified(false);
-	}
-
-	/**
-	 * Used by KMyMoneyTransactionImpl.createTransaction to add a new Transaction to
-	 * this file.
-	 *
-	 * @see KMyMoneyTransactionImpl#createSplit(GncTransaction.TrnSplits.TrnSplit)
-	 */
-	protected void addTransaction(final KMyMoneyTransactionImpl trx) {
-		incrementCountDataFor("transaction");
-
-		getRootElement().getTRANSACTIONS().getTRANSACTION().add(trx.getJwsdpPeer());
-		setModified(true);
-		super.trxMgr.addTransaction(trx);
-	}
 
 	/**
 	 * @see {@link KMyMoneyFileImpl#loadFile(java.io.File)}
@@ -266,15 +169,6 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	protected void loadFile(final File pFile) throws IOException {
 		super.loadFile(pFile);
 		lastWriteTime = Math.max(pFile.lastModified(), System.currentTimeMillis());
-	}
-
-	/**
-	 * @see KMyMoneyFileImpl#setRootElement(GncV2)
-	 */
-	@SuppressWarnings("exports")
-	@Override
-	public void setRootElement(final KMYMONEYFILE rootElement) {
-		super.setRootElement(rootElement);
 	}
 
 	/**
@@ -323,7 +217,117 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
 
 	/**
-	 * Calculate and set the correct valued for all the following count-data.<br/>
+	 * @return the time in ms (compatible with File.lastModified) of the last
+	 *         write-operation
+	 */
+	@Override
+	public long getLastWriteTime() {
+		return lastWriteTime;
+	}
+
+	// ---------------------------------------------------------------
+
+	/**
+	 * keep the count-data up to date.
+	 *
+	 * @param type  the type to set it for
+	 * @param val the value
+	 */
+	protected void setCountDataFor(final String type, final int val) {
+	
+		if ( type == null ) {
+			throw new IllegalArgumentException("null type given");
+		}
+	
+		if ( type.trim().length() == 0 ) {
+			throw new IllegalArgumentException("empty type given");
+		}
+
+		if ( val < 0 ) {
+			throw new IllegalArgumentException("val < 0 given");
+		}
+	
+		if ( type.trim().equals("account")  ) {
+			getRootElement().getACCOUNTS().setCount(BigInteger.valueOf(val));
+			setModified(true);
+			return;
+		} else if ( type.trim().equals("transaction")  ) {
+			getRootElement().getTRANSACTIONS().setCount(BigInteger.valueOf(val));
+			setModified(true);
+			return;
+		} else if ( type.trim().equals("payee")  ) {
+			getRootElement().getPAYEES().setCount(BigInteger.valueOf(val));
+			setModified(true);
+			return;
+		} else if ( type.trim().equals("security")  ) {
+			getRootElement().getSECURITIES().setCount(BigInteger.valueOf(val));
+			setModified(true);
+			return;
+		} else if ( type.trim().equals("pricepair")  ) {
+			getRootElement().getPRICES().setCount(BigInteger.valueOf(val));
+			setModified(true);
+			return;
+		} else {
+			throw new IllegalArgumentException("Unknown type '" + type + "'");
+		}
+	}
+
+	/**
+	 * Keep the count-data up to date. The count-data is re-calculated on the fly
+	 * before writing but we like to keep our internal model up-to-date just to be
+	 * defensive.
+	 *
+	 * @param type the type to set it for
+	 */
+	protected void incrementCountDataFor(final String type) {
+
+		if ( type == null ) {
+			throw new IllegalArgumentException("null type given");
+		}
+
+		if ( type.trim().length() == 0 ) {
+			throw new IllegalArgumentException("empty type given");
+		}
+		
+		incrementCountDataForCore(type, 1);
+	}
+
+	/**
+	 * Keep the count-data up to date. The count-data is re-calculated on the fly
+	 * before writing but we like to keep our internal model up-to-date just to be
+	 * defensive.
+	 *
+	 * @param type the type to set it for
+	 */
+	protected void decrementCountDataFor(final String type) {
+
+		if ( type == null ) {
+			throw new IllegalArgumentException("null type given");
+		}
+
+		if ( type.trim().length() == 0 ) {
+			throw new IllegalArgumentException("empty type given");
+		}
+		
+		incrementCountDataForCore(type, -1);
+	}
+
+	private void incrementCountDataForCore(final String type, final int delta) {
+
+		if ( type == null ) {
+			throw new IllegalArgumentException("null type given");
+		}
+
+		if ( type.trim().length() == 0 ) {
+			throw new IllegalArgumentException("empty type given");
+		}
+
+		int currCnt = getCountDataFor(type);
+		setCountDataFor(type, currCnt + delta);
+	}
+
+	/**
+	 * Calculate and set the correct values for all the following count-data.<br/>
 	 * Also check the that only valid elements are in the book-element and that they
 	 * have the correct order.
 	 */
@@ -365,6 +369,31 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		// (we do not enforce this in the xml-schema to allow for reading out of order
 		// files)
 		// java.util.Collections.sort(getRootElement(), new BookElementsSorter());
+	}
+
+	// ---------------------------------------------------------------
+
+	/**
+	 * Used by KMyMoneyTransactionImpl.createTransaction to add a new Transaction to
+	 * this file.
+	 *
+	 * @see KMyMoneyTransactionImpl#createSplit(GncTransaction.TrnSplits.TrnSplit)
+	 */
+	protected void addTransaction(final KMyMoneyTransactionImpl trx) {
+		incrementCountDataFor("transaction");
+
+		getRootElement().getTRANSACTIONS().getTRANSACTION().add(trx.getJwsdpPeer());
+		setModified(true);
+		super.trxMgr.addTransaction(trx);
+	}
+
+	/**
+	 * @see KMyMoneyFileImpl#setRootElement(GncV2)
+	 */
+	@SuppressWarnings("exports")
+	@Override
+	public void setRootElement(final KMYMONEYFILE rootElement) {
+		super.setRootElement(rootElement);
 	}
 
 	/**
@@ -724,8 +753,16 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 //			throw new IllegalArgumentException("account ID is not set");
 //		}
 
-		KMyMoneyAccount acct = super.getAccountByID(acctID);
-		return new KMyMoneyWritableAccountImpl((KMyMoneyAccountImpl) acct);
+		try {
+			KMyMoneyAccount acct = super.getAccountByID(acctID);
+			return new KMyMoneyWritableAccountImpl((KMyMoneyAccountImpl) acct, true);
+		} catch (Exception exc) {
+			LOGGER.error(
+					"getWritableAccountByID: Could not instantiate writable account object from read-only account object (ID: "
+							+ acctID + ")");
+			throw new RuntimeException(
+					"Could not instantiate writable account object from read-only account object (ID: " + acctID + ")");
+		}
 	}
 
 	@Override
@@ -740,6 +777,20 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 		KMyMoneyTransaction trx = super.getTransactionByID(trxID);
 		return new KMyMoneyWritableTransactionImpl((KMyMoneyTransactionImpl) trx);
+	}
+
+	@Override
+	public KMyMoneyWritableTransactionSplit getWritableTransactionSplitByID(KMMQualifSpltID spltID) {
+		if ( spltID == null ) {
+			throw new IllegalArgumentException("null transaction split ID given");
+		}
+
+		if ( ! spltID.isSet() ) {
+			throw new IllegalArgumentException("transaction split ID is not set");
+		}
+
+		KMyMoneyTransactionSplit splt = super.getTransactionSplitByID(spltID);
+		return new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) splt);
 	}
 
 	@Override

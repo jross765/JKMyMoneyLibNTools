@@ -2,6 +2,7 @@ package org.kmymoney.api.currency;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.api.basetypes.simple.KMMIDNotSetException;
+import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -233,6 +236,30 @@ public class ComplexPriceTable implements Serializable {
 
 		return table.convertFromBaseCurrency(pValue, secCurrID.getCode());
 	}
+	
+	/*
+	public boolean convertFromBaseCurrency(FixedPointNumber pValue, final Currency curr) {
+
+		SimplePriceTable table = getByNamespace(KMMQualifSecCurrID.Type.CURRENCY);
+		if ( table == null ) {
+			return false;
+		}
+
+		return table.convertFromBaseCurrency(pValue, curr.getCurrencyCode());
+	}
+	
+	public boolean convertFromBaseCurrency(FixedPointNumber pValue, final KMMSecID secID) throws KMMIDNotSetException {
+
+		SimplePriceTable table = getByNamespace(KMMQualifSecCurrID.Type.SECURITY);
+		if ( table == null ) {
+			return false;
+		}
+
+		return table.convertFromBaseCurrency(pValue, secID.get());
+	}
+	*/
+	
+	// ----------------------------
 
 	public boolean convertToBaseCurrency(FixedPointNumber pValue, final KMMQualifSecCurrID secCurrID) {
 
@@ -244,6 +271,30 @@ public class ComplexPriceTable implements Serializable {
 
 		return table.convertToBaseCurrency(pValue, secCurrID.getCode());
 	}
+	
+	/*
+	public boolean convertToBaseCurrency(FixedPointNumber pValue, final Currency curr) {
+
+		SimplePriceTable table = getByNamespace(KMMQualifSecCurrID.Type.CURRENCY);
+
+		if ( table == null ) {
+			return false;
+		}
+
+		return table.convertToBaseCurrency(pValue, curr.getCurrencyCode());
+	}
+
+	public boolean convertToBaseCurrency(FixedPointNumber pValue, final KMMSecID secID) throws KMMIDNotSetException {
+
+		SimplePriceTable table = getByNamespace(KMMQualifSecCurrID.Type.SECURITY);
+
+		if ( table == null ) {
+			return false;
+		}
+
+		return table.convertToBaseCurrency(pValue, secID.get());
+	}
+	*/
 
 	// ---------------------------------------------------------------
 
@@ -255,19 +306,19 @@ public class ComplexPriceTable implements Serializable {
 	}
 
 	/**
-	 * @param nameSpace
+	 * @param type
 	 * @return
 	 */
-	protected SimplePriceTable getByNamespace(KMMQualifSecCurrID.Type nameSpace) {
-		return namespace2CurrTab.get(nameSpace);
+	protected SimplePriceTable getByNamespace(KMMQualifSecCurrID.Type type) {
+		return namespace2CurrTab.get(type);
 	}
 
 	/**
-	 * @param nameSpace
+	 * @param tyoe
 	 * @return 
 	 */
-	public Collection<String> getCurrencies(final KMMQualifSecCurrID.Type nameSpace) {
-		SimplePriceTable table = getByNamespace(nameSpace);
+	public Collection<String> getCurrencies(final KMMQualifSecCurrID.Type tyoe) {
+		SimplePriceTable table = getByNamespace(tyoe);
 		if ( table == null ) {
 			return new HashSet<String>();
 		}

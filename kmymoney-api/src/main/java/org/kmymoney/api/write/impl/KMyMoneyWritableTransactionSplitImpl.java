@@ -26,35 +26,30 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableTransactionImpl.class);
 
+    // ---------------------------------------------------------------
+
 	/**
 	 * Our helper to implement the KMyMoneyWritableObject-interface.
 	 */
 	private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
-	/**
-	 * @see KMyMoneyTransactionSplitImpl#getTransaction()
-	 */
-	@Override
-	public KMyMoneyWritableTransaction getTransaction() {
-		return (KMyMoneyWritableTransaction) super.getTransaction();
-	}
-
 	// ---------------------------------------------------------------
 	
 	/**
 	 * @param jwsdpPeer   the JWSDP-object we are facading.
-	 * @param kmmFile 
 	 * @param trx the transaction we belong to
+     * @param addSpltToAcct 
 	 */
 	@SuppressWarnings("exports")
 	public KMyMoneyWritableTransactionSplitImpl(
 			final SPLIT jwsdpPeer,
-			final KMyMoneyWritableFile kmmFile,
-			final KMyMoneyWritableTransaction trx) {
-		super(jwsdpPeer, kmmFile, trx);
+			final KMyMoneyWritableTransaction trx, 
+    		final boolean addSpltToAcct) {
+		super(jwsdpPeer, trx, 
+			  addSpltToAcct);
 	}
 
-	/**
+    /**
 	 * create a new split and and add it to the given transaction.
 	 * @param trx transaction the transaction we will belong to
 	 * @param acct     the account we take money (or other things) from or give
@@ -66,8 +61,8 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		super(createTransactionSplit_int(trx.getWritableFile(), 
 				                         trx, acct, 
 				                         trx.getNewSplitID()),
-			  trx.getWritableKMyMoneyFile(),
-		      trx);
+		      trx,
+		      true);
 
 		// this is a workaound.
 		// if super does account.addSplit(this) it adds an instance on
@@ -83,7 +78,8 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	}
 
     public KMyMoneyWritableTransactionSplitImpl(final KMyMoneyTransactionSplitImpl splt) throws IllegalArgumentException {
-	super(splt.getJwsdpPeer(), splt.getKMyMoneyFile(), splt.getTransaction());
+	super(splt.getJwsdpPeer(), splt.getTransaction(), 
+		  true);
     }
 
 	// ---------------------------------------------------------------
@@ -111,10 +107,10 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		}
 
 		if ( ! newID.isSet() ) {
-			throw new IllegalArgumentException("empty ID given");
+			throw new IllegalArgumentException("unset ID given");
 		}
 
-		// this is needed because transaction.addSplit() later
+		// This is needed because transaction.addSplit() later
 		// must have an already build List of splits.
 		// if not it will create the list from the JAXB-Data
 		// thus 2 instances of this KMyMoneyTransactionSplitWritingImpl
@@ -140,6 +136,16 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
         LOGGER.debug("createTransactionSplit_int: Created new transaction split (core): " + jwsdpSplt.getId());
 		
         return jwsdpSplt;
+	}
+
+	// ---------------------------------------------------------------
+	
+	/**
+	 * @see KMyMoneyTransactionSplitImpl#getTransaction()
+	 */
+	@Override
+	public KMyMoneyWritableTransaction getTransaction() {
+		return (KMyMoneyWritableTransaction) super.getTransaction();
 	}
 
 	/**
@@ -236,7 +242,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 
 		if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
 			if ( helper.getPropertyChangeSupport() != null ) {
-				helper.getPropertyChangeSupport().firePropertyChange("quantity", new FixedPointNumber(old), n);
+				helper.getPropertyChangeSupport().firePropertyChange("shares", new FixedPointNumber(old), n);
 			}
 		}
 	}
@@ -274,7 +280,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 			getJwsdpPeer().setShares(n.toKMyMoneyString());
 			if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
 				if ( helper.getPropertyChangeSupport() != null ) {
-					helper.getPropertyChangeSupport().firePropertyChange("quantity", new FixedPointNumber(oldquantity), n);
+					helper.getPropertyChangeSupport().firePropertyChange("shares", new FixedPointNumber(oldquantity), n);
 				}
 			}
 		}
@@ -404,5 +410,64 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		// TODO Auto-generated method stub
 		
 	}
+
+    // ---------------------------------------------------------------
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+	StringBuffer buffer = new StringBuffer();
+	buffer.append("KMyMoneyWritableTransactionSplitImpl [");
+
+	buffer.append("qualif-id=");
+	buffer.append(getQualifID());
+
+	// Part of qualif-id:
+	// buffer.append(" transaction-id=");
+	// buffer.append(getTransaction().getID());
+
+	buffer.append(", action=");
+	try {
+	    buffer.append(getAction());
+	} catch (Exception e) {
+	    buffer.append("ERROR");
+	}
+
+	buffer.append(", state=");
+	try {
+	    buffer.append(getState());
+	} catch (Exception e) {
+	    buffer.append("ERROR");
+	}
+
+	buffer.append(", account-id=");
+	buffer.append(getAccountID());
+
+//	buffer.append(", account=");
+//	try {
+//	    KMyMoneyAccount account = getAccount();
+//	    buffer.append(account == null ? "null" : "'" + account.getQualifiedName() + "'");
+//	} catch (Exception e) {
+//	    buffer.append("ERROR");
+//	}
+
+	buffer.append(", memo='");
+	buffer.append(getMemo() + "'");
+
+	// usually not set:
+	// buffer.append(" transaction-description: '");
+	// buffer.append(getTransaction().getMemo() + "'");
+
+	buffer.append(", value=");
+	buffer.append(getValue());
+
+	buffer.append(", shares=");
+	buffer.append(getShares());
+
+	buffer.append("]");
+	return buffer.toString();
+    }
 
 }

@@ -16,18 +16,19 @@ import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
-import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
-import org.kmymoney.api.read.UnknownSplitActionException;
+import org.kmymoney.api.read.MappingException;
 import org.kmymoney.api.read.UnknownSplitStateException;
+import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of KMyMoneyTransactionSplit that uses JWSDSP.
  */
-public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit 
+public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
+                                          implements KMyMoneyTransactionSplit 
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyTransactionSplitImpl.class);
 
@@ -38,11 +39,6 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
      */
     protected SPLIT jwsdpPeer;
     
-    /**
-     * The file we belong to.
-     */
-    private final KMyMoneyFile kmmFile;
-
     /**
      * the transaction this split belongs to.
      */
@@ -58,31 +54,45 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     @SuppressWarnings("exports")
     public KMyMoneyTransactionSplitImpl(
 	    final SPLIT peer,
-	    final KMyMoneyFile kmmFile,
-	    final KMyMoneyTransaction trx) {
+	    final KMyMoneyTransaction trx,
+	    final boolean addSpltToAcct) {
+    super(trx.getKMyMoneyFile());
+    	
 	this.jwsdpPeer = peer;
-	this.kmmFile = kmmFile;
 	this.myTransaction = trx;
 
-	// ::CHECK
-	// ::TODO
-	KMyMoneyAccount acct = getAccount();
-	if (acct == null) {
-	    System.err.println("No such Account id='" + getAccountID() + "' for Transactions-Split with id '" + getID()
-		    + "' description '" + getMemo() + "' in transaction with id '" + getTransaction().getID()
-		    + "' description '" + getTransaction().getMemo() + "'");
-	} else {
-	    acct.addTransactionSplit(this);
+	if ( addSpltToAcct ) {
+		KMyMoneyAccount acct = getAccount();
+		if (acct == null) {
+		    LOGGER.error("No such Account id='" + getAccountID() + "' for Transactions-Split with id '" + getQualifID()
+			    + "' description '" + getMemo() + "' in transaction with id '" + getTransaction().getID()
+			    + "' description '" + getTransaction().getMemo() + "'");
+		} else {
+		    acct.addTransactionSplit(this);
+		}
 	}
-
     }
 
     // ---------------------------------------------------------------
 
-	@Override
-	public KMyMoneyFile getKMyMoneyFile() {
-		return kmmFile;
-	}
+    /**
+     * @return the JWSDP-object we are facading.
+     */
+    @SuppressWarnings("exports")
+    public SPLIT getJwsdpPeer() {
+    	return jwsdpPeer;
+    }
+
+    /**
+     * @param newPeer the JWSDP-object we are facading.
+     */
+    protected void setJwsdpPeer(final SPLIT newPeer) {
+    	if (newPeer == null) {
+    		throw new IllegalArgumentException("null not allowed for field this.jwsdpPeer");
+    	}
+
+    	jwsdpPeer = newPeer;
+    }
 
     // ---------------------------------------------------------------
 
@@ -99,9 +109,24 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
 	return new KMMQualifSpltID(getTransactionID(), getID());
     }
 
-    public Action getAction() throws UnknownSplitActionException {
-	String actionStr = getJwsdpPeer().getAction();
-	return Action.valueOff(actionStr);
+    @Override
+    public Action getAction() {
+    	try {
+    		return Action.valueOff( getActionStr() );
+    	} catch (Exception e) {
+    		throw new MappingException("Could not map string '" + getActionStr() + "' to Action enum");
+    	}
+    }
+
+    /**
+     * @see KMyMoneyTransactionSplit#getAction()
+     */
+    public String getActionStr() {
+    	if (getJwsdpPeer().getAction() == null) {
+    		return "";
+    	}
+
+    	return getJwsdpPeer().getAction();
     }
 
     public State getState() throws UnknownSplitStateException {
@@ -110,43 +135,24 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
     }
 
     /**
-     * @return the JWSDP-object we are facading.
-     */
-    @SuppressWarnings("exports")
-    public SPLIT getJwsdpPeer() {
-	return jwsdpPeer;
-    }
-
-    /**
-     * @param newPeer the JWSDP-object we are facading.
-     */
-    protected void setJwsdpPeer(final SPLIT newPeer) {
-	if (newPeer == null) {
-	    throw new IllegalArgumentException("null not allowed for field this.jwsdpPeer");
-	}
-
-	jwsdpPeer = newPeer;
-    }
-
-    /**
      * @see KMyMoneyTransactionSplit#getAccountID()
      */
     public KMMComplAcctID getAccountID() {
-	String id = jwsdpPeer.getAccount();
-	assert id != null;
-	return new KMMComplAcctID(id);
+	String acctID = jwsdpPeer.getAccount();
+	assert acctID != null;
+	return new KMMComplAcctID(acctID);
     }
 
     /**
      * @see KMyMoneyTransactionSplit#getAccount()
      */
     public KMyMoneyAccount getAccount() {
-	return myTransaction.getKMyMoneyFile().getAccountByID(getAccountID());
+    	return myTransaction.getKMyMoneyFile().getAccountByID(getAccountID());
     }
 
     @Override
     public KMMTrxID getTransactionID() {
-	return myTransaction.getID();
+    	return myTransaction.getID();
     }
 
     /**
@@ -154,14 +160,14 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
      */
     @Override
     public KMyMoneyTransaction getTransaction() {
-	return myTransaction;
+    	return myTransaction;
     }
 
     /**
      * @see KMyMoneyTransactionSplit#getValue()
      */
     public FixedPointNumber getValue() {
-	return new FixedPointNumber(jwsdpPeer.getValue());
+    	return new FixedPointNumber(jwsdpPeer.getValue());
     }
 
     /**
@@ -170,16 +176,14 @@ public class KMyMoneyTransactionSplitImpl implements KMyMoneyTransactionSplit
      * @throws InvalidQualifSecCurrTypeException 
      */
     protected NumberFormat getSharesCurrencyFormat() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-
-	return ((KMyMoneyAccountImpl) getAccount()).getCurrencyFormat();
+    	return ((KMyMoneyAccountImpl) getAccount()).getCurrencyFormat();
     }
 
     /**
      * @return the currency-format of the transaction
      */
     public NumberFormat getValueCurrencyFormat() {
-
-	return ((KMyMoneyTransactionImpl) getTransaction()).getCurrencyFormat();
+    	return ((KMyMoneyTransactionImpl) getTransaction()).getCurrencyFormat();
     }
 
     /**

@@ -1,18 +1,23 @@
 package org.kmymoney.api.read.impl.hlp;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.KMYMONEYFILE;
+import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionImpl;
+import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
+import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,34 +42,65 @@ public class FileTransactionManager {
 	// ---------------------------------------------------------------
 
 	private void init(final KMYMONEYFILE pRootElement) {
-		trxMap = new HashMap<KMMTrxID, KMyMoneyTransaction>();
-		trxSpltMap = new HashMap<KMMQualifSpltID, KMyMoneyTransactionSplit>();
-
-		for ( TRANSACTION jwsdpTrx : pRootElement.getTRANSACTIONS().getTRANSACTION() ) {
-			try {
-				KMyMoneyTransactionImpl trx = createTransaction(jwsdpTrx);
-				trxMap.put(trx.getID(), trx);
-				for ( KMyMoneyTransactionSplit splt : trx.getSplits() ) {
-					KMMQualifSpltID spltID = new KMMQualifSpltID(trx.getID(), splt.getID());
-					trxSpltMap.put(spltID, splt);
-				}
-			} catch (RuntimeException e) {
-				LOGGER.error("init: [RuntimeException] Problem in " + getClass().getName() + ".init: "
-						+ "ignoring illegal Transaction-Entry with id=" + jwsdpTrx.getId(), e);
-			}
-		} // for
-
-		LOGGER.debug("init: No. of entries in transaction map: " + trxMap.size());
+		init1(pRootElement);
+		init2(pRootElement);
 	}
 
-	/**
-	 * @param jwsdpTrx the JWSDP-peer (parsed xml-element) to fill our object with
-	 * @return the new KMyMoneyTransaction to wrap the given jaxb-object.
-	 */
+	private void init1(final KMYMONEYFILE pRootElement) {
+		trxMap = new HashMap<KMMTrxID, KMyMoneyTransaction>();
+
+		for ( KMyMoneyTransactionImpl trx : getTransactions_readAfresh() ) {
+			trxMap.put(trx.getID(), trx);
+		}
+
+		LOGGER.debug("init1: No. of entries in transaction map: " + trxMap.size());
+	}
+
+	private void init2(final KMYMONEYFILE pRootElement) {
+		trxSpltMap = new HashMap<KMMQualifSpltID, KMyMoneyTransactionSplit>();
+
+		for ( KMyMoneyTransaction trx : trxMap.values() ) {
+			try {
+				List<KMyMoneyTransactionSplit> spltList = null;
+				if ( kmmFile instanceof KMyMoneyWritableFileImpl ) {
+					// CAUTION: As opposed to the code in the sister project,
+					// the second arg here has to be set to "true", else the
+					// whole shebang will not work.
+					// Cannot explain this...
+					spltList = ((KMyMoneyTransactionImpl) trx).getSplits(true);
+				} else {
+					spltList = ((KMyMoneyTransactionImpl) trx).getSplits(true);
+				}
+				for ( KMyMoneyTransactionSplit splt : spltList ) {
+					trxSpltMap.put(splt.getQualifID(), splt);
+				}
+			} catch (RuntimeException e) {
+				LOGGER.error("init2: [RuntimeException] Problem in " + getClass().getName() + ".init2: "
+						+ "ignoring illegal Transaction entry with id=" + trx.getID(), e);
+//		System.err.println("init2: ignoring illegal Transaction entry with id: " + trx.getID());
+//		System.err.println("  " + e.getMessage());
+			}
+		} // for trx
+
+		LOGGER.debug("init2: No. of entries in transaction split map: " + trxSpltMap.size());
+	}
+
+	// ----------------------------
+
 	protected KMyMoneyTransactionImpl createTransaction(final TRANSACTION jwsdpTrx) {
 		KMyMoneyTransactionImpl trx = new KMyMoneyTransactionImpl(jwsdpTrx, kmmFile);
-		LOGGER.debug("Generated new transaction: " + trx.getID());
+		LOGGER.debug("createTransaction: Generated new transaction: " + trx.getID());
 		return trx;
+	}
+
+	protected KMyMoneyTransactionSplitImpl createTransactionSplit(
+			final SPLIT jwsdpTrxSplt,
+			final KMyMoneyTransaction trx, 
+			final boolean addSpltToAcct) {
+		KMyMoneyTransactionSplitImpl splt = new KMyMoneyTransactionSplitImpl(jwsdpTrxSplt, trx, 
+																			 addSpltToAcct);
+		LOGGER.debug("createTransactionSplit: Generated new transaction split: " + splt.getQualifID());
+		return splt;
 	}
 
 	// ---------------------------------------------------------------
@@ -107,10 +143,10 @@ public class FileTransactionManager {
 		addTransactionSplit(splt, true);
 	}
 
-	public void addTransactionSplit(KMyMoneyTransactionSplit splt, boolean withInvc) throws IllegalArgumentException {
+	public void addTransactionSplit(KMyMoneyTransactionSplit splt, boolean withTrx) throws IllegalArgumentException {
 		trxSpltMap.put(splt.getQualifID(), splt);
 
-		if ( withInvc ) {
+		if ( withTrx ) {
 			addTransaction(splt.getTransaction(), false);
 		}
 	}
@@ -119,9 +155,9 @@ public class FileTransactionManager {
 		removeTransactionSplit(splt, true);
 	}
 
-	public void removeTransactionSplit(KMyMoneyTransactionSplit splt, boolean withInvc)
+	public void removeTransactionSplit(KMyMoneyTransactionSplit splt, boolean withTrx)
 			throws IllegalArgumentException {
-		if ( withInvc ) {
+		if ( withTrx ) {
 			removeTransaction(splt.getTransaction(), false);
 		}
 
@@ -159,16 +195,118 @@ public class FileTransactionManager {
 
 		KMyMoneyTransactionSplit retval = trxSpltMap.get(spltID);
 		if ( retval == null ) {
-			LOGGER.warn("getTransactionSplitByID: No Transaction-Split with ID '" + spltID + "'. We know " + trxSpltMap.size() + " transactions.");
+			LOGGER.warn("getTransactionSplitByID: No Transaction-Split with ID '" + spltID + "'. We know " + trxSpltMap.size() + " transaction splits.");
 		}
+
 		return retval;
 	}
+
+	public Collection<KMyMoneyTransactionImpl> getTransactions_readAfresh() {
+		Collection<KMyMoneyTransactionImpl> result = new ArrayList<KMyMoneyTransactionImpl>();
+
+		for ( TRANSACTION jwsdpTrx : getTransactions_raw() ) {
+			try {
+				KMyMoneyTransactionImpl trx = createTransaction(jwsdpTrx);
+				result.add(trx);
+			} catch (RuntimeException e) {
+				LOGGER.error("getTransactions_readAfresh: [RuntimeException] Problem in " + getClass().getName()
+						+ ".getTransactions_readAfresh: " + "ignoring illegal Transaction entry with id="
+						+ jwsdpTrx.getId(), e);
+//		System.err.println("getTransactions_readAfresh: ignoring illegal Transaction entry with id: " + jwsdpTrx.getTrnID().getValue());
+//		System.err.println("  " + e.getMessage());
+			}
+		}
+
+		return result;
+	}
+
+	private Collection<TRANSACTION> getTransactions_raw() {
+		Collection<TRANSACTION> result = new ArrayList<TRANSACTION>();
+
+		for ( TRANSACTION jwsdpTrx : kmmFile.getRootElement().getTRANSACTIONS().getTRANSACTION() ) {
+			result.add(jwsdpTrx);
+		}
+
+		return result;
+	}
+
+	// ----------------------------
 
 	public Collection<KMyMoneyTransactionSplit> getTransactionSplits() {
 		if ( trxSpltMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
 		return Collections.unmodifiableCollection(trxSpltMap.values());
+	}
+
+	public Collection<KMyMoneyTransactionSplitImpl> getTransactionSplits_readAfresh() {
+		Collection<KMyMoneyTransactionSplitImpl> result = new ArrayList<KMyMoneyTransactionSplitImpl>();
+
+		for ( KMyMoneyTransaction trx : getTransactions_readAfresh() ) {
+			for ( SPLIT jwsdpTrxSplt : getTransactionSplits_raw(trx.getID()) ) {
+				try {
+					KMyMoneyTransactionSplitImpl splt = createTransactionSplit(jwsdpTrxSplt, trx,
+																			   false);
+					result.add(splt);
+				} catch (RuntimeException e) {
+					LOGGER.error("getTransactionSplits_readAfresh(1): [RuntimeException] Problem in "
+							+ "ignoring illegal Transaction Split entry with id="
+							+ trx.getID() + ":" + jwsdpTrxSplt.getId(), e);
+//			System.err.println("getTransactionSplits_readAfresh(1): ignoring illegal Transaction Split entry with id: " + jwsdpTrxSplt.getSplitID().getValue());
+//			System.err.println("  " + e.getMessage());
+				}
+			} // for jwsdpTrxSplt
+		} // for trx
+
+		return result;
+	}
+
+	public Collection<KMyMoneyTransactionSplitImpl> getTransactionSplits_readAfresh(final KMMTrxID trxID) {
+		Collection<KMyMoneyTransactionSplitImpl> result = new ArrayList<KMyMoneyTransactionSplitImpl>();
+
+		for ( KMyMoneyTransaction trx : getTransactions_readAfresh() ) {
+			if ( trx.getID().equals(trxID) ) {
+				for ( SPLIT jwsdpTrxSplt : getTransactionSplits_raw(trx.getID()) ) {
+					try {
+						KMyMoneyTransactionSplitImpl splt = createTransactionSplit(jwsdpTrxSplt, trx, 
+																				   true);
+						result.add(splt);
+					} catch (RuntimeException e) {
+						LOGGER.error("getTransactionSplits_readAfresh(2): [RuntimeException] Problem in "
+								+ "ignoring illegal Transaction Split entry with id="
+								+ trx.getID() + ":" + jwsdpTrxSplt.getId(), e);
+//			System.err.println("getTransactionSplits_readAfresh(2): ignoring illegal Transaction Split entry with id: " + jwsdpTrxSplt.getSplitID().getValue());
+//			System.err.println("  " + e.getMessage());
+					}
+				} // for jwsdpTrxSplt
+			} // if
+		} // for trx
+
+		return result;
+	}
+
+	private Collection<SPLIT> getTransactionSplits_raw(final TRANSACTION jwsdpTrx) {
+		Collection<SPLIT> result = new ArrayList<SPLIT>();
+
+		for ( SPLIT jwsdpTrxSplt : jwsdpTrx.getSPLITS().getSPLIT() ) {
+			result.add(jwsdpTrxSplt);
+		}
+
+		return result;
+	}
+
+	private Collection<SPLIT> getTransactionSplits_raw(final KMMTrxID trxID) {
+		Collection<SPLIT> result = new ArrayList<SPLIT>();
+
+		for ( TRANSACTION jwsdpTrx : getTransactions_raw() ) {
+			if ( jwsdpTrx.getId().equals(trxID.toString()) ) {
+				for ( SPLIT jwsdpTrxSplt : jwsdpTrx.getSPLITS().getSPLIT() ) {
+					result.add(jwsdpTrxSplt);
+				}
+			}
+		}
+
+		return result;
 	}
 
 	// ---------------------------------------------------------------
