@@ -55,7 +55,7 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 	 * @param desc the user-defined description (may contain multiple lines and
 	 *             non-ascii-characters)
 	 */
-	void setDescription(String desc);
+	void setMemo(String desc);
 
 	/**
 	 * Get the sum of all transaction-splits affecting this account in the given

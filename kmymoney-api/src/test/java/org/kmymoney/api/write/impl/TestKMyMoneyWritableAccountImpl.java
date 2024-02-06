@@ -3,6 +3,7 @@ package org.kmymoney.api.write.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import java.io.File;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Currency;
@@ -323,7 +324,76 @@ public class TestKMyMoneyWritableAccountImpl {
     // Check whether the KMyMoneyWritableAccount objects returned by
     // can actually be modified -- both in memory and persisted in file.
 	
-	// ::TODO
+	@Test
+	public void test02_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_1_ID);
+		assertNotEquals(null, acct);
+
+		assertEquals(ACCT_1_ID, acct.getID());
+
+		// ----------------------------
+		// Modify the object
+
+		acct.setName("Giro d'Italia");
+		acct.setMemo("My favorite account");
+
+		// ----------------------------
+		// Check whether the object can has actually be modified
+		// (in memory, not in the file yet).
+
+		test02_1_check_memory(acct);
+
+		// ----------------------------
+		// Now, check whether the modified object can be written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the GnuCash file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test02_1_check_persisted(outFile);
+	}
+
+	@Test
+	public void test02_2() throws Exception {
+		// ::TODO
+	}
+
+	private void test02_1_check_memory(KMyMoneyWritableAccount pye) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
+
+		assertEquals(ACCT_1_ID, pye.getID()); // unchanged
+		assertEquals("Giro d'Italia", pye.getName()); // changed
+		assertEquals("My favorite account", pye.getMemo()); // changed
+	}
+
+	private void test02_1_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
+
+		KMyMoneyAccount acct = kmmOutFile.getAccountByID(ACCT_1_ID);
+		assertNotEquals(null, acct);
+
+		assertEquals(ACCT_1_ID, acct.getID()); // unchanged
+		assertEquals("Giro d'Italia", acct.getName()); // changed
+		assertEquals("My favorite account", acct.getMemo()); // changed
+	}
 
     // -----------------------------------------------------------------
     // PART 3: Create new objects

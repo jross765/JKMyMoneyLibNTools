@@ -98,55 +98,56 @@ public class TestKMyMoneyWritableSecurityImpl {
     // KMyMoneyWritableFileImpl.getWritableSecurityByID() are actually
     // complete (as complete as returned be KMyMoneyFileImpl.getSecurityByID().
 
-    @Test
-    public void test01_1() throws Exception {
-	KMyMoneyWritableSecurity sec = kmmInFile.getWritableSecurityByQualifID(secID1);
-	assertNotEquals(null, sec);
+	@Test
+	public void test01_1() throws Exception {
+		KMyMoneyWritableSecurity sec = kmmInFile.getWritableSecurityByQualifID(secID1);
+		assertNotEquals(null, sec);
 
-	assertEquals(secID1.toString(), sec.getQualifID().toString());
-	// *Not* equal because of class
-	assertNotEquals(secID1, sec.getID());
-	// ::TODO: Convert to SecurityID_Exchange, then it should be equal
+		assertEquals(secID1.toString(), sec.getQualifID().toString());
+		// *Not* equal because of class
+		assertNotEquals(secID1, sec.getID());
+		// ::TODO: Convert to SecurityID_Exchange, then it should be equal
 //    assertEquals(secCurrID1, sec.getQualifID()); // not trivial!
-	// ::TODO
-	// assertEquals(SEC_1_ISIN, sec.getSymbol());
-	assertEquals(SEC_1_TICKER, sec.getSymbol());
-	assertEquals("Mercedes-Benz Group AG", sec.getName());
-    }
+		// ::TODO
+		// assertEquals(SEC_1_ISIN, sec.getSymbol());
+		assertEquals(SEC_1_TICKER, sec.getSymbol());
+		assertEquals("Mercedes-Benz Group AG", sec.getName());
+	}
 
-    @Test
-    public void test01_2() throws Exception {
-	Collection<KMyMoneyWritableSecurity> secList = kmmInFile.getWritableSecuritiesByName("mercedes");
-	assertNotEquals(null, secList);
-	assertEquals(1, secList.size());
+	@Test
+	public void test01_2() throws Exception {
+		Collection<KMyMoneyWritableSecurity> secList = kmmInFile.getWritableSecuritiesByName("mercedes");
+		assertNotEquals(null, secList);
+		assertEquals(1, secList.size());
 
-	assertEquals(secID1.toString(), ((KMyMoneySecurity) secList.toArray()[0]).getQualifID().toString());
-	assertEquals(secID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
-	// ::TODO: Convert to SecurityID_Exchange, then it should be equal
+		assertEquals(secID1.toString(), ((KMyMoneySecurity) secList.toArray()[0]).getQualifID().toString());
+		assertEquals(secID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
+		// ::TODO: Convert to SecurityID_Exchange, then it should be equal
 //    assertEquals(secCurrID1, 
 //	        ((KMyMoneySecurity) secList.toArray()[0]).getQualifID()); // not trivial!
-	// ::TODO
-	// assertEquals(SEC_1_ISIN, ((KMyMoneySecurity) secList.toArray()[0]).getSymbol());
-	assertEquals(SEC_1_TICKER, ((KMyMoneySecurity) secList.toArray()[0]).getSymbol());
-	assertEquals("Mercedes-Benz Group AG", ((KMyMoneySecurity) secList.toArray()[0]).getName());
+		// ::TODO
+		// assertEquals(SEC_1_ISIN, ((KMyMoneySecurity)
+		// secList.toArray()[0]).getSymbol());
+		assertEquals(SEC_1_TICKER, ((KMyMoneySecurity) secList.toArray()[0]).getSymbol());
+		assertEquals("Mercedes-Benz Group AG", ((KMyMoneySecurity) secList.toArray()[0]).getName());
 
-	secList = kmmInFile.getWritableSecuritiesByName("BENZ");
-	assertNotEquals(null, secList);
-	assertEquals(1, secList.size());
-	assertEquals(secID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
-	// ::TODO: Convert to SecurityID_Exchange, then it should be equal
+		secList = kmmInFile.getWritableSecuritiesByName("BENZ");
+		assertNotEquals(null, secList);
+		assertEquals(1, secList.size());
+		assertEquals(secID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
+		// ::TODO: Convert to SecurityID_Exchange, then it should be equal
 //    assertEquals(secCurrID1, 
 //	         ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
 
-	secList = kmmInFile.getWritableSecuritiesByName(" MeRceDeS-bEnZ  ");
-	assertNotEquals(null, secList);
-	assertEquals(1, secList.size());
-	assertEquals(secID1.toString(), ((KMyMoneySecurity) secList.toArray()[0]).getQualifID().toString());
-	assertEquals(secID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
-	// ::TODO: Convert to SecurityID_Exchange, then it should be equal
+		secList = kmmInFile.getWritableSecuritiesByName(" MeRceDeS-bEnZ  ");
+		assertNotEquals(null, secList);
+		assertEquals(1, secList.size());
+		assertEquals(secID1.toString(), ((KMyMoneySecurity) secList.toArray()[0]).getQualifID().toString());
+		assertEquals(secID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
+		// ::TODO: Convert to SecurityID_Exchange, then it should be equal
 //    assertEquals(secCurrID1, 
 //	         ((KMyMoneySecurity) secList.toArray()[0]).getQualifID()); // not trivial!
-    }
+	}
 
     // -----------------------------------------------------------------
     // PART 2: Modify existing objects
@@ -164,62 +165,80 @@ public class TestKMyMoneyWritableSecurityImpl {
     // PART 3.1: High-Level
     // ------------------------------
 
-    @Test
-    public void test03_1_1() throws Exception {
-	kmmInFileStats = new KMMFileStats(kmmInFile);
+	@Test
+	public void test03_1_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
 
-	assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic + 1 for template
-	assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // sic, NOT + 1 yet
-	assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic + 1
+																												// for
+																												// template
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // sic,
+																													// NOT
+																													// +
+																													// 1
+																													// yet
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
 
-	KMyMoneyWritableSecurity sec = kmmInFile.createWritableSecurity();
-	newID.set(sec.getID());
-	sec.setName("Best Corp Ever");
+		KMyMoneyWritableSecurity sec = kmmInFile.createWritableSecurity();
+		newID.set(sec.getID());
+		sec.setName("Best Corp Ever");
 
-	// ----------------------------
-	// Check whether the object can has actually be created
-	// (in memory, not in the file yet).
+		// ----------------------------
+		// Check whether the object can has actually be created
+		// (in memory, not in the file yet).
 
-	test03_1_1_check_memory(sec);
+		test03_1_1_check_memory(sec);
 
-	// ----------------------------
-	// Now, check whether the created object can be written to the
-	// output file, then re-read from it, and whether is is what
-	// we expect it is.
+		// ----------------------------
+		// Now, check whether the created object can be written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
 
-	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
-	// System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test01_1: '"
-	// + outFile.getPath() + "'");
-	outFile.delete(); // sic, the temp. file is already generated (empty),
-			  // and the KMyMoney file writer does not like that.
-	kmmInFile.writeFile(outFile);
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
 
-	test03_1_1_check_persisted(outFile);
-    }
+		test03_1_1_check_persisted(outFile);
+	}
 
-    private void test03_1_1_check_memory(KMyMoneyWritableSecurity sec) throws Exception {
-	assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic + 1 for template
-	assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // sic, NOT + 1 yet
-	assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
+	private void test03_1_1_check_memory(KMyMoneyWritableSecurity sec) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic
+																													// +
+																													// 1
+																													// for
+																													// template
+		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // sic,
+																														// NOT
+																														// +
+																														// 1
+																														// yet
+		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
 
-	assertEquals(newID.toString(), sec.getID().toString());
-	assertEquals("Best Corp Ever", sec.getName());
-    }
+		assertEquals(newID.toString(), sec.getID().toString());
+		assertEquals("Best Corp Ever", sec.getName());
+	}
 
-    private void test03_1_1_check_persisted(File outFile) throws Exception {
-	kmmOutFile = new KMyMoneyFileImpl(outFile);
-	kmmOutFileStats = new KMMFileStats(kmmOutFile);
+	private void test03_1_1_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-	assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic + 1 for template
-	assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // dto.
-	assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic
+																													// +
+																													// 1
+																													// for
+																													// template
+		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // dto.
+		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
 
-	KMyMoneySecurity sec = kmmOutFile.getSecurityByID(newID);
-	assertNotEquals(null, sec);
+		KMyMoneySecurity sec = kmmOutFile.getSecurityByID(newID);
+		assertNotEquals(null, sec);
 
-	assertEquals(newID.toString(), sec.getID().toString());
-	assertEquals("Best Corp Ever", sec.getName());
-    }
+		assertEquals(newID.toString(), sec.getID().toString());
+		assertEquals("Best Corp Ever", sec.getName());
+	}
 
     // ------------------------------
     // PART 3.2: Low-Level

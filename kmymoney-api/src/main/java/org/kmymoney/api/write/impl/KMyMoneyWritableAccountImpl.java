@@ -364,7 +364,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	/**
 	 * @see KMyMoneyWritableAccount#setName(java.lang.String)
 	 */
-	public void setDescription(final String descr) {
+	public void setMemo(final String descr) {
 		if ( descr == null ) {
 			throw new IllegalArgumentException("null or empty description given!");
 		}
