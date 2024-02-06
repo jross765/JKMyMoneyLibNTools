@@ -414,7 +414,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	/**
 	 * @see KMyMoneyWritableAccount#setParentAccount(KMyMoneyAccount)
 	 */
-	public void setParentAccountId(final KMMComplAcctID prntAcctID) {
+	public void setParentAccountID(final KMMComplAcctID prntAcctID) {
 		if ( prntAcctID == null ) {
 			setParentAccount(null);
 			return;

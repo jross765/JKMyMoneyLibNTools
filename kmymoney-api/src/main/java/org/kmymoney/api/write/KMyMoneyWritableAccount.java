@@ -95,7 +95,7 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 	 *
 	 * @see {@link #setParentAccount(KMyMoneyAccount)}
 	 */
-	void setParentAccountId(KMMComplAcctID prntAcctID);
+	void setParentAccountID(KMMComplAcctID prntAcctID);
 
 	/**
 	 * Remove this account from the sytem.<br/>

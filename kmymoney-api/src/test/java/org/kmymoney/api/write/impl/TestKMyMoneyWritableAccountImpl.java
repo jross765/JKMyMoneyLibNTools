@@ -16,9 +16,11 @@ import org.kmymoney.api.ConstTest;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.simple.KMMAcctID;
 import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
+import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
 
 import junit.framework.JUnit4TestAdapter;
@@ -44,7 +46,7 @@ public class TestKMyMoneyWritableAccountImpl {
     private KMMFileStats kmmInFileStats = null;
     private KMMFileStats kmmOutFileStats = null;
 
-    private KMMAcctID newID = null;
+    private KMMComplAcctID newID = null;
 
     // https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
     @SuppressWarnings("exports")
@@ -369,14 +371,14 @@ public class TestKMyMoneyWritableAccountImpl {
 		// ::TODO
 	}
 
-	private void test02_1_check_memory(KMyMoneyWritableAccount pye) throws Exception {
+	private void test02_1_check_memory(KMyMoneyWritableAccount acct) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
 		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
 
-		assertEquals(ACCT_1_ID, pye.getID()); // unchanged
-		assertEquals("Giro d'Italia", pye.getName()); // changed
-		assertEquals("My favorite account", pye.getMemo()); // changed
+		assertEquals(ACCT_1_ID, acct.getID()); // unchanged
+		assertEquals("Giro d'Italia", acct.getName()); // changed
+		assertEquals("My favorite account", acct.getMemo()); // changed
 	}
 
 	private void test02_1_check_persisted(File outFile) throws Exception {
@@ -401,6 +403,78 @@ public class TestKMyMoneyWritableAccountImpl {
 
     // ------------------------------
     // PART 3.1: High-Level
+    // ------------------------------
+
+	@Test
+	public void test03_1_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritableAccount acct = kmmInFile.createWritableAccount();
+		acct.setName("Various expenses");
+		acct.setType(KMyMoneyAccount.Type.EXPENSE);
+		acct.setParentAccountID(ACCT_13_ID);
+		acct.setCurrencyID(kmmInFile.getDefaultCurrencyID());
+		acct.setMemo("All the stuff that does not fit into the other expenses accounts");
+
+		// ----------------------------
+		// Check whether the object can has actually be created
+		// (in memory, not in the file yet).
+
+		test03_1_1_check_memory(acct);
+
+		// ----------------------------
+		// Now, check whether the created object can be written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the GnuCash file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test03_1_1_check_persisted(outFile);
+	}
+
+	private void test03_1_1_check_memory(KMyMoneyWritableAccount acct) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_ACCT + 1, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_ACCT + 1, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_ACCT + 1, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
+
+		newID = acct.getID();
+		assertEquals("Various expenses", acct.getName());
+		assertEquals(KMyMoneyAccount.Type.EXPENSE, acct.getType());
+		assertEquals(ACCT_13_ID, acct.getParentAccountID());
+		assertEquals(kmmInFile.getDefaultCurrencyID(), acct.getSecCurrID().getCode());
+		assertEquals("All the stuff that does not fit into the other expenses accounts", acct.getMemo());
+	}
+
+	private void test03_1_1_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		assertEquals(ConstTest.Stats.NOF_ACCT + 1, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_ACCT + 1, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_ACCT + 1, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
+
+		KMyMoneyAccount acct = kmmOutFile.getAccountByID(newID);
+		assertNotEquals(null, acct);
+
+		assertEquals(newID, acct.getID());
+		assertEquals("Various expenses", acct.getName());
+		assertEquals(KMyMoneyAccount.Type.EXPENSE, acct.getType());
+		assertEquals(ACCT_13_ID, acct.getParentAccountID());
+		assertEquals(kmmInFile.getDefaultCurrencyID(), acct.getSecCurrID().getCode());
+		assertEquals("All the stuff that does not fit into the other expenses accounts", acct.getMemo());
+	}
+
+    // ------------------------------
+    // PART 3.2: Low-Level
     // ------------------------------
 
 	// ::TODO
