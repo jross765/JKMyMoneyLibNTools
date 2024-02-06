@@ -22,9 +22,9 @@ import org.kmymoney.api.read.KMyMoneySecurity;
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneyPriceImpl {
-	static final KMMPriceID PRC_1_ID = new KMMPriceID("E000001", "EUR", "2023-11-03"); // SAP/EUR
-	static final KMMPriceID PRC_2_ID = new KMMPriceID("E000002", "EUR", "2023-11-01"); // MBG/EUR
-	static final KMMPriceID PRC_3_ID = new KMMPriceID("USD", "EUR", "2023-12-04");
+	public static final KMMPriceID PRC_1_ID = new KMMPriceID("E000001", "EUR", "2023-11-03"); // SAP/EUR
+	public static final KMMPriceID PRC_2_ID = new KMMPriceID("E000002", "EUR", "2023-11-01"); // MBG/EUR
+	public static final KMMPriceID PRC_3_ID = new KMMPriceID("USD", "EUR", "2023-12-04");
 
 	// -----------------------------------------------------------------
 
@@ -92,7 +92,7 @@ public class TestKMyMoneyPriceImpl {
 	}
 
 	@Test
-	public void test02_1() throws Exception {
+	public void test01_1() throws Exception {
 		prc = kmmFile.getPriceByID(PRC_1_ID);
 		assertNotEquals(null, prc);
 
@@ -132,7 +132,7 @@ public class TestKMyMoneyPriceImpl {
 	}
 
 	@Test
-	public void test02_2() throws Exception {
+	public void test01_2() throws Exception {
 		prc = kmmFile.getPriceByID(PRC_2_ID);
 		assertNotEquals(null, prc);
 
@@ -172,7 +172,7 @@ public class TestKMyMoneyPriceImpl {
 	}
 
 	@Test
-	public void test02_3() throws Exception {
+	public void test01_3() throws Exception {
 		prc = kmmFile.getPriceByID(PRC_3_ID);
 		assertNotEquals(null, prc);
 

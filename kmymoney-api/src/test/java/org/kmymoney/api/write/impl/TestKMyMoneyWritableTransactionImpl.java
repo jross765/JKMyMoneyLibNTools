@@ -52,35 +52,35 @@ public class TestKMyMoneyWritableTransactionImpl {
 
     // -----------------------------------------------------------------
 
-    public static void main(String[] args) throws Exception {
-	junit.textui.TestRunner.run(suite());
-    }
-
-    @SuppressWarnings("exports")
-    public static junit.framework.Test suite() {
-	return new JUnit4TestAdapter(TestKMyMoneyWritableTransactionImpl.class);
-    }
-
-    @Before
-    public void initialize() throws Exception {
-	ClassLoader classLoader = getClass().getClassLoader();
-	// URL kmmFileURL = classLoader.getResource(Const.KMM_FILENAME);
-	// System.err.println("KMyMoney test file resource: '" + kmmFileURL + "'");
-	InputStream kmmInFileStream = null;
-	try {
-	    kmmInFileStream = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME_IN);
-	} catch (Exception exc) {
-	    System.err.println("Cannot generate input stream from resource");
-	    return;
+	public static void main(String[] args) throws Exception {
+		junit.textui.TestRunner.run(suite());
 	}
 
-	try {
-	    kmmInFile = new KMyMoneyWritableFileImpl(kmmInFileStream);
-	} catch (Exception exc) {
-	    System.err.println("Cannot parse KMyMoney in-file");
-	    exc.printStackTrace();
+	@SuppressWarnings("exports")
+	public static junit.framework.Test suite() {
+		return new JUnit4TestAdapter(TestKMyMoneyWritableTransactionImpl.class);
 	}
-    }
+
+	@Before
+	public void initialize() throws Exception {
+		ClassLoader classLoader = getClass().getClassLoader();
+		// URL kmmFileURL = classLoader.getResource(Const.KMM_FILENAME);
+		// System.err.println("KMyMoney test file resource: '" + kmmFileURL + "'");
+		InputStream kmmInFileStream = null;
+		try {
+			kmmInFileStream = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME_IN);
+		} catch (Exception exc) {
+			System.err.println("Cannot generate input stream from resource");
+			return;
+		}
+
+		try {
+			kmmInFile = new KMyMoneyWritableFileImpl(kmmInFileStream);
+		} catch (Exception exc) {
+			System.err.println("Cannot parse KMyMoney in-file");
+			exc.printStackTrace();
+		}
+	}
 
     // -----------------------------------------------------------------
     // PART 1: Read existing objects as modifiable ones

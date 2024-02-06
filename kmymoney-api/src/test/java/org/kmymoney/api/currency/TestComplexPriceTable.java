@@ -61,8 +61,8 @@ public class TestComplexPriceTable {
 		assertEquals(2, complPriceTab.getNameSpaces().size());
 
 		Object[] nameSpaceArr = complPriceTab.getNameSpaces().toArray();
-		assertEquals(KMMQualifSecCurrID.Type.SECURITY, (KMMQualifSecCurrID.Type) nameSpaceArr[0]);
-		assertEquals(KMMQualifSecCurrID.Type.CURRENCY, (KMMQualifSecCurrID.Type) nameSpaceArr[1]);
+		assertEquals(KMMQualifSecCurrID.Type.SECURITY, (KMMQualifSecCurrID.Type) nameSpaceArr[1]);
+		assertEquals(KMMQualifSecCurrID.Type.CURRENCY, (KMMQualifSecCurrID.Type) nameSpaceArr[0]);
 	}
 
 	@Test

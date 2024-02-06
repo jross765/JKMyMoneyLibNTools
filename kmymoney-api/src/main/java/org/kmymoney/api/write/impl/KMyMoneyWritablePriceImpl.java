@@ -10,6 +10,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
@@ -18,6 +19,7 @@ import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyCurrency;
+import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyPriceImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
@@ -132,12 +134,6 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 
     // ---------------------------------------------------------------
 
-    public KMyMoneyWritablePricePair getWritableParentPricePair() {
-	return wrtblParent;
-    }
-    
-    // ---------------------------------------------------------------
-
 	@Override
 	public void setFromSecCurrStr(String secCurr) {
 		if ( secCurr == null )
@@ -218,6 +214,40 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
     	getWritableKMyMoneyFile().setModified(true);
     }
     
+    // ---------------------------------------------------------------
+
+    @Override
+    public KMyMoneyWritablePricePair getWritableParentPricePair() {
+    	return wrtblParent;
+    }
+    
+    // ---------------------------------------------------------------
+
+    public void setParentPricePairID(KMMCurrPair prcPrID) {
+		if ( prcPrID == null )
+			throw new IllegalArgumentException("null price pair ID given");
+
+		// ::TODO
+//		if ( ! prcPrID.isSet() )
+//			throw new IllegalArgumentException("unset price pair ID given");
+
+		KMMCurrPair oldPrcPrID = getParentPricePairID();
+
+		getWritableParentPricePair().setID(prcPrID);
+		getWritableKMyMoneyFile().setModified(true);
+
+		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+		if ( propertyChangeSupport != null ) {
+			propertyChangeSupport.firePropertyChange("pricePairID", oldPrcPrID, prcPrID);
+		}
+    }
+	
+    public void setParentPricePair(KMyMoneyPricePair prcPr) {
+		if ( prcPr == null )
+			throw new IllegalArgumentException("null price pair given");
+
+    }
+	
     // ---------------------------------------------------------------
 
     @Override

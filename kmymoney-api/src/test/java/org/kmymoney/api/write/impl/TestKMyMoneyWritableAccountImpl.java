@@ -14,13 +14,10 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.api.basetypes.simple.KMMAcctID;
-import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
-import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
 
 import junit.framework.JUnit4TestAdapter;
@@ -55,35 +52,35 @@ public class TestKMyMoneyWritableAccountImpl {
 
     // -----------------------------------------------------------------
 
-    public static void main(String[] args) throws Exception {
-	junit.textui.TestRunner.run(suite());
-    }
-
-    @SuppressWarnings("exports")
-    public static junit.framework.Test suite() {
-	return new JUnit4TestAdapter(TestKMyMoneyWritableAccountImpl.class);
-    }
-
-    @Before
-    public void initialize() throws Exception {
-	ClassLoader classLoader = getClass().getClassLoader();
-	// URL kmmFileURL = classLoader.getResource(Const.KMM_FILENAME);
-	// System.err.println("KMyMoney test file resource: '" + kmmFileURL + "'");
-	InputStream kmmInFileStream = null;
-	try {
-	    kmmInFileStream = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME_IN);
-	} catch (Exception exc) {
-	    System.err.println("Cannot generate input stream from resource");
-	    return;
+	public static void main(String[] args) throws Exception {
+		junit.textui.TestRunner.run(suite());
 	}
 
-	try {
-	    kmmInFile = new KMyMoneyWritableFileImpl(kmmInFileStream);
-	} catch (Exception exc) {
-	    System.err.println("Cannot parse KMyMoney in-file");
-	    exc.printStackTrace();
+	@SuppressWarnings("exports")
+	public static junit.framework.Test suite() {
+		return new JUnit4TestAdapter(TestKMyMoneyWritableAccountImpl.class);
 	}
-    }
+
+	@Before
+	public void initialize() throws Exception {
+		ClassLoader classLoader = getClass().getClassLoader();
+		// URL kmmFileURL = classLoader.getResource(Const.KMM_FILENAME);
+		// System.err.println("KMyMoney test file resource: '" + kmmFileURL + "'");
+		InputStream kmmInFileStream = null;
+		try {
+			kmmInFileStream = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME_IN);
+		} catch (Exception exc) {
+			System.err.println("Cannot generate input stream from resource");
+			return;
+		}
+
+		try {
+			kmmInFile = new KMyMoneyWritableFileImpl(kmmInFileStream);
+		} catch (Exception exc) {
+			System.err.println("Cannot parse KMyMoney in-file");
+			exc.printStackTrace();
+		}
+	}
 
     // -----------------------------------------------------------------
     // PART 1: Read existing objects as modifiable ones

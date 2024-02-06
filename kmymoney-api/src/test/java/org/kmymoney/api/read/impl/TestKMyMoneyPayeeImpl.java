@@ -15,12 +15,14 @@ import org.kmymoney.api.read.aux.KMMAddress;
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneyPayeeImpl {
-	private KMyMoneyFile kmmFile = null;
-	private KMyMoneyPayee pye = null;
-
 	public static final KMMPyeID PYE_1_ID = new KMMPyeID("P000002"); // Gehalt
 	public static final KMMPyeID PYE_2_ID = new KMMPyeID("P000003"); // Geldautomat
 	public static final KMMPyeID PYE_3_ID = new KMMPyeID("P000005"); // Schnorzelmoeller
+
+	// -----------------------------------------------------------------
+
+	private KMyMoneyFile kmmFile = null;
+	private KMyMoneyPayee pye = null;
 
 	// -----------------------------------------------------------------
 

@@ -1,4 +1,4 @@
-package org.kmymoney.api.read.impl;
+package org.kmymoney.api.write.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -6,37 +6,51 @@ import static org.junit.Assert.assertNotEquals;
 import java.io.InputStream;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
 import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.read.KMyMoneyCurrency;
-import org.kmymoney.api.read.KMyMoneyFile;
-import org.kmymoney.api.read.KMyMoneyPrice;
-import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
+import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.api.read.impl.TestKMyMoneyPriceImpl;
+import org.kmymoney.api.read.impl.TestKMyMoneyPricePairImpl;
+import org.kmymoney.api.read.impl.aux.KMMFileStats;
+import org.kmymoney.api.write.KMyMoneyWritablePrice;
+import org.kmymoney.api.write.KMyMoneyWritablePricePair;
 
 import junit.framework.JUnit4TestAdapter;
 
-public class TestKMyMoneyPricePairImpl {
-	public static final KMMCurrPair PRCPR_1_ID = new KMMCurrPair("E000001", "EUR"); // SAP/EUR
-	public static final KMMCurrPair PRCPR_2_ID = new KMMCurrPair("E000002", "EUR"); // MBG/EUR
-	public static final KMMCurrPair PRCPR_3_ID = new KMMCurrPair("USD", "EUR");
+public class TestKMyMoneyWritablePricePairImpl {
+    public static final KMMCurrPair PRCPR_1_ID = TestKMyMoneyPricePairImpl.PRCPR_1_ID;
+    public static final KMMCurrPair PRCPR_2_ID = TestKMyMoneyPricePairImpl.PRCPR_2_ID;
+    public static final KMMCurrPair PRCPR_3_ID = TestKMyMoneyPricePairImpl.PRCPR_3_ID;
 
-	// -----------------------------------------------------------------
+    // -----------------------------------------------------------------
 
-	private KMyMoneyFile kmmFile = null;
-	private KMyMoneyPrice prc = null;
-	private KMyMoneyPricePair prcPr = null;
+    private KMyMoneyWritableFileImpl kmmInFile = null;
+    private KMyMoneyFileImpl kmmOutFile = null;
+
+    private KMMFileStats kmmInFileStats = null;
+    private KMMFileStats kmmOutFileStats = null;
 
 	KMMQualifSecCurrID secID1 = null;
 	KMMQualifSecCurrID secID2 = null;
 
 	KMMQualifCurrID currID1 = null;
 
-	// -----------------------------------------------------------------
+	private KMMCurrPair newID = null;
+
+    // https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
+    @SuppressWarnings("exports")
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+
+    // -----------------------------------------------------------------
 
 	public static void main(String[] args) throws Exception {
 		junit.textui.TestRunner.run(suite());
@@ -44,26 +58,26 @@ public class TestKMyMoneyPricePairImpl {
 
 	@SuppressWarnings("exports")
 	public static junit.framework.Test suite() {
-		return new JUnit4TestAdapter(TestKMyMoneyPricePairImpl.class);
+		return new JUnit4TestAdapter(TestKMyMoneyWritablePricePairImpl.class);
 	}
 
 	@Before
 	public void initialize() throws Exception {
 		ClassLoader classLoader = getClass().getClassLoader();
-		// URL kmmFileURL = classLoader.getResource(Const.GCSH_FILENAME);
+		// URL kmmFileURL = classLoader.getResource(Const.KMM_FILENAME);
 		// System.err.println("KMyMoney test file resource: '" + kmmFileURL + "'");
-		InputStream kmmFileStream = null;
+		InputStream kmmInFileStream = null;
 		try {
-			kmmFileStream = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME);
+			kmmInFileStream = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME_IN);
 		} catch (Exception exc) {
 			System.err.println("Cannot generate input stream from resource");
 			return;
 		}
 
 		try {
-			kmmFile = new KMyMoneyFileImpl(kmmFileStream);
+			kmmInFile = new KMyMoneyWritableFileImpl(kmmInFileStream);
 		} catch (Exception exc) {
-			System.err.println("Cannot parse KMyMoney file");
+			System.err.println("Cannot parse KMyMoney in-file");
 			exc.printStackTrace();
 		}
 
@@ -75,28 +89,22 @@ public class TestKMyMoneyPricePairImpl {
 		currID1 = new KMMQualifCurrID("USD");
 	}
 
-	// -----------------------------------------------------------------
-
-//  @Test
-//  public void test01() throws Exception
-//  {
-//      Collection<KMMPricePair> prcPrList = kmmFile.getPricePairs();
-//      
-//      assertEquals(5, prcPrList.size());
-//
-//      // ::TODO: Sort array for predictability
-////      Object[] priceArr = priceList.toArray();
-////      
-////      assertEquals(PRICE_1_ID, ((KMMPrice) priceArr[0]).getID());
-////      assertEquals(PRICE_2_ID, ((KMMPrice) priceArr[1]).getID());
-////      assertEquals(PRICE_3_ID, ((KMMPrice) priceArr[2]).getID());
-//  }
+    // -----------------------------------------------------------------
+    // PART 1: Read existing objects as modifiable ones
+    // (and see whether they are fully symmetrical to their read-only
+    // counterparts)
+    // -----------------------------------------------------------------
+    // Cf. TestKMyMoneyPricePairImpl.test01_xyz
+    //
+    // Check whether the KMyMoneyWritablePricePair objects returned by
+    // KMyMoneyWritableFileImpl.getWritablePricePairByID() are actually
+    // complete (as complete as returned be KMyMoneyFileImpl.getPricePairByID().
 
 	@Test
 	public void test01_1() throws Exception {
-		prc = kmmFile.getPriceByID(TestKMyMoneyPriceImpl.PRC_1_ID);
+		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(TestKMyMoneyPriceImpl.PRC_1_ID);
 		assertNotEquals(null, prc);
-		prcPr = prc.getParentPricePair();
+		KMyMoneyWritablePricePair prcPr = prc.getWritableParentPricePair();
 		assertNotEquals(null, prcPr);
 
 		assertEquals(PRCPR_1_ID, prcPr.getID());
@@ -133,9 +141,9 @@ public class TestKMyMoneyPricePairImpl {
 
 	@Test
 	public void test01_2() throws Exception {
-		prc = kmmFile.getPriceByID(TestKMyMoneyPriceImpl.PRC_2_ID);
+		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(TestKMyMoneyPriceImpl.PRC_2_ID);
 		assertNotEquals(null, prc);
-		prcPr = prc.getParentPricePair();
+		KMyMoneyWritablePricePair prcPr = prc.getWritableParentPricePair();
 		assertNotEquals(null, prcPr);
 
 		assertEquals(PRCPR_2_ID, prcPr.getID());
@@ -172,9 +180,9 @@ public class TestKMyMoneyPricePairImpl {
 
 	@Test
 	public void test01_3() throws Exception {
-		prc = kmmFile.getPriceByID(TestKMyMoneyPriceImpl.PRC_3_ID);
+		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(TestKMyMoneyPriceImpl.PRC_3_ID);
 		assertNotEquals(null, prc);
-		prcPr = prc.getParentPricePair();
+		KMyMoneyWritablePricePair prcPr = prc.getWritableParentPricePair();
 		assertNotEquals(null, prcPr);
 
 		assertEquals(PRCPR_3_ID, prcPr.getID());
@@ -198,5 +206,29 @@ public class TestKMyMoneyPricePairImpl {
 			assertEquals(0, 0);
 		}
 	}
+
+    // -----------------------------------------------------------------
+    // PART 2: Modify existing objects
+    // -----------------------------------------------------------------
+    // Check whether the KMyMoneyWritablePricePair objects returned by
+    // can actually be modified -- both in memory and persisted in file.
+	
+	// ::TODO
+
+    // -----------------------------------------------------------------
+    // PART 3: Create new objects
+    // -----------------------------------------------------------------
+
+    // ------------------------------
+    // PART 3.1: High-Level
+    // ------------------------------
+
+	// ::TODO
+
+    // ------------------------------
+    // PART 3.2: Low-Level
+    // ------------------------------
+
+	// ::TODO
 
 }

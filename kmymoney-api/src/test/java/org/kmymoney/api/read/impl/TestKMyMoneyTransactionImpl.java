@@ -15,11 +15,13 @@ import org.kmymoney.api.read.KMyMoneyTransaction;
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneyTransactionImpl {
-	private KMyMoneyFile kmmFile = null;
-	private KMyMoneyTransaction trx = null;
-
 	public static final KMMTrxID TRX_1_ID = new KMMTrxID("T000000000000000001");
 	public static final KMMTrxID TRX_2_ID = new KMMTrxID("T000000000000000002");
+
+	// -----------------------------------------------------------------
+
+	private KMyMoneyFile kmmFile = null;
+	private KMyMoneyTransaction trx = null;
 
 	// -----------------------------------------------------------------
 

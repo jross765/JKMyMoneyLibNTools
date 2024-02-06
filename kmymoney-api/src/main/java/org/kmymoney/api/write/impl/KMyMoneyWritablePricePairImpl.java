@@ -8,6 +8,7 @@ import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.read.KMyMoneyCurrency;
+import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
@@ -97,6 +98,38 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
         return jwsdpPrcPair;
     }
 
+    // ---------------------------------------------------------------
+
+	@Override
+	public void set(final KMyMoneyPricePair prcPr) {
+		if ( prcPr == null )
+			throw new IllegalArgumentException("null price pair given");
+
+		// ::TODO
+//		if ( ! prcPr.isSet() )
+//			throw new IllegalArgumentException("unset price pair given");
+
+		setFromSecCurrQualifID(prcPr.getFromSecCurrQualifID());
+		setToCurrencyQualifID(prcPr.getToCurrencyQualifID());
+		
+		getWritableKMyMoneyFile().setModified(true);
+	}
+	
+	@Override
+	public void setID(final KMMCurrPair currPr) {
+		if ( currPr == null )
+			throw new IllegalArgumentException("null currency pair given");
+
+		// ::TODO
+//		if ( ! currPr.isSet() )
+//			throw new IllegalArgumentException("unset currency pair given");
+
+		setFromSecCurrQualifID(currPr.getFromSecCurr());
+		setToCurrencyQualifID(currPr.getToCurr());
+
+		getWritableKMyMoneyFile().setModified(true);
+	}
+    
     // ---------------------------------------------------------------
 
 	@Override
