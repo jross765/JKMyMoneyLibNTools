@@ -9,6 +9,7 @@ import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.SplitNotFoundException;
 import org.kmymoney.api.read.hlp.KMyMoneyObject;
+import org.kmymoney.api.write.hlp.HasWritableUserDefinedAttributes;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 
 /**
@@ -17,7 +18,8 @@ import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
  * "splits".
  */
 public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
-                                                     KMyMoneyWritableObject
+                                                     KMyMoneyWritableObject,
+                                                     HasWritableUserDefinedAttributes
 {
 
 	/**

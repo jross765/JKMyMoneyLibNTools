@@ -7,6 +7,7 @@ import java.util.Locale;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.numbers.FixedPointNumber;
+import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
 
 /**
  * A financial transaction between two or more accounts.
@@ -16,7 +17,9 @@ import org.kmymoney.api.numbers.FixedPointNumber;
  * 
  * @see KMyMoneyTransactionSplit
  */
-public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction> {
+public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction>,
+                                             HasUserDefinedAttributes
+{
 
     // For the following enumarations, cf.:
     // https://github.com/KDE/kmymoney/blob/master/kmymoney/mymoney/mymoneyenums.h

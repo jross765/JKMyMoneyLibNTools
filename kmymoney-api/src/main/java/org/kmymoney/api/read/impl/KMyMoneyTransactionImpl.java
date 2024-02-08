@@ -21,6 +21,8 @@ import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.SplitNotFoundException;
+import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
+import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.slf4j.Logger;
@@ -370,9 +372,36 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
 	return postDate;
     }
 
+    // ---------------------------------------------------------------
+
+	/**
+	 * @param name the name of the user-defined attribute
+	 * @return the value or null if not set
+	 */
+	public String getUserDefinedAttribute(final String name) {
+		if ( jwsdpPeer.getKEYVALUEPAIRS() == null) {
+			return null;
+		}
+		
+		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
+		return HasUserDefinedAttributesImpl.getUserDefinedAttributeCore(kvpList, name);
+	}
+
     /**
-     * @see java.lang.Object#toString()
+     * @return all keys that can be used with
+     *         ${@link #getUserDefinedAttribute(String)}}.
      */
+	public Collection<String> getUserDefinedAttributeKeys() {
+		if ( jwsdpPeer.getKEYVALUEPAIRS() == null) {
+			return null;
+		}
+		
+		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
+		return HasUserDefinedAttributesImpl.getUserDefinedAttributeKeysCore(kvpList);
+	}
+
+    // ---------------------------------------------------------------
+
     @Override
     public String toString() {
 	StringBuffer buffer = new StringBuffer();
