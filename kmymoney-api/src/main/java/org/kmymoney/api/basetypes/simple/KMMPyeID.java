@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A technical entry ID for all a payee
+ * A technical entry ID for a payee
  * (primarily defined for type safety).
  * 
  * @see KMyMoneyPayee

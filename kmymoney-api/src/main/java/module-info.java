@@ -16,9 +16,9 @@ module kmymoney.api {
 	// exports org.kmymoney.api.read.impl.hlp;
 	
 	exports org.kmymoney.api.write;
-	// exports org.kmymoney.api.write.aux; ::TODO
+	exports org.kmymoney.api.write.aux;
 	// exports org.kmymoney.api.write.hlp;
 	exports org.kmymoney.api.write.impl;
-	// exports org.kmymoney.api.write.impl.aux; ::TODO
+	exports org.kmymoney.api.write.impl.aux;
 	// exports org.kmymoney.api.write.impl.hlp;
 }

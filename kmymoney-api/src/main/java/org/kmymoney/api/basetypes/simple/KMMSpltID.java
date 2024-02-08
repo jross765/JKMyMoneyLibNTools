@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A technical entry ID for all a transaction split
+ * A technical entry ID for a transaction split
  * (primarily defined for type safety).
  * 
  * @see KMyMoneyTransactionSplit

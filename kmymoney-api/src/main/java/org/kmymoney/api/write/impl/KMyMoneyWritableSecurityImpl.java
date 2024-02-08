@@ -9,6 +9,8 @@ import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
+import org.kmymoney.api.generated.KEYVALUEPAIRS;
+import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.read.KMMSecCurr;
@@ -136,20 +138,95 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 			throw new IllegalArgumentException("empty symbol given!");
 		}
 
+		String oldSymb = getSymbol();
 		jwsdpPeer.setSymbol(symb);
 		getKMyMoneyFile().setModified(true);
+
+		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+		if (propertyChangeSupport != null) {
+		    propertyChangeSupport.firePropertyChange("symbol", oldSymb, symb);
+		}
 	}
 
 	@Override
 	public void setCode(final String code) {
+		if ( code == null ) {
+			throw new IllegalArgumentException("null code given!");
+		}
+
+		if ( code.trim().length() == 0 ) {
+			throw new IllegalArgumentException("empty code given!");
+		}
+
+		String oldCode = getCode();
+		if ( oldCode == null ) {
+			// key-value-pair(s) does/do not exist yet
+			ObjectFactory fact = getKMyMoneyFile().getObjectFactory();
+			if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
+				// The structure KEYVALUEPAIRS (note the s) does not
+				// exist yet -- e.t. has to be built from scratch
+				KEYVALUEPAIRS kvps = fact.createKEYVALUEPAIRS();
+				
+				PAIR kvp = fact.createPAIR();
+				kvp.setKey("kmm-security-id");
+				kvp.setValue("");
+				kvps.getPAIR().add(kvp);
+				
+				jwsdpPeer.setKEYVALUEPAIRS(kvps);
+			} else {
+				// The structure KEYVALUEPAIRS already exists, but
+				// there is no PAIR entry yet that matches the key.
+				PAIR kvp = fact.createPAIR();
+				kvp.setKey("kmm-security-id");
+				kvp.setValue("");
+				jwsdpPeer.getKEYVALUEPAIRS().getPAIR().add(kvp);
+			}
+		}
 		
+		// We can, at this stage, be sure that both the structure
+		// KEYVALUEPAIRS (note the s) and the entry matching the key
+		// exist.
+		for ( PAIR kvp : jwsdpPeer.getKEYVALUEPAIRS().getPAIR() ) {
+		    if ( kvp.getKey().equals("kmm-security-id") )
+		    	kvp.setValue(code);
+		}
+
+		getKMyMoneyFile().setModified(true);
+
+		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+		if (propertyChangeSupport != null) {
+		    propertyChangeSupport.firePropertyChange("code", oldCode, code);
+		}
 	}
 
 	// ---------------------------------------------------------------
 
 	@Override
 	public void setType(final KMMSecCurr.Type type) {
-		// ::TODO
+		setTypeBigInt(type.getCode());
+	}
+
+	public void setTypeBigInt(final BigInteger type) {
+		if ( type == null ) {
+			throw new IllegalArgumentException("null type given!");
+		}
+
+		if ( type.intValue() < 0 ) {
+			throw new IllegalArgumentException("type < 0 given!"); // sic, 0 is allowed!
+		}
+
+		if ( type.intValue() == KMMSecCurr.Type.UNSET ) {
+			throw new IllegalArgumentException("unset type given!");
+		}
+
+		BigInteger oldType = getTypeBigInt();
+		jwsdpPeer.setType(type);
+		getKMyMoneyFile().setModified(true);
+
+		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+		if (propertyChangeSupport != null) {
+		    propertyChangeSupport.firePropertyChange("type", oldType, type);
+		}
 	}
 
 	@Override
@@ -168,7 +245,7 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 
 		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
 		if (propertyChangeSupport != null) {
-		    propertyChangeSupport.firePropertyChange("pp", oldName, name);
+		    propertyChangeSupport.firePropertyChange("name", oldName, name);
 		}
 	}
 
@@ -229,7 +306,7 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 
 		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
 		if (propertyChangeSupport != null) {
-		    propertyChangeSupport.firePropertyChange("tradingcurrency", oldCurrID, currID);
+		    propertyChangeSupport.firePropertyChange("tradingCurrency", oldCurrID, currID);
 		}
 	}
 
@@ -249,7 +326,7 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 
 		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
 		if (propertyChangeSupport != null) {
-		    propertyChangeSupport.firePropertyChange("tradingmarket", oldMkt, mkt);
+		    propertyChangeSupport.firePropertyChange("tradingMarket", oldMkt, mkt);
 		}
 	}
 

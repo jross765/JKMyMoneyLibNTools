@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A technical entry ID for all an account
+ * A technical entry ID for an account
  * (primarily defined for type safety).
  * 
  * @see KMyMoneyAccount

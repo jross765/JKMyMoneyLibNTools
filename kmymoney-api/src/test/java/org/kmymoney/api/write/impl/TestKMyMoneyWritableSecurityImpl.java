@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.io.File;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.util.Collection;
 
 import org.junit.Before;
@@ -12,8 +13,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
+import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
+import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneySecurityImpl;
@@ -155,7 +158,103 @@ public class TestKMyMoneyWritableSecurityImpl {
     // Check whether the KMyMoneyWritableSecurity objects returned by
     // can actually be modified -- both in memory and persisted in file.
 
-    // ::TODO
+	@Test
+	public void test02_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritableSecurity sec = kmmInFile.getWritableSecurityByQualifID(secID1);
+		assertNotEquals(null, sec);
+
+		assertEquals(secID1, sec.getQualifID());
+		assertEquals(SEC_1_ID, sec.getQualifID().getCode());
+
+		// ----------------------------
+		// Modify the object
+
+		sec.setType(KMMSecCurr.Type.MUTUAL_FUND);
+		sec.setName("Benzedes Merc");
+		sec.setCode("BNZMRC");
+		sec.setSymbol("DE00071BNZ00");
+		sec.setPP(BigInteger.valueOf(3));
+		sec.setSAF(BigInteger.valueOf(1000));
+		sec.setTradingCurrency(new KMMQualifCurrID("CZK"));
+		sec.setTradingMarket("Kleinkleckersdorf a. d. Lahn");
+		// ::TODO
+		// sec.setRoundingMethod(KMMSecCurr.RoundingMethod.CEIL);
+
+		// ----------------------------
+		// Check whether the object can has actually be modified
+		// (in memory, not in the file yet).
+
+		test02_1_check_memory(sec);
+
+		// ----------------------------
+		// Now, check whether the modified object can be written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the GnuCash file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test02_1_check_persisted(outFile);
+	}
+
+	@Test
+	public void test02_2() throws Exception {
+		// ::TODO
+	}
+
+	private void test02_1_check_memory(KMyMoneyWritableSecurity sec) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
+
+		assertEquals(secID1, sec.getQualifID()); // unchanged
+		assertEquals(SEC_1_ID, sec.getQualifID().getCode()); // unchanged
+		assertEquals(KMMSecCurr.Type.MUTUAL_FUND, sec.getType()); // changed
+		assertEquals("Benzedes Merc", sec.getName()); // changed
+		assertEquals("BNZMRC", sec.getCode()); // changed
+		assertEquals("DE00071BNZ00", sec.getSymbol()); // changed
+		assertEquals(3, sec.getPP().intValue()); // changed
+		assertEquals(1000, sec.getSAF().intValue()); // changed
+		assertEquals("CZK", sec.getTradingCurrency().getCode()); // changed
+		assertEquals("Kleinkleckersdorf a. d. Lahn", sec.getTradingMarket()); // changed
+		// ::TODO
+		// assertEquals(KMMSecCurr.RoundingMethod.CEIL, sec.getRoundingMethod()); // changed
+	}
+
+	private void test02_1_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
+
+		KMyMoneySecurity sec = kmmOutFile.getSecurityByID(SEC_1_ID);
+		assertNotEquals(null, sec);
+
+		assertEquals(secID1, sec.getQualifID()); // unchanged
+		assertEquals(SEC_1_ID, sec.getQualifID().getCode()); // unchanged
+		assertEquals(KMMSecCurr.Type.MUTUAL_FUND, sec.getType()); // changed
+		assertEquals("Benzedes Merc", sec.getName()); // changed
+		assertEquals("BNZMRC", sec.getCode()); // changed
+		assertEquals("DE00071BNZ00", sec.getSymbol()); // changed
+		assertEquals(3, sec.getPP().intValue()); // changed
+		assertEquals(1000, sec.getSAF().intValue()); // changed
+		assertEquals("CZK", sec.getTradingCurrency().getCode()); // changed
+		assertEquals("Kleinkleckersdorf a. d. Lahn", sec.getTradingMarket()); // changed
+		// ::TODO
+		// assertEquals(KMMSecCurr.RoundingMethod.CEIL, sec.getRoundingMethod()); // changed
+	}
 
     // -----------------------------------------------------------------
     // PART 3: Create new objects

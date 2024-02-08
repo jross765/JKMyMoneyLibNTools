@@ -85,26 +85,28 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
      * {@inheritDoc}
      */
     public String getCode() {
-	String result = "";
-	
 	if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
 		return null;
 	}
 	
 	for ( PAIR kvp : jwsdpPeer.getKEYVALUEPAIRS().getPAIR() ) {
 	    if ( kvp.getKey().equals("kmm-security-id") )
-	    result += kvp.getValue();
+	    return kvp.getValue();
 	}
 	
-	return result;
+	return null;
     }
 
     // ---------------------------------------------------------------
 
     @Override
     public KMMSecCurr.Type getType() throws UnknownSecurityTypeException {
-	BigInteger typeVal = jwsdpPeer.getType(); 
+	BigInteger typeVal = getTypeBigInt(); 
 	return KMMSecCurrImpl.getType(typeVal.intValue());
+    }
+
+    public BigInteger getTypeBigInt() {
+	return jwsdpPeer.getType(); 
     }
 
     @Override
