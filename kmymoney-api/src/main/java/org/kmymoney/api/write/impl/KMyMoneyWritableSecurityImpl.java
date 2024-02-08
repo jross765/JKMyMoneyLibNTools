@@ -159,39 +159,10 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 		}
 
 		String oldCode = getCode();
-		if ( oldCode == null ) {
-			// key-value-pair(s) does/do not exist yet
-			ObjectFactory fact = getKMyMoneyFile().getObjectFactory();
-			if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
-				// The structure KEYVALUEPAIRS (note the s) does not
-				// exist yet -- e.t. has to be built from scratch
-				KEYVALUEPAIRS kvps = fact.createKEYVALUEPAIRS();
-				
-				PAIR kvp = fact.createPAIR();
-				kvp.setKey("kmm-security-id");
-				kvp.setValue("");
-				kvps.getPAIR().add(kvp);
-				
-				jwsdpPeer.setKEYVALUEPAIRS(kvps);
-			} else {
-				// The structure KEYVALUEPAIRS already exists, but
-				// there is no PAIR entry yet that matches the key.
-				PAIR kvp = fact.createPAIR();
-				kvp.setKey("kmm-security-id");
-				kvp.setValue("");
-				jwsdpPeer.getKEYVALUEPAIRS().getPAIR().add(kvp);
-			}
-		}
+		setUserDefinedAttribute("kmm-security-id", code); // sic, no try-catch-block here
 		
-		// We can, at this stage, be sure that both the structure
-		// KEYVALUEPAIRS (note the s) and the entry matching the key
-		// exist.
-		for ( PAIR kvp : jwsdpPeer.getKEYVALUEPAIRS().getPAIR() ) {
-		    if ( kvp.getKey().equals("kmm-security-id") )
-		    	kvp.setValue(code);
-		}
-
-		getKMyMoneyFile().setModified(true);
+		// Already done:
+		// getKMyMoneyFile().setModified(true);
 
 		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
 		if (propertyChangeSupport != null) {
@@ -359,10 +330,36 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 	 * @see {@link KMyMoneyObject#getUserDefinedAttribute(String)}
 	 */
 	public void setUserDefinedAttribute(final String name, final String value) {
+		KEYVALUEPAIRS kvps = jwsdpPeer.getKEYVALUEPAIRS();
+		if ( kvps == null ) {
+			// key-value-pair(s) does/do not exist yet
+			ObjectFactory fact = getKMyMoneyFile().getObjectFactory();
+			if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
+				// The structure KEYVALUEPAIRS (note the s) does not
+				// exist yet -- e.t. has to be built from scratch
+				kvps = fact.createKEYVALUEPAIRS();
+				jwsdpPeer.setKEYVALUEPAIRS(kvps);
+			}
+		}
+		
+		String val = getUserDefinedAttribute(name);
+		if ( val == null ) {
+			// The structure KEYVALUEPAIRS already exists, but
+			// there is no PAIR entry yet that matches the key.
+			ObjectFactory fact = getKMyMoneyFile().getObjectFactory();
+			PAIR kvp = fact.createPAIR();
+			kvp.setKey(name);
+			kvp.setValue("");
+			jwsdpPeer.getKEYVALUEPAIRS().getPAIR().add(kvp);
+		}
+		
 		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
 		HasWritableUserDefinedAttributesImpl
 			.setUserDefinedAttributeCore(kvpList, getWritableKMyMoneyFile(), 
 			                             name, value);
+
+		// Already done in HasWritableUserDefinedAttributesImpl.setUserDefinedAttributeCore:
+		// getKMyMoneyFile().setModified(true);
 	}
 
 	// -----------------------------------------------------------------

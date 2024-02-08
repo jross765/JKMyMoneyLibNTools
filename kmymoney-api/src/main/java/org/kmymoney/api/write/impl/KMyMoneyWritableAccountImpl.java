@@ -14,6 +14,8 @@ import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.simple.KMMAcctID;
 import org.kmymoney.api.basetypes.simple.KMMInstID;
 import org.kmymoney.api.generated.ACCOUNT;
+import org.kmymoney.api.generated.KEYVALUEPAIRS;
+import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -137,15 +139,6 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 
 		getWritableKMyMoneyFile().getRootElement().getACCOUNTS().getACCOUNT().remove(jwsdpPeer);
 		getWritableKMyMoneyFile().removeAccount(this);
-	}
-
-	/**
-	 * The kmymoney-file is the top-level class to contain everything.
-	 *
-	 * @return the file we are associated with
-	 */
-	public KMyMoneyWritableFile getWritableKMyMoneyFile() {
-		return (KMyMoneyWritableFileImpl) getKMyMoneyFile();
 	}
 
 	// ---------------------------------------------------------------
@@ -458,6 +451,27 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		}
 	}
 
+	// ---------------------------------------------------------------
+
+	/**
+	 * The kmymoney-file is the top-level class to contain everything.
+	 *
+	 * @return the file we are associated with
+	 */
+	public KMyMoneyWritableFileImpl getWritableKMyMoneyFile() {
+		return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+	}
+
+	/**
+	 * The kmymoney-file is the top-level class to contain everything.
+	 *
+	 * @return the file we are associated with
+	 */
+	@Override
+	public KMyMoneyWritableFileImpl getKMyMoneyFile() {
+		return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+	}
+
 	// -------------------------------------------------------
 
 	/**
@@ -466,10 +480,36 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	 * @see {@link KMyMoneyObject#getUserDefinedAttribute(String)}
 	 */
 	public void setUserDefinedAttribute(final String name, final String value) {
+		KEYVALUEPAIRS kvps = jwsdpPeer.getKEYVALUEPAIRS();
+		if ( kvps == null ) {
+			// key-value-pair(s) does/do not exist yet
+			ObjectFactory fact = getKMyMoneyFile().getObjectFactory();
+			if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
+				// The structure KEYVALUEPAIRS (note the s) does not
+				// exist yet -- e.t. has to be built from scratch
+				kvps = fact.createKEYVALUEPAIRS();
+				jwsdpPeer.setKEYVALUEPAIRS(kvps);
+			}
+		}
+		
+		String val = getUserDefinedAttribute(name);
+		if ( val == null ) {
+			// The structure KEYVALUEPAIRS already exists, but
+			// there is no PAIR entry yet that matches the key.
+			ObjectFactory fact = getKMyMoneyFile().getObjectFactory();
+			PAIR kvp = fact.createPAIR();
+			kvp.setKey(name);
+			kvp.setValue("");
+			jwsdpPeer.getKEYVALUEPAIRS().getPAIR().add(kvp);
+		}
+		
 		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
 		HasWritableUserDefinedAttributesImpl
 			.setUserDefinedAttributeCore(kvpList, getWritableKMyMoneyFile(), 
 			                             name, value);
+
+		// Already done in HasWritableUserDefinedAttributesImpl.setUserDefinedAttributeCore:
+		// getKMyMoneyFile().setModified(true);
 	}
 
     // -----------------------------------------------------------------

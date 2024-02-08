@@ -8,7 +8,8 @@ import org.kmymoney.api.generated.PAIR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HasUserDefinedAttributesImpl {
+public class HasUserDefinedAttributesImpl // implements HasUserDefinedAttributes
+{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(HasUserDefinedAttributesImpl.class);
 
@@ -16,6 +17,10 @@ public class HasUserDefinedAttributesImpl {
 
     public static String getUserDefinedAttributeCore(final List<PAIR> kvpList, 
     		                                         final String name) {
+		if ( ! getUserDefinedAttributeKeysCore(kvpList).contains(name) ) {
+			throw new KVPListDoesNotContainKeyException();
+		}
+		
 		for ( PAIR kvp : kvpList ) {
 			if ( kvp.getKey().equals(name) ) {
 				return kvp.getValue();
@@ -34,5 +39,5 @@ public class HasUserDefinedAttributesImpl {
 
 		return retval;
 	}
-    
+
 }

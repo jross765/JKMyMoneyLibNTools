@@ -20,6 +20,7 @@ import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.UnknownRoundingMethodException;
 import org.kmymoney.api.read.UnknownSecurityTypeException;
 import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
+import org.kmymoney.api.read.impl.hlp.KVPListDoesNotContainKeyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,16 +86,11 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
      * {@inheritDoc}
      */
     public String getCode() {
-	if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
-		return null;
-	}
-	
-	for ( PAIR kvp : jwsdpPeer.getKEYVALUEPAIRS().getPAIR() ) {
-	    if ( kvp.getKey().equals("kmm-security-id") )
-	    return kvp.getValue();
-	}
-	
-	return null;
+    	try {
+    		return getUserDefinedAttribute("kmm-security-id");
+    	} catch (KVPListDoesNotContainKeyException exc) {
+    		return null;
+    	}
     }
 
     // ---------------------------------------------------------------
@@ -182,6 +178,10 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
 	 * @return the value or null if not set
 	 */
 	public String getUserDefinedAttribute(final String name) {
+		if ( jwsdpPeer.getKEYVALUEPAIRS() == null) {
+			return null;
+		}
+		
 		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
 		return HasUserDefinedAttributesImpl.getUserDefinedAttributeCore(kvpList, name);
 	}
@@ -191,6 +191,10 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
      *         ${@link #getUserDefinedAttribute(String)}}.
      */
 	public Collection<String> getUserDefinedAttributeKeys() {
+		if ( jwsdpPeer.getKEYVALUEPAIRS() == null) {
+			return null;
+		}
+		
 		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
 		return HasUserDefinedAttributesImpl.getUserDefinedAttributeKeysCore(kvpList);
 	}

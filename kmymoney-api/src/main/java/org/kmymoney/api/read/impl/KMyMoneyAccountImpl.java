@@ -263,6 +263,10 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 	 * @return the value or null if not set
 	 */
 	public String getUserDefinedAttribute(final String name) {
+		if ( jwsdpPeer.getKEYVALUEPAIRS() == null) {
+			return null;
+		}
+		
 		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
 		return HasUserDefinedAttributesImpl.getUserDefinedAttributeCore(kvpList, name);
 	}
@@ -272,6 +276,10 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      *         ${@link #getUserDefinedAttribute(String)}}.
      */
 	public Collection<String> getUserDefinedAttributeKeys() {
+		if ( jwsdpPeer.getKEYVALUEPAIRS() == null) {
+			return null;
+		}
+		
 		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
 		return HasUserDefinedAttributesImpl.getUserDefinedAttributeKeysCore(kvpList);
 	}
