@@ -1,4 +1,4 @@
-package org.kmymoney.api.read.impl;
+package org.kmymoney.api.read.impl.aux;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -12,12 +12,11 @@ import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.aux.KMMAddress;
+import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 
 import junit.framework.JUnit4TestAdapter;
 
-public class TestKMyMoneyPayeeImpl {
-	public static final KMMPyeID PYE_1_ID = new KMMPyeID("P000002"); // Gehalt
-	public static final KMMPyeID PYE_2_ID = new KMMPyeID("P000003"); // Geldautomat
+public class TestKMAddressImpl {
 	public static final KMMPyeID PYE_3_ID = new KMMPyeID("P000005"); // Schnorzelmoeller
 
 	// -----------------------------------------------------------------
@@ -33,7 +32,7 @@ public class TestKMyMoneyPayeeImpl {
 
 	@SuppressWarnings("exports")
 	public static junit.framework.Test suite() {
-		return new JUnit4TestAdapter(TestKMyMoneyPayeeImpl.class);
+		return new JUnit4TestAdapter(TestKMAddressImpl.class);
 	}
 
 	@Before
@@ -60,34 +59,20 @@ public class TestKMyMoneyPayeeImpl {
 	// -----------------------------------------------------------------
 
 	@Test
-	public void test01_1() throws Exception {
-		pye = kmmFile.getPayeeByID(PYE_1_ID);
-
-		assertEquals(PYE_1_ID, pye.getID());
-		assertEquals("Gehalt", pye.getName());
-	}
-
-	@Test
-	public void test01_2() throws Exception {
-		pye = kmmFile.getPayeeByID(PYE_2_ID);
-
-		assertEquals(PYE_2_ID, pye.getID());
-		assertEquals("Geldautomat", pye.getName());
-	}
-
-	@Test
 	public void test01_3() throws Exception {
 		pye = kmmFile.getPayeeByID(PYE_3_ID);
-
-		assertEquals(PYE_3_ID, pye.getID());
-		assertEquals("Fürchtegott Schnorzelmöller", pye.getName());
-		assertEquals(null, pye.getDefaultAccountID());
-		assertEquals("fuerchtegott.schnorzelmoeller@prater.at", pye.getEmail());
-		assertEquals("", pye.getReference()); // sic, not null
-		assertEquals("Pezi-Bär von der Urania kennt ihn gut", pye.getNotes());
+		assertNotEquals(null, pye);
 
 		KMMAddress addr = pye.getAddress();
 		assertNotEquals(null, addr);
-		// Detailed test of the address: Cf. TestKMMAddressImpl
+		
+		assertEquals("Krailbacher Gasse 123 a\n" + "Postfach ABC\n" + "Kennwort Kasperlpost", addr.getStreet());
+		assertEquals("Wien", addr.getCity());
+		assertEquals(null, addr.getCounty());
+		assertEquals("1136", addr.getPostCode());
+		assertEquals("Österreich", addr.getState());
+		assertEquals(null, addr.getZip());
+		assertEquals(null, addr.getZipCode());
+		assertEquals("+43 - 12 - 277278279", addr.getTelephone());
 	}
 }

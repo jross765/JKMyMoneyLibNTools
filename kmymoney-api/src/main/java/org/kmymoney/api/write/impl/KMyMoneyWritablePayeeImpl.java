@@ -153,6 +153,23 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
     // ---------------------------------------------------------------
 
     /**
+     * @see KMyMoneyWritablePayee#getWritableAddress()
+     */
+    public KMMWritableAddress getWritableAddress() {
+	return new KMMWritableAddressImpl(jwsdpPeer.getADDRESS());
+    }
+
+    /**
+     * @see KMyMoneyPayee#getAddress()
+     */
+//    @Override
+//    public KMMWritableAddress getAddress() {
+//	return getWritableAddress();
+//    }
+
+    // ---------------------------------------------------------------
+
+    /**
      * @see KMyMoneyWritablePayee#setName(java.lang.String)
      */
     @Override
@@ -271,23 +288,6 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 		// TODO Auto-generated method stub
 		
 	}
-
-    // ---------------------------------------------------------------
-
-    /**
-     * @see KMyMoneyWritablePayee#getWritableAddress()
-     */
-    public KMMWritableAddress getWritableAddress() {
-	return new KMMWritableAddressImpl(jwsdpPeer.getADDRESS());
-    }
-
-    /**
-     * @see KMyMoneyPayee#getAddress()
-     */
-//    @Override
-//    public KMMWritableAddress getAddress() {
-//	return getWritableAddress();
-//    }
 
     // -----------------------------------------------------------------
 

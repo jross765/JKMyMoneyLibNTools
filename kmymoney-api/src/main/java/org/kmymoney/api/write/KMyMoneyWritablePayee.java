@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.aux.KMMAddress;
+import org.kmymoney.api.write.aux.KMMWritableAddress;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 
 /**
@@ -18,6 +19,10 @@ public interface KMyMoneyWritablePayee extends KMyMoneyPayee,
 
     void remove();
    
+    // ---------------------------------------------------------------
+
+    KMMWritableAddress getWritableAddress();
+    
     // ---------------------------------------------------------------
 
     void setName(String name);

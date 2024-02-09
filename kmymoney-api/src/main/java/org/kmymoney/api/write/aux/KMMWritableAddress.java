@@ -1,6 +1,8 @@
 package org.kmymoney.api.write.aux;
 
-public interface KMMWritableAddress {
+import org.kmymoney.api.read.aux.KMMAddress;
+
+public interface KMMWritableAddress extends KMMAddress {
 
 	void  setStreet(String street);
     
