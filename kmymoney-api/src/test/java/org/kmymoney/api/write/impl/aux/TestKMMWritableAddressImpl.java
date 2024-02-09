@@ -227,7 +227,7 @@ public class TestKMMWritableAddressImpl {
 			// In that case, however, the following test(s) is/are
 			// redundant, because it effectively becomes a variant
 			// of the test cases in part 2.
-			addr = pye.createWritableAddress();
+			int dummy = 1;
 		}
 		
 		// ----------------------------
