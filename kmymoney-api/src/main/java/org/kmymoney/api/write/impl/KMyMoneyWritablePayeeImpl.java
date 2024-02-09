@@ -116,6 +116,12 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
         return jwsdpPye;
     }
 
+    // ---------------------------------------------------------------
+
+	protected void setAddress(final KMMWritableAddressImpl addr) {
+		super.setAddress(addr);
+	}
+
     /**
      * Delete this Payee and remove it from the file.
      *
@@ -166,6 +172,19 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 //    public KMMWritableAddress getAddress() {
 //	return getWritableAddress();
 //    }
+
+    public KMMWritableAddress createWritableAddress() {
+		KMMWritableAddressImpl addr = new KMMWritableAddressImpl(this);
+		setAddress(addr);
+		if ( helper.getPropertyChangeSupport() != null ) {
+			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableAddress());
+		}
+		return addr;
+    }
+    
+	public void remove(KMMWritableAddress impl) {
+		// ::TODO
+	}
 
     // ---------------------------------------------------------------
 

@@ -247,6 +247,7 @@ public class TestKMyMoneyWritablePayeeImpl {
 
 		newID = pye.getID();
 		assertEquals("Norma Jean Baker", pye.getName());
+		assertNotEquals(null, pye.getAddress()); // Cf. TestKMMWritableAddressImpl
 	}
 
 	private void test03_1_1_check_persisted(File outFile) throws Exception {
@@ -262,6 +263,7 @@ public class TestKMyMoneyWritablePayeeImpl {
 
 		assertEquals(newID, pye.getID());
 		assertEquals("Norma Jean Baker", pye.getName());
+		assertNotEquals(null, pye.getAddress()); // Cf. TestKMMWritableAddressImpl
 	}
 
     // ------------------------------

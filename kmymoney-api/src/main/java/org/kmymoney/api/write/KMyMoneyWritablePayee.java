@@ -23,7 +23,11 @@ public interface KMyMoneyWritablePayee extends KMyMoneyPayee,
 
     KMMWritableAddress getWritableAddress();
     
-    // ---------------------------------------------------------------
+    KMMWritableAddress createWritableAddress();
+    
+	void remove(KMMWritableAddress impl);
+
+	// ---------------------------------------------------------------
 
     void setName(String name);
 

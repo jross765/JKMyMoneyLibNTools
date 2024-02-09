@@ -1,8 +1,16 @@
 package org.kmymoney.api.write.impl.aux;
 
+import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.generated.ADDRESS;
+import org.kmymoney.api.generated.ObjectFactory;
+import org.kmymoney.api.generated.SPLIT;
+import org.kmymoney.api.numbers.FixedPointNumber;
+import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.impl.aux.KMMAddressImpl;
 import org.kmymoney.api.write.aux.KMMWritableAddress;
+import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
+import org.kmymoney.api.write.impl.KMyMoneyWritablePayeeImpl;
+import org.kmymoney.api.write.impl.KMyMoneyWritableTransactionImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +33,47 @@ public class KMMWritableAddressImpl extends KMMAddressImpl
     public KMMWritableAddressImpl(final KMMAddressImpl addr) {
     	super(addr.getJwsdpPeer());
     }
+
+	public KMMWritableAddressImpl(final KMyMoneyWritablePayeeImpl pye) {
+		super(createAddress_int(pye.getWritableKMyMoneyFile(), pye));
+
+		pye.setAddress(this);
+	}
+
+	// ---------------------------------------------------------------
+	
+	/**
+	 * Creates a new Transaction and add's it to the given gnucash-file Don't modify
+	 * the ID of the new transaction!
+	 */
+	protected static ADDRESS createAddress_int(
+			final KMyMoneyWritableFileImpl file, 
+			final KMyMoneyWritablePayeeImpl pye) {
+
+		if ( pye == null ) {
+			throw new IllegalArgumentException("null payee given");
+		}
+
+		// This is needed because transaction.addSplit() later
+		// must have an already built address.
+		// Otherwise, it will create it from the JAXB-Data
+		// thus 2 instances of this KMyMoneyWritableAddressImpl
+		// will exist. One created in getSplits() from this JAXB-Data
+		// the other is this object.
+		pye.getAddress();
+
+		ObjectFactory fact = file.getObjectFactory();
+
+		ADDRESS jwsdpAddr = fact.createADDRESS();
+		
+		// NO, not here but in the calling method:
+		// trx.addAddress(new KMyMoneyWritableAddressImpl(jwsdpAddr, pye.getKMyMoneyFile(), pye));
+		file.setModified(true);
+    
+        LOGGER.debug("createAddress_int: Created new address (core)");
+		
+        return jwsdpAddr;
+	}
 
     // ---------------------------------------------------------------
 

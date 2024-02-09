@@ -111,14 +111,14 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		}
 
 		// This is needed because transaction.addSplit() later
-		// must have an already build List of splits.
-		// if not it will create the list from the JAXB-Data
-		// thus 2 instances of this KMyMoneyTransactionSplitWritingImpl
+		// must have an already built list of splits.
+		// Otherwise, it will create the list from the JAXB-Data
+		// thus 2 instances of this KMyMoneyWritableTransactionSplitImpl
 		// will exist. One created in getSplits() from this JAXB-Data
 		// the other is this object.
 		trx.getSplits();
 
-		// ObjectFactory factory = file.getObjectFactory();
+		// ObjectFactory fact = file.getObjectFactory();
 
 		SPLIT jwsdpSplt = file.createSplitType();
 		

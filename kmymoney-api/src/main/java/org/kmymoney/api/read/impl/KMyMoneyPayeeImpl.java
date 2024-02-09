@@ -1,12 +1,14 @@
 package org.kmymoney.api.read.impl;
 
 import java.math.BigInteger;
+import java.util.Collection;
 
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.generated.PAYEE;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPayee;
+import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.read.impl.aux.KMMAddressImpl;
 import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
@@ -44,6 +46,12 @@ public class KMyMoneyPayeeImpl extends KMyMoneyObjectImpl
 	return jwsdpPeer;
     }
 
+	// ---------------------------------------------------------------
+
+    protected void setAddress(final KMMAddressImpl addr) {
+		jwsdpPeer.setADDRESS(addr.getJwsdpPeer());
+    }
+    
 	// ---------------------------------------------------------------
 
 	@Override

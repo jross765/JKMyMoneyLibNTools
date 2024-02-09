@@ -189,71 +189,98 @@ public class TestKMMWritableAddressImpl {
     // -----------------------------------------------------------------
     // PART 3: Create new objects
     // -----------------------------------------------------------------
+	
+	// Note: In fact, this section is not really necessary/redundant,
+	// because address objects seem to *always* be generated; not only
+	// when generated with the standard GnuCash GUI, but also with this
+	// library, and even with a fresh and naked payee object.
+	// It is just, that, currently, we do not know whether it really 
+	// *never ever* occurs that a payee object is generated without address
+	// sub-object, under no circumstances conceivable. The author doubts it...
+	// Cf. test cases in TestKmyMoneyWritablePayee, part 3 and
+	// the comments in test03_1_1() below.
 
     // ------------------------------
     // PART 3.1: High-Level
     // ------------------------------
 
-//	@Test
-//	public void test03_1_1() throws Exception {
-//		kmmInFileStats = new KMMFileStats(kmmInFile);
-//
-//		KMyMoneyWritablePayee pye = kmmInFile.getWritablePayeeByID(PYE_3_ID);
-//		assertNotEquals(null, pye);
-//		assertEquals(PYE_3_ID, pye.getID());
-//
-//		assertNotEquals(null, addr);
-//		
-//		// ----------------------------
-//		// Create the object
-//
-//		KMMWritableAddress addr = pye.createWritableAddress();
-//
-//		// ----------------------------
-//		// Check whether the object can has actually be created
-//		// (in memory, not in the file yet).
-//
-//		test03_1_1_check_memory(addr);
-//
-//		// ----------------------------
-//		// Now, check whether the created object can be written to the
-//		// output file, then re-read from it, and whether is is what
-//		// we expect it is.
-//
-//		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
-//		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
-//		// + outFile.getPath() + "'");
-//		outFile.delete(); // sic, the temp. file is already generated (empty),
-//		// and the GnuCash file writer does not like that.
-//		kmmInFile.writeFile(outFile);
-//
-//		test03_1_1_check_persisted(outFile);
-//	}
-//
-//	private void test03_1_1_check_memory(KMyMoneyWritableAddress addr) throws Exception {
-//		assertEquals("Norma Jean Baker", pye.getName());
-//	}
-//
-//	private void test03_1_1_check_persisted(File outFile) throws Exception {
-//		kmmOutFile = new KMyMoneyFileImpl(outFile);
-//		kmmOutFileStats = new KMMFileStats(kmmOutFile);
-//
-//		KMyMoneyPayee pye = kmmOutFile.getPayeeByID(PYE_2_ID);
-//		assertNotEquals(null, pye);
-//		assertEquals(PYE_2_ID, pye.getID());
-//
-//		KMMAddress addr = pye.getAddress();
-//		assertNotEquals(null, addr);
-//
-//		assertEquals("Judengasse 3", addr.getStreet()); // unchanged
-//		assertEquals("Salzburg", addr.getCity()); // changed
-//		assertEquals(null, addr.getCounty()); // unchanged
-//		assertEquals("1334", addr.getPostCode()); // changed
-//		assertEquals("Österreich", addr.getState()); // unchanged
-//		assertEquals("2345", addr.getZip()); // changed
-//		assertEquals(null, addr.getZipCode()); // unchanged
-//		assertEquals("+43 - 12 - 37403273", addr.getTelephone()); // changed
-//	}
+	@Test
+	public void test03_1_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		KMyMoneyWritablePayee pye = kmmInFile.getWritablePayeeByID(PYE_2_ID);
+		assertNotEquals(null, pye);
+		assertEquals(PYE_2_ID, pye.getID());
+
+		KMMWritableAddress addr = pye.getWritableAddress();
+		if ( addr == null ) {
+			// Create a new address object
+			// Note: this is, as far as we understand, the
+			// case that *normally* does not occur.
+			addr = pye.createWritableAddress();
+		} else {
+			// Take the existing address object
+			// Note: this is, as far as we understand, the 
+			// standard case, as it seems that the address
+			// object is always generated with the Payee object
+			// by default.
+			// In that case, however, the following test(s) is/are
+			// redundant, because it effectively becomes a variant
+			// of the test cases in part 2.
+			addr = pye.createWritableAddress();
+		}
+		
+		// ----------------------------
+
+		addr.setStreet("Champs Élysées");
+		addr.setCity("Paris");
+		addr.setPostCode("75000");
+		addr.setTelephone("+33 - 1 - 99 91 99 91");
+
+		// ----------------------------
+		// Check whether the object can has actually be created
+		// (in memory, not in the file yet).
+
+		test03_1_1_check_memory(addr);
+
+		// ----------------------------
+		// Now, check whether the created object can be written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the GnuCash file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test03_1_1_check_persisted(outFile);
+	}
+
+	private void test03_1_1_check_memory(KMMWritableAddress addr) throws Exception {
+		assertEquals("Champs Élysées", addr.getStreet());
+		assertEquals("Paris", addr.getCity());
+		assertEquals("75000", addr.getPostCode());
+		assertEquals("+33 - 1 - 99 91 99 91", addr.getTelephone());
+	}
+
+	private void test03_1_1_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		KMyMoneyPayee pye = kmmOutFile.getPayeeByID(PYE_2_ID);
+		assertNotEquals(null, pye);
+		assertEquals(PYE_2_ID, pye.getID());
+
+		KMMAddress addr = pye.getAddress();
+		assertNotEquals(null, addr);
+
+		assertEquals("Champs Élysées", addr.getStreet());
+		assertEquals("Paris", addr.getCity());
+		assertEquals("75000", addr.getPostCode());
+		assertEquals("+33 - 1 - 99 91 99 91", addr.getTelephone());
+	}
 
     // ------------------------------
     // PART 3.2: Low-Level
