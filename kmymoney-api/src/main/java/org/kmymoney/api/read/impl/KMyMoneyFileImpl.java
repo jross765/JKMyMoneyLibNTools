@@ -386,6 +386,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     }
 
     @Override
+    public Collection<KMyMoneyAccount> getAccountsByType(KMyMoneyAccount.Type type) throws UnknownAccountTypeException {
+    	return acctMgr.getAccountsByType(type);
+    }
+
+    @Override
     public Collection<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, 
 	                                                        boolean qualif, boolean relaxed) throws UnknownAccountTypeException {
 	return acctMgr.getAccountsByTypeAndName(type, expr, qualif, relaxed);

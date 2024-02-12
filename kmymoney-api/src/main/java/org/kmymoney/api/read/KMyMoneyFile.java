@@ -3,6 +3,9 @@ package org.kmymoney.api.read;
 import java.io.File;
 import java.util.Collection;
 
+import org.gnucash.api.read.GnucashAccount;
+import org.gnucash.api.read.UnknownAccountTypeException;
+import org.gnucash.api.read.GnucashAccount.Type;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
@@ -144,6 +147,14 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	KMyMoneyAccount getAccountByIDorNameEx(KMMComplAcctID acctID, String name)
 			throws NoEntryFoundException, TooManyEntriesFoundException;
 
+	/**
+	 * 
+	 * @param type
+	 * @return
+	 * @throws UnknownAccountTypeException
+	 */
+    Collection<KMyMoneyAccount> getAccountsByType(KMyMoneyAccount.Type type) throws UnknownAccountTypeException;
+    
 	/**
 	 * @param type
 	 * @param expr search expression

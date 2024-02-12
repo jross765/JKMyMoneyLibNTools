@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID.Top;
 import org.kmymoney.api.basetypes.simple.KMMAcctID;
-import org.kmymoney.api.currency.InvalidKMMComplAcctIDException;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -247,6 +246,19 @@ public class FileAccountManager {
 		return getAccountByIDorNameEx(new KMMComplAcctID(acctID), name);
 	}
 	
+	public Collection<KMyMoneyAccount> getAccountsByType(Type type)
+			throws UnknownAccountTypeException {
+		Collection<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
+
+		for ( KMyMoneyAccount acct : getAccounts() ) {
+			if ( acct.getType() == type ) {
+				result.add(acct);
+			}
+		}
+
+		return result;
+	}
+
 	public Collection<KMyMoneyAccount> getAccountsByTypeAndName(Type type, String expr, boolean qualif, boolean relaxed)
 			throws UnknownAccountTypeException {
 		Collection<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
