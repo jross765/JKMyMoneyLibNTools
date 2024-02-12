@@ -3,9 +3,6 @@ package org.kmymoney.api.read;
 import java.io.File;
 import java.util.Collection;
 
-import org.gnucash.api.read.GnucashAccount;
-import org.gnucash.api.read.UnknownAccountTypeException;
-import org.gnucash.api.read.GnucashAccount.Type;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
