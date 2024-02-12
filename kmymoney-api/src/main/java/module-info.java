@@ -2,6 +2,7 @@ module kmymoney.api {
 	requires static org.slf4j;
 	requires java.desktop;
 	requires jakarta.xml.bind;
+	requires java.xml;
 	
 	exports org.kmymoney.api.basetypes.simple;
 	exports org.kmymoney.api.basetypes.complex;

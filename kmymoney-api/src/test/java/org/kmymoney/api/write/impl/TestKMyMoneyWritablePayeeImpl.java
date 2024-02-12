@@ -276,8 +276,7 @@ public class TestKMyMoneyWritablePayeeImpl {
 		pye.setName("Norma Jean Baker");
 
 		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
-		// System.err.println("Outfile for TestKMyMoneyWritablePayeeImpl.test01_1: '" +
-		// outFile.getPath() + "'");
+		// System.err.println("Outfile for TestKMyMoneyWritablePayeeImpl.test01_1: '" + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
 		// and the GnuCash file writer does not like that.
 		kmmInFile.writeFile(outFile);

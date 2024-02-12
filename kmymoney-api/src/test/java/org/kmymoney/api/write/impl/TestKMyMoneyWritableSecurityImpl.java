@@ -8,6 +8,9 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.Collection;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,6 +25,10 @@ import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneySecurityImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import junit.framework.JUnit4TestAdapter;
 
@@ -201,7 +208,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		// and the GnuCash file writer does not like that.
+		                  // and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test02_1_check_persisted(outFile);
@@ -297,7 +304,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		// and the KMyMoney file writer does not like that.
+		                  // and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test03_1_1_check_persisted(outFile);
@@ -343,20 +350,20 @@ public class TestKMyMoneyWritableSecurityImpl {
     // PART 3.2: Low-Level
     // ------------------------------
 
-//    @Test
-//    public void test03_2_1() throws Exception {
-//	KMyMoneyWritableSecurity sec = kmmInFile.createWritableSecurity();
-//	sec.setQualifID(new KMMSecID_Exchange(KMMSecCurrNameSpace.Exchange.NASDAQ, "SCAM"));
-//	sec.setName("Scam and Screw Corp.");
-//
-//	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
-////      System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test01_1: '" + outFile.getPath() + "'");
-//	outFile.delete(); // sic, the temp. file is already generated (empty),
-//			  // and the KMyMoney file writer does not like that.
-//	kmmInFile.writeFile(outFile);
-//
-//	test03_2_1_check(outFile);
-//    }
+	@Test
+	public void test03_2_1() throws Exception {
+		KMyMoneyWritableSecurity sec = kmmInFile.createWritableSecurity();
+		sec.setName("Scam and Screw Corp.");
+		sec.setSymbol("SCAM");
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test01_1: '" + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		                  // and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test03_2_1_check(outFile);
+	}
 
     // -----------------------------------------------------------------
 
@@ -387,124 +394,102 @@ public class TestKMyMoneyWritableSecurityImpl {
 //      // assertEquals(validResult);
 //  }
 
-//    private void test03_2_1_check(File outFile) throws Exception {
-//	assertNotEquals(null, outFile);
-//	assertEquals(true, outFile.exists());
-//
-//	// Build document
-//	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//	DocumentBuilder builder = factory.newDocumentBuilder();
-//	Document document = builder.parse(outFile);
-////      System.err.println("xxxx XML parsed");
-//
-//	// Normalize the XML structure
-//	document.getDocumentElement().normalize();
-////      System.err.println("xxxx XML normalized");
-//
-//	NodeList nList = document.getElementsByTagName("gnc:commodity");
-//	assertEquals(ConstTest.Stats.NOF_SEC_ALL + 1 + 1, nList.getLength()); // <-- CAUTION: includes
-//										// "template:template"
-//
-//	// Last (new) node
-//	Node lastNode = nList.item(nList.getLength() - 1);
-//	assertEquals(lastNode.getNodeType(), Node.ELEMENT_NODE);
-//	Element elt = (Element) lastNode;
-//	assertEquals("Scam and Screw Corp.", elt.getElementsByTagName("sec:name").item(0).getTextContent());
-//	assertEquals(KMMSecCurrNameSpace.Exchange.NASDAQ.toString(),
-//		elt.getElementsByTagName("sec:space").item(0).getTextContent());
-//	assertEquals("SCAM", elt.getElementsByTagName("sec:id").item(0).getTextContent());
-//    }
-//
+	private void test03_2_1_check(File outFile) throws Exception {
+		assertNotEquals(null, outFile);
+		assertEquals(true, outFile.exists());
+
+		// Build document
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document document = builder.parse(outFile);
+//      System.err.println("xxxx XML parsed");
+
+		// Normalize the XML structure
+		document.getDocumentElement().normalize();
+//      System.err.println("xxxx XML normalized");
+
+		NodeList nList = document.getElementsByTagName("SECURITY");
+		assertEquals(ConstTest.Stats.NOF_SEC + 1, nList.getLength());
+
+		// Last (new) node
+		Node lastNode = nList.item(nList.getLength() - 1);
+		assertEquals(lastNode.getNodeType(), Node.ELEMENT_NODE);
+		Element elt = (Element) lastNode;
+		assertEquals("Scam and Screw Corp.", elt.getAttribute("name"));
+		assertEquals("SCAM", elt.getAttribute("symbol"));
+	}
+
 //    // -----------------------------------------------------------------
-//
-//    @Test
-//    public void test03_2_2() throws Exception {
-//	KMyMoneyWritableSecurity sec1 = kmmInFile.createWritableSecurity();
-//	sec1.setQualifID(new KMMSecID_Exchange(KMMSecCurrNameSpace.Exchange.NASDAQ, "SCAM"));
-//	sec1.setName("Scam and Screw Corp.");
-//	sec1.setXCode("US0123456789");
-//
-//	KMyMoneyWritableSecurity sec2 = kmmInFile.createWritableSecurity();
-//	sec2.setQualifID(new KMMSecID_MIC(KMMSecCurrNameSpace.MIC.XBRU, "CHOC"));
-//	sec2.setName("Chocolaterie de la Grande Place");
-//	sec2.setXCode("BE0123456789");
-//
-//	KMyMoneyWritableSecurity sec3 = kmmInFile.createWritableSecurity();
-//	sec3.setQualifID(new KMMSecID_Exchange(KMMSecCurrNameSpace.Exchange.EURONEXT, "FOUS"));
-//	sec3.setName("Ils sont fous ces dingos!");
-//	sec3.setXCode("FR0123456789");
-//
-//	KMyMoneyWritableSecurity sec4 = kmmInFile.createWritableSecurity();
-//	sec4.setQualifID(new KMMSecID_SecIdType(KMMSecCurrNameSpace.SecIdType.ISIN, "GB10000A2222"));
-//	sec4.setName("Ye Ole National British Trade Company Ltd.");
-//	sec4.setXCode("GB10000A2222"); // sic, has to be set redundantly
-//
-//	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
-//	// System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test02_1: '"
-//	// + outFile.getPath() + "'");
-//	outFile.delete(); // sic, the temp. file is already generated (empty),
-//			  // and the KMyMoney file writer does not like that.
-//	kmmInFile.writeFile(outFile);
-//
-//	test03_2_2_check(outFile);
-//    }
-//
-//    private void test03_2_2_check(File outFile) throws Exception {
-//	assertNotEquals(null, outFile);
-//	assertEquals(true, outFile.exists());
-//
-//	// Build document
-//	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//	DocumentBuilder builder = factory.newDocumentBuilder();
-//	Document document = builder.parse(outFile);
-////      System.err.println("xxxx XML parsed");
-//
-//	// Normalize the XML structure
-//	document.getDocumentElement().normalize();
-////      System.err.println("xxxx XML normalized");
-//
-//	NodeList nList = document.getElementsByTagName("gnc:commodity");
-//	assertEquals(ConstTest.Stats.NOF_SEC_ALL + 1 + 4, nList.getLength()); // <-- CAUTION: includes
-//										// "template:template"
-//
-//	// Last three nodes (the new ones)
-//	Node node = nList.item(nList.getLength() - 4);
-//	assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
-//	Element elt = (Element) node;
-//	assertEquals("Scam and Screw Corp.", elt.getElementsByTagName("sec:name").item(0).getTextContent());
-//	assertEquals(KMMSecCurrNameSpace.Exchange.NASDAQ.toString(),
-//		elt.getElementsByTagName("sec:space").item(0).getTextContent());
-//	assertEquals("SCAM", elt.getElementsByTagName("sec:id").item(0).getTextContent());
-//	assertEquals("US0123456789", elt.getElementsByTagName("sec:xcode").item(0).getTextContent());
-//
-//	node = nList.item(nList.getLength() - 3);
-//	assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
-//	elt = (Element) node;
-//	assertEquals("Chocolaterie de la Grande Place",
-//		elt.getElementsByTagName("sec:name").item(0).getTextContent());
-//	assertEquals(KMMSecCurrNameSpace.MIC.XBRU.toString(),
-//		elt.getElementsByTagName("sec:space").item(0).getTextContent());
-//	assertEquals("CHOC", elt.getElementsByTagName("sec:id").item(0).getTextContent());
-//	assertEquals("BE0123456789", elt.getElementsByTagName("sec:xcode").item(0).getTextContent());
-//
-//	node = nList.item(nList.getLength() - 2);
-//	assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
-//	elt = (Element) node;
-//	assertEquals("Ils sont fous ces dingos!", elt.getElementsByTagName("sec:name").item(0).getTextContent());
-//	assertEquals(KMMSecCurrNameSpace.Exchange.EURONEXT.toString(),
-//		elt.getElementsByTagName("sec:space").item(0).getTextContent());
-//	assertEquals("FOUS", elt.getElementsByTagName("sec:id").item(0).getTextContent());
-//	assertEquals("FR0123456789", elt.getElementsByTagName("sec:xcode").item(0).getTextContent());
-//
-//	node = nList.item(nList.getLength() - 1);
-//	assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
-//	elt = (Element) node;
-//	assertEquals("Ye Ole National British Trade Company Ltd.",
-//		elt.getElementsByTagName("sec:name").item(0).getTextContent());
-//	assertEquals(KMMSecCurrNameSpace.SecIdType.ISIN.toString(),
-//		elt.getElementsByTagName("sec:space").item(0).getTextContent());
-//	assertEquals("GB10000A2222", elt.getElementsByTagName("sec:id").item(0).getTextContent());
-//	assertEquals("GB10000A2222", elt.getElementsByTagName("sec:xcode").item(0).getTextContent());
-//    }
+
+	@Test
+	public void test03_2_2() throws Exception {
+		KMyMoneyWritableSecurity sec1 = kmmInFile.createWritableSecurity();
+		sec1.setName("Scam and Screw Corp.");
+		sec1.setSymbol("US0123456789");
+
+		KMyMoneyWritableSecurity sec2 = kmmInFile.createWritableSecurity();
+		sec2.setName("Chocolaterie de la Grande Place");
+		sec2.setSymbol("BE0123456789");
+
+		KMyMoneyWritableSecurity sec3 = kmmInFile.createWritableSecurity();
+		sec3.setName("Ils sont fous ces dingos!");
+		sec3.setSymbol("FR0123456789");
+
+		KMyMoneyWritableSecurity sec4 = kmmInFile.createWritableSecurity();
+		sec4.setName("Ye Ole National British Trade Company Ltd.");
+		sec4.setSymbol("GB10000A2222"); // sic, has to be set redundantly
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test02_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		                  // and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test03_2_2_check(outFile);
+	}
+
+	private void test03_2_2_check(File outFile) throws Exception {
+		assertNotEquals(null, outFile);
+		assertEquals(true, outFile.exists());
+
+		// Build document
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document document = builder.parse(outFile);
+//      System.err.println("xxxx XML parsed");
+
+		// Normalize the XML structure
+		document.getDocumentElement().normalize();
+//      System.err.println("xxxx XML normalized");
+
+		NodeList nList = document.getElementsByTagName("SECURITY");
+		assertEquals(ConstTest.Stats.NOF_SEC + 4, nList.getLength());
+
+		// Last three nodes (the new ones)
+		Node node = nList.item(nList.getLength() - 4);
+		assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+		Element elt = (Element) node;
+		assertEquals("Scam and Screw Corp.", elt.getAttribute("name"));
+		assertEquals("US0123456789", elt.getAttribute("symbol"));
+
+		node = nList.item(nList.getLength() - 3);
+		assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+		elt = (Element) node;
+		assertEquals("Chocolaterie de la Grande Place", elt.getAttribute("name"));
+		assertEquals("BE0123456789", elt.getAttribute("symbol"));
+
+		node = nList.item(nList.getLength() - 2);
+		assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+		elt = (Element) node;
+		assertEquals("Ils sont fous ces dingos!", elt.getAttribute("name"));
+		assertEquals("FR0123456789", elt.getAttribute("symbol"));
+
+		node = nList.item(nList.getLength() - 1);
+		assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+		elt = (Element) node;
+		assertEquals("Ye Ole National British Trade Company Ltd.", elt.getAttribute("name"));
+		assertEquals("GB10000A2222", elt.getAttribute("symbol"));
+	}
 
 }
