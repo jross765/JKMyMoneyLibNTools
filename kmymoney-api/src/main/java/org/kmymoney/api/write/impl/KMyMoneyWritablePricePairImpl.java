@@ -191,7 +191,7 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 //		if ( ! qualifID.isSet() )
 //			throw new IllegalArgumentException("unset ID given");
 
-		jwsdpPeer.setFrom(qualifID.toString());
+		jwsdpPeer.setFrom(qualifID.getCode());
 		getWritableKMyMoneyFile().setModified(true);
 	}
 
@@ -276,14 +276,14 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 
     // ---------------------------------------------------------------
     
-    @Override
-    public String toString() {
-	return toStringShort();
-    }
-
-    public String toStringShort() {
-	return getFromSecCurrStr() + ";" + getToCurrStr();
-    }
+//    @Override
+//    public String toString() {
+//	return toStringShort();
+//    }
+//
+//    public String toStringShort() {
+//	return getFromSecCurrStr() + ";" + getToCurrStr();
+//    }
 
     public String toStringLong() {
 	String result = "KMMWritablePricePairImpl [";

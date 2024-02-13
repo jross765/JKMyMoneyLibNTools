@@ -3,6 +3,7 @@ package org.kmymoney.api.write.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import java.io.File;
 import java.io.InputStream;
 
 import org.junit.Before;
@@ -15,6 +16,7 @@ import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.read.KMyMoneyCurrency;
+import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyPriceImpl;
@@ -213,7 +215,93 @@ public class TestKMyMoneyWritablePricePairImpl {
     // Check whether the KMyMoneyWritablePricePair objects returned by
     // can actually be modified -- both in memory and persisted in file.
 	
-	// ::TODO
+	@Test
+	public void test02_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritablePricePair prcPr = kmmInFile.getWritablePricePairByID(PRCPR_1_ID);
+		assertNotEquals(null, prcPr);
+
+		assertEquals(PRCPR_1_ID, prcPr.getID());
+
+		// ----------------------------
+		// Modify the object
+
+		// Now, obviously, this is a completely nonsensical action that
+		// you virtually never would take in real life (regardless of 
+		// what specific currencies you choose). But this is a test case, 
+		// so we do it anyway...
+		prcPr.setFromCurrencyCode("BRL");
+		prcPr.setToCurrencyCode("SGD");
+
+		// ----------------------------
+		// Check whether the object can has actually be modified
+		// (in memory, not in the file yet).
+
+		test02_1_check_memory(prcPr);
+
+		// ----------------------------
+		// Now, check whether the modified object can be written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+                          // and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test02_1_check_persisted(outFile);
+	}
+
+	@Test
+	public void test02_2() throws Exception {
+		// ::TODO
+	}
+
+	private void test02_1_check_memory(KMyMoneyWritablePricePair prcPr) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
+
+		// CAUTION: The price pair, by its very definition, is a special
+		// case: It does not *have* an ID (like "unique" and "separated from its 
+		// content"), but rather its content *is* its own ID (a term that,
+		// strictly speaking, one actually should not use here, but there
+		// is a rationale for it, in the broader context of how to treat the 
+		// prices). Anyway: This is why, as opposed to all other entities,
+		// the price "ID" changes when its content is changed.
+		// assertEquals(PRCPR_1_ID, prcPr.getID()); // unchanged <-- NO!
+		assertEquals("BRL", prcPr.getFromCurrencyCode()); // changed
+		assertEquals("SGD", prcPr.getToCurrencyCode()); // changed
+	}
+
+	private void test02_1_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
+
+		// CAUTION: As opposed to the symmetrical test case in the other
+		// entities, we *cannot* search with the original ID here because
+		// it does not exist any more.
+		// CAUTION: Cf. comment in test02_1_check_memory()
+		// KMyMoneyPricePair prcPr = kmmOutFile.getPricePairByID(PRCPR_1_ID);
+		KMyMoneyPricePair prcPr = kmmOutFile.getPricePairByID(new KMMCurrPair("BRL", "SGD"));
+		assertNotEquals(null, prcPr);
+
+		// Cf. comment in test02_1_check_memory()
+		// assertEquals(PRCPR_1_ID, prcPr.getID()); // unchanged <-- NO!
+		assertEquals("BRL", prcPr.getFromCurrencyCode()); // changed
+		assertEquals("SGD", prcPr.getToCurrencyCode()); // changed
+	}
 
     // -----------------------------------------------------------------
     // PART 3: Create new objects
