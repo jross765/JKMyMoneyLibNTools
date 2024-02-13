@@ -33,13 +33,13 @@ import org.w3c.dom.NodeList;
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneyWritableSecurityImpl {
-    public static final String SEC_1_ID     = TestKMyMoneySecurityImpl.SEC_1_ID;
-    public static final String SEC_1_ISIN   = TestKMyMoneySecurityImpl.SEC_1_ISIN;
-    public static final String SEC_1_TICKER = TestKMyMoneySecurityImpl.SEC_1_TICKER;
+	private static final String SEC_1_ID     = TestKMyMoneySecurityImpl.SEC_1_ID;
+	private static final String SEC_1_ISIN   = TestKMyMoneySecurityImpl.SEC_1_ISIN;
+	private static final String SEC_1_TICKER = TestKMyMoneySecurityImpl.SEC_1_TICKER;
 
-    public static final String SEC_2_ID     = TestKMyMoneySecurityImpl.SEC_2_ID;
-    public static final String SEC_2_ISIN   = TestKMyMoneySecurityImpl.SEC_1_ISIN;
-    public static final String SEC_2_TICKER = TestKMyMoneySecurityImpl.SEC_1_TICKER;
+	private static final String SEC_2_ID     = TestKMyMoneySecurityImpl.SEC_2_ID;
+	private static final String SEC_2_ISIN   = TestKMyMoneySecurityImpl.SEC_1_ISIN;
+	private static final String SEC_2_TICKER = TestKMyMoneySecurityImpl.SEC_1_TICKER;
 
     // ---------------------------------------------------------------
 

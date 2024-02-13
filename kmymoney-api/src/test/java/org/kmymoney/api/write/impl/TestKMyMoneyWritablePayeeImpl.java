@@ -29,9 +29,9 @@ import org.w3c.dom.NodeList;
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneyWritablePayeeImpl {
-    public static final KMMPyeID PYE_1_ID = TestKMyMoneyPayeeImpl.PYE_1_ID;
-    public static final KMMPyeID PYE_2_ID = TestKMyMoneyPayeeImpl.PYE_2_ID;
-    public static final KMMPyeID PYE_3_ID = TestKMyMoneyPayeeImpl.PYE_3_ID;
+	private static final KMMPyeID PYE_1_ID = TestKMyMoneyPayeeImpl.PYE_1_ID;
+	private static final KMMPyeID PYE_2_ID = TestKMyMoneyPayeeImpl.PYE_2_ID;
+	private static final KMMPyeID PYE_3_ID = TestKMyMoneyPayeeImpl.PYE_3_ID;
 
     // -----------------------------------------------------------------
 

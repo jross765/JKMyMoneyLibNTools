@@ -29,11 +29,11 @@ import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneyWritableTransactionImpl {
-    private static final KMMTrxID TRX_1_ID = TestKMyMoneyTransactionImpl.TRX_1_ID;
-    private static final KMMTrxID TRX_2_ID = TestKMyMoneyTransactionImpl.TRX_2_ID;
+	private static final KMMTrxID TRX_1_ID = TestKMyMoneyTransactionImpl.TRX_1_ID;
+	private static final KMMTrxID TRX_2_ID = TestKMyMoneyTransactionImpl.TRX_2_ID;
 
-    private static final KMMComplAcctID ACCT_1_ID = TestKMyMoneyAccountImpl.ACCT_1_ID;
-    private static final KMMAcctID ACCT_20_ID = new KMMAcctID("A000005"); // Asset::Barvermögen::Spar RaiBa
+	private static final KMMComplAcctID ACCT_1_ID = TestKMyMoneyAccountImpl.ACCT_1_ID;
+	private static final KMMAcctID ACCT_20_ID = new KMMAcctID("A000005"); // Asset::Barvermögen::Spar RaiBa
 
     // -----------------------------------------------------------------
 

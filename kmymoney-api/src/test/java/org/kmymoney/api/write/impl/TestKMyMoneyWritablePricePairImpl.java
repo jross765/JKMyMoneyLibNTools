@@ -28,9 +28,9 @@ import org.kmymoney.api.write.KMyMoneyWritablePricePair;
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneyWritablePricePairImpl {
-    public static final KMMCurrPair PRCPR_1_ID = TestKMyMoneyPricePairImpl.PRCPR_1_ID;
-    public static final KMMCurrPair PRCPR_2_ID = TestKMyMoneyPricePairImpl.PRCPR_2_ID;
-    public static final KMMCurrPair PRCPR_3_ID = TestKMyMoneyPricePairImpl.PRCPR_3_ID;
+	private static final KMMCurrPair PRCPR_1_ID = TestKMyMoneyPricePairImpl.PRCPR_1_ID;
+	private static final KMMCurrPair PRCPR_2_ID = TestKMyMoneyPricePairImpl.PRCPR_2_ID;
+	private static final KMMCurrPair PRCPR_3_ID = TestKMyMoneyPricePairImpl.PRCPR_3_ID;
 
     // -----------------------------------------------------------------
 
