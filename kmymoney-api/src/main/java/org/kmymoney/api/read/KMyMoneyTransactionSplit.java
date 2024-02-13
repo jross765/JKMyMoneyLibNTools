@@ -9,7 +9,6 @@ import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.numbers.FixedPointNumber;
-import org.kmymoney.api.read.hlp.KMyMoneyObject;
 
 /**
  * A single addition or removal of a quantity of an account's accounted-for items 

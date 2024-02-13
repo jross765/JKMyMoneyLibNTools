@@ -3,6 +3,7 @@ package org.kmymoney.api.write.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import java.io.File;
 import java.io.InputStream;
 import java.time.LocalDate;
 
@@ -16,11 +17,16 @@ import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyCurrency;
+import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.read.KMyMoneyPrice.Source;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyPriceImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
+import org.kmymoney.api.read.impl.hlp.FileStats;
+import org.kmymoney.api.write.KMyMoneyWritablePayee;
 import org.kmymoney.api.write.KMyMoneyWritablePrice;
 
 import junit.framework.JUnit4TestAdapter;
@@ -114,7 +120,8 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals("SAP AG", prc.getFromSecurity().getName());
 		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString());
 		assertEquals("EUR", prc.getToCurrencyCode());
-		assertEquals("Transaction", prc.getSource());
+		assertEquals(Source.TRANSACTION, prc.getSource()); // unchanged
+		assertEquals("Transaction", prc.getSourceStr()); // unchanged
 		assertEquals(LocalDate.of(2023, 11, 3), prc.getDate());
 		assertEquals(120.0, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
@@ -154,7 +161,8 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals("Mercedes-Benz Group AG", prc.getFromSecurity().getName());
 		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString());
 		assertEquals("EUR", prc.getToCurrencyCode());
-		assertEquals("User", prc.getSource());
+		assertEquals(Source.USER, prc.getSource());
+		assertEquals("User", prc.getSourceStr());
 		assertEquals(LocalDate.of(2023, 11, 1), prc.getDate());
 		assertEquals(116.5, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
@@ -191,7 +199,8 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals("USD", prc.getFromCurrencyCode());
 		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString());
 		assertEquals("EUR", prc.getToCurrencyCode());
-		assertEquals("User", prc.getSource());
+		assertEquals(Source.USER, prc.getSource());
+		assertEquals("User", prc.getSourceStr());
 		assertEquals(LocalDate.of(2023, 12, 4), prc.getDate());
 		assertEquals(0.92, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
@@ -216,7 +225,99 @@ public class TestKMyMoneyWritablePriceImpl {
     // Check whether the KMyMoneyWritablePrice objects returned by
     // can actually be modified -- both in memory and persisted in file.
 	
-	// ::TODO
+	@Test
+	public void test02_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,         kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(PRC_1_ID);
+		assertNotEquals(null, prc);
+
+		assertEquals(PRC_1_ID, prc.getID());
+
+		// ----------------------------
+		// Modify the object
+
+		// CAUTION: No, not date, because that would change the "ID".
+		// Cf. TestKMyMoneyWritablePricePair.
+		// prc.setDate(LocalDate.of(1977, 7, 12));
+		prc.setValue(new FixedPointNumber(123.71));
+		prc.setSource(Source.USER);
+
+		// ----------------------------
+		// Check whether the object can has actually be modified
+		// (in memory, not in the file yet).
+
+		test02_1_check_memory(prc);
+
+		// ----------------------------
+		// Now, check whether the modified object can be written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+                          // and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test02_1_check_persisted(outFile);
+	}
+
+	@Test
+	public void test02_2() throws Exception {
+		// ::TODO
+	}
+
+	private void test02_1_check_memory(KMyMoneyWritablePrice prc) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,         kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+
+		assertEquals(PRC_1_ID, prc.getID()); // unchanged
+		assertEquals(secID1.toString(), prc.getFromSecCurrQualifID().toString()); // unchanged
+		assertEquals(secID1.toString(), prc.getFromSecurityQualifID().toString()); // unchanged
+		assertEquals(secID1.getCode().toString(), prc.getFromSecurityQualifID().getSecID().toString()); // unchanged
+		assertNotEquals(secID1.getCode(), prc.getFromSecurityQualifID().getSecID()); // unchanged
+		assertNotEquals(secID1, prc.getFromSecurityQualifID()); // unchanged
+		assertEquals("SAP AG", prc.getFromSecurity().getName()); // unchanged
+		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString()); // unchanged
+		assertEquals("EUR", prc.getToCurrencyCode()); // unchanged
+		assertEquals("User", prc.getSourceStr()); // unchanged
+		assertEquals(Source.USER, prc.getSource()); // unchanged
+		assertEquals(LocalDate.of(2023, 11, 3), prc.getDate()); // unchanged
+		assertEquals(123.71, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE); // changed
+	}
+
+	private void test02_1_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,         kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+
+		KMyMoneyPrice prc = kmmOutFile.getPriceByID(PRC_1_ID);
+		assertNotEquals(null, prc);
+
+		assertEquals(PRC_1_ID, prc.getID());
+		assertEquals(secID1.toString(), prc.getFromSecCurrQualifID().toString()); // unchanged
+		assertEquals(secID1.toString(), prc.getFromSecurityQualifID().toString()); // unchanged
+		assertEquals(secID1.getCode().toString(), prc.getFromSecurityQualifID().getSecID().toString()); // unchanged
+		assertNotEquals(secID1.getCode(), prc.getFromSecurityQualifID().getSecID()); // unchanged
+		assertNotEquals(secID1, prc.getFromSecurityQualifID()); // unchanged
+		assertEquals("SAP AG", prc.getFromSecurity().getName()); // unchanged
+		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString()); // unchanged
+		assertEquals("EUR", prc.getToCurrencyCode()); // unchanged
+		assertEquals("User", prc.getSourceStr()); // changed
+		assertEquals(Source.USER, prc.getSource()); // changed
+		assertEquals(LocalDate.of(2023, 11, 3), prc.getDate()); // unchanged
+		assertEquals(123.71, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE); // changed
+	}
 
     // -----------------------------------------------------------------
     // PART 3: Create new objects

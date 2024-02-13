@@ -19,19 +19,48 @@ import org.kmymoney.api.read.hlp.KMyMoneyPricePairCore;
  */
 public interface KMyMoneyPrice extends KMyMoneyPricePairCore {
 
-    // ::TODO: these are still KMyMoney values
+	/*
+	 * After superficial code analysis, it seems that the KMyMoney developers 
+	 * generally put little emphasis on type safety -- sloppily speaking, 
+	 * "everything's a string".
+	 * That includes the price source. At present, the author does not even
+	 * know precisely whether the strings written by KMyMoney for a price
+	 * source are locale-specfic or not (hopefully not).
+	 * It seems that we generally *cannot" map from/to an enum. However, 
+	 * it might be that we can define a sort of "base enum" for the most
+	 * basic/common cases.
+	 * Very dissatisfying indeed...     
+	 */
     public enum Source {
-	EDIT_DLG,         // "user:price-editor"
-	FQ,               // "Finance::Quote"
-	USER_PRICE,       // "user:price"
-	XFER_DLG_VAL,     // "user:xfer-dialog"
-	SPLIT_REG,        // "user:split-register"
-	SPLIT_IMPORT,     // "user:split-import"
-	STOCK_SPLIT,      // "user:stock-split"
-	STOCK_TRANSACTION,// "user:stock-transaction"
-	INVOICE,          // "user:invoice-post"
-	TEMP,             // "temporary"
-	INVALID,          // "invalid"    
+    	USER        ( "User" ),
+    	TRANSACTION ( "Transaction" );
+    	
+    	// ---
+	      
+    	private String code = "UNSET";
+
+    	// ---
+    	      
+    	Source(String code) {
+    	    this.code = code;
+    	}
+    	      
+    	// ---
+    		
+    	public String getCode() {
+    	    return code;
+    	}
+    		
+    	// no typo!
+    	public static Source valueOff(String code) {
+    	    for ( Source src : values() ) {
+    	    	if ( src.getCode().equals(code) ) {
+    	    		return src;
+    	    	}
+    	    }
+    		    
+    	    return null;
+    	}
     }
 	
     // ---------------------------------------------------------------
@@ -65,7 +94,12 @@ public interface KMyMoneyPrice extends KMyMoneyPricePairCore {
     /**
      * @return
      */
-    String getSource();
+    Source getSource();
+
+    /**
+     * @return
+     */
+    String getSourceStr();
 
     /**
      * @return

@@ -109,7 +109,7 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
         
         PRICE jwsdpPrc = file.createPriceType();
         
-        jwsdpPrc.setSource(Source.USER_PRICE.toString());
+        jwsdpPrc.setSource(Source.USER.getCode());
         
         try {
             // https://stackoverflow.com/questions/835889/java-util-date-to-xmlgregoriancalendar
@@ -288,9 +288,10 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 
     @Override
     public void setSource(Source src) {
-		setSourceStr(src.toString());
+		setSourceStr(src.getCode());
     }
 
+    @Override
     public void setSourceStr(String srcStr) {
 		if ( srcStr == null )
 			throw new IllegalArgumentException("null source given");
@@ -298,7 +299,7 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 		if ( srcStr.trim().length() == 0 )
 			throw new IllegalArgumentException("empty source given");
 
-		String oldSrc = getSource();
+		String oldSrc = getSourceStr();
 
 		jwsdpPeer.setSource(srcStr);
 		getWritableKMyMoneyFile().setModified(true);

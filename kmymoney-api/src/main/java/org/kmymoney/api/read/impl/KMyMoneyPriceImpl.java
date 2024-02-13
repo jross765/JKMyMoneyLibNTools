@@ -2,7 +2,6 @@ package org.kmymoney.api.read.impl;
 
 import java.text.NumberFormat;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Currency;
 
@@ -208,11 +207,16 @@ public class KMyMoneyPriceImpl implements KMyMoneyPrice {
     }
 
     @Override
-    public String getSource() {
-	if ( jwsdpPeer.getSource() == null )
-	    return null;
+    public Source getSource() {
+    	return Source.valueOff(getSourceStr());
+    }
+
+    @Override
+    public String getSourceStr() {
+    	if ( jwsdpPeer.getSource() == null )
+    		return null;
 	
-	return jwsdpPeer.getSource();
+    	return jwsdpPeer.getSource();
     }
 
     @Override

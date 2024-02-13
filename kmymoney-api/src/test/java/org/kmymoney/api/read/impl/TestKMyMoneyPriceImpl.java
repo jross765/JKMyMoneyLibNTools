@@ -17,6 +17,7 @@ import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.read.KMyMoneyPrice.Source;
 import org.kmymoney.api.read.KMyMoneySecurity;
 
 import junit.framework.JUnit4TestAdapter;
@@ -105,7 +106,8 @@ public class TestKMyMoneyPriceImpl {
 		assertEquals("SAP AG", prc.getFromSecurity().getName());
 		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString());
 		assertEquals("EUR", prc.getToCurrencyCode());
-		assertEquals("Transaction", prc.getSource());
+		assertEquals("Transaction", prc.getSourceStr());
+		assertEquals(Source.TRANSACTION, prc.getSource());
 		assertEquals(LocalDate.of(2023, 11, 3), prc.getDate());
 		assertEquals(120.0, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
@@ -145,7 +147,8 @@ public class TestKMyMoneyPriceImpl {
 		assertEquals("Mercedes-Benz Group AG", prc.getFromSecurity().getName());
 		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString());
 		assertEquals("EUR", prc.getToCurrencyCode());
-		assertEquals("User", prc.getSource());
+		assertEquals("User", prc.getSourceStr());
+		assertEquals(Source.USER, prc.getSource());
 		assertEquals(LocalDate.of(2023, 11, 1), prc.getDate());
 		assertEquals(116.5, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
@@ -182,7 +185,8 @@ public class TestKMyMoneyPriceImpl {
 		assertEquals("USD", prc.getFromCurrencyCode());
 		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString());
 		assertEquals("EUR", prc.getToCurrencyCode());
-		assertEquals("User", prc.getSource());
+		assertEquals(Source.USER, prc.getSource());
+		assertEquals("User", prc.getSourceStr());
 		assertEquals(LocalDate.of(2023, 12, 4), prc.getDate());
 		assertEquals(0.92, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 

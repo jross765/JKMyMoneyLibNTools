@@ -36,6 +36,8 @@ public interface KMyMoneyWritablePrice extends KMyMoneyPrice,
 
     void setSource(Source src);
 
+    void setSourceStr(String src);
+
     void setValue(FixedPointNumber val);
 
 }
