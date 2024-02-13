@@ -8,6 +8,9 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Currency;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,6 +22,10 @@ import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import junit.framework.JUnit4TestAdapter;
 
@@ -474,6 +481,151 @@ public class TestKMyMoneyWritableAccountImpl {
     // PART 3.2: Low-Level
     // ------------------------------
 
-	// ::TODO
+	@Test
+	public void test03_2_1() throws Exception {
+		KMyMoneyWritableAccount acct = kmmInFile.createWritableAccount();
+		acct.setType(KMyMoneyAccount.Type.LIABILITY);
+		acct.setParentAccountID(ACCT_3_ID);
+		acct.setName("SNAF");
+		acct.setMemo("Stuff never accounted for");
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritablePayeeImpl.test01_1: '" + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		                  // and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test03_2_1_check(outFile);
+	}
+
+    // -----------------------------------------------------------------
+
+//  @Test
+//  public void test03_2_2() throws Exception
+//  {
+//      assertNotEquals(null, outFileGlob);
+//      assertEquals(true, outFileGlob.exists());
+//
+//      // Check if generated document is valid
+//      // ::TODO: in fact, not even the input document is.
+//      // Build document
+//      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//      DocumentBuilder builder = factory.newDocumentBuilder(); 
+//      Document document = builder.parse(outFileGlob);
+//      System.err.println("xxxx XML parsed");
+//
+//      // https://howtodoinjava.com/java/xml/read-xml-dom-parser-example/
+//      Schema schema = null;
+//      String language = XMLConstants.W3C_XML_SCHEMA_NS_URI;
+//      SchemaFactory factory1 = SchemaFactory.newInstance(language);
+//      schema = factory1.newSchema(outFileGlob);
+//
+//      Validator validator = schema.newValidator();
+//      DOMResult validResult = null; 
+//      validator.validate(new DOMSource(document), validResult);
+//      System.out.println("yyy: " + validResult);
+//      // assertEquals(validResult);
+//  }
+
+	private void test03_2_1_check(File outFile) throws Exception {
+		assertNotEquals(null, outFile);
+		assertEquals(true, outFile.exists());
+
+		// Build document
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document document = builder.parse(outFile);
+//      System.err.println("xxxx XML parsed");
+
+		// Normalize the XML structure
+		document.getDocumentElement().normalize();
+//      System.err.println("xxxx XML normalized");
+
+		NodeList nList = document.getElementsByTagName("ACCOUNT");
+		assertEquals(ConstTest.Stats.NOF_ACCT + 1, nList.getLength());
+
+		// Last (new) node
+		Node lastNode = nList.item(nList.getLength() - 1);
+		assertEquals(lastNode.getNodeType(), Node.ELEMENT_NODE);
+		Element elt = (Element) lastNode;
+		assertEquals("" + KMyMoneyAccount.Type.LIABILITY.getCode(), elt.getAttribute("type"));
+		assertEquals(ACCT_3_ID.toString(), elt.getAttribute("parentaccount"));
+		assertEquals("SNAF", elt.getAttribute("name"));
+		assertEquals("Stuff never accounted for", elt.getAttribute("description"));
+	}
+
+	// -----------------------------------------------------------------
+
+	@Test
+	public void test03_2_4() throws Exception {
+		KMyMoneyWritableAccount acct1 = kmmInFile.createWritableAccount();
+		acct1.setType(KMyMoneyAccount.Type.LIABILITY);
+		acct1.setParentAccountID(ACCT_3_ID);
+		acct1.setName("SNAF");
+		acct1.setMemo("Stuff never accounted for");
+
+		KMyMoneyWritableAccount acct2 = kmmInFile.createWritableAccount();
+		acct2.setType(KMyMoneyAccount.Type.CHECKING);
+		acct2.setParentAccountID(ACCT_2_ID);
+		acct2.setName("BAHAMAS SECRET");
+		acct2.setMemo("My very VERY secret account on the Bahamas");
+
+		KMyMoneyWritableAccount acct3 = kmmInFile.createWritableAccount();
+		acct3.setType(KMyMoneyAccount.Type.CASH);
+		acct3.setParentAccountID(ACCT_1_ID);
+		acct3.setName("Bug-Out Cash");
+		acct3.setMemo("My hopefully secret cash wallet for crises");
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+//      System.err.println("Outfile for TestKMyMoneyWritablePayeeImpl.test02_1: '" + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		                  // and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test03_2_4_check(outFile);
+	}
+
+	private void test03_2_4_check(File outFile) throws Exception {
+		assertNotEquals(null, outFile);
+		assertEquals(true, outFile.exists());
+
+		// Build document
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document document = builder.parse(outFile);
+//      System.err.println("xxxx XML parsed");
+
+		// Normalize the XML structure
+		document.getDocumentElement().normalize();
+//      System.err.println("xxxx XML normalized");
+
+		NodeList nList = document.getElementsByTagName("ACCOUNT");
+		assertEquals(ConstTest.Stats.NOF_ACCT + 3, nList.getLength());
+
+		// Last three nodes (the new ones)
+		Node node = nList.item(nList.getLength() - 3);
+		assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+		Element elt = (Element) node;
+		assertEquals("" + KMyMoneyAccount.Type.LIABILITY.getCode(), elt.getAttribute("type"));
+		assertEquals(ACCT_3_ID.toString(), elt.getAttribute("parentaccount"));
+		assertEquals("SNAF", elt.getAttribute("name"));
+		assertEquals("Stuff never accounted for", elt.getAttribute("description"));
+
+		node = nList.item(nList.getLength() - 2);
+		assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+		elt = (Element) node;
+		assertEquals("" + KMyMoneyAccount.Type.CHECKING.getCode(), elt.getAttribute("type"));
+		assertEquals(ACCT_2_ID.toString(), elt.getAttribute("parentaccount"));
+		assertEquals("BAHAMAS SECRET", elt.getAttribute("name"));
+		assertEquals("My very VERY secret account on the Bahamas", elt.getAttribute("description"));
+
+		node = nList.item(nList.getLength() - 1);
+		assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+		elt = (Element) node;
+		assertEquals("" + KMyMoneyAccount.Type.CASH.getCode(), elt.getAttribute("type"));
+		assertEquals(ACCT_1_ID.toString(), elt.getAttribute("parentaccount"));
+		assertEquals("Bug-Out Cash", elt.getAttribute("name"));
+		assertEquals("My hopefully secret cash wallet for crises", elt.getAttribute("description"));
+	}
 
 }
