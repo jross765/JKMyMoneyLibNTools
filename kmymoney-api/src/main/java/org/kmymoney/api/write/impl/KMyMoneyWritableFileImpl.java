@@ -938,6 +938,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		return null;
 	}
 
+	// ----------------------------
+
 	@Override
 	public KMyMoneyWritablePricePair createWritablePricePair() {
 		KMyMoneyWritablePricePairImpl prc = new KMyMoneyWritablePricePairImpl(this);
@@ -988,6 +990,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	// ----------------------------
 
 	@Override
 	public KMyMoneyWritablePrice createWritablePrice(KMyMoneyPricePairImpl prcPair) {

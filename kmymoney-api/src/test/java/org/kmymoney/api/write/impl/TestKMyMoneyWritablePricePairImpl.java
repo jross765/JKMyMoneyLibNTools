@@ -294,7 +294,9 @@ public class TestKMyMoneyWritablePricePairImpl {
 		// it does not exist any more.
 		// CAUTION: Cf. comment in test02_1_check_memory()
 		// KMyMoneyPricePair prcPr = kmmOutFile.getPricePairByID(PRCPR_1_ID);
-		KMyMoneyPricePair prcPr = kmmOutFile.getPricePairByID(new KMMCurrPair("BRL", "SGD"));
+		KMyMoneyPricePair prcPr = kmmOutFile.getPricePairByID(PRCPR_1_ID);
+		assertEquals(null, prcPr); // sic
+		prcPr = kmmOutFile.getPricePairByID(new KMMCurrPair("BRL", "SGD"));
 		assertNotEquals(null, prcPr);
 
 		// Cf. comment in test02_1_check_memory()

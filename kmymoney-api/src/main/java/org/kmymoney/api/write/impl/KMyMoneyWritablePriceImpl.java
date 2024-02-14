@@ -3,7 +3,7 @@ package org.kmymoney.api.write.impl;
 import java.beans.PropertyChangeSupport;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.ZoneId;
 import java.util.GregorianCalendar;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -111,10 +111,16 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
         
         jwsdpPrc.setSource(Source.USER.getCode());
         
+        LocalDate dateNow = LocalDate.now();
+        
         try {
             // https://stackoverflow.com/questions/835889/java-util-date-to-xmlgregoriancalendar
-            GregorianCalendar cal = new GregorianCalendar();
-            cal.setTime(new Date());
+			// https://stackoverflow.com/questions/49667772/localdate-to-gregoriancalendar-conversion
+			// CAUTION: The following two lines with new Date() do not work so well.
+//            GregorianCalendar cal = new GregorianCalendar();
+//            cal.setTime(new Date());
+			GregorianCalendar cal = GregorianCalendar
+					.from( dateNow.atStartOfDay().atZone(ZoneId.systemDefault()) );
             XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
             jwsdpPrc.setDate(xmlCal);
         } catch ( DatatypeConfigurationException exc ) {
@@ -126,7 +132,7 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
         prntPrcPair.getJwsdpPeer().getPRICE().add(jwsdpPrc); // <-- NOT parent (yet)!
         file.setModified(true);
     
-        KMMPriceID prcID = new KMMPriceID(prntPrcPair, jwsdpPrc.getDate().toString());
+        KMMPriceID prcID = new KMMPriceID(prntPrcPair, DATE_FORMAT.format(dateNow));
         LOGGER.debug("createPrice_int: Created new price (core): " + prcID.toString());
         
         return jwsdpPrc;
@@ -259,11 +265,15 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 		
 		try {
             // https://stackoverflow.com/questions/835889/java-util-date-to-xmlgregoriancalendar
-			this.date = LocalDate.now();
-	        GregorianCalendar cal = new GregorianCalendar();
-	        cal.setTime(new Date(this.date.getYear(),
-	        		             this.date.getMonthValue(),
-	        		             this.date.getDayOfMonth()));
+			// https://stackoverflow.com/questions/49667772/localdate-to-gregoriancalendar-conversion
+			this.date = date;
+			// CAUTION: The following two lines with new Date(...) do not work (realiably)
+//	        GregorianCalendar cal = new GregorianCalendar();
+//	        cal.setTime(new Date(this.date.getYear(),
+//	        		             this.date.getMonthValue(),
+//	        		             this.date.getDayOfMonth()));
+			GregorianCalendar cal = GregorianCalendar 
+					.from( date.atStartOfDay(ZoneId.systemDefault()) );
 	        XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
 			jwsdpPeer.setDate(xmlCal);
 		} catch ( DatatypeConfigurationException exc ) {

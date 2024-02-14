@@ -1,7 +1,10 @@
 package org.kmymoney.api.basetypes.complex;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+import org.kmymoney.api.Const;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 
 /**
@@ -16,32 +19,40 @@ import org.kmymoney.api.read.KMyMoneyPricePair;
  */
 public class KMMPriceID {
     
-    private String fromCurr;
+    protected static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
+    
+    // -----------------------------------------------------------
+
+    private String fromSecCurr;
     private String toCurr;
     private String dateStr;
     
     // ---------------------------------------------------------------
 
-	public KMMPriceID(String fromCurr, String toCurr, String dateStr) {
-		this.fromCurr = fromCurr;
+	public KMMPriceID(String fromSecCurr, String toCurr, String dateStr) {
+		this.fromSecCurr = fromSecCurr;
 		this.toCurr = toCurr;
 		this.dateStr = dateStr;
 	}
 
 	public KMMPriceID(KMyMoneyPricePair prcPair, String dateStr) {
-		this.fromCurr = prcPair.getFromSecCurrStr();
+		this.fromSecCurr = prcPair.getFromSecCurrStr();
 		this.toCurr = prcPair.getToCurrStr();
 		this.dateStr = dateStr;
 	}
     
     // ---------------------------------------------------------------
 
-    public String getFromCurr() {
-        return fromCurr;
+    public String getFromSecCurr() {
+        return fromSecCurr;
     }
 
-    public void setFromCurr(String fromCurr) {
-        this.fromCurr = fromCurr;
+    public void setFromSecCurr(String fromSecCurr) {
+        this.fromSecCurr = fromSecCurr;
+    }
+
+    public void setFromSecCurr(KMMQualifSecCurrID fromSecCurr) {
+        setFromSecCurr(fromSecCurr.getCode());
     }
 
     public String getToCurr() {
@@ -52,19 +63,46 @@ public class KMMPriceID {
         this.toCurr = toCurr;
     }
 
+    public void setToCurr(KMMQualifCurrID toCurr) {
+        setToCurr(toCurr.getCode());
+    }
+
     public String getDateStr() {
         return dateStr;
     }
 
+    public LocalDate getDate() {
+    	if ( getDateStr() == null )
+    		return null;
+	
+    	return LocalDate.parse(getDateStr());
+    }
+    
     public void setDateStr(String dateStr) {
         this.dateStr = dateStr;
     }
 
+    public void setDate(LocalDate date) {
+    	if ( date == null ) {
+    		throw new IllegalArgumentException("null date given");
+    	}
+    	
+    	setDateStr(DATE_FORMAT.format(date));
+    }
+    
+    // ----------------------------
+
+	public void set(KMMPriceID id) {
+		setFromSecCurr(id.getFromSecCurr());
+		setToCurr(id.getToCurr());
+		setDateStr(id.getDateStr());
+	}
+        
     // ---------------------------------------------------------------
 
     @Override
     public int hashCode() {
-	return Objects.hash(dateStr, fromCurr, toCurr);
+	return Objects.hash(dateStr, fromSecCurr, toCurr);
     }
 
     @Override
@@ -77,7 +115,7 @@ public class KMMPriceID {
 	}
 	KMMPriceID other = (KMMPriceID) obj;
 	return Objects.equals(dateStr, other.dateStr) && 
-	       Objects.equals(fromCurr, other.fromCurr) && 
+	       Objects.equals(fromSecCurr, other.fromSecCurr) && 
 	       Objects.equals(toCurr, other.toCurr);
     }
 
@@ -89,11 +127,11 @@ public class KMMPriceID {
     }
         
     public String toStringShort() {
-	return fromCurr + ";" + toCurr + ";" + dateStr;
+	return fromSecCurr + ";" + toCurr + ";" + dateStr;
     }
         
     public String toStringLong() {
-	return "KMMPriceID [fromCurr=" + fromCurr + ", toCurr=" + toCurr + ", dateStr=" + dateStr + "]";
+	return "KMMPriceID [fromSecCurr=" + fromSecCurr + ", toCurr=" + toCurr + ", dateStr=" + dateStr + "]";
     }
-        
+
 }

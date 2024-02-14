@@ -207,6 +207,14 @@ public class KMyMoneyPriceImpl implements KMyMoneyPrice {
     }
 
     @Override
+    public String getDateStr() {
+	if ( jwsdpPeer.getDate() == null )
+	    return null;
+	
+	return jwsdpPeer.getDate().toString();
+    }
+
+    @Override
     public Source getSource() {
     	return Source.valueOff(getSourceStr());
     }

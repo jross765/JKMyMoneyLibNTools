@@ -91,6 +91,8 @@ public interface KMyMoneyPrice extends KMyMoneyPricePairCore {
      */
     LocalDate getDate();
 
+    String getDateStr();
+
     /**
      * @return
      */

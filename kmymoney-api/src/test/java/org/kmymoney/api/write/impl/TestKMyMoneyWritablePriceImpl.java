@@ -21,12 +21,14 @@ import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPrice.Source;
+import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyPriceImpl;
+import org.kmymoney.api.read.impl.TestKMyMoneyPricePairImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.api.read.impl.hlp.FileStats;
-import org.kmymoney.api.write.KMyMoneyWritablePayee;
 import org.kmymoney.api.write.KMyMoneyWritablePrice;
 
 import junit.framework.JUnit4TestAdapter;
@@ -36,7 +38,11 @@ public class TestKMyMoneyWritablePriceImpl {
 	private static final KMMPriceID PRC_2_ID = TestKMyMoneyPriceImpl.PRC_2_ID;
 	private static final KMMPriceID PRC_3_ID = TestKMyMoneyPriceImpl.PRC_3_ID;
 
-    // -----------------------------------------------------------------
+	private static final KMMCurrPair PRCPR_1_ID = TestKMyMoneyPricePairImpl.PRCPR_1_ID;
+	private static final KMMCurrPair PRCPR_2_ID = TestKMyMoneyPricePairImpl.PRCPR_2_ID;
+	private static final KMMCurrPair PRCPR_3_ID = TestKMyMoneyPricePairImpl.PRCPR_3_ID;
+
+	// -----------------------------------------------------------------
 
     private KMyMoneyWritableFileImpl kmmInFile = null;
     private KMyMoneyFileImpl kmmOutFile = null;
@@ -49,7 +55,7 @@ public class TestKMyMoneyWritablePriceImpl {
 
 	KMMQualifCurrID currID1 = null;
 
-	private KMMCurrPair newID = null;
+	private KMMPriceID newID = null;
 
     // https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
     @SuppressWarnings("exports")
@@ -93,6 +99,8 @@ public class TestKMyMoneyWritablePriceImpl {
 		secID2 = new KMMQualifSecCurrID(KMMQualifSecCurrID.Type.SECURITY, "E000002");
 
 		currID1 = new KMMQualifCurrID("USD");
+		
+		newID = new KMMPriceID("EUR", "EUR", "1970-01-01"); // dummy
 	}
 
     // -----------------------------------------------------------------
@@ -327,7 +335,86 @@ public class TestKMyMoneyWritablePriceImpl {
     // PART 3.1: High-Level
     // ------------------------------
 
-	// ::TODO
+    @Test
+	public void test03_1_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,         kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+
+		KMyMoneyPricePair prcPr = kmmInFile.getPricePairByID(PRCPR_1_ID);
+		KMyMoneyWritablePrice prc = kmmInFile.createWritablePrice((KMyMoneyPricePairImpl) prcPr);
+		prc.setDate(LocalDate.of(1910, 5, 1));
+		prc.setValue(new FixedPointNumber(345.21));
+		prc.setSource(Source.USER);
+
+		// ----------------------------
+		// Check whether the object can has actually be created
+		// (in memory, not in the file yet).
+
+		test03_1_1_check_memory(prc);
+
+		// ----------------------------
+		// Now, check whether the created object can be written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+						  // and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test03_1_1_check_persisted(outFile);
+	}
+
+	private void test03_1_1_check_memory(KMyMoneyWritablePrice prc) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_PRC + 1, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,             kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRC + 1, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+
+		newID.set( prc.getID() );
+		assertEquals(PRCPR_1_ID.getFromSecCurr().getCode(), newID.getFromSecCurr());
+		assertEquals(PRCPR_1_ID.getToCurr().getCode(), newID.getToCurr());
+		assertEquals("1910-05-01", newID.getDateStr());
+		assertEquals(LocalDate.of(1910, 5, 1), newID.getDate());
+		
+		assertEquals(PRCPR_1_ID.getFromSecCurr(), prc.getFromSecCurrQualifID());
+		assertEquals(PRCPR_1_ID.getToCurr(), prc.getToCurrencyQualifID());
+		assertEquals("1910-05-01T00:00:00.000+01:00", prc.getDateStr()); // sic
+		assertEquals(LocalDate.of(1910, 5, 1), prc.getDate());
+		assertEquals(345.21, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
+		assertEquals("User", prc.getSourceStr());
+		assertEquals(Source.USER, prc.getSource());
+	}
+
+	private void test03_1_1_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		assertEquals(ConstTest.Stats.NOF_PRC + 1, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,             kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRC + 1, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+
+		KMyMoneyPrice prc = kmmOutFile.getPriceByID(newID);
+		assertNotEquals(null, prc);
+
+		assertEquals(newID, prc.getID());
+		assertEquals(PRCPR_1_ID.getFromSecCurr().getCode(), newID.getFromSecCurr());
+		assertEquals(PRCPR_1_ID.getToCurr().getCode(), newID.getToCurr());
+		assertEquals("1910-05-01", newID.getDateStr());
+		assertEquals(LocalDate.of(1910, 5, 1), newID.getDate());
+		
+		assertEquals(PRCPR_1_ID.getFromSecCurr(), prc.getFromSecCurrQualifID());
+		assertEquals(PRCPR_1_ID.getToCurr(), prc.getToCurrencyQualifID());
+		assertEquals("1910-05-01+01:00", prc.getDateStr()); // sic
+		assertEquals(LocalDate.of(1910, 5, 1), prc.getDate());
+		assertEquals(345.21, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
+		assertEquals("User", prc.getSourceStr());
+		assertEquals(Source.USER, prc.getSource());
+	}
 
     // ------------------------------
     // PART 3.2: Low-Level
