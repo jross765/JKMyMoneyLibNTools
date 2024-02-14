@@ -2,9 +2,12 @@ package org.kmymoney.api.basetypes.complex;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Currency;
 import java.util.Objects;
 
 import org.kmymoney.api.Const;
+import org.kmymoney.api.basetypes.simple.KMMIDNotSetException;
+import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 
 /**
@@ -48,11 +51,43 @@ public class KMMPriceID {
     }
 
     public void setFromSecCurr(String fromSecCurr) {
+    	if ( fromSecCurr == null ) {
+    		throw new IllegalArgumentException("null security-currency-ID given");
+    	}
+    	
         this.fromSecCurr = fromSecCurr;
     }
 
     public void setFromSecCurr(KMMQualifSecCurrID fromSecCurr) {
+    	if ( fromSecCurr == null ) {
+    		throw new IllegalArgumentException("null security-currency-ID given");
+    	}
+    	
         setFromSecCurr(fromSecCurr.getCode());
+    }
+
+    public void setFromSecID(KMMSecID fromSecID) throws KMMIDNotSetException {
+    	if ( fromSecID == null ) {
+    		throw new IllegalArgumentException("null security-ID given");
+    	}
+    	
+        setFromSecCurr(fromSecID.get());
+    }
+
+    public void setFromCurr(Currency fromCurr) throws KMMIDNotSetException {
+    	if ( fromCurr == null ) {
+    		throw new IllegalArgumentException("null currency given");
+    	}
+    	
+        setFromSecCurr(fromCurr.getCurrencyCode());
+    }
+
+    public void setFromCurr(String fromCurrCode) throws KMMIDNotSetException {
+    	if ( fromCurrCode == null ) {
+    		throw new IllegalArgumentException("null currency given");
+    	}
+    	
+        setFromCurr(Currency.getInstance(fromCurrCode));
     }
 
     public String getToCurr() {
@@ -60,12 +95,36 @@ public class KMMPriceID {
     }
 
     public void setToCurr(String toCurr) {
+    	if ( toCurr == null ) {
+    		throw new IllegalArgumentException("null currency-ID given");
+    	}
+    	
         this.toCurr = toCurr;
     }
 
     public void setToCurr(KMMQualifCurrID toCurr) {
+    	if ( toCurr == null ) {
+    		throw new IllegalArgumentException("null currency-ID given");
+    	}
+    	
         setToCurr(toCurr.getCode());
     }
+
+    public void setToCurr(Currency toCurr) throws KMMIDNotSetException {
+    	if ( toCurr == null ) {
+    		throw new IllegalArgumentException("null currency given");
+    	}
+    	
+        setToCurr(toCurr.getCurrencyCode());
+    }
+
+//    public void setToCurr(String toCurrCode) throws KMMIDNotSetException {
+//    	if ( toCurrCode == null ) {
+//    		throw new IllegalArgumentException("null currency given");
+//    	}
+//    	
+//        setFromCurr(Currency.getInstance(toCurrCode));
+//    }
 
     public String getDateStr() {
         return dateStr;
@@ -79,6 +138,10 @@ public class KMMPriceID {
     }
     
     public void setDateStr(String dateStr) {
+    	if ( dateStr == null ) {
+    		throw new IllegalArgumentException("null date given");
+    	}
+    	
         this.dateStr = dateStr;
     }
 
