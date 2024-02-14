@@ -63,7 +63,12 @@ public class KMyMoneyPricePairImpl implements KMyMoneyPricePair {
     
     @Override
     public KMMCurrPair getID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
-	return new KMMCurrPair(jwsdpPeer.getFrom(), jwsdpPeer.getTo());
+    	if ( jwsdpPeer.getFrom() == null ||
+    		 jwsdpPeer.getTo() == null ) {
+    		throw new IllegalStateException("from-sec-curr and/or to-curr of JWSDP peer is/are null");
+    	}
+    	
+    	return new KMMCurrPair(jwsdpPeer.getFrom(), jwsdpPeer.getTo());
     }
 
     // -----------------------------------------------------------

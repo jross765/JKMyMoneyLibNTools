@@ -42,8 +42,13 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
     	super(jwsdpPeer, file);
     }
 
-    public KMyMoneyWritablePricePairImpl(final KMyMoneyWritableFileImpl file) {
-    	super(createPricePair_int(file), file);
+    public KMyMoneyWritablePricePairImpl(
+    		final KMMQualifSecCurrID fromSecCurrID, 
+    		final KMMQualifCurrID toCurrID,
+    		final KMyMoneyWritableFileImpl file) {
+    	super(createPricePair_int(fromSecCurrID, toCurrID,
+    							  file), 
+    		  file);
     }
 
     public KMyMoneyWritablePricePairImpl(final KMyMoneyPricePairImpl prcPair) {
@@ -80,20 +85,24 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 //	return splt;
 //  }
 
-    private static PRICEPAIR createPricePair_int(final KMyMoneyWritableFileImpl file) {
+    private static PRICEPAIR createPricePair_int(
+    		final KMMQualifSecCurrID fromSecCurrID, 
+    		final KMMQualifCurrID toCurrID,
+    		final KMyMoneyWritableFileImpl file) {
 	
-        ObjectFactory factory = file.getObjectFactory();
+        // ObjectFactory fact = file.getObjectFactory();
         
         PRICEPAIR jwsdpPrcPair = file.createPricePairType();
-        
-        // ::EMPTY
-        // set nothing (sic)
+
+        jwsdpPrcPair.setFrom(fromSecCurrID.getCode());
+        jwsdpPrcPair.setTo(toCurrID.getCode());
     
         file.getRootElement().getPRICES().getPRICEPAIR().add(jwsdpPrcPair);
         file.setModified(true);
     
-        KMMCurrPair prcPairID = new KMMCurrPair(jwsdpPrcPair.getFrom(), jwsdpPrcPair.getTo());
+        KMMCurrPair prcPairID = new KMMCurrPair(fromSecCurrID, toCurrID);
         LOGGER.debug("createPricePair_int: Created new price pair (core): " + prcPairID.toString());
+        // LOGGER.debug("createPricePair_int: Created new price pair (core): " + jwsdpPrcPair);
     
         return jwsdpPrcPair;
     }
@@ -165,7 +174,7 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 //		if ( ! qualifID.isSet() )
 //			throw new IllegalArgumentException("unset ID given");
 
-    	jwsdpPeer.setFrom(qualifID.toString());
+    	jwsdpPeer.setFrom(qualifID.getCode());
     	getWritableKMyMoneyFile().setModified(true);
     }
 
@@ -178,7 +187,7 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 //		if ( ! qualifID.isSet() )
 //			throw new IllegalArgumentException("unset ID given");
 
-		jwsdpPeer.setFrom(qualifID.toString());
+		jwsdpPeer.setFrom(qualifID.getCode());
 		getWritableKMyMoneyFile().setModified(true);
 	}
 
@@ -204,7 +213,7 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 //		if ( ! sec.isSet() )
 //			throw new IllegalArgumentException("unset ID given");
 
-		jwsdpPeer.setFrom(sec.toString());
+		jwsdpPeer.setFrom(sec.getCode());
 		getWritableKMyMoneyFile().setModified(true);
 	}
 
@@ -228,7 +237,7 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 //		if ( ! curr.isSet() )
 //			throw new IllegalArgumentException("unset ID given");
 
-		jwsdpPeer.setFrom(curr.toString());
+		jwsdpPeer.setFrom(curr.getID());
 		getWritableKMyMoneyFile().setModified(true);
 	}
 
@@ -270,7 +279,7 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 //		if ( ! curr.isSet() )
 //			throw new IllegalArgumentException("unset ID given");
 
-		jwsdpPeer.setTo(curr.toString());
+		jwsdpPeer.setTo(curr.getID());
 		setToCurrencyQualifID(curr.getQualifID());
 	}
 

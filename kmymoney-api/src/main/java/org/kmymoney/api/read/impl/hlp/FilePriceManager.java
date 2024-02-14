@@ -63,19 +63,19 @@ public class FilePriceManager {
 
 		initPriceDB(pRootElement);
 		List<PRICEPAIR> prices = priceDB.getPRICEPAIR();
-		for ( PRICEPAIR jwsdpPricePair : prices ) {
-			String fromCurr = jwsdpPricePair.getFrom();
-			String toCurr = jwsdpPricePair.getTo();
+		for ( PRICEPAIR jwsdpPrcPr : prices ) {
+			String fromCurr = jwsdpPrcPr.getFrom();
+			String toCurr = jwsdpPrcPr.getTo();
 			KMMCurrPair currPair = new KMMCurrPair(fromCurr, toCurr);
-			KMyMoneyPricePair pricePair = createPricePair(jwsdpPricePair);
+			KMyMoneyPricePair pricePair = createPricePair(jwsdpPrcPr);
 			prcPairMap.put(currPair, pricePair);
-			for ( PRICE jwsdpPrice : jwsdpPricePair.getPRICE() ) {
-				XMLGregorianCalendar cal = jwsdpPrice.getDate();
+			for ( PRICE jwsdpPrc : jwsdpPrcPr.getPRICE() ) {
+				XMLGregorianCalendar cal = jwsdpPrc.getDate();
 				if ( cal != null ) {
 					LocalDate date = LocalDate.of(cal.getYear(), cal.getMonth(), cal.getDay());
 					String dateStr = date.toString();
 					KMMPriceID priceID = new KMMPriceID(fromCurr, toCurr, dateStr);
-					KMyMoneyPriceImpl price = createPrice(pricePair, jwsdpPrice);
+					KMyMoneyPriceImpl price = createPrice(pricePair, jwsdpPrc);
 					prcMap.put(priceID, price);
 				} else {
 					LOGGER.error("init: Found Price without or with invalid date: (" + fromCurr + "/" + toCurr + ")");

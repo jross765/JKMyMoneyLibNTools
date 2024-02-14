@@ -19,6 +19,8 @@ import java.util.zip.GZIPOutputStream;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
+import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.basetypes.simple.KMMAcctID;
@@ -941,8 +943,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	// ----------------------------
 
 	@Override
-	public KMyMoneyWritablePricePair createWritablePricePair() {
-		KMyMoneyWritablePricePairImpl prc = new KMyMoneyWritablePricePairImpl(this);
+	public KMyMoneyWritablePricePair createWritablePricePair(
+			final KMMQualifSecCurrID fromSecCurrID, 
+			final KMMQualifCurrID toCurrID) {
+		KMyMoneyWritablePricePairImpl prc = new KMyMoneyWritablePricePairImpl(fromSecCurrID, toCurrID, 
+																			  this);
 		super.prcMgr.addPricePair(prc);
 		return prc;
 	}

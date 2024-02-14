@@ -7,6 +7,8 @@ import java.util.Collection;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMCurrPair;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
+import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.api.basetypes.simple.KMMPyeID;
@@ -246,7 +248,8 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	/**
 	 * @return a new price pair with no splits that is already added to this file
 	 */
-	KMyMoneyWritablePricePair createWritablePricePair();
+	KMyMoneyWritablePricePair createWritablePricePair(KMMQualifSecCurrID fromSecCurrID,
+													  KMMQualifCurrID toCurrID);
 
 	/**
 	 *
