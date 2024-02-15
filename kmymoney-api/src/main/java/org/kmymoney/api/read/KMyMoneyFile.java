@@ -367,10 +367,10 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param prcPairID id of a price pair
+	 * @param prcPrID id of a price pair
 	 * @return the identified price pair or null
 	 */
-	KMyMoneyPricePair getPricePairByID(KMMCurrPair prcPairID);
+	KMyMoneyPricePair getPricePairByID(KMMCurrPair prcPrID);
 
 	/**
 	 * @return all price pairs defined in the book

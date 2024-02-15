@@ -60,15 +60,25 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
     }
 
     public KMyMoneyWritablePriceImpl(
-    		final KMyMoneyPricePairImpl prcPair,
+    		final KMyMoneyPricePairImpl prcPr,
     		final KMyMoneyWritableFileImpl file) {
-    	super(prcPair, createPrice_int(prcPair, file), file);
-    	this.wrtblParent = new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) prcPair);
+    	super(prcPr, createPrice_int(prcPr, file), file);
+    	
+    	if ( prcPr instanceof KMyMoneyWritablePricePair ) {
+    		this.wrtblParent = (KMyMoneyWritablePricePair) prcPr;
+    	} else {
+        	this.wrtblParent = new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) prcPr);
+    	}
     }
 
     public KMyMoneyWritablePriceImpl(final KMyMoneyPriceImpl prc) {
     	super(prc.getParentPricePair(), prc.getJwsdpPeer(), prc.getKMyMoneyFile());
-    	this.wrtblParent = new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) prc.getParentPricePair());
+    	
+    	if ( prc.getParentPricePair() instanceof KMyMoneyWritablePricePair ) {
+    		this.wrtblParent = (KMyMoneyWritablePricePair) prc.getParentPricePair();
+    	} else {
+        	this.wrtblParent = new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) prc.getParentPricePair());
+    	}
     }
 
     // ---------------------------------------------------------------
@@ -102,7 +112,7 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 //  }
 
     private static PRICE createPrice_int(
-    	final KMyMoneyPricePairImpl prntPrcPair,
+    	final KMyMoneyPricePairImpl prntPrcPr,
 	    final KMyMoneyWritableFileImpl file) {
 	
         ObjectFactory factory = file.getObjectFactory();
@@ -129,10 +139,10 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
         
         jwsdpPrc.setPrice("1");
         
-        prntPrcPair.getJwsdpPeer().getPRICE().add(jwsdpPrc); // <-- NOT parent (yet)!
+        prntPrcPr.getJwsdpPeer().getPRICE().add(jwsdpPrc); // <-- NOT parent (yet)!
         file.setModified(true);
     
-        KMMPriceID prcID = new KMMPriceID(prntPrcPair, DATE_FORMAT.format(dateNow));
+        KMMPriceID prcID = new KMMPriceID(prntPrcPr, DATE_FORMAT.format(dateNow));
         LOGGER.debug("createPrice_int: Created new price (core): " + prcID.toString());
         
         return jwsdpPrc;

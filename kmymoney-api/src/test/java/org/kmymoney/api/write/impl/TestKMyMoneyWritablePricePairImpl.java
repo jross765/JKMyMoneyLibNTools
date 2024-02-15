@@ -19,10 +19,8 @@ import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
-import org.kmymoney.api.read.impl.TestKMyMoneyPriceImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyPricePairImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
-import org.kmymoney.api.write.KMyMoneyWritablePrice;
 import org.kmymoney.api.write.KMyMoneyWritablePricePair;
 
 import junit.framework.JUnit4TestAdapter;
@@ -104,9 +102,10 @@ public class TestKMyMoneyWritablePricePairImpl {
 
 	@Test
 	public void test01_1() throws Exception {
-		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(TestKMyMoneyPriceImpl.PRC_1_ID);
-		assertNotEquals(null, prc);
-		KMyMoneyWritablePricePair prcPr = prc.getWritableParentPricePair();
+//		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(TestKMyMoneyPriceImpl.PRC_1_ID);
+//		assertNotEquals(null, prc);
+//		KMyMoneyWritablePricePair prcPr = prc.getWritableParentPricePair();
+		KMyMoneyWritablePricePair prcPr = kmmInFile.getWritablePricePairByID(PRCPR_1_ID);
 		assertNotEquals(null, prcPr);
 
 		assertEquals(PRCPR_1_ID, prcPr.getID());
@@ -127,7 +126,7 @@ public class TestKMyMoneyWritablePricePairImpl {
 		}
 
 		try {
-			String dummy = prc.getFromCurrencyCode(); // illegal call in this context
+			String dummy = prcPr.getFromCurrencyCode(); // illegal call in this context
 			assertEquals(0, 1);
 		} catch (Exception exc) {
 			assertEquals(0, 0);
@@ -143,9 +142,10 @@ public class TestKMyMoneyWritablePricePairImpl {
 
 	@Test
 	public void test01_2() throws Exception {
-		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(TestKMyMoneyPriceImpl.PRC_2_ID);
-		assertNotEquals(null, prc);
-		KMyMoneyWritablePricePair prcPr = prc.getWritableParentPricePair();
+//		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(TestKMyMoneyPriceImpl.PRC_2_ID);
+//		assertNotEquals(null, prc);
+//		KMyMoneyWritablePricePair prcPr = prc.getWritableParentPricePair();
+		KMyMoneyWritablePricePair prcPr = kmmInFile.getWritablePricePairByID(PRCPR_2_ID);
 		assertNotEquals(null, prcPr);
 
 		assertEquals(PRCPR_2_ID, prcPr.getID());
@@ -182,9 +182,10 @@ public class TestKMyMoneyWritablePricePairImpl {
 
 	@Test
 	public void test01_3() throws Exception {
-		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(TestKMyMoneyPriceImpl.PRC_3_ID);
-		assertNotEquals(null, prc);
-		KMyMoneyWritablePricePair prcPr = prc.getWritableParentPricePair();
+//		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(TestKMyMoneyPriceImpl.PRC_3_ID);
+//		assertNotEquals(null, prc);
+//		KMyMoneyWritablePricePair prcPr = prc.getWritableParentPricePair();
+		KMyMoneyWritablePricePair prcPr = kmmInFile.getWritablePricePairByID(PRCPR_3_ID);
 		assertNotEquals(null, prcPr);
 
 		assertEquals(PRCPR_3_ID, prcPr.getID());

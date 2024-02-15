@@ -920,18 +920,22 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	// ---------------------------------------------------------------
 
 	@Override
-	public KMyMoneyWritablePricePair getWritablePricePairByID(KMMCurrPair prcPairID) {
-		if ( prcPairID == null ) {
+	public KMyMoneyWritablePricePair getWritablePricePairByID(KMMCurrPair prcPrID) {
+		if ( prcPrID == null ) {
 			throw new IllegalArgumentException("null price pair ID given");
 		}
 
 		// ::TODO
-//		if ( ! prcPairID.isSet() ) {
+//		if ( ! prcPrID.isSet() ) {
 //			throw new IllegalArgumentException("price ID is not set");
 //		}
 
-		KMyMoneyPricePair prcPair = super.getPricePairByID(prcPairID);
-		return new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) prcPair);
+		KMyMoneyPricePair prcPr = super.getPricePairByID(prcPrID);
+		if ( prcPr == null ) {
+			return null;
+		}
+		
+		return new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) prcPr);
 	}
 
 	@Override
@@ -953,17 +957,17 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
 
 	@Override
-	public void removePricePair(KMyMoneyWritablePricePair prcPair) {
+	public void removePricePair(KMyMoneyWritablePricePair prcPr) {
 		// 1) remove avatar in price manager
-		super.prcMgr.removePricePair(prcPair);
+		super.prcMgr.removePricePair(prcPr);
 		
 		// 2) remove price pair, if no prices left
-		for ( PRICEPAIR jwsdpPrcPair : getRootElement().getPRICES().getPRICEPAIR() ) {
-			if ( jwsdpPrcPair.getFrom().equals(prcPair.getFromCurrencyCode()) &&
-				 jwsdpPrcPair.getTo().equals(prcPair.getToCurrencyCode()) ) {
-				if ( jwsdpPrcPair.getPRICE().size() == 0 ) {
+		for ( PRICEPAIR jwsdpPrcPr : getRootElement().getPRICES().getPRICEPAIR() ) {
+			if ( jwsdpPrcPr.getFrom().equals(prcPr.getFromCurrencyCode()) &&
+				 jwsdpPrcPr.getTo().equals(prcPr.getToCurrencyCode()) ) {
+				if ( jwsdpPrcPr.getPRICE().size() == 0 ) {
 					// CAUTION concurrency ::CHECK
-					getRootElement().getPRICES().getPRICEPAIR().remove(jwsdpPrcPair);
+					getRootElement().getPRICES().getPRICEPAIR().remove(jwsdpPrcPr);
 					break;
 				}
 			}
@@ -999,8 +1003,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	// ----------------------------
 
 	@Override
-	public KMyMoneyWritablePrice createWritablePrice(KMyMoneyPricePairImpl prcPair) {
-		KMyMoneyWritablePriceImpl prc = new KMyMoneyWritablePriceImpl(prcPair, this);
+	public KMyMoneyWritablePrice createWritablePrice(KMyMoneyPricePairImpl prcPr) {
+		KMyMoneyWritablePriceImpl prc = new KMyMoneyWritablePriceImpl(prcPr, this);
 		super.prcMgr.addPrice(prc);
 		return prc;
 	}
@@ -1011,24 +1015,24 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		super.prcMgr.removePrice(prc);
 		
 		// 2) remove price
-		KMyMoneyPricePair prcPair = prc.getParentPricePair();
+		KMyMoneyPricePair prcPr = prc.getParentPricePair();
 		
-		for ( PRICEPAIR jwsdpPrcPair : getRootElement().getPRICES().getPRICEPAIR() ) {
-			if ( jwsdpPrcPair.getFrom().equals(prcPair.getFromCurrencyCode()) &&
-				 jwsdpPrcPair.getTo().equals(prcPair.getToCurrencyCode()) ) {
+		for ( PRICEPAIR jwsdpPrcPr : getRootElement().getPRICES().getPRICEPAIR() ) {
+			if ( jwsdpPrcPr.getFrom().equals(prcPr.getFromCurrencyCode()) &&
+				 jwsdpPrcPr.getTo().equals(prcPr.getToCurrencyCode()) ) {
 				// CAUTION concurrency ::CHECK
-				jwsdpPrcPair.getPRICE().remove(((KMyMoneyWritablePriceImpl) prc).getJwsdpPeer());
+				jwsdpPrcPr.getPRICE().remove(((KMyMoneyWritablePriceImpl) prc).getJwsdpPeer());
 				break;
 			}
 		}
 		
 		// 3) remove price pair, if no prices left
-		for ( PRICEPAIR jwsdpPrcPair : getRootElement().getPRICES().getPRICEPAIR() ) {
-			if ( jwsdpPrcPair.getFrom().equals(prcPair.getFromCurrencyCode()) &&
-				 jwsdpPrcPair.getTo().equals(prcPair.getToCurrencyCode()) ) {
-				if ( jwsdpPrcPair.getPRICE().size() == 0 ) {
+		for ( PRICEPAIR jwsdpPrcPr : getRootElement().getPRICES().getPRICEPAIR() ) {
+			if ( jwsdpPrcPr.getFrom().equals(prcPr.getFromCurrencyCode()) &&
+				 jwsdpPrcPr.getTo().equals(prcPr.getToCurrencyCode()) ) {
+				if ( jwsdpPrcPr.getPRICE().size() == 0 ) {
 					// CAUTION concurrency ::CHECK
-					getRootElement().getPRICES().getPRICEPAIR().remove(jwsdpPrcPair);
+					getRootElement().getPRICES().getPRICEPAIR().remove(jwsdpPrcPr);
 					break;
 				}
 			}

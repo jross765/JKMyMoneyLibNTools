@@ -17,6 +17,7 @@ import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
+import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 
 import junit.framework.JUnit4TestAdapter;
 
@@ -61,7 +62,7 @@ public class TestKMyMoneyPricePairImpl {
 		}
 
 		try {
-			kmmFile = new KMyMoneyFileImpl(kmmFileStream);
+			kmmFile = new KMyMoneyWritableFileImpl(kmmFileStream);
 		} catch (Exception exc) {
 			System.err.println("Cannot parse KMyMoney file");
 			exc.printStackTrace();

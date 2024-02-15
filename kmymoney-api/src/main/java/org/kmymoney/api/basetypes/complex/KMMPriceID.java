@@ -9,6 +9,8 @@ import org.kmymoney.api.Const;
 import org.kmymoney.api.basetypes.simple.KMMIDNotSetException;
 import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.read.KMyMoneyPricePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * KMyMoney has no IDs for the price objects (neither on the price-pair level
@@ -22,6 +24,8 @@ import org.kmymoney.api.read.KMyMoneyPricePair;
  */
 public class KMMPriceID {
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(KMMPriceID.class);
+
     protected static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
     
     // -----------------------------------------------------------
@@ -38,9 +42,9 @@ public class KMMPriceID {
 		this.dateStr = dateStr;
 	}
 
-	public KMMPriceID(KMyMoneyPricePair prcPair, String dateStr) {
-		this.fromSecCurr = prcPair.getFromSecCurrStr();
-		this.toCurr = prcPair.getToCurrStr();
+	public KMMPriceID(KMyMoneyPricePair prcPr, String dateStr) {
+		this.fromSecCurr = prcPr.getFromSecCurrStr();
+		this.toCurr = prcPr.getToCurrStr();
 		this.dateStr = dateStr;
 	}
     

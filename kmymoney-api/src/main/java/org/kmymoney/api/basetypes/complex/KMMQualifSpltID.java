@@ -4,6 +4,8 @@ import java.util.Objects;
 
 import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * KMyMoney's Split "IDs" are in fact no IDs, because they are only unique within
@@ -14,6 +16,10 @@ import org.kmymoney.api.basetypes.simple.KMMTrxID;
  */
 public class KMMQualifSpltID {
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(KMMQualifSpltID.class);
+
+    // ---------------------------------------------------------------
+
     private KMMTrxID  trxID;
     private KMMSpltID spltID;
     

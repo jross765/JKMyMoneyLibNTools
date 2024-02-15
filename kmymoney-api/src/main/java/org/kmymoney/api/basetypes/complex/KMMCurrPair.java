@@ -2,85 +2,138 @@ package org.kmymoney.api.basetypes.complex;
 
 import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class KMMCurrPair {
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(KMMCurrPair.class);
+
+    // ---------------------------------------------------------------
+
     private KMMQualifSecCurrID fromSecCurr;
     private KMMQualifCurrID    toCurr;
     
     // ---------------------------------------------------------------
 
-    public KMMCurrPair(KMMQualifSecCurrID fromCurr, KMMQualifCurrID toCurr) {
-	this.fromSecCurr = fromCurr;
-	this.toCurr = toCurr;
-    }
+	public KMMCurrPair(KMMQualifSecCurrID fromSecCurr, KMMQualifCurrID toCurr) {
+		if ( fromSecCurr == null ) {
+			throw new IllegalArgumentException("null from-security-currency-ID given");
+		}
+
+		if ( toCurr == null ) {
+			throw new IllegalArgumentException("null to-currency-ID given");
+		}
+		
+		init();
+		
+		this.fromSecCurr.set(fromSecCurr);
+		this.toCurr.set(toCurr);
+	}
+
+	public KMMCurrPair(String fromSecCurr, String toCurr)
+			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+		if ( fromSecCurr == null ) {
+			throw new IllegalArgumentException("null from-security-currency-ID given");
+		}
+
+		if ( toCurr == null ) {
+			throw new IllegalArgumentException("null to-currency-ID given");
+		}
+		
+		init();
+		
+		setFromSecCurr(fromSecCurr);
+		setToCurr(toCurr);
+	}
     
-    public KMMCurrPair(String fromCurr, String toCurr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
-	setFromSecCurr(fromCurr);
-	setToCurr(toCurr);
-    }
-    
+    // ---------------------------------------------------------------
+	
+	private void init() {
+		fromSecCurr = new KMMQualifSecCurrID();
+		toCurr      = new KMMQualifCurrID();
+	}
+
     // ---------------------------------------------------------------
 
     public KMMQualifSecCurrID getFromSecCurr() {
         return fromSecCurr;
     }
 
-    public void setFromCurr(KMMQualifSecCurrID fromCurr) {
-        this.fromSecCurr = fromCurr;
+    public void setFromSecCurr(KMMQualifSecCurrID fromSecCurr) {
+		if ( fromSecCurr == null ) {
+			throw new IllegalArgumentException("null from-security-currency-ID given");
+		}
+
+        this.fromSecCurr.set(fromSecCurr);
     }
 
-    public void setFromSecCurr(String fromCurr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
-	if ( fromCurr.startsWith("E0") ) { // ::MAGIC
-	    this.fromSecCurr = new KMMQualifSecID(fromCurr);
-	} else {
-	    this.fromSecCurr = new KMMQualifCurrID(fromCurr);
+	public void setFromSecCurr(String fromSecCurr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+		if ( fromSecCurr == null ) {
+			throw new IllegalArgumentException("null from-security-currency-ID given");
+		}
+
+		if ( fromSecCurr.startsWith("E0") ) { // ::MAGIC
+			this.fromSecCurr = new KMMQualifSecID(fromSecCurr);
+		} else {
+			this.fromSecCurr = new KMMQualifCurrID(fromSecCurr);
+		}
 	}
-    }
 
     public KMMQualifCurrID getToCurr() {
         return toCurr;
     }
 
     public void setToCurr(KMMQualifCurrID toCurr) {
-        this.toCurr = toCurr;
+		if ( toCurr == null ) {
+			throw new IllegalArgumentException("null to-currency-ID given");
+		}
+		
+        this.toCurr.set(toCurr);
     }
 
     public void setToCurr(String toCurr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+		if ( toCurr == null ) {
+			throw new IllegalArgumentException("null to-currency-ID given");
+		}
+		
         this.toCurr = new KMMQualifCurrID(toCurr);
     }
 
     // ---------------------------------------------------------------
     
-    @Override
-    public int hashCode() {
-	return Objects.hash(fromSecCurr, toCurr);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(fromSecCurr, toCurr);
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj) {
-	    return true;
+	@Override
+	public boolean equals(Object obj) {
+		if ( this == obj ) {
+			return true;
+		}
+		if ( !(obj instanceof KMMCurrPair) ) {
+			return false;
+		}
+		KMMCurrPair other = (KMMCurrPair) obj;
+		return Objects.equals(fromSecCurr.toString(), other.getFromSecCurr().toString()) && // <-- important: toString()!
+			   Objects.equals(toCurr.toString(),      other.getToCurr().toString());        // <-- here optional: toString()!
 	}
-	if (!(obj instanceof KMMCurrPair)) {
-	    return false;
-	}
-	KMMCurrPair other = (KMMCurrPair) obj;
-	return Objects.equals(fromSecCurr, other.fromSecCurr) && Objects.equals(toCurr, other.toCurr);
-    }
 
     // ---------------------------------------------------------------
     
-    @Override
-    public String toString() {
-	return toStringShort();
-    }
+	@Override
+	public String toString() {
+		return toStringShort();
+	}
 
-    public String toStringShort() {
-	return fromSecCurr + ";" + toCurr;
-    }
+	public String toStringShort() {
+		return fromSecCurr.getCode() + ";" + toCurr.getCode();
+	}
 
-    public String toStringLong() {
-	return "KMMCurrPair [fromCurr=" + fromSecCurr + ", toCurr=" + toCurr + "]";
-    }
+	public String toStringLong() {
+		return "KMMCurrPair [fromSecCurr=" + fromSecCurr.toString() + 
+				               ", toCurr=" + toCurr.toString() + "]";
+	}
 
 }

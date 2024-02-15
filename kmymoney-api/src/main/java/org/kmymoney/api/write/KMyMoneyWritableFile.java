@@ -235,7 +235,7 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * @see KMyMoneyFile#getPriceByID(KMMPriceID)
 	 * @return A changeable version of the transaction.
 	 */
-	KMyMoneyWritablePricePair getWritablePricePairByID(KMMCurrPair prcPairID);
+	KMyMoneyWritablePricePair getWritablePricePairByID(KMMCurrPair prcPrID);
 	
 	/**
 	 * @see KMyMoneyFile#getPricePairs()
@@ -253,9 +253,9 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 
 	/**
 	 *
-	 * @param prcPair 
+	 * @param prcPr 
 	 */
-	void removePricePair(KMyMoneyWritablePricePair prcPair);
+	void removePricePair(KMyMoneyWritablePricePair prcPr);
 
 	// ---------------------------------------------------------------
 
@@ -274,10 +274,10 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	// ----------------------------
 
 	/**
-	 * @param prcPair 
+	 * @param prcPr 
 	 * @return a new price with no splits that is already added to this file
 	 */
-	KMyMoneyWritablePrice createWritablePrice(KMyMoneyPricePairImpl prcPair);
+	KMyMoneyWritablePrice createWritablePrice(KMyMoneyPricePairImpl prcPr);
 
 	/**
 	 *

@@ -22,26 +22,26 @@ public class TestKMMQualifCurrID {
 
 	@Test
 	public void test01() throws Exception {
-		KMMQualifCurrID commCurr = new KMMQualifCurrID(Currency.getInstance("EUR"));
+		KMMQualifCurrID secCurr = new KMMQualifCurrID(Currency.getInstance("EUR"));
 
-		assertEquals(KMMQualifCurrID.Type.CURRENCY, commCurr.getType());
-		assertEquals("EUR", commCurr.getCode());
-		assertEquals("EUR", commCurr.getCurrency().getCurrencyCode());
-		assertEquals("CURRENCY:EUR", commCurr.toString());
+		assertEquals(KMMQualifCurrID.Type.CURRENCY, secCurr.getType());
+		assertEquals("EUR", secCurr.getCode());
+		assertEquals("EUR", secCurr.getCurrency().getCurrencyCode());
+		assertEquals("CURRENCY:EUR", secCurr.toString());
 
 		// ---
 
-		commCurr = new KMMQualifCurrID(Currency.getInstance("USD"));
+		secCurr = new KMMQualifCurrID(Currency.getInstance("USD"));
 
-		assertEquals(KMMQualifCurrID.Type.CURRENCY, commCurr.getType());
-		assertEquals("USD", commCurr.getCode());
-		assertEquals("USD", commCurr.getCurrency().getCurrencyCode());
-		assertEquals("CURRENCY:USD", commCurr.toString());
+		assertEquals(KMMQualifCurrID.Type.CURRENCY, secCurr.getType());
+		assertEquals("USD", secCurr.getCode());
+		assertEquals("USD", secCurr.getCurrency().getCurrencyCode());
+		assertEquals("CURRENCY:USD", secCurr.toString());
 
 		// ---
 
 		try {
-			commCurr = new KMMQualifCurrID(Currency.getInstance("XYZ")); // invalid code
+			secCurr = new KMMQualifCurrID(Currency.getInstance("XYZ")); // invalid code
 			assertEquals(1, 0);
 		} catch (Exception exc) {
 			// correct behaviour: Throw exception
@@ -51,27 +51,27 @@ public class TestKMMQualifCurrID {
 
 	@Test
 	public void test04_1() throws Exception {
-		KMMQualifCurrID commCurrPrs = KMMQualifCurrID.parse("CURRENCY:EUR");
-		KMMQualifCurrID commCurrRef = new KMMQualifCurrID(Currency.getInstance("EUR"));
+		KMMQualifCurrID secCurrPrs = KMMQualifCurrID.parse("CURRENCY:EUR");
+		KMMQualifCurrID secCurrRef = new KMMQualifCurrID(Currency.getInstance("EUR"));
 
-		assertEquals(KMMQualifCurrID.Type.CURRENCY, commCurrPrs.getType());
-		assertEquals("CURRENCY:EUR", commCurrPrs.toString());
-		assertEquals(commCurrRef, commCurrPrs);
+		assertEquals(KMMQualifCurrID.Type.CURRENCY, secCurrPrs.getType());
+		assertEquals("CURRENCY:EUR", secCurrPrs.toString());
+		assertEquals(secCurrRef, secCurrPrs);
 
 		// ---
 
-		commCurrPrs = KMMQualifCurrID.parse("CURRENCY:USD");
-		commCurrRef = new KMMQualifCurrID(Currency.getInstance("USD"));
+		secCurrPrs = KMMQualifCurrID.parse("CURRENCY:USD");
+		secCurrRef = new KMMQualifCurrID(Currency.getInstance("USD"));
 
-		assertEquals(KMMQualifCurrID.Type.CURRENCY, commCurrPrs.getType());
-		assertEquals("CURRENCY:USD", commCurrPrs.toString());
-		assertEquals(commCurrRef, commCurrPrs);
+		assertEquals(KMMQualifCurrID.Type.CURRENCY, secCurrPrs.getType());
+		assertEquals("CURRENCY:USD", secCurrPrs.toString());
+		assertEquals(secCurrRef, secCurrPrs);
 	}
 
 	@Test
 	public void test04_2() throws Exception {
 		try {
-			KMMQualifCurrID commCurrPrs = KMMQualifCurrID.parse("EURONEXT:SAP");
+			KMMQualifCurrID secCurrPrs = KMMQualifCurrID.parse("EURONEXT:SAP");
 		} catch (Exception exc) {
 			assertEquals(0, 0);
 		}
@@ -80,7 +80,7 @@ public class TestKMMQualifCurrID {
 	@Test
 	public void test04_3() throws Exception {
 		try {
-			KMMQualifCurrID commCurrPrs = KMMQualifCurrID.parse("FUXNSTUELL:BURP");
+			KMMQualifCurrID secCurrPrs = KMMQualifCurrID.parse("FUXNSTUELL:BURP");
 		} catch (Exception exc) {
 			assertEquals(0, 0);
 		}

@@ -147,14 +147,23 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
     
     @Override
     public String toString() {
-	if (type != Type.SECURITY)
-	    return "ERROR";
-
-	String result = Type.SECURITY.toString() + 
-			SEPARATOR + 
-			secID.toString();
-
-	return result;
+    	return toStringShort();
     }
+    
+	public String toStringShort() {
+		if ( type != Type.SECURITY )
+			return "ERROR";
+
+		String result = Type.SECURITY.toString() + SEPARATOR + secID.toString();
+
+		return result;
+	}
+
+	public String toStringLong() {
+		if ( type != Type.SECURITY )
+			return "ERROR";
+
+    	return "KMMQualifSecID [type=" + type + ", secID='" + secID.toString() + "']";
+	}
 
 }

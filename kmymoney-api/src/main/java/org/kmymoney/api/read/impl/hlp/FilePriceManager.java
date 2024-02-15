@@ -44,9 +44,9 @@ public class FilePriceManager {
 
 	protected KMyMoneyFileImpl kmmFile;
 
-	private PRICES                              priceDB = null;
-	private Map<KMMCurrPair, KMyMoneyPricePair> prcPairMap  = null;
-	private Map<KMMPriceID, KMyMoneyPrice>      prcMap  = null;
+	private PRICES                              priceDB  = null;
+	private Map<KMMCurrPair, KMyMoneyPricePair> prcPrMap = null;
+	private Map<KMMPriceID, KMyMoneyPrice>      prcMap   = null;
 
 	// ---------------------------------------------------------------
 
@@ -58,8 +58,8 @@ public class FilePriceManager {
 	// ---------------------------------------------------------------
 
 	private void init(final KMYMONEYFILE pRootElement) {
-		prcPairMap = new HashMap<KMMCurrPair, KMyMoneyPricePair>();
-		prcMap = new HashMap<KMMPriceID, KMyMoneyPrice>();
+		prcPrMap = new HashMap<KMMCurrPair, KMyMoneyPricePair>();
+		prcMap   = new HashMap<KMMPriceID, KMyMoneyPrice>();
 
 		initPriceDB(pRootElement);
 		List<PRICEPAIR> prices = priceDB.getPRICEPAIR();
@@ -68,7 +68,7 @@ public class FilePriceManager {
 			String toCurr = jwsdpPrcPr.getTo();
 			KMMCurrPair currPair = new KMMCurrPair(fromCurr, toCurr);
 			KMyMoneyPricePair pricePair = createPricePair(jwsdpPrcPr);
-			prcPairMap.put(currPair, pricePair);
+			prcPrMap.put(currPair, pricePair);
 			for ( PRICE jwsdpPrc : jwsdpPrcPr.getPRICE() ) {
 				XMLGregorianCalendar cal = jwsdpPrc.getDate();
 				if ( cal != null ) {
@@ -83,7 +83,7 @@ public class FilePriceManager {
 			}
 		}
 
-		LOGGER.debug("init: No. of entries in price pair map: " + prcPairMap.size());
+		LOGGER.debug("init: No. of entries in price pair map: " + prcPrMap.size());
 		LOGGER.debug("init: No. of entries in price map: " + prcMap.size());
 	}
 
@@ -91,50 +91,50 @@ public class FilePriceManager {
 		priceDB = pRootElement.getPRICES();
 	}
 
-	protected KMyMoneyPricePairImpl createPricePair(final PRICEPAIR jwsdpPricePair) {
-		KMyMoneyPricePairImpl prcPr = new KMyMoneyPricePairImpl(jwsdpPricePair, kmmFile);
+	protected KMyMoneyPricePairImpl createPricePair(final PRICEPAIR jwsdpPrcPr) {
+		KMyMoneyPricePairImpl prcPr = new KMyMoneyPricePairImpl(jwsdpPrcPr, kmmFile);
 		LOGGER.debug("createPricePair: Generated new price pair: " + prcPr.getID());
 		return prcPr;
 	}
 
-	protected KMyMoneyPriceImpl createPrice(final KMyMoneyPricePair pricePair, final PRICE jwsdpPrice) {
-		KMyMoneyPriceImpl prc = new KMyMoneyPriceImpl(pricePair, jwsdpPrice, kmmFile);
+	protected KMyMoneyPriceImpl createPrice(final KMyMoneyPricePair prcPr, final PRICE jwsdpPrc) {
+		KMyMoneyPriceImpl prc = new KMyMoneyPriceImpl(prcPr, jwsdpPrc, kmmFile);
 		LOGGER.info("createPrice: Generated new price: " + prc.getID());
 		return prc;
 	}
 
 	// ---------------------------------------------------------------
 
-	public void addPricePair(KMyMoneyPricePair prcPair) {
-		addPricePair(prcPair, true);
+	public void addPricePair(KMyMoneyPricePair prcPr) {
+		addPricePair(prcPr, true);
 	}
 
-	public void addPricePair(KMyMoneyPricePair prcPair, boolean withPrc) {
-		prcPairMap.put(prcPair.getID(), prcPair);
+	public void addPricePair(KMyMoneyPricePair prcPr, boolean withPrc) {
+		prcPrMap.put(prcPr.getID(), prcPr);
 
 		if ( withPrc ) {
-			for ( KMyMoneyPrice splt : prcPair.getPrices() ) {
+			for ( KMyMoneyPrice splt : prcPr.getPrices() ) {
 				addPrice(splt, false);
 			}
 		}
 
-		LOGGER.debug("addPricePair: Added price pair to cache: " + prcPair.getID());
+		LOGGER.debug("addPricePair: Added price pair to cache: " + prcPr.getID());
 	}
 
-	public void removePricePair(KMyMoneyPricePair prcPair) {
-		removePricePair(prcPair, true);
+	public void removePricePair(KMyMoneyPricePair prcPr) {
+		removePricePair(prcPr, true);
 	}
 
-	public void removePricePair(KMyMoneyPricePair prcPair, boolean withPrc) {
+	public void removePricePair(KMyMoneyPricePair prcPr, boolean withPrc) {
 		if ( withPrc ) {
-			for ( KMyMoneyPrice splt : prcPair.getPrices() ) {
+			for ( KMyMoneyPrice splt : prcPr.getPrices() ) {
 				removePrice(splt, false);
 			}
 		}
 
-		prcPairMap.remove(prcPair.getID());
+		prcPrMap.remove(prcPr.getID());
 
-		LOGGER.debug("removePricePair: Removed price pair from cache: " + prcPair.getID());
+		LOGGER.debug("removePricePair: Removed price pair from cache: " + prcPr.getID());
 	}
 
 	// ---------------------------------------------------------------
@@ -143,11 +143,11 @@ public class FilePriceManager {
 		addPrice(prc, true);
 	}
 
-	public void addPrice(KMyMoneyPrice prc, boolean withPrcPair) {
+	public void addPrice(KMyMoneyPrice prc, boolean withPrcPr) {
 		prcMap.put(prc.getID(), prc);
 		LOGGER.debug("addPrice: Added price to cache: " + prc.getID());
 
-		if ( withPrcPair ) {
+		if ( withPrcPr ) {
 			addPricePair(prc.getParentPricePair(), false);
 		}
 	}
@@ -156,8 +156,8 @@ public class FilePriceManager {
 		removePrice(prc, true);
 	}
 
-	public void removePrice(KMyMoneyPrice prc, boolean withPrcPair) {
-		if ( withPrcPair ) {
+	public void removePrice(KMyMoneyPrice prc, boolean withPrcPr) {
+		if ( withPrcPr ) {
 			removePricePair(prc.getParentPricePair(), false);
 		}
 
@@ -173,20 +173,32 @@ public class FilePriceManager {
 	
 	// ----------------------------
 
-	public KMyMoneyPricePair getPricePairByID(KMMCurrPair prcPairID) {
-		if ( prcPairMap == null ) {
+	public KMyMoneyPricePair getPricePairByID(KMMCurrPair prcPrID) {
+		if ( prcPrMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
-
-		return prcPairMap.get(prcPairID);
+		
+		// CAUTION: The following line does not work reliably in all relevant cases.
+		// That has to do with the intricacies of the definition of KMMCurrPair
+		// (cf. test cases for KMMCurrPair):
+		// return prcPrMap.get(prcPrID);
+		
+		// Instead:
+		for ( KMMCurrPair elt : prcPrMap.keySet() ) {
+			if ( elt.toString().equals(prcPrID.toString()) ) { // <-- important: toString()
+				return prcPrMap.get(elt);
+			}
+		}
+		
+		return null;
 	}
 
 	public Collection<KMyMoneyPricePair> getPricePairs() {
-		if ( prcPairMap == null ) {
+		if ( prcPrMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
 
-		return prcPairMap.values();
+		return prcPrMap.values();
 	}
 
 	// ----------------------------
@@ -448,7 +460,7 @@ public class FilePriceManager {
 	// ---------------------------------------------------------------
 
 	public int getNofEntriesPricePairMap() {
-		return prcPairMap.size();
+		return prcPrMap.size();
 	}
 
 	public int getNofEntriesPriceMap() {

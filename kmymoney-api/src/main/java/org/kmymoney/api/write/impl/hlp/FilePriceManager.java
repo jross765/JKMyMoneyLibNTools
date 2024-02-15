@@ -40,10 +40,10 @@ public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceMa
 			fromSecCurrID = new KMMQualifCurrID(jwsdpPrcPr.getFrom());
 		}
 		KMMQualifCurrID toCurrID = new KMMQualifCurrID(jwsdpPrcPr.getTo());
-		KMyMoneyWritablePricePairImpl prcPair = new KMyMoneyWritablePricePairImpl(fromSecCurrID, toCurrID,
+		KMyMoneyWritablePricePairImpl prcPr = new KMyMoneyWritablePricePairImpl(fromSecCurrID, toCurrID,
 																				  (KMyMoneyWritableFileImpl) kmmFile);
-		LOGGER.debug("createPricePair: Generated new writable price pair: " + prcPair.getID());
-		return prcPair;
+		LOGGER.debug("createPricePair: Generated new writable price pair: " + prcPr.getID());
+		return prcPr;
 	}
 
 	// ----------------------------

@@ -51,8 +51,8 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
     		  file);
     }
 
-    public KMyMoneyWritablePricePairImpl(final KMyMoneyPricePairImpl prcPair) {
-    	super(prcPair.getJwsdpPeer(), prcPair.getKMyMoneyFile());
+    public KMyMoneyWritablePricePairImpl(final KMyMoneyPricePairImpl prcPr) {
+    	super(prcPr.getJwsdpPeer(), prcPr.getKMyMoneyFile());
     }
 
     // ---------------------------------------------------------------
@@ -92,19 +92,19 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 	
         // ObjectFactory fact = file.getObjectFactory();
         
-        PRICEPAIR jwsdpPrcPair = file.createPricePairType();
+        PRICEPAIR jwsdpPrcPr = file.createPricePairType();
 
-        jwsdpPrcPair.setFrom(fromSecCurrID.getCode());
-        jwsdpPrcPair.setTo(toCurrID.getCode());
+        jwsdpPrcPr.setFrom(fromSecCurrID.getCode());
+        jwsdpPrcPr.setTo(toCurrID.getCode());
     
-        file.getRootElement().getPRICES().getPRICEPAIR().add(jwsdpPrcPair);
+        file.getRootElement().getPRICES().getPRICEPAIR().add(jwsdpPrcPr);
         file.setModified(true);
     
-        KMMCurrPair prcPairID = new KMMCurrPair(fromSecCurrID, toCurrID);
-        LOGGER.debug("createPricePair_int: Created new price pair (core): " + prcPairID.toString());
-        // LOGGER.debug("createPricePair_int: Created new price pair (core): " + jwsdpPrcPair);
+        KMMCurrPair prcPrID = new KMMCurrPair(fromSecCurrID, toCurrID);
+        LOGGER.debug("createPricePair_int: Created new price pair (core): " + prcPrID.toString());
+        // LOGGER.debug("createPricePair_int: Created new price pair (core): " + jwsdpPrcPr);
     
-        return jwsdpPrcPair;
+        return jwsdpPrcPr;
     }
 
     // ---------------------------------------------------------------

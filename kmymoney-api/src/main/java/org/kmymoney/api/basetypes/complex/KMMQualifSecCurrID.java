@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class KMMQualifSecCurrID {
-    
+	
     public enum Type {
 	CURRENCY,
 	SECURITY,
@@ -62,6 +62,13 @@ public class KMMQualifSecCurrID {
 	    throw new IllegalArgumentException("Security code is empty");
 
         this.code = secCode.trim();
+    }
+    
+    // ---------------------------------------------------------------
+    
+    public void set(KMMQualifSecCurrID val) {
+    	setType(val.getType());
+    	setCode(val.getCode());
     }
     
     // ---------------------------------------------------------------
@@ -132,7 +139,15 @@ public class KMMQualifSecCurrID {
     
     @Override
     public String toString() {
-	return type.toString() + SEPARATOR + code;
+    	return toStringShort();
+    }
+
+    public String toStringShort() {
+    	return type.toString() + SEPARATOR + code;
+    }
+
+    public String toStringLong() {
+    	return "KMMQualifSecCurrID [type=" + type + ", code='" + code + "']";
     }
 
 }

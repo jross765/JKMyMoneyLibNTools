@@ -19,6 +19,10 @@ import org.slf4j.LoggerFactory;
  */
 public class KMMComplAcctID implements Comparable<KMMComplAcctID> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(KMMComplAcctID.class);
+
+    // ---------------------------------------------------------------
+
     public enum Type {
 	STANDARD,
 	SPECIAL,

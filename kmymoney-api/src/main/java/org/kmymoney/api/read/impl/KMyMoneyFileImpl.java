@@ -568,8 +568,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     // ---------------------------------------------------------------
     
     @Override
-    public KMyMoneyPricePair getPricePairByID(KMMCurrPair prcPairID) {
-	return prcMgr.getPricePairByID(prcPairID);
+    public KMyMoneyPricePair getPricePairByID(KMMCurrPair prcPrID) {
+	return prcMgr.getPricePairByID(prcPrID);
     }
 
     @Override
