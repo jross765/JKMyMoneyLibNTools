@@ -72,6 +72,7 @@ public class WritingContentHandler implements ContentHandler {
 	public void startDocument() throws SAXException {
 		try {
 			wrt.write("<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n");
+			wrt.write("<!DOCTYPE KMYMONEY-FILE>\n");
 		} catch (IOException e) {
 			LOGGER.error("startDocument: Problem", e);
 		}
@@ -200,7 +201,10 @@ public class WritingContentHandler implements ContentHandler {
 
 	}
 
-	public void startElement(final String namespaceURI, final String localName, final String qName,
+	public void startElement(
+			final String namespaceURI, 
+			final String localName, 
+			final String qName,
 			final Attributes atts) throws SAXException {
 		try {
 			if ( last_was == LAST_WAS_OPEN_ELEMENT ) {
@@ -216,6 +220,7 @@ public class WritingContentHandler implements ContentHandler {
 
 			wrt.write("<" + qName);
 
+			// ::MAGIC
 			isAcct = qName.equals("ACCOUNT");
 			isTrx  = qName.equals("TRANSACTION");
 			isSplt = qName.equals("SPLIT");

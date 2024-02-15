@@ -197,7 +197,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			out = new GZIPOutputStream(out);
 		}
 
-		Writer writer = new NamespaceAdderWriter(new OutputStreamWriter(out, CODEPAGE));
+		Writer writer = new OutputStreamWriter(out, CODEPAGE);
 		try {
 			JAXBContext context = getJAXBContext();
 			Marshaller marsh = context.createMarshaller();
