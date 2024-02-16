@@ -1,4 +1,7 @@
 # Major Changes 
+## V. 0.3 &rarr; 0.4
+Write access to all supported entities (there are a few unsupported ones  left).
+
 ## V. 0.2 &rarr; 0.3
 First version that you can seriously use.
 We'll consider this a "good beta".
@@ -10,8 +13,6 @@ However, still only read-access.
 
 # Planned
 It should go without saying, but the following points are of course subject to change and by no means a promise that they will actually be implemented soon:
-
-* Write access.
 
 * Better test case coverage.
 
