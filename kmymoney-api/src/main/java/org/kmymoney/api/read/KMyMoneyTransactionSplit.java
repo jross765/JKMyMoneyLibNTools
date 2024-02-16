@@ -6,6 +6,7 @@ import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
+import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.numbers.FixedPointNumber;
@@ -239,6 +240,10 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      */
     String getSharesFormattedForHTML(Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
+    KMMPyeID getPayeeID();
+    
+    KMyMoneyPayee getPayee();
+    
     /**
      * @return the user-defined description for this object
      *         (may contain multiple lines and non-ascii-characters)

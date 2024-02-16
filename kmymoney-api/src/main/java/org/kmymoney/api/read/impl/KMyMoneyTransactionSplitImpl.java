@@ -11,11 +11,13 @@ import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
+import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.MappingException;
@@ -129,6 +131,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     	return getJwsdpPeer().getAction();
     }
 
+    @Override
     public State getState() throws UnknownSplitStateException {
 	BigInteger reconFlag = getJwsdpPeer().getReconcileflag();
 	return State.valueOff(reconFlag.intValue());
@@ -137,6 +140,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     /**
      * @see KMyMoneyTransactionSplit#getAccountID()
      */
+    @Override
     public KMMComplAcctID getAccountID() {
 	String acctID = jwsdpPeer.getAccount();
 	assert acctID != null;
@@ -146,6 +150,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     /**
      * @see KMyMoneyTransactionSplit#getAccount()
      */
+    @Override
     public KMyMoneyAccount getAccount() {
     	return myTransaction.getKMyMoneyFile().getAccountByID(getAccountID());
     }
@@ -166,6 +171,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     /**
      * @see KMyMoneyTransactionSplit#getValue()
      */
+    @Override
     public FixedPointNumber getValue() {
     	return new FixedPointNumber(jwsdpPeer.getValue());
     }
@@ -189,6 +195,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     /**
      * @see KMyMoneyTransactionSplit#getValueFormatted()
      */
+    @Override
     public String getValueFormatted() {
 	return getValueCurrencyFormat().format(getValue());
     }
@@ -196,6 +203,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     /**
      * @see KMyMoneyTransactionSplit#getValueFormatted(java.util.Locale)
      */
+    @Override
     public String getValueFormatted(final Locale lcl) {
 
 	NumberFormat cf = NumberFormat.getInstance(lcl);
@@ -211,6 +219,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     /**
      * @see KMyMoneyTransactionSplit#getValueFormattedForHTML()
      */
+    @Override
     public String getValueFormattedForHTML() {
 	return getValueFormatted().replaceFirst("€", "&euro;");
     }
@@ -218,6 +227,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     /**
      * @see KMyMoneyTransactionSplit#getValueFormattedForHTML(java.util.Locale)
      */
+    @Override
     public String getValueFormattedForHTML(final Locale lcl) {
 	return getValueFormatted(lcl).replaceFirst("€", "&euro;");
     }
@@ -225,6 +235,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     /**
      * @see KMyMoneyTransactionSplit#getAccountBalance()
      */
+    @Override
     public FixedPointNumber getAccountBalance() {
 	return getAccount().getBalance(this);
     }
@@ -234,6 +245,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      * @throws InvalidQualifSecCurrTypeException 
      * @see KMyMoneyTransactionSplit#getAccountBalanceFormatted()
      */
+    @Override
     public String getAccountBalanceFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	return ((KMyMoneyAccountImpl) getAccount()).getCurrencyFormat().format(getAccountBalance());
     }
@@ -243,6 +255,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      * @throws InvalidQualifSecCurrTypeException 
      * @see KMyMoneyTransactionSplit#getAccountBalanceFormatted(java.util.Locale)
      */
+    @Override
     public String getAccountBalanceFormatted(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	return getAccount().getBalanceFormatted(lcl);
     }
@@ -250,6 +263,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     /**
      * @see KMyMoneyTransactionSplit#getShares()
      */
+    @Override
     public FixedPointNumber getShares() {
 	return new FixedPointNumber(jwsdpPeer.getShares());
     }
@@ -259,6 +273,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
+    @Override
     public String getSharesFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	return getSharesCurrencyFormat().format(getShares());
     }
@@ -271,6 +286,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
+    @Override
     public String getSharesFormatted(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	NumberFormat nf = NumberFormat.getCurrencyInstance(lcl);
 	if ( getAccount().getSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
@@ -287,6 +303,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
+    @Override
     public String getSharesFormattedForHTML() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	return getSharesFormatted().replaceFirst("€", "&euro;");
     }
@@ -296,10 +313,28 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
+    @Override
     public String getSharesFormattedForHTML(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	return getSharesFormatted(lcl).replaceFirst("€", "&euro;");
     }
 
+    @Override
+    public KMMPyeID getPayeeID() {
+    	if ( jwsdpPeer.getPayee() == null )
+    		return null;
+    	
+    	return new KMMPyeID( jwsdpPeer.getPayee() );
+    }
+    
+    @Override
+    public KMyMoneyPayee getPayee() {
+    	if ( getPayeeID() == null )
+    		return null;
+    	
+    	return getKMyMoneyFile().getPayeeByID(getPayeeID()); 
+    }
+
+    @Override
     public String getMemo() {
 	if (jwsdpPeer.getMemo() == null) {
 	    return "";
@@ -372,13 +407,8 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
 	buffer.append(", account-id=");
 	buffer.append(getAccountID());
 
-//	buffer.append(", account=");
-//	try {
-//	    KMyMoneyAccount account = getAccount();
-//	    buffer.append(account == null ? "null" : "'" + account.getQualifiedName() + "'");
-//	} catch (Exception e) {
-//	    buffer.append("ERROR");
-//	}
+	buffer.append(", payee-id=");
+	buffer.append(getPayeeID());
 
 	buffer.append(", memo='");
 	buffer.append(getMemo() + "'");

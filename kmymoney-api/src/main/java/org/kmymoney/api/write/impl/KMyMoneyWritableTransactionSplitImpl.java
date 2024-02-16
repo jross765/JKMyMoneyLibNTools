@@ -5,11 +5,13 @@ import java.text.ParseException;
 
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.IllegalTransactionSplitActionException;
 import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
@@ -151,6 +153,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	/**
 	 * remove this split from it's transaction.
 	 */
+	@Override
 	public void remove() {
 		getTransaction().remove(this);
 	}
@@ -158,33 +161,40 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	/**
 	 * @see KMyMoneyWritableTransactionSplit#setAccount(KMyMoneyAccount)
 	 */
+	@Override
 	public void setAccountID(final KMMComplAcctID acctID) {
-		setAccount(getTransaction().getKMyMoneyFile().getAccountByID(acctID));
+		if ( acctID == null ) {
+			throw new IllegalArgumentException("null account ID given");
+		}
+		
+		String old = (getJwsdpPeer().getAccount() == null ? null : getJwsdpPeer().getAccount());
+		jwsdpPeer.setAccount(acctID.toString());
+		((KMyMoneyWritableFile) getWritableKMyMoneyFile()).setModified(true);
+
+		if ( old == null || 
+			 ! old.equals(acctID) ) {
+			if ( helper.getPropertyChangeSupport() != null ) {
+				helper.getPropertyChangeSupport().firePropertyChange("accountID", old, acctID.toString());
+			}
+		}
 	}
 
 	/**
 	 * @see KMyMoneyWritableTransactionSplit#setAccount(KMyMoneyAccount)
 	 */
+	@Override
 	public void setAccount(final KMyMoneyAccount acct) {
 		if ( acct == null ) {
-			throw new NullPointerException("null account given");
+			throw new IllegalArgumentException("null account given");
 		}
 		
-		String old = (getJwsdpPeer().getAccount() == null ? null : getJwsdpPeer().getAccount());
-		jwsdpPeer.setAccount(acct.getID().toString());
-		((KMyMoneyWritableFile) getWritableKMyMoneyFile()).setModified(true);
-
-		if ( old == null || !old.equals(acct.getID()) ) {
-			if ( helper.getPropertyChangeSupport() != null ) {
-				helper.getPropertyChangeSupport().firePropertyChange("accountID", old, acct.getID().toString());
-			}
-		}
-
+		setAccountID(acct.getID());
 	}
 
 	/**
 	 * @see KMyMoneyWritableTransactionSplit#setShares(FixedPointNumber)
 	 */
+	@Override
 	public void setShares(final String n) {
 		try {
 			this.setShares(new FixedPointNumber(n.toLowerCase().replaceAll("&euro;", "").replaceAll("&pound;", "")));
@@ -222,9 +232,10 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	/**
 	 * @see KMyMoneyWritableTransactionSplit#setShares(FixedPointNumber)
 	 */
+	@Override
 	public void setShares(final FixedPointNumber n) {
 		if ( n == null ) {
-			throw new NullPointerException("null quantity given");
+			throw new IllegalArgumentException("null quantity given");
 		}
 
 		String old = getJwsdpPeer().getShares();
@@ -250,6 +261,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	/**
 	 * @see KMyMoneyWritableTransactionSplit#setValue(FixedPointNumber)
 	 */
+	@Override
 	public void setValue(final String n) {
 		try {
 			this.setValue(new FixedPointNumber(n.toLowerCase().replaceAll("&euro;", "").replaceAll("&pound;", "")));
@@ -268,9 +280,10 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	/**
 	 * @see KMyMoneyWritableTransactionSplit#setValue(FixedPointNumber)
 	 */
+	@Override
 	public void setValue(final FixedPointNumber n) {
 		if ( n == null ) {
-			throw new NullPointerException("null value given");
+			throw new IllegalArgumentException("null value given");
 		}
 		String old = getJwsdpPeer().getValue();
 		jwsdpPeer.setValue(n.toKMyMoneyString());
@@ -292,15 +305,42 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		}
 	}
 
+	@Override
+	public void setPayeeID(KMMPyeID pyeID) {
+		if ( pyeID == null ) {
+			throw new IllegalArgumentException("null payee ID given");
+		}
+		
+		String old = (getJwsdpPeer().getPayee() == null ? null : getJwsdpPeer().getPayee());
+		jwsdpPeer.setPayee(pyeID.toString());
+		((KMyMoneyWritableFile) getWritableKMyMoneyFile()).setModified(true);
+
+		if ( old == null || 
+			 ! old.equals(pyeID) ) {
+			if ( helper.getPropertyChangeSupport() != null ) {
+				helper.getPropertyChangeSupport().firePropertyChange("payeeID", old, pyeID.toString());
+			}
+		}
+	}
+
+	@Override
+	public void setPayee(KMyMoneyPayee pye) {
+		if ( pye == null ) {
+			throw new IllegalArgumentException("null payee given");
+		}
+		
+		setPayeeID(pye.getID());
+	}
+
 	/**
 	 * Set the description-text.
 	 *
 	 * @param desc the new description
 	 */
+	@Override
 	public void setDescription(final String desc) {
 		if ( desc == null ) {
-			throw new IllegalArgumentException(
-					"null description given! Please use the empty string instead of null for an empty description");
+			throw new IllegalArgumentException("null description given! Please use the empty string instead of null for an empty description");
 		}
 
 		String old = getJwsdpPeer().getMemo();
@@ -314,6 +354,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		}
 	}
 
+	@Override
 	public void setAction(final Action act) throws IllegalTransactionSplitActionException {
 		setActionStr(act.getCode());
 	}
@@ -349,6 +390,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	/**
 	 * @see KMyMoneyWritableTransactionSplit#setSharesFormattedForHTML(java.lang.String)
 	 */
+	@Override
 	public void setSharesFormattedForHTML(final String n) {
 		this.setShares(n);
 	}
@@ -356,6 +398,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	/**
 	 * @see KMyMoneyWritableTransactionSplit#setValueFormattedForHTML(java.lang.String)
 	 */
+	@Override
 	public void setValueFormattedForHTML(final String n) {
 		this.setValue(n);
 	}
@@ -367,6 +410,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	 *
 	 * @return the file we are associated with
 	 */
+	@Override
 	public KMyMoneyWritableFileImpl getWritableKMyMoneyFile() {
 		return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
 	}
@@ -445,13 +489,8 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	buffer.append(", account-id=");
 	buffer.append(getAccountID());
 
-//	buffer.append(", account=");
-//	try {
-//	    KMyMoneyAccount account = getAccount();
-//	    buffer.append(account == null ? "null" : "'" + account.getQualifiedName() + "'");
-//	} catch (Exception e) {
-//	    buffer.append("ERROR");
-//	}
+	buffer.append(", payee-id=");
+	buffer.append(getPayeeID());
 
 	buffer.append(", memo='");
 	buffer.append(getMemo() + "'");

@@ -3,8 +3,10 @@ package org.kmymoney.api.write;
 import java.beans.PropertyChangeListener;
 
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.api.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 import org.kmymoney.api.read.IllegalTransactionSplitActionException;
@@ -89,6 +91,10 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 * @param n the new value (in the currency of the transaction)
 	 */
 	void setValue(FixedPointNumber n);
+	
+	void setPayeeID(KMMPyeID pyeID);
+
+	void setPayee(KMyMoneyPayee pye);
 
 	/**
 	 * Set the description-text.
