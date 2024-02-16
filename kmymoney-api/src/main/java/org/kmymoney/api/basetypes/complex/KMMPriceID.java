@@ -37,17 +37,57 @@ public class KMMPriceID {
     // ---------------------------------------------------------------
 
 	public KMMPriceID(String fromSecCurr, String toCurr, String dateStr) {
+		init();
+		
 		this.fromSecCurr = fromSecCurr;
 		this.toCurr = toCurr;
 		this.dateStr = dateStr;
 	}
 
 	public KMMPriceID(KMyMoneyPricePair prcPr, String dateStr) {
+		init();
+		
 		this.fromSecCurr = prcPr.getFromSecCurrStr();
 		this.toCurr = prcPr.getToCurrStr();
 		this.dateStr = dateStr;
 	}
     
+	public KMMPriceID(KMyMoneyPricePair prcPr, LocalDate date) {
+		init();
+		
+		this.fromSecCurr = prcPr.getFromSecCurrStr();
+		this.toCurr = prcPr.getToCurrStr();
+		this.dateStr = DATE_FORMAT.format(date);
+	}
+    
+	public KMMPriceID(KMMQualifSecCurrID fromSecCurr, KMMQualifCurrID toCurr, LocalDate date) {
+		init();
+		
+		this.fromSecCurr = fromSecCurr.getCode();
+		this.toCurr = toCurr.getCode();
+		this.dateStr = DATE_FORMAT.format(date);
+	}
+    
+	public KMMPriceID(KMMCurrPair prcPr, LocalDate date) {
+		init();
+		
+		this.fromSecCurr = prcPr.getFromSecCurr().getCode();
+		this.toCurr = prcPr.getToCurr().getCode();
+		this.dateStr = DATE_FORMAT.format(date);
+	}
+    
+    // ---------------------------------------------------------------
+	
+	private void init() {
+		// ::EMPTY
+	}
+
+	public void reset() {
+		fromSecCurr = "(unset)";
+		toCurr      = "(unset)";
+		dateStr     = "(unset)";
+	}
+
     // ---------------------------------------------------------------
 
     public String getFromSecCurr() {
@@ -198,7 +238,9 @@ public class KMMPriceID {
     }
         
     public String toStringLong() {
-	return "KMMPriceID [fromSecCurr=" + fromSecCurr + ", toCurr=" + toCurr + ", dateStr=" + dateStr + "]";
+	return "KMMPriceID [fromSecCurr=" + fromSecCurr + 
+			              ", toCurr=" + toCurr + 
+			             ", dateStr=" + dateStr + "]";
     }
 
 }

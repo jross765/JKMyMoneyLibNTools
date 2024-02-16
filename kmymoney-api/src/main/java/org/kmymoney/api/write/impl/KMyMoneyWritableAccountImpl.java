@@ -6,13 +6,18 @@ import java.beans.PropertyChangeSupport;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Currency;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.simple.KMMAcctID;
 import org.kmymoney.api.basetypes.simple.KMMInstID;
+import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.KEYVALUEPAIRS;
 import org.kmymoney.api.generated.ObjectFactory;
@@ -183,12 +188,13 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("null or empty name given!");
 		}
 
-		String oldName = jwsdpPeer.getName();
+		String oldName = getName();
 		if ( oldName == name ) {
 			return; // nothing has changed
 		}
 		this.jwsdpPeer.setName(name);
 		setIsModified();
+		
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
@@ -196,53 +202,75 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		}
 	}
 
-	/**
-	 * @see KMyMoneyWritableAccount#setAccountCode(java.lang.String)
-	 */
-	public void setInstitutionID(final KMMInstID instID) {
-		if ( instID == null ) {
-			throw new IllegalArgumentException("null institution-ID given!");
+	// ::TODO
+//	/**
+//	 * @see KMyMoneyWritableAccount#setAccountCode(java.lang.String)
+//	 */
+//	public void setInstitutionID(final KMMInstID instID) {
+//		if ( instID == null ) {
+//			throw new IllegalArgumentException("null institution-ID given!");
+//		}
+//
+//		if ( ! instID.isSet() ) {
+//			throw new IllegalArgumentException("unset institution-ID given!");
+//		}
+//
+//		String oldInstID = getInstitution();
+//		if ( oldInstID == instID.toString() ) {
+//			return; // nothing has changed
+//		}
+//		this.jwsdpPeer.setInstitution(instID.toString());
+//		setIsModified();
+//		// <<insert code to react further to this change here
+//		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
+//		if ( propertyChangeFirer != null ) {
+//			propertyChangeFirer.firePropertyChange("code", oldInstID, instID);
+//		}
+//	}
+
+	// ----------------------------
+
+	@Override
+	public void setQualifSecCurrID(final KMMQualifSecCurrID secCurrID) {
+		if ( secCurrID == null ) {
+			throw new IllegalArgumentException("null security/currency ID given!");
 		}
 
-		if ( ! instID.isSet() ) {
-			throw new IllegalArgumentException("unset institution-ID given!");
-		}
+		// ::TODO
+//		if ( ! secCurrID.isSet() ) {
+//			throw new IllegalArgumentException("unset security/currency ID given!");
+//		}
 
-		String oldInstID = jwsdpPeer.getInstitution();
-		if ( oldInstID == instID.toString() ) {
+		KMMQualifSecCurrID oldCurrId = getSecCurrID();
+		if ( oldCurrId == secCurrID ) {
 			return; // nothing has changed
 		}
-		this.jwsdpPeer.setInstitution(instID.toString());
+		this.jwsdpPeer.setCurrency(secCurrID.getCode());
 		setIsModified();
+		
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
-			propertyChangeFirer.firePropertyChange("code", oldInstID, instID);
+			propertyChangeFirer.firePropertyChange("currencyID", oldCurrId, secCurrID.getCode());
 		}
 	}
-
-	/**
-	 * @param currencyID the new currency
-	 * @see #setCurrencyNameSpace(String)
-	 * @see {@link KMyMoneyAccount#getCurrencyID()}
-	 */
-	public void setCurrencyID(final String currID) {
-		if ( currID == null ) {
-			throw new IllegalArgumentException("null or empty currencyID given!");
-		}
-
-		String oldCurrId = jwsdpPeer.getCurrency();
-		if ( oldCurrId == currID ) {
-			return; // nothing has changed
-		}
-		this.jwsdpPeer.setCurrency(currID);
-		setIsModified();
-		// <<insert code to react further to this change here
-		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
-		if ( propertyChangeFirer != null ) {
-			propertyChangeFirer.firePropertyChange("currencyID", oldCurrId, currID);
-		}
+	
+	@Override
+	public void setSecID(final KMMSecID secID) {
+		setQualifSecCurrID(new KMMQualifSecID(secID));
 	}
+	
+	@Override
+	public void setCurrency(final Currency curr) {
+		setQualifSecCurrID(new KMMQualifCurrID(curr));
+	}
+
+	@Override
+	public void setCurrency(final String currCode) {
+		setCurrency(Currency.getInstance(currCode));
+	}
+	
+	// ----------------------------
 
 	/**
 	 * set getWritableFile().setModified(true).
@@ -362,7 +390,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("null or empty description given!");
 		}
 
-		String oldDescr = jwsdpPeer.getDescription();
+		String oldDescr = getMemo();
 		if ( oldDescr == descr ) {
 			return; // nothing has changed
 		}
@@ -391,8 +419,8 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("type <= 0 given!");
 		}
 
-		BigInteger oldTypeInt = jwsdpPeer.getType();
-		if ( oldTypeInt == typeInt ) {
+		BigInteger oldType = getTypeBigInt();
+		if ( oldType == typeInt ) {
 			return; // nothing has changed
 		}
 		jwsdpPeer.setType(typeInt);
@@ -400,7 +428,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
-			propertyChangeFirer.firePropertyChange("type", oldTypeInt, typeInt);
+			propertyChangeFirer.firePropertyChange("type", oldType, typeInt);
 		}
 	}
 
@@ -440,7 +468,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("I cannot be my own (grand-)parent!");
 		}
 
-		KMyMoneyAccount oldPrntAcct = null;
+		KMyMoneyAccount oldPrntAcct = getParentAccount();
 		jwsdpPeer.setParentaccount(prntAcct.getID().toString());
 		setIsModified();
 
@@ -542,5 +570,5 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	
 	return buffer.toString();
     }
-    
+
 }

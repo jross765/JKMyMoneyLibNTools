@@ -14,10 +14,9 @@ import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.read.KMMSecCurr;
-import org.kmymoney.api.read.UnknownRoundingMethodException;
-import org.kmymoney.api.read.UnknownSecurityTypeException;
 import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.kmymoney.api.read.impl.KMyMoneySecurityImpl;
+import org.kmymoney.api.read.impl.hlp.KVPListDoesNotContainKeyException;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.kmymoney.api.write.impl.hlp.HasWritableUserDefinedAttributesImpl;
@@ -342,7 +341,16 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 			}
 		}
 		
-		String val = getUserDefinedAttribute(name);
+		String val = null;
+		try {
+			val = getUserDefinedAttribute(name);
+		} catch ( KVPListDoesNotContainKeyException |
+				  NullPointerException exc ) {
+			LOGGER.warn("setUserDefinedAttribute: Cannot get actual user-defined value for key '" + name + "'; " + 
+	                    "does not exist yet.");
+			LOGGER.warn("setUserDefinedAttribute: Will generate it.");
+		}
+		
 		if ( val == null ) {
 			// The structure KEYVALUEPAIRS already exists, but
 			// there is no PAIR entry yet that matches the key.
@@ -373,7 +381,7 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 	
 	try {
 	    result += ", type=" + getType();
-	} catch (UnknownSecurityTypeException e) {
+	} catch (Exception e) {
 	    result += ", type=" + "ERROR";
 	}
 	
@@ -382,7 +390,7 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 	
 	try {
 	    result += ", rounding-method=" + getRoundingMethod();
-	} catch (UnknownRoundingMethodException e) {
+	} catch (Exception e) {
 	    result += ", rounding-method=" + "ERROR";
 	}
 	

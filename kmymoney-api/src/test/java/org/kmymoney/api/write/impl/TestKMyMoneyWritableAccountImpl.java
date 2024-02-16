@@ -421,7 +421,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		acct.setName("Various expenses");
 		acct.setType(KMyMoneyAccount.Type.EXPENSE);
 		acct.setParentAccountID(ACCT_13_ID);
-		acct.setCurrencyID(kmmInFile.getDefaultCurrencyID());
+		acct.setCurrency(kmmInFile.getDefaultCurrencyID());
 		acct.setMemo("All the stuff that does not fit into the other expenses accounts");
 
 		// ----------------------------

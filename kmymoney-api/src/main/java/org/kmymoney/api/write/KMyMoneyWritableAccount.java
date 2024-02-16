@@ -3,9 +3,14 @@ package org.kmymoney.api.write;
 import java.beans.PropertyChangeListener;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.Currency;
 
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.simple.KMMInstID;
+import org.kmymoney.api.basetypes.simple.KMMSecID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.write.hlp.HasWritableUserDefinedAttributes;
@@ -43,13 +48,14 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 	 */
 	void setName(String name);
 
-	/**
-	 * Change the user-definable account-number. It should contain no newlines but
-	 * may contain non-ascii and non-western characters.
-	 *
-	 * @param code the new code (not null)
-	 */
-	void setInstitutionID(KMMInstID instID);
+	// :.TODO
+//	/**
+//	 * Change the user-definable account-number. It should contain no newlines but
+//	 * may contain non-ascii and non-western characters.
+//	 *
+//	 * @param code the new code (not null)
+//	 */
+//	void setInstitutionID(KMMInstID instID);
 
 	/**
 	 * @param desc the user-defined description (may contain multiple lines and
@@ -78,12 +84,21 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 
 	void setTypeInt(BigInteger typeInt);
 
-	/**
-	 * @param id the new currency
-	 * @see #setCurrencyNameSpace(String)
-	 * @see {@link KMyMoneyAccount#getCurrencyID()}
-	 */
-	void setCurrencyID(final String currID);
+	// ----------------------------
+
+	void setQualifSecCurrID(final KMMQualifSecCurrID secCurrID);
+	
+//	void setQualifSecID(final KMMQualifSecID secID);
+//	
+//	void setQualifCurrID(final KMMQualifCurrID currID);
+	
+	void setSecID(final KMMSecID secID);
+	
+	void setCurrency(final Currency curr);
+
+	void setCurrency(final String currCode);
+	
+	// ----------------------------
 
 	/**
 	 * @param newparent the new account or null to make it a top-level-account

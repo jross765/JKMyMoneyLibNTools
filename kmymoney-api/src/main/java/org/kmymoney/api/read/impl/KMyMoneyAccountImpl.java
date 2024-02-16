@@ -172,10 +172,8 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     	return jwsdpPeer.getNumber();
     }
 
-    private BigInteger getTypeBigInt() throws UnknownAccountTypeException {
-    	return jwsdpPeer.getType();
-    }
 
+    @Override
     public Type getType() throws UnknownAccountTypeException {
     	try {
     	    Type result = Type.valueOff( getTypeBigInt().intValue() );
@@ -183,6 +181,11 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     	} catch ( Exception exc ) {
     	    throw new UnknownAccountTypeException();
     	}
+    }
+
+    @Override
+    public BigInteger getTypeBigInt() {
+    	return jwsdpPeer.getType();
     }
 
     @Override
