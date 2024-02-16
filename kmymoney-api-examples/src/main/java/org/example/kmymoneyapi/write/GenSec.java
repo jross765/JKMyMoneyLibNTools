@@ -9,12 +9,12 @@ import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 
 public class GenSec {
     // BEGIN Example data -- adapt to your needs
-    private static String kmmInFileName = null;
-    private static String kmmOutFileName = null;
+    private static String kmmInFileName  = "example_in.kmy";
+    private static String kmmOutFileName = "example_out.xml";
 
-    private static String name = null;
-    private static String symbol = null;
-    private static String isin = null;
+    private static String name   = "HyperCyberScam Corp.";
+    private static String symbol = "SCAM";
+    private static String isin   = "US0123456789";
     // END Example data
 
     // -----------------------------------------------------------------
@@ -29,7 +29,6 @@ public class GenSec {
 	    System.exit(1);
 	}
     }
-
 
     protected void kernel() throws Exception {
 	KMyMoneyWritableFileImpl kmmFile = new KMyMoneyWritableFileImpl(new File(kmmInFileName));

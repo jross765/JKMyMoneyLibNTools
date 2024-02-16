@@ -15,15 +15,16 @@ import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 
 public class GenTrx {
     // BEGIN Example data -- adapt to your needs
-    private static String kmmInFileName = null;
-    private static String kmmOutFileName = null;
-    private static KMMAcctID fromAcctID = null; // sic, not KMMComplAcctID
-    private static KMMAcctID toAcctID = null; // dto.
-    private static KMMPyeID pyeID = null;
-    private static FixedPointNumber amount = null;
-    private static FixedPointNumber quantity = null;
-    private static LocalDate datePosted = null;
-    private static String description = null;
+    private static String kmmInFileName  = "example_in.kmy";
+    private static String kmmOutFileName = "example_out.xml";
+    
+    private static KMMAcctID        fromAcctID  = new KMMAcctID("A000066"); // sic, not KMMComplAcctID
+    private static KMMAcctID        toAcctID    = new KMMAcctID("A000010"); // dto.
+    private static KMMPyeID         pyeID       = new KMMPyeID("P000007");  // optional, may be null
+    private static FixedPointNumber amount      = new FixedPointNumber("1234/10");
+    private static FixedPointNumber quantity    = amount;
+    private static LocalDate        datePosted  = LocalDate.of(2024, 2, 15);
+    private static String           description = "Bla-bla";
     // END Example data
 
     // -----------------------------------------------------------------
@@ -62,7 +63,7 @@ public class GenTrx {
 	if (pyeID != null)
 	    split1.setPayeeID(pyeID);
 
-	// This is what we actually want:
+	// This is what we actually want (cf. above):
 	split1.setDescription(description);
 
 	// ---

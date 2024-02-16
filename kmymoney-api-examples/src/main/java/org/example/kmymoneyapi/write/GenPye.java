@@ -9,9 +9,10 @@ import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 
 public class GenPye {
     // BEGIN Example data -- adapt to your needs
-    private static String kmmInFileName = null;
-    private static String kmmOutFileName = null;
-    private static String name = null;
+    private static String kmmInFileName  = "example_in.kmy";
+    private static String kmmOutFileName = "example_out.xml";
+    
+    private static String name = "Mama & Papa";
     // END Example data
 
     // -----------------------------------------------------------------
@@ -26,7 +27,6 @@ public class GenPye {
 	    System.exit(1);
 	}
     }
-
 
     protected void kernel() throws Exception {
 	KMyMoneyWritableFileImpl kmmFile = new KMyMoneyWritableFileImpl(new File(kmmInFileName));

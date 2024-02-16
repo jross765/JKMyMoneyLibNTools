@@ -17,14 +17,14 @@ import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 
 public class GenPrc {
     // BEGIN Example data -- adapt to your needs
-    private static String kmmInFileName = null;
-    private static String kmmOutFileName = null;
+    private static String kmmInFileName  = "example_in.kmy";
+    private static String kmmOutFileName = "example_out.xml";
 
-    private static KMMQualifSecCurrID fromSecCurrID = null;
-    private static KMMQualifCurrID toCurrID = null;
-    private static LocalDate date = null;
-    private static FixedPointNumber value = null;
-    private static KMyMoneyPrice.Source source = null;
+    private static KMMQualifSecCurrID   fromSecCurrID = null;
+    private static KMMQualifCurrID      toCurrID      = null;
+    private static LocalDate            date          = LocalDate.of(2024, 2, 15);
+    private static FixedPointNumber     value         = new FixedPointNumber("1234/10");
+    private static KMyMoneyPrice.Source source        = KMyMoneyPrice.Source.USER;
     // END Example data
 
     // -----------------------------------------------------------------
