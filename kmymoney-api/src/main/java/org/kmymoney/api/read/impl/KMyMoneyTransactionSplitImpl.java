@@ -323,6 +323,9 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     	if ( jwsdpPeer.getPayee() == null )
     		return null;
     	
+    	if ( jwsdpPeer.getPayee().trim().length() == 0 )
+    		return null;
+    	
     	return new KMMPyeID( jwsdpPeer.getPayee() );
     }
     
