@@ -36,7 +36,6 @@ import org.kmymoney.api.read.impl.KMyMoneyTransactionImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
-import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 import org.kmymoney.api.write.impl.hlp.HasWritableUserDefinedAttributesImpl;
 import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
 import org.slf4j.Logger;
@@ -396,7 +395,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	
 	KMMSpltID getNewSplitID() {
 		
-		int maxSpltNo = 1; // sic, in case there are no splits yet
+		int maxSpltNo = 0;
 		for ( KMyMoneyTransactionSplit splt : getSplits() ) {
 			try {
 				String coreID = splt.getID().get().substring(1);
@@ -408,7 +407,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 			}
 		}
 		
-		return new KMMSpltID(maxSpltNo);
+		return new KMMSpltID(maxSpltNo + 1);
 	}
 
 	// ---------------------------------------------------------------
