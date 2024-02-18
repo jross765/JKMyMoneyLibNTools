@@ -17,7 +17,7 @@ import java.util.TreeSet;
 import java.util.zip.GZIPOutputStream;
 
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
@@ -920,7 +920,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	// ---------------------------------------------------------------
 
 	@Override
-	public KMyMoneyWritablePricePair getWritablePricePairByID(KMMCurrPair prcPrID) {
+	public KMyMoneyWritablePricePair getWritablePricePairByID(KMMPricePairID prcPrID) {
 		if ( prcPrID == null ) {
 			throw new IllegalArgumentException("null price pair ID given");
 		}

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.hlp.KMyMoneyPricePairCore;
@@ -77,7 +77,7 @@ public interface KMyMoneyPrice extends KMyMoneyPricePairCore {
      * @throws InvalidQualifSecCurrIDException
      * @throws InvalidQualifSecCurrTypeException
      */
-    KMMCurrPair getParentPricePairID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+    KMMPricePairID getParentPricePairID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 	
     /**
      * @return

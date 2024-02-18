@@ -12,7 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
@@ -38,9 +38,9 @@ public class TestKMyMoneyWritablePriceImpl {
 	private static final KMMPriceID PRC_2_ID = TestKMyMoneyPriceImpl.PRC_2_ID;
 	private static final KMMPriceID PRC_3_ID = TestKMyMoneyPriceImpl.PRC_3_ID;
 
-	private static final KMMCurrPair PRCPR_1_ID = TestKMyMoneyPricePairImpl.PRCPR_1_ID;
-	private static final KMMCurrPair PRCPR_2_ID = TestKMyMoneyPricePairImpl.PRCPR_2_ID;
-	private static final KMMCurrPair PRCPR_3_ID = TestKMyMoneyPricePairImpl.PRCPR_3_ID;
+	private static final KMMPricePairID PRCPR_1_ID = TestKMyMoneyPricePairImpl.PRCPR_1_ID;
+	private static final KMMPricePairID PRCPR_2_ID = TestKMyMoneyPricePairImpl.PRCPR_2_ID;
+	private static final KMMPricePairID PRCPR_3_ID = TestKMyMoneyPricePairImpl.PRCPR_3_ID;
 
 	// -----------------------------------------------------------------
 

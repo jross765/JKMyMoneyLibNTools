@@ -3,7 +3,7 @@ package org.kmymoney.api.write;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
@@ -24,7 +24,7 @@ public interface KMyMoneyWritablePrice extends KMyMoneyPrice,
 	
     // ----------------------------
 
-    void setParentPricePairID(KMMCurrPair prcPrID);
+    void setParentPricePairID(KMMPricePairID prcPrID);
 	
     void setParentPricePair(KMyMoneyPricePair prcPr);
 	

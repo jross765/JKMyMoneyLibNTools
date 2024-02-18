@@ -8,7 +8,7 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
@@ -22,9 +22,9 @@ import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneyPricePairImpl {
-	public static final KMMCurrPair PRCPR_1_ID = new KMMCurrPair("E000001", "EUR"); // SAP/EUR
-	public static final KMMCurrPair PRCPR_2_ID = new KMMCurrPair("E000002", "EUR"); // MBG/EUR
-	public static final KMMCurrPair PRCPR_3_ID = new KMMCurrPair("USD", "EUR");
+	public static final KMMPricePairID PRCPR_1_ID = new KMMPricePairID("E000001", "EUR"); // SAP/EUR
+	public static final KMMPricePairID PRCPR_2_ID = new KMMPricePairID("E000002", "EUR"); // MBG/EUR
+	public static final KMMPricePairID PRCPR_3_ID = new KMMPricePairID("USD", "EUR");
 
 	// -----------------------------------------------------------------
 

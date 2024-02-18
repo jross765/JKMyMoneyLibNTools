@@ -11,7 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
@@ -26,9 +26,9 @@ import org.kmymoney.api.write.KMyMoneyWritablePricePair;
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneyWritablePricePairImpl {
-	private static final KMMCurrPair PRCPR_1_ID = TestKMyMoneyPricePairImpl.PRCPR_1_ID;
-	private static final KMMCurrPair PRCPR_2_ID = TestKMyMoneyPricePairImpl.PRCPR_2_ID;
-	private static final KMMCurrPair PRCPR_3_ID = TestKMyMoneyPricePairImpl.PRCPR_3_ID;
+	private static final KMMPricePairID PRCPR_1_ID = TestKMyMoneyPricePairImpl.PRCPR_1_ID;
+	private static final KMMPricePairID PRCPR_2_ID = TestKMyMoneyPricePairImpl.PRCPR_2_ID;
+	private static final KMMPricePairID PRCPR_3_ID = TestKMyMoneyPricePairImpl.PRCPR_3_ID;
 
     // -----------------------------------------------------------------
 
@@ -43,7 +43,7 @@ public class TestKMyMoneyWritablePricePairImpl {
 
 	KMMQualifCurrID currID1 = null;
 
-	private KMMCurrPair newID = null;
+	private KMMPricePairID newID = null;
 
     // https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
     @SuppressWarnings("exports")
@@ -297,7 +297,7 @@ public class TestKMyMoneyWritablePricePairImpl {
 		// KMyMoneyPricePair prcPr = kmmOutFile.getPricePairByID(PRCPR_1_ID);
 		KMyMoneyPricePair prcPr = kmmOutFile.getPricePairByID(PRCPR_1_ID);
 		assertEquals(null, prcPr); // sic
-		prcPr = kmmOutFile.getPricePairByID(new KMMCurrPair("BRL", "SGD"));
+		prcPr = kmmOutFile.getPricePairByID(new KMMPricePairID("BRL", "SGD"));
 		assertNotEquals(null, prcPr);
 
 		// Cf. comment in test02_1_check_memory()

@@ -5,9 +5,9 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KMMCurrPair {
+public class KMMPricePairID {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMMCurrPair.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KMMPricePairID.class);
 
     // ---------------------------------------------------------------
 
@@ -16,7 +16,7 @@ public class KMMCurrPair {
     
     // ---------------------------------------------------------------
 
-	public KMMCurrPair(KMMQualifSecCurrID fromSecCurr, KMMQualifCurrID toCurr) {
+	public KMMPricePairID(KMMQualifSecCurrID fromSecCurr, KMMQualifCurrID toCurr) {
 		if ( fromSecCurr == null ) {
 			throw new IllegalArgumentException("null from-security-currency-ID given");
 		}
@@ -31,7 +31,7 @@ public class KMMCurrPair {
 		this.toCurr.set(toCurr);
 	}
 
-	public KMMCurrPair(String fromSecCurr, String toCurr)
+	public KMMPricePairID(String fromSecCurr, String toCurr)
 			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 		if ( fromSecCurr == null ) {
 			throw new IllegalArgumentException("null from-security-currency-ID given");
@@ -112,10 +112,10 @@ public class KMMCurrPair {
 		if ( this == obj ) {
 			return true;
 		}
-		if ( !(obj instanceof KMMCurrPair) ) {
+		if ( !(obj instanceof KMMPricePairID) ) {
 			return false;
 		}
-		KMMCurrPair other = (KMMCurrPair) obj;
+		KMMPricePairID other = (KMMPricePairID) obj;
 		return Objects.equals(fromSecCurr.toString(), other.getFromSecCurr().toString()) && // <-- important: toString()!
 			   Objects.equals(toCurr.toString(),      other.getToCurr().toString());        // <-- here optional: toString()!
 	}
@@ -132,8 +132,8 @@ public class KMMCurrPair {
 	}
 
 	public String toStringLong() {
-		return "KMMCurrPair [fromSecCurr=" + fromSecCurr.toString() + 
-				               ", toCurr=" + toCurr.toString() + "]";
+		return "KMMPricePairID [fromSecCurr=" + fromSecCurr.toString() + 
+				                  ", toCurr=" + toCurr.toString() + "]";
 	}
 
 }

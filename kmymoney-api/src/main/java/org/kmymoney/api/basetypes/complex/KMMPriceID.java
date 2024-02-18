@@ -68,7 +68,7 @@ public class KMMPriceID {
 		this.dateStr = DATE_FORMAT.format(date);
 	}
     
-	public KMMPriceID(KMMCurrPair prcPr, LocalDate date) {
+	public KMMPriceID(KMMPricePairID prcPr, LocalDate date) {
 		init();
 		
 		this.fromSecCurr = prcPr.getFromSecCurr().getCode();

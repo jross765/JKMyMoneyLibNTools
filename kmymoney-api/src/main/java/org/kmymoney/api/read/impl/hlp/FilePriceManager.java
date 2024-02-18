@@ -13,7 +13,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.kmymoney.api.Const;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
@@ -45,7 +45,7 @@ public class FilePriceManager {
 	protected KMyMoneyFileImpl kmmFile;
 
 	private PRICES                              priceDB  = null;
-	private Map<KMMCurrPair, KMyMoneyPricePair> prcPrMap = null;
+	private Map<KMMPricePairID, KMyMoneyPricePair> prcPrMap = null;
 	private Map<KMMPriceID, KMyMoneyPrice>      prcMap   = null;
 
 	// ---------------------------------------------------------------
@@ -58,7 +58,7 @@ public class FilePriceManager {
 	// ---------------------------------------------------------------
 
 	private void init(final KMYMONEYFILE pRootElement) {
-		prcPrMap = new HashMap<KMMCurrPair, KMyMoneyPricePair>();
+		prcPrMap = new HashMap<KMMPricePairID, KMyMoneyPricePair>();
 		prcMap   = new HashMap<KMMPriceID, KMyMoneyPrice>();
 
 		initPriceDB(pRootElement);
@@ -66,7 +66,7 @@ public class FilePriceManager {
 		for ( PRICEPAIR jwsdpPrcPr : prices ) {
 			String fromCurr = jwsdpPrcPr.getFrom();
 			String toCurr = jwsdpPrcPr.getTo();
-			KMMCurrPair currPair = new KMMCurrPair(fromCurr, toCurr);
+			KMMPricePairID currPair = new KMMPricePairID(fromCurr, toCurr);
 			KMyMoneyPricePair pricePair = createPricePair(jwsdpPrcPr);
 			prcPrMap.put(currPair, pricePair);
 			for ( PRICE jwsdpPrc : jwsdpPrcPr.getPRICE() ) {
@@ -173,7 +173,7 @@ public class FilePriceManager {
 	
 	// ----------------------------
 
-	public KMyMoneyPricePair getPricePairByID(KMMCurrPair prcPrID) {
+	public KMyMoneyPricePair getPricePairByID(KMMPricePairID prcPrID) {
 		if ( prcPrMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -184,7 +184,7 @@ public class FilePriceManager {
 		// return prcPrMap.get(prcPrID);
 		
 		// Instead:
-		for ( KMMCurrPair elt : prcPrMap.keySet() ) {
+		for ( KMMPricePairID elt : prcPrMap.keySet() ) {
 			if ( elt.toString().equals(prcPrID.toString()) ) { // <-- important: toString()
 				return prcPrMap.get(elt);
 			}

@@ -1,11 +1,9 @@
-// $Header: svn://gila_svn_priv/finanzen/KMyMoneyToolsXML/trunk/KMyMoneyToolsXML/src/main/java/de/riegelmuenchen/kmymoney/tools/xml/gen/GenPrc.java 8578 2024-02-15 13:51:56Z thilo $
-
 package org.example.kmymoneyapi.write;
 
 import java.io.File;
 import java.time.LocalDate;
 
-import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.numbers.FixedPointNumber;
@@ -43,7 +41,7 @@ public class GenPrc {
     protected void kernel() throws Exception {
 	KMyMoneyWritableFileImpl kmmFile = new KMyMoneyWritableFileImpl(new File(kmmInFileName));
 
-	KMMCurrPair prcPrID = new KMMCurrPair(fromSecCurrID, toCurrID);
+	KMMPricePairID prcPrID = new KMMPricePairID(fromSecCurrID, toCurrID);
 	KMyMoneyWritablePricePair prcPr = kmmFile.getWritablePricePairByID(prcPrID);
 	if (prcPr == null) {
 	    System.err.println("Price pair '" + prcPrID + "' does not exist in KMyMoney file yet.");

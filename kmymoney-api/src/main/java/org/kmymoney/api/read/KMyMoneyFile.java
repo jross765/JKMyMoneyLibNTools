@@ -6,7 +6,7 @@ import java.util.Collection;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
@@ -370,7 +370,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param prcPrID id of a price pair
 	 * @return the identified price pair or null
 	 */
-	KMyMoneyPricePair getPricePairByID(KMMCurrPair prcPrID);
+	KMyMoneyPricePair getPricePairByID(KMMPricePairID prcPrID);
 
 	/**
 	 * @return all price pairs defined in the book

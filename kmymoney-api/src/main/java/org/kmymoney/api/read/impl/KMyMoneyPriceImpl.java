@@ -10,7 +10,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.kmymoney.api.Const;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
@@ -91,7 +91,7 @@ public class KMyMoneyPriceImpl implements KMyMoneyPrice {
     }
 
     @Override
-    public KMMCurrPair getParentPricePairID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public KMMPricePairID getParentPricePairID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
 	return parent.getID();
     }
 

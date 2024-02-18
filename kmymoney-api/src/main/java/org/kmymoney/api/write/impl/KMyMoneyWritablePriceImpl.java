@@ -10,7 +10,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
@@ -239,7 +239,7 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
     
     // ---------------------------------------------------------------
 
-    public void setParentPricePairID(KMMCurrPair prcPrID) {
+    public void setParentPricePairID(KMMPricePairID prcPrID) {
 		if ( prcPrID == null )
 			throw new IllegalArgumentException("null price pair ID given");
 
@@ -247,7 +247,7 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 //		if ( ! prcPrID.isSet() )
 //			throw new IllegalArgumentException("unset price pair ID given");
 
-		KMMCurrPair oldPrcPrID = getParentPricePairID();
+		KMMPricePairID oldPrcPrID = getParentPricePairID();
 
 		getWritableParentPricePair().setID(prcPrID);
 		getWritableKMyMoneyFile().setModified(true);

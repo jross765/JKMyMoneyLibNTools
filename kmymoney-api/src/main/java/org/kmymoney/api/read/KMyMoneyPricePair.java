@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.read.hlp.KMyMoneyPricePairCore;
 
 /**
@@ -26,7 +26,7 @@ public interface KMyMoneyPricePair extends KMyMoneyPricePairCore {
      * @throws InvalidQualifSecCurrIDException
      * @throws InvalidQualifSecCurrTypeException
      */
-    KMMCurrPair getID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+    KMMPricePairID getID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
     
     // ---------------------------------------------------------------
     

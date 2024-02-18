@@ -1,5 +1,3 @@
-// $Header: svn://gila_svn_priv/finanzen/KMyMoneyToolsXML/trunk/KMyMoneyToolsXML/src/main/java/de/riegelmuenchen/kmymoney/tools/xml/gen/GenPye.java 8485 2024-02-06 08:51:24Z thilo $
-
 package org.example.kmymoneyapi.write;
 
 import java.io.File;

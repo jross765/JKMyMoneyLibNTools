@@ -1,7 +1,5 @@
 A Java-library for reading and writing the XML file format of the KMyMoney open source personal finance software.
 
-**Caution**: In the current version, the library can only read KMyMoney files. Write-access is planned for a future version.
-
 # Compatibility
 ## System Compatibility
 Version 0.4.0 of the library has been tested with KMyMoney 5.1.3 on Linux (locale de_DE) and OpenJDK 17.0.
@@ -12,9 +10,9 @@ As far as the author knows, there should be no issues with other locales, but he
 ## Version Compatibility
 | Version | Backward Compat. | Note                           |
 |---------|------------------|--------------------------------|
-| 0.4     | yes              | Not 100% compatible, but more less (untested) |
-| 0.3     | no               | major changes in interfaces    |
-| 0.2     | no               | major changes in interfaces    |
+| 0.4     | no               | Minor changes in interfaces    |
+| 0.3     | no               | Major changes in interfaces    |
+| 0.2     | no               | Major changes in interfaces    |
 
 # Modules and Further Details
 

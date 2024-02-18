@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.basetypes.complex.KMMPriceID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
@@ -235,7 +235,7 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * @see KMyMoneyFile#getPriceByID(KMMPriceID)
 	 * @return A changeable version of the transaction.
 	 */
-	KMyMoneyWritablePricePair getWritablePricePairByID(KMMCurrPair prcPrID);
+	KMyMoneyWritablePricePair getWritablePricePairByID(KMMPricePairID prcPrID);
 	
 	/**
 	 * @see KMyMoneyFile#getPricePairs()

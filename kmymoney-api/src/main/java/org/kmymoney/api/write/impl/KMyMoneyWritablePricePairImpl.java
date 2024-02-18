@@ -1,7 +1,7 @@
 package org.kmymoney.api.write.impl;
 
 import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.api.basetypes.complex.KMMCurrPair;
+import org.kmymoney.api.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
@@ -100,7 +100,7 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
         file.getRootElement().getPRICES().getPRICEPAIR().add(jwsdpPrcPr);
         file.setModified(true);
     
-        KMMCurrPair prcPrID = new KMMCurrPair(fromSecCurrID, toCurrID);
+        KMMPricePairID prcPrID = new KMMPricePairID(fromSecCurrID, toCurrID);
         LOGGER.debug("createPricePair_int: Created new price pair (core): " + prcPrID.toString());
         // LOGGER.debug("createPricePair_int: Created new price pair (core): " + jwsdpPrcPr);
     
@@ -125,7 +125,7 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 	}
 	
 	@Override
-	public void setID(final KMMCurrPair currPr) {
+	public void setID(final KMMPricePairID currPr) {
 		if ( currPr == null )
 			throw new IllegalArgumentException("null currency pair given");
 
