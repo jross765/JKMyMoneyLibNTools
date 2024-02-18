@@ -92,6 +92,8 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 */
 	void setValue(FixedPointNumber n);
 	
+	void setPrice(FixedPointNumber prc);
+	
 	void setPayeeID(KMMPyeID pyeID);
 
 	void setPayee(KMyMoneyPayee pye);

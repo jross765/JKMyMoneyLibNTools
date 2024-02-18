@@ -17,7 +17,7 @@ public class ConstTest extends Const {
 	public static final int NOF_TRX       = 18;
 	public static final int NOF_TRX_SPLT  = 38;
 	
-	public static final int NOF_PYE       = 8;
+	public static final int NOF_PYE       = 9;
 	
 	public static final int NOF_SEC       = 2;
 	public static final int NOF_CURR      = 2;

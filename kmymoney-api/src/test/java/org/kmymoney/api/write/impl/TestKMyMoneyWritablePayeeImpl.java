@@ -335,7 +335,7 @@ public class TestKMyMoneyWritablePayeeImpl {
 	assertEquals(lastNode.getNodeType(), Node.ELEMENT_NODE);
 	Element elt = (Element) lastNode;
 	assertEquals("Norma Jean Baker", elt.getAttribute("name"));
-	assertEquals("P000009", elt.getAttribute("id"));
+	assertEquals("P000010", elt.getAttribute("id"));
     }
 
     // -----------------------------------------------------------------
@@ -382,19 +382,19 @@ public class TestKMyMoneyWritablePayeeImpl {
 	assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
 	Element elt = (Element) node;
 	assertEquals("Norma Jean Baker", elt.getAttribute("name"));
-	assertEquals("P000009", elt.getAttribute("id"));
+	assertEquals("P000010", elt.getAttribute("id"));
 
 	node = nList.item(nList.getLength() - 2);
 	assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
 	elt = (Element) node;
 	assertEquals("Madonna Louise Ciccone", elt.getAttribute("name"));
-	assertEquals("P000010", elt.getAttribute("id"));
+	assertEquals("P000011", elt.getAttribute("id"));
 
 	node = nList.item(nList.getLength() - 1);
 	assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
 	elt = (Element) node;
 	assertEquals("Rowan Atkinson", elt.getAttribute("name"));
-	assertEquals("P000011", elt.getAttribute("id"));
+	assertEquals("P000012", elt.getAttribute("id"));
     }
 
 }

@@ -285,9 +285,11 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		if ( n == null ) {
 			throw new IllegalArgumentException("null value given");
 		}
+		
 		String old = getJwsdpPeer().getValue();
 		jwsdpPeer.setValue(n.toKMyMoneyString());
 		((KMyMoneyWritableFile) getKMyMoneyFile()).setModified(true);
+		
 		if ( isCurrencyMatching() ) {
 			String oldquantity = getJwsdpPeer().getShares();
 			getJwsdpPeer().setShares(n.toKMyMoneyString());
@@ -301,6 +303,23 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
 			if ( helper.getPropertyChangeSupport() != null ) {
 				helper.getPropertyChangeSupport().firePropertyChange("value", new FixedPointNumber(old), n);
+			}
+		}
+	}
+
+	@Override
+	public void setPrice(final FixedPointNumber prc) {
+		if ( prc == null ) {
+			throw new IllegalArgumentException("null price given");
+		}
+		
+		String old = getJwsdpPeer().getPrice();
+		jwsdpPeer.setPrice(prc.toKMyMoneyString());
+		((KMyMoneyWritableFile) getKMyMoneyFile()).setModified(true);
+		
+		if ( old == null || !old.equals(prc.toKMyMoneyString()) ) {
+			if ( helper.getPropertyChangeSupport() != null ) {
+				helper.getPropertyChangeSupport().firePropertyChange("price", new FixedPointNumber(old), prc);
 			}
 		}
 	}
@@ -504,6 +523,9 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 
 	buffer.append(", shares=");
 	buffer.append(getShares());
+
+	buffer.append(", price=");
+	buffer.append(getPrice());
 
 	buffer.append("]");
 	return buffer.toString();

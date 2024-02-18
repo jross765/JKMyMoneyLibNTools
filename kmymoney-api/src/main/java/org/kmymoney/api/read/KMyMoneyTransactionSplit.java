@@ -240,6 +240,8 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      */
     String getSharesFormattedForHTML(Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
+    FixedPointNumber getPrice();
+
     KMMPyeID getPayeeID();
     
     KMyMoneyPayee getPayee();

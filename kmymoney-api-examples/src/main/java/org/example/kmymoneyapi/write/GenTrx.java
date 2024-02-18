@@ -24,7 +24,7 @@ public class GenTrx {
     // Following two account IDs: sic, not KMMComplAcctID
     private static KMMAcctID        fromAcct1ID  = new KMMAcctID("A000066"); // Asset:Barvermögen:Bargeld:Kasse Ada
     private static KMMAcctID        toAcct1ID    = new KMMAcctID("A000010"); // Expense:Bildung:Zeitungen
-    private static KMMPyeID         pye1ID       = new KMMPyeID("P000007");  // optional, may be null
+    private static KMMPyeID         pye1ID       = new KMMPyeID("P000009");  // optional, may be null
     private static KMyMoneyWritableTransactionSplit.Action act1 = null;      // Do not set here 
     private static FixedPointNumber amt1         = new FixedPointNumber("1234/100");
     private static FixedPointNumber qty1         = amt1;
@@ -35,12 +35,19 @@ public class GenTrx {
     
     // Following two account IDs: sic, not KMMComplAcctID
     private static KMMAcctID        fromAcct2ID  = new KMMAcctID("A000004"); // Asset:Barvermögen:Giro RaiBa
-    private static KMMAcctID        toAcct2ID    = new KMMAcctID("A000063"); // Asset:Finanzanlagen:Depot RaiBa:DE0007164600 SAP
+    private static KMMAcctID        toAcct21ID   = new KMMAcctID("A000063"); // Asset:Finanzanlagen:Depot RaiBa:DE0007164600 SAP
+    private static KMMAcctID        toAcct22ID   = new KMMAcctID("A000020"); // Expense:Sonstiges:Bankgebühren
     private static KMMPyeID         pye2ID       = null;                     // Do not set here
     private static KMyMoneyWritableTransactionSplit.Action act2 = KMyMoneyWritableTransactionSplit.Action.BUY_SHARES;
-    private static FixedPointNumber amt2         = new FixedPointNumber("234567/100");
-    private static FixedPointNumber qty21        = amt2;
     private static FixedPointNumber qty22        = new FixedPointNumber("15");
+    private static FixedPointNumber prc1         = new FixedPointNumber("1/1");       // optional
+    private static FixedPointNumber prc2         = new FixedPointNumber("15574/100"); // half-mandatory
+    private static FixedPointNumber prc3         = prc1;                              // optional
+    private static FixedPointNumber amt22        = qty22.multiply(prc2);              // net
+    private static FixedPointNumber amt23        = new FixedPointNumber("95/10");     // fees & commissions
+    private static FixedPointNumber amt21        = amt22.add(amt23);                  // gross
+    private static FixedPointNumber qty21        = amt21;
+    private static FixedPointNumber qty23        = amt23;
     private static LocalDate        datPst2      = LocalDate.of(2024, 1, 15);
     private static String           descr2       = "Aktienkauf";
     // END Example data
@@ -77,6 +84,7 @@ public class GenTrx {
 	System.out.println("Write file:");
 	System.out.println("---------------------------");
 	kmmFile.writeFile(new File(kmmOutFileName));
+	
 	System.out.println("OK");
     }
 
@@ -94,21 +102,23 @@ public class GenTrx {
 
 	// ---
 
-	KMyMoneyWritableTransactionSplit split1 = trx.createWritableSplit(kmmFile.getAccountByID(fromAcct1ID));
-	split1.setValue(new FixedPointNumber(amt1.negate()));
-	split1.setShares(new FixedPointNumber(qty1.negate()));
-	split1.setPayeeID(pye1ID);
+	KMyMoneyWritableTransactionSplit splt1 = trx.createWritableSplit(kmmFile.getAccountByID(fromAcct1ID));
+	splt1.setValue(new FixedPointNumber(amt1.negate()));
+	splt1.setShares(new FixedPointNumber(qty1.negate()));
+	splt1.setPayeeID(pye1ID);
 	// This is what we actually want (cf. above):
-	split1.setDescription(descr1);
+	splt1.setDescription(descr1);
+	System.out.println("Split 1 to write: " + splt1.toString());
 
 	// ---
 
-	KMyMoneyWritableTransactionSplit split2 = trx.createWritableSplit(kmmFile.getAccountByID(toAcct1ID));
-	split2.setValue(new FixedPointNumber(amt1));
-	split2.setShares(new FixedPointNumber(qty1));
-	split2.setPayeeID(pye1ID);
+	KMyMoneyWritableTransactionSplit splt2 = trx.createWritableSplit(kmmFile.getAccountByID(toAcct1ID));
+	splt2.setValue(new FixedPointNumber(amt1));
+	splt2.setShares(new FixedPointNumber(qty1));
+	splt2.setPayeeID(pye1ID);
 	// Cf. above
-	split2.setDescription(descr1);
+	splt2.setDescription(descr1);
+	System.out.println("Split 2 to write: " + splt2.toString());
 
 	// ---
 
@@ -121,8 +131,9 @@ public class GenTrx {
     }
 
     private void genTrx2(KMyMoneyWritableFileImpl kmmFile) throws IOException {
-	System.err.println("Account 2 name (from): '" + kmmFile.getAccountByID(fromAcct2ID).getQualifiedName() + "'");
-	System.err.println("Account 2 name (to):   '" + kmmFile.getAccountByID(toAcct2ID).getQualifiedName() + "'");
+	System.err.println("Account 1 name (from): '" + kmmFile.getAccountByID(fromAcct2ID).getQualifiedName() + "'");
+	System.err.println("Account 2 name (to):   '" + kmmFile.getAccountByID(toAcct21ID).getQualifiedName() + "'");
+	System.err.println("Account 3 name (to):   '" + kmmFile.getAccountByID(toAcct22ID).getQualifiedName() + "'");
 
 	// ---
 
@@ -134,20 +145,34 @@ public class GenTrx {
 
 	// ---
 
-	KMyMoneyWritableTransactionSplit split1 = trx.createWritableSplit(kmmFile.getAccountByID(fromAcct2ID));
-	split1.setValue(new FixedPointNumber(amt2.negate()));
-	split1.setShares(new FixedPointNumber(qty21.negate()));
+	KMyMoneyWritableTransactionSplit splt1 = trx.createWritableSplit(kmmFile.getAccountByID(fromAcct2ID));
+	splt1.setValue(new FixedPointNumber(amt21.negate()));
+	splt1.setShares(new FixedPointNumber(qty21.negate()));
+	splt1.setPrice(prc1); // completely optional 
 	// This is what we actually want (cf. above):
-	split1.setDescription(descr2);
+	splt1.setDescription(descr2);
+	System.out.println("Split 1 to write: " + splt1.toString());
 
 	// ---
 
-	KMyMoneyWritableTransactionSplit split2 = trx.createWritableSplit(kmmFile.getAccountByID(toAcct2ID));
-	split2.setValue(new FixedPointNumber(amt2));
-	split2.setShares(new FixedPointNumber(qty22));
-	split2.setAction(act2);
+	KMyMoneyWritableTransactionSplit splt2 = trx.createWritableSplit(kmmFile.getAccountByID(toAcct21ID));
+	splt2.setValue(new FixedPointNumber(amt22));
+	splt2.setShares(new FixedPointNumber(qty22));
+	splt2.setPrice(prc2); // optional (sic), but advisable
+	splt2.setAction(act2);
 	// Cf. above
-	split2.setDescription(descr2);
+	splt2.setDescription(descr2);
+	System.out.println("Split 2 to write: " + splt2.toString());
+
+	// ---
+
+	KMyMoneyWritableTransactionSplit splt3 = trx.createWritableSplit(kmmFile.getAccountByID(toAcct22ID));
+	splt3.setValue(new FixedPointNumber(amt23));
+	splt3.setShares(new FixedPointNumber(qty23));
+	splt3.setPrice(prc3); // completely optional
+	// Cf. above
+	splt3.setDescription(descr2);
+	System.out.println("Split 3 to write: " + splt3.toString());
 
 	// ---
 

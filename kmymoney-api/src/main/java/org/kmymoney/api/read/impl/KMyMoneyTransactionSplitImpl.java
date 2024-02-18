@@ -319,6 +319,17 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     }
 
     @Override
+    public FixedPointNumber getPrice() {
+    	if ( jwsdpPeer.getPrice() == null )
+    		return null;
+    	
+    	if ( jwsdpPeer.getPrice().trim().length() == 0 )
+    		return null;
+    	
+    	return new FixedPointNumber( jwsdpPeer.getPrice() );
+    }
+    
+    @Override
     public KMMPyeID getPayeeID() {
     	if ( jwsdpPeer.getPayee() == null )
     		return null;
@@ -425,6 +436,9 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
 
 	buffer.append(", shares=");
 	buffer.append(getShares());
+
+	buffer.append(", price=");
+	buffer.append(getPrice());
 
 	buffer.append("]");
 	return buffer.toString();
