@@ -127,19 +127,30 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
 
     KMMQualifSpltID getQualifID();
 
+    // ----------------------------
+
     /**
      *
-     * @return the id of the account we transfer from/to.
+     * @return the ID of the account we transfer from/to.
      */
     KMMComplAcctID getAccountID();
 
     /**
-     * This may be null if an account-id is specified in
-     * the gnucash-file that does not belong to an account.
-     * @return the account of the account we transfer from/to.
+     * @return the account we transfer from/to.
      */
     KMyMoneyAccount getAccount();
 
+    // ----------------------------
+
+    KMMPyeID getPayeeID();
+    
+    KMyMoneyPayee getPayee();
+    
+    // ----------------------------
+
+    /**
+     * @return the ID of the transaction this is a split of.
+     */
     KMMTrxID getTransactionID();
 
     /**
@@ -147,6 +158,19 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      */
     KMyMoneyTransaction getTransaction();
 
+    // ----------------------------
+
+    /**
+     * Get the type of association this split has with
+     * an invoice's lot.
+     * @return null, or one of the ACTION_xyz values defined
+     * @throws UnknownSplitActionException 
+     */
+    Action getAction();
+
+    State getState();
+    
+    // ----------------------------
 
     /**
      * The value is in the currency of the transaction!
@@ -177,6 +201,8 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      */
     String getValueFormattedForHTML(Locale lcl);
 
+    // ----------------------------
+
     /**
      * @return the balance of the account (in the account's currency)
      *         up to this split.
@@ -199,6 +225,8 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * @see KMyMoneyAccount#getBalanceFormatted()
      */
     String getAccountBalanceFormatted(Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+
+    // ----------------------------
 
     /**
      * The quantity is in the currency of the account!
@@ -239,27 +267,25 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * @throws InvalidQualifSecCurrTypeException 
      */
     String getSharesFormattedForHTML(Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    
+    // ----------------------------
 
     FixedPointNumber getPrice();
 
-    KMMPyeID getPayeeID();
+    String getPriceFormatted();
+
+    String getPriceFormatted(Locale lcl);
+
+    String getPriceFormattedForHTML();
+
+    String getPriceFormattedForHTML(Locale lcl);
     
-    KMyMoneyPayee getPayee();
-    
+    // ----------------------------
+
     /**
      * @return the user-defined description for this object
      *         (may contain multiple lines and non-ascii-characters)
      */
     String getMemo();
 
-      /**
-     * Get the type of association this split has with
-     * an invoice's lot.
-     * @return null, or one of the ACTION_xyz values defined
-     * @throws UnknownSplitActionException 
-     */
-    Action getAction() throws UnknownSplitActionException;
-
-    State getState() throws UnknownSplitStateException;
-    
 }

@@ -110,7 +110,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("Giro RaiBa", acct.getName());
 		assertEquals("Asset:Barvermögen:Giro RaiBa", acct.getQualifiedName());
 		assertEquals("Girokonto 1", acct.getMemo());
-		assertEquals("CURRENCY:EUR", acct.getSecCurrID().toString());
+		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals("A000002", acct.getParentAccountID().toString());
 		assertEquals(0, acct.getChildren().size());
@@ -133,7 +133,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("Depot RaiBa", acct.getName());
 		assertEquals("Asset:Finanzanlagen:Depot RaiBa", acct.getQualifiedName());
 		assertEquals("Aktiendepot 1", acct.getMemo());
-		assertEquals("CURRENCY:EUR", acct.getSecCurrID().toString());
+		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals("A000061", acct.getParentAccountID().toString());
 		assertEquals(2, acct.getChildren().size());
@@ -161,7 +161,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("Gehalt", acct.getName());
 		assertEquals("Income:Gehalt", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
-		assertEquals("CURRENCY:EUR", acct.getSecCurrID().toString());
+		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(ACCT_12_ID, acct.getParentAccountID());
 		assertEquals(2, acct.getChildren().size());
@@ -186,7 +186,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("DE0007100000 Mercedes-Benz Group AG", acct.getName());
 		assertEquals("Asset:Finanzanlagen:Depot RaiBa:DE0007100000 Mercedes-Benz Group AG", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
-		assertEquals("SECURITY:E000002", acct.getSecCurrID().toString());
+		assertEquals("SECURITY:E000002", acct.getQualifSecCurrID().toString());
 
 		assertEquals(ACCT_2_ID, acct.getParentAccountID());
 		assertEquals(0, acct.getChildren().size());
@@ -212,7 +212,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("Asset", acct.getName());
 		assertEquals("Asset", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
-		assertEquals("CURRENCY:EUR", acct.getSecCurrID().toString());
+		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
 		assertEquals(2, acct.getChildren().size());
@@ -236,7 +236,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("Liability", acct.getName());
 		assertEquals("Liability", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
-		assertEquals("CURRENCY:EUR", acct.getSecCurrID().toString());
+		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
 		assertEquals(1, acct.getChildren().size());
@@ -259,7 +259,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("Income", acct.getName());
 		assertEquals("Income", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
-		assertEquals("CURRENCY:EUR", acct.getSecCurrID().toString());
+		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
 		assertEquals(4, acct.getChildren().size());
@@ -286,7 +286,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("Expense", acct.getName());
 		assertEquals("Expense", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
-		assertEquals("CURRENCY:EUR", acct.getSecCurrID().toString());
+		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
 		assertEquals(15, acct.getChildren().size());
@@ -313,7 +313,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("Equity", acct.getName());
 		assertEquals("Equity", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
-		assertEquals("CURRENCY:EUR", acct.getSecCurrID().toString());
+		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
 		assertEquals(0, acct.getChildren().size());
@@ -454,7 +454,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("Various expenses", acct.getName());
 		assertEquals(KMyMoneyAccount.Type.EXPENSE, acct.getType());
 		assertEquals(ACCT_13_ID, acct.getParentAccountID());
-		assertEquals(kmmInFile.getDefaultCurrencyID(), acct.getSecCurrID().getCode());
+		assertEquals(kmmInFile.getDefaultCurrencyID(), acct.getQualifSecCurrID().getCode());
 		assertEquals("All the stuff that does not fit into the other expenses accounts", acct.getMemo());
 	}
 
@@ -473,7 +473,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("Various expenses", acct.getName());
 		assertEquals(KMyMoneyAccount.Type.EXPENSE, acct.getType());
 		assertEquals(ACCT_13_ID, acct.getParentAccountID());
-		assertEquals(kmmInFile.getDefaultCurrencyID(), acct.getSecCurrID().getCode());
+		assertEquals(kmmInFile.getDefaultCurrencyID(), acct.getQualifSecCurrID().getCode());
 		assertEquals("All the stuff that does not fit into the other expenses accounts", acct.getMemo());
 	}
 

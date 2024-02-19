@@ -14,6 +14,9 @@ import java.util.Locale;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kmymoney.api.Const;
+import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -103,10 +106,22 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     }
 
     /**
-     * @see KMyMoneyAccount#getCurrencyID()
+     * @see KMyMoneyAccount#getQualifSecCurrID()
      */
-    public String getSecurity() {
-	return jwsdpPeer.getCommodity();
+    public KMMQualifSecCurrID getQualifSecCurrID() {
+    	if ( jwsdpPeer.getCommodity() == null )
+    		return null;
+    	
+    	KMMQualifSecCurrID result = null;
+    	if ( jwsdpPeer.getCommodity().startsWith("E0") ) { // ::MAGIC
+    		// is security
+    		result = new KMMQualifSecID(jwsdpPeer.getCommodity());
+    	} else {
+    		// is currency
+    		result = new KMMQualifCurrID(jwsdpPeer.getCommodity());
+    	}
+    	
+    	return result;
     }
 
     /**
@@ -132,7 +147,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      * @see KMyMoneyTransaction#getBalanceFormatted()
      */
     public String getBalanceFormatted() {
-	return getCurrencyFormat().format(getBalance());
+    	return getCurrencyFormat().format(getBalance());
     }
 
     /**
@@ -143,8 +158,8 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     public String getBalanceFormatted(final Locale loc) {
 
 	NumberFormat cf = NumberFormat.getInstance(loc);
-	if (getSecurity().equals("XYZ")) { // ::TODO is currency, not security
-	    cf.setCurrency(Currency.getInstance(getSecurity()));
+	if ( getQualifSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
+	    cf.setCurrency(Currency.getInstance(getQualifSecCurrID().getCode()));
 	} else {
 	    cf.setCurrency(null);
 	}
@@ -177,14 +192,14 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      * @see KMyMoneyTransaction#getNegatedBalanceFormatted(java.util.Locale)
      */
     public String getNegatedBalanceFormatted(final Locale loc) throws NumberFormatException {
-	NumberFormat cf = NumberFormat.getInstance(loc);
-	if (getSecurity().equals("XYZ")) { // ::TODO is currency, not security
-	    cf.setCurrency(Currency.getInstance(getSecurity()));
+	NumberFormat nf = NumberFormat.getInstance(loc);
+	if ( getQualifSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
+	    nf.setCurrency(Currency.getInstance(getQualifSecCurrID().getCode()));
 	} else {
-	    cf.setCurrency(null);
+	    nf.setCurrency(null);
 	}
 
-	return cf.format(getNegatedBalance());
+	return nf.format(getNegatedBalance());
     }
 
     /**
@@ -343,10 +358,10 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     protected NumberFormat getCurrencyFormat() {
 	if (currencyFormat == null) {
 	    currencyFormat = NumberFormat.getCurrencyInstance();
-	    if (getSecurity().equals("XYZ")) { // ::TODO is currency, not security 
-		currencyFormat.setCurrency(Currency.getInstance(getSecurity()));
+	    if ( getQualifSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) { 
+	    	currencyFormat.setCurrency(Currency.getInstance(getQualifSecCurrID().getCode()));
 	    } else {
-		currencyFormat = NumberFormat.getInstance();
+			currencyFormat = NumberFormat.getInstance();
 	    }
 
 	}

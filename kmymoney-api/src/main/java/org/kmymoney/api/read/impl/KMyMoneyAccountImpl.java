@@ -189,7 +189,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     }
 
     @Override
-	public KMMQualifSecCurrID getSecCurrID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	public KMMQualifSecCurrID getQualifSecCurrID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	
 	KMMQualifSecCurrID result = null;
 	
@@ -308,7 +308,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 	
 	buffer.append(", security/currency='");
 	try {
-	    buffer.append(getSecCurrID() + "'");
+	    buffer.append(getQualifSecCurrID() + "'");
 	} catch (Exception e) {
 	    buffer.append("ERROR");
 	}

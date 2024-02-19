@@ -241,7 +241,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 //			throw new IllegalArgumentException("unset security/currency ID given!");
 //		}
 
-		KMMQualifSecCurrID oldCurrId = getSecCurrID();
+		KMMQualifSecCurrID oldCurrId = getQualifSecCurrID();
 		if ( oldCurrId == secCurrID ) {
 			return; // nothing has changed
 		}
@@ -561,7 +561,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	
 	buffer.append(", security/currency='");
 	try {
-	    buffer.append(getSecCurrID() + "'");
+	    buffer.append(getQualifSecCurrID() + "'");
 	} catch (Exception e) {
 	    buffer.append("ERROR");
 	}

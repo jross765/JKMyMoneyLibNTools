@@ -297,7 +297,7 @@ public class TestKMyMoneyWritableTransactionImpl {
 
 		// assertEquals(KMyMoneyTransaction.Type.PAYMENT, trx.getType());
 		assertEquals("Chattanooga Choo-Choo", trx.getMemo());
-		assertEquals("EUR", trx.getSecurity().toString());
+		assertEquals("CURRENCY:EUR", trx.getQualifSecCurrID().toString());
 		assertEquals("2023-12-11", trx.getEntryDate().toString());
 		assertEquals("2023-05-20", trx.getDatePosted().toString());
 
@@ -340,7 +340,7 @@ public class TestKMyMoneyWritableTransactionImpl {
 
 		// assertEquals(KMyMoneyTransaction.Type.PAYMENT, trx.getType());
 		assertEquals("Chattanooga Choo-Choo", trx.getMemo());
-		assertEquals("EUR", trx.getSecurity());
+		assertEquals("CURRENCY:EUR", trx.getQualifSecCurrID().toString());
 		assertEquals("2023-12-11", trx.getEntryDate().toString());
 		assertEquals("2023-05-20", trx.getDatePosted().toString());
 

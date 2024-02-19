@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 
+import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.api.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.numbers.FixedPointNumber;
@@ -141,7 +142,7 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction>,
      */
     boolean isBalanced();
 
-    String getSecurity();
+    KMMQualifSecCurrID getQualifSecCurrID();
 
     /**
      * The result is in the currency of the transaction.<br/>

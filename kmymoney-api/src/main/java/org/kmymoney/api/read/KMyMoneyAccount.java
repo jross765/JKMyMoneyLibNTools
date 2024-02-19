@@ -219,7 +219,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
 
     BigInteger getTypeBigInt();
 
-    KMMQualifSecCurrID getSecCurrID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMMQualifSecCurrID getQualifSecCurrID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     // -----------------------------------------------------------------
 

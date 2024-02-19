@@ -222,11 +222,11 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		if ( trx == null ) {
 			return false;
 		}
-		KMMQualifSecCurrID secCurrID = acct.getSecCurrID();
+		KMMQualifSecCurrID secCurrID = acct.getQualifSecCurrID();
 		if ( secCurrID == null ) {
 			return false;
 		}
-		return secCurrID.equals(trx.getSecurity());
+		return secCurrID.toString().equals(trx.getQualifSecCurrID().toString());
 	}
 
 	/**

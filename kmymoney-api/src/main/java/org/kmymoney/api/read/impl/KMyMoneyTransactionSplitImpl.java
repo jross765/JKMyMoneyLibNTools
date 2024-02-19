@@ -1,6 +1,5 @@
 package org.kmymoney.api.read.impl;
 
-import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
@@ -21,7 +20,6 @@ import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.MappingException;
-import org.kmymoney.api.read.UnknownSplitStateException;
 import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +42,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     /**
      * the transaction this split belongs to.
      */
-    private final KMyMoneyTransaction myTransaction;
+    private final KMyMoneyTransaction myTrx;
 
     // ---------------------------------------------------------------
 
@@ -61,7 +59,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     super(trx.getKMyMoneyFile());
     	
 	this.jwsdpPeer = peer;
-	this.myTransaction = trx;
+	this.myTrx = trx;
 
 	if ( addSpltToAcct ) {
 		KMyMoneyAccount acct = getAccount();
@@ -103,13 +101,75 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      */
     @Override
     public KMMSpltID getID() {
-	return new KMMSpltID(jwsdpPeer.getId());
+    	return new KMMSpltID(jwsdpPeer.getId());
     }
 
     @Override
     public KMMQualifSpltID getQualifID() {
-	return new KMMQualifSpltID(getTransactionID(), getID());
+    	return new KMMQualifSpltID(getTransactionID(), getID());
     }
+    
+    // ---------------------------------------------------------------
+
+    /**
+     * @see KMyMoneyTransactionSplit#getAccountID()
+     */
+    @Override
+    public KMMComplAcctID getAccountID() {
+    	if ( jwsdpPeer.getAccount() == null )
+    		return null;
+    	
+    	if ( jwsdpPeer.getAccount().trim().length() == 0 )
+    		return null;
+    	
+    	return new KMMComplAcctID( jwsdpPeer.getAccount() );
+    }
+
+    /**
+     * @see KMyMoneyTransactionSplit#getAccount()
+     */
+    @Override
+    public KMyMoneyAccount getAccount() {
+    	return myTrx.getKMyMoneyFile().getAccountByID(getAccountID());
+    }
+
+    // ----------------------------
+    
+    @Override
+    public KMMPyeID getPayeeID() {
+    	if ( jwsdpPeer.getPayee() == null )
+    		return null;
+    	
+    	if ( jwsdpPeer.getPayee().trim().length() == 0 )
+    		return null;
+    	
+    	return new KMMPyeID( jwsdpPeer.getPayee() );
+    }
+    
+    @Override
+    public KMyMoneyPayee getPayee() {
+    	if ( getPayeeID() == null )
+    		return null;
+    	
+    	return getKMyMoneyFile().getPayeeByID(getPayeeID()); 
+    }
+
+    // ----------------------------
+
+    @Override
+    public KMMTrxID getTransactionID() {
+    	return myTrx.getID();
+    }
+
+    /**
+     * @see KMyMoneyTransactionSplit#getTransaction()
+     */
+    @Override
+    public KMyMoneyTransaction getTransaction() {
+    	return myTrx;
+    }
+
+    // ---------------------------------------------------------------
 
     @Override
     public Action getAction() {
@@ -121,7 +181,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     }
 
     /**
-     * @see KMyMoneyTransactionSplit#getAction()
+     * see {@link #getAction()}
      */
     public String getActionStr() {
     	if (getJwsdpPeer().getAction() == null) {
@@ -132,41 +192,27 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     }
 
     @Override
-    public State getState() throws UnknownSplitStateException {
-	BigInteger reconFlag = getJwsdpPeer().getReconcileflag();
-	return State.valueOff(reconFlag.intValue());
+    public State getState() {
+    	try {
+    		return State.valueOff( getStateInt() );
+    	} catch (Exception e) {
+    		throw new MappingException("Could not map integer " + getStateInt() + " to State enum");
+    	}
     }
 
     /**
-     * @see KMyMoneyTransactionSplit#getAccountID()
+     * see {@link #getState()}
+     * @return
      */
-    @Override
-    public KMMComplAcctID getAccountID() {
-	String acctID = jwsdpPeer.getAccount();
-	assert acctID != null;
-	return new KMMComplAcctID(acctID);
+    public int getStateInt() {
+    	if (jwsdpPeer.getAction() == null) {
+    		return -1;
+    	}
+
+		return jwsdpPeer.getReconcileflag().intValue();
     }
 
-    /**
-     * @see KMyMoneyTransactionSplit#getAccount()
-     */
-    @Override
-    public KMyMoneyAccount getAccount() {
-    	return myTransaction.getKMyMoneyFile().getAccountByID(getAccountID());
-    }
-
-    @Override
-    public KMMTrxID getTransactionID() {
-    	return myTransaction.getID();
-    }
-
-    /**
-     * @see KMyMoneyTransactionSplit#getTransaction()
-     */
-    @Override
-    public KMyMoneyTransaction getTransaction() {
-    	return myTransaction;
-    }
+    // ---------------------------------------------------------------
 
     /**
      * @see KMyMoneyTransactionSplit#getValue()
@@ -174,22 +220,6 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     @Override
     public FixedPointNumber getValue() {
     	return new FixedPointNumber(jwsdpPeer.getValue());
-    }
-
-    /**
-     * @return The currencyFormat for the quantity to use when no locale is given.
-     * @throws InvalidQualifSecCurrIDException 
-     * @throws InvalidQualifSecCurrTypeException 
-     */
-    protected NumberFormat getSharesCurrencyFormat() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-    	return ((KMyMoneyAccountImpl) getAccount()).getCurrencyFormat();
-    }
-
-    /**
-     * @return the currency-format of the transaction
-     */
-    public NumberFormat getValueCurrencyFormat() {
-    	return ((KMyMoneyTransactionImpl) getTransaction()).getCurrencyFormat();
     }
 
     /**
@@ -205,15 +235,15 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      */
     @Override
     public String getValueFormatted(final Locale lcl) {
-
-	NumberFormat cf = NumberFormat.getInstance(lcl);
-	if (getTransaction().getSecurity().equals("XYZ")) { // ::TODO: is currency, not security 
-	    cf.setCurrency(Currency.getInstance(getTransaction().getSecurity()));
-	} else {
-	    cf = NumberFormat.getNumberInstance(lcl);
-	}
-
-	return cf.format(getValue());
+    	NumberFormat nf = NumberFormat.getInstance(lcl);
+    	if ( getTransaction().getQualifSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
+    		// redundant, but symmetry:
+    		nf.setCurrency(Currency.getInstance(getTransaction().getQualifSecCurrID().getCode()));
+    		return nf.format(getValue());
+    	} else {
+    		// nf = NumberFormat.getNumberInstance(lcl);
+    		return nf.format(getValue()) + " " + getTransaction().getQualifSecCurrID().toString();
+    	}
     }
 
     /**
@@ -231,6 +261,8 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     public String getValueFormattedForHTML(final Locale lcl) {
 	return getValueFormatted(lcl).replaceFirst("€", "&euro;");
     }
+
+    // ---------------------------------------------------------------
 
     /**
      * @see KMyMoneyTransactionSplit#getAccountBalance()
@@ -259,6 +291,8 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     public String getAccountBalanceFormatted(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	return getAccount().getBalanceFormatted(lcl);
     }
+
+    // ---------------------------------------------------------------
 
     /**
      * @see KMyMoneyTransactionSplit#getShares()
@@ -289,12 +323,12 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     @Override
     public String getSharesFormatted(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 	NumberFormat nf = NumberFormat.getCurrencyInstance(lcl);
-	if ( getAccount().getSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
-	    nf.setCurrency(new KMMQualifCurrID(getAccount().getSecCurrID()).getCurrency());
+	if ( getAccount().getQualifSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
+	    nf.setCurrency(new KMMQualifCurrID(getAccount().getQualifSecCurrID()).getCurrency());
 	    return nf.format(getShares());
 	}
 	else {
-	    return nf.format(getShares()) + " " + getAccount().getSecCurrID().toString(); 
+	    return nf.format(getShares()) + " " + getAccount().getQualifSecCurrID().toString(); 
 	}
     }
 
@@ -318,6 +352,8 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
 	return getSharesFormatted(lcl).replaceFirst("€", "&euro;");
     }
 
+    // ---------------------------------------------------------------
+    
     @Override
     public FixedPointNumber getPrice() {
     	if ( jwsdpPeer.getPrice() == null )
@@ -330,23 +366,33 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     }
     
     @Override
-    public KMMPyeID getPayeeID() {
-    	if ( jwsdpPeer.getPayee() == null )
-    		return null;
-    	
-    	if ( jwsdpPeer.getPayee().trim().length() == 0 )
-    		return null;
-    	
-    	return new KMMPyeID( jwsdpPeer.getPayee() );
+    public String getPriceFormatted() {
+    	return getPriceCurrencyFormat().format(getPrice());
+    }
+
+    @Override
+    public String getPriceFormatted(Locale lcl) {
+    	NumberFormat nf = NumberFormat.getCurrencyInstance(lcl);
+    	if ( getAccount().getQualifSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
+    	    nf.setCurrency(new KMMQualifCurrID(getAccount().getQualifSecCurrID()).getCurrency());
+    	    return nf.format(getPrice());
+    	}
+    	else {
+    	    return nf.format(getPrice()) + " " + getAccount().getQualifSecCurrID().toString(); 
+    	}
+    }
+
+    @Override
+    public String getPriceFormattedForHTML() {
+    	return getPriceFormatted().replaceFirst("€", "&euro;");
+    }
+
+    @Override
+    public String getPriceFormattedForHTML(Locale lcl) {
+    	return getPriceFormatted(lcl).replaceFirst("€", "&euro;");
     }
     
-    @Override
-    public KMyMoneyPayee getPayee() {
-    	if ( getPayeeID() == null )
-    		return null;
-    	
-    	return getKMyMoneyFile().getPayeeByID(getPayeeID()); 
-    }
+    // ---------------------------------------------------------------
 
     @Override
     public String getMemo() {
@@ -354,6 +400,28 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
 	    return "";
 	}
 	return jwsdpPeer.getMemo();
+    }
+    
+    // ---------------------------------------------------------------
+
+    /**
+     * @return the currency-format of the transaction
+     */
+    public NumberFormat getValueCurrencyFormat() {
+    	return ((KMyMoneyTransactionImpl) getTransaction()).getCurrencyFormat();
+    }
+
+    /**
+     * @return The currencyFormat for the quantity to use when no locale is given.
+     * @throws InvalidQualifSecCurrIDException 
+     * @throws InvalidQualifSecCurrTypeException 
+     */
+    protected NumberFormat getSharesCurrencyFormat() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    	return ((KMyMoneyAccountImpl) getAccount()).getCurrencyFormat();
+    }
+    
+    protected NumberFormat getPriceCurrencyFormat() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    	return getSharesCurrencyFormat(); // ::CHECK ::TODO
     }
     
     // ---------------------------------------------------------------

@@ -206,7 +206,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		}
 
 		// is conversion needed?
-		if ( getSecCurrID().equals(secCurrID) ) {
+		if ( getQualifSecCurrID().equals(secCurrID) ) {
 			return retval;
 		}
 	
@@ -220,9 +220,9 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	
 		if ( ! priceTab.convertToBaseCurrency(retval, secCurrID) ) {
 			Collection<String> currList = getKMyMoneyFile().getCurrencyTable()
-					.getCurrencies(getSecCurrID().getType());
+					.getCurrencies(getQualifSecCurrID().getType());
 			LOGGER.error("getBalance: Cannot transfer " + "from our currency '"
-					+ getSecCurrID().toString() + "' to the base-currency!" + " \n(we know "
+					+ getQualifSecCurrID().toString() + "' to the base-currency!" + " \n(we know "
 					+ getKMyMoneyFile().getCurrencyTable().getNameSpaces().size() + " currency-namespaces and "
 					+ (currList == null ? "no" : "" + currList.size()) + " currencies in our namespace)");
 			return null;
@@ -254,8 +254,8 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		}
 
 		// is conversion needed?
-		if ( getSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
-			if ( getSecCurrID().getCode().equals(curr.getCurrencyCode()) ) {
+		if ( getQualifSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
+			if ( getQualifSecCurrID().getCode().equals(curr.getCurrencyCode()) ) {
 				return retval;
 			}
 		}
@@ -268,9 +268,9 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 			return null;
 		}
 
-		if ( ! priceTab.convertToBaseCurrency(retval, getSecCurrID()) ) {
+		if ( ! priceTab.convertToBaseCurrency(retval, getQualifSecCurrID()) ) {
 			LOGGER.warn("getBalance: Cannot transfer " + "from our currency '"
-					+ getSecCurrID().toString() + "' to the base-currency!");
+					+ getQualifSecCurrID().toString() + "' to the base-currency!");
 			return null;
 		}
 
@@ -318,7 +318,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 
 	public FixedPointNumber getBalanceRecursive(final LocalDate date)
 			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-		return getBalanceRecursive(date, getSecCurrID());
+		return getBalanceRecursive(date, getQualifSecCurrID());
 	}
 
 	public FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMQualifSecCurrID secCurrID)
@@ -454,11 +454,11 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 	 * @throws InvalidQualifSecCurrTypeException
 	 */
 	public Currency getCurrency() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-		if ( getSecCurrID().getType() != KMMQualifSecCurrID.Type.CURRENCY ) {
+		if ( getQualifSecCurrID().getType() != KMMQualifSecCurrID.Type.CURRENCY ) {
 			return null;
 		}
 
-		String kmmCurrID = getSecCurrID().getCode();
+		String kmmCurrID = getQualifSecCurrID().getCode();
 		return Currency.getInstance(kmmCurrID);
 	}
 
@@ -468,7 +468,7 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		}
 
 		// the currency may have changed
-		if ( getSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
+		if ( getQualifSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
 			Currency currency = getCurrency();
 			currencyFormat.setCurrency(currency);
 		} else {
