@@ -9,9 +9,9 @@
 		<version>${project.version}</version>
 	</parent>
 
-	<artifactId>kmymoney-api-examples</artifactId>
+	<artifactId>kmymoney-api-ext</artifactId>
 
-	<name>${project.title} : API Examples</name>
+	<name>${project.title} : API Extensions</name>
 
 	<properties>
 
