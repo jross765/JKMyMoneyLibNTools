@@ -41,9 +41,9 @@ public class GenTrx {
     private static FixedPointNumber prc1         = new FixedPointNumber("1/1");       // optional
     private static FixedPointNumber prc2         = new FixedPointNumber("15574/100"); // half-mandatory
     private static FixedPointNumber prc3         = prc1;                              // optional
-    private static FixedPointNumber amt22        = qty22.multiply(prc2);              // net
+    private static FixedPointNumber amt22        = qty22.copy().multiply(prc2);       // net
     private static FixedPointNumber amt23        = new FixedPointNumber("95/10");     // fees & commissions
-    private static FixedPointNumber amt21        = amt22.add(amt23);                  // gross
+    private static FixedPointNumber amt21        = amt22.copy().add(amt23);           // gross
     private static FixedPointNumber qty21        = amt21;
     private static FixedPointNumber qty23        = amt23;
     private static LocalDate        datPst2      = LocalDate.of(2024, 1, 15);
