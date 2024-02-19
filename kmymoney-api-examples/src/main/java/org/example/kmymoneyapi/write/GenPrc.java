@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 import org.kmymoney.api.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
@@ -18,10 +18,16 @@ public class GenPrc {
     private static String kmmInFileName  = "example_in.xml";
     private static String kmmOutFileName = "example_out.xml";
 
-    private static KMMQualifSecCurrID   fromSecCurrID = null;
-    private static KMMQualifCurrID      toCurrID      = null;
-    private static LocalDate            date          = LocalDate.of(2024, 2, 15);
-    private static FixedPointNumber     value         = new FixedPointNumber("1234/10");
+    private static KMMQualifSecID       fromSecCurr1ID = new KMMQualifSecID("E000001");
+    private static KMMQualifCurrID      toCurr1ID      = new KMMQualifCurrID("EUR");
+    private static LocalDate            date1          = LocalDate.of(2024, 1, 15);
+    private static FixedPointNumber     value1         = new FixedPointNumber("123/1");
+    
+    private static KMMQualifCurrID      fromSecCurr2ID = new KMMQualifCurrID("BRL");
+    private static KMMQualifCurrID      toCurr2ID      = toCurr1ID;
+    private static LocalDate            date2          = LocalDate.of(2024, 2, 15);
+    private static FixedPointNumber     value2         = new FixedPointNumber("540/100");
+    
     private static KMyMoneyPrice.Source source        = KMyMoneyPrice.Source.USER;
     // END Example data
 
@@ -41,29 +47,64 @@ public class GenPrc {
     protected void kernel() throws Exception {
 	KMyMoneyWritableFileImpl kmmFile = new KMyMoneyWritableFileImpl(new File(kmmInFileName));
 
-	KMMPricePairID prcPrID = new KMMPricePairID(fromSecCurrID, toCurrID);
+	System.out.println("---------------------");
+	System.out.println("Generate price no. 1:");
+	System.out.println("---------------------");
+	genPrc1(kmmFile);
+	
+	System.out.println("");
+	System.out.println("---------------------");
+	System.out.println("Generate price no. 2:");
+	System.out.println("---------------------");
+	genPrc2(kmmFile);
+	
+	System.out.println("");
+	System.out.println("---------------------------");
+	System.out.println("Write file:");
+	System.out.println("---------------------------");
+	kmmFile.writeFile(new File(kmmOutFileName));
+	
+	System.out.println("OK");
+    }
+
+    private void genPrc1(KMyMoneyWritableFileImpl kmmFile) {
+	KMMPricePairID prcPrID = new KMMPricePairID(fromSecCurr1ID, toCurr1ID);
 	KMyMoneyWritablePricePair prcPr = kmmFile.getWritablePricePairByID(prcPrID);
 	if (prcPr == null) {
 	    System.err.println("Price pair '" + prcPrID + "' does not exist in KMyMoney file yet.");
 	    System.err.println("Will generate it.");
-	    prcPr = kmmFile.createWritablePricePair(fromSecCurrID, toCurrID);
-	    prcPr.setFromSecCurrQualifID(fromSecCurrID);
-	    prcPr.setToCurrencyQualifID(toCurrID);
+	    prcPr = kmmFile.createWritablePricePair(fromSecCurr1ID, toCurr1ID);
 	} else {
 	    System.err.println("Price pair '" + prcPrID + "' already exists in KMyMoney file.");
 	    System.err.println("Will take that one.");
 	}
 
 	KMyMoneyWritablePrice prc = kmmFile.createWritablePrice((KMyMoneyPricePairImpl) prcPr);
-	// prc.setFromSecCurrQualifID(fromSecCurrID);
-	// prc.setToCurrencyQualifID(toCurrID);
-	prc.setDate(date);
-	prc.setValue(value);
+	prc.setDate(date1);
+	prc.setValue(value1);
 	prc.setSource(source);
 
 	System.out.println("Price to write: " + prc.toString());
-	kmmFile.writeFile(new File(kmmOutFileName));
-	System.out.println("OK");
+    }
+
+    private void genPrc2(KMyMoneyWritableFileImpl kmmFile) {
+	KMMPricePairID prcPrID = new KMMPricePairID(fromSecCurr2ID, toCurr2ID);
+	KMyMoneyWritablePricePair prcPr = kmmFile.getWritablePricePairByID(prcPrID);
+	if (prcPr == null) {
+	    System.err.println("Price pair '" + prcPrID + "' does not exist in KMyMoney file yet.");
+	    System.err.println("Will generate it.");
+	    prcPr = kmmFile.createWritablePricePair(fromSecCurr2ID, toCurr2ID);
+	} else {
+	    System.err.println("Price pair '" + prcPrID + "' already exists in KMyMoney file.");
+	    System.err.println("Will take that one.");
+	}
+
+	KMyMoneyWritablePrice prc = kmmFile.createWritablePrice((KMyMoneyPricePairImpl) prcPr);
+	prc.setDate(date2);
+	prc.setValue(value2);
+	prc.setSource(source);
+
+	System.out.println("Price to write: " + prc.toString());
     }
 
 }
