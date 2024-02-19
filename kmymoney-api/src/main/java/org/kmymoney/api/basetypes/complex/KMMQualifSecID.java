@@ -14,37 +14,50 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
 
     // ---------------------------------------------------------------
     
-    public KMMQualifSecID() {
-	super();
-	type = Type.SECURITY;
-    }
+	public KMMQualifSecID() {
+		super();
+		
+		init();
+		
+		type = Type.SECURITY;
+	}
 
-    public KMMQualifSecID(KMMSecID secID) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	public KMMQualifSecID(KMMSecID secID) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+		super(Type.SECURITY, secID.toString());
 
-	super(Type.SECURITY, secID.toString());
+		init();
+		
+		setType(Type.SECURITY);
+		setSecID(secID);
+	}
 
-	setType(Type.SECURITY);
-	setSecID(secID);
-    }
+	public KMMQualifSecID(String secIDStr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+		super(Type.SECURITY, secIDStr);
 
-    public KMMQualifSecID(String secIDStr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+		init();
+		
+		setType(Type.SECURITY);
+		setSecID(secIDStr);
+	}
 
-	super(Type.SECURITY, secIDStr);
+	public KMMQualifSecID(KMMQualifSecCurrID secCurrID)
+			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+		super(Type.SECURITY, secCurrID.getCode());
 
-	setType(Type.SECURITY);
-	setSecID(secIDStr);
-    }
+		if ( getType() != Type.SECURITY )
+			throw new InvalidQualifSecCurrTypeException();
 
-    public KMMQualifSecID(KMMQualifSecCurrID secCurrID) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+		init();
+		
+		setType(Type.SECURITY);
+		setSecID(code);
+	}
 
-	super(Type.SECURITY, secCurrID.getCode());
-
-	if ( getType() != Type.SECURITY )
-	    throw new InvalidQualifSecCurrTypeException();
-
-	setType(Type.SECURITY);
-	setSecID(code);
-    }
+	// ---------------------------------------------------------------
+	
+	private void init() {
+		secID = new KMMSecID();
+	}
 
     // ---------------------------------------------------------------
 
@@ -59,89 +72,89 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
     // ---------------------------------------------------------------
     
     public KMMSecID getSecID() throws InvalidQualifSecCurrTypeException {
-  	if ( type != Type.SECURITY )
-	    throw new InvalidQualifSecCurrTypeException();
+    	if ( type != Type.SECURITY )
+    		throw new InvalidQualifSecCurrTypeException();
 	
         return secID;
     }
 
-    public void setSecID(KMMSecID secID) throws InvalidQualifSecCurrTypeException {
-  	if ( type != Type.SECURITY )
-	    throw new InvalidQualifSecCurrTypeException();
-	
-	if ( secID == null )
-	    throw new IllegalArgumentException("Argument currency is null");
+	public void setSecID(KMMSecID secID) throws InvalidQualifSecCurrTypeException {
+		if ( type != Type.SECURITY )
+			throw new InvalidQualifSecCurrTypeException();
 
-        this.secID = secID;
-    }
+		if ( secID == null )
+			throw new IllegalArgumentException("Argument currency is null");
 
-    public void setSecID(String secIDStr) {
-  	if ( secIDStr == null )
-	    throw new IllegalArgumentException("Argument string is null");
-
-	setSecID(new KMMSecID(secIDStr));
-    }
-
-    // ---------------------------------------------------------------
-    
-    public static KMMQualifSecID parse(String str) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
-	if ( str == null )
-	    throw new IllegalArgumentException("Argument string is null");
-
-	if ( str.equals("") )
-	    throw new IllegalArgumentException("Argument string is empty");
-
-	KMMQualifSecID result = new KMMQualifSecID();
-	
-	int posSep = str.indexOf(SEPARATOR);
-	// Plausi ::MAGIC
-	if ( posSep <= 3 ||
-	     posSep >= str.length() - 2 )
-	    throw new InvalidQualifSecCurrIDException();
-	
-	String typeStr = str.substring(0, posSep).trim();
-	String secCodeStr = str.substring(posSep + 1, str.length()).trim();
-	
-	if ( typeStr.equals(Type.SECURITY.toString()) ) {
-	    result.setType(Type.SECURITY);
-	    result.setCode(secCodeStr);
-	} else {
-	    LOGGER.error("parse: Unknown security/currency type '" + typeStr + "'");
-	    throw new InvalidQualifSecCurrTypeException();
+		this.secID = secID;
 	}
-	
-	return result;
-    }
-    
+
+	public void setSecID(String secIDStr) {
+		if ( secIDStr == null )
+			throw new IllegalArgumentException("Argument string is null");
+
+		setSecID(new KMMSecID(secIDStr));
+	}
+
     // ---------------------------------------------------------------
 
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((secID == null) ? 0 : secID.hashCode());
-	result = prime * result + ((type == null) ? 0 : type.hashCode());
-	return result;
-    }
+	public static KMMQualifSecID parse(String str)
+			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+		if ( str == null )
+			throw new IllegalArgumentException("Argument string is null");
 
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	KMMQualifSecID other = (KMMQualifSecID) obj;
-	if (type != other.type)
-	    return false;
-	if (secID == null) {
-	    if (other.secID != null)
-		return false;
-	} else if (!secID.equals(other.secID))
-	    return false;
-	return true;
-    }
+		if ( str.equals("") )
+			throw new IllegalArgumentException("Argument string is empty");
+
+		KMMQualifSecID result = new KMMQualifSecID();
+
+		int posSep = str.indexOf(SEPARATOR);
+		// Plausi ::MAGIC
+		if ( posSep <= 3 || posSep >= str.length() - 2 )
+			throw new InvalidQualifSecCurrIDException();
+
+		String typeStr = str.substring(0, posSep).trim();
+		String secCodeStr = str.substring(posSep + 1, str.length()).trim();
+
+		if ( typeStr.equals(Type.SECURITY.toString()) ) {
+			result.setType(Type.SECURITY);
+			result.setCode(secCodeStr);
+		} else {
+			LOGGER.error("parse: Unknown security/currency type '" + typeStr + "'");
+			throw new InvalidQualifSecCurrTypeException();
+		}
+
+		return result;
+	}
+
+	// ---------------------------------------------------------------
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((secID == null) ? 0 : secID.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if ( this == obj )
+			return true;
+		if ( obj == null )
+			return false;
+		if ( getClass() != obj.getClass() )
+			return false;
+		KMMQualifSecID other = (KMMQualifSecID) obj;
+		if ( type != other.type )
+			return false;
+		if ( secID == null ) {
+			if ( other.secID != null )
+				return false;
+		} else if ( !secID.equals(other.secID) )
+			return false;
+		return true;
+	}
 
     // ---------------------------------------------------------------
     
@@ -154,7 +167,9 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
 		if ( type != Type.SECURITY )
 			return "ERROR";
 
-		String result = Type.SECURITY.toString() + SEPARATOR + secID.toString();
+		String result = Type.SECURITY.toString() + 
+						SEPARATOR + 
+						secID.toString();
 
 		return result;
 	}

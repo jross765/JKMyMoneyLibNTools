@@ -3,7 +3,6 @@ package org.kmymoney.api.basetypes.complex;
 import java.util.Currency;
 import java.util.Locale;
 
-import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +71,7 @@ public class KMMQualifCurrID extends KMMQualifSecCurrID {
 		super.setType(type);
 	}
 
-	// ----------------------------
+    // ---------------------------------------------------------------
 
 	public Currency getCurrency() throws InvalidQualifSecCurrTypeException {
 		if ( type != Type.CURRENCY )

@@ -82,8 +82,8 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	public KMyMoneyWritableTransactionImpl(final KMyMoneyTransactionImpl trx) {
 		super(trx.getJwsdpPeer(), trx.getKMyMoneyFile());
 
-		// ::TODO
-		System.err.println("NOT IMPLEMENTED YET");
+		// ::TODO / ::CHECK
+		// System.err.println("NOT IMPLEMENTED YET");
 //	    for ( KMyMoeneyTransactionSplit splt : trx.getSplits() ) 
 //	    {
 //		addSplit(new KMyMoneyTransactionSplitImpl(splt.jwsdpPeer, trx));

@@ -73,7 +73,7 @@ public class KMMPricePairID {
 			throw new IllegalArgumentException("null from-security-currency-ID given");
 		}
 
-		if ( fromSecCurr.startsWith("E0") ) { // ::MAGIC
+		if ( fromSecCurr.startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
 			this.fromSecCurr = new KMMQualifSecID(fromSecCurr);
 		} else {
 			this.fromSecCurr = new KMMQualifCurrID(fromSecCurr);

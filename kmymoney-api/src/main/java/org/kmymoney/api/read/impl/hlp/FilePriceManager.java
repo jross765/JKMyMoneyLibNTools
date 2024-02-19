@@ -221,7 +221,7 @@ public class FilePriceManager {
 
 	public FixedPointNumber getLatestPrice(final String secCurrIDStr)
 			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
-		if ( secCurrIDStr.startsWith("E0") ) { // ::MAGIC
+		if ( secCurrIDStr.startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
 			return getLatestPrice(new KMMQualifSecID(secCurrIDStr));
 		} else {
 			return getLatestPrice(new KMMQualifCurrID(secCurrIDStr));
@@ -395,7 +395,7 @@ public class FilePriceManager {
 					}
 
 					// BEGIN core
-					if ( toCurr.startsWith("E0") ) {
+					if ( toCurr.startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
 						// is security
 						if ( depth > maxRecursionDepth ) {
 							LOGGER.warn(

@@ -671,7 +671,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 	    
 	    // ::TODO: Try to implement Security type
 	    KMMQualifSecCurrID.Type nameSpace = null;
-	    if ( fromSecCurr.startsWith("E0") ) // ::MAGIC
+	    if ( fromSecCurr.startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) )
 		nameSpace = KMMQualifSecCurrID.Type.SECURITY;
 	    else
 		nameSpace = KMMQualifSecCurrID.Type.CURRENCY;

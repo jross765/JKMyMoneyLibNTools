@@ -90,7 +90,7 @@ public class KMyMoneyPricePairImpl implements KMyMoneyPricePair {
 	String secCurrID = getFromSecCurrStr();
 
 	KMMQualifSecCurrID result = null;
-	if ( secCurrID.startsWith("E0") ) { // ::MAGIC
+	if ( secCurrID.startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
 	    result = new KMMQualifSecID(secCurrID);
 	} else {
 	    result = new KMMQualifCurrID(secCurrID);
@@ -147,7 +147,7 @@ public class KMyMoneyPricePairImpl implements KMyMoneyPricePair {
 	String secCurrID = getToCurrStr();
 
 	KMMQualifCurrID result = null;
-	if ( secCurrID.startsWith("E0") ) { // ::MAGIC
+	if ( secCurrID.startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
 	    throw new InvalidQualifSecCurrTypeException();
 	} else {
 	    result = new KMMQualifCurrID(secCurrID);

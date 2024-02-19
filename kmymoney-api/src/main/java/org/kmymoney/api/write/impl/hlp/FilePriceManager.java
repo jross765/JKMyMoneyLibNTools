@@ -34,7 +34,7 @@ public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceMa
 	@Override
 	protected KMyMoneyPricePairImpl createPricePair(final PRICEPAIR jwsdpPrcPr) {
 		KMMQualifSecCurrID fromSecCurrID = null;
-		if ( jwsdpPrcPr.getFrom().startsWith("E0") ) { // ::MAGIC
+		if ( jwsdpPrcPr.getFrom().startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
 			fromSecCurrID = new KMMQualifSecID(jwsdpPrcPr.getFrom());
 		} else {
 			fromSecCurrID = new KMMQualifCurrID(jwsdpPrcPr.getFrom());

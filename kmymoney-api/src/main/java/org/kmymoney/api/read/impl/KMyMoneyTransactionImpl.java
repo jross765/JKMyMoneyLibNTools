@@ -113,7 +113,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     		return null;
     	
     	KMMQualifSecCurrID result = null;
-    	if ( jwsdpPeer.getCommodity().startsWith("E0") ) { // ::MAGIC
+    	if ( jwsdpPeer.getCommodity().startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
     		// is security
     		result = new KMMQualifSecID(jwsdpPeer.getCommodity());
     	} else {

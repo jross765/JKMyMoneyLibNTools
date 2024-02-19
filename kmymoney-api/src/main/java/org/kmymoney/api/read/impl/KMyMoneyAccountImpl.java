@@ -31,8 +31,6 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyAccountImpl.class);
 
-    private static final String PREFIX_SECURITY = "E0";  // ::MAGIC
-
     // ---------------------------------------------------------------
 
     /**
@@ -193,7 +191,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 	
 	KMMQualifSecCurrID result = null;
 	
-	if ( jwsdpPeer.getCurrency().startsWith(PREFIX_SECURITY) ) {
+	if ( jwsdpPeer.getCurrency().startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
 	    result = new KMMQualifSecID(jwsdpPeer.getCurrency());
 	} else {
 	    result = new KMMQualifCurrID(jwsdpPeer.getCurrency());
