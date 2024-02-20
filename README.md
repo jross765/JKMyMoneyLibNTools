@@ -13,6 +13,7 @@ but he has not tested it.
 ## Version Compatibility
 | Version | Backward Compat. | Note                           |
 |---------|------------------|--------------------------------|
+| 0.5     | (w.i.p.)         |                                |
 | 0.4     | no               | Minor changes in interfaces    |
 | 0.3     | no               | Major changes in interfaces    |
 | 0.2     | no               | Major changes in interfaces    |
@@ -20,6 +21,8 @@ but he has not tested it.
 # Modules and Further Details
 
 * [API](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api/README.md)
+
+* [API Extensions](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api-ext/README.md)
 
 * [Example Programs](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api-examples/README.md)
 
