@@ -17,7 +17,8 @@ import org.slf4j.LoggerFactory;
 public class DepotTransactionManager {
     
     public enum Type {
-	BUY_STOCK
+	BUY_STOCK,
+	DIVIDEND
     }
     
     // ---------------------------------------------------------------
@@ -54,9 +55,27 @@ public class DepotTransactionManager {
 	    throw new IllegalArgumentException("unset account ID given");
 	}
 		
-	LOGGER.debug("genBuyStockTrx: Account 1 name (offsetting): '" + kmmFile.getAccountByID(offsetAcctID).getQualifiedName() + "'");
-	LOGGER.debug("genBuyStockTrx: Account 2 name (stock):      '" + kmmFile.getAccountByID(stockAcctID).getQualifiedName() + "'");
-	LOGGER.debug("genBuyStockTrx: Account 3 name (taxes/fees): '" + kmmFile.getAccountByID(taxFeeAcctID).getQualifiedName() + "'");
+	if ( nofStocks == null  ||
+	     stockPrc == null ||
+	     taxesFees == null ) {
+	    throw new IllegalArgumentException("null amount given");
+	}
+		
+	if ( nofStocks.doubleValue() <= 0.0 ) {
+	    throw new IllegalArgumentException("number of stocks <= 0.0 given");
+	}
+			
+	if ( stockPrc.doubleValue() <= 0.0 ) {
+	    throw new IllegalArgumentException("stock price <= 0.0 given");
+	}
+			
+	if ( taxesFees.doubleValue() <= 0.0 ) {
+	    throw new IllegalArgumentException("taxes/fees <= 0.0 given");
+	}
+
+	LOGGER.debug("genBuyStockTrx: Account 1 name (stock):      '" + kmmFile.getAccountByID(stockAcctID).getQualifiedName() + "'");
+	LOGGER.debug("genBuyStockTrx: Account 2 name (taxes/fees): '" + kmmFile.getAccountByID(taxFeeAcctID).getQualifiedName() + "'");
+	LOGGER.debug("genBuyStockTrx: Account 3 name (offsetting): '" + kmmFile.getAccountByID(offsetAcctID).getQualifiedName() + "'");
 
 	// ---
 	// Check account types
@@ -130,6 +149,143 @@ public class DepotTransactionManager {
 	// ---
 
 	LOGGER.info("genBuyStockTrx: Generated new Transaction: " + trx.getID());
+	return trx;
+    }
+    
+    public static KMyMoneyWritableTransaction genDivivendTrx(
+	    final KMyMoneyWritableFileImpl kmmFile,
+	    final KMMAcctID stockAcctID,
+	    final KMMAcctID incomeAcctID,
+	    final KMMAcctID taxAcctID,
+	    final KMMAcctID offsetAcctID,
+	    final FixedPointNumber divGross,
+	    final FixedPointNumber taxes,
+	    final LocalDate postDate,
+	    final String descr) throws UnknownAccountTypeException {
+	
+	if ( kmmFile == null ) {
+	    throw new IllegalArgumentException("null KMyMoney file given");
+	}
+		
+	if ( stockAcctID == null  ||
+	     incomeAcctID == null ||
+	     taxAcctID == null ||
+	     offsetAcctID == null ) {
+	    throw new IllegalArgumentException("null account ID given");
+	}
+	
+	if ( ! ( stockAcctID.isSet()  ) ||
+	     ! ( incomeAcctID.isSet() ) ||
+	     ! ( taxAcctID.isSet() ) ||
+	     ! ( offsetAcctID.isSet() ) ) {
+	    throw new IllegalArgumentException("unset account ID given");
+	}
+		
+	if ( divGross == null  ||
+	     taxes == null ) {
+	    throw new IllegalArgumentException("null amount given");
+	}
+
+	// CAUTION: The following two: In fact, this can happen
+	// (negative booking after cancellation / Stornobuchung)
+//	if ( divGross.doubleValue() <= 0.0 ) {
+//	    throw new IllegalArgumentException("gross dividend <= 0.0 given");
+//	}
+//				
+//	if ( taxes.doubleValue() <= 0.0 ) {
+//	    throw new IllegalArgumentException("taxes <= 0.0 given");
+//	}
+				
+	LOGGER.debug("genDivivendTrx: Account 1 name (stock):      '" + kmmFile.getAccountByID(stockAcctID).getQualifiedName() + "'");
+	LOGGER.debug("genDivivendTrx: Account 2 name (income):     '" + kmmFile.getAccountByID(incomeAcctID).getQualifiedName() + "'");
+	LOGGER.debug("genDivivendTrx: Account 3 name (tax):        '" + kmmFile.getAccountByID(taxAcctID).getQualifiedName() + "'");
+	LOGGER.debug("genDivivendTrx: Account 4 name (offsetting): '" + kmmFile.getAccountByID(offsetAcctID).getQualifiedName() + "'");
+
+	// ---
+	// Check account types
+	KMyMoneyAccount stockAcct  = kmmFile.getAccountByID(stockAcctID);
+	KMyMoneyAccount incomeAcct = kmmFile.getAccountByID(incomeAcctID);
+	KMyMoneyAccount taxAcct    = kmmFile.getAccountByID(taxAcctID);
+	KMyMoneyAccount offsetAcct = kmmFile.getAccountByID(offsetAcctID);
+	
+	if ( stockAcct.getType() != KMyMoneyAccount.Type.STOCK ) {
+	    throw new IllegalArgumentException("Account with ID " + stockAcctID + " is not of type " + KMyMoneyAccount.Type.STOCK);
+	}
+
+	if ( incomeAcct.getType() != KMyMoneyAccount.Type.INCOME ) {
+	    throw new IllegalArgumentException("Account with ID " + incomeAcct + " is not of type " + KMyMoneyAccount.Type.INCOME);
+	}
+
+	if ( taxAcct.getType() != KMyMoneyAccount.Type.EXPENSE ) {
+	    throw new IllegalArgumentException("Account with ID " + incomeAcct + " is not of type " + KMyMoneyAccount.Type.EXPENSE);
+	}
+
+	if ( offsetAcct.getType() != KMyMoneyAccount.Type.CHECKING ) {
+	    throw new IllegalArgumentException("Account with ID " + offsetAcctID + " is not of type " + KMyMoneyAccount.Type.CHECKING);
+	}
+
+	// ---
+
+	FixedPointNumber divNet = divGross.copy().subtract(taxes);
+	LOGGER.debug("genDivivendTrx: Net dividend: " + divNet);
+
+	// ---
+
+	KMyMoneyWritableTransaction trx = kmmFile.createWritableTransaction();
+	// Does not work like that: The description/memo on transaction
+	// level is purely internal:
+	// trx.setDescription(description);
+	trx.setDescription("Generated by DepotTransactionManager, " + LocalDateTime.now());
+
+	// ---
+	
+	KMyMoneyWritableTransactionSplit splt1 = trx.createWritableSplit(stockAcct);
+	splt1.setValue(new FixedPointNumber());
+	splt1.setShares(new FixedPointNumber());
+	splt1.setAction(KMyMoneyTransactionSplit.Action.DIVIDEND);
+	// splt1.setPrice("1/1"); // completely optional
+	// Cf. above
+	splt1.setDescription(descr);
+	LOGGER.debug("genDivivendTrx: Split 1 to write: " + splt1.toString());
+
+	// ---
+
+	KMyMoneyWritableTransactionSplit splt2 = trx.createWritableSplit(offsetAcct);
+	splt2.setValue(new FixedPointNumber(divNet));
+	splt2.setShares(new FixedPointNumber(divNet));
+	// splt2.setPrice("1/1"); // completely optional
+	// This is what we actually want (cf. above):
+	splt2.setDescription(descr);
+	LOGGER.debug("genDivivendTrx: Split 2 to write: " + splt2.toString());
+
+	// ---
+
+	KMyMoneyWritableTransactionSplit splt3 = trx.createWritableSplit(incomeAcct);
+	splt3.setValue(new FixedPointNumber(divGross.negate()));
+	splt3.setShares(new FixedPointNumber(divGross.negate()));
+	// splt3.setPrice("1/1"); // completely optional
+	// Cf. above
+	splt3.setDescription(descr);
+	LOGGER.debug("genDivivendTrx: Split 3 to write: " + splt3.toString());
+
+	// ---
+
+	KMyMoneyWritableTransactionSplit splt4 = trx.createWritableSplit(taxAcct);
+	splt4.setValue(new FixedPointNumber(taxes));
+	splt4.setShares(new FixedPointNumber(taxes));
+	// splt4.setPrice("1/1"); // completely optional
+	// Cf. above
+	splt4.setDescription(descr);
+	LOGGER.debug("genDivivendTrx: Split 4 to write: " + splt4.toString());
+
+	// ---
+
+	trx.setDatePosted(postDate);
+	trx.setDateEntered(LocalDate.now());
+
+	// ---
+
+	LOGGER.info("genDivivendTrx: Generated new Transaction: " + trx.getID());
 	return trx;
     }
     
