@@ -266,8 +266,8 @@ public class TestKMyMoneyWritableAccountImpl {
 		Object[] acctArr = acct.getChildren().toArray();
 		assertEquals("A000049", ((KMyMoneyAccount) acctArr[0]).getID().toString());
 		assertEquals("A000052", ((KMyMoneyAccount) acctArr[1]).getID().toString());
-		assertEquals("A000053", ((KMyMoneyAccount) acctArr[2]).getID().toString());
-		assertEquals("A000054", ((KMyMoneyAccount) acctArr[3]).getID().toString());
+		assertEquals("A000068", ((KMyMoneyAccount) acctArr[2]).getID().toString());
+		assertEquals("A000053", ((KMyMoneyAccount) acctArr[3]).getID().toString());
 
 		// ::CHECK: Really negative?
 		assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);

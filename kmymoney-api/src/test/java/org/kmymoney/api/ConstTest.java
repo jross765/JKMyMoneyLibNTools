@@ -13,7 +13,7 @@ public class ConstTest extends Const {
     
     public class Stats {
     
-	public static final int NOF_ACCT      = 69;
+	public static final int NOF_ACCT      = 74;
 	public static final int NOF_TRX       = 18;
 	public static final int NOF_TRX_SPLT  = 38;
 	
