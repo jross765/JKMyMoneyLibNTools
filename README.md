@@ -20,6 +20,8 @@ but he has not tested it.
 
 # Modules and Further Details
 
+* [Base](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-base/README.md)
+
 * [API](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api/README.md)
 
 * [API Extensions](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api-ext/README.md)
