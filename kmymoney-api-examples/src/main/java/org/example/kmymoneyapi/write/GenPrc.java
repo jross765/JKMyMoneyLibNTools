@@ -3,9 +3,9 @@ package org.example.kmymoneyapi.write;
 import java.io.File;
 import java.time.LocalDate;
 
-import org.kmymoney.api.basetypes.complex.KMMPricePairID;
-import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.complex.KMMPricePairID;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;

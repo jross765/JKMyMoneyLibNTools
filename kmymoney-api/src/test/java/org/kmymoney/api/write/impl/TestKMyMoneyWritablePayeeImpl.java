@@ -14,7 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.api.basetypes.simple.KMMPyeID;
+import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;

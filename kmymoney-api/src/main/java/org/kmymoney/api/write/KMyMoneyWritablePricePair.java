@@ -1,6 +1,6 @@
 package org.kmymoney.api.write;
 
-import org.kmymoney.api.basetypes.complex.KMMPricePairID;
+import org.kmymoney.base.basetypes.complex.KMMPricePairID;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 import org.kmymoney.api.write.hlp.KMyMoneyWritablePricePairCore;

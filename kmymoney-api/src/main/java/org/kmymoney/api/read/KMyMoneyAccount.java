@@ -7,13 +7,13 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
-import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
-import org.kmymoney.api.basetypes.simple.KMMIDNotSetException;
-import org.kmymoney.api.basetypes.simple.KMMSecID;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
+import org.kmymoney.base.basetypes.simple.KMMIDNotSetException;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
 

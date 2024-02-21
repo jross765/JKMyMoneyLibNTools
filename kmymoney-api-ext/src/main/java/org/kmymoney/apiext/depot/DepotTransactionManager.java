@@ -3,7 +3,7 @@ package org.kmymoney.apiext.depot;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import org.kmymoney.api.basetypes.simple.KMMAcctID;
+import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;

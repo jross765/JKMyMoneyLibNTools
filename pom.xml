@@ -18,6 +18,7 @@
 
 	<modules>
 
+		<module>kmymoney-base</module>
 		<module>kmymoney-api</module>
 		<module>kmymoney-api-ext</module>
 		<module>kmymoney-api-examples</module>

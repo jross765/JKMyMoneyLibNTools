@@ -6,12 +6,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.read.KMyMoneyAccount;

@@ -3,7 +3,7 @@ package org.example.kmymoneyapi.read;
 import java.io.File;
 import java.util.Collection;
 
-import org.kmymoney.api.basetypes.simple.KMMPyeID;
+import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.NoEntryFoundException;
 import org.kmymoney.api.read.TooManyEntriesFoundException;

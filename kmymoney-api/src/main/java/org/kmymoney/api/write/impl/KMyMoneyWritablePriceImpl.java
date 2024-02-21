@@ -10,11 +10,11 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.kmymoney.api.basetypes.complex.KMMPricePairID;
-import org.kmymoney.api.basetypes.complex.KMMPriceID;
-import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.complex.KMMPricePairID;
+import org.kmymoney.api.basetypes.complex.KMMPriceID; // <-- sic, API.basetypes, not BASE.basetypes
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.numbers.FixedPointNumber;

@@ -2,9 +2,9 @@ package org.example.kmymoneyapi.read;
 
 import java.io.File;
 
-import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.NoEntryFoundException;

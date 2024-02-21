@@ -8,7 +8,7 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.api.basetypes.simple.KMMPyeID;
+import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.aux.KMMAddress;

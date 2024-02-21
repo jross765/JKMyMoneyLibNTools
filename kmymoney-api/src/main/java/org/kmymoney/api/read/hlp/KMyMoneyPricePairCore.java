@@ -1,10 +1,10 @@
 package org.kmymoney.api.read.hlp;
 
-import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;

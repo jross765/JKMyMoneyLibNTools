@@ -2,13 +2,13 @@ package org.kmymoney.api.read;
 
 import java.util.Locale;
 
-import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
-import org.kmymoney.api.basetypes.simple.KMMPyeID;
-import org.kmymoney.api.basetypes.simple.KMMSpltID;
-import org.kmymoney.api.basetypes.simple.KMMTrxID;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
+import org.kmymoney.base.basetypes.simple.KMMPyeID;
+import org.kmymoney.base.basetypes.simple.KMMSpltID;
+import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 
 /**

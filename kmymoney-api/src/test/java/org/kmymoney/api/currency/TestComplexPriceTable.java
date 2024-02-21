@@ -8,8 +8,8 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
@@ -61,8 +61,8 @@ public class TestComplexPriceTable {
 		assertEquals(2, complPriceTab.getNameSpaces().size());
 
 		Object[] nameSpaceArr = complPriceTab.getNameSpaces().toArray();
-		assertEquals(KMMQualifSecCurrID.Type.SECURITY, (KMMQualifSecCurrID.Type) nameSpaceArr[1]);
-		assertEquals(KMMQualifSecCurrID.Type.CURRENCY, (KMMQualifSecCurrID.Type) nameSpaceArr[0]);
+		assertEquals(KMMQualifSecCurrID.Type.SECURITY, (KMMQualifSecCurrID.Type) nameSpaceArr[0]);
+		assertEquals(KMMQualifSecCurrID.Type.CURRENCY, (KMMQualifSecCurrID.Type) nameSpaceArr[1]);
 	}
 
 	@Test

@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import org.kmymoney.api.basetypes.simple.KMMAcctID;
-import org.kmymoney.api.basetypes.simple.KMMPyeID;
+import org.kmymoney.base.basetypes.simple.KMMAcctID;
+import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;

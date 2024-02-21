@@ -10,9 +10,9 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.api.basetypes.complex.KMMComplAcctID.Top;
-import org.kmymoney.api.basetypes.simple.KMMAcctID;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID.Top;
+import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.read.KMyMoneyAccount;

@@ -17,9 +17,9 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.kmymoney.api.basetypes.simple.KMMIDNotSetException;
-import org.kmymoney.api.basetypes.simple.KMMSpltID;
-import org.kmymoney.api.basetypes.simple.KMMTrxID;
+import org.kmymoney.base.basetypes.simple.KMMIDNotSetException;
+import org.kmymoney.base.basetypes.simple.KMMSpltID;
+import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.KEYVALUEPAIRS;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PAIR;

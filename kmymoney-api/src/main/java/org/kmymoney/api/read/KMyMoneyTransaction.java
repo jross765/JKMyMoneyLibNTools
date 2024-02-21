@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 
-import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.api.basetypes.simple.KMMTrxID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;

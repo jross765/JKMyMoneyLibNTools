@@ -1,6 +1,6 @@
 package org.kmymoney.api.write.impl.aux;
 
-import org.kmymoney.api.basetypes.simple.KMMSpltID;
+import org.kmymoney.base.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.generated.ADDRESS;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.SPLIT;

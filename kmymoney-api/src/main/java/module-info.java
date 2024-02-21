@@ -4,8 +4,8 @@ module kmymoney.api {
 	requires jakarta.xml.bind;
 	requires java.xml;
 	
-	exports org.kmymoney.api.basetypes.simple;
-	exports org.kmymoney.api.basetypes.complex;
+	requires kmymoney.base;
+	
 	exports org.kmymoney.api.currency;
 	exports org.kmymoney.api.numbers;
 	

@@ -3,10 +3,10 @@ package org.kmymoney.api.write.impl;
 import java.beans.PropertyChangeListener;
 import java.text.ParseException;
 
-import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.api.basetypes.simple.KMMPyeID;
-import org.kmymoney.api.basetypes.simple.KMMSpltID;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.simple.KMMPyeID;
+import org.kmymoney.base.basetypes.simple.KMMSpltID;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.IllegalTransactionSplitActionException;

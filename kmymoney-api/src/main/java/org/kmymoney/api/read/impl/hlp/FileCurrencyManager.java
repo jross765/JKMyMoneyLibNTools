@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.generated.CURRENCY;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.read.KMyMoneyCurrency;

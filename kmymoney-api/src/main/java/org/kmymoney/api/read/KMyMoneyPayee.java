@@ -2,8 +2,8 @@ package org.kmymoney.api.read;
 
 import java.math.BigInteger;
 
-import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.api.basetypes.simple.KMMPyeID;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.read.hlp.KMyMoneyObject;
 

@@ -2,7 +2,7 @@ package org.kmymoney.api.write;
 
 import java.math.BigInteger;
 
-import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.write.hlp.HasWritableUserDefinedAttributes;

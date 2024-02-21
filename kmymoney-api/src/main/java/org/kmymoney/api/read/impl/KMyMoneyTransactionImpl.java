@@ -14,10 +14,10 @@ import java.util.Locale;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kmymoney.api.Const;
-import org.kmymoney.api.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.api.basetypes.simple.KMMTrxID;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;

@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.kmymoney.api.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.api.basetypes.simple.KMMIDNotSetException;
-import org.kmymoney.api.basetypes.simple.KMMSecID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.simple.KMMIDNotSetException;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.api.numbers.FixedPointNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

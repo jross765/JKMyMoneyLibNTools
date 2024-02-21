@@ -5,10 +5,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.api.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.api.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.api.basetypes.simple.KMMSecID;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.read.KMyMoneySecurity;

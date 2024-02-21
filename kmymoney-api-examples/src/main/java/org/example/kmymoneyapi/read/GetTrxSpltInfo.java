@@ -2,9 +2,9 @@ package org.example.kmymoneyapi.read;
 
 import java.io.File;
 
-import org.kmymoney.api.basetypes.complex.KMMQualifSpltID;
-import org.kmymoney.api.basetypes.simple.KMMSpltID;
-import org.kmymoney.api.basetypes.simple.KMMTrxID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
+import org.kmymoney.base.basetypes.simple.KMMSpltID;
+import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 

@@ -16,7 +16,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.api.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyAccountImpl;
