@@ -14,7 +14,7 @@ import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.base.basetypes.simple.KMMIDNotSetException;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
-import org.kmymoney.api.numbers.FixedPointNumber;
+import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
 
 /**

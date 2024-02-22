@@ -1,10 +1,10 @@
 package org.kmymoney.api.write.impl.aux;
 
 import org.kmymoney.base.basetypes.simple.KMMSpltID;
+import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.api.generated.ADDRESS;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.SPLIT;
-import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.impl.aux.KMMAddressImpl;
 import org.kmymoney.api.write.aux.KMMWritableAddress;

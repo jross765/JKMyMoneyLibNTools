@@ -16,9 +16,9 @@ import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
+import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.api.currency.ComplexPriceTable;
 import org.kmymoney.api.generated.KMYMONEYFILE;
-import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.hlp.KMyMoneyObject;
 
 /**

@@ -6,7 +6,7 @@ import java.util.Currency;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.kmymoney.api.numbers.FixedPointNumber;
+import org.kmymoney.base.numbers.FixedPointNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

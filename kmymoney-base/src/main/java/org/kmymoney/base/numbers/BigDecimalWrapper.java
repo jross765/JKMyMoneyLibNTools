@@ -1,4 +1,4 @@
-package org.kmymoney.api.numbers;
+package org.kmymoney.base.numbers;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

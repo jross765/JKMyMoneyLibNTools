@@ -6,8 +6,8 @@ import java.util.Locale;
 
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
+import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.api.generated.TRANSACTION;
-import org.kmymoney.api.numbers.FixedPointNumber;
 import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
 
 /**

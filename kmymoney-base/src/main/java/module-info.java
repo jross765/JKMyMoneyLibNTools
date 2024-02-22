@@ -4,4 +4,6 @@ module kmymoney.base {
 	
 	exports org.kmymoney.base.basetypes.simple;
 	exports org.kmymoney.base.basetypes.complex;
+	exports org.kmymoney.base.numbers;
+	exports org.kmymoney.base.tuples;
 }
