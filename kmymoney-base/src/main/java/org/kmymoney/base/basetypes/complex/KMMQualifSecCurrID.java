@@ -42,6 +42,13 @@ public class KMMQualifSecCurrID {
 	}
 
     // ---------------------------------------------------------------
+	
+	public void reset() {
+		this.type = Type.UNSET;
+		this.code = "";
+	}
+
+    // ---------------------------------------------------------------
 
     public Type getType() {
         return type;
