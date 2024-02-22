@@ -193,6 +193,7 @@ public class DepotTransactionManager {
 	    // Cf. above
 	    splt3.setDescription(descr);
 	    LOGGER.debug("genBuyStockTrx: Split 3." + counter + " to write: " + splt3.toString());
+	    counter++;
 	}
 
 	// ---
@@ -385,6 +386,7 @@ public class DepotTransactionManager {
 	    // Cf. above
 	    splt4.setDescription(descr);
 	    LOGGER.debug("genDivivendTrx: Split 4." + counter + " to write: " + splt4.toString());
+	    counter++;
 	}
 
 	// ---
