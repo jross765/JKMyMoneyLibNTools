@@ -1,4 +1,12 @@
 # Major Changes 
+## V. 0.4 &rarr; 0.5
+* Changed project structure: 
+  * Introduced new module "Base", moved some basic packages from module "API" into it.
+
+    This was necessary because the author is using the new module in other, external projects (not published).
+
+  * Introduced new module "API Extensions", which contains one class: `DepotTransactionManager`, which provides a simplified, high-level interface for generating buy- and dividend transactions in an investment account.
+
 ## V. 0.3 &rarr; 0.4
 **The** major change here: 
 
@@ -25,10 +33,6 @@ It should go without saying, but the following points are of course subject to c
 * Add support for other entities (institution, budget, etc.)
 
 * Better test case coverage.
-
-* Possibly some macro code (i.e., wrappers for generating specific variants), e.g. wrappers for:
-
-  * booking dividend payments from a share.
 
 * Possibly write a set of generally-usable command-line tools for basic handling of reading/writing activities, based on existing set of simple examples (but in a separate module).
 
