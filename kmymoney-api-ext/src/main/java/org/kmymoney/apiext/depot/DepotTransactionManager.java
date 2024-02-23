@@ -258,9 +258,11 @@ public class DepotTransactionManager {
 	    throw new IllegalArgumentException("null expenses account list given");
 	}
 			
-	if ( expensesAcctAmtList.isEmpty() ) {
-	    throw new IllegalArgumentException("empty expenses account list given");
-	}
+    	// CAUTION: Yes, this actually happen in real life, e.g. with specifics 
+    	// of German tax law (Freibetrag, Kapitalausschuettung).
+//	if ( expensesAcctAmtList.isEmpty() ) {
+//	    throw new IllegalArgumentException("empty expenses account list given");
+//	}
 			
 	for ( AcctIDAmountPair elt : expensesAcctAmtList ) {
 	    if ( ! elt.isNotNull() ) {
