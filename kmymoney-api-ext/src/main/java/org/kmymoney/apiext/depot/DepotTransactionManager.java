@@ -167,7 +167,7 @@ public class DepotTransactionManager {
 	splt1.setShares(new FixedPointNumber(amtGross.negate()));
 	// splt3.setPrice("1/1"); // completely optional
 	// This is what we actually want (cf. above):
-	splt1.setDescription(descr);
+	splt1.setDescription(descr); // sic, only here
 	LOGGER.debug("genBuyStockTrx: Split 1 to write: " + splt1.toString());
 
 	// ---
@@ -177,8 +177,6 @@ public class DepotTransactionManager {
 	splt2.setShares(new FixedPointNumber(nofStocks));
 	splt2.setPrice(stockPrc); // optional (sic), but advisable
 	splt2.setAction(KMyMoneyTransactionSplit.Action.BUY_SHARES);
-	// Cf. above
-	splt2.setDescription(descr);
 	LOGGER.debug("genBuyStockTrx: Split 2 to write: " + splt2.toString());
 
 	// ---
@@ -190,8 +188,6 @@ public class DepotTransactionManager {
 	    splt3.setValue(new FixedPointNumber(elt.amount()));
 	    splt3.setShares(new FixedPointNumber(elt.amount()));
 	    // splt3.setPrice("1/1"); // completely optional
-	    // Cf. above
-	    splt3.setDescription(descr);
 	    LOGGER.debug("genBuyStockTrx: Split 3." + counter + " to write: " + splt3.toString());
 	    counter++;
 	}
@@ -350,8 +346,6 @@ public class DepotTransactionManager {
 	splt1.setShares(new FixedPointNumber());
 	splt1.setAction(KMyMoneyTransactionSplit.Action.DIVIDEND);
 	// splt1.setPrice("1/1"); // completely optional
-	// Cf. above
-	splt1.setDescription(descr);
 	LOGGER.debug("genDivivendTrx: Split 1 to write: " + splt1.toString());
 
 	// ---
@@ -361,7 +355,7 @@ public class DepotTransactionManager {
 	splt2.setShares(new FixedPointNumber(divNet));
 	// splt2.setPrice("1/1"); // completely optional
 	// This is what we actually want (cf. above):
-	splt2.setDescription(descr);
+	splt2.setDescription(descr); // sic, only here
 	LOGGER.debug("genDivivendTrx: Split 2 to write: " + splt2.toString());
 
 	// ---
@@ -370,8 +364,6 @@ public class DepotTransactionManager {
 	splt3.setValue(new FixedPointNumber(divGross.negate()));
 	splt3.setShares(new FixedPointNumber(divGross.negate()));
 	// splt3.setPrice("1/1"); // completely optional
-	// Cf. above
-	splt3.setDescription(descr);
 	LOGGER.debug("genDivivendTrx: Split 3 to write: " + splt3.toString());
 
 	// ---
@@ -383,8 +375,6 @@ public class DepotTransactionManager {
 	    splt4.setValue(new FixedPointNumber(elt.amount()));
 	    splt4.setShares(new FixedPointNumber(elt.amount()));
 	    // splt4.setPrice("1/1"); // completely optional
-	    // Cf. above
-	    splt4.setDescription(descr);
 	    LOGGER.debug("genDivivendTrx: Split 4." + counter + " to write: " + splt4.toString());
 	    counter++;
 	}

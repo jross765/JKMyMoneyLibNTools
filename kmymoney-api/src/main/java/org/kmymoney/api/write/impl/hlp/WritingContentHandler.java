@@ -34,8 +34,8 @@ public class WritingContentHandler implements ContentHandler {
 
     // ----------------------------
 
-    private final String encodeme[] = new String[] { "&", ">", "<" };
-    private final String encoded[]  = new String[] { "&amp;", "&gt;", "&lt;" };
+    private final String encodeme[] = new String[] { "&", ">", "<", "\"" };
+    private final String encoded[]  = new String[] { "&amp;", "&gt;", "&lt;", "&quot;" };
 
     // ----------------------------
 
@@ -43,11 +43,13 @@ public class WritingContentHandler implements ContentHandler {
     int last_was = 0;
     private char[] spaces;
     
+    boolean isInst = false;
     boolean isAcct = false;
     boolean isTrx  = false;
     boolean isSplt = false;
     boolean isPye  = false;
     boolean isSec  = false;
+    boolean isTag  = false;
 
     // ---------------------------------------------------------------
 
@@ -169,11 +171,13 @@ public class WritingContentHandler implements ContentHandler {
 
 	public void endElement(final String namespaceURI, final String localName, final String qName) throws SAXException {
 		try {
-			if ( ( isAcct ||
+			if ( ( isInst ||
+				   isAcct ||
 				   isTrx  ||
 				   isSplt ||
 				   isPye  ||
-				   isSec ) && 
+				   isSec  ||
+				   isTag ) && 
 				 last_was != LAST_WAS_CHARACTER_DATA ) {
 				characters(new char[0], 0, 0);
 			}
@@ -221,18 +225,25 @@ public class WritingContentHandler implements ContentHandler {
 			wrt.write("<" + qName);
 
 			// ::MAGIC
+			isInst = qName.equals("INSTITUTION");
 			isAcct = qName.equals("ACCOUNT");
 			isTrx  = qName.equals("TRANSACTION");
 			isSplt = qName.equals("SPLIT");
 			isPye  = qName.equals("PAYEE");
 			isSec  = qName.equals("SECURITY");
+			isTag  = qName.equals("TAG");
 			for ( int i = 0; i < atts.getLength(); i++ ) {
-				if ( isAcct && atts.getQName(i).equals("name") ||
+				if ( isInst && atts.getQName(i).equals("name") ||
+					 isInst && atts.getQName(i).equals("memo") ||
+					 isAcct && atts.getQName(i).equals("name") ||
 					 isAcct && atts.getQName(i).equals("description") || 
 					 isTrx  && atts.getQName(i).equals("memo") || 
 					 isSplt && atts.getQName(i).equals("memo") || 
 					 isPye  && atts.getQName(i).equals("name") ||
-					 isSec  && atts.getQName(i).equals("name") ) {
+					 isPye  && atts.getQName(i).equals("matchkey") ||
+					 isSec  && atts.getQName(i).equals("name") ||
+					 isTag  && atts.getQName(i).equals("name") ||
+					 isTag  && atts.getQName(i).equals("notes") ) {
 					wrt.write(" " + atts.getQName(i) + "=\"");
 					charactersCore(atts.getValue(i));
 					wrt.write("\"");

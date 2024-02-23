@@ -148,7 +148,7 @@ public class GenTrx {
 	splt1.setShares(new FixedPointNumber(qty21.negate()));
 	splt1.setPrice(prc1); // completely optional 
 	// This is what we actually want (cf. above):
-	splt1.setDescription(descr2);
+	splt1.setDescription(descr2); // sic, only this one
 	System.out.println("Split 1 to write: " + splt1.toString());
 
 	// ---
@@ -158,8 +158,7 @@ public class GenTrx {
 	splt2.setShares(new FixedPointNumber(qty22));
 	splt2.setPrice(prc2); // optional (sic), but advisable
 	splt2.setAction(act2);
-	// Cf. above
-	splt2.setDescription(descr2);
+	splt2.setDescription("Kauf SAP");
 	System.out.println("Split 2 to write: " + splt2.toString());
 
 	// ---
@@ -168,8 +167,7 @@ public class GenTrx {
 	splt3.setValue(new FixedPointNumber(amt23));
 	splt3.setShares(new FixedPointNumber(qty23));
 	splt3.setPrice(prc3); // completely optional
-	// Cf. above
-	splt3.setDescription(descr2);
+	splt3.setDescription("Bankgebühren");
 	System.out.println("Split 3 to write: " + splt3.toString());
 
 	// ---
