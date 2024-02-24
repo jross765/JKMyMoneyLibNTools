@@ -7,6 +7,8 @@
 
   * Introduced new module "API Extensions", which contains one class: `DepotTransactionManager`, which provides a simplified, high-level interface for generating buy- and dividend transactions in an investment account.
 
+* Improved test coverage.
+
 ## V. 0.3 &rarr; 0.4
 **The** major change here: 
 
