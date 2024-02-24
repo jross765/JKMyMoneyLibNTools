@@ -4,7 +4,7 @@ This module is a small helper library that has been spun off from the API module
 This might seem overly complicated, but in fact, it was necessary, because the author uses it in another, external project as well, without using the API there.
 
 # Major Changes 
-## V. 0.3 &rarr; 0.4
+## V. 0.4 &rarr; 0.5
 Created, spun off from the API module.
 
 # Planned
