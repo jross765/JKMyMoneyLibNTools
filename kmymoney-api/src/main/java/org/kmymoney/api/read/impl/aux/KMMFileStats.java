@@ -137,5 +137,59 @@ public class KMMFileStats {
 
 		return FileStats.ERROR; // Compiler happy
 	}
+	
+	// ---------------------------------------------------------------
+	
+	public boolean equals(KMMFileStats other) {
+		if ( other.getNofEntriesAccounts(Type.RAW)     != getNofEntriesAccounts(Type.RAW) ||
+			 other.getNofEntriesAccounts(Type.COUNTER) != getNofEntriesAccounts(Type.COUNTER) ||
+			 other.getNofEntriesAccounts(Type.CACHE)   != getNofEntriesAccounts(Type.CACHE)) {
+			return false;
+		}
+		
+		if ( other.getNofEntriesTransactions(Type.RAW)     != getNofEntriesTransactions(Type.RAW) ||
+			 other.getNofEntriesTransactions(Type.COUNTER) != getNofEntriesTransactions(Type.COUNTER) ||
+			 other.getNofEntriesTransactions(Type.CACHE)   != getNofEntriesTransactions(Type.CACHE)) {
+			return false;
+		}
+			
+		if ( other.getNofEntriesTransactionSplits(Type.RAW)     != getNofEntriesTransactionSplits(Type.RAW) ||
+			 other.getNofEntriesTransactionSplits(Type.COUNTER) != getNofEntriesTransactionSplits(Type.COUNTER) ||
+			 other.getNofEntriesTransactionSplits(Type.CACHE)   != getNofEntriesTransactionSplits(Type.CACHE)) {
+			return false;
+		}
+				
+		if ( other.getNofEntriesPayees(Type.RAW)     != getNofEntriesPayees(Type.RAW) ||
+			 other.getNofEntriesPayees(Type.COUNTER) != getNofEntriesPayees(Type.COUNTER) ||
+			 other.getNofEntriesPayees(Type.CACHE)   != getNofEntriesPayees(Type.CACHE)) {
+			return false;
+		}
+					
+		if ( other.getNofEntriesSecurities(Type.RAW)     != getNofEntriesSecurities(Type.RAW) ||
+			 other.getNofEntriesSecurities(Type.COUNTER) != getNofEntriesSecurities(Type.COUNTER) ||
+			 other.getNofEntriesSecurities(Type.CACHE)   != getNofEntriesSecurities(Type.CACHE)) {
+			return false;
+		}
+						
+		if ( other.getNofEntriesCurrencies(Type.RAW)     != getNofEntriesCurrencies(Type.RAW) ||
+			 other.getNofEntriesCurrencies(Type.COUNTER) != getNofEntriesCurrencies(Type.COUNTER) ||
+			 other.getNofEntriesCurrencies(Type.CACHE)   != getNofEntriesCurrencies(Type.CACHE)) {
+			return false;
+		}
+							
+		if ( other.getNofEntriesPricePairs(Type.RAW)     != getNofEntriesPricePairs(Type.RAW) ||
+			 other.getNofEntriesPricePairs(Type.COUNTER) != getNofEntriesPricePairs(Type.COUNTER) ||
+			 other.getNofEntriesPricePairs(Type.CACHE)   != getNofEntriesPricePairs(Type.CACHE)) {
+			return false;
+		}
+								
+		if ( other.getNofEntriesPrices(Type.RAW)     != getNofEntriesPrices(Type.RAW) ||
+			 other.getNofEntriesPrices(Type.COUNTER) != getNofEntriesPrices(Type.COUNTER) ||
+			 other.getNofEntriesPrices(Type.CACHE)   != getNofEntriesPrices(Type.CACHE)) {
+			return false;
+		}
+									
+		return true;
+	}
 
 }

@@ -13,7 +13,10 @@ import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneyFileImpl {
 	private KMyMoneyFileImpl kmmFile = null;
+	private KMyMoneyFileImpl kmmFile2 = null;
+	
 	private KMMFileStats kmmFileStats = null;
+	private KMMFileStats kmmFileStats2 = null;
 
 	// -----------------------------------------------------------------
 
@@ -32,8 +35,10 @@ public class TestKMyMoneyFileImpl {
 		// URL kmmFileURL = classLoader.getResource(Const.GCSH_FILENAME);
 		// System.err.println("KMyMoney test file resource: '" + kmmFileURL + "'");
 		InputStream kmmFileStream = null;
+		InputStream kmmFileStream2 = null;
 		try {
 			kmmFileStream = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME);
+			kmmFileStream2 = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME);
 		} catch (Exception exc) {
 			System.err.println("Cannot generate input stream from resource");
 			return;
@@ -41,12 +46,14 @@ public class TestKMyMoneyFileImpl {
 
 		try {
 			kmmFile = new KMyMoneyFileImpl(kmmFileStream);
+			kmmFile2 = new KMyMoneyFileImpl(kmmFileStream2);
 		} catch (Exception exc) {
 			System.err.println("Cannot parse KMyMoney file");
 			exc.printStackTrace();
 		}
 
 		kmmFileStats = new KMMFileStats(kmmFile);
+		kmmFileStats2 = new KMMFileStats(kmmFile2);
 	}
 
 	// -----------------------------------------------------------------
@@ -103,6 +110,33 @@ public class TestKMyMoneyFileImpl {
 		// assertEquals(ConstTest.Stats.NOF_PRC,
 		// kmmFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PRC, kmmFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+	}
+
+    // ---------------------------------------------------------------
+    // The following test cases seem trivial, obvious, superfluous. 
+    // I am not so sure about that. I cannot exactly provide a reason
+    // right now, but my gut and my experience tell me that these tests
+    // are not that trivial and redundant as they seem to be.
+
+	@Test
+	public void test08() throws Exception {
+		assertEquals(kmmFile.toString(), kmmFile2.toString());
+		// Does not work:
+		// assertEquals(kmmFileStats, kmmFileStats2);
+		// Works:
+		assertEquals(true, kmmFileStats2.equals(kmmFileStats));
+	}
+
+	@Test
+	public void test24() throws Exception {
+		assertEquals(kmmFile.getAccounts().toString(), kmmFile2.getAccounts().toString());
+		assertEquals(kmmFile.getTransactions().toString(), kmmFile2.getTransactions().toString());
+		assertEquals(kmmFile.getTransactionSplits().toString(), kmmFile2.getTransactionSplits().toString());
+		assertEquals(kmmFile.getPayees().toString(), kmmFile2.getPayees().toString());
+		assertEquals(kmmFile.getSecurities().toString(), kmmFile2.getSecurities().toString());
+		assertEquals(kmmFile.getCurrencies().toString(), kmmFile2.getCurrencies().toString());
+		assertEquals(kmmFile.getPricePairs().toString(), kmmFile2.getPricePairs().toString());
+		assertEquals(kmmFile.getPrices().toString(), kmmFile2.getPrices().toString());
 	}
 
 }
