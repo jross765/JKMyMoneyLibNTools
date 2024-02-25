@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
-import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.generated.TRANSACTION;
@@ -18,6 +16,8 @@ import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
+import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
+import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -201,8 +201,8 @@ public class FileTransactionManager {
 		return retval;
 	}
 
-	public Collection<KMyMoneyTransactionImpl> getTransactions_readAfresh() {
-		Collection<KMyMoneyTransactionImpl> result = new ArrayList<KMyMoneyTransactionImpl>();
+	public List<KMyMoneyTransactionImpl> getTransactions_readAfresh() {
+		List<KMyMoneyTransactionImpl> result = new ArrayList<KMyMoneyTransactionImpl>();
 
 		for ( TRANSACTION jwsdpTrx : getTransactions_raw() ) {
 			try {
@@ -220,8 +220,8 @@ public class FileTransactionManager {
 		return result;
 	}
 
-	private Collection<TRANSACTION> getTransactions_raw() {
-		Collection<TRANSACTION> result = new ArrayList<TRANSACTION>();
+	private List<TRANSACTION> getTransactions_raw() {
+		List<TRANSACTION> result = new ArrayList<TRANSACTION>();
 
 		for ( TRANSACTION jwsdpTrx : kmmFile.getRootElement().getTRANSACTIONS().getTRANSACTION() ) {
 			result.add(jwsdpTrx);
@@ -232,15 +232,21 @@ public class FileTransactionManager {
 
 	// ----------------------------
 
-	public Collection<KMyMoneyTransactionSplit> getTransactionSplits() {
+	public List<KMyMoneyTransactionSplit> getTransactionSplits() {
 		if ( trxSpltMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
-		return Collections.unmodifiableCollection(trxSpltMap.values());
+
+		List<KMyMoneyTransactionSplit> result = new ArrayList<KMyMoneyTransactionSplit>();
+		for ( KMyMoneyTransactionSplit elt : trxSpltMap.values() ) {
+			result.add(elt);
+		}
+		
+		return Collections.unmodifiableList(result);
 	}
 
-	public Collection<KMyMoneyTransactionSplitImpl> getTransactionSplits_readAfresh() {
-		Collection<KMyMoneyTransactionSplitImpl> result = new ArrayList<KMyMoneyTransactionSplitImpl>();
+	public List<KMyMoneyTransactionSplitImpl> getTransactionSplits_readAfresh() {
+		List<KMyMoneyTransactionSplitImpl> result = new ArrayList<KMyMoneyTransactionSplitImpl>();
 
 		for ( KMyMoneyTransaction trx : getTransactions_readAfresh() ) {
 			for ( SPLIT jwsdpTrxSplt : getTransactionSplits_raw(trx.getID()) ) {
@@ -261,8 +267,8 @@ public class FileTransactionManager {
 		return result;
 	}
 
-	public Collection<KMyMoneyTransactionSplitImpl> getTransactionSplits_readAfresh(final KMMTrxID trxID) {
-		Collection<KMyMoneyTransactionSplitImpl> result = new ArrayList<KMyMoneyTransactionSplitImpl>();
+	public List<KMyMoneyTransactionSplitImpl> getTransactionSplits_readAfresh(final KMMTrxID trxID) {
+		List<KMyMoneyTransactionSplitImpl> result = new ArrayList<KMyMoneyTransactionSplitImpl>();
 
 		for ( KMyMoneyTransaction trx : getTransactions_readAfresh() ) {
 			if ( trx.getID().equals(trxID) ) {
@@ -285,8 +291,8 @@ public class FileTransactionManager {
 		return result;
 	}
 
-	private Collection<SPLIT> getTransactionSplits_raw(final TRANSACTION jwsdpTrx) {
-		Collection<SPLIT> result = new ArrayList<SPLIT>();
+	private List<SPLIT> getTransactionSplits_raw(final TRANSACTION jwsdpTrx) {
+		List<SPLIT> result = new ArrayList<SPLIT>();
 
 		for ( SPLIT jwsdpTrxSplt : jwsdpTrx.getSPLITS().getSPLIT() ) {
 			result.add(jwsdpTrxSplt);
@@ -295,8 +301,8 @@ public class FileTransactionManager {
 		return result;
 	}
 
-	private Collection<SPLIT> getTransactionSplits_raw(final KMMTrxID trxID) {
-		Collection<SPLIT> result = new ArrayList<SPLIT>();
+	private List<SPLIT> getTransactionSplits_raw(final KMMTrxID trxID) {
+		List<SPLIT> result = new ArrayList<SPLIT>();
 
 		for ( TRANSACTION jwsdpTrx : getTransactions_raw() ) {
 			if ( jwsdpTrx.getId().equals(trxID.toString()) ) {

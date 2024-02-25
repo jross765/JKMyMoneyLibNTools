@@ -5,20 +5,12 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Currency;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 
-import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.base.basetypes.simple.KMMAcctID;
-import org.kmymoney.base.basetypes.simple.KMMInstID;
-import org.kmymoney.base.basetypes.simple.KMMSecID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.KEYVALUEPAIRS;
 import org.kmymoney.api.generated.ObjectFactory;
@@ -34,6 +26,13 @@ import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import org.kmymoney.api.write.impl.hlp.HasWritableUserDefinedAttributesImpl;
 import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.simple.KMMAcctID;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
+import org.kmymoney.base.numbers.FixedPointNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -297,7 +296,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			return myBalanceCached;
 		}
 
-		Collection<KMyMoneyTransactionSplit> after = new LinkedList<KMyMoneyTransactionSplit>();
+		List<KMyMoneyTransactionSplit> after = new ArrayList<KMyMoneyTransactionSplit>();
 		FixedPointNumber balance = getBalance(LocalDate.now(), after);
 
 		if ( after.isEmpty() ) {

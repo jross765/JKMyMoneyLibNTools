@@ -139,8 +139,8 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
     // ---------------------------------------------------------------
 
     @Override
-    public Collection<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-	Collection<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
+    public List<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	List<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
 	
 	Collection<KMyMoneyPrice> prices = getKMyMoneyFile().getPrices();
 	for ( KMyMoneyPrice price : prices ) {

@@ -1,14 +1,14 @@
 package org.kmymoney.api.read;
 
 import java.math.BigInteger;
-import java.util.Collection;
+import java.util.List;
 
+import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
-import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
 
 /**
  * In KMyMoney lingo, "security" is an umbrella term for
@@ -92,7 +92,7 @@ public interface KMyMoneySecurity extends HasUserDefinedAttributes {
      * @throws InvalidQualifSecCurrTypeException
      * @throws InvalidQualifSecCurrIDException
      */
-    Collection<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    List<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     
     /**
      * @return

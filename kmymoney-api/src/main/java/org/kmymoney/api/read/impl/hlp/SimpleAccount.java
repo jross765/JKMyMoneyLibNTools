@@ -168,14 +168,14 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 
 	@Override
 	public FixedPointNumber getBalance(final LocalDate date) {
-		return getBalance(date, (Collection<KMyMoneyTransactionSplit>) null);
+		return getBalance(date, (List<KMyMoneyTransactionSplit>) null);
 	}
 
 	/**
 	 * The currency will be the one of this account.
 	 */
 	@Override
-	public FixedPointNumber getBalance(final LocalDate date, Collection<KMyMoneyTransactionSplit> after) {
+	public FixedPointNumber getBalance(final LocalDate date, List<KMyMoneyTransactionSplit> after) {
 	
 		FixedPointNumber balance = new FixedPointNumber();
 	

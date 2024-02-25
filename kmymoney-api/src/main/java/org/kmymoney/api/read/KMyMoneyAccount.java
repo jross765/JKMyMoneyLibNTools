@@ -299,7 +299,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @param after splits that are after date are added here.
      * @return the balance formatted using the current locale
      */
-    FixedPointNumber getBalance(LocalDate date, Collection<KMyMoneyTransactionSplit> after);
+    FixedPointNumber getBalance(LocalDate date, List<KMyMoneyTransactionSplit> after);
 
     FixedPointNumber getBalance(LocalDate date, KMMQualifSecCurrID secCurrID);
 
