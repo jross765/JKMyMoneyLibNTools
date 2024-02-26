@@ -31,7 +31,6 @@ public class KMyMoneyWritableObjectImpl extends KMyMoneyObjectImpl
 	 * have listeners)
 	 */
 	private volatile PropertyChangeSupport myPtyChg = null;
-	
 
 	// ---------------------------------------------------------------
 
@@ -122,11 +121,6 @@ public class KMyMoneyWritableObjectImpl extends KMyMoneyObjectImpl
 
 	// ---------------------------------------------------------------
 
-	/**
-	 * Just an overridden ToString to return this classe's name and hashCode.
-	 *
-	 * @return className and hashCode
-	 */
 	@Override
 	public String toString() {
 		return "KMyMoneyWritableObjectImpl@" + hashCode();

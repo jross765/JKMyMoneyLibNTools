@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 public class KMyMoneyPayeeImpl extends KMyMoneyObjectImpl
                                implements KMyMoneyPayee 
 {
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyPayeeImpl.class);
 
 	// ---------------------------------------------------------------
@@ -24,13 +23,14 @@ public class KMyMoneyPayeeImpl extends KMyMoneyObjectImpl
 	/**
 	 * the JWSDP-object we are facading.
 	 */
-	protected PAYEE jwsdpPeer;
+	protected final PAYEE jwsdpPeer;
 
 	// ---------------------------------------------------------------
 
 	@SuppressWarnings("exports")
 	public KMyMoneyPayeeImpl(final PAYEE peer, final KMyMoneyFile kmmFile) {
 		super(kmmFile);
+		
 		jwsdpPeer = peer;
 	}
 

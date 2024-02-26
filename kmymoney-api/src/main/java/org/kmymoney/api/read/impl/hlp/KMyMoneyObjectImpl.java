@@ -12,23 +12,23 @@ public class KMyMoneyObjectImpl implements KMyMoneyObject {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyObjectImpl.class);
 
-	// ---------------------------------------------------------------
+	// -----------------------------------------------------------------
 
-	protected final KMyMoneyFile myFile;
+	protected final KMyMoneyFile kmmFile;
 
 	// -----------------------------------------------------------------
 
-	public KMyMoneyObjectImpl(final KMyMoneyFile myFile) {
+	public KMyMoneyObjectImpl(final KMyMoneyFile kmmFile) {
 		super();
 
-		this.myFile = myFile;
+		this.kmmFile = kmmFile;
 	}
 
-	// ---------------------------------------------------------------
+	// -----------------------------------------------------------------
 
 	@Override
 	public KMyMoneyFile getKMyMoneyFile() {
-		return myFile;
+		return kmmFile;
 	}
 
 	// -----------------------------------------------------------------

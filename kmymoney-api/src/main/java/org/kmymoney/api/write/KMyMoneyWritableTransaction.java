@@ -8,7 +8,6 @@ import java.util.Collection;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.SplitNotFoundException;
-import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.kmymoney.api.write.hlp.HasWritableUserDefinedAttributes;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 
@@ -148,12 +147,5 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
 	 */
 	@SuppressWarnings("exports")
 	void removePropertyChangeListener(PropertyChangeListener listener);
-
-	/**
-	 * @param name  the name of the user-defined attribute
-	 * @param value the value or null if not set
-	 * @see {@link KMyMoneyObject#getUserDefinedAttribute(String)}
-	 */
-	void setUserDefinedAttribute(final String name, final String value);
 
 }

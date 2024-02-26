@@ -1,6 +1,5 @@
 package org.kmymoney.api.read.impl.hlp;
 
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.text.NumberFormat;
 import java.time.LocalDate;
@@ -11,6 +10,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import org.kmymoney.api.currency.ComplexPriceTable;
+import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.KMyMoneyTransaction;
+import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
@@ -20,11 +24,6 @@ import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.base.basetypes.simple.KMMIDNotSetException;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.numbers.FixedPointNumber;
-import org.kmymoney.api.currency.ComplexPriceTable;
-import org.kmymoney.api.read.KMyMoneyAccount;
-import org.kmymoney.api.read.KMyMoneyFile;
-import org.kmymoney.api.read.KMyMoneyTransaction;
-import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,15 +31,13 @@ import org.slf4j.LoggerFactory;
  * This is a base-class that helps implementing the KMyMoneyAccount interface
  * with its extensive number of convenience-methods.<br/>
  */
-public abstract class SimpleAccount implements KMyMoneyAccount {
+public abstract class SimpleAccount extends KMyMoneyObjectImpl 
+									implements KMyMoneyAccount 
+{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SimpleAccount.class);
 
 	// ---------------------------------------------------------------
-
-	private final KMyMoneyFile myFile;
-
-	// ----------------------------
 
 	private static NumberFormat currencyFormat = null;
 
@@ -48,9 +45,8 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 
 	// ---------------------------------------------------------------
 
-	public SimpleAccount(final KMyMoneyFile myFile) {
-		super();
-		this.myFile = myFile;
+	public SimpleAccount(final KMyMoneyFile kmmFile) {
+		super(kmmFile);
 	}
 
 	// ---------------------------------------------------------------
@@ -68,10 +64,6 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 		}
 
 		return retval;
-	}
-
-	public KMyMoneyFile getKMyMoneyFile() {
-		return myFile;
 	}
 
 	public boolean isChildAccountRecursive(final KMyMoneyAccount account) {
@@ -588,63 +580,6 @@ public abstract class SimpleAccount implements KMyMoneyAccount {
 			return null;
 		}
 		return Long.valueOf(s.substring(0, digitCount));
-	}
-
-	// ------------------------ support for propertyChangeListeners
-
-	protected PropertyChangeSupport getPropertyChangeSupport() {
-		return myPtyChg;
-	}
-
-	/**
-	 * Add a PropertyChangeListener to the listener list. The listener is registered
-	 * for all properties.
-	 *
-	 * @param listener The PropertyChangeListener to be added
-	 */
-	public final void addPropertyChangeListener(final PropertyChangeListener listener) {
-		if ( myPtyChg == null ) {
-			myPtyChg = new PropertyChangeSupport(this);
-		}
-		myPtyChg.addPropertyChangeListener(listener);
-	}
-
-	/**
-	 * Add a PropertyChangeListener for a specific property. The listener will be
-	 * invoked only when a call on firePropertyChange names that specific property.
-	 *
-	 * @param propertyName The name of the property to listen on.
-	 * @param listener     The PropertyChangeListener to be added
-	 */
-	public final void addPropertyChangeListener(final String propertyName, final PropertyChangeListener listener) {
-		if ( myPtyChg == null ) {
-			myPtyChg = new PropertyChangeSupport(this);
-		}
-		myPtyChg.addPropertyChangeListener(propertyName, listener);
-	}
-
-	/**
-	 * Remove a PropertyChangeListener for a specific property.
-	 *
-	 * @param propertyName The name of the property that was listened on.
-	 * @param listener     The PropertyChangeListener to be removed
-	 */
-	public final void removePropertyChangeListener(final String propertyName, final PropertyChangeListener listener) {
-		if ( myPtyChg != null ) {
-			myPtyChg.removePropertyChangeListener(propertyName, listener);
-		}
-	}
-
-	/**
-	 * Remove a PropertyChangeListener from the listener list. This removes a
-	 * PropertyChangeListener that was registered for all properties.
-	 *
-	 * @param listener The PropertyChangeListener to be removed
-	 */
-	public synchronized void removePropertyChangeListener(final PropertyChangeListener listener) {
-		if ( myPtyChg != null ) {
-			myPtyChg.removePropertyChangeListener(listener);
-		}
 	}
 
 }

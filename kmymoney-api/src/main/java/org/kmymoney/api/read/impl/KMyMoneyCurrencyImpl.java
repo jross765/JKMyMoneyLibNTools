@@ -15,12 +15,14 @@ import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.UnknownRoundingMethodException;
 import org.kmymoney.api.read.UnknownSecurityTypeException;
+import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.kmymoney.api.generated.CURRENCY;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KMyMoneyCurrencyImpl implements KMyMoneyCurrency {
-
+public class KMyMoneyCurrencyImpl extends KMyMoneyObjectImpl 
+								  implements KMyMoneyCurrency 
+{
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyCurrencyImpl.class);
 
     // ---------------------------------------------------------------
@@ -28,12 +30,7 @@ public class KMyMoneyCurrencyImpl implements KMyMoneyCurrency {
     /**
      * the JWSDP-object we are facading.
      */
-    private CURRENCY jwsdpPeer;
-
-    /**
-     * The file we belong to.
-     */
-    private final KMyMoneyFile file;
+    private final CURRENCY jwsdpPeer;
 
     // ---------------------------------------------------------------
 
@@ -41,15 +38,9 @@ public class KMyMoneyCurrencyImpl implements KMyMoneyCurrency {
     public KMyMoneyCurrencyImpl(
 	    final CURRENCY peer, 
 	    final KMyMoneyFile kmmFile) {
-
-	jwsdpPeer = peer;
-	file = kmmFile;
-    }
-
-    // ---------------------------------------------------------------
-
-    public KMyMoneyFile getKMyMoneyFile() {
-	return file;
+    	super(kmmFile);
+    	
+    	jwsdpPeer = peer;
     }
 
     // ---------------------------------------------------------------

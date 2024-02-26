@@ -1,20 +1,16 @@
 package org.kmymoney.api.write;
 
-import java.beans.PropertyChangeListener;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Currency;
 
-import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.base.basetypes.simple.KMMInstID;
-import org.kmymoney.base.basetypes.simple.KMMSecID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.write.hlp.HasWritableUserDefinedAttributes;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
+import org.kmymoney.base.numbers.FixedPointNumber;
 
 
 /**
@@ -118,39 +114,4 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 	 */
 	void remove();
 	
-	// ---------------------------------------------------------------
-
-	/**
-	 * Add a PropertyChangeListener to the listener list. The listener is registered
-	 * for all properties.
-	 *
-	 * @param listener The PropertyChangeListener to be added
-	 */
-	void addPropertyChangeListener(PropertyChangeListener listener);
-
-	/**
-	 * Add a PropertyChangeListener for a specific property. The listener will be
-	 * invoked only when a call on firePropertyChange names that specific property.
-	 *
-	 * @param propertyName The name of the property to listen on.
-	 * @param listener     The PropertyChangeListener to be added
-	 */
-	void addPropertyChangeListener(String propertyName, PropertyChangeListener listener);
-
-	/**
-	 * Remove a PropertyChangeListener for a specific property.
-	 *
-	 * @param propertyName The name of the property that was listened on.
-	 * @param listener     The PropertyChangeListener to be removed
-	 */
-	void removePropertyChangeListener(String propertyName, PropertyChangeListener listener);
-
-	/**
-	 * Remove a PropertyChangeListener from the listener list. This removes a
-	 * PropertyChangeListener that was registered for all properties.
-	 *
-	 * @param listener The PropertyChangeListener to be removed
-	 */
-	void removePropertyChangeListener(PropertyChangeListener listener);
-
 }

@@ -23,6 +23,7 @@ import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.SplitNotFoundException;
 import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
+import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
@@ -34,7 +35,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Implementation of KMyMoneyTransaction that uses JWSDP.
  */
-public class KMyMoneyTransactionImpl implements KMyMoneyTransaction 
+public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl 
+									 implements KMyMoneyTransaction 
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyTransactionImpl.class);
 
@@ -46,12 +48,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     /**
      * the JWSDP-object we are facading.
      */
-    protected TRANSACTION jwsdpPeer;
-
-    /**
-     * The file we belong to.
-     */
-    private final KMyMoneyFile kmmFile;
+    protected final TRANSACTION jwsdpPeer;
 
     // ---------------------------------------------------------------
 
@@ -82,16 +79,16 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     public KMyMoneyTransactionImpl(
 	    final TRANSACTION peer, 
 	    final KMyMoneyFile kmmFile) {
+    	super(kmmFile);
 
-	this.jwsdpPeer = peer;
-	this.kmmFile = kmmFile;
-
+    	this.jwsdpPeer = peer;
     }
 
     // Copy-constructor
     public KMyMoneyTransactionImpl(final KMyMoneyTransaction trx) {
-	jwsdpPeer = trx.getJwsdpPeer();
-	kmmFile = trx.getKMyMoneyFile();
+    	super(trx.getKMyMoneyFile());
+
+    	jwsdpPeer = trx.getJwsdpPeer();
     }
 
     // ---------------------------------------------------------------
@@ -224,14 +221,6 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
     @SuppressWarnings("exports")
     public TRANSACTION getJwsdpPeer() {
 	return jwsdpPeer;
-    }
-
-    /**
-     * @see KMyMoneyTransaction#getKMyMoneyFile()
-     */
-    @Override
-    public KMyMoneyFile getKMyMoneyFile() {
-	return kmmFile;
     }
 
     // ----------------------------

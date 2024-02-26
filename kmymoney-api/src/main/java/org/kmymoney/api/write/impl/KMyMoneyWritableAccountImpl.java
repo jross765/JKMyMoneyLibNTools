@@ -53,8 +53,8 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
     /**
      * Our helper to implement the KMyMoneyWritableObject-interface.
      */
-    private KMyMoneyWritableObjectImpl helper;
-    
+    private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
+
 	/**
 	 * Used by ${@link #getBalance()} to cache the result.
 	 */
@@ -156,7 +156,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 
 		setIsModified();
 		// <<insert code to react further to this change here
-		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
+		PropertyChangeSupport propertyChangeFirer = helper.getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
 			propertyChangeFirer.firePropertyChange("transactionSplits", null, getTransactionSplits());
 		}
@@ -171,7 +171,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 
 		setIsModified();
 		// <<insert code to react further to this change here
-		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
+		PropertyChangeSupport propertyChangeFirer = helper.getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
 			propertyChangeFirer.firePropertyChange("transactionSplits", null, transactionSplits);
 		}
@@ -195,7 +195,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		setIsModified();
 		
 		// <<insert code to react further to this change here
-		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
+		PropertyChangeSupport propertyChangeFirer = helper.getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
 			propertyChangeFirer.firePropertyChange("name", oldName, name);
 		}
@@ -248,7 +248,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		setIsModified();
 		
 		// <<insert code to react further to this change here
-		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
+		PropertyChangeSupport propertyChangeFirer = helper.getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
 			propertyChangeFirer.firePropertyChange("currencyID", oldCurrId, secCurrID.getCode());
 		}
@@ -342,9 +342,9 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 					}
 				};
 				
-				addPropertyChangeListener("currencyID", myBalanceCachedInvalidtor);
-				addPropertyChangeListener("currencyNameSpace", myBalanceCachedInvalidtor);
-				addPropertyChangeListener("transactionSplits", myBalanceCachedInvalidtor);
+				helper.addPropertyChangeListener("currencyID", myBalanceCachedInvalidtor);
+				helper.addPropertyChangeListener("currencyNameSpace", myBalanceCachedInvalidtor);
+				helper.addPropertyChangeListener("transactionSplits", myBalanceCachedInvalidtor);
 			}
 		}
 
@@ -396,7 +396,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		jwsdpPeer.setDescription(descr);
 		setIsModified();
 		// <<insert code to react further to this change here
-		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
+		PropertyChangeSupport propertyChangeFirer = helper.getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
 			propertyChangeFirer.firePropertyChange("description", oldDescr, descr);
 		}
@@ -425,7 +425,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		jwsdpPeer.setType(typeInt);
 		setIsModified();
 		// <<insert code to react further to this change here
-		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
+		PropertyChangeSupport propertyChangeFirer = helper.getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
 			propertyChangeFirer.firePropertyChange("type", oldType, typeInt);
 		}
@@ -472,7 +472,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		setIsModified();
 
 		// <<insert code to react further to this change here
-		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
+		PropertyChangeSupport propertyChangeFirer = helper.getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
 			propertyChangeFirer.firePropertyChange("parentAccount", oldPrntAcct, prntAcct);
 		}

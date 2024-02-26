@@ -8,25 +8,27 @@ import java.util.Currency;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kmymoney.api.Const;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.base.basetypes.complex.KMMPricePairID;
-import org.kmymoney.base.basetypes.complex.KMMPriceID;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
+import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.base.basetypes.complex.KMMPriceID;
+import org.kmymoney.base.basetypes.complex.KMMPricePairID;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.numbers.FixedPointNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KMyMoneyPriceImpl implements KMyMoneyPrice {
-
+public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl 
+							   implements KMyMoneyPrice 
+{
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyPriceImpl.class);
 
     protected static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
@@ -34,8 +36,6 @@ public class KMyMoneyPriceImpl implements KMyMoneyPrice {
     // -----------------------------------------------------------
 
     protected final PRICE jwsdpPeer;
-
-    private final KMyMoneyFile file;
 
     // -----------------------------------------------------------
     
@@ -53,18 +53,17 @@ public class KMyMoneyPriceImpl implements KMyMoneyPrice {
     /**
      * @param parent 
      * @param newPeer the JWSDP-object we are wrapping.
-     * @param file 
+     * @param kmmFile 
      */
     @SuppressWarnings("exports")
     public KMyMoneyPriceImpl(
     		final KMyMoneyPricePair parent, 
     		final PRICE newPeer, 
-    		final KMyMoneyFile file) {
-	super();
+    		final KMyMoneyFile kmmFile) {
+	super(kmmFile);
 		
 	this.parent    = parent;
 	this.jwsdpPeer = newPeer;
-	this.file      = file;
     }
 
 	// ---------------------------------------------------------------
@@ -75,10 +74,6 @@ public class KMyMoneyPriceImpl implements KMyMoneyPrice {
     @SuppressWarnings("exports")
     public PRICE getJwsdpPeer() {
 	return jwsdpPeer;
-    }
-
-    public KMyMoneyFile getKMyMoneyFile() {
-	return file;
     }
 
     // -----------------------------------------------------------

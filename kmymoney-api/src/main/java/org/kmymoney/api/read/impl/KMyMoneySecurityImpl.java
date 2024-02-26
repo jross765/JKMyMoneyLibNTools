@@ -20,12 +20,14 @@ import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.UnknownRoundingMethodException;
 import org.kmymoney.api.read.UnknownSecurityTypeException;
 import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
+import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.kmymoney.api.read.impl.hlp.KVPListDoesNotContainKeyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KMyMoneySecurityImpl implements KMyMoneySecurity {
-
+public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl 
+								  implements KMyMoneySecurity 
+{
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneySecurityImpl.class);
 
     // ---------------------------------------------------------------
@@ -33,12 +35,7 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
     /**
      * the JWSDP-object we are facading.
      */
-    protected SECURITY jwsdpPeer;
-
-    /**
-     * The file we belong to.
-     */
-    private final KMyMoneyFile file;
+    protected final SECURITY jwsdpPeer;
 
     // ---------------------------------------------------------------
 
@@ -46,9 +43,9 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
     public KMyMoneySecurityImpl(
 	    final SECURITY peer, 
 	    final KMyMoneyFile kmmFile) {
+    	super(kmmFile);
 
-	jwsdpPeer = peer;
-	file = kmmFile;
+    	jwsdpPeer = peer;
     }
 
 	// ---------------------------------------------------------------
@@ -59,10 +56,6 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
     @SuppressWarnings("exports")
     public SECURITY getJwsdpPeer() {
 	return jwsdpPeer;
-    }
-
-    public KMyMoneyFile getKMyMoneyFile() {
-	return file;
     }
 
     // ---------------------------------------------------------------

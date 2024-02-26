@@ -37,12 +37,12 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     /**
      * the JWSDP-object we are facading.
      */
-    protected SPLIT jwsdpPeer;
+    protected final SPLIT jwsdpPeer;
     
     /**
      * the transaction this split belongs to.
      */
-    private final KMyMoneyTransaction myTrx;
+    protected final KMyMoneyTransaction myTrx;
 
     // ---------------------------------------------------------------
 
@@ -81,17 +81,6 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     @SuppressWarnings("exports")
     public SPLIT getJwsdpPeer() {
     	return jwsdpPeer;
-    }
-
-    /**
-     * @param newPeer the JWSDP-object we are facading.
-     */
-    protected void setJwsdpPeer(final SPLIT newPeer) {
-    	if (newPeer == null) {
-    		throw new IllegalArgumentException("null not allowed for field this.jwsdpPeer");
-    	}
-
-    	jwsdpPeer = newPeer;
     }
 
     // ---------------------------------------------------------------

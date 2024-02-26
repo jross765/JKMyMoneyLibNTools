@@ -36,7 +36,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     /**
      * the JWSDP-object we are facading.
      */
-    protected ACCOUNT jwsdpPeer;
+    protected final ACCOUNT jwsdpPeer;
 
     // ---------------------------------------------------------------
 
@@ -79,17 +79,6 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     @SuppressWarnings("exports")
     public ACCOUNT getJwsdpPeer() {
 	return jwsdpPeer;
-    }
-
-    /**
-     * @param newPeer the JWSDP-object we are wrapping.
-     */
-    protected void setJwsdpPeer(final ACCOUNT newPeer) {
-	if (newPeer == null) {
-	    throw new IllegalArgumentException("null not allowed for field this.jwsdpPeer");
-	}
-
-	jwsdpPeer = newPeer;
     }
 
     // ---------------------------------------------------------------
