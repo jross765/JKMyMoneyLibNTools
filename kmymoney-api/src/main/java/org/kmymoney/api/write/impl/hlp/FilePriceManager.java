@@ -1,9 +1,5 @@
 package org.kmymoney.api.write.impl.hlp;
 
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID.Type;
 import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.read.KMyMoneyPricePair;
@@ -13,6 +9,9 @@ import org.kmymoney.api.write.KMyMoneyWritablePricePair;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritablePriceImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritablePricePairImpl;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

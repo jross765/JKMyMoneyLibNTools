@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -198,7 +199,7 @@ public class FilePriceManager {
 			throw new IllegalStateException("no root-element loaded");
 		}
 
-		return prcPrMap.values();
+		return Collections.unmodifiableCollection(prcPrMap.values());
 	}
 
 	// ----------------------------

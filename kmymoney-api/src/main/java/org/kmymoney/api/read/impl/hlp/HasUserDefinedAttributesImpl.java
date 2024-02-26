@@ -1,7 +1,6 @@
 package org.kmymoney.api.read.impl.hlp;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.kmymoney.api.generated.PAIR;
@@ -30,7 +29,7 @@ public class HasUserDefinedAttributesImpl // implements HasUserDefinedAttributes
 		return null;
     }
 
-    public static Collection<String> getUserDefinedAttributeKeysCore(final List<PAIR> kvpList) {
+    public static List<String> getUserDefinedAttributeKeysCore(final List<PAIR> kvpList) {
 		List<String> retval = new ArrayList<String>();
 
 		for ( PAIR kvp : kvpList ) {

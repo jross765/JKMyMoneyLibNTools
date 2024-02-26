@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
@@ -105,8 +106,8 @@ public class KMyMoneyCurrencyImpl implements KMyMoneyCurrency {
     // ---------------------------------------------------------------
 
     @Override
-    public Collection<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-	Collection<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
+    public List<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    	List<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
 	
 	Collection<KMyMoneyPrice> prices = getKMyMoneyFile().getPrices();
 	for ( KMyMoneyPrice price : prices ) {

@@ -1,6 +1,7 @@
 package org.kmymoney.api.read.impl.hlp;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,7 +88,7 @@ public class FileCurrencyManager {
 	}
 
 	public Collection<KMyMoneyCurrency> getCurrencies() {
-		return currMap.values();
+		return Collections.unmodifiableCollection(currMap.values());
 	}
 
 	// ---------------------------------------------------------------

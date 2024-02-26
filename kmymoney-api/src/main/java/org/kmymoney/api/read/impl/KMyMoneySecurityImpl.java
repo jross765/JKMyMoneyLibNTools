@@ -190,7 +190,7 @@ public class KMyMoneySecurityImpl implements KMyMoneySecurity {
      * @return all keys that can be used with
      *         ${@link #getUserDefinedAttribute(String)}}.
      */
-	public Collection<String> getUserDefinedAttributeKeys() {
+	public List<String> getUserDefinedAttributeKeys() {
 		if ( jwsdpPeer.getKEYVALUEPAIRS() == null) {
 			return null;
 		}

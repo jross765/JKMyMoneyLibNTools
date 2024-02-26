@@ -1,7 +1,7 @@
 package org.kmymoney.api.read;
 
 import java.math.BigInteger;
-import java.util.Collection;
+import java.util.List;
 
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
@@ -69,7 +69,7 @@ public interface KMyMoneyCurrency {
     
     // ------------------------------------------------------------
 
-    Collection<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    List<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     
     KMyMoneyPrice getYoungestQuote() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     

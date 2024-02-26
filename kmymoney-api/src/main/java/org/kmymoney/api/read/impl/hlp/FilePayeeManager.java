@@ -2,7 +2,9 @@ package org.kmymoney.api.read.impl.hlp;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
@@ -84,16 +86,16 @@ public class FilePayeeManager {
 		return retval;
 	}
 
-	public Collection<KMyMoneyPayee> getPayeesByName(String expr) {
+	public List<KMyMoneyPayee> getPayeesByName(String expr) {
 		return getPayeesByName(expr, true);
 	}
 
-	public Collection<KMyMoneyPayee> getPayeesByName(String expr, boolean relaxed) {
+	public List<KMyMoneyPayee> getPayeesByName(String expr, boolean relaxed) {
 		if ( pyeMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
 
-		Collection<KMyMoneyPayee> result = new ArrayList<KMyMoneyPayee>();
+		List<KMyMoneyPayee> result = new ArrayList<KMyMoneyPayee>();
 
 		for ( KMyMoneyPayee pye : getPayees() ) {
 			if ( pye.getName() != null ) {
@@ -113,7 +115,7 @@ public class FilePayeeManager {
 	}
 
 	public KMyMoneyPayee getPayeesByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException {
-		Collection<KMyMoneyPayee> cmdtyList = getPayeesByName(expr, false);
+		List<KMyMoneyPayee> cmdtyList = getPayeesByName(expr, false);
 		if ( cmdtyList.size() == 0 )
 			throw new NoEntryFoundException();
 		else if ( cmdtyList.size() > 1 )
@@ -123,7 +125,7 @@ public class FilePayeeManager {
 	}
 
 	public Collection<KMyMoneyPayee> getPayees() {
-		return pyeMap.values();
+		return Collections.unmodifiableCollection(pyeMap.values());
 	}
 
 	// ---------------------------------------------------------------

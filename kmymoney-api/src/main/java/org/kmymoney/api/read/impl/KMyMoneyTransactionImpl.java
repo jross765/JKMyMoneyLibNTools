@@ -14,20 +14,20 @@ import java.util.Locale;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kmymoney.api.Const;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.base.basetypes.simple.KMMTrxID;
-import org.kmymoney.base.numbers.FixedPointNumber;
+import org.kmymoney.api.generated.PAIR;
+import org.kmymoney.api.generated.SPLIT;
+import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.SplitNotFoundException;
 import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
-import org.kmymoney.api.generated.PAIR;
-import org.kmymoney.api.generated.SPLIT;
-import org.kmymoney.api.generated.TRANSACTION;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.simple.KMMTrxID;
+import org.kmymoney.base.numbers.FixedPointNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -406,7 +406,7 @@ public class KMyMoneyTransactionImpl implements KMyMoneyTransaction
      * @return all keys that can be used with
      *         ${@link #getUserDefinedAttribute(String)}}.
      */
-	public Collection<String> getUserDefinedAttributeKeys() {
+	public List<String> getUserDefinedAttributeKeys() {
 		if ( jwsdpPeer.getKEYVALUEPAIRS() == null) {
 			return null;
 		}

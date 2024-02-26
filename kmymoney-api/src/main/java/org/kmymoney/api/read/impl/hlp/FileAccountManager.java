@@ -4,15 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.base.basetypes.complex.KMMComplAcctID.Top;
-import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -22,6 +18,9 @@ import org.kmymoney.api.read.TooManyEntriesFoundException;
 import org.kmymoney.api.read.UnknownAccountTypeException;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID.Top;
+import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,12 +100,12 @@ public class FileAccountManager {
 		return getAccountByID(new KMMComplAcctID(acctID));
 	}
 
-	public Collection<KMyMoneyAccount> getAccountsByParentID(final KMMComplAcctID acctID) {
+	public List<KMyMoneyAccount> getAccountsByParentID(final KMMComplAcctID acctID) {
 		if ( acctMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
 
-		SortedSet<KMyMoneyAccount> retval = new TreeSet<KMyMoneyAccount>();
+		List<KMyMoneyAccount> retval = new ArrayList<KMyMoneyAccount>();
 
 		for ( KMyMoneyAccount acct : acctMap.values() ) {
 			KMMComplAcctID prntID = acct.getParentAccountID();
@@ -126,21 +125,21 @@ public class FileAccountManager {
 		return retval;
 	}
 
-	public Collection<KMyMoneyAccount> getAccountsByParentID(final KMMAcctID acctID) {
+	public List<KMyMoneyAccount> getAccountsByParentID(final KMMAcctID acctID) {
 		return getAccountsByParentID(new KMMComplAcctID(acctID));
 	}
 	
-	public Collection<KMyMoneyAccount> getAccountsByName(final String name) {
+	public List<KMyMoneyAccount> getAccountsByName(final String name) {
 		return getAccountsByName(name, true, true);
 	}
 
-	public Collection<KMyMoneyAccount> getAccountsByName(final String expr, boolean qualif, boolean relaxed) {
+	public List<KMyMoneyAccount> getAccountsByName(final String expr, boolean qualif, boolean relaxed) {
 
 		if ( acctMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
 
-		Collection<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
+		List<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
 
 		for ( KMyMoneyAccount acct : acctMap.values() ) {
 			if ( relaxed ) {
@@ -171,7 +170,7 @@ public class FileAccountManager {
 
 	public KMyMoneyAccount getAccountByNameUniq(final String name, final boolean qualif)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
-		Collection<KMyMoneyAccount> acctList = getAccountsByName(name, qualif, false);
+		List<KMyMoneyAccount> acctList = getAccountsByName(name, qualif, false);
 		if ( acctList.size() == 0 )
 			throw new NoEntryFoundException();
 		else if ( acctList.size() > 1 )
@@ -246,9 +245,9 @@ public class FileAccountManager {
 		return getAccountByIDorNameEx(new KMMComplAcctID(acctID), name);
 	}
 	
-	public Collection<KMyMoneyAccount> getAccountsByType(Type type)
+	public List<KMyMoneyAccount> getAccountsByType(Type type)
 			throws UnknownAccountTypeException {
-		Collection<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
+		List<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
 
 		for ( KMyMoneyAccount acct : getAccounts() ) {
 			if ( acct.getType() == type ) {
@@ -259,9 +258,9 @@ public class FileAccountManager {
 		return result;
 	}
 
-	public Collection<KMyMoneyAccount> getAccountsByTypeAndName(Type type, String expr, boolean qualif, boolean relaxed)
+	public List<KMyMoneyAccount> getAccountsByTypeAndName(Type type, String expr, boolean qualif, boolean relaxed)
 			throws UnknownAccountTypeException {
-		Collection<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
+		List<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
 
 		for ( KMyMoneyAccount acct : getAccountsByName(expr, qualif, relaxed) ) {
 			if ( acct.getType() == type ) {
@@ -279,12 +278,12 @@ public class FileAccountManager {
 			throw new IllegalStateException("no root-element loaded");
 		}
 
-		return Collections.unmodifiableCollection(new TreeSet<>(acctMap.values()));
+		return Collections.unmodifiableCollection(acctMap.values());
 	}
 
-	public Collection<? extends KMyMoneyAccount> getParentlessAccounts() {
+	public List<? extends KMyMoneyAccount> getParentlessAccounts() {
 		try {
-			Collection<KMyMoneyAccount> retval = new TreeSet<KMyMoneyAccount>();
+			List<KMyMoneyAccount> retval = new ArrayList<KMyMoneyAccount>();
 
 			for ( KMyMoneyAccount acct : getAccounts() ) {
 				if ( acct.getParentAccountID() == null ) {
@@ -303,8 +302,8 @@ public class FileAccountManager {
 		}
 	}
 
-	public Collection<KMMComplAcctID> getTopAccountIDs() {
-		Collection<KMMComplAcctID> result = new ArrayList<KMMComplAcctID>();
+	public List<KMMComplAcctID> getTopAccountIDs() {
+		List<KMMComplAcctID> result = new ArrayList<KMMComplAcctID>();
 
 		result.add(KMMComplAcctID.get(Top.ASSET));
 		result.add(KMMComplAcctID.get(Top.LIABILITY));
@@ -315,8 +314,8 @@ public class FileAccountManager {
 		return result;
 	}
 
-	public Collection<KMyMoneyAccount> getTopAccounts() {
-		Collection<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
+	public List<KMyMoneyAccount> getTopAccounts() {
+		List<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
 
 		for ( KMMComplAcctID acctID : getTopAccountIDs() ) {
 			KMyMoneyAccount acct = getAccountByID(acctID);

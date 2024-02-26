@@ -1,19 +1,11 @@
 package org.kmymoney.api.read.impl;
 
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -22,6 +14,12 @@ import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.UnknownAccountTypeException;
 import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
 import org.kmymoney.api.read.impl.hlp.SimpleAccount;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -278,7 +276,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      * @return all keys that can be used with
      *         ${@link #getUserDefinedAttribute(String)}}.
      */
-	public Collection<String> getUserDefinedAttributeKeys() {
+	public List<String> getUserDefinedAttributeKeys() {
 		if ( jwsdpPeer.getKEYVALUEPAIRS() == null) {
 			return null;
 		}

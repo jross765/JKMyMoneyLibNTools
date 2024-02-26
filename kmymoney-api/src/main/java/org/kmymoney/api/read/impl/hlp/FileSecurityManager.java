@@ -2,13 +2,11 @@ package org.kmymoney.api.read.impl.hlp;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.read.KMyMoneySecurity;
@@ -16,6 +14,10 @@ import org.kmymoney.api.read.NoEntryFoundException;
 import org.kmymoney.api.read.TooManyEntriesFoundException;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.KMyMoneySecurityImpl;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -202,16 +204,16 @@ public class FileSecurityManager {
 		return retval;
 	}
 
-	public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr) {
+	public List<KMyMoneySecurity> getSecuritiesByName(final String expr) {
 		return getSecuritiesByName(expr, true);
 	}
 
-	public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed) {
+	public List<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed) {
 		if ( secMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
 
-		Collection<KMyMoneySecurity> result = new ArrayList<KMyMoneySecurity>();
+		List<KMyMoneySecurity> result = new ArrayList<KMyMoneySecurity>();
 
 		for ( KMyMoneySecurity sec : getSecurities() ) {
 			if ( sec.getName() != null ) // yes, that can actually happen!
@@ -233,7 +235,7 @@ public class FileSecurityManager {
 
 	public KMyMoneySecurity getSecurityByNameUniq(final String expr)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
-		Collection<KMyMoneySecurity> cmdtyList = getSecuritiesByName(expr, false);
+		List<KMyMoneySecurity> cmdtyList = getSecuritiesByName(expr, false);
 		if ( cmdtyList.size() == 0 )
 			throw new NoEntryFoundException();
 		else if ( cmdtyList.size() > 1 )
@@ -243,7 +245,7 @@ public class FileSecurityManager {
 	}
 
 	public Collection<KMyMoneySecurity> getSecurities() {
-		return secMap.values();
+		return Collections.unmodifiableCollection(secMap.values());
 	}
 
 	// ---------------------------------------------------------------

@@ -1,6 +1,6 @@
 package org.kmymoney.api.read.hlp;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface HasUserDefinedAttributes {
 
@@ -14,6 +14,6 @@ public interface HasUserDefinedAttributes {
      * 
      * @return all keys that can be used with ${@link #getUserDefinedAttribute(String)}}.
      */
-    Collection<String> getUserDefinedAttributeKeys();
+    List<String> getUserDefinedAttributeKeys();
     
 }
