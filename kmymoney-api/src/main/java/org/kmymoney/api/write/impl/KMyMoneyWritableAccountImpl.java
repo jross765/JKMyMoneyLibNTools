@@ -317,9 +317,9 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 							 evt.getSource() instanceof KMyMoneyWritableTransactionSplit ) {
 							KMyMoneyWritableTransactionSplit splitw = (KMyMoneyWritableTransactionSplit) evt.getSource();
 							if ( splitw.getAccount() != KMyMoneyWritableAccountImpl.this ) {
-								splitw.removePropertyChangeListener("account", this);
-								splitw.removePropertyChangeListener("shares", this);
-								splitw.getTransaction().removePropertyChangeListener("datePosted", this);
+								helper.removePropertyChangeListener("account", this);
+								helper.removePropertyChangeListener("shares", this);
+								helper.removePropertyChangeListener("datePosted", this);
 								splitsWeAreAddedTo.remove(splitw);
 							}
 
@@ -333,9 +333,9 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 									continue;
 								}
 								KMyMoneyWritableTransactionSplit splitw = (KMyMoneyWritableTransactionSplit) split;
-								splitw.addPropertyChangeListener("account", this);
-								splitw.addPropertyChangeListener("shares", this);
-								splitw.getTransaction().addPropertyChangeListener("datePosted", this);
+								helper.addPropertyChangeListener("account", this);
+								helper.addPropertyChangeListener("shares", this);
+								helper.addPropertyChangeListener("datePosted", this);
 								splitsWeAreAddedTo.add(splitw);
 							}
 						}

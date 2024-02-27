@@ -444,36 +444,6 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
 	}
 
-	// ---------------------------------------------------------------
-
-	@SuppressWarnings("exports")
-	@Override
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@SuppressWarnings("exports")
-	@Override
-	public void addPropertyChangeListener(String ptyName, PropertyChangeListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@SuppressWarnings("exports")
-	@Override
-	public void removePropertyChangeListener(String ptyName, PropertyChangeListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@SuppressWarnings("exports")
-	@Override
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
-
     // ---------------------------------------------------------------
 
     /**

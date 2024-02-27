@@ -363,34 +363,6 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		
 	}
 
-	@SuppressWarnings("exports")
-	@Override
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@SuppressWarnings("exports")
-	@Override
-	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@SuppressWarnings("exports")
-	@Override
-	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@SuppressWarnings("exports")
-	@Override
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	// ---------------------------------------------------------------
 	
 	KMMSpltID getNewSplitID() {
