@@ -226,8 +226,12 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * @param pCmdtyNameFraction number of decimal-places after the comma
 	 * @param pCmdtyName         common name of the new currency
 	 */
-	public void addCurrency(final String pCmdtySpace, final String pCmdtyId, final FixedPointNumber conversionFactor,
-			final int pCmdtyNameFraction, final String pCmdtyName);
+	public void addCurrency(
+			String pCmdtySpace,
+			String pCmdtyId,
+			FixedPointNumber conversionFactor,
+			int pCmdtyNameFraction,
+			String pCmdtyName);
 
 	// ---------------------------------------------------------------
 

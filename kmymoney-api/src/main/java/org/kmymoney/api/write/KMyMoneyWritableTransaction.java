@@ -26,13 +26,13 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
 	 * @see #setCurrencyNameSpace(String)
 	 * @see {@link KMyMoneyTransaction#getCurrencyID()}
 	 */
-	void setCurrencyID(final String id);
+	void setCurrencyID(String id);
 
 	/**
 	 * @param id the new namespace
 	 * @see {@link KMyMoneyTransaction#getCurrencyNameSpace()}
 	 */
-	void setCurrencyNameSpace(final String id);
+	void setCurrencyNameSpace(String id);
 
 	/**
 	 * The gnucash-file is the top-level class to contain everything.
@@ -46,15 +46,15 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
 	 *                    entered into the system
 	 * @see {@link #setDatePosted(LocalDateTime)}
 	 */
-	void setDateEntered(final LocalDate dateEntered);
+	void setDateEntered(LocalDate dateEntered);
 
 	/**
 	 * @param datePosted the day (time is ignored) that the money was transfered
 	 * @see {@link #setDateEntered(LocalDateTime)}
 	 */
-	void setDatePosted(final LocalDate datePosted);
+	void setDatePosted(LocalDate datePosted);
 
-	void setDescription(final String desc);
+	void setDescription(String desc);
 
 	/**
 	 * @return 

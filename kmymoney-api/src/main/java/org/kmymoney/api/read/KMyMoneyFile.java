@@ -232,14 +232,14 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param expr search expression
 	 * @return
 	 */
-	Collection<KMyMoneyPayee> getPayeesByName(final String expr);
+	Collection<KMyMoneyPayee> getPayeesByName(String expr);
 
 	/**
 	 * @param expr search expression
 	 * @param relaxed
 	 * @return
 	 */
-	Collection<KMyMoneyPayee> getPayeesByName(final String expr, final boolean relaxed);
+	Collection<KMyMoneyPayee> getPayeesByName(String expr, boolean relaxed);
 
 	/**
 	 * @param expr search expression
@@ -247,7 +247,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @throws NoEntryFoundException
 	 * @throws TooManyEntriesFoundException
 	 */
-	KMyMoneyPayee getPayeesByNameUniq(final String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
+	KMyMoneyPayee getPayeesByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
 
 	/**
 	 * @return a (possibly read-only) collection of all customers Do not modify the
@@ -310,14 +310,14 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param expr search expression
 	 * @return
 	 */
-	Collection<KMyMoneySecurity> getSecuritiesByName(final String expr);
+	Collection<KMyMoneySecurity> getSecuritiesByName(String expr);
 
 	/**
 	 * @param expr search expression
 	 * @param relaxed
 	 * @return
 	 */
-	Collection<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed);
+	Collection<KMyMoneySecurity> getSecuritiesByName(String expr, boolean relaxed);
 
 	/**
 	 * @param expr search expression
@@ -325,7 +325,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @throws NoEntryFoundException
 	 * @throws TooManyEntriesFoundException
 	 */
-	KMyMoneySecurity getSecurityByNameUniq(final String expr)
+	KMyMoneySecurity getSecurityByNameUniq(String expr)
 			throws NoEntryFoundException, TooManyEntriesFoundException;
 
 	/**

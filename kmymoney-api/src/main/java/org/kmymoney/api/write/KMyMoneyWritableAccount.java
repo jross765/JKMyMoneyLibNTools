@@ -82,17 +82,17 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 
 	// ----------------------------
 
-	void setQualifSecCurrID(final KMMQualifSecCurrID secCurrID);
+	void setQualifSecCurrID(KMMQualifSecCurrID secCurrID);
 	
-//	void setQualifSecID(final KMMQualifSecID secID);
+//	void setQualifSecID(KMMQualifSecID secID);
 //	
-//	void setQualifCurrID(final KMMQualifCurrID currID);
+//	void setQualifCurrID(KMMQualifCurrID currID);
 	
-	void setSecID(final KMMSecID secID);
+	void setSecID(KMMSecID secID);
 	
-	void setCurrency(final Currency curr);
+	void setCurrency(Currency curr);
 
-	void setCurrency(final String currCode);
+	void setCurrency(String currCode);
 	
 	// ----------------------------
 
