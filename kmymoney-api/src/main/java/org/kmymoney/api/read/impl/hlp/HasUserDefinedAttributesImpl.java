@@ -40,10 +40,11 @@ public class HasUserDefinedAttributesImpl // implements HasUserDefinedAttributes
 
 		if ( name.equals("") )
 			return null;
-		
-		if ( ! getUserDefinedAttributeKeysCore(kvpList).contains(name) ) {
-			throw new KVPListDoesNotContainKeyException();
-		}
+
+		// NO:
+//		if ( ! getUserDefinedAttributeKeysCore(kvpList).contains(name) ) {
+//			throw new KVPListDoesNotContainKeyException();
+//		}
 		
 		for ( PAIR kvp : kvpList ) {
 			if ( kvp.getKey().equals(name) ) {
