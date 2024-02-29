@@ -15,6 +15,7 @@ import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.api.read.impl.hlp.KVPListDoesNotContainKeyException;
 import org.kmymoney.api.read.impl.hlp.TestHasUserDefinedAttributesImpl;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
@@ -93,25 +94,25 @@ public class TestHasWritableUserDefinedAttributesImpl {
     // -----------------------------------------------------------------
 
     // No kvps
-//    @Test
-//    public void test_01_acct_01() throws Exception {
-//    	KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_1_ID);
-//    	assertNotEquals(null, acct);
-//    	
-//    	assertEquals(null, acct.getUserDefinedAttributeKeys());
-//    }
-//
-//    // One kvp
-//    @Test
-//    public void test_01_acct_02() throws Exception {
-//    	KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_2_ID);
-//    	assertNotEquals(null, acct);
-//    	
-//    	assertNotEquals(null, acct.getUserDefinedAttributeKeys());
-//    	assertEquals(1, acct.getUserDefinedAttributeKeys().size());
-//    	assertEquals(ConstTest.KVP_KEY_ACCT_IBAN, acct.getUserDefinedAttributeKeys().get(0));
-//    	assertEquals("DE01 1234 2345 3456 4567 99", acct.getUserDefinedAttribute(ConstTest.KVP_KEY_ACCT_IBAN));
-//    }
+    @Test
+    public void test_01_acct_01() throws Exception {
+    	KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_1_ID);
+    	assertNotEquals(null, acct);
+    	
+    	assertEquals(null, acct.getUserDefinedAttributeKeys());
+    }
+
+    // One kvp
+    @Test
+    public void test_01_acct_02() throws Exception {
+    	KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_2_ID);
+    	assertNotEquals(null, acct);
+    	
+    	assertNotEquals(null, acct.getUserDefinedAttributeKeys());
+    	assertEquals(1, acct.getUserDefinedAttributeKeys().size());
+    	assertEquals(ConstTest.KVP_KEY_ACCT_IBAN, acct.getUserDefinedAttributeKeys().get(0));
+    	assertEquals("DE01 1234 2345 3456 4567 99", acct.getUserDefinedAttribute(ConstTest.KVP_KEY_ACCT_IBAN));
+    }
 
     // -----------------------------------------------------------------
     // Transaction
@@ -206,122 +207,122 @@ public class TestHasWritableUserDefinedAttributesImpl {
 	// ----------------------------
     // No slots
     
-//    @Test
-//    public void test_02_acct_01() throws Exception {
-//    	KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_1_ID);
-//    	assertNotEquals(null, acct);
-//
-//    	assertEquals(ACCT_1_ID, acct.getID());
-//
-//    	// ----------------------------
-//    	// Modify the object
-//
-//    	try {
-//        	acct.setUserDefinedAttribute("abc", "def"); // illegal call, because does not exist
-//        	assertEquals(0, 1);
-//    	} catch ( SlotListDoesNotContainKeyException exc ) {
-//        	acct.addUserDefinedAttribute(ConstTest.SLOT_KEY_ASSOC_URI, "abc", "http://bore.dom");
-//    	}
-//
-//    	// ----------------------------
-//    	// Check whether the object can has actually be modified
-//    	// (in memory, not in the file yet).
-//
-//    	test_02_acct_01_check_memory(acct);
-//
-//    	// ----------------------------
-//    	// Now, check whether the modified object can be written to the
-//    	// output file, then re-read from it, and whether is is what
-//    	// we expect it is.
-//
-//    	File outFile = folder.newFile(ConstTest.GCSH_FILENAME_OUT);
-//    	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
-//    	// + outFile.getPath() + "'");
-//    	outFile.delete(); // sic, the temp. file is already generated (empty),
-//    			          // and the GnuCash file writer does not like that.
-//    	kmmInFile.writeFile(outFile);
-//
-//    	test_02_acct_01_check_persisted(outFile);
-//    }
-//
-//    private void test_02_acct_01_check_memory(KMyMoneyWritableAccount acct) throws Exception {
-//    	assertEquals(ACCT_1_ID, acct.getID()); // unchanged
-//    	assertNotEquals(null, acct.getUserDefinedAttributeKeys()); // changed
-//    	assertEquals(1, acct.getUserDefinedAttributeKeys().size()); // changed
-//    	assertEquals("http://bore.dom", acct.getUserDefinedAttribute("abc")); // changed
-//    }
-//
-//	private void test_02_acct_01_check_persisted(File outFile) throws Exception {
-//		kmmOutFile = new KMyMoneyFileImpl(outFile);
-//
-//		KMyMoneyAccount acct = kmmOutFile.getAccountByID(ACCT_1_ID);
-//		assertNotEquals(null, acct);
-//
-//		assertEquals(ACCT_1_ID, acct.getID()); // unchanged
-//    	assertNotEquals(null, acct.getUserDefinedAttributeKeys()); // changed
-//    	assertEquals(1, acct.getUserDefinedAttributeKeys().size()); // changed
-//    	assertEquals("http://bore.dom", acct.getUserDefinedAttribute("abc")); // changed
-//	}
+    @Test
+    public void test_02_acct_01() throws Exception {
+    	KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_1_ID);
+    	assertNotEquals(null, acct);
+
+    	assertEquals(ACCT_1_ID.toString(), acct.getID().toString());
+
+    	// ----------------------------
+    	// Modify the object
+
+    	try {
+        	acct.setUserDefinedAttribute("abc", "def"); // illegal call, because does not exist
+        	assertEquals(0, 1);
+    	} catch ( KVPListDoesNotContainKeyException exc ) {
+        	acct.addUserDefinedAttribute("abc", "http://bore.dom");
+    	}
+
+    	// ----------------------------
+    	// Check whether the object can has actually be modified
+    	// (in memory, not in the file yet).
+
+    	test_02_acct_01_check_memory(acct);
+
+    	// ----------------------------
+    	// Now, check whether the modified object can be written to the
+    	// output file, then re-read from it, and whether is is what
+    	// we expect it is.
+
+    	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+    	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+    	// + outFile.getPath() + "'");
+    	outFile.delete(); // sic, the temp. file is already generated (empty),
+    			          // and the GnuCash file writer does not like that.
+    	kmmInFile.writeFile(outFile);
+
+    	test_02_acct_01_check_persisted(outFile);
+    }
+
+    private void test_02_acct_01_check_memory(KMyMoneyWritableAccount acct) throws Exception {
+    	assertEquals(ACCT_1_ID.toString(), acct.getID().toString()); // unchanged
+    	assertNotEquals(null, acct.getUserDefinedAttributeKeys()); // changed
+    	assertEquals(1, acct.getUserDefinedAttributeKeys().size()); // changed
+    	assertEquals("http://bore.dom", acct.getUserDefinedAttribute("abc")); // changed
+    }
+
+	private void test_02_acct_01_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+
+		KMyMoneyAccount acct = kmmOutFile.getAccountByID(ACCT_1_ID);
+		assertNotEquals(null, acct);
+
+		assertEquals(ACCT_1_ID.toString(), acct.getID().toString()); // unchanged
+    	assertNotEquals(null, acct.getUserDefinedAttributeKeys()); // changed
+    	assertEquals(1, acct.getUserDefinedAttributeKeys().size()); // changed
+    	assertEquals("http://bore.dom", acct.getUserDefinedAttribute("abc")); // changed
+	}
 	
 	// ----------------------------
     // One or more slots
 
-//    @Test
-//    public void test_02_acct_02() throws Exception {
-//    	KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_2_ID);
-//    	assertNotEquals(null, acct);
-//
-//    	assertEquals(ACCT_2_ID, acct.getID());
-//
-//    	// ----------------------------
-//    	// Modify the object
-//
-//    	try {
-//        	acct.setUserDefinedAttribute("abc", "def"); // illegal call, because does not exist
-//        	assertEquals(0, 1);
-//    	} catch ( SlotListDoesNotContainKeyException exc ) {
-//        	acct.setUserDefinedAttribute(ConstTest.SLOT_KEY_ACCT_PLACEHOLDER, "false");
-//    	}
-//
-//    	// ----------------------------
-//    	// Check whether the object can has actually be modified
-//    	// (in memory, not in the file yet).
-//
-//    	test_02_acct_02_check_memory(acct);
-//
-//    	// ----------------------------
-//    	// Now, check whether the modified object can be written to the
-//    	// output file, then re-read from it, and whether is is what
-//    	// we expect it is.
-//
-//    	File outFile = folder.newFile(ConstTest.GCSH_FILENAME_OUT);
-//    	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
-//    	// + outFile.getPath() + "'");
-//    	outFile.delete(); // sic, the temp. file is already generated (empty),
-//    			          // and the GnuCash file writer does not like that.
-//    	kmmInFile.writeFile(outFile);
-//
-//    	test_02_acct_02_check_persisted(outFile);
-//    }
-//    
-//    private void test_02_acct_02_check_memory(KMyMoneyWritableAccount acct) throws Exception {
-//    	assertEquals(ACCT_2_ID, acct.getID()); // unchanged
-//    	assertNotEquals(null, acct.getUserDefinedAttributeKeys()); // unchanged
-//    	assertEquals(1, acct.getUserDefinedAttributeKeys().size()); // unchanged
-//    	assertEquals("false", acct.getUserDefinedAttribute(ConstTest.SLOT_KEY_ACCT_PLACEHOLDER)); // changed
-//    }
-//
-//	private void test_02_acct_02_check_persisted(File outFile) throws Exception {
-//		kmmOutFile = new KMyMoneyFileImpl(outFile);
-//
-//		KMyMoneyAccount acct = kmmOutFile.getAccountByID(ACCT_2_ID);
-//		assertNotEquals(null, acct);
-//
-//    	assertEquals(ACCT_2_ID, acct.getID()); // unchanged
-//    	assertNotEquals(null, acct.getUserDefinedAttributeKeys()); // unchanged
-//    	assertEquals(1, acct.getUserDefinedAttributeKeys().size()); // unchanged
-//    	assertEquals("false", acct.getUserDefinedAttribute(ConstTest.SLOT_KEY_ACCT_PLACEHOLDER)); // changed
-//	}
+    @Test
+    public void test_02_acct_02() throws Exception {
+    	KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_2_ID);
+    	assertNotEquals(null, acct);
+
+    	assertEquals(ACCT_2_ID.toString(), acct.getID().toString());
+
+    	// ----------------------------
+    	// Modify the object
+
+    	try {
+        	acct.setUserDefinedAttribute("abc", "def"); // illegal call, because does not exist
+        	assertEquals(0, 1);
+    	} catch ( KVPListDoesNotContainKeyException exc ) {
+        	acct.setUserDefinedAttribute(ConstTest.KVP_KEY_ACCT_IBAN, "Snoopy and Woodstock");
+    	}
+
+    	// ----------------------------
+    	// Check whether the object can has actually be modified
+    	// (in memory, not in the file yet).
+
+    	test_02_acct_02_check_memory(acct);
+
+    	// ----------------------------
+    	// Now, check whether the modified object can be written to the
+    	// output file, then re-read from it, and whether is is what
+    	// we expect it is.
+
+    	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+    	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+    	// + outFile.getPath() + "'");
+    	outFile.delete(); // sic, the temp. file is already generated (empty),
+    			          // and the GnuCash file writer does not like that.
+    	kmmInFile.writeFile(outFile);
+
+    	test_02_acct_02_check_persisted(outFile);
+    }
+    
+    private void test_02_acct_02_check_memory(KMyMoneyWritableAccount acct) throws Exception {
+    	assertEquals(ACCT_2_ID.toString(), acct.getID().toString()); // unchanged
+    	assertNotEquals(null, acct.getUserDefinedAttributeKeys()); // unchanged
+    	assertEquals(1, acct.getUserDefinedAttributeKeys().size()); // unchanged
+    	assertEquals("Snoopy and Woodstock", acct.getUserDefinedAttribute(ConstTest.KVP_KEY_ACCT_IBAN)); // changed
+    }
+
+	private void test_02_acct_02_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+
+		KMyMoneyAccount acct = kmmOutFile.getAccountByID(ACCT_2_ID);
+		assertNotEquals(null, acct);
+
+    	assertEquals(ACCT_2_ID.toString(), acct.getID().toString()); // unchanged
+    	assertNotEquals(null, acct.getUserDefinedAttributeKeys()); // unchanged
+    	assertEquals(1, acct.getUserDefinedAttributeKeys().size()); // unchanged
+    	assertEquals("Snoopy and Woodstock", acct.getUserDefinedAttribute(ConstTest.KVP_KEY_ACCT_IBAN)); // changed
+	}
 	
     // -----------------------------------------------------------------
     // Transaction
@@ -330,62 +331,62 @@ public class TestHasWritableUserDefinedAttributesImpl {
 	// ----------------------------
     // No slots
     
-//    @Test
-//    public void test_02_trx_01() throws Exception {
-//    	KMyMoneyWritableTransaction trx = kmmInFile.getWritableTransactionByID(TRX_1_ID);
-//    	assertNotEquals(null, trx);
-//
-//    	assertEquals(TRX_1_ID, trx.getID());
-//
-//    	// ----------------------------
-//    	// Modify the object
-//
-//    	try {
-//        	trx.setUserDefinedAttribute("abc", "def"); // illegal call, because does not exist
-//        	assertEquals(0, 1);
-//    	} catch ( SlotListDoesNotContainKeyException exc ) {
-//        	trx.addUserDefinedAttribute(ConstTest.SLOT_KEY_ASSOC_URI, "abc", "http://bore.dom");
-//    	}
-//
-//    	// ----------------------------
-//    	// Check whether the object can has actually be modified
-//    	// (in memory, not in the file yet).
-//
-//    	test_02_trx_01_check_memory(trx);
-//
-//    	// ----------------------------
-//    	// Now, check whether the modified object can be written to the
-//    	// output file, then re-read from it, and whether is is what
-//    	// we expect it is.
-//
-//    	File outFile = folder.newFile(ConstTest.GCSH_FILENAME_OUT);
-//    	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
-//    	// + outFile.getPath() + "'");
-//    	outFile.delete(); // sic, the temp. file is already generated (empty),
-//    			          // and the GnuCash file writer does not like that.
-//    	kmmInFile.writeFile(outFile);
-//
-//    	test_02_trx_01_check_persisted(outFile);
-//    }
-//
-//    private void test_02_trx_01_check_memory(KMyMoneyWritableTransaction trx) throws Exception {
-//    	assertEquals(TRX_1_ID, trx.getID()); // unchanged
-//    	assertNotEquals(null, trx.getUserDefinedAttributeKeys()); // changed
-//    	assertEquals(1, trx.getUserDefinedAttributeKeys().size()); // changed
-//    	assertEquals("http://bore.dom", trx.getUserDefinedAttribute("abc")); // changed
-//    }
-//
-//	private void test_02_trx_01_check_persisted(File outFile) throws Exception {
-//		kmmOutFile = new KMyMoneyFileImpl(outFile);
-//
-//		KMyMoneyTransaction trx = kmmOutFile.getTransactionByID(TRX_1_ID);
-//		assertNotEquals(null, trx);
-//
-//		assertEquals(TRX_1_ID, trx.getID()); // unchanged
-//    	assertNotEquals(null, trx.getUserDefinedAttributeKeys()); // changed
-//    	assertEquals(1, trx.getUserDefinedAttributeKeys().size()); // changed
-//    	assertEquals("http://bore.dom", trx.getUserDefinedAttribute("abc")); // changed
-//	}
+    @Test
+    public void test_02_trx_01() throws Exception {
+    	KMyMoneyWritableTransaction trx = kmmInFile.getWritableTransactionByID(TRX_1_ID);
+    	assertNotEquals(null, trx);
+
+    	assertEquals(TRX_1_ID, trx.getID());
+
+    	// ----------------------------
+    	// Modify the object
+
+    	try {
+        	trx.setUserDefinedAttribute("abc", "def"); // illegal call, because does not exist
+        	assertEquals(0, 1);
+    	} catch ( KVPListDoesNotContainKeyException exc ) {
+        	trx.addUserDefinedAttribute("abc", "http://bore.dom");
+    	}
+
+    	// ----------------------------
+    	// Check whether the object can has actually be modified
+    	// (in memory, not in the file yet).
+
+    	test_02_trx_01_check_memory(trx);
+
+    	// ----------------------------
+    	// Now, check whether the modified object can be written to the
+    	// output file, then re-read from it, and whether is is what
+    	// we expect it is.
+
+    	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+    	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+    	// + outFile.getPath() + "'");
+    	outFile.delete(); // sic, the temp. file is already generated (empty),
+    			          // and the GnuCash file writer does not like that.
+    	kmmInFile.writeFile(outFile);
+
+    	test_02_trx_01_check_persisted(outFile);
+    }
+
+    private void test_02_trx_01_check_memory(KMyMoneyWritableTransaction trx) throws Exception {
+    	assertEquals(TRX_1_ID, trx.getID()); // unchanged
+    	assertNotEquals(null, trx.getUserDefinedAttributeKeys()); // changed
+    	assertEquals(1, trx.getUserDefinedAttributeKeys().size()); // changed
+    	assertEquals("http://bore.dom", trx.getUserDefinedAttribute("abc")); // changed
+    }
+
+	private void test_02_trx_01_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+
+		KMyMoneyTransaction trx = kmmOutFile.getTransactionByID(TRX_1_ID);
+		assertNotEquals(null, trx);
+
+		assertEquals(TRX_1_ID, trx.getID()); // unchanged
+    	assertNotEquals(null, trx.getUserDefinedAttributeKeys()); // changed
+    	assertEquals(1, trx.getUserDefinedAttributeKeys().size()); // changed
+    	assertEquals("http://bore.dom", trx.getUserDefinedAttribute("abc")); // changed
+	}
 	
 	// ----------------------------
     // One or more slots
@@ -405,7 +406,7 @@ public class TestHasWritableUserDefinedAttributesImpl {
 //    	try {
 //        	trx.setUserDefinedAttribute("abc", "def"); // illegal call, because does not exist
 //        	assertEquals(0, 1);
-//    	} catch ( SlotListDoesNotContainKeyException exc ) {
+//    	} catch ( KVPListDoesNotContainKeyException exc ) {
 //        	trx.setUserDefinedAttribute(ConstTest.SLOT_KEY_TRX_DATE_POSTED, "2024-01-05");
 //    	}
 //
@@ -420,7 +421,7 @@ public class TestHasWritableUserDefinedAttributesImpl {
 //    	// output file, then re-read from it, and whether is is what
 //    	// we expect it is.
 //
-//    	File outFile = folder.newFile(ConstTest.GCSH_FILENAME_OUT);
+//    	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
 //    	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 //    	// + outFile.getPath() + "'");
 //    	outFile.delete(); // sic, the temp. file is already generated (empty),
@@ -463,122 +464,67 @@ public class TestHasWritableUserDefinedAttributesImpl {
     
 	// ----------------------------
     // No slots
+
+	// No such data
+	
+	// ----------------------------
+    // One or more slots
+
+    @Test
+    public void test_02_sec_02() throws Exception {
+    	KMyMoneyWritableSecurity sec = kmmInFile.getWritableSecurityByID(SEC_2_ID);
+    	assertNotEquals(null, sec);
+
+    	assertEquals(SEC_2_ID, sec.getID());
+
+    	// ----------------------------
+    	// Modify the object
+
+    	try {
+        	sec.setUserDefinedAttribute("abc", "def"); // illegal call, because does not exist
+        	assertEquals(0, 1);
+    	} catch ( KVPListDoesNotContainKeyException exc ) {
+        	sec.setUserDefinedAttribute(ConstTest.KVP_KEY_SEC_SECURITY_ID, "KUXYZPP082");
+    	}
+
+    	// ----------------------------
+    	// Check whether the object can has actually be modified
+    	// (in memory, not in the file yet).
+
+    	test_02_sec_02_check_memory(sec);
+
+    	// ----------------------------
+    	// Now, check whether the modified object can be written to the
+    	// output file, then re-read from it, and whether is is what
+    	// we expect it is.
+
+    	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+    	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+    	// + outFile.getPath() + "'");
+    	outFile.delete(); // sic, the temp. file is already generated (empty),
+    			          // and the GnuCash file writer does not like that.
+    	kmmInFile.writeFile(outFile);
+
+    	test_02_sec_02_check_persisted(outFile);
+    }
     
-//    @Test
-//    public void test_02_sec_01() throws Exception {
-//    	KMyMoneyWritableSecurity sec = kmmInFile.getWritableSecurityByQualifID(SEC_1_ID);
-//    	assertNotEquals(null, sec);
-//
-//    	assertEquals(SEC_1_ID.toString(), sec.getQualifID().toString());
-//
-//    	// ----------------------------
-//    	// Modify the object
-//
-//    	try {
-//        	sec.setUserDefinedAttribute("abc", "def"); // illegal call, because does not exist
-//        	assertEquals(0, 1);
-//    	} catch ( SlotListDoesNotContainKeyException exc ) {
-//        	sec.addUserDefinedAttribute(ConstTest.SLOT_KEY_ASSOC_URI, "abc", "http://bore.dom");
-//    	}
-//
-//    	// ----------------------------
-//    	// Check whether the object can has actually be modified
-//    	// (in memory, not in the file yet).
-//
-//    	test_02_sec_01_check_memory(sec);
-//
-//    	// ----------------------------
-//    	// Now, check whether the modified object can be written to the
-//    	// output file, then re-read from it, and whether is is what
-//    	// we expect it is.
-//
-//    	File outFile = folder.newFile(ConstTest.GCSH_FILENAME_OUT);
-//    	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
-//    	// + outFile.getPath() + "'");
-//    	outFile.delete(); // sic, the temp. file is already generated (empty),
-//    			          // and the GnuCash file writer does not like that.
-//    	kmmInFile.writeFile(outFile);
-//
-//    	test_02_sec_01_check_persisted(outFile);
-//    }
-//
-//    private void test_02_sec_01_check_memory(KMyMoneyWritableSecurity sec) throws Exception {
-//    	assertEquals(SEC_1_ID.toString(), sec.getQualifID().toString()); // unchanged
-//    	assertNotEquals(null, sec.getUserDefinedAttributeKeys()); // changed
-//    	assertEquals(1, sec.getUserDefinedAttributeKeys().size()); // changed
-//    	assertEquals("http://bore.dom", sec.getUserDefinedAttribute("abc")); // changed
-//    }
-//
-//	private void test_02_sec_01_check_persisted(File outFile) throws Exception {
-//		kmmOutFile = new KMyMoneyFileImpl(outFile);
-//
-//		KMyMoneySecurity sec = kmmOutFile.getSecurityByQualifID(SEC_1_ID);
-//		assertNotEquals(null, sec);
-//
-//		assertEquals(SEC_1_ID.toString(), sec.getQualifID().toString()); // unchanged
-//    	assertNotEquals(null, sec.getUserDefinedAttributeKeys()); // changed
-//    	assertEquals(1, sec.getUserDefinedAttributeKeys().size()); // changed
-//    	assertEquals("http://bore.dom", sec.getUserDefinedAttribute("abc")); // changed
-//	}
-//	
-//	// ----------------------------
-//    // One or more slots
-//
-//    @Test
-//    public void test_02_sec_02() throws Exception {
-//    	KMyMoneyWritableSecurity sec = kmmInFile.getWritableSecurityByQualifID(SEC_2_ID);
-//    	assertNotEquals(null, sec);
-//
-//    	assertEquals(SEC_2_ID.toString(), sec.getQualifID().toString());
-//
-//    	// ----------------------------
-//    	// Modify the object
-//
-//    	try {
-//        	sec.setUserDefinedAttribute("abc", "def"); // illegal call, because does not exist
-//        	assertEquals(0, 1);
-//    	} catch ( SlotListDoesNotContainKeyException exc ) {
-//        	sec.setUserDefinedAttribute(ConstTest.SLOT_KEY_SEC_USER_SYMBOL, "KUXYZPP082");
-//    	}
-//
-//    	// ----------------------------
-//    	// Check whether the object can has actually be modified
-//    	// (in memory, not in the file yet).
-//
-//    	test_02_sec_02_check_memory(sec);
-//
-//    	// ----------------------------
-//    	// Now, check whether the modified object can be written to the
-//    	// output file, then re-read from it, and whether is is what
-//    	// we expect it is.
-//
-//    	File outFile = folder.newFile(ConstTest.GCSH_FILENAME_OUT);
-//    	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
-//    	// + outFile.getPath() + "'");
-//    	outFile.delete(); // sic, the temp. file is already generated (empty),
-//    			          // and the GnuCash file writer does not like that.
-//    	kmmInFile.writeFile(outFile);
-//
-//    	test_02_sec_02_check_persisted(outFile);
-//    }
-//    
-//    private void test_02_sec_02_check_memory(KMyMoneyWritableSecurity sec) throws Exception {
-//    	assertEquals(SEC_2_ID.toString(), sec.getQualifID().toString()); // unchanged
-//    	assertNotEquals(null, sec.getUserDefinedAttributeKeys()); // unchanged
-//    	assertEquals(1, sec.getUserDefinedAttributeKeys().size()); // unchanged
-//    	assertEquals("KUXYZPP082", sec.getUserDefinedAttribute(ConstTest.SLOT_KEY_SEC_USER_SYMBOL)); // changed
-//    }
-//
-//	private void test_02_sec_02_check_persisted(File outFile) throws Exception {
-//		kmmOutFile = new KMyMoneyFileImpl(outFile);
-//
-//		KMyMoneySecurity sec = kmmOutFile.getSecurityByQualifID(SEC_2_ID);
-//		assertNotEquals(null, sec);
-//
-//    	assertEquals(SEC_2_ID.toString(), sec.getQualifID().toString()); // unchanged
-//    	assertNotEquals(null, sec.getUserDefinedAttributeKeys()); // unchanged
-//    	assertEquals(1, sec.getUserDefinedAttributeKeys().size()); // unchanged
-//    	assertEquals("KUXYZPP082", sec.getUserDefinedAttribute(ConstTest.SLOT_KEY_SEC_USER_SYMBOL)); // changed
-//	}
+    private void test_02_sec_02_check_memory(KMyMoneyWritableSecurity sec) throws Exception {
+    	assertEquals(SEC_2_ID, sec.getID()); // unchanged
+    	assertNotEquals(null, sec.getUserDefinedAttributeKeys()); // unchanged
+    	assertEquals(1, sec.getUserDefinedAttributeKeys().size()); // unchanged
+    	assertEquals("KUXYZPP082", sec.getUserDefinedAttribute(ConstTest.KVP_KEY_SEC_SECURITY_ID)); // changed
+    }
+
+	private void test_02_sec_02_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+
+		KMyMoneySecurity sec = kmmOutFile.getSecurityByID(SEC_2_ID);
+		assertNotEquals(null, sec);
+
+    	assertEquals(SEC_2_ID, sec.getID()); // unchanged
+    	assertNotEquals(null, sec.getUserDefinedAttributeKeys()); // unchanged
+    	assertEquals(1, sec.getUserDefinedAttributeKeys().size()); // unchanged
+    	assertEquals("KUXYZPP082", sec.getUserDefinedAttribute(ConstTest.KVP_KEY_SEC_SECURITY_ID)); // changed
+	}
 
 }

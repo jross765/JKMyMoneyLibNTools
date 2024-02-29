@@ -11,6 +11,7 @@ import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
+import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
@@ -92,6 +93,8 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * @return A changable version of the account or null of not found.
 	 */
 	KMyMoneyWritableAccount getWritableAccountByID(KMMComplAcctID acctID);
+
+	KMyMoneyWritableAccount getWritableAccountByID(KMMAcctID acctID);
 
 	/**
 	 *

@@ -768,6 +768,28 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
 
 	@Override
+	public KMyMoneyWritableAccount getWritableAccountByID(final KMMAcctID acctID) {
+		if ( acctID == null ) {
+			throw new IllegalArgumentException("null account ID given");
+		}
+
+		if ( ! acctID.isSet() ) {
+			throw new IllegalArgumentException("account ID is not set");
+		}
+
+		try {
+			KMyMoneyAccount acct = super.getAccountByID(acctID);
+			return new KMyMoneyWritableAccountImpl((KMyMoneyAccountImpl) acct, true);
+		} catch (Exception exc) {
+			LOGGER.error(
+					"getWritableAccountByID: Could not instantiate writable account object from read-only account object (ID: "
+							+ acctID + ")");
+			throw new RuntimeException(
+					"Could not instantiate writable account object from read-only account object (ID: " + acctID + ")");
+		}
+	}
+
+	@Override
 	public KMyMoneyWritableTransaction getWritableTransactionByID(KMMTrxID trxID) {
 		if ( trxID == null ) {
 			throw new IllegalArgumentException("null transaction ID given");
