@@ -2,25 +2,22 @@ package org.kmymoney.api.write.impl;
 
 import java.beans.PropertyChangeSupport;
 import java.math.BigInteger;
-import java.util.List;
 
 import org.kmymoney.api.Const;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.api.generated.KEYVALUEPAIRS;
 import org.kmymoney.api.generated.ObjectFactory;
-import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.read.KMMSecCurr;
-import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.kmymoney.api.read.impl.KMyMoneySecurityImpl;
 import org.kmymoney.api.read.impl.hlp.KVPListDoesNotContainKeyException;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.kmymoney.api.write.impl.hlp.HasWritableUserDefinedAttributesImpl;
 import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -323,51 +320,39 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 
 	// ---------------------------------------------------------------
 
-	/**
-	 * @param name  the name of the user-defined attribute
-	 * @param value the value or null if not set
-	 * @see {@link KMyMoneyObject#getUserDefinedAttribute(String)}
-	 */
-	public void setUserDefinedAttribute(final String name, final String value) {
-		KEYVALUEPAIRS kvps = jwsdpPeer.getKEYVALUEPAIRS();
-		if ( kvps == null ) {
-			// key-value-pair(s) does/do not exist yet
+	@Override
+	public void addUserDefinedAttribute(final String name, final String value) {
+		if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
 			ObjectFactory fact = getKMyMoneyFile().getObjectFactory();
-			if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
-				// The structure KEYVALUEPAIRS (note the s) does not
-				// exist yet -- e.t. has to be built from scratch
-				kvps = fact.createKEYVALUEPAIRS();
-				jwsdpPeer.setKEYVALUEPAIRS(kvps);
-			}
+			KEYVALUEPAIRS newKVPs = fact.createKEYVALUEPAIRS();
+			jwsdpPeer.setKEYVALUEPAIRS(newKVPs);
 		}
 		
-		String val = null;
-		try {
-			val = getUserDefinedAttribute(name);
-		} catch ( KVPListDoesNotContainKeyException |
-				  NullPointerException exc ) {
-			LOGGER.warn("setUserDefinedAttribute: Cannot get actual user-defined value for key '" + name + "'; " + 
-	                    "does not exist yet.");
-			LOGGER.warn("setUserDefinedAttribute: Will generate it.");
-		}
-		
-		if ( val == null ) {
-			// The structure KEYVALUEPAIRS already exists, but
-			// there is no PAIR entry yet that matches the key.
-			ObjectFactory fact = getKMyMoneyFile().getObjectFactory();
-			PAIR kvp = fact.createPAIR();
-			kvp.setKey(name);
-			kvp.setValue("");
-			jwsdpPeer.getKEYVALUEPAIRS().getPAIR().add(kvp);
-		}
-		
-		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
 		HasWritableUserDefinedAttributesImpl
-			.setUserDefinedAttributeCore(kvpList, getWritableKMyMoneyFile(), 
+			.addUserDefinedAttributeCore(jwsdpPeer.getKEYVALUEPAIRS(), getWritableKMyMoneyFile(), 
 			                             name, value);
+	}
 
-		// Already done in HasWritableUserDefinedAttributesImpl.setUserDefinedAttributeCore:
-		// getKMyMoneyFile().setModified(true);
+	@Override
+	public void removeUserDefinedAttribute(final String name) {
+		if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
+			throw new KVPListDoesNotContainKeyException();
+		}
+		
+		HasWritableUserDefinedAttributesImpl
+			.removeUserDefinedAttributeCore(jwsdpPeer.getKEYVALUEPAIRS(), getWritableKMyMoneyFile(), 
+			                             	name);
+	}
+
+	@Override
+	public void setUserDefinedAttribute(final String name, final String value) {
+		if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
+			throw new KVPListDoesNotContainKeyException();
+		}
+		
+		HasWritableUserDefinedAttributesImpl
+			.setUserDefinedAttributeCore(jwsdpPeer.getKEYVALUEPAIRS(), getWritableKMyMoneyFile(), 
+			                             name, value);
 	}
 
 	// -----------------------------------------------------------------

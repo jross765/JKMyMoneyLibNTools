@@ -1,11 +1,5 @@
 package org.kmymoney.api.write.impl;
 
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.base.basetypes.complex.KMMPricePairID;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyPricePair;
@@ -14,6 +8,11 @@ import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritablePricePair;
 import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.base.basetypes.complex.KMMPricePairID;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

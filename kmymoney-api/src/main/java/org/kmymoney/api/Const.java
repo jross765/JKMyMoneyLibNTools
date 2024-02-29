@@ -2,6 +2,16 @@ package org.kmymoney.api;
 
 public class Const {
   
+  public static final String KVP_KEY_ACCT_IBAN         = "iban";
+  
+  public static final String KVP_KEY_SEC_SECURITY_ID   = "kmm-security-id";  
+  public static final String KVP_KEY_SEC_ONLINE_SOURCE = "kmm-online-source";
+  
+  public static final String KVP_KEY_ASSOC_URI         = "assoc_uri";
+  public static final String KVP_KEY_DUMMY             = "dummy";
+
+  // -----------------------------------------------------------------
+
   public static final String STANDARD_DATE_FORMAT = "yyyy-MM-dd";
 
   public static final String STANDARD_DATE_FORMAT_BOOK = "yyyy-MM-dd";

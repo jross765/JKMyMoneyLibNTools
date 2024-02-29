@@ -14,13 +14,12 @@ import java.util.List;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.KEYVALUEPAIRS;
 import org.kmymoney.api.generated.ObjectFactory;
-import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.UnknownAccountTypeException;
-import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.api.read.impl.hlp.KVPListDoesNotContainKeyException;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
@@ -501,42 +500,39 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 
 	// -------------------------------------------------------
 
-	/**
-	 * @param name  the name of the user-defined attribute
-	 * @param value the value or null if not set
-	 * @see {@link KMyMoneyObject#getUserDefinedAttribute(String)}
-	 */
-	public void setUserDefinedAttribute(final String name, final String value) {
-		KEYVALUEPAIRS kvps = jwsdpPeer.getKEYVALUEPAIRS();
-		if ( kvps == null ) {
-			// key-value-pair(s) does/do not exist yet
+	@Override
+	public void addUserDefinedAttribute(final String name, final String value) {
+		if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
 			ObjectFactory fact = getKMyMoneyFile().getObjectFactory();
-			if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
-				// The structure KEYVALUEPAIRS (note the s) does not
-				// exist yet -- e.t. has to be built from scratch
-				kvps = fact.createKEYVALUEPAIRS();
-				jwsdpPeer.setKEYVALUEPAIRS(kvps);
-			}
+			KEYVALUEPAIRS newKVPs = fact.createKEYVALUEPAIRS();
+			jwsdpPeer.setKEYVALUEPAIRS(newKVPs);
 		}
 		
-		String val = getUserDefinedAttribute(name);
-		if ( val == null ) {
-			// The structure KEYVALUEPAIRS already exists, but
-			// there is no PAIR entry yet that matches the key.
-			ObjectFactory fact = getKMyMoneyFile().getObjectFactory();
-			PAIR kvp = fact.createPAIR();
-			kvp.setKey(name);
-			kvp.setValue("");
-			jwsdpPeer.getKEYVALUEPAIRS().getPAIR().add(kvp);
-		}
-		
-		List<PAIR> kvpList = jwsdpPeer.getKEYVALUEPAIRS().getPAIR();
 		HasWritableUserDefinedAttributesImpl
-			.setUserDefinedAttributeCore(kvpList, getWritableKMyMoneyFile(), 
+			.addUserDefinedAttributeCore(jwsdpPeer.getKEYVALUEPAIRS(), getWritableKMyMoneyFile(), 
 			                             name, value);
+	}
 
-		// Already done in HasWritableUserDefinedAttributesImpl.setUserDefinedAttributeCore:
-		// getKMyMoneyFile().setModified(true);
+	@Override
+	public void removeUserDefinedAttribute(final String name) {
+		if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
+			throw new KVPListDoesNotContainKeyException();
+		}
+		
+		HasWritableUserDefinedAttributesImpl
+			.removeUserDefinedAttributeCore(jwsdpPeer.getKEYVALUEPAIRS(), getWritableKMyMoneyFile(), 
+			                             	name);
+	}
+
+	@Override
+	public void setUserDefinedAttribute(final String name, final String value) {
+		if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
+			throw new KVPListDoesNotContainKeyException();
+		}
+		
+		HasWritableUserDefinedAttributesImpl
+			.setUserDefinedAttributeCore(jwsdpPeer.getKEYVALUEPAIRS(), getWritableKMyMoneyFile(), 
+			                             name, value);
 	}
 
     // -----------------------------------------------------------------

@@ -1,13 +1,7 @@
 package org.kmymoney.api.write.impl;
 
-import java.beans.PropertyChangeListener;
 import java.text.ParseException;
 
-import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.basetypes.simple.KMMPyeID;
-import org.kmymoney.base.basetypes.simple.KMMSpltID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.read.IllegalTransactionSplitActionException;
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -17,6 +11,11 @@ import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.simple.KMMPyeID;
+import org.kmymoney.base.basetypes.simple.KMMSpltID;
+import org.kmymoney.base.numbers.FixedPointNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
