@@ -127,7 +127,7 @@ public class GenDepotTrx {
 		
 		KMMAcctID expAcct2 = new KMMAcctID( "A000027" ); // Soli
 		FixedPointNumber amt2 = amt1.copy().multiply(new FixedPointNumber("55/100"));
-		AcctIDAmountPair acctAmtPr2 = new AcctIDAmountPair(expAcct1, amt1);
+		AcctIDAmountPair acctAmtPr2 = new AcctIDAmountPair(expAcct2, amt2);
 		expensesAcctAmtList.add(acctAmtPr2);
 	}
 }
