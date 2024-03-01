@@ -1,5 +1,19 @@
-`JKMyMoneyLib` is a Java-library for reading and writing the XML file format of the 
-KMyMoney open source personal finance software.
+Project JKMyMoneyLib
+=====================
+
+`JKMyMoneyLib` is a free and open-source Java-library for reading and writing the XML file format of the KMyMoney open source personal finance software (`kmymoney.org`).
+
+It is not directly affiliated with / sponsored or coordinated by the developers of the KMyMoney project.
+
+# Modules and Further Details
+
+* [Base](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-base/README.md)
+
+* [API](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api/README.md)
+
+* [API Extensions](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api-ext/README.md)
+
+* [Example Programs](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api-examples/README.md)
 
 # Compatibility
 ## System Compatibility
@@ -18,22 +32,29 @@ but he has not tested it.
 | 0.3     | no               | Major changes in interfaces    |
 | 0.2     | no               | Major changes in interfaces    |
 
-# Modules and Further Details
+# Major Changes
+Here, only the top-level changes are mentioned. For more Details, cf. the README files of the resp. modules (links below).
 
-* [Base](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-base/README.md)
+## V. 0.4 &rarr; 0.5
+Changed project structure:
 
-* [API](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api/README.md)
+* Introduced new module "Base" (spun off from "API").
 
-* [API Extensions](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api-ext/README.md)
+	This was necessary because the author is using the new module in other, external projects (not published).
 
-* [Example Programs](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api-examples/README.md)
+* Introduced new module "API Extensions"
+
+	Currently, it contains just one class. That will (hopefully) grow.
+
+## V. 0.3 &rarr; 0.4 and Before
+Cf. the README file of modules "API" and "Example programs" (links below).
 
 # Sister Project
 This project has a sister project: 
 
 [`JGnuCashLib`](https://github.com/jross765/jgnucashlib)
 
-Both projects do not have the same level of maturity, `JGnuCashLib` is currently more 
+Both projects do not have the same level of maturity, `JGnuCashLib` is currently a little more 
 advanced than `JKMyMoneyLib`. Obviously, the author strives to keep both projects symmetrical 
 and to eventually have them both on a comparable level of maturity.
 
