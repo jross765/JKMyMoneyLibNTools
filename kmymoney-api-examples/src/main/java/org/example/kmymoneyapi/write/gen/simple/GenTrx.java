@@ -1,4 +1,4 @@
-package org.example.kmymoneyapi.write;
+package org.example.kmymoneyapi.write.gen.simple;
 
 import java.io.File;
 import java.io.IOException;
