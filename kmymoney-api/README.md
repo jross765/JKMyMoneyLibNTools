@@ -5,7 +5,7 @@ This is the core module of the project, providing all low-level read-/write acce
 
 # Major Changes 
 ## V. 0.4 &rarr; 0.5
-* Extracted some basic packagesto new module "Base".
+* Extracted some basic packages to new module "Base".
 
 * Clean-up work, most of it under the hood.
 

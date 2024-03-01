@@ -182,21 +182,13 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      */
     KMMComplAcctID getParentAccountID();
     
-    boolean isRootAccount();
-
     /**
      * @return the parent-account we are a child of or null if we are a top-level
      *         account
      */
     KMyMoneyAccount getParentAccount();
 
-    /**
-     * The returned collection is never null and is sorted by Account-Name.
-     *
-     * @return all child-accounts
-     * @see #getChildren()
-     */
-    Collection<KMyMoneyAccount> getSubAccounts();
+    boolean isRootAccount();
 
     /**
      * The returned collection is never null and is sorted by Account-Name.

@@ -273,8 +273,7 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
 	if ( getSplits().size() == 0 )
 	    throw new SplitNotFoundException();
 	
-	Iterator<KMyMoneyTransactionSplit> iter = getSplits().iterator();
-	return iter.next();
+	return getSplits().get(0);
     }
 
     /**
@@ -285,9 +284,7 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
 	if ( getSplits().size() <= 1 )
 	    throw new SplitNotFoundException();
 	
-	Iterator<KMyMoneyTransactionSplit> iter = getSplits().iterator();
-	iter.next();
-	return iter.next();
+	return getSplits().get(1);
     }
 
     /**

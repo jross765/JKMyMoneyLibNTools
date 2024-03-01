@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Currency;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -111,28 +110,6 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 		}
 	}
 
-	@Override
-	public boolean isRootAccount() {
-		// The following does not work -- endless loop
-//	    for ( KMyMoneyAccount acct : getKMyMoneyFile().getRootAccounts() ) {
-//		if ( acct.getID().equals(getID()) ) {
-//		    return true;
-//		}
-//	    }
-//	    return false;
-
-		// Instead (and just as good):
-		if ( getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.ASSET)) || 
-			 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.LIABILITY)) || 
-			 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.INCOME)) || 
-			 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.EXPENSE)) || 
-			 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.EQUITY)) ) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public KMyMoneyAccount getParentAccount() {
 		if ( isRootAccount() )
 			return null;
@@ -149,8 +126,20 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 		return getKMyMoneyFile().getAccountByID(parentID);
 	}
 
-	public Collection<KMyMoneyAccount> getSubAccounts() {
-		return getChildren();
+	@Override
+	public boolean isRootAccount() {
+		// Note: KMyMoney does not actually have a root account.
+		// Instead, we define all top-level accounts as roots.
+		// ==> We have not *one* tree, but five of them.
+		if ( getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.ASSET)) || 
+			 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.LIABILITY)) || 
+			 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.INCOME)) || 
+			 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.EXPENSE)) || 
+			 getID().equals(KMMComplAcctID.get(KMMComplAcctID.Top.EQUITY)) ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -404,8 +393,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 			}
 		}
 
-		for ( Iterator<KMyMoneyAccount> iter = getSubAccounts().iterator(); iter.hasNext(); ) {
-			KMyMoneyAccount account = (KMyMoneyAccount) iter.next();
+		for ( KMyMoneyAccount account : getChildren() ) {
 			KMyMoneyTransactionSplit split = account.getLastSplitBeforeRecursive(date);
 			if ( split != null && 
 				 split.getTransaction() != null ) {

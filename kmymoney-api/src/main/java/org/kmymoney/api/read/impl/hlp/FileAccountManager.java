@@ -176,7 +176,7 @@ public class FileAccountManager {
 		else if ( acctList.size() > 1 )
 			throw new TooManyEntriesFoundException();
 		else
-			return acctList.iterator().next();
+			return acctList.get(0);
 	}
 
 	/*

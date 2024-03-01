@@ -46,6 +46,8 @@ Changed project structure:
 
 	Currently, it contains just one class. That will (hopefully) grow.
 
+* Improved symmetry with sister project.
+
 ## V. 0.3 &rarr; 0.4 and Before
 Cf. the README file of modules "API" and "Example programs" (links below).
 

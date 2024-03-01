@@ -121,7 +121,7 @@ public class FilePayeeManager {
 		else if ( cmdtyList.size() > 1 )
 			throw new TooManyEntriesFoundException();
 		else
-			return cmdtyList.iterator().next();
+			return cmdtyList.get(0);
 	}
 
 	public Collection<KMyMoneyPayee> getPayees() {
