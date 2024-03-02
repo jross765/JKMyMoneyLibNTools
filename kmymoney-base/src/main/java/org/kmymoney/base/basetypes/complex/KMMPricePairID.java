@@ -102,6 +102,22 @@ public class KMMPricePairID {
 
     // ---------------------------------------------------------------
     
+    public void set(KMMPricePairID prcPrID) {
+		if ( prcPrID == null ) {
+			throw new IllegalArgumentException("null price-pair-ID given");
+		}
+
+		// ::TODO
+//		if ( ! prcPrID.isSet() ) {
+//			throw new IllegalArgumentException("unset price-pair-ID given");
+//		}
+		
+        setFromSecCurr(prcPrID.getFromSecCurr());
+        setToCurr(prcPrID.getToCurr());
+    }
+
+    // ---------------------------------------------------------------
+    
 	@Override
 	public int hashCode() {
 		return Objects.hash(fromSecCurr, toCurr);

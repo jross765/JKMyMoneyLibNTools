@@ -1,6 +1,7 @@
 package org.kmymoney.api.write.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.File;
 import java.io.InputStream;
@@ -108,9 +109,6 @@ public class TestKMyMoneyWritableFileImpl {
 
 	@Test
 	public void test05() throws Exception {
-		// CAUTION: This one is an exception:
-		// There is one additional security object on the "raw" level:
-		// the "template".
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
@@ -173,18 +171,35 @@ public class TestKMyMoneyWritableFileImpl {
 		kmmOutFile = new KMyMoneyWritableFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 		
-		test_04_1_check_1();
+		assertEquals(true, outFile.exists());
+		
+		test_04_1_check_1_xmllint(outFile);
 		test_04_1_check_2();
+		test_04_1_check_3();
 	}
 
-	private void test_04_1_check_1() {
+	// CAUTION: Not platform-independent!
+	// Tool "xmllint" must be installed and in path
+	private void test_04_1_check_1_xmllint(File outFile) throws Exception {
+		// Check if generated document is valid
+		ProcessBuilder bld = new ProcessBuilder("xmllint", outFile.getAbsolutePath());
+		Process prc = bld.start();
+
+		if ( prc.waitFor() == 0 ) {
+			assertEquals(0, 0);
+		} else {
+			assertEquals(0, 1);
+		}
+	}
+	
+	private void test_04_1_check_2() {
 		// Does not work:
 		// assertEquals(kmmFileStats, kmmFileStats2);
 		// Works:
 		assertEquals(true, kmmInFileStats.equals(kmmOutFileStats));
 	}
 
-	private void test_04_1_check_2() {
+	private void test_04_1_check_3() {
 		assertEquals(kmmInFile.getAccounts().toString(), kmmOutFile.getAccounts().toString());
 		assertEquals(kmmInFile.getTransactions().toString(), kmmOutFile.getTransactions().toString());
 		assertEquals(kmmInFile.getTransactionSplits().toString(), kmmOutFile.getTransactionSplits().toString());

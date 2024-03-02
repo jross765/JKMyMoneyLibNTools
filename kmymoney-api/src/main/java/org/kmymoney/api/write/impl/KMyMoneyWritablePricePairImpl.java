@@ -50,6 +50,14 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
     		  file);
     }
 
+    public KMyMoneyWritablePricePairImpl(
+    		final KMMPricePairID prcPrID,
+    		final KMyMoneyWritableFileImpl file) {
+    	super(createPricePair_int(prcPrID.getFromSecCurr(), prcPrID.getToCurr(),
+    							  file), 
+    		  file);
+    }
+
     public KMyMoneyWritablePricePairImpl(final KMyMoneyPricePairImpl prcPr) {
     	super(prcPr.getJwsdpPeer(), prcPr.getKMyMoneyFile());
     }

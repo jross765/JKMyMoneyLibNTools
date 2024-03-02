@@ -11,10 +11,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.base.basetypes.complex.KMMPricePairID;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
@@ -22,6 +18,10 @@ import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyPricePairImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.api.write.KMyMoneyWritablePricePair;
+import org.kmymoney.base.basetypes.complex.KMMPricePairID;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 
 import junit.framework.JUnit4TestAdapter;
 
@@ -87,6 +87,8 @@ public class TestKMyMoneyWritablePricePairImpl {
 		secID2 = new KMMQualifSecCurrID(KMMQualifSecCurrID.Type.SECURITY, "E000002");
 
 		currID1 = new KMMQualifCurrID("USD");
+		
+		newID = new KMMPricePairID(new KMMQualifCurrID("EUR"), new KMMQualifCurrID("EUR")); // dummy
 	}
 
     // -----------------------------------------------------------------
@@ -314,7 +316,65 @@ public class TestKMyMoneyWritablePricePairImpl {
     // PART 3.1: High-Level
     // ------------------------------
 
-	// ::TODO
+	@Test
+	public void test03_1_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW)); 
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
+
+		KMMQualifCurrID fromCurr = new KMMQualifCurrID("CNY");  
+		KMMQualifCurrID toCurr = new KMMQualifCurrID("JPY");  
+		KMMPricePairID prcPrID = new KMMPricePairID(fromCurr, toCurr);  
+		KMyMoneyWritablePricePair prcPr = kmmInFile.createWritablePricePair(prcPrID);
+		newID.set(prcPr.getID());
+
+		// Additional check for this class -- no, not as trivial as it seems to be. 
+		assertEquals(newID, prcPrID);
+		
+		// ----------------------------
+		// Check whether the object can has actually be created
+		// (in memory, not in the file yet).
+
+		test03_1_1_check_memory(prcPr);
+
+		// ----------------------------
+		// Now, check whether the created object can be written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		                  // and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test03_1_1_check_persisted(outFile);
+	}
+
+	private void test03_1_1_check_memory(KMyMoneyWritablePricePair prcPr) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
+
+		assertEquals(newID.toString(), prcPr.getID().toString());
+	}
+
+	private void test03_1_1_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
+
+		KMyMoneyPricePair sec = kmmOutFile.getPricePairByID(newID);
+		assertNotEquals(null, sec);
+
+		assertEquals(newID.toString(), sec.getID().toString());
+	}
 
     // ------------------------------
     // PART 3.2: Low-Level

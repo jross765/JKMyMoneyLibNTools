@@ -275,14 +275,8 @@ public class TestKMyMoneyWritableSecurityImpl {
 	public void test03_1_1() throws Exception {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
-		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic + 1
-																												// for
-																												// template
-		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // sic,
-																													// NOT
-																													// +
-																													// 1
-																													// yet
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritableSecurity sec = kmmInFile.createWritableSecurity();
@@ -311,16 +305,8 @@ public class TestKMyMoneyWritableSecurityImpl {
 	}
 
 	private void test03_1_1_check_memory(KMyMoneyWritableSecurity sec) throws Exception {
-		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic
-																													// +
-																													// 1
-																													// for
-																													// template
-		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // sic,
-																														// NOT
-																														// +
-																														// 1
-																														// yet
+		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
 
 		assertEquals(newID.toString(), sec.getID().toString());
@@ -331,12 +317,8 @@ public class TestKMyMoneyWritableSecurityImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic
-																													// +
-																													// 1
-																													// for
-																													// template
-		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // dto.
+		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
 
 		KMyMoneySecurity sec = kmmOutFile.getSecurityByID(newID);

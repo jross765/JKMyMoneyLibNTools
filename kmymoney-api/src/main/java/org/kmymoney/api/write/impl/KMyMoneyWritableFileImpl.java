@@ -979,6 +979,13 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
 
 	@Override
+	public KMyMoneyWritablePricePair createWritablePricePair(KMMPricePairID prcPrID) {
+		KMyMoneyWritablePricePairImpl prc = new KMyMoneyWritablePricePairImpl(prcPrID, this);
+		super.prcMgr.addPricePair(prc);
+		return prc;
+	}
+	
+	@Override
 	public void removePricePair(KMyMoneyWritablePricePair prcPr) {
 		// 1) remove avatar in price manager
 		super.prcMgr.removePricePair(prcPr);

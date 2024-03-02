@@ -259,6 +259,11 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 													  KMMQualifCurrID toCurrID);
 
 	/**
+	 * @return a new price pair with no splits that is already added to this file
+	 */
+	KMyMoneyWritablePricePair createWritablePricePair(KMMPricePairID prcPrID);
+
+	/**
 	 *
 	 * @param prcPr 
 	 */
