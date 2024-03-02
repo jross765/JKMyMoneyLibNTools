@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
  * A technical entry ID for an account
  * (primarily defined for type safety).
  * 
- * @see KMyMoneyAccount
  * @see KMMComplAcctID
  */
 public class KMMAcctID extends KMMID {

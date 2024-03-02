@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 /**
  * A technical entry ID for a transaction split
  * (primarily defined for type safety).
- * 
- * @see KMyMoneyTransactionSplit
  */
 public class KMMSpltID extends KMMID {
     // Logger

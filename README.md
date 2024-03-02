@@ -17,8 +17,11 @@ It is not directly affiliated with / sponsored or coordinated by the developers 
 
 # Compatibility
 ## System Compatibility
-Version 0.4 of the library has been tested with KMyMoney 5.1.3 on Linux (locale de_DE) and 
+Version 0.4 of the library has been tested with 
+KMyMoney 5.1.3 on Linux (locale de_DE) and 
 OpenJDK 17.0.
+
+Java 11 or earlier won't work.
 
 ## Locale/Language Compatibility
 As far as the author knows, there should be no issues with other locales, 

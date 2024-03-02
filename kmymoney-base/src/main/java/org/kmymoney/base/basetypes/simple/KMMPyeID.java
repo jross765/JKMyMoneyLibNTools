@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 /**
  * A technical entry ID for a payee
  * (primarily defined for type safety).
- * 
- * @see KMyMoneyPayee
  */
 public class KMMPyeID extends KMMID {
     // Logger

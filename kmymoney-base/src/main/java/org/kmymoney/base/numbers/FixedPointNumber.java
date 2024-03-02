@@ -186,7 +186,7 @@ public class FixedPointNumber extends BigDecimalWrapper implements Cloneable {
 	}
 
 	/**
-	 * @return
+	 * @return a new FixedPointNumber object which is a copy of this one
 	 */
 	public FixedPointNumber copy() {
 		FixedPointNumber fp2 = new FixedPointNumber(getBigDecimal());

@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 /**
  * A technical entry ID for a security
  * (primarily defined for type safety).
- * 
- * @see KMyMoneySecurity
  */
 public class KMMSecID extends KMMID {
     // Logger
