@@ -362,7 +362,8 @@ public class TestKMyMoneyWritableSecurityImpl {
 		                  // and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
-		test03_2_1_check(outFile);
+		test03_2_1_check_1_xmllint(outFile);
+		test03_2_1_check_2(outFile);
 	}
 
     // -----------------------------------------------------------------
@@ -394,7 +395,25 @@ public class TestKMyMoneyWritableSecurityImpl {
 //      // assertEquals(validResult);
 //  }
 
-	private void test03_2_1_check(File outFile) throws Exception {
+	// Sort of "soft" variant of above function
+	// CAUTION: Not platform-independent!
+	// Tool "xmllint" must be installed and in path
+	private void test03_2_1_check_1_xmllint(File outFile) throws Exception {
+		assertNotEquals(null, outFile);
+		assertEquals(true, outFile.exists());
+
+		// Check if generated document is valid
+		ProcessBuilder bld = new ProcessBuilder("xmllint", outFile.getAbsolutePath());
+		Process prc = bld.start();
+
+		if ( prc.waitFor() == 0 ) {
+			assertEquals(0, 0);
+		} else {
+			assertEquals(0, 1);
+		}
+	}
+	
+	private void test03_2_1_check_2(File outFile) throws Exception {
 		assertNotEquals(null, outFile);
 		assertEquals(true, outFile.exists());
 

@@ -3,8 +3,10 @@ package org.kmymoney.api.write.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.Currency;
 
@@ -495,13 +497,14 @@ public class TestKMyMoneyWritableAccountImpl {
 		                  // and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
-		test03_2_1_check(outFile);
+		test03_2_0_check_1_xmllint(outFile);
+		test03_2_1_check_2(outFile);
 	}
 
     // -----------------------------------------------------------------
 
 //  @Test
-//  public void test03_2_2() throws Exception
+//  public void test03_2_0_check_1() throws Exception
 //  {
 //      assertNotEquals(null, outFileGlob);
 //      assertEquals(true, outFileGlob.exists());
@@ -527,7 +530,25 @@ public class TestKMyMoneyWritableAccountImpl {
 //      // assertEquals(validResult);
 //  }
 
-	private void test03_2_1_check(File outFile) throws Exception {
+	// Sort of "soft" variant of above function
+	// CAUTION: Not platform-independent!
+	// Tool "xmllint" must be installed and in path
+	private void test03_2_0_check_1_xmllint(File outFile) throws Exception {
+		assertNotEquals(null, outFile);
+		assertEquals(true, outFile.exists());
+
+		// Check if generated document is valid
+		ProcessBuilder bld = new ProcessBuilder("xmllint", outFile.getAbsolutePath());
+		Process prc = bld.start();
+
+		if ( prc.waitFor() == 0 ) {
+			assertEquals(0, 0);
+		} else {
+			assertEquals(0, 1);
+		}
+	}
+
+	private void test03_2_1_check_2(File outFile) throws Exception {
 		assertNotEquals(null, outFile);
 		assertEquals(true, outFile.exists());
 
