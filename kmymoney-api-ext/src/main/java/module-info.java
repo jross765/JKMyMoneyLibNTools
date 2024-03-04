@@ -5,5 +5,5 @@ module kmymoney.apiext {
 	requires kmymoney.base;
 	requires kmymoney.api;
 
-	exports org.kmymoney.apiext.depot;
+	exports org.kmymoney.apiext.secacct;
 }

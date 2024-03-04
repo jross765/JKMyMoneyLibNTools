@@ -8,8 +8,8 @@ import java.util.List;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
-import org.kmymoney.apiext.depot.DepotTransactionManager;
-import org.kmymoney.apiext.depot.DepotTransactionManager.Type;
+import org.kmymoney.apiext.secacct.SecuritiesAccountTransactionManager;
+import org.kmymoney.apiext.secacct.SecuritiesAccountTransactionManager.Type;
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.base.tuples.AcctIDAmountPair;
@@ -24,7 +24,7 @@ public class GenDepotTrx {
     private static String kmmInFileName  = "example_in.xml";
     private static String kmmOutFileName = "example_out.xml";
 
-	private static DepotTransactionManager.Type type = Type.DIVIDEND;
+	private static SecuritiesAccountTransactionManager.Type type = Type.DIVIDEND;
 
 	private static KMMAcctID stockAcctID  = new KMMAcctID( "A000063" );
 	private static KMMAcctID incomeAcctID = new KMMAcctID( "A000070" ); // only for dividend, not for buy/sell
@@ -93,14 +93,14 @@ public class GenDepotTrx {
 
 		KMyMoneyWritableTransaction trx = null;
 		initExpAccts();
-		if ( type == DepotTransactionManager.Type.BUY_STOCK ) {
-			trx = DepotTransactionManager
+		if ( type == SecuritiesAccountTransactionManager.Type.BUY_STOCK ) {
+			trx = SecuritiesAccountTransactionManager
 					.genBuyStockTrx(kmmFile, 
 									stockAcctID, expensesAcctAmtList, offsetAcctID,
 									nofStocks, stockPrc, 
 									datPst, descr);
-		} else if ( type == DepotTransactionManager.Type.DIVIDEND ) {
-			trx = DepotTransactionManager
+		} else if ( type == SecuritiesAccountTransactionManager.Type.DIVIDEND ) {
+			trx = SecuritiesAccountTransactionManager
 					.genDivivendTrx(kmmFile, 
 									stockAcctID, incomeAcctID, expensesAcctAmtList, offsetAcctID, 
 									divGross, datPst, 
