@@ -257,11 +257,11 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
-		assertEquals(15, acct.getChildren().size());
+		assertEquals(16, acct.getChildren().size());
 		Object[] acctArr = acct.getChildren().toArray();
-		assertEquals("A000012", ((KMyMoneyAccount) acctArr[0]).getID().toString());
-		assertEquals("A000017", ((KMyMoneyAccount) acctArr[1]).getID().toString());
-		assertEquals("A000023", ((KMyMoneyAccount) acctArr[2]).getID().toString());
+		assertEquals("A000072", ((KMyMoneyAccount) acctArr[0]).getID().toString());
+		assertEquals("A000012", ((KMyMoneyAccount) acctArr[1]).getID().toString());
+		assertEquals("A000017", ((KMyMoneyAccount) acctArr[2]).getID().toString());
 		// etc.
 		// assertEquals("A000xyz", ((KMyMoneyAccount) acctArr[3]).getID().toString());
 
