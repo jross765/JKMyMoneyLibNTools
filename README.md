@@ -1,11 +1,10 @@
-Project JKMyMoneyLib
-=====================
+# Project JKMyMoneyLib
 
 `JKMyMoneyLib` is a free and open-source Java-library for reading and writing the XML file format of the KMyMoney open source personal finance software (`kmymoney.org`).
 
 It is not directly affiliated with / sponsored or coordinated by the developers of the KMyMoney project.
 
-# Modules and Further Details
+## Modules and Further Details
 
 * [Base](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-base/README.md)
 
@@ -15,19 +14,19 @@ It is not directly affiliated with / sponsored or coordinated by the developers 
 
 * [Example Programs](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api-examples/README.md)
 
-# Compatibility
-## System Compatibility
+## Compatibility
+### System Compatibility
 Version 0.4 of the library has been tested with 
 KMyMoney 5.1.3 on Linux (locale de_DE) and 
 OpenJDK 17.0.
 
 Java 11 or earlier won't work.
 
-## Locale/Language Compatibility
+### Locale/Language Compatibility
 As far as the author knows, there should be no issues with other locales, 
 but he has not tested it.
 
-## Version Compatibility
+### Version Compatibility
 | Version | Backward Compat. | Note                           |
 |---------|------------------|--------------------------------|
 | 0.5     | (w.i.p.)         |                                |
@@ -35,10 +34,10 @@ but he has not tested it.
 | 0.3     | no               | Major changes in interfaces    |
 | 0.2     | no               | Major changes in interfaces    |
 
-# Major Changes
+## Major Changes
 Here, only the top-level changes are mentioned. For more Details, cf. the README files of the resp. modules (links below).
 
-## V. 0.4 &rarr; 0.5
+### V. 0.4 &rarr; 0.5
 Changed project structure:
 
 * Introduced new module "Base" (spun off from "API").
@@ -49,12 +48,10 @@ Changed project structure:
 
 	Currently, it contains just one class. That will (hopefully) grow.
 
-* Improved symmetry with sister project.
-
-## V. 0.3 &rarr; 0.4 and Before
+### V. 0.3 &rarr; 0.4 and Before
 Cf. the README file of modules "API" and "Example programs" (links below).
 
-# Sister Project
+## Sister Project
 This project has a sister project: 
 
 [`JGnuCashLib`](https://github.com/jross765/jgnucashlib)
@@ -75,7 +72,7 @@ similar on a source code level -- so much so that you partially can use `diff`. 
 however, also see some exceptions here and there where that "low-level-symmetry" is not 
 maintainable.
 
-# Acknowledgements
+## Acknowledgements
 
 Special thanks to **Marcus Wolschon (Sofware-Design u. Beratung)** and **Deniss Larka** -- 
 they don't / did not contribute directly to this project, but they did the pioneering and 
