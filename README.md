@@ -1,8 +1,11 @@
 # Project JKMyMoneyLib
 
-`JKMyMoneyLib` is a free and open-source Java-library for reading and writing the XML file format of the KMyMoney open source personal finance software (`kmymoney.org`).
+`JKMyMoneyLib` is a free and open-source Java-library for reading and writing the XML 
+file format of the KMyMoney open source personal finance software 
+([kmymoney.org](https://kmymoney.org)).
 
-It is not directly affiliated with / sponsored or coordinated by the developers of the KMyMoney project.
+It is not directly affiliated with / sponsored or coordinated by the developers of the 
+KMyMoney project.
 
 ## Modules and Further Details
 
@@ -27,15 +30,21 @@ As far as the author knows, there should be no issues with other locales,
 but he has not tested it.
 
 ### Version Compatibility
++---------+------------------+--------------------------------+
 | Version | Backward Compat. | Note                           |
-|---------|------------------|--------------------------------|
-| 0.5     | (w.i.p.)         |                                |
++---------+------------------+--------------------------------+
+| 0.5     | mostly (?)       | Minor changes, should be largely compatible (untested!) |
++---------+------------------+--------------------------------+
 | 0.4     | no               | Minor changes in interfaces    |
++---------+------------------+--------------------------------+
 | 0.3     | no               | Major changes in interfaces    |
++---------+------------------+--------------------------------+
 | 0.2     | no               | Major changes in interfaces    |
++---------+------------------+--------------------------------+
 
 ## Major Changes
-Here, only the top-level changes are mentioned. For more Details, cf. the README files of the resp. modules (links below).
+Here, only the top-level changes on module-level are mentioned. For more Details, 
+cf. the README files of the resp. modules (links above).
 
 ### V. 0.4 &rarr; 0.5
 Changed project structure:
@@ -46,24 +55,39 @@ Changed project structure:
 
 * Introduced new module "API Extensions"
 
-	Currently, it contains just one class. That will (hopefully) grow.
+	Currently, this module it is very small. It will (hopefully) grow.
 
 ### V. 0.3 &rarr; 0.4 and Before
 Cf. the README file of modules "API" and "Example programs" (links below).
 
+## Level of Maturity
+This software is still in its beta stage.
+
+Although the author, at this stage, feels more or less comfortable with using this
+library for write-access (given all the test cases he has contributed), he still 
+recommends not just taking it and "wildly" changing things in your valuable KMyMoney
+files that you may have been building for years or possibly even decades. Although 
+he is using it for his own needs, he reckons that it still contains non-trivial bugs,
+and it definitely has not been sufficiently exposed to real-world data yet to blindly 
+rely on it working correctly in all conceivable edge and corner cases.
+
+In other words: **Make backups before you use this lib!** Take your time and check
+the generated/changed files thoroughly before moving on.
+
 ## Sister Project
 This project has a sister project: 
-
 [`JGnuCashLib`](https://github.com/jross765/jgnucashlib)
 
-Both projects do not have the same level of maturity, `JGnuCashLib` is currently a little more 
-advanced than `JKMyMoneyLib`. Obviously, the author strives to keep both projects symmetrical 
-and to eventually have them both on a comparable level of maturity.
+Both projects have roughly the same level of maturity, `JGnuCashLib` currently being a little 
+more advanced than `JKMyMoneyLib`. Obviously, the author strives to keep both projects 
+symmetrical and to eventually have them both on a comparable level of maturity.
 
-What is meant by "symmetry" is this context? It means that this project has literally evolved / 
-is literally evolving from a source-code copy of its sister, `JGnuCashLib` (i.e., copy the code, 
-then adapt it). Given that KMyMoney and GnuCash are two finance applications with quite a few 
-similarities (both in business logic and file format), this approach makes sense. 
+What is meant by "symmetry" is this context? It means that this project has, in the early
+stages, literally evolved from a source-code copy of its sister, `JGnuCashLib`.
+Meanwhile, changes and adaptations are going in both directions.
+Given that KMyMoney and GnuCash are two finance applications with quite a few 
+similarities (both in business logic and file format), this approach makes sense
+and has been working well so far.
 
 Of course, this is a "10.000-metre bird's-eye view". As always in life, things are a little more
 complicated once you go into the details. Still, looking at the big picture and at least 
@@ -77,6 +101,6 @@ maintainable.
 Special thanks to **Marcus Wolschon (Sofware-Design u. Beratung)** and **Deniss Larka** -- 
 they don't / did not contribute directly to this project, but they did the pioneering and 
 stewardship work of the sister project `JGnuCashLib` (and its predecessor, resp.) for quite
- a few years, long before the author got into it. This project heavily makes use of the 
+a few years, long before the author got into it. This project heavily makes use of the 
 approaches and techniques in said project.
 

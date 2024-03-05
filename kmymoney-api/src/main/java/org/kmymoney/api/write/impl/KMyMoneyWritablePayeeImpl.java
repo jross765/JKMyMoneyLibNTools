@@ -70,7 +70,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
     // ---------------------------------------------------------------
 
     /**
-     * Creates a new Transaction and add's it to the given kmymoney-file Don't modify
+     * Creates a new Transaction and add's it to the given KMyMoney file Don't modify
      * the ID of the new transaction!
      *
      * @param file the file we will belong to
@@ -137,7 +137,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
     // ---------------------------------------------------------------
 
     /**
-     * The kmymoney-file is the top-level class to contain everything.
+     * The KMyMoney file is the top-level class to contain everything.
      *
      * @return the file we are associated with
      */
@@ -147,7 +147,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
     }
 
     /**
-     * The kmymoney-file is the top-level class to contain everything.
+     * The KMyMoney file is the top-level class to contain everything.
      *
      * @return the file we are associated with
      */

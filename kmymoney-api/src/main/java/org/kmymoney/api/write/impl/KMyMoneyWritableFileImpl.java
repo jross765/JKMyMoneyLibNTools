@@ -73,7 +73,7 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 
 /**
- * Implementation of KMyMoneyWritableFile based on GnucashFileImpl.
+ * Implementation of KMyMoneyWritableFile based on KMyMoneyFileImpl.
  * @see KMyMoneyFileImpl
  */
 public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl 

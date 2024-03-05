@@ -4,7 +4,7 @@ import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 
 /**
- * Interface that all interfaces for writable gnucash-entities shall implement
+ * Interface that all interfaces for writable KMyMoney entities shall implement
  */
 public interface KMyMoneyWritableObject extends KMyMoneyObject {
 

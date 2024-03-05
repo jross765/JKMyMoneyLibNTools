@@ -28,7 +28,7 @@ public class HasWritableUserDefinedAttributesImpl extends HasUserDefinedAttribut
 			throw new IllegalArgumentException("null slot list given");
 		
 		if ( kmmFile == null )
-			throw new IllegalArgumentException("null GnuCash file given");
+			throw new IllegalArgumentException("null KMyMoney file given");
 		
 		if ( name == null )
 			throw new IllegalArgumentException("null name given");
@@ -58,7 +58,7 @@ public class HasWritableUserDefinedAttributesImpl extends HasUserDefinedAttribut
 			throw new IllegalArgumentException("null slot list given");
 
 		if ( kmmFile == null )
-			throw new IllegalArgumentException("null GnuCash file given");
+			throw new IllegalArgumentException("null KMyMoney file given");
 
 		if ( name == null )
 			throw new IllegalArgumentException("null name given");
@@ -95,7 +95,7 @@ public class HasWritableUserDefinedAttributesImpl extends HasUserDefinedAttribut
 			throw new IllegalArgumentException("null slot list given");
 
 		if ( gcshFile == null )
-			throw new IllegalArgumentException("null GnuCash file given");
+			throw new IllegalArgumentException("null KMyMoney file given");
 
 		if ( name == null )
 			throw new IllegalArgumentException("null name given");
@@ -131,7 +131,7 @@ public class HasWritableUserDefinedAttributesImpl extends HasUserDefinedAttribut
 			throw new IllegalArgumentException("null slot list given");
 
 		if ( kmmFile == null )
-			throw new IllegalArgumentException("null GnuCash file given");
+			throw new IllegalArgumentException("null KMyMoney file given");
 
 		if ( name == null )
 			throw new IllegalArgumentException("null name given");
@@ -162,7 +162,7 @@ public class HasWritableUserDefinedAttributesImpl extends HasUserDefinedAttribut
 			throw new IllegalArgumentException("null slot list given");
 
 		if ( kmmFile == null )
-			throw new IllegalArgumentException("null GnuCash file given");
+			throw new IllegalArgumentException("null KMyMoney file given");
 
 		if ( name == null )
 			throw new IllegalArgumentException("null name given");

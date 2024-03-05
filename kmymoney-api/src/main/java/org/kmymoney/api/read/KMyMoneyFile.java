@@ -38,7 +38,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 
 	/**
 	 * The Currency-Table gets initialized with the latest prices found in the
-	 * gnucash-file.
+	 * KMyMoney file.
 	 * 
 	 * @return Returns the currencyTable.
 	 */
@@ -394,7 +394,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param secCurrID
 	 * @param pCmdtySpace the name space for pCmdtyId
 	 * @param pCmdtyId    the currency-name
-	 * @return the latest price-quote in the gnucash-file in EURO
+	 * @return the latest price-quote in the KMyMoney-file in EURO
 	 * @throws InvalidQualifSecCurrIDException 
 	 * @throws InvalidQualifSecCurrTypeException 
 	 */

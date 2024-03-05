@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Helper-Class used to implement functions all gnucash-objects support.
+ * Helper-Class used to implement functions all KMyMoney objects support.
  */
 public class KMyMoneyObjectImpl implements KMyMoneyObject {
 

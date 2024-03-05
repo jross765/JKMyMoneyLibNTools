@@ -1,16 +1,11 @@
 package org.kmymoney.api.write.impl.aux;
 
-import org.kmymoney.base.basetypes.simple.KMMSpltID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.api.generated.ADDRESS;
 import org.kmymoney.api.generated.ObjectFactory;
-import org.kmymoney.api.generated.SPLIT;
-import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.impl.aux.KMMAddressImpl;
 import org.kmymoney.api.write.aux.KMMWritableAddress;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritablePayeeImpl;
-import org.kmymoney.api.write.impl.KMyMoneyWritableTransactionImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +38,7 @@ public class KMMWritableAddressImpl extends KMMAddressImpl
 	// ---------------------------------------------------------------
 	
 	/**
-	 * Creates a new Transaction and add's it to the given gnucash-file Don't modify
+	 * Creates a new Transaction and add's it to the given KMyMoney file Don't modify
 	 * the ID of the new transaction!
 	 */
 	protected static ADDRESS createAddress_int(

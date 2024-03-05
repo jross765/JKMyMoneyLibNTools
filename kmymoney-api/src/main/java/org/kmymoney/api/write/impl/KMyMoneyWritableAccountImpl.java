@@ -480,7 +480,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	// ---------------------------------------------------------------
 
 	/**
-	 * The kmymoney-file is the top-level class to contain everything.
+	 * The KMyMoney file is the top-level class to contain everything.
 	 *
 	 * @return the file we are associated with
 	 */
@@ -489,7 +489,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	}
 
 	/**
-	 * The kmymoney-file is the top-level class to contain everything.
+	 * The KMyMoney file is the top-level class to contain everything.
 	 *
 	 * @return the file we are associated with
 	 */

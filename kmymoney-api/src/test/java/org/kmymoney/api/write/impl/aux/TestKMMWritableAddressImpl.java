@@ -192,7 +192,7 @@ public class TestKMMWritableAddressImpl {
 	
 	// Note: In fact, this section is not really necessary/redundant,
 	// because address objects seem to *always* be generated; not only
-	// when generated with the standard GnuCash GUI, but also with this
+	// when generated with the standard KMyMoney GUI, but also with this
 	// library, and even with a fresh and naked payee object.
 	// It is just, that, currently, we do not know whether it really 
 	// *never ever* occurs that a payee object is generated without address

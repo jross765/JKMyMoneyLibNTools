@@ -242,7 +242,7 @@ public class FilePriceManager {
 	 * @param depth       used for recursion. Always call with '0' for aborting
 	 *                    recursive quotes (quotes to other then the base- currency)
 	 *                    we abort if the depth reached 6.
-	 * @return the latest price-quote in the kmymoney-file in the default-currency
+	 * @return the latest price-quote in the KMyMoney file in the default-currency
 	 * @throws InvalidQualifSecCurrTypeException
 	 * @throws InvalidQualifSecCurrIDException
 	 * @see {@link KMyMoneyFile#getLatestPrice(String, String)}

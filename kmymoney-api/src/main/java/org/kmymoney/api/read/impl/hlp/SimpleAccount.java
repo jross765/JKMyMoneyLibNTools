@@ -340,7 +340,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 			retval = new FixedPointNumber();
 		}
 
-		// CAUTION: As opposed to the sister project JGnucashLib, the following three lines 
+		// CAUTION: As opposed to the sister project JGnuCashLib, the following three lines 
 		// work for read-branch (KMyMoneyAccountImpl) but *not* for write-branch 
 		// (KMyMoneyWritableAccountImpl). Don'nt know why, can't explain it...
 //		for ( KMyMoneyAccount child : getChildren() ) {

@@ -3,7 +3,7 @@ package org.kmymoney.api.read.hlp;
 import org.kmymoney.api.read.KMyMoneyFile;
 
 /**
- * Interface all gnucash-entities implement.
+ * Interface all KMyMoney entities implement.
  */
 public interface KMyMoneyObject {
 

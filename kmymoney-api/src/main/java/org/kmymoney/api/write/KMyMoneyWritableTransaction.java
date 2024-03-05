@@ -35,7 +35,7 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
 	void setCurrencyNameSpace(String id);
 
 	/**
-	 * The gnucash-file is the top-level class to contain everything.
+	 * The KMyMoney file is the top-level class to contain everything.
 	 * 
 	 * @return the file we are associated with
 	 */

@@ -44,7 +44,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 
     /**
      * The splits of this transaction. May not be fully initialized during loading
-     * of the gnucash-file.
+     * of the KMyMoney-file.
      *
      * @see #mySplitsNeedSorting
      */

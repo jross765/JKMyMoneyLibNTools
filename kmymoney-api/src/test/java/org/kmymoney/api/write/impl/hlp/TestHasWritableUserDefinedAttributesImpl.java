@@ -239,7 +239,7 @@ public class TestHasWritableUserDefinedAttributesImpl {
     	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
     	// + outFile.getPath() + "'");
     	outFile.delete(); // sic, the temp. file is already generated (empty),
-    			          // and the GnuCash file writer does not like that.
+    			          // and the KMyMoney file writer does not like that.
     	kmmInFile.writeFile(outFile);
 
     	test_02_acct_01_check_persisted(outFile);
@@ -299,7 +299,7 @@ public class TestHasWritableUserDefinedAttributesImpl {
     	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
     	// + outFile.getPath() + "'");
     	outFile.delete(); // sic, the temp. file is already generated (empty),
-    			          // and the GnuCash file writer does not like that.
+    			          // and the KMyMoney file writer does not like that.
     	kmmInFile.writeFile(outFile);
 
     	test_02_acct_02_check_persisted(outFile);
@@ -363,7 +363,7 @@ public class TestHasWritableUserDefinedAttributesImpl {
     	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
     	// + outFile.getPath() + "'");
     	outFile.delete(); // sic, the temp. file is already generated (empty),
-    			          // and the GnuCash file writer does not like that.
+    			          // and the KMyMoney file writer does not like that.
     	kmmInFile.writeFile(outFile);
 
     	test_02_trx_01_check_persisted(outFile);
@@ -425,7 +425,7 @@ public class TestHasWritableUserDefinedAttributesImpl {
 //    	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 //    	// + outFile.getPath() + "'");
 //    	outFile.delete(); // sic, the temp. file is already generated (empty),
-//    			          // and the GnuCash file writer does not like that.
+//    			          // and the KMyMoney file writer does not like that.
 //    	kmmInFile.writeFile(outFile);
 //
 //    	test_02_trx_02_check_persisted(outFile);
@@ -502,7 +502,7 @@ public class TestHasWritableUserDefinedAttributesImpl {
     	// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
     	// + outFile.getPath() + "'");
     	outFile.delete(); // sic, the temp. file is already generated (empty),
-    			          // and the GnuCash file writer does not like that.
+    			          // and the KMyMoney file writer does not like that.
     	kmmInFile.writeFile(outFile);
 
     	test_02_sec_02_check_persisted(outFile);
