@@ -29,8 +29,7 @@ public class GenPye {
     protected void kernel() throws Exception {
 	KMyMoneyWritableFileImpl kmmFile = new KMyMoneyWritableFileImpl(new File(kmmInFileName));
 
-	KMyMoneyWritablePayee pye = kmmFile.createWritablePayee();
-	pye.setName(name);
+	KMyMoneyWritablePayee pye = kmmFile.createWritablePayee(name);
 
 	System.out.println("Payee to write: " + pye.toString());
 	kmmFile.writeFile(new File(kmmOutFileName));

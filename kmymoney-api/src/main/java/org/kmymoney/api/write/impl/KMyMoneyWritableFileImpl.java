@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -840,8 +841,9 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * @see KMyMoneyFileImpl#createCustomer(GncV2.GncBook.GncGncCustomer)
 	 */
 	@Override
-	public KMyMoneyWritablePayee createWritablePayee() {
+	public KMyMoneyWritablePayee createWritablePayee(final String name) {
 		KMyMoneyWritablePayeeImpl pye = new KMyMoneyWritablePayeeImpl(this);
+		pye.setName(name);
 		super.pyeMgr.addPayee(pye);
 		return pye;
 	}
@@ -927,8 +929,9 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
 
 	@Override
-	public KMyMoneyWritableSecurity createWritableSecurity() {
+	public KMyMoneyWritableSecurity createWritableSecurity(final String name) {
 		KMyMoneyWritableSecurityImpl sec = new KMyMoneyWritableSecurityImpl(this);
+		sec.setName(name);
 		super.secMgr.addSecurity(sec);
 		return sec;
 	}
@@ -1033,8 +1036,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	// ----------------------------
 
 	@Override
-	public KMyMoneyWritablePrice createWritablePrice(KMyMoneyPricePairImpl prcPr) {
+	public KMyMoneyWritablePrice createWritablePrice(
+			final KMyMoneyPricePairImpl prcPr,
+			final LocalDate date) {
 		KMyMoneyWritablePriceImpl prc = new KMyMoneyWritablePriceImpl(prcPr, this);
+		prc.setDate(date);
 		super.prcMgr.addPrice(prc);
 		return prc;
 	}

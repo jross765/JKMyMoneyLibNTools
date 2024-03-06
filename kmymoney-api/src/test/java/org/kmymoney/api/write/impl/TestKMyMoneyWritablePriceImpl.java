@@ -344,8 +344,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
 
 		KMyMoneyPricePair prcPr = kmmInFile.getPricePairByID(PRCPR_1_ID);
-		KMyMoneyWritablePrice prc = kmmInFile.createWritablePrice((KMyMoneyPricePairImpl) prcPr);
-		prc.setDate(LocalDate.of(1910, 5, 1));
+		KMyMoneyWritablePrice prc = kmmInFile.createWritablePrice((KMyMoneyPricePairImpl) prcPr, LocalDate.of(1910, 5, 1));
 		prc.setValue(new FixedPointNumber(345.21));
 		prc.setSource(Source.USER);
 

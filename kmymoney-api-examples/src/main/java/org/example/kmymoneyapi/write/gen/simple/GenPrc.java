@@ -79,8 +79,7 @@ public class GenPrc {
 	    System.err.println("Will take that one.");
 	}
 
-	KMyMoneyWritablePrice prc = kmmFile.createWritablePrice((KMyMoneyPricePairImpl) prcPr);
-	prc.setDate(date1);
+	KMyMoneyWritablePrice prc = kmmFile.createWritablePrice((KMyMoneyPricePairImpl) prcPr, date1);
 	prc.setValue(value1);
 	prc.setSource(source);
 
@@ -99,8 +98,7 @@ public class GenPrc {
 	    System.err.println("Will take that one.");
 	}
 
-	KMyMoneyWritablePrice prc = kmmFile.createWritablePrice((KMyMoneyPricePairImpl) prcPr);
-	prc.setDate(date2);
+	KMyMoneyWritablePrice prc = kmmFile.createWritablePrice((KMyMoneyPricePairImpl) prcPr, date2);
 	prc.setValue(value2);
 	prc.setSource(source);
 

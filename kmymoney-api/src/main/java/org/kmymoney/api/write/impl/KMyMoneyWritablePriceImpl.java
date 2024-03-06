@@ -112,8 +112,8 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 //  }
 
     private static PRICE createPrice_int(
-    	final KMyMoneyPricePairImpl prntPrcPr,
-	    final KMyMoneyWritableFileImpl file) {
+    		final KMyMoneyPricePairImpl prntPrcPr,
+    		final KMyMoneyWritableFileImpl file) {
 	
         ObjectFactory factory = file.getObjectFactory();
         

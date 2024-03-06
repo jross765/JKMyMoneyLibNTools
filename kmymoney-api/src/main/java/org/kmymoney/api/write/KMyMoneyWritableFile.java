@@ -2,6 +2,7 @@ package org.kmymoney.api.write;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -173,7 +174,7 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	/**
 	 * @return a new customer with no values that is already added to this file
 	 */
-	KMyMoneyWritablePayee createWritablePayee();
+	KMyMoneyWritablePayee createWritablePayee(String name);
 
 	/**
 	 *
@@ -210,7 +211,7 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	/**
 	 * @return a new transaction with no splits that is already added to this file
 	 */
-	KMyMoneyWritableSecurity createWritableSecurity();
+	KMyMoneyWritableSecurity createWritableSecurity(String name);
 
 	/**
 	 *
@@ -290,7 +291,7 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * @param prcPr 
 	 * @return a new price with no splits that is already added to this file
 	 */
-	KMyMoneyWritablePrice createWritablePrice(KMyMoneyPricePairImpl prcPr);
+	KMyMoneyWritablePrice createWritablePrice(KMyMoneyPricePairImpl prcPr, LocalDate date);
 
 	/**
 	 *

@@ -280,9 +280,8 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
 
-		KMyMoneyWritableSecurity sec = kmmInFile.createWritableSecurity();
+		KMyMoneyWritableSecurity sec = kmmInFile.createWritableSecurity("Best Corp Ever");
 		newID.set(sec.getID());
-		sec.setName("Best Corp Ever");
 
 		// ----------------------------
 		// Check whether the object can has actually be created
@@ -335,8 +334,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 
 	@Test
 	public void test03_2_1() throws Exception {
-		KMyMoneyWritableSecurity sec = kmmInFile.createWritableSecurity();
-		sec.setName("Scam and Screw Corp.");
+		KMyMoneyWritableSecurity sec = kmmInFile.createWritableSecurity("Scam and Screw Corp.");
 		sec.setSymbol("SCAM");
 
 		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
@@ -425,20 +423,16 @@ public class TestKMyMoneyWritableSecurityImpl {
 
 	@Test
 	public void test03_2_2() throws Exception {
-		KMyMoneyWritableSecurity sec1 = kmmInFile.createWritableSecurity();
-		sec1.setName("Scam and Screw Corp.");
+		KMyMoneyWritableSecurity sec1 = kmmInFile.createWritableSecurity("Scam and Screw Corp.");
 		sec1.setSymbol("US0123456789");
 
-		KMyMoneyWritableSecurity sec2 = kmmInFile.createWritableSecurity();
-		sec2.setName("Chocolaterie de la Grande Place");
+		KMyMoneyWritableSecurity sec2 = kmmInFile.createWritableSecurity("Chocolaterie de la Grande Place");
 		sec2.setSymbol("BE0123456789");
 
-		KMyMoneyWritableSecurity sec3 = kmmInFile.createWritableSecurity();
-		sec3.setName("Ils sont fous ces dingos!");
+		KMyMoneyWritableSecurity sec3 = kmmInFile.createWritableSecurity("Ils sont fous ces dingos!");
 		sec3.setSymbol("FR0123456789");
 
-		KMyMoneyWritableSecurity sec4 = kmmInFile.createWritableSecurity();
-		sec4.setName("Ye Ole National British Trade Company Ltd.");
+		KMyMoneyWritableSecurity sec4 = kmmInFile.createWritableSecurity("Ye Ole National British Trade Company Ltd.");
 		sec4.setSymbol("GB10000A2222"); // sic, has to be set redundantly
 
 		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);

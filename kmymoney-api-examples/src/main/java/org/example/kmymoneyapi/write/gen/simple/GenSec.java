@@ -31,8 +31,7 @@ public class GenSec {
     protected void kernel() throws Exception {
 	KMyMoneyWritableFileImpl kmmFile = new KMyMoneyWritableFileImpl(new File(kmmInFileName));
 
-	KMyMoneyWritableSecurity sec = kmmFile.createWritableSecurity();
-	sec.setName(name);
+	KMyMoneyWritableSecurity sec = kmmFile.createWritableSecurity(name);
 	sec.setUserDefinedAttribute("kmm-security-id", isin);
 
 	if (symbol != null)

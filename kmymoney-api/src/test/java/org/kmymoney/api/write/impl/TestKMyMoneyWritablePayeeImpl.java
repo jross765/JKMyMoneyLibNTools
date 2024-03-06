@@ -14,13 +14,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyPayeeImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.api.write.KMyMoneyWritablePayee;
+import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -216,8 +216,7 @@ public class TestKMyMoneyWritablePayeeImpl {
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
 
-		KMyMoneyWritablePayee pye = kmmInFile.createWritablePayee();
-		pye.setName("Norma Jean Baker");
+		KMyMoneyWritablePayee pye = kmmInFile.createWritablePayee("Norma Jean Baker");
 
 		// ----------------------------
 		// Check whether the object can has actually be created
@@ -272,8 +271,7 @@ public class TestKMyMoneyWritablePayeeImpl {
 
 	@Test
 	public void test03_2_1() throws Exception {
-		KMyMoneyWritablePayee pye = kmmInFile.createWritablePayee();
-		pye.setName("Norma Jean Baker");
+		KMyMoneyWritablePayee pye = kmmInFile.createWritablePayee("Norma Jean Baker");
 
 		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
 		// System.err.println("Outfile for TestKMyMoneyWritablePayeeImpl.test01_1: '" + outFile.getPath() + "'");
@@ -361,14 +359,11 @@ public class TestKMyMoneyWritablePayeeImpl {
 
     @Test
     public void test03_2_4() throws Exception {
-	KMyMoneyWritablePayee pye1 = kmmInFile.createWritablePayee();
-	pye1.setName("Norma Jean Baker");
+	KMyMoneyWritablePayee pye1 = kmmInFile.createWritablePayee("Norma Jean Baker");
 
-	KMyMoneyWritablePayee pye2 = kmmInFile.createWritablePayee();
-	pye2.setName("Madonna Louise Ciccone");
+	KMyMoneyWritablePayee pye2 = kmmInFile.createWritablePayee("Madonna Louise Ciccone");
 
-	KMyMoneyWritablePayee pye3 = kmmInFile.createWritablePayee();
-	pye3.setName("Rowan Atkinson");
+	KMyMoneyWritablePayee pye3 = kmmInFile.createWritablePayee("Rowan Atkinson");
 
 	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
 //      System.err.println("Outfile for TestKMyMoneyWritablePayeeImpl.test02_1: '" + outFile.getPath() + "'");
