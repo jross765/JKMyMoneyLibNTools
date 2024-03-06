@@ -3,12 +3,11 @@ package org.kmymoney.api.write.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.Currency;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,12 +17,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -138,10 +137,11 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals("A000061", acct.getParentAccountID().toString());
-		assertEquals(2, acct.getChildren().size());
-		Object[] acctArr = acct.getChildren().toArray();
-		assertEquals("A000064", ((KMyMoneyAccount) acctArr[0]).getID().toString());
-		assertEquals("A000063", ((KMyMoneyAccount) acctArr[1]).getID().toString());
+		
+		List<KMyMoneyAccount> acctList = acct.getChildren();
+		assertEquals(2, acctList.size());
+		assertEquals("A000064", acctList.get(0).getID().toString());
+		assertEquals("A000063", acctList.get(1).getID().toString());
 
 		// ::TODO
 		assertEquals(0.0, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
@@ -166,10 +166,11 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(ACCT_12_ID, acct.getParentAccountID());
-		assertEquals(2, acct.getChildren().size());
-		Object[] acctArr = acct.getChildren().toArray();
-		assertEquals("A000051", ((KMyMoneyAccount) acctArr[0]).getID().toString());
-		assertEquals("A000050", ((KMyMoneyAccount) acctArr[1]).getID().toString());
+
+		List<KMyMoneyAccount> acctList = acct.getChildren();
+		assertEquals(2, acctList.size());
+		assertEquals("A000050", acctList.get(0).getID().toString());
+		assertEquals("A000051", acctList.get(1).getID().toString());
 
 		// ::CHECK: Really negative?
 		assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
@@ -217,10 +218,11 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
-		assertEquals(2, acct.getChildren().size());
-		Object[] acctArr = acct.getChildren().toArray();
-		assertEquals("A000061", ((KMyMoneyAccount) acctArr[0]).getID().toString());
-		assertEquals("A000002", ((KMyMoneyAccount) acctArr[1]).getID().toString());
+		
+		List<KMyMoneyAccount> acctList = acct.getChildren();
+		assertEquals(2, acctList.size());
+		assertEquals("A000002", acctList.get(0).getID().toString());
+		assertEquals("A000061", acctList.get(1).getID().toString());
 		
 		assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals(15597.50, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
@@ -242,8 +244,10 @@ public class TestKMyMoneyWritableAccountImpl {
 
 		assertEquals(null, acct.getParentAccountID());
 		assertEquals(1, acct.getChildren().size());
-		Object[] acctArr = acct.getChildren().toArray();
-		assertEquals("A000058", ((KMyMoneyAccount) acctArr[0]).getID().toString());
+
+		List<KMyMoneyAccount> acctList = acct.getChildren();
+		assertEquals(1, acctList.size());
+		assertEquals("A000058", acctList.get(0).getID().toString());
 
 		assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals(0.00, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
@@ -264,12 +268,13 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
-		assertEquals(4, acct.getChildren().size());
-		Object[] acctArr = acct.getChildren().toArray();
-		assertEquals("A000052", ((KMyMoneyAccount) acctArr[0]).getID().toString());
-		assertEquals("A000049", ((KMyMoneyAccount) acctArr[1]).getID().toString());
-		assertEquals("A000068", ((KMyMoneyAccount) acctArr[2]).getID().toString());
-		assertEquals("A000053", ((KMyMoneyAccount) acctArr[3]).getID().toString());
+		
+		List<KMyMoneyAccount> acctList = acct.getChildren();
+		assertEquals(4, acctList.size());
+		assertEquals("A000049", acctList.get(0).getID().toString());
+		assertEquals("A000052", acctList.get(1).getID().toString());
+		assertEquals("A000068", acctList.get(2).getID().toString());
+		assertEquals("A000053", acctList.get(3).getID().toString());
 
 		// ::CHECK: Really negative?
 		assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
@@ -291,11 +296,12 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
-		assertEquals(16, acct.getChildren().size());
-		Object[] acctArr = acct.getChildren().toArray();
-		assertEquals("A000072", ((KMyMoneyAccount) acctArr[0]).getID().toString());
-		assertEquals("A000012", ((KMyMoneyAccount) acctArr[1]).getID().toString());
-		assertEquals("A000017", ((KMyMoneyAccount) acctArr[2]).getID().toString());
+		
+		List<KMyMoneyAccount> acctList = acct.getChildren();
+		assertEquals(16, acctList.size());
+		assertEquals("A000072", acctList.get(0).getID().toString());
+		assertEquals("A000006", acctList.get(1).getID().toString());
+		assertEquals("A000011", acctList.get(2).getID().toString());
 		// etc.
 		// assertEquals("A000xyz", ((KMyMoneyAccount) acctArr[3]).getID().toString());
 
@@ -318,7 +324,9 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
-		assertEquals(0, acct.getChildren().size());
+
+		List<KMyMoneyAccount> acctList = acct.getChildren();
+		assertEquals(0, acctList.size());
 
 		assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals(0.00, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);

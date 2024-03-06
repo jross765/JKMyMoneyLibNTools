@@ -3,10 +3,17 @@ package org.kmymoney.api.write;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
+import org.kmymoney.api.generated.KMYMONEYFILE;
+import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.NoEntryFoundException;
+import org.kmymoney.api.read.TooManyEntriesFoundException;
+import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
+import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.base.basetypes.complex.KMMPricePairID;
 import org.kmymoney.base.basetypes.complex.KMMPriceID;
+import org.kmymoney.base.basetypes.complex.KMMPricePairID;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
@@ -16,12 +23,6 @@ import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.kmymoney.base.numbers.FixedPointNumber;
-import org.kmymoney.api.generated.KMYMONEYFILE;
-import org.kmymoney.api.read.KMyMoneyFile;
-import org.kmymoney.api.read.NoEntryFoundException;
-import org.kmymoney.api.read.TooManyEntriesFoundException;
-import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
-import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 
 /**
  * Extension of KMyMoneyFile that allows writing. <br/>
@@ -192,9 +193,9 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	
 	KMyMoneyWritableSecurity getWritableSecurityBySymbol(String symb);
 
-    Collection<KMyMoneyWritableSecurity> getWritableSecuritiesByName(String expr);
+	List<KMyMoneyWritableSecurity> getWritableSecuritiesByName(String expr);
 
-    Collection<KMyMoneyWritableSecurity> getWritableSecuritiesByName(String expr, boolean relaxed);
+    List<KMyMoneyWritableSecurity> getWritableSecuritiesByName(String expr, boolean relaxed);
     
     KMyMoneyWritableSecurity getWritableSecurityByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
     

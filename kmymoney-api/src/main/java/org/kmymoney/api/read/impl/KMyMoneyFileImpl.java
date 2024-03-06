@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import org.kmymoney.api.Const;
@@ -317,7 +318,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @return the sorted collection of children of that account
      */
     @Override
-    public Collection<KMyMoneyAccount> getAccountsByParentID(final KMMComplAcctID acctID) {
+    public List<KMyMoneyAccount> getAccountsByParentID(final KMMComplAcctID acctID) {
         return acctMgr.getAccountsByParentID(acctID);
     }
 
@@ -529,12 +530,12 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     }
 
     @Override
-    public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr) {
+    public List<KMyMoneySecurity> getSecuritiesByName(final String expr) {
 	return secMgr.getSecuritiesByName(expr);
     }
 
     @Override
-    public Collection<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed) {
+    public List<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed) {
 	return secMgr.getSecuritiesByName(expr, relaxed);
     }
 

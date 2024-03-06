@@ -11,25 +11,12 @@ import java.io.Writer;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.zip.GZIPOutputStream;
 
-import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.base.basetypes.complex.KMMPricePairID;
-import org.kmymoney.base.basetypes.complex.KMMPriceID;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
-import org.kmymoney.base.basetypes.simple.KMMAcctID;
-import org.kmymoney.base.basetypes.simple.KMMInstID;
-import org.kmymoney.base.basetypes.simple.KMMPyeID;
-import org.kmymoney.base.basetypes.simple.KMMSecID;
-import org.kmymoney.base.basetypes.simple.KMMSpltID;
-import org.kmymoney.base.basetypes.simple.KMMTrxID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.PAYEE;
@@ -67,6 +54,20 @@ import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import org.kmymoney.api.write.hlp.IDManager;
 import org.kmymoney.api.write.impl.hlp.WritingContentHandler;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.complex.KMMPriceID;
+import org.kmymoney.base.basetypes.complex.KMMPricePairID;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
+import org.kmymoney.base.basetypes.simple.KMMAcctID;
+import org.kmymoney.base.basetypes.simple.KMMInstID;
+import org.kmymoney.base.basetypes.simple.KMMPyeID;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
+import org.kmymoney.base.basetypes.simple.KMMSpltID;
+import org.kmymoney.base.basetypes.simple.KMMTrxID;
+import org.kmymoney.base.numbers.FixedPointNumber;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -883,8 +884,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
 
 	@Override
-	public Collection<KMyMoneyWritableSecurity> getWritableSecuritiesByName(final String expr) {
-		Collection<KMyMoneyWritableSecurity> result = new ArrayList<KMyMoneyWritableSecurity>();
+	public List<KMyMoneyWritableSecurity> getWritableSecuritiesByName(final String expr) {
+		List<KMyMoneyWritableSecurity> result = new ArrayList<KMyMoneyWritableSecurity>();
 
 		for ( KMyMoneySecurity sec : super.getSecuritiesByName(expr) ) {
 			KMyMoneyWritableSecurity newSec = new KMyMoneyWritableSecurityImpl((KMyMoneySecurityImpl) sec);
@@ -895,8 +896,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
     }
 
 	@Override
-	public Collection<KMyMoneyWritableSecurity> getWritableSecuritiesByName(final String expr, final boolean relaxed) {
-		Collection<KMyMoneyWritableSecurity> result = new ArrayList<KMyMoneyWritableSecurity>();
+	public List<KMyMoneyWritableSecurity> getWritableSecuritiesByName(final String expr, final boolean relaxed) {
+		List<KMyMoneyWritableSecurity> result = new ArrayList<KMyMoneyWritableSecurity>();
 
 		for ( KMyMoneySecurity sec : super.getSecuritiesByName(expr, relaxed) ) {
 			KMyMoneyWritableSecurity newSec = new KMyMoneyWritableSecurityImpl((KMyMoneySecurityImpl) sec);

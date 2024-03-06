@@ -1,6 +1,5 @@
 package org.kmymoney.api.read.impl.hlp;
 
-import java.beans.PropertyChangeSupport;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -40,8 +39,6 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 
 	private static NumberFormat currencyFormat = null;
 
-	private volatile PropertyChangeSupport myPtyChg = null;
-
 	// ---------------------------------------------------------------
 
 	public SimpleAccount(final KMyMoneyFile kmmFile) {
@@ -54,14 +51,14 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 	 * The returned list is sorted by the natural order of the Transaction-Splits.
 	 */
 	public List<KMyMoneyTransaction> getTransactions() {
-		List<? extends KMyMoneyTransactionSplit> splits = getTransactionSplits();
-		List<KMyMoneyTransaction> retval = new ArrayList<KMyMoneyTransaction>(splits.size());
+		List<KMyMoneyTransaction> retval = new ArrayList<KMyMoneyTransaction>();
 
-		for ( Object element : splits ) {
-			KMyMoneyTransactionSplit split = (KMyMoneyTransactionSplit) element;
-			retval.add(split.getTransaction());
+		for ( KMyMoneyTransactionSplit splt : getTransactionSplits() ) {
+			retval.add(splt.getTransaction());
 		}
 
+		// retval.sort(Comparator.reverseOrder()); // not necessary 
+		
 		return retval;
 	}
 
@@ -223,7 +220,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
 
 		FixedPointNumber retval = getBalance(date);
-		
+
 		if ( retval == null ) {
 			LOGGER.warn("getBalance: Error creating balance!");
 			return null;
@@ -286,7 +283,6 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 	}
 
 	public String getBalanceFormatted(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
-	
 		NumberFormat cf = NumberFormat.getCurrencyInstance(lcl);
 		cf.setCurrency(getCurrency());
 		return cf.format(getBalance());
@@ -478,82 +474,40 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 		return null;
 	}
 
-	/*
-	 * This is an extension to ${@link #compareNamesTo(Object)} that makes sure that
-	 * NEVER 2 accounts with different IDs compare to 0. Compares our name to
-	 * o.toString() .<br/>
-	 * If both starts with some digits the resulting ${@link java.lang.Integer} are
-	 * compared.<br/>
-	 * If one starts with a number and the other does not, the one starting with a
-	 * number is "bigger"<br/>
-	 * else and if both integers are equals a normals comparison of the
-	 * ${@link java.lang.String} is done.
-	 */
+    // -----------------------------------------------------------------
+
 	@Override
-	public int compareTo(final KMyMoneyAccount otherAcc) {
-
-		int i = compareNamesTo(otherAcc);
+	public int compareTo(final KMyMoneyAccount otherAcct) {
+		int i = compareToByQualifiedName(otherAcct);
 		if ( i != 0 ) {
 			return i;
 		}
 
-		KMyMoneyAccount other = otherAcc;
-		i = other.getID().toString().compareTo(getID().toString());
+		i = compareToByID(otherAcct);
 		if ( i != 0 ) {
 			return i;
 		}
 
-		return ("" + hashCode()).compareTo("" + otherAcc.hashCode());
-
+		return ("" + hashCode()).compareTo("" + otherAcct.hashCode());
 	}
 
-	/*
-	 * Compares our name to o.toString() .<br/>
-	 * If both starts with some digits the resulting ${@link java.lang.Integer} are
-	 * compared.<br/>
-	 * If one starts with a number and the other does not, the one starting with a
-	 * number is "bigger"<br/>
-	 * else and if both integers are equals a normals comparison of the
-	 */
-	public int compareNamesTo(final Object o) throws ClassCastException {
-
-		// usually compare the qualified name
-		String other = o.toString();
-		String me = getQualifiedName();
-
-		// if we have the same parent,
-		// compare the unqualified name.
-		// This enshures that the exception
-		// for numbers is used within our parent-
-		// account too and not just in the top-
-		// level accounts
-		if ( o instanceof KMyMoneyAccount && 
-				((KMyMoneyAccount) o).getParentAccountID() != null && 
-				getParentAccountID() != null && 
-				((KMyMoneyAccount) o).getParentAccountID().toString()
-						.equalsIgnoreCase(getParentAccountID().toString()) ) {
-			other = ((KMyMoneyAccount) o).getName();
-			me = getName();
-		}
-
-		// compare
-
-		Long i0 = startsWithNumber(other);
-		Long i1 = startsWithNumber(me);
-		if ( i0 == null && i1 != null ) {
-			return 1;
-		} else if ( i1 == null && i0 != null ) {
-			return -1;
-		} else if ( i0 == null ) {
-			return me.compareTo(other);
-		} else if ( i1 == null ) {
-			return me.compareTo(other);
-		} else if ( i1.equals(i0) ) {
-			return me.compareTo(other);
-		}
-
-		return i1.compareTo(i0);
+	private int compareToByID(final KMyMoneyAccount otherAcct) {
+		return getID().toString().compareTo(otherAcct.getID().toString());
 	}
+
+	private int compareToByNumber(final KMyMoneyAccount otherAcct) {
+		return getNumber().toString().compareTo(otherAcct.getNumber().toString());
+	}
+
+	private int compareToByName(final KMyMoneyAccount otherAcct) {
+		return getName().compareTo(otherAcct.getName());
+	}
+
+	private int compareToByQualifiedName(final KMyMoneyAccount otherAcct) {
+		return getQualifiedName().compareTo(otherAcct.getQualifiedName());
+	}
+
+    // -----------------------------------------------------------------
 
 	/*
 	 * Helper used in ${@link #compareTo(Object)} to compare names starting with a

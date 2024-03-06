@@ -2,11 +2,11 @@ package org.kmymoney.api.read;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
+import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
@@ -15,7 +15,6 @@ import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.base.basetypes.simple.KMMIDNotSetException;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.numbers.FixedPointNumber;
-import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
 
 /**
  * A KMyMoney account satisfies the "normal" definition of the term in 
@@ -195,9 +194,9 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      *
      * @return all child-accounts
      */
-    Collection<KMyMoneyAccount> getChildren();
+    List<KMyMoneyAccount> getChildren();
 
-    Collection<KMyMoneyAccount> getChildrenRecursive();
+    List<KMyMoneyAccount> getChildrenRecursive();
 
     /**
      * @param account the account to test

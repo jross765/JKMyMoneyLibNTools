@@ -20,7 +20,9 @@ import org.kmymoney.base.basetypes.simple.KMMSecID;
  * <br>
  * Cf. <a href="https://docs.kde.org/stable5/en/kmymoney/kmymoney/details.investments.ledger.html#idm2349">KMyMoney handbook</a>
  */
-public interface KMyMoneySecurity extends HasUserDefinedAttributes {
+public interface KMyMoneySecurity extends Comparable<KMyMoneySecurity>,
+										  HasUserDefinedAttributes 
+{
 
     /**
      * @return

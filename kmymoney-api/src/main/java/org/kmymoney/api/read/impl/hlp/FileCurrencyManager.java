@@ -88,6 +88,10 @@ public class FileCurrencyManager {
 	}
 
 	public Collection<KMyMoneyCurrency> getCurrencies() {
+		if ( currMap == null ) {
+			throw new IllegalStateException("no root-element loaded");
+		}
+
 		return Collections.unmodifiableCollection(currMap.values());
 	}
 

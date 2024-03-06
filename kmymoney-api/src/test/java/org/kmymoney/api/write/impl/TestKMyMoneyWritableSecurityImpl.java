@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.util.Collection;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -126,7 +127,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 
 	@Test
 	public void test01_2() throws Exception {
-		Collection<KMyMoneyWritableSecurity> secList = kmmInFile.getWritableSecuritiesByName("mercedes");
+		List<KMyMoneyWritableSecurity> secList = kmmInFile.getWritableSecuritiesByName("mercedes");
 		assertNotEquals(null, secList);
 		assertEquals(1, secList.size());
 

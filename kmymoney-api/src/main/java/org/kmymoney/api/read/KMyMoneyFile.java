@@ -2,6 +2,7 @@ package org.kmymoney.api.read;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
@@ -68,7 +69,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param acctID if null, gives all account that have no parent
 	 * @return all accounts with that parent in no particular order
 	 */
-	Collection<KMyMoneyAccount> getAccountsByParentID(KMMComplAcctID acctID);
+	List<KMyMoneyAccount> getAccountsByParentID(KMMComplAcctID acctID);
 
 	/**
 	 * warning: this function has to traverse all accounts. If it much faster to try
@@ -310,14 +311,14 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param expr search expression
 	 * @return
 	 */
-	Collection<KMyMoneySecurity> getSecuritiesByName(String expr);
+	List<KMyMoneySecurity> getSecuritiesByName(String expr);
 
 	/**
 	 * @param expr search expression
 	 * @param relaxed
 	 * @return
 	 */
-	Collection<KMyMoneySecurity> getSecuritiesByName(String expr, boolean relaxed);
+	List<KMyMoneySecurity> getSecuritiesByName(String expr, boolean relaxed);
 
 	/**
 	 * @param expr search expression

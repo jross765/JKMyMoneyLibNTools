@@ -120,17 +120,17 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      * @see KMyMoneyAccount#getChildren()
      */
     @Override
-    public Collection<KMyMoneyAccount> getChildren() {
+    public List<KMyMoneyAccount> getChildren() {
     	return getKMyMoneyFile().getAccountsByParentID(getID());
     }
 
     @Override
-    public Collection<KMyMoneyAccount> getChildrenRecursive() {
+    public List<KMyMoneyAccount> getChildrenRecursive() {
     	return getChildrenRecursiveCore(getChildren());
     }
 
-    private static Collection<KMyMoneyAccount> getChildrenRecursiveCore(Collection<KMyMoneyAccount> accts) {
-    	Collection<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
+    private static List<KMyMoneyAccount> getChildrenRecursiveCore(Collection<KMyMoneyAccount> accts) {
+    	List<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
     	
     	for ( KMyMoneyAccount acct : accts ) {
     		result.add(acct);

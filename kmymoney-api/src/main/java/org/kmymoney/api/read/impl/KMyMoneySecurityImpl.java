@@ -6,11 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.read.KMMSecCurr;
@@ -22,6 +17,11 @@ import org.kmymoney.api.read.UnknownSecurityTypeException;
 import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
 import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.kmymoney.api.read.impl.hlp.KVPListDoesNotContainKeyException;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -192,7 +192,36 @@ public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl
 		return HasUserDefinedAttributesImpl.getUserDefinedAttributeKeysCore(kvpList);
 	}
 
-    // ---------------------------------------------------------------
+    // -----------------------------------------------------------------
+
+	@Override
+	public int compareTo(final KMyMoneySecurity otherSec) {
+		int i = compareToByName(otherSec);
+		if ( i != 0 ) {
+			return i;
+		}
+
+		i = compareToByQualifID(otherSec);
+		if ( i != 0 ) {
+			return i;
+		}
+
+		return ("" + hashCode()).compareTo("" + otherSec.hashCode());
+	}
+	
+//	private int compareToByID(final KMyMoneySecurity otherCmdty) {
+//		return getID().toString().compareTo(otherCmdty.getID().toString());
+//	}
+
+	private int compareToByQualifID(final KMyMoneySecurity otherSec) {
+		return getQualifID().toString().compareTo(otherSec.getQualifID().toString());
+	}
+
+	private int compareToByName(final KMyMoneySecurity otherSec) {
+		return getName().compareTo(otherSec.getName());
+	}
+
+    // -----------------------------------------------------------------
 
     @Override
     public String toString() {

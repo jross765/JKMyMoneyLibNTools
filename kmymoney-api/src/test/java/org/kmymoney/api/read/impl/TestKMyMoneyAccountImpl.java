@@ -5,7 +5,9 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Currency;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -132,10 +134,11 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(ACCT_12_ID, acct.getParentAccountID());
-		assertEquals(2, acct.getChildren().size());
-		Object[] acctArr = acct.getChildren().toArray();
-		assertEquals("A000051", ((KMyMoneyAccount) acctArr[0]).getID().toString());
-		assertEquals("A000050", ((KMyMoneyAccount) acctArr[1]).getID().toString());
+		
+		List<KMyMoneyAccount> acctList = acct.getChildren();
+		assertEquals(2, acctList.size());
+		assertEquals("A000050", acctList.get(0).getID().toString());
+		assertEquals("A000051", acctList.get(1).getID().toString());
 
 		// ::CHECK: Really negative?
 		assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
@@ -183,10 +186,11 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
-		assertEquals(2, acct.getChildren().size());
-		Object[] acctArr = acct.getChildren().toArray();
-		assertEquals("A000061", ((KMyMoneyAccount) acctArr[0]).getID().toString());
-		assertEquals("A000002", ((KMyMoneyAccount) acctArr[1]).getID().toString());
+		
+		List<KMyMoneyAccount> acctList = acct.getChildren();
+		assertEquals(2, acctList.size());
+		assertEquals("A000002", acctList.get(0).getID().toString());
+		assertEquals("A000061", acctList.get(1).getID().toString());
 
 		assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals(15597.50, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
@@ -230,12 +234,13 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
-		assertEquals(4, acct.getChildren().size());
-		Object[] acctArr = acct.getChildren().toArray();
-		assertEquals("A000052", ((KMyMoneyAccount) acctArr[0]).getID().toString());
-		assertEquals("A000049", ((KMyMoneyAccount) acctArr[1]).getID().toString());
-		assertEquals("A000068", ((KMyMoneyAccount) acctArr[2]).getID().toString());
-		assertEquals("A000053", ((KMyMoneyAccount) acctArr[3]).getID().toString());
+		
+		List<KMyMoneyAccount> acctList = acct.getChildren();
+		assertEquals(4, acctList.size());
+		assertEquals("A000049", acctList.get(0).getID().toString());
+		assertEquals("A000052", acctList.get(1).getID().toString());
+		assertEquals("A000068", acctList.get(2).getID().toString());
+		assertEquals("A000053", acctList.get(3).getID().toString());
 
 		// ::CHECK: Really negative?
 		assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
@@ -257,11 +262,12 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
-		assertEquals(16, acct.getChildren().size());
-		Object[] acctArr = acct.getChildren().toArray();
-		assertEquals("A000072", ((KMyMoneyAccount) acctArr[0]).getID().toString());
-		assertEquals("A000012", ((KMyMoneyAccount) acctArr[1]).getID().toString());
-		assertEquals("A000017", ((KMyMoneyAccount) acctArr[2]).getID().toString());
+		
+		List<KMyMoneyAccount> acctList = acct.getChildren();
+		assertEquals(16, acctList.size());
+		assertEquals("A000072", acctList.get(0).getID().toString());
+		assertEquals("A000006", acctList.get(1).getID().toString());
+		assertEquals("A000011", acctList.get(2).getID().toString());
 		// etc.
 		// assertEquals("A000xyz", ((KMyMoneyAccount) acctArr[3]).getID().toString());
 

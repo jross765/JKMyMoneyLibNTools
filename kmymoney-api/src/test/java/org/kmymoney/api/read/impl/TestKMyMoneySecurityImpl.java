@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -162,15 +164,15 @@ public class TestKMyMoneySecurityImpl {
 
 	@Test
 	public void test01_5() throws Exception {
-		Collection<KMyMoneySecurity> secList = kmmFile.getSecuritiesByName("mercedes");
+		List<KMyMoneySecurity> secList = kmmFile.getSecuritiesByName("mercedes");
 		assertNotEquals(null, secList);
 		assertEquals(1, secList.size());
 
-		assertEquals(secCurrID1.toString(), ((KMyMoneySecurity) secList.toArray()[0]).getQualifID().toString());
-		assertEquals(secCurrID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
-		assertEquals(SEC_1_TICKER, ((KMyMoneySecurity) secList.toArray()[0]).getSymbol());
-		assertEquals(SEC_1_ISIN, ((KMyMoneySecurity) secList.toArray()[0]).getCode());
-		assertEquals("Mercedes-Benz Group AG", ((KMyMoneySecurity) secList.toArray()[0]).getName());
+		assertEquals(secCurrID1.toString(), secList.get(0).getQualifID().toString());
+		assertEquals(secCurrID1, secList.get(0).getQualifID());
+		assertEquals(SEC_1_TICKER, secList.get(0).getSymbol());
+		assertEquals(SEC_1_ISIN, secList.get(0).getCode());
+		assertEquals("Mercedes-Benz Group AG", secList.get(0).getName());
 
 		secList = kmmFile.getSecuritiesByName("BENZ");
 		assertNotEquals(null, secList);

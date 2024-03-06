@@ -125,6 +125,10 @@ public class FilePayeeManager {
 	}
 
 	public Collection<KMyMoneyPayee> getPayees() {
+		if ( pyeMap == null ) {
+			throw new IllegalStateException("no root-element loaded");
+		}
+
 		return Collections.unmodifiableCollection(pyeMap.values());
 	}
 

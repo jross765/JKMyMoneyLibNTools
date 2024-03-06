@@ -3,6 +3,7 @@ package org.kmymoney.api.read.impl.hlp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -230,6 +231,8 @@ public class FileSecurityManager {
 			}
 		}
 
+		result.sort(Comparator.naturalOrder()); 
+
 		return result;
 	}
 
@@ -245,6 +248,10 @@ public class FileSecurityManager {
 	}
 
 	public Collection<KMyMoneySecurity> getSecurities() {
+		if ( secMap == null ) {
+			throw new IllegalStateException("no root-element loaded");
+		}
+
 		return Collections.unmodifiableCollection(secMap.values());
 	}
 
