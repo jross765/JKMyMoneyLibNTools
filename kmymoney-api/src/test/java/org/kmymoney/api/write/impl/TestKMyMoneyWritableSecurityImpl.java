@@ -309,6 +309,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
 
 		assertEquals(newID.toString(), sec.getID().toString());
+		assertEquals(KMMSecCurr.Type.STOCK, sec.getType());
 		assertEquals("Best Corp Ever", sec.getName());
 		assertEquals("X11823", sec.getUserDefinedAttribute(ConstTest.KVP_KEY_SEC_SECURITY_ID));
 	}
@@ -325,6 +326,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertNotEquals(null, sec);
 
 		assertEquals(newID.toString(), sec.getID().toString());
+		assertEquals(KMMSecCurr.Type.STOCK, sec.getType());
 		assertEquals("Best Corp Ever", sec.getName());
 		assertEquals("X11823", sec.getUserDefinedAttribute(ConstTest.KVP_KEY_SEC_SECURITY_ID));
 	}
@@ -420,6 +422,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		Node lastNode = nList.item(nList.getLength() - 1);
 		assertEquals(Node.ELEMENT_NODE, lastNode.getNodeType());
 		Element elt = (Element) lastNode;
+		assertEquals("" + KMMSecCurr.Type.STOCK.getCode().intValue(), elt.getAttribute("type"));
 		assertEquals("Scam and Screw Corp.", elt.getAttribute("name"));
 		assertEquals("SCAM", elt.getAttribute("symbol"));
 		
@@ -448,14 +451,14 @@ public class TestKMyMoneyWritableSecurityImpl {
 
 		KMyMoneyWritableSecurity sec2 = 
 				kmmInFile.createWritableSecurity(
-						KMMSecCurr.Type.STOCK, 
+						KMMSecCurr.Type.BOND, 
 						"BE0123456789", 
 						"Chocolaterie de la Grande Place");
 		sec2.setSymbol("CHOC"); // dto.
 
 		KMyMoneyWritableSecurity sec3 = 
 				kmmInFile.createWritableSecurity(
-						KMMSecCurr.Type.STOCK, 
+						KMMSecCurr.Type.MUTUAL_FUND, 
 						"FR0123456789", 
 						"Ils sont fous ces dingos!");
 		sec3.setSymbol("FOUS"); // dto.
@@ -497,6 +500,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		Node node = nList.item(nList.getLength() - 4);
 		assertEquals(Node.ELEMENT_NODE, node.getNodeType());
 		Element elt = (Element) node;
+		assertEquals("" + KMMSecCurr.Type.STOCK.getCode().intValue(), elt.getAttribute("type"));
 		assertEquals("Scam and Screw Corp.", elt.getAttribute("name"));
 		assertEquals("SCAM", elt.getAttribute("symbol"));
 
@@ -514,6 +518,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		node = nList.item(nList.getLength() - 3);
 		assertEquals(Node.ELEMENT_NODE, node.getNodeType());
 		elt = (Element) node;
+		assertEquals("" + KMMSecCurr.Type.BOND.getCode().intValue(), elt.getAttribute("type"));
 		assertEquals("Chocolaterie de la Grande Place", elt.getAttribute("name"));
 		assertEquals("CHOC", elt.getAttribute("symbol"));
 		
@@ -531,6 +536,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		node = nList.item(nList.getLength() - 2);
 		assertEquals(Node.ELEMENT_NODE, node.getNodeType());
 		elt = (Element) node;
+		assertEquals("" + KMMSecCurr.Type.MUTUAL_FUND.getCode().intValue(), elt.getAttribute("type"));
 		assertEquals("Ils sont fous ces dingos!", elt.getAttribute("name"));
 		assertEquals("FOUS", elt.getAttribute("symbol"));
 		
@@ -548,6 +554,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		node = nList.item(nList.getLength() - 1);
 		assertEquals(Node.ELEMENT_NODE, node.getNodeType());
 		elt = (Element) node;
+		assertEquals("" + KMMSecCurr.Type.STOCK.getCode().intValue(), elt.getAttribute("type"));
 		assertEquals("Ye Ole National British Trade Company Ltd.", elt.getAttribute("name"));
 		assertEquals("BTRD", elt.getAttribute("symbol"));
 		
