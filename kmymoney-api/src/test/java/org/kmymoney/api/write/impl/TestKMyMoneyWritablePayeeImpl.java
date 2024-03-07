@@ -349,7 +349,7 @@ public class TestKMyMoneyWritablePayeeImpl {
 
 	// Last (new) node
 	Node lastNode = nList.item(nList.getLength() - 1);
-	assertEquals(lastNode.getNodeType(), Node.ELEMENT_NODE);
+	assertEquals(Node.ELEMENT_NODE, lastNode.getNodeType());
 	Element elt = (Element) lastNode;
 	assertEquals("Norma Jean Baker", elt.getAttribute("name"));
 	assertEquals("P000010", elt.getAttribute("id"));
@@ -393,19 +393,19 @@ public class TestKMyMoneyWritablePayeeImpl {
 
 	// Last three nodes (the new ones)
 	Node node = nList.item(nList.getLength() - 3);
-	assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+	assertEquals(Node.ELEMENT_NODE, node.getNodeType());
 	Element elt = (Element) node;
 	assertEquals("Norma Jean Baker", elt.getAttribute("name"));
 	assertEquals("P000010", elt.getAttribute("id"));
 
 	node = nList.item(nList.getLength() - 2);
-	assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+	assertEquals(Node.ELEMENT_NODE, node.getNodeType());
 	elt = (Element) node;
 	assertEquals("Madonna Louise Ciccone", elt.getAttribute("name"));
 	assertEquals("P000011", elt.getAttribute("id"));
 
 	node = nList.item(nList.getLength() - 1);
-	assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+	assertEquals(Node.ELEMENT_NODE, node.getNodeType());
 	elt = (Element) node;
 	assertEquals("Rowan Atkinson", elt.getAttribute("name"));
 	assertEquals("P000012", elt.getAttribute("id"));

@@ -575,7 +575,7 @@ public class TestKMyMoneyWritableAccountImpl {
 
 		// Last (new) node
 		Node lastNode = nList.item(nList.getLength() - 1);
-		assertEquals(lastNode.getNodeType(), Node.ELEMENT_NODE);
+		assertEquals(Node.ELEMENT_NODE, lastNode.getNodeType());
 		Element elt = (Element) lastNode;
 		assertEquals("" + KMyMoneyAccount.Type.LIABILITY.getCode(), elt.getAttribute("type"));
 		assertEquals(ACCT_3_ID.toString(), elt.getAttribute("parentaccount"));
@@ -633,7 +633,7 @@ public class TestKMyMoneyWritableAccountImpl {
 
 		// Last three nodes (the new ones)
 		Node node = nList.item(nList.getLength() - 3);
-		assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+		assertEquals(Node.ELEMENT_NODE, node.getNodeType());
 		Element elt = (Element) node;
 		assertEquals("" + KMyMoneyAccount.Type.LIABILITY.getCode(), elt.getAttribute("type"));
 		assertEquals(ACCT_3_ID.toString(), elt.getAttribute("parentaccount"));
@@ -641,7 +641,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("Stuff never accounted for", elt.getAttribute("description"));
 
 		node = nList.item(nList.getLength() - 2);
-		assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+		assertEquals(Node.ELEMENT_NODE, node.getNodeType());
 		elt = (Element) node;
 		assertEquals("" + KMyMoneyAccount.Type.CHECKING.getCode(), elt.getAttribute("type"));
 		assertEquals(ACCT_2_ID.toString(), elt.getAttribute("parentaccount"));
@@ -649,7 +649,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("My very VERY secret account on the Bahamas", elt.getAttribute("description"));
 
 		node = nList.item(nList.getLength() - 1);
-		assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+		assertEquals(Node.ELEMENT_NODE, node.getNodeType());
 		elt = (Element) node;
 		assertEquals("" + KMyMoneyAccount.Type.CASH.getCode(), elt.getAttribute("type"));
 		assertEquals(ACCT_1_ID.toString(), elt.getAttribute("parentaccount"));

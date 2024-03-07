@@ -2,6 +2,8 @@ package org.example.kmymoneyapi.write.gen.simple;
 
 import java.io.File;
 
+import org.kmymoney.api.Const;
+import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 
@@ -31,8 +33,8 @@ public class GenSec {
     protected void kernel() throws Exception {
 	KMyMoneyWritableFileImpl kmmFile = new KMyMoneyWritableFileImpl(new File(kmmInFileName));
 
-	KMyMoneyWritableSecurity sec = kmmFile.createWritableSecurity(name);
-	sec.setUserDefinedAttribute("kmm-security-id", isin);
+	KMyMoneyWritableSecurity sec = kmmFile.createWritableSecurity(KMMSecCurr.Type.STOCK, isin, name);
+	sec.setSymbol(symbol);
 
 	if (symbol != null)
 	    sec.setSymbol(symbol);

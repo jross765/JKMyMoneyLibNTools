@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.kmymoney.api.generated.KMYMONEYFILE;
+import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.NoEntryFoundException;
 import org.kmymoney.api.read.TooManyEntriesFoundException;
@@ -209,9 +210,16 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	// ----------------------------
 
 	/**
+	 * @param type  Security type
+	 * @param secID Security ID (<strong>not</strong> the internal technical ID,
+	 *              but the business ID, such as ISIN, CUSIP, etc. 
+	 *              A ticker will also work, but it is <strong>not</strong> recommended,
+	 *              as tickers typically are not unique, and there is a separate field
+	 *              for it. 
+	 * @param name  Security name
 	 * @return a new transaction with no splits that is already added to this file
 	 */
-	KMyMoneyWritableSecurity createWritableSecurity(String name);
+	KMyMoneyWritableSecurity createWritableSecurity(KMMSecCurr.Type type, String secID, String name);
 
 	/**
 	 *

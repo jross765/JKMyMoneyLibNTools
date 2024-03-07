@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.TreeSet;
 import java.util.zip.GZIPOutputStream;
 
+import org.kmymoney.api.Const;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.PAYEE;
@@ -27,6 +28,7 @@ import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.generated.SPLITS;
 import org.kmymoney.api.generated.TRANSACTION;
+import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyPrice;
@@ -929,9 +931,14 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
 
 	@Override
-	public KMyMoneyWritableSecurity createWritableSecurity(final String name) {
+	public KMyMoneyWritableSecurity createWritableSecurity(
+			final KMMSecCurr.Type type,
+			final String secID, // <-- e.g., ISIN
+			final String name) {
 		KMyMoneyWritableSecurityImpl sec = new KMyMoneyWritableSecurityImpl(this);
+		sec.setType(type);
 		sec.setName(name);
+	    sec.addUserDefinedAttribute(Const.KVP_KEY_SEC_SECURITY_ID, secID);
 		super.secMgr.addSecurity(sec);
 		return sec;
 	}

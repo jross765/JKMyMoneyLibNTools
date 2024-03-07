@@ -5,16 +5,15 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.io.InputStream;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Currency;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 
 import junit.framework.JUnit4TestAdapter;
 

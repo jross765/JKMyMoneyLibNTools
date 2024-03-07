@@ -1,7 +1,6 @@
 package org.kmymoney.api.write.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import java.io.File;
 import java.io.InputStream;

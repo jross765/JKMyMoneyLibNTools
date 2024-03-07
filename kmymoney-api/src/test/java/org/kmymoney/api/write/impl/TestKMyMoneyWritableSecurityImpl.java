@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotEquals;
 import java.io.File;
 import java.io.InputStream;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -17,15 +16,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneySecurityImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -280,7 +279,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
 
-		KMyMoneyWritableSecurity sec = kmmInFile.createWritableSecurity("Best Corp Ever");
+		KMyMoneyWritableSecurity sec = kmmInFile.createWritableSecurity(KMMSecCurr.Type.STOCK, "X11823", "Best Corp Ever");
 		newID.set(sec.getID());
 
 		// ----------------------------
@@ -311,6 +310,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 
 		assertEquals(newID.toString(), sec.getID().toString());
 		assertEquals("Best Corp Ever", sec.getName());
+		assertEquals("X11823", sec.getUserDefinedAttribute(ConstTest.KVP_KEY_SEC_SECURITY_ID));
 	}
 
 	private void test03_1_1_check_persisted(File outFile) throws Exception {
@@ -326,6 +326,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 
 		assertEquals(newID.toString(), sec.getID().toString());
 		assertEquals("Best Corp Ever", sec.getName());
+		assertEquals("X11823", sec.getUserDefinedAttribute(ConstTest.KVP_KEY_SEC_SECURITY_ID));
 	}
 
     // ------------------------------
@@ -334,7 +335,11 @@ public class TestKMyMoneyWritableSecurityImpl {
 
 	@Test
 	public void test03_2_1() throws Exception {
-		KMyMoneyWritableSecurity sec = kmmInFile.createWritableSecurity("Scam and Screw Corp.");
+		KMyMoneyWritableSecurity sec = 
+				kmmInFile.createWritableSecurity(
+						KMMSecCurr.Type.STOCK, 
+						"US0123456789", 
+						"Scam and Screw Corp.");
 		sec.setSymbol("SCAM");
 
 		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
@@ -413,27 +418,53 @@ public class TestKMyMoneyWritableSecurityImpl {
 
 		// Last (new) node
 		Node lastNode = nList.item(nList.getLength() - 1);
-		assertEquals(lastNode.getNodeType(), Node.ELEMENT_NODE);
+		assertEquals(Node.ELEMENT_NODE, lastNode.getNodeType());
 		Element elt = (Element) lastNode;
 		assertEquals("Scam and Screw Corp.", elt.getAttribute("name"));
 		assertEquals("SCAM", elt.getAttribute("symbol"));
+		
+		Node kvpsNode = elt.getElementsByTagName("KEYVALUEPAIRS").item(0);
+		assertNotEquals(null, kvpsNode.getNodeType());
+		assertEquals(Node.ELEMENT_NODE, kvpsNode.getNodeType());
+		Element kvpsElt = (Element) kvpsNode;
+		Node kvpNode = kvpsElt.getElementsByTagName("PAIR").item(0);
+		assertNotEquals(null, kvpNode.getNodeType());
+		assertEquals(Node.ELEMENT_NODE, kvpNode.getNodeType());
+		Element kvpElt = (Element) kvpNode;
+		assertEquals(ConstTest.KVP_KEY_SEC_SECURITY_ID, kvpElt.getAttribute("key"));
+		assertEquals("US0123456789", kvpElt.getAttribute("value"));
 	}
 
 //    // -----------------------------------------------------------------
 
 	@Test
 	public void test03_2_2() throws Exception {
-		KMyMoneyWritableSecurity sec1 = kmmInFile.createWritableSecurity("Scam and Screw Corp.");
-		sec1.setSymbol("US0123456789");
+		KMyMoneyWritableSecurity sec1 = 
+				kmmInFile.createWritableSecurity(
+						KMMSecCurr.Type.STOCK, 
+						"US0123456789", 
+						"Scam and Screw Corp.");
+		sec1.setSymbol("SCAM"); // <-- CAUTION: Symbol is a different field than the security ID above
 
-		KMyMoneyWritableSecurity sec2 = kmmInFile.createWritableSecurity("Chocolaterie de la Grande Place");
-		sec2.setSymbol("BE0123456789");
+		KMyMoneyWritableSecurity sec2 = 
+				kmmInFile.createWritableSecurity(
+						KMMSecCurr.Type.STOCK, 
+						"BE0123456789", 
+						"Chocolaterie de la Grande Place");
+		sec2.setSymbol("CHOC"); // dto.
 
-		KMyMoneyWritableSecurity sec3 = kmmInFile.createWritableSecurity("Ils sont fous ces dingos!");
-		sec3.setSymbol("FR0123456789");
+		KMyMoneyWritableSecurity sec3 = 
+				kmmInFile.createWritableSecurity(
+						KMMSecCurr.Type.STOCK, 
+						"FR0123456789", 
+						"Ils sont fous ces dingos!");
+		sec3.setSymbol("FOUS"); // dto.
 
-		KMyMoneyWritableSecurity sec4 = kmmInFile.createWritableSecurity("Ye Ole National British Trade Company Ltd.");
-		sec4.setSymbol("GB10000A2222"); // sic, has to be set redundantly
+		KMyMoneyWritableSecurity sec4 = kmmInFile.createWritableSecurity(
+				KMMSecCurr.Type.STOCK, 
+				"GB10000A2222", 
+				"Ye Ole National British Trade Company Ltd.");
+		sec4.setSymbol("BTRD"); // dto.
 
 		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
 		// System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test02_1: '"
@@ -464,28 +495,72 @@ public class TestKMyMoneyWritableSecurityImpl {
 
 		// Last three nodes (the new ones)
 		Node node = nList.item(nList.getLength() - 4);
-		assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+		assertEquals(Node.ELEMENT_NODE, node.getNodeType());
 		Element elt = (Element) node;
 		assertEquals("Scam and Screw Corp.", elt.getAttribute("name"));
-		assertEquals("US0123456789", elt.getAttribute("symbol"));
+		assertEquals("SCAM", elt.getAttribute("symbol"));
+
+		Node kvpsNode = elt.getElementsByTagName("KEYVALUEPAIRS").item(0);
+		assertNotEquals(null, kvpsNode.getNodeType());
+		assertEquals(Node.ELEMENT_NODE, kvpsNode.getNodeType());
+		Element kvpsElt = (Element) kvpsNode;
+		Node kvpNode = kvpsElt.getElementsByTagName("PAIR").item(0);
+		assertNotEquals(null, kvpNode.getNodeType());
+		assertEquals(Node.ELEMENT_NODE, kvpNode.getNodeType());
+		Element kvpElt = (Element) kvpNode;
+		assertEquals(ConstTest.KVP_KEY_SEC_SECURITY_ID, kvpElt.getAttribute("key"));
+		assertEquals("US0123456789", kvpElt.getAttribute("value"));
 
 		node = nList.item(nList.getLength() - 3);
-		assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+		assertEquals(Node.ELEMENT_NODE, node.getNodeType());
 		elt = (Element) node;
 		assertEquals("Chocolaterie de la Grande Place", elt.getAttribute("name"));
-		assertEquals("BE0123456789", elt.getAttribute("symbol"));
+		assertEquals("CHOC", elt.getAttribute("symbol"));
+		
+		kvpsNode = elt.getElementsByTagName("KEYVALUEPAIRS").item(0);
+		assertNotEquals(null, kvpsNode.getNodeType());
+		assertEquals(Node.ELEMENT_NODE, kvpsNode.getNodeType());
+		kvpsElt = (Element) kvpsNode;
+		kvpNode = kvpsElt.getElementsByTagName("PAIR").item(0);
+		assertNotEquals(null, kvpNode.getNodeType());
+		assertEquals(Node.ELEMENT_NODE, kvpNode.getNodeType());
+		kvpElt = (Element) kvpNode;
+		assertEquals(ConstTest.KVP_KEY_SEC_SECURITY_ID, kvpElt.getAttribute("key"));
+		assertEquals("BE0123456789", kvpElt.getAttribute("value"));
 
 		node = nList.item(nList.getLength() - 2);
-		assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+		assertEquals(Node.ELEMENT_NODE, node.getNodeType());
 		elt = (Element) node;
 		assertEquals("Ils sont fous ces dingos!", elt.getAttribute("name"));
-		assertEquals("FR0123456789", elt.getAttribute("symbol"));
+		assertEquals("FOUS", elt.getAttribute("symbol"));
+		
+		kvpsNode = elt.getElementsByTagName("KEYVALUEPAIRS").item(0);
+		assertNotEquals(null, kvpsNode.getNodeType());
+		assertEquals(Node.ELEMENT_NODE, kvpsNode.getNodeType());
+		kvpsElt = (Element) kvpsNode;
+		kvpNode = kvpsElt.getElementsByTagName("PAIR").item(0);
+		assertNotEquals(null, kvpNode.getNodeType());
+		assertEquals(Node.ELEMENT_NODE, kvpNode.getNodeType());
+		kvpElt = (Element) kvpNode;
+		assertEquals(ConstTest.KVP_KEY_SEC_SECURITY_ID, kvpElt.getAttribute("key"));
+		assertEquals("FR0123456789", kvpElt.getAttribute("value"));
 
 		node = nList.item(nList.getLength() - 1);
-		assertEquals(node.getNodeType(), Node.ELEMENT_NODE);
+		assertEquals(Node.ELEMENT_NODE, node.getNodeType());
 		elt = (Element) node;
 		assertEquals("Ye Ole National British Trade Company Ltd.", elt.getAttribute("name"));
-		assertEquals("GB10000A2222", elt.getAttribute("symbol"));
+		assertEquals("BTRD", elt.getAttribute("symbol"));
+		
+		kvpsNode = elt.getElementsByTagName("KEYVALUEPAIRS").item(0);
+		assertNotEquals(null, kvpsNode.getNodeType());
+		assertEquals(Node.ELEMENT_NODE, kvpsNode.getNodeType());
+		kvpsElt = (Element) kvpsNode;
+		kvpNode = kvpsElt.getElementsByTagName("PAIR").item(0);
+		assertNotEquals(null, kvpNode.getNodeType());
+		assertEquals(Node.ELEMENT_NODE, kvpNode.getNodeType());
+		kvpElt = (Element) kvpNode;
+		assertEquals(ConstTest.KVP_KEY_SEC_SECURITY_ID, kvpElt.getAttribute("key"));
+		assertEquals("GB10000A2222", kvpElt.getAttribute("value"));
 	}
 
 }
