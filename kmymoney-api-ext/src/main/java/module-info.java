@@ -2,8 +2,8 @@ module kmymoney.apiext {
 	requires static org.slf4j;
 	// requires java.desktop;
 	
-	requires kmymoney.base;
-	requires kmymoney.api;
+	requires transitive kmymoney.base;
+	requires transitive kmymoney.api;
 
 	exports org.kmymoney.apiext.secacct;
 }

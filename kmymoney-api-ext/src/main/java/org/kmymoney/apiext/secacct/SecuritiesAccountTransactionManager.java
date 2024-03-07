@@ -38,7 +38,6 @@ public class SecuritiesAccountTransactionManager {
     
     // ---------------------------------------------------------------
     
-    @SuppressWarnings("exports")
     public static KMyMoneyWritableTransaction genBuyStockTrx(
 	    final KMyMoneyWritableFileImpl kmmFile,
 	    final KMMAcctID stockAcctID,
@@ -60,7 +59,6 @@ public class SecuritiesAccountTransactionManager {
 			      postDate, descr);	
     }
     
-    @SuppressWarnings("exports")
     public static KMyMoneyWritableTransaction genBuyStockTrx(
 	    final KMyMoneyWritableFileImpl kmmFile,
 	    final KMMAcctID stockAcctID,
@@ -212,7 +210,6 @@ public class SecuritiesAccountTransactionManager {
     
     // ---------------------------------------------------------------
     
-    @SuppressWarnings("exports")
     public static KMyMoneyWritableTransaction genDivivendTrx(
 	    final KMyMoneyWritableFileImpl kmmFile,
 	    final KMMAcctID stockAcctID,
@@ -234,7 +231,6 @@ public class SecuritiesAccountTransactionManager {
 			      postDate, descr);
     }
     
-    @SuppressWarnings("exports")
     public static KMyMoneyWritableTransaction genDivivendTrx(
 	    final KMyMoneyWritableFileImpl kmmFile,
 	    final KMMAcctID stockAcctID,
