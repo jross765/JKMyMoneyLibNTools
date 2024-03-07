@@ -78,7 +78,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * 
 	 * @param expr search expression
 	 *
-	 * @param name the UNQUaLIFIED name to look for
+	 * @param name the <stronig>unqualified</strong> name to look for
 	 * @return null if not found
 	 * @see #getAccountByID(KMMComplAcctID)
 	 * @see #getAccountsByParentID(KMMComplAcctID)
@@ -88,9 +88,9 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 
 	/**
 	 * @param expr search expression
-	 * @param qualif
-	 * @param relaxed
-	 * @return
+	 * @param qualif Whether to search for qualified names of unqualified ones
+	 * @param relaxed Whether to ignore upper/lower-case letters or not (true: case-insensitive)
+	 * @return the qualified or unqualified name to look for, depending on parameter qualif.
 	 */
 	Collection<KMyMoneyAccount> getAccountsByName(String expr, boolean qualif, boolean relaxed);
 

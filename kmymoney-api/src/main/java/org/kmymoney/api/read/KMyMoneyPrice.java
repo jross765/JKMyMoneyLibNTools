@@ -17,7 +17,9 @@ import org.kmymoney.api.read.hlp.KMyMoneyPricePairCore;
  *   <li>A pseudo-security's price</li> 
  * </ul>
  */
-public interface KMyMoneyPrice extends KMyMoneyPricePairCore {
+public interface KMyMoneyPrice extends Comparable<KMyMoneyPrice>,
+                                       KMyMoneyPricePairCore
+{
 
 	/*
 	 * After superficial code analysis, it seems that the KMyMoney developers 
@@ -66,52 +68,67 @@ public interface KMyMoneyPrice extends KMyMoneyPricePairCore {
     // ---------------------------------------------------------------
     
     /**
-     * @return
+     * @return Returns the ID of the price object. In lack of a proper technical IDs 
+     *         for price entries in KMyMoney, this is essentially the triple ("from-security/currency",
+     *         "to-currency", "date").
      * @throws InvalidQualifSecCurrIDException
      * @throws InvalidQualifSecCurrTypeException
      */
     KMMPriceID getID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
     
     /**
-     * @return
+     * @return Returns the parent price pair object (essentially the pair ("from-security/currency",
+     *         "to-currency")
      * @throws InvalidQualifSecCurrIDException
      * @throws InvalidQualifSecCurrTypeException
+     * {@link #getParentPricePair()}
      */
     KMMPricePairID getParentPricePairID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
 	
     /**
-     * @return
+     * @return Returns the parent price pair object.
+     * {@link #getParentPricePairID()}
      */
     KMyMoneyPricePair getParentPricePair();
 	
     // ----------------------------
 
     /**
-     * @return
+     * @return Returns the value date of the price.
+     * {@link #getDateStr()}
      */
     LocalDate getDate();
 
+    /**
+     * @return Returns the value date of the price.
+     * {@link #getDate()}
+     */
     String getDateStr();
 
     /**
-     * @return
+     * @return Returns the price source (e.g., "User" or "Transaction")
+     * {@link #getSourceStr()}
      */
     Source getSource();
 
-    /**
-     * @return
-     */
-    String getSourceStr();
+//    /**
+//     * @return
+//     * {@link #getSource()}
+//     */
+//    String getSourceStr();
 
     /**
-     * @return
+     * @return Returns the price value (the actual "price" in the narrower sense)
+     * {@link #getValueFormatted()}
      */
     FixedPointNumber getValue();
     
     /**
-     * @return
+     * @return Returns the price value (the actual "price" in the narrower sense)
+     *         as a formatted string.
      * @throws InvalidQualifSecCurrTypeException
      * @throws InvalidQualifSecCurrIDException
+     * {@link #getValue()}
      */
     String getValueFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
     

@@ -1,7 +1,7 @@
 package org.kmymoney.api.read.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.generated.PRICEPAIR;
@@ -168,8 +168,8 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
     // -----------------------------------------------------------
     
     @Override
-    public Collection<KMyMoneyPrice> getPrices() {
-	Collection<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
+    public List<KMyMoneyPrice> getPrices() {
+    	List<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
 	
 	for ( PRICE prc : jwsdpPeer.getPRICE() ) {
 	    KMyMoneyPrice newPrc = new KMyMoneyPriceImpl(this, prc, getKMyMoneyFile());
@@ -197,7 +197,19 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
 	return true;
     }
     
-    // -----------------------------------------------------------
+    // -----------------------------------------------------------------
+
+    @Override
+	public int compareTo(final KMyMoneyPricePair otherPrc) {
+		int i = getID().toString().compareTo(otherPrc.getID().toString());
+		if ( i != 0 ) {
+			return i;
+		}
+
+		return ("" + hashCode()).compareTo("" + otherPrc.hashCode());
+	}
+	
+    // -----------------------------------------------------------------
     
     @Override
     public String toString() {

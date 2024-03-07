@@ -6,6 +6,10 @@ import static org.junit.Assert.assertNotEquals;
 import java.io.File;
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -24,6 +28,7 @@ import org.kmymoney.api.read.KMyMoneyPrice.Source;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.api.read.impl.KMyMoneyPriceImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyPriceImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyPricePairImpl;
@@ -37,6 +42,8 @@ public class TestKMyMoneyWritablePriceImpl {
 	private static final KMMPriceID PRC_1_ID = TestKMyMoneyPriceImpl.PRC_1_ID;
 	private static final KMMPriceID PRC_2_ID = TestKMyMoneyPriceImpl.PRC_2_ID;
 	private static final KMMPriceID PRC_3_ID = TestKMyMoneyPriceImpl.PRC_3_ID;
+	private static final KMMPriceID PRC_4_ID = TestKMyMoneyPriceImpl.PRC_4_ID;
+	private static final KMMPriceID PRC_5_ID = TestKMyMoneyPriceImpl.PRC_5_ID;
 
 	private static final KMMPricePairID PRCPR_1_ID = TestKMyMoneyPricePairImpl.PRCPR_1_ID;
 	private static final KMMPricePairID PRCPR_2_ID = TestKMyMoneyPricePairImpl.PRCPR_2_ID;
@@ -115,6 +122,20 @@ public class TestKMyMoneyWritablePriceImpl {
     // complete (as complete as returned be KMyMoneyFileImpl.getPriceByID().
 
 	@Test
+	public void test01() throws Exception {
+		Collection<KMyMoneyWritablePrice> prcColl = kmmInFile.getWritablePrices();
+		List<KMyMoneyWritablePrice> prcList = new ArrayList<KMyMoneyWritablePrice>(prcColl);
+		prcList.sort(Comparator.naturalOrder());
+
+		assertEquals(5, prcList.size());
+		assertEquals(PRC_1_ID, prcList.get(0).getID());
+		assertEquals(PRC_2_ID, prcList.get(1).getID());
+		assertEquals(PRC_3_ID, prcList.get(2).getID());
+		assertEquals(PRC_4_ID, prcList.get(3).getID());
+		assertEquals(PRC_5_ID, prcList.get(4).getID());
+	}
+
+	@Test
 	public void test01_1() throws Exception {
 		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(PRC_1_ID);
 		assertNotEquals(null, prc);
@@ -129,7 +150,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString());
 		assertEquals("EUR", prc.getToCurrencyCode());
 		assertEquals(Source.TRANSACTION, prc.getSource()); // unchanged
-		assertEquals("Transaction", prc.getSourceStr()); // unchanged
+		assertEquals("Transaction", ((KMyMoneyWritablePriceImpl) prc).getSourceStr()); // unchanged
 		assertEquals(LocalDate.of(2023, 11, 3), prc.getDate());
 		assertEquals(120.0, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
@@ -157,10 +178,10 @@ public class TestKMyMoneyWritablePriceImpl {
 
 	@Test
 	public void test01_2() throws Exception {
-		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(PRC_2_ID);
+		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(PRC_4_ID);
 		assertNotEquals(null, prc);
 
-		assertEquals(PRC_2_ID, prc.getID());
+		assertEquals(PRC_4_ID, prc.getID());
 		assertEquals(secID2.toString(), prc.getFromSecCurrQualifID().toString());
 		assertEquals(secID2.toString(), prc.getFromSecurityQualifID().toString());
 		assertEquals(secID2.getCode().toString(), prc.getFromSecurityQualifID().getSecID().toString());
@@ -170,7 +191,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString());
 		assertEquals("EUR", prc.getToCurrencyCode());
 		assertEquals(Source.USER, prc.getSource());
-		assertEquals("User", prc.getSourceStr());
+		assertEquals("User", ((KMyMoneyWritablePriceImpl) prc).getSourceStr());
 		assertEquals(LocalDate.of(2023, 11, 1), prc.getDate());
 		assertEquals(116.5, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
@@ -198,17 +219,17 @@ public class TestKMyMoneyWritablePriceImpl {
 
 	@Test
 	public void test01_3() throws Exception {
-		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(PRC_3_ID);
+		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(PRC_5_ID);
 		assertNotEquals(null, prc);
 
-		assertEquals(PRC_3_ID, prc.getID());
+		assertEquals(PRC_5_ID, prc.getID());
 		assertEquals(currID1.toString(), prc.getFromSecCurrQualifID().toString());
 		assertEquals(currID1.toString(), prc.getFromCurrencyQualifID().toString());
 		assertEquals("USD", prc.getFromCurrencyCode());
 		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString());
 		assertEquals("EUR", prc.getToCurrencyCode());
 		assertEquals(Source.USER, prc.getSource());
-		assertEquals("User", prc.getSourceStr());
+		assertEquals("User", ((KMyMoneyWritablePriceImpl) prc).getSourceStr());
 		assertEquals(LocalDate.of(2023, 12, 4), prc.getDate());
 		assertEquals(0.92, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
@@ -295,7 +316,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals("SAP AG", prc.getFromSecurity().getName()); // unchanged
 		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString()); // unchanged
 		assertEquals("EUR", prc.getToCurrencyCode()); // unchanged
-		assertEquals("User", prc.getSourceStr()); // unchanged
+		assertEquals("User", ((KMyMoneyWritablePriceImpl) prc).getSourceStr()); // unchanged
 		assertEquals(Source.USER, prc.getSource()); // unchanged
 		assertEquals(LocalDate.of(2023, 11, 3), prc.getDate()); // unchanged
 		assertEquals(123.71, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE); // changed
@@ -321,7 +342,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals("SAP AG", prc.getFromSecurity().getName()); // unchanged
 		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString()); // unchanged
 		assertEquals("EUR", prc.getToCurrencyCode()); // unchanged
-		assertEquals("User", prc.getSourceStr()); // changed
+		assertEquals("User", ((KMyMoneyPriceImpl) prc).getSourceStr()); // changed
 		assertEquals(Source.USER, prc.getSource()); // changed
 		assertEquals(LocalDate.of(2023, 11, 3), prc.getDate()); // unchanged
 		assertEquals(123.71, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE); // changed
@@ -385,7 +406,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals("1910-05-01T00:00:00.000+01:00", prc.getDateStr()); // sic
 		assertEquals(LocalDate.of(1910, 5, 1), prc.getDate());
 		assertEquals(345.21, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
-		assertEquals("User", prc.getSourceStr());
+		assertEquals("User", ((KMyMoneyWritablePriceImpl) prc).getSourceStr());
 		assertEquals(Source.USER, prc.getSource());
 	}
 
@@ -411,7 +432,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals("1910-05-01+01:00", prc.getDateStr()); // sic
 		assertEquals(LocalDate.of(1910, 5, 1), prc.getDate());
 		assertEquals(345.21, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
-		assertEquals("User", prc.getSourceStr());
+		assertEquals("User", ((KMyMoneyPriceImpl) prc).getSourceStr());
 		assertEquals(Source.USER, prc.getSource());
 	}
 

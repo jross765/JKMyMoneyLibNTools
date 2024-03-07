@@ -17,32 +17,37 @@ import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 public interface KMyMoneyCurrency {
 
     /**
-     * @return
+     * @return Returns the technical ID (in this particular case, the ISO currency code) 
      */
     String getID();
 
     /**
-     * @return
+     * @return Returns the fully-qualified ID (inluding the preifx)
      * @throws InvalidQualifSecCurrTypeException
      * @throws InvalidQualifSecCurrIDException
+     * {@link KMMSecCurr}
      */
     KMMQualifCurrID getQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
 
     /**
-     * @return
+     * @return Returns the currency symbol (e.g., the dollar symbol, the euro symbol, etc.) 
      */
     String getSymbol();
 
     // ------------------------------------------------------------
 
     /**
-     * @return
+     * @return  Returns the security/currency type. This is, strictly speaking, completely
+     *          redundant, as for a currency, the security/currency type is obviously always
+     *          "currency". But we include it nevertheless, as it is explicitly saved in the 
+     *          KMyMoney file.
      * @throws UnknownSecurityTypeException
+     * {@link #getRoundingMethod()}
      */
     KMMSecCurr.Type getType() throws UnknownSecurityTypeException;
     
     /**
-     * @return
+     * @return Returns the currency name (spelled out, such as "Euro" or "US Dollar")
      */
     String getName();
     
@@ -52,8 +57,10 @@ public interface KMyMoneyCurrency {
     BigInteger getPP();
     
     /**
-     * @return
+     * @return Returns the rounding method (we suppose that it is fully redundant, 
+     *         similarly to the type)
      * @throws UnknownRoundingMethodException
+     * {@link #getType()}
      */
     KMMSecCurr.RoundingMethod getRoundingMethod() throws UnknownRoundingMethodException;
     

@@ -4,6 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -78,20 +82,17 @@ public class TestKMyMoneyPricePairImpl {
 
 	// -----------------------------------------------------------------
 
-//  @Test
-//  public void test01() throws Exception
-//  {
-//      Collection<KMMPricePair> prcPrList = kmmFile.getPricePairs();
-//      
-//      assertEquals(5, prcPrList.size());
-//
-//      // ::TODO: Sort array for predictability
-////      Object[] priceArr = priceList.toArray();
-////      
-////      assertEquals(PRICE_1_ID, ((KMMPrice) priceArr[0]).getID());
-////      assertEquals(PRICE_2_ID, ((KMMPrice) priceArr[1]).getID());
-////      assertEquals(PRICE_3_ID, ((KMMPrice) priceArr[2]).getID());
-//  }
+	@Test
+	public void test01() throws Exception {
+		Collection<KMyMoneyPricePair> prcPrColl = kmmFile.getPricePairs();
+		List<KMyMoneyPricePair> prcPrList = new ArrayList<KMyMoneyPricePair>(prcPrColl);
+		prcPrList.sort(Comparator.naturalOrder());
+
+		assertEquals(3, prcPrList.size());
+		assertEquals(PRCPR_1_ID, prcPrList.get(0).getID());
+		assertEquals(PRCPR_2_ID, prcPrList.get(1).getID());
+		assertEquals(PRCPR_3_ID, prcPrList.get(2).getID());
+	}
 
 	@Test
 	public void test01_1() throws Exception {
@@ -134,7 +135,7 @@ public class TestKMyMoneyPricePairImpl {
 
 	@Test
 	public void test01_2() throws Exception {
-		prc = kmmFile.getPriceByID(TestKMyMoneyPriceImpl.PRC_2_ID);
+		prc = kmmFile.getPriceByID(TestKMyMoneyPriceImpl.PRC_3_ID);
 		assertNotEquals(null, prc);
 		prcPr = prc.getParentPricePair();
 		assertNotEquals(null, prcPr);
@@ -173,7 +174,7 @@ public class TestKMyMoneyPricePairImpl {
 
 	@Test
 	public void test01_3() throws Exception {
-		prc = kmmFile.getPriceByID(TestKMyMoneyPriceImpl.PRC_3_ID);
+		prc = kmmFile.getPriceByID(TestKMyMoneyPriceImpl.PRC_5_ID);
 		assertNotEquals(null, prc);
 		prcPr = prc.getParentPricePair();
 		assertNotEquals(null, prcPr);

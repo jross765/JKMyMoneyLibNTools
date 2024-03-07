@@ -8,7 +8,8 @@ public interface SimplePriceTable {
 
     /**
      * @param code
-     * @return
+     * @return conversion factor from currency specified by
+     *         code to base currency
      */
     FixedPointNumber getConversionFactor(final String code);
 

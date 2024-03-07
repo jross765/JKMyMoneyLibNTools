@@ -1,11 +1,11 @@
 package org.kmymoney.api.read;
 
-import java.util.Collection;
+import java.util.List;
 
+import org.kmymoney.api.read.hlp.KMyMoneyPricePairCore;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.base.basetypes.complex.KMMPricePairID;
-import org.kmymoney.api.read.hlp.KMyMoneyPricePairCore;
 
 /**
  * In KMyMoney, a price pair is a data structure which holds all the 
@@ -19,10 +19,14 @@ import org.kmymoney.api.read.hlp.KMyMoneyPricePairCore;
  * <strong>all</strong> MBG.DE/EUR quotes are held in the MBG.DE-EUR price pair,
  * etc.
  */
-public interface KMyMoneyPricePair extends KMyMoneyPricePairCore {
+public interface KMyMoneyPricePair extends Comparable<KMyMoneyPricePair>,
+										   KMyMoneyPricePairCore 
+{
 
     /**
-     * @return
+     * @return Returns the ID of the price pair object. In lack of a proper technical IDs 
+     *         for price pair entries in KMyMoney, this is essentially the pair ("from-security/currency",
+     *         "to-currency").
      * @throws InvalidQualifSecCurrIDException
      * @throws InvalidQualifSecCurrTypeException
      */
@@ -31,8 +35,9 @@ public interface KMyMoneyPricePair extends KMyMoneyPricePairCore {
     // ---------------------------------------------------------------
     
     /**
-     * @return
+     * @return Returns the price objects (for different dates/sources) under 
+     *         the price pair.
      */
-    Collection<KMyMoneyPrice> getPrices();
+    List<KMyMoneyPrice> getPrices();
 	
 }

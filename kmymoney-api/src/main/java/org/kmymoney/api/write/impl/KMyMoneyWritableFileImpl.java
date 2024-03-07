@@ -973,8 +973,14 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 	@Override
 	public Collection<KMyMoneyWritablePricePair> getWritablePricePairs() {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<KMyMoneyWritablePricePair> result = new ArrayList<KMyMoneyWritablePricePair>();
+
+		for ( KMyMoneyPricePair sec : super.getPricePairs() ) {
+			KMyMoneyWritablePricePair newSec = new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) sec);
+			result.add(newSec);
+		}
+
+		return result;
 	}
 
 	// ----------------------------
@@ -1036,8 +1042,14 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 	@Override
 	public Collection<KMyMoneyWritablePrice> getWritablePrices() {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<KMyMoneyWritablePrice> result = new ArrayList<KMyMoneyWritablePrice>();
+
+		for ( KMyMoneyPrice sec : super.getPrices() ) {
+			KMyMoneyWritablePrice newSec = new KMyMoneyWritablePriceImpl((KMyMoneyPriceImpl) sec);
+			result.add(newSec);
+		}
+
+		return result;
 	}
 	
 	// ----------------------------

@@ -5,6 +5,10 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -101,6 +105,18 @@ public class TestKMyMoneyWritablePricePairImpl {
     // Check whether the KMyMoneyWritablePricePair objects returned by
     // KMyMoneyWritableFileImpl.getWritablePricePairByID() are actually
     // complete (as complete as returned be KMyMoneyFileImpl.getPricePairByID().
+
+	@Test
+	public void test01() throws Exception {
+		Collection<KMyMoneyWritablePricePair> prcPrColl = kmmInFile.getWritablePricePairs();
+		List<KMyMoneyWritablePricePair> prcPrList = new ArrayList<KMyMoneyWritablePricePair>(prcPrColl);
+		prcPrList.sort(Comparator.naturalOrder());
+
+		assertEquals(3, prcPrList.size());
+		assertEquals(PRCPR_1_ID, prcPrList.get(0).getID());
+		assertEquals(PRCPR_2_ID, prcPrList.get(1).getID());
+		assertEquals(PRCPR_3_ID, prcPrList.get(2).getID());
+	}
 
 	@Test
 	public void test01_1() throws Exception {

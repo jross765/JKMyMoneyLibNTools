@@ -214,7 +214,6 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
     	return Source.valueOff(getSourceStr());
     }
 
-    @Override
     public String getSourceStr() {
     	if ( jwsdpPeer.getSource() == null )
     		return null;
@@ -235,8 +234,30 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
 	return getCurrencyFormat().format(getValue());
     }
 
-    // ---------------------------------------------------------------
-    
+    // -----------------------------------------------------------------
+
+    @Override
+	public int compareTo(final KMyMoneyPrice otherPrc) {
+		int i = getParentPricePairID().toString().compareTo(otherPrc.getParentPricePairID().toString());
+		if ( i != 0 ) {
+			return i;
+		}
+
+		i = getDate().compareTo(otherPrc.getDate());
+		if ( i != 0 ) {
+			return i;
+		}
+
+		i = getSource().toString().compareTo(otherPrc.getSource().toString()); // sic, not getSourceStr()
+		if ( i != 0 ) {
+			return i;
+		}
+		
+		return ("" + hashCode()).compareTo("" + otherPrc.hashCode());
+	}
+	
+    // -----------------------------------------------------------------
+
     @Override
     public String toString() {
 	String result = "KMyMoneyPriceImpl [";
