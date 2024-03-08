@@ -14,7 +14,7 @@ import junit.framework.JUnit4TestAdapter;
 public class TestKMyMoneyFileImpl {
 	private KMyMoneyFileImpl kmmFile = null;
 	private KMyMoneyFileImpl kmmFile2 = null;
-	
+
 	private KMMFileStats kmmFileStats = null;
 	private KMMFileStats kmmFileStats2 = null;
 
@@ -112,11 +112,11 @@ public class TestKMyMoneyFileImpl {
 		assertEquals(ConstTest.Stats.NOF_PRC, kmmFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
 	}
 
-    // ---------------------------------------------------------------
-    // The following test cases seem trivial, obvious, superfluous. 
-    // I am not so sure about that. I cannot exactly provide a reason
-    // right now, but my gut and my experience tell me that these tests
-    // are not that trivial and redundant as they seem to be.
+	// ---------------------------------------------------------------
+	// The following test cases seem trivial, obvious, superfluous. 
+	// I am not so sure about that. I cannot exactly provide a reason
+	// right now, but my gut and my experience tell me that these tests
+	// are not that trivial and redundant as they seem to be.
 
 	@Test
 	public void test08() throws Exception {

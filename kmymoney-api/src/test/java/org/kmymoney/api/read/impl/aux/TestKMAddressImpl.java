@@ -65,7 +65,7 @@ public class TestKMAddressImpl {
 
 		KMMAddress addr = pye.getAddress();
 		assertNotEquals(null, addr);
-		
+
 		assertEquals("Krailbacher Gasse 123 a\n" + "Postfach ABC\n" + "Kennwort Kasperlpost", addr.getStreet());
 		assertEquals("Wien", addr.getCity());
 		assertEquals(null, addr.getCounty());

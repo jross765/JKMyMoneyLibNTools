@@ -35,7 +35,7 @@ public class TestKMyMoneyWritableAccountImpl {
 	private static final KMMComplAcctID ACCT_2_ID = TestKMyMoneyAccountImpl.ACCT_2_ID;
 	private static final KMMComplAcctID ACCT_3_ID = TestKMyMoneyAccountImpl.ACCT_3_ID;
 	private static final KMMComplAcctID ACCT_4_ID = TestKMyMoneyAccountImpl.ACCT_4_ID;
-    
+
 	// Top-level accounts
 	private static final KMMComplAcctID ACCT_10_ID = TestKMyMoneyAccountImpl.ACCT_10_ID;
 	private static final KMMComplAcctID ACCT_11_ID = TestKMyMoneyAccountImpl.ACCT_11_ID;
@@ -43,22 +43,22 @@ public class TestKMyMoneyWritableAccountImpl {
 	private static final KMMComplAcctID ACCT_13_ID = TestKMyMoneyAccountImpl.ACCT_13_ID;
 	private static final KMMComplAcctID ACCT_14_ID = TestKMyMoneyAccountImpl.ACCT_14_ID;
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
-    private KMyMoneyWritableFileImpl kmmInFile = null;
-    private KMyMoneyFileImpl kmmOutFile = null;
+	private KMyMoneyWritableFileImpl kmmInFile = null;
+	private KMyMoneyFileImpl kmmOutFile = null;
 
-    private KMMFileStats kmmInFileStats = null;
-    private KMMFileStats kmmOutFileStats = null;
+	private KMMFileStats kmmInFileStats = null;
+	private KMMFileStats kmmOutFileStats = null;
 
-    private KMMComplAcctID newID = null;
+	private KMMComplAcctID newID = null;
 
-    // https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
-    @SuppressWarnings("exports")
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+	// https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
+	@SuppressWarnings("exports")
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
 	public static void main(String[] args) throws Exception {
 		junit.textui.TestRunner.run(suite());
@@ -90,16 +90,16 @@ public class TestKMyMoneyWritableAccountImpl {
 		}
 	}
 
-    // -----------------------------------------------------------------
-    // PART 1: Read existing objects as modifiable ones
-    // (and see whether they are fully symmetrical to their read-only
-    // counterparts)
-    // -----------------------------------------------------------------
-    // Cf. TestKMyMoneyAccountImpl.test01_xyz
-    //
-    // Check whether the KMyMoneyWritableAccount objects returned by
-    // KMyMoneyWritableFileImpl.getWritableAccountByID() are actually
-    // complete (as complete as returned be KMyMoneyFileImpl.getAccountByID().
+	// -----------------------------------------------------------------
+	// PART 1: Read existing objects as modifiable ones
+	// (and see whether they are fully symmetrical to their read-only
+	// counterparts)
+	// -----------------------------------------------------------------
+	// Cf. TestKMyMoneyAccountImpl.test01_xyz
+	//
+	// Check whether the KMyMoneyWritableAccount objects returned by
+	// KMyMoneyWritableFileImpl.getWritableAccountByID() are actually
+	// complete (as complete as returned be KMyMoneyFileImpl.getAccountByID().
 
 	@Test
 	public void test01_1() throws Exception {
@@ -137,7 +137,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals("A000061", acct.getParentAccountID().toString());
-		
+
 		List<KMyMoneyAccount> acctList = acct.getChildren();
 		assertEquals(2, acctList.size());
 		assertEquals("A000064", acctList.get(0).getID().toString());
@@ -149,8 +149,8 @@ public class TestKMyMoneyWritableAccountImpl {
 
 		// ::TODO
 		assertEquals(0, acct.getTransactions().size());
-//    assertEquals("568864bfb0954897ab8578db4d27372f", acct.getTransactions().get(0).getID());
-//    assertEquals("18a45dfc8a6868c470438e27d6fe10b2", acct.getTransactions().get(1).getID());
+		//    assertEquals("568864bfb0954897ab8578db4d27372f", acct.getTransactions().get(0).getID());
+		//    assertEquals("18a45dfc8a6868c470438e27d6fe10b2", acct.getTransactions().get(1).getID());
 	}
 
 	@Test
@@ -204,7 +204,7 @@ public class TestKMyMoneyWritableAccountImpl {
 
 	// -----------------------------------------------------------------
 	// Top-level accounts
-	
+
 	@Test
 	public void test01_10() throws Exception {
 		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_10_ID);
@@ -218,12 +218,12 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
-		
+
 		List<KMyMoneyAccount> acctList = acct.getChildren();
 		assertEquals(2, acctList.size());
 		assertEquals("A000002", acctList.get(0).getID().toString());
 		assertEquals("A000061", acctList.get(1).getID().toString());
-		
+
 		assertEquals(0.00, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals(15597.50, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
@@ -268,7 +268,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
-		
+
 		List<KMyMoneyAccount> acctList = acct.getChildren();
 		assertEquals(4, acctList.size());
 		assertEquals("A000049", acctList.get(0).getID().toString());
@@ -296,7 +296,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
-		
+
 		List<KMyMoneyAccount> acctList = acct.getChildren();
 		assertEquals(16, acctList.size());
 		assertEquals("A000072", acctList.get(0).getID().toString());
@@ -334,12 +334,12 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals(0, acct.getTransactions().size());
 	}
 
-    // -----------------------------------------------------------------
-    // PART 2: Modify existing objects
-    // -----------------------------------------------------------------
-    // Check whether the KMyMoneyWritableAccount objects returned by
-    // can actually be modified -- both in memory and persisted in file.
-	
+	// -----------------------------------------------------------------
+	// PART 2: Modify existing objects
+	// -----------------------------------------------------------------
+	// Check whether the KMyMoneyWritableAccount objects returned by
+	// can actually be modified -- both in memory and persisted in file.
+
 	@Test
 	public void test02_1() throws Exception {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
@@ -374,7 +374,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		                  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test02_1_check_persisted(outFile);
@@ -411,13 +411,13 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("My favorite account", acct.getMemo()); // changed
 	}
 
-    // -----------------------------------------------------------------
-    // PART 3: Create new objects
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
+	// PART 3: Create new objects
+	// -----------------------------------------------------------------
 
-    // ------------------------------
-    // PART 3.1: High-Level
-    // ------------------------------
+	// ------------------------------
+	// PART 3.1: High-Level
+	// ------------------------------
 
 	@Test
 	public void test03_1_1() throws Exception {
@@ -449,7 +449,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		                  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test03_1_1_check_persisted(outFile);
@@ -487,9 +487,9 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("All the stuff that does not fit into the other expenses accounts", acct.getMemo());
 	}
 
-    // ------------------------------
-    // PART 3.2: Low-Level
-    // ------------------------------
+	// ------------------------------
+	// PART 3.2: Low-Level
+	// ------------------------------
 
 	@Test
 	public void test03_2_1() throws Exception {
@@ -502,41 +502,41 @@ public class TestKMyMoneyWritableAccountImpl {
 		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
 		// System.err.println("Outfile for TestKMyMoneyWritablePayeeImpl.test01_1: '" + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		                  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test03_2_0_check_1_xmllint(outFile);
 		test03_2_1_check_2(outFile);
 	}
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
-//  @Test
-//  public void test03_2_0_check_1() throws Exception
-//  {
-//      assertNotEquals(null, outFileGlob);
-//      assertEquals(true, outFileGlob.exists());
-//
-//      // Check if generated document is valid
-//      // ::TODO: in fact, not even the input document is.
-//      // Build document
-//      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//      DocumentBuilder builder = factory.newDocumentBuilder(); 
-//      Document document = builder.parse(outFileGlob);
-//      System.err.println("xxxx XML parsed");
-//
-//      // https://howtodoinjava.com/java/xml/read-xml-dom-parser-example/
-//      Schema schema = null;
-//      String language = XMLConstants.W3C_XML_SCHEMA_NS_URI;
-//      SchemaFactory factory1 = SchemaFactory.newInstance(language);
-//      schema = factory1.newSchema(outFileGlob);
-//
-//      Validator validator = schema.newValidator();
-//      DOMResult validResult = null; 
-//      validator.validate(new DOMSource(document), validResult);
-//      System.out.println("yyy: " + validResult);
-//      // assertEquals(validResult);
-//  }
+	//  @Test
+	//  public void test03_2_0_check_1() throws Exception
+	//  {
+	//      assertNotEquals(null, outFileGlob);
+	//      assertEquals(true, outFileGlob.exists());
+	//
+	//      // Check if generated document is valid
+	//      // ::TODO: in fact, not even the input document is.
+	//      // Build document
+	//      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	//      DocumentBuilder builder = factory.newDocumentBuilder(); 
+	//      Document document = builder.parse(outFileGlob);
+	//      System.err.println("xxxx XML parsed");
+	//
+	//      // https://howtodoinjava.com/java/xml/read-xml-dom-parser-example/
+	//      Schema schema = null;
+	//      String language = XMLConstants.W3C_XML_SCHEMA_NS_URI;
+	//      SchemaFactory factory1 = SchemaFactory.newInstance(language);
+	//      schema = factory1.newSchema(outFileGlob);
+	//
+	//      Validator validator = schema.newValidator();
+	//      DOMResult validResult = null; 
+	//      validator.validate(new DOMSource(document), validResult);
+	//      System.out.println("yyy: " + validResult);
+	//      // assertEquals(validResult);
+	//  }
 
 	// Sort of "soft" variant of above function
 	// CAUTION: Not platform-independent!
@@ -564,11 +564,11 @@ public class TestKMyMoneyWritableAccountImpl {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document document = builder.parse(outFile);
-//      System.err.println("xxxx XML parsed");
+		//      System.err.println("xxxx XML parsed");
 
 		// Normalize the XML structure
 		document.getDocumentElement().normalize();
-//      System.err.println("xxxx XML normalized");
+		//      System.err.println("xxxx XML normalized");
 
 		NodeList nList = document.getElementsByTagName("ACCOUNT");
 		assertEquals(ConstTest.Stats.NOF_ACCT + 1, nList.getLength());
@@ -606,9 +606,9 @@ public class TestKMyMoneyWritableAccountImpl {
 		acct3.setMemo("My hopefully secret cash wallet for crises");
 
 		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
-//      System.err.println("Outfile for TestKMyMoneyWritablePayeeImpl.test02_1: '" + outFile.getPath() + "'");
+		//      System.err.println("Outfile for TestKMyMoneyWritablePayeeImpl.test02_1: '" + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		                  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test03_2_4_check(outFile);
@@ -622,11 +622,11 @@ public class TestKMyMoneyWritableAccountImpl {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document document = builder.parse(outFile);
-//      System.err.println("xxxx XML parsed");
+		//      System.err.println("xxxx XML parsed");
 
 		// Normalize the XML structure
 		document.getDocumentElement().normalize();
-//      System.err.println("xxxx XML normalized");
+		//      System.err.println("xxxx XML normalized");
 
 		NodeList nList = document.getElementsByTagName("ACCOUNT");
 		assertEquals(ConstTest.Stats.NOF_ACCT + 3, nList.getLength());

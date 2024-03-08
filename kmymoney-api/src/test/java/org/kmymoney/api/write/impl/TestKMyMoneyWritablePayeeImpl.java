@@ -33,22 +33,22 @@ public class TestKMyMoneyWritablePayeeImpl {
 	private static final KMMPyeID PYE_2_ID = TestKMyMoneyPayeeImpl.PYE_2_ID;
 	private static final KMMPyeID PYE_3_ID = TestKMyMoneyPayeeImpl.PYE_3_ID;
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
-    private KMyMoneyWritableFileImpl kmmInFile = null;
-    private KMyMoneyFileImpl kmmOutFile = null;
+	private KMyMoneyWritableFileImpl kmmInFile = null;
+	private KMyMoneyFileImpl kmmOutFile = null;
 
-    private KMMFileStats kmmInFileStats = null;
-    private KMMFileStats kmmOutFileStats = null;
+	private KMMFileStats kmmInFileStats = null;
+	private KMMFileStats kmmOutFileStats = null;
 
-    private KMMPyeID newID = null;
+	private KMMPyeID newID = null;
 
-    // https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
-    @SuppressWarnings("exports")
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+	// https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
+	@SuppressWarnings("exports")
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
 	public static void main(String[] args) throws Exception {
 		junit.textui.TestRunner.run(suite());
@@ -80,16 +80,16 @@ public class TestKMyMoneyWritablePayeeImpl {
 		}
 	}
 
-    // -----------------------------------------------------------------
-    // PART 1: Read existing objects as modifiable ones
-    // (and see whether they are fully symmetrical to their read-only
-    // counterparts)
-    // -----------------------------------------------------------------
-    // Cf. TestKMyMoneyPayeeImpl.test01_1/02_1
-    //
-    // Check whether the KMyMoneyWritablePayee objects returned by
-    // KMyMoneyWritableFileImpl.getWritablePayeeByID() are actually
-    // complete (as complete as returned be KMyMoneyFileImpl.getPayeeByID().
+	// -----------------------------------------------------------------
+	// PART 1: Read existing objects as modifiable ones
+	// (and see whether they are fully symmetrical to their read-only
+	// counterparts)
+	// -----------------------------------------------------------------
+	// Cf. TestKMyMoneyPayeeImpl.test01_1/02_1
+	//
+	// Check whether the KMyMoneyWritablePayee objects returned by
+	// KMyMoneyWritableFileImpl.getWritablePayeeByID() are actually
+	// complete (as complete as returned be KMyMoneyFileImpl.getPayeeByID().
 
 	@Test
 	public void test01_1() throws Exception {
@@ -123,11 +123,11 @@ public class TestKMyMoneyWritablePayeeImpl {
 		// Detailed test of the address: Cf. TestKMMWritableAddressImpl
 	}
 
-    // -----------------------------------------------------------------
-    // PART 2: Modify existing objects
-    // -----------------------------------------------------------------
-    // Check whether the KMyMoneyWritablePayee objects returned by
-    // can actually be modified -- both in memory and persisted in file.
+	// -----------------------------------------------------------------
+	// PART 2: Modify existing objects
+	// -----------------------------------------------------------------
+	// Check whether the KMyMoneyWritablePayee objects returned by
+	// can actually be modified -- both in memory and persisted in file.
 
 	@Test
 	public void test02_1() throws Exception {
@@ -163,7 +163,7 @@ public class TestKMyMoneyWritablePayeeImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-                          // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test02_1_check_persisted(outFile);
@@ -200,13 +200,13 @@ public class TestKMyMoneyWritablePayeeImpl {
 		assertEquals("World's most intelligent canine being", pye.getNotes()); // changed
 	}
 
-    // -----------------------------------------------------------------
-    // PART 3: Create new objects
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
+	// PART 3: Create new objects
+	// -----------------------------------------------------------------
 
-    // ------------------------------
-    // PART 3.1: High-Level
-    // ------------------------------
+	// ------------------------------
+	// PART 3.1: High-Level
+	// ------------------------------
 
 	@Test
 	public void test03_1_1() throws Exception {
@@ -233,7 +233,7 @@ public class TestKMyMoneyWritablePayeeImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		                  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test03_1_1_check_persisted(outFile);
@@ -265,9 +265,9 @@ public class TestKMyMoneyWritablePayeeImpl {
 		assertNotEquals(null, pye.getAddress()); // Cf. TestKMMWritableAddressImpl
 	}
 
-    // ------------------------------
-    // PART 3.2: Low-Level
-    // ------------------------------
+	// ------------------------------
+	// PART 3.2: Low-Level
+	// ------------------------------
 
 	@Test
 	public void test03_2_1() throws Exception {
@@ -276,41 +276,41 @@ public class TestKMyMoneyWritablePayeeImpl {
 		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
 		// System.err.println("Outfile for TestKMyMoneyWritablePayeeImpl.test01_1: '" + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		                  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test03_2_1_check_1_xmllint(outFile);
 		test03_2_1_check_2(outFile);
 	}
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
-//  @Test
-//  public void test03_2_1_check() throws Exception
-//  {
-//      assertNotEquals(null, outFileGlob);
-//      assertEquals(true, outFileGlob.exists());
-//
-//      // Check if generated document is valid
-//      // ::TODO: in fact, not even the input document is.
-//      // Build document
-//      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//      DocumentBuilder builder = factory.newDocumentBuilder(); 
-//      Document document = builder.parse(outFileGlob);
-//      System.err.println("xxxx XML parsed");
-//
-//      // https://howtodoinjava.com/java/xml/read-xml-dom-parser-example/
-//      Schema schema = null;
-//      String language = XMLConstants.W3C_XML_SCHEMA_NS_URI;
-//      SchemaFactory factory1 = SchemaFactory.newInstance(language);
-//      schema = factory1.newSchema(outFileGlob);
-//
-//      Validator validator = schema.newValidator();
-//      DOMResult validResult = null; 
-//      validator.validate(new DOMSource(document), validResult);
-//      System.out.println("yyy: " + validResult);
-//      // assertEquals(validResult);
-//  }
+	//  @Test
+	//  public void test03_2_1_check() throws Exception
+	//  {
+	//      assertNotEquals(null, outFileGlob);
+	//      assertEquals(true, outFileGlob.exists());
+	//
+	//      // Check if generated document is valid
+	//      // ::TODO: in fact, not even the input document is.
+	//      // Build document
+	//      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	//      DocumentBuilder builder = factory.newDocumentBuilder(); 
+	//      Document document = builder.parse(outFileGlob);
+	//      System.err.println("xxxx XML parsed");
+	//
+	//      // https://howtodoinjava.com/java/xml/read-xml-dom-parser-example/
+	//      Schema schema = null;
+	//      String language = XMLConstants.W3C_XML_SCHEMA_NS_URI;
+	//      SchemaFactory factory1 = SchemaFactory.newInstance(language);
+	//      schema = factory1.newSchema(outFileGlob);
+	//
+	//      Validator validator = schema.newValidator();
+	//      DOMResult validResult = null; 
+	//      validator.validate(new DOMSource(document), validResult);
+	//      System.out.println("yyy: " + validResult);
+	//      // assertEquals(validResult);
+	//  }
 
 	// Sort of "soft" variant of above function
 	// CAUTION: Not platform-independent!
@@ -329,86 +329,86 @@ public class TestKMyMoneyWritablePayeeImpl {
 			assertEquals(0, 1);
 		}
 	}
-	
-    private void test03_2_1_check_2(File outFile) throws Exception {
-	assertNotEquals(null, outFile);
-	assertEquals(true, outFile.exists());
 
-	// Build document
-	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	DocumentBuilder builder = factory.newDocumentBuilder();
-	Document document = builder.parse(outFile);
-//      System.err.println("xxxx XML parsed");
+	private void test03_2_1_check_2(File outFile) throws Exception {
+		assertNotEquals(null, outFile);
+		assertEquals(true, outFile.exists());
 
-	// Normalize the XML structure
-	document.getDocumentElement().normalize();
-//      System.err.println("xxxx XML normalized");
+		// Build document
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document document = builder.parse(outFile);
+		//      System.err.println("xxxx XML parsed");
 
-	NodeList nList = document.getElementsByTagName("PAYEE");
-	assertEquals(ConstTest.Stats.NOF_PYE + 1, nList.getLength());
+		// Normalize the XML structure
+		document.getDocumentElement().normalize();
+		//      System.err.println("xxxx XML normalized");
 
-	// Last (new) node
-	Node lastNode = nList.item(nList.getLength() - 1);
-	assertEquals(Node.ELEMENT_NODE, lastNode.getNodeType());
-	Element elt = (Element) lastNode;
-	assertEquals("Norma Jean Baker", elt.getAttribute("name"));
-	assertEquals("P000010", elt.getAttribute("id"));
-    }
+		NodeList nList = document.getElementsByTagName("PAYEE");
+		assertEquals(ConstTest.Stats.NOF_PYE + 1, nList.getLength());
 
-    // -----------------------------------------------------------------
+		// Last (new) node
+		Node lastNode = nList.item(nList.getLength() - 1);
+		assertEquals(Node.ELEMENT_NODE, lastNode.getNodeType());
+		Element elt = (Element) lastNode;
+		assertEquals("Norma Jean Baker", elt.getAttribute("name"));
+		assertEquals("P000010", elt.getAttribute("id"));
+	}
 
-    @Test
-    public void test03_2_4() throws Exception {
-	KMyMoneyWritablePayee pye1 = kmmInFile.createWritablePayee("Norma Jean Baker");
+	// -----------------------------------------------------------------
 
-	KMyMoneyWritablePayee pye2 = kmmInFile.createWritablePayee("Madonna Louise Ciccone");
+	@Test
+	public void test03_2_4() throws Exception {
+		KMyMoneyWritablePayee pye1 = kmmInFile.createWritablePayee("Norma Jean Baker");
 
-	KMyMoneyWritablePayee pye3 = kmmInFile.createWritablePayee("Rowan Atkinson");
+		KMyMoneyWritablePayee pye2 = kmmInFile.createWritablePayee("Madonna Louise Ciccone");
 
-	File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
-//      System.err.println("Outfile for TestKMyMoneyWritablePayeeImpl.test02_1: '" + outFile.getPath() + "'");
-	outFile.delete(); // sic, the temp. file is already generated (empty),
-			          // and the KMyMoney file writer does not like that.
-	kmmInFile.writeFile(outFile);
+		KMyMoneyWritablePayee pye3 = kmmInFile.createWritablePayee("Rowan Atkinson");
 
-	test03_2_4_check(outFile);
-    }
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		//      System.err.println("Outfile for TestKMyMoneyWritablePayeeImpl.test02_1: '" + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
 
-    private void test03_2_4_check(File outFile) throws Exception {
-	assertNotEquals(null, outFile);
-	assertEquals(true, outFile.exists());
+		test03_2_4_check(outFile);
+	}
 
-	// Build document
-	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	DocumentBuilder builder = factory.newDocumentBuilder();
-	Document document = builder.parse(outFile);
-//      System.err.println("xxxx XML parsed");
+	private void test03_2_4_check(File outFile) throws Exception {
+		assertNotEquals(null, outFile);
+		assertEquals(true, outFile.exists());
 
-	// Normalize the XML structure
-	document.getDocumentElement().normalize();
-//      System.err.println("xxxx XML normalized");
+		// Build document
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document document = builder.parse(outFile);
+		//      System.err.println("xxxx XML parsed");
 
-	NodeList nList = document.getElementsByTagName("PAYEE");
-	assertEquals(ConstTest.Stats.NOF_PYE + 3, nList.getLength());
+		// Normalize the XML structure
+		document.getDocumentElement().normalize();
+		//      System.err.println("xxxx XML normalized");
 
-	// Last three nodes (the new ones)
-	Node node = nList.item(nList.getLength() - 3);
-	assertEquals(Node.ELEMENT_NODE, node.getNodeType());
-	Element elt = (Element) node;
-	assertEquals("Norma Jean Baker", elt.getAttribute("name"));
-	assertEquals("P000010", elt.getAttribute("id"));
+		NodeList nList = document.getElementsByTagName("PAYEE");
+		assertEquals(ConstTest.Stats.NOF_PYE + 3, nList.getLength());
 
-	node = nList.item(nList.getLength() - 2);
-	assertEquals(Node.ELEMENT_NODE, node.getNodeType());
-	elt = (Element) node;
-	assertEquals("Madonna Louise Ciccone", elt.getAttribute("name"));
-	assertEquals("P000011", elt.getAttribute("id"));
+		// Last three nodes (the new ones)
+		Node node = nList.item(nList.getLength() - 3);
+		assertEquals(Node.ELEMENT_NODE, node.getNodeType());
+		Element elt = (Element) node;
+		assertEquals("Norma Jean Baker", elt.getAttribute("name"));
+		assertEquals("P000010", elt.getAttribute("id"));
 
-	node = nList.item(nList.getLength() - 1);
-	assertEquals(Node.ELEMENT_NODE, node.getNodeType());
-	elt = (Element) node;
-	assertEquals("Rowan Atkinson", elt.getAttribute("name"));
-	assertEquals("P000012", elt.getAttribute("id"));
-    }
+		node = nList.item(nList.getLength() - 2);
+		assertEquals(Node.ELEMENT_NODE, node.getNodeType());
+		elt = (Element) node;
+		assertEquals("Madonna Louise Ciccone", elt.getAttribute("name"));
+		assertEquals("P000011", elt.getAttribute("id"));
+
+		node = nList.item(nList.getLength() - 1);
+		assertEquals(Node.ELEMENT_NODE, node.getNodeType());
+		elt = (Element) node;
+		assertEquals("Rowan Atkinson", elt.getAttribute("name"));
+		assertEquals("P000012", elt.getAttribute("id"));
+	}
 
 }

@@ -15,18 +15,18 @@ import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneyWritableFileImpl {
-    private KMyMoneyWritableFileImpl kmmInFile  = null;
-    private KMyMoneyWritableFileImpl kmmOutFile = null;
+	private KMyMoneyWritableFileImpl kmmInFile  = null;
+	private KMyMoneyWritableFileImpl kmmOutFile = null;
 
-    private KMMFileStats kmmInFileStats  = null;
-    private KMMFileStats kmmOutFileStats = null;
+	private KMMFileStats kmmInFileStats  = null;
+	private KMMFileStats kmmOutFileStats = null;
 
-    // https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
-    @SuppressWarnings("exports")
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+	// https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
+	@SuppressWarnings("exports")
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
 	public static void main(String[] args) throws Exception {
 		junit.textui.TestRunner.run(suite());
@@ -60,16 +60,16 @@ public class TestKMyMoneyWritableFileImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 	}
 
-    // -----------------------------------------------------------------
-    // PART 1: Read existing objects as modifiable ones
-    // (and see whether they are fully symmetrical to their read-only
-    // counterparts)
-    // -----------------------------------------------------------------
-    // Cf. TestKMyMoneyFile.test01/02
-    //
-    // Check whether the KMyMoneyWritableFile objects returned by
-    // KMyMoneyWritableFileImpl.getWritableFileByID() are actually
-    // complete (as complete as returned be KMyMoneyFileImpl.getFileByID().
+	// -----------------------------------------------------------------
+	// PART 1: Read existing objects as modifiable ones
+	// (and see whether they are fully symmetrical to their read-only
+	// counterparts)
+	// -----------------------------------------------------------------
+	// Cf. TestKMyMoneyFile.test01/02
+	//
+	// Check whether the KMyMoneyWritableFile objects returned by
+	// KMyMoneyWritableFileImpl.getWritableFileByID() are actually
+	// complete (as complete as returned be KMyMoneyFileImpl.getFileByID().
 
 	@Test
 	public void test01() throws Exception {
@@ -129,22 +129,22 @@ public class TestKMyMoneyWritableFileImpl {
 		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
 	}
 
-    // -----------------------------------------------------------------
-    // PART 2: Modify existing objects
-    // -----------------------------------------------------------------
-    // Check whether the KMyMoneyWritableFile objects returned by
-    // can actually be modified -- both in memory and persisted in file.
+	// -----------------------------------------------------------------
+	// PART 2: Modify existing objects
+	// -----------------------------------------------------------------
+	// Check whether the KMyMoneyWritableFile objects returned by
+	// can actually be modified -- both in memory and persisted in file.
 
-    // ::TODO
+	// ::TODO
 
-    // -----------------------------------------------------------------
-    // PART 3: Create new objects
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
+	// PART 3: Create new objects
+	// -----------------------------------------------------------------
 
-    // ::TODO
+	// ::TODO
 
-    // -----------------------------------------------------------------
-    // PART 4: Idempotency
+	// -----------------------------------------------------------------
+	// PART 4: Idempotency
 	// 
 	// Check that a KMyMoney file which has been loaded by the lib and
 	// written into another file without having changed anything produces
@@ -156,7 +156,7 @@ public class TestKMyMoneyWritableFileImpl {
 	// have identical contents.
 	// 
 	// And no, this test is not trivial, absolutely not.
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
 	@Test
 	public void test04_1() throws Exception {
@@ -164,14 +164,14 @@ public class TestKMyMoneyWritableFileImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-                          // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		kmmOutFile = new KMyMoneyWritableFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
-		
+
 		assertEquals(true, outFile.exists());
-		
+
 		test_04_1_check_1_xmllint(outFile);
 		test_04_1_check_2();
 		test_04_1_check_3();
@@ -190,7 +190,7 @@ public class TestKMyMoneyWritableFileImpl {
 			assertEquals(0, 1);
 		}
 	}
-	
+
 	private void test_04_1_check_2() {
 		// Does not work:
 		// assertEquals(kmmFileStats, kmmFileStats2);

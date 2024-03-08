@@ -35,22 +35,22 @@ public class TestKMyMoneyWritableTransactionImpl {
 	private static final KMMComplAcctID ACCT_1_ID = TestKMyMoneyAccountImpl.ACCT_1_ID;
 	private static final KMMAcctID ACCT_20_ID = new KMMAcctID("A000005"); // Asset::Barvermögen::Spar RaiBa
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
-    private KMyMoneyWritableFileImpl kmmInFile = null;
-    private KMyMoneyFileImpl kmmOutFile = null;
+	private KMyMoneyWritableFileImpl kmmInFile = null;
+	private KMyMoneyFileImpl kmmOutFile = null;
 
-    private KMMFileStats kmmInFileStats = null;
-    private KMMFileStats kmmOutFileStats = null;
+	private KMMFileStats kmmInFileStats = null;
+	private KMMFileStats kmmOutFileStats = null;
 
-    private KMMTrxID newTrxID = null;
+	private KMMTrxID newTrxID = null;
 
-    // https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
-    @SuppressWarnings("exports")
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+	// https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
+	@SuppressWarnings("exports")
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
 	public static void main(String[] args) throws Exception {
 		junit.textui.TestRunner.run(suite());
@@ -82,16 +82,16 @@ public class TestKMyMoneyWritableTransactionImpl {
 		}
 	}
 
-    // -----------------------------------------------------------------
-    // PART 1: Read existing objects as modifiable ones
-    // (and see whether they are fully symmetrical to their read-only
-    // counterparts)
-    // -----------------------------------------------------------------
-    // Cf. TestKMyMoneyTransaction.test01/02
-    //
-    // Check whether the KMyMoneyWritableTransaction objects returned by
-    // KMyMoneyWritableFileImpl.getWritableTransactionByID() are actually
-    // complete (as complete as returned be KMyMoneyFileImpl.getTransactionByID().
+	// -----------------------------------------------------------------
+	// PART 1: Read existing objects as modifiable ones
+	// (and see whether they are fully symmetrical to their read-only
+	// counterparts)
+	// -----------------------------------------------------------------
+	// Cf. TestKMyMoneyTransaction.test01/02
+	//
+	// Check whether the KMyMoneyWritableTransaction objects returned by
+	// KMyMoneyWritableFileImpl.getWritableTransactionByID() are actually
+	// complete (as complete as returned be KMyMoneyFileImpl.getTransactionByID().
 
 	@Test
 	public void test01() throws Exception {
@@ -125,11 +125,11 @@ public class TestKMyMoneyWritableTransactionImpl {
 		assertEquals("S0002", trx.getSplits().get(1).getID().toString());
 	}
 
-    // -----------------------------------------------------------------
-    // PART 2: Modify existing objects
-    // -----------------------------------------------------------------
-    // Check whether the KMyMoneyWritableTransaction objects returned by
-    // can actually be modified -- both in memory and persisted in file.
+	// -----------------------------------------------------------------
+	// PART 2: Modify existing objects
+	// -----------------------------------------------------------------
+	// Check whether the KMyMoneyWritableTransaction objects returned by
+	// can actually be modified -- both in memory and persisted in file.
 
 	@Test
 	public void test02_1() throws Exception {
@@ -169,7 +169,7 @@ public class TestKMyMoneyWritableTransactionImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		                  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test02_1_check_persisted(outFile);
@@ -217,13 +217,13 @@ public class TestKMyMoneyWritableTransactionImpl {
 		assertEquals("S0002", trx.getSplits().get(1).getID().toString()); // unchanged
 	}
 
-    // -----------------------------------------------------------------
-    // PART 3: Create new objects
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
+	// PART 3: Create new objects
+	// -----------------------------------------------------------------
 
-    // ------------------------------
-    // PART 3.1: High-Level
-    // ------------------------------
+	// ------------------------------
+	// PART 3.1: High-Level
+	// ------------------------------
 
 	@Test
 	public void test03_1() throws Exception {
@@ -280,7 +280,7 @@ public class TestKMyMoneyWritableTransactionImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		                  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test03_1_check_persisted(outFile);
@@ -369,10 +369,10 @@ public class TestKMyMoneyWritableTransactionImpl {
 		assertEquals("Generated by TestKMyMoneyWritableTransactionImpl.test03_1 (2)", splt2.getMemo());
 	}
 
-    // ------------------------------
-    // PART 3.2: Low-Level
-    // ------------------------------
+	// ------------------------------
+	// PART 3.2: Low-Level
+	// ------------------------------
 
-    // ::TODO
+	// ::TODO
 
 }

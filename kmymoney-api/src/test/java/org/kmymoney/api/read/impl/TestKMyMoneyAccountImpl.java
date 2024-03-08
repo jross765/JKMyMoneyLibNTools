@@ -116,8 +116,8 @@ public class TestKMyMoneyAccountImpl {
 
 		// ::TODO
 		assertEquals(0, acct.getTransactions().size());
-//    assertEquals("568864bfb0954897ab8578db4d27372f", acct.getTransactions().get(0).getID());
-//    assertEquals("18a45dfc8a6868c470438e27d6fe10b2", acct.getTransactions().get(1).getID());
+		//    assertEquals("568864bfb0954897ab8578db4d27372f", acct.getTransactions().get(0).getID());
+		//    assertEquals("18a45dfc8a6868c470438e27d6fe10b2", acct.getTransactions().get(1).getID());
 	}
 
 	@Test
@@ -133,7 +133,7 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(ACCT_12_ID, acct.getParentAccountID());
-		
+
 		List<KMyMoneyAccount> acctList = acct.getChildren();
 		assertEquals(2, acctList.size());
 		assertEquals("A000050", acctList.get(0).getID().toString());
@@ -185,7 +185,7 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
-		
+
 		List<KMyMoneyAccount> acctList = acct.getChildren();
 		assertEquals(2, acctList.size());
 		assertEquals("A000002", acctList.get(0).getID().toString());
@@ -233,7 +233,7 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
-		
+
 		List<KMyMoneyAccount> acctList = acct.getChildren();
 		assertEquals(4, acctList.size());
 		assertEquals("A000049", acctList.get(0).getID().toString());
@@ -261,7 +261,7 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals(null, acct.getParentAccountID());
-		
+
 		List<KMyMoneyAccount> acctList = acct.getChildren();
 		assertEquals(16, acctList.size());
 		assertEquals("A000072", acctList.get(0).getID().toString());

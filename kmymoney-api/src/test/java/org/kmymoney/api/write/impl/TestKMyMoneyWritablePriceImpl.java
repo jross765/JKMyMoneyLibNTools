@@ -51,11 +51,11 @@ public class TestKMyMoneyWritablePriceImpl {
 
 	// -----------------------------------------------------------------
 
-    private KMyMoneyWritableFileImpl kmmInFile = null;
-    private KMyMoneyFileImpl kmmOutFile = null;
+	private KMyMoneyWritableFileImpl kmmInFile = null;
+	private KMyMoneyFileImpl kmmOutFile = null;
 
-    private KMMFileStats kmmInFileStats = null;
-    private KMMFileStats kmmOutFileStats = null;
+	private KMMFileStats kmmInFileStats = null;
+	private KMMFileStats kmmOutFileStats = null;
 
 	KMMQualifSecCurrID secID1 = null;
 	KMMQualifSecCurrID secID2 = null;
@@ -64,12 +64,12 @@ public class TestKMyMoneyWritablePriceImpl {
 
 	private KMMPriceID newID = null;
 
-    // https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
-    @SuppressWarnings("exports")
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+	// https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
+	@SuppressWarnings("exports")
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
 	public static void main(String[] args) throws Exception {
 		junit.textui.TestRunner.run(suite());
@@ -106,20 +106,20 @@ public class TestKMyMoneyWritablePriceImpl {
 		secID2 = new KMMQualifSecCurrID(KMMQualifSecCurrID.Type.SECURITY, "E000002");
 
 		currID1 = new KMMQualifCurrID("USD");
-		
+
 		newID = new KMMPriceID("EUR", "EUR", "1970-01-01"); // dummy
 	}
 
-    // -----------------------------------------------------------------
-    // PART 1: Read existing objects as modifiable ones
-    // (and see whether they are fully symmetrical to their read-only
-    // counterparts)
-    // -----------------------------------------------------------------
-    // Cf. TestKMyMoneyPriceImpl.test01_xyz
-    //
-    // Check whether the KMyMoneyWritablePrice objects returned by
-    // KMyMoneyWritableFileImpl.getWritablePriceByID() are actually
-    // complete (as complete as returned be KMyMoneyFileImpl.getPriceByID().
+	// -----------------------------------------------------------------
+	// PART 1: Read existing objects as modifiable ones
+	// (and see whether they are fully symmetrical to their read-only
+	// counterparts)
+	// -----------------------------------------------------------------
+	// Cf. TestKMyMoneyPriceImpl.test01_xyz
+	//
+	// Check whether the KMyMoneyWritablePrice objects returned by
+	// KMyMoneyWritableFileImpl.getWritablePriceByID() are actually
+	// complete (as complete as returned be KMyMoneyFileImpl.getPriceByID().
 
 	@Test
 	public void test01() throws Exception {
@@ -248,12 +248,12 @@ public class TestKMyMoneyWritablePriceImpl {
 		}
 	}
 
-    // -----------------------------------------------------------------
-    // PART 2: Modify existing objects
-    // -----------------------------------------------------------------
-    // Check whether the KMyMoneyWritablePrice objects returned by
-    // can actually be modified -- both in memory and persisted in file.
-	
+	// -----------------------------------------------------------------
+	// PART 2: Modify existing objects
+	// -----------------------------------------------------------------
+	// Check whether the KMyMoneyWritablePrice objects returned by
+	// can actually be modified -- both in memory and persisted in file.
+
 	@Test
 	public void test02_1() throws Exception {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
@@ -291,7 +291,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-                          // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test02_1_check_persisted(outFile);
@@ -348,15 +348,15 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals(123.71, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE); // changed
 	}
 
-    // -----------------------------------------------------------------
-    // PART 3: Create new objects
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
+	// PART 3: Create new objects
+	// -----------------------------------------------------------------
 
-    // ------------------------------
-    // PART 3.1: High-Level
-    // ------------------------------
+	// ------------------------------
+	// PART 3.1: High-Level
+	// ------------------------------
 
-    @Test
+	@Test
 	public void test03_1_1() throws Exception {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
@@ -384,7 +384,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-						  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test03_1_1_check_persisted(outFile);
@@ -400,7 +400,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals(PRCPR_1_ID.getToCurr().getCode(), newID.getToCurr());
 		assertEquals("1910-05-01", newID.getDateStr());
 		assertEquals(LocalDate.of(1910, 5, 1), newID.getDate());
-		
+
 		assertEquals(PRCPR_1_ID.getFromSecCurr(), prc.getFromSecCurrQualifID());
 		assertEquals(PRCPR_1_ID.getToCurr(), prc.getToCurrencyQualifID());
 		assertEquals("1910-05-01T00:00:00.000+01:00", prc.getDateStr()); // sic
@@ -426,7 +426,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals(PRCPR_1_ID.getToCurr().getCode(), newID.getToCurr());
 		assertEquals("1910-05-01", newID.getDateStr());
 		assertEquals(LocalDate.of(1910, 5, 1), newID.getDate());
-		
+
 		assertEquals(PRCPR_1_ID.getFromSecCurr(), prc.getFromSecCurrQualifID());
 		assertEquals(PRCPR_1_ID.getToCurr(), prc.getToCurrencyQualifID());
 		assertEquals("1910-05-01+01:00", prc.getDateStr()); // sic
@@ -436,9 +436,9 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals(Source.USER, prc.getSource());
 	}
 
-    // ------------------------------
-    // PART 3.2: Low-Level
-    // ------------------------------
+	// ------------------------------
+	// PART 3.2: Low-Level
+	// ------------------------------
 
 	// ::TODO
 

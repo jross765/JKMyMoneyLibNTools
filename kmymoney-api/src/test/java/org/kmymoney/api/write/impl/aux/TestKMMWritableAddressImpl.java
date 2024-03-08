@@ -24,25 +24,25 @@ import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMMWritableAddressImpl {
-    public static final KMMPyeID PYE_2_ID = TestKMyMoneyPayeeImpl.PYE_2_ID;
-    public static final KMMPyeID PYE_3_ID = TestKMyMoneyPayeeImpl.PYE_3_ID;
+	public static final KMMPyeID PYE_2_ID = TestKMyMoneyPayeeImpl.PYE_2_ID;
+	public static final KMMPyeID PYE_3_ID = TestKMyMoneyPayeeImpl.PYE_3_ID;
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
-    private KMyMoneyWritableFileImpl kmmInFile = null;
-    private KMyMoneyFileImpl kmmOutFile = null;
+	private KMyMoneyWritableFileImpl kmmInFile = null;
+	private KMyMoneyFileImpl kmmOutFile = null;
 
-    private KMMFileStats kmmInFileStats = null;
-    private KMMFileStats kmmOutFileStats = null;
+	private KMMFileStats kmmInFileStats = null;
+	private KMMFileStats kmmOutFileStats = null;
 
-    private KMMPyeID newID = null;
+	private KMMPyeID newID = null;
 
-    // https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
-    @SuppressWarnings("exports")
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+	// https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
+	@SuppressWarnings("exports")
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
 	public static void main(String[] args) throws Exception {
 		junit.textui.TestRunner.run(suite());
@@ -74,16 +74,16 @@ public class TestKMMWritableAddressImpl {
 		}
 	}
 
-    // -----------------------------------------------------------------
-    // PART 1: Read existing objects as modifiable ones
-    // (and see whether they are fully symmetrical to their read-only
-    // counterparts)
-    // -----------------------------------------------------------------
-    // Cf. TestKMMAddressImpl.test01_1/02_1
-    //
-    // Check whether the KMyMoneyWritablePayee objects returned by
-    // KMyMoneyWritableFileImpl.getWritablePayeeByID() are actually
-    // complete (as complete as returned be KMyMoneyFileImpl.getPayeeByID().
+	// -----------------------------------------------------------------
+	// PART 1: Read existing objects as modifiable ones
+	// (and see whether they are fully symmetrical to their read-only
+	// counterparts)
+	// -----------------------------------------------------------------
+	// Cf. TestKMMAddressImpl.test01_1/02_1
+	//
+	// Check whether the KMyMoneyWritablePayee objects returned by
+	// KMyMoneyWritableFileImpl.getWritablePayeeByID() are actually
+	// complete (as complete as returned be KMyMoneyFileImpl.getPayeeByID().
 
 	@Test
 	public void test01_1() throws Exception {
@@ -93,7 +93,7 @@ public class TestKMMWritableAddressImpl {
 
 		KMMAddress addr = pye.getAddress();
 		assertNotEquals(null, addr);
-		
+
 		assertEquals("Krailbacher Gasse 123 a\n" + "Postfach ABC\n" + "Kennwort Kasperlpost", addr.getStreet());
 		assertEquals("Wien", addr.getCity());
 		assertEquals(null, addr.getCounty());
@@ -104,11 +104,11 @@ public class TestKMMWritableAddressImpl {
 		assertEquals("+43 - 12 - 277278279", addr.getTelephone());
 	}
 
-    // -----------------------------------------------------------------
-    // PART 2: Modify existing objects
-    // -----------------------------------------------------------------
-    // Check whether the KMyMoneyWritablePayee objects returned by
-    // can actually be modified -- both in memory and persisted in file.
+	// -----------------------------------------------------------------
+	// PART 2: Modify existing objects
+	// -----------------------------------------------------------------
+	// Check whether the KMyMoneyWritablePayee objects returned by
+	// can actually be modified -- both in memory and persisted in file.
 
 	@Test
 	public void test02_1() throws Exception {
@@ -118,7 +118,7 @@ public class TestKMMWritableAddressImpl {
 
 		KMMWritableAddress addr = pye.getWritableAddress();
 		assertNotEquals(null, addr);
-		
+
 		// ----------------------------
 		// Modify the object
 
@@ -143,7 +143,7 @@ public class TestKMMWritableAddressImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		                  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test02_1_check_persisted(outFile);
@@ -186,10 +186,10 @@ public class TestKMMWritableAddressImpl {
 		assertEquals("+43 - 12 - 37403273", addr.getTelephone()); // changed
 	}
 
-    // -----------------------------------------------------------------
-    // PART 3: Create new objects
-    // -----------------------------------------------------------------
-	
+	// -----------------------------------------------------------------
+	// PART 3: Create new objects
+	// -----------------------------------------------------------------
+
 	// Note: In fact, this section is not really necessary/redundant,
 	// because address objects seem to *always* be generated; not only
 	// when generated with the standard KMyMoney GUI, but also with this
@@ -200,9 +200,9 @@ public class TestKMMWritableAddressImpl {
 	// Cf. test cases in TestKmyMoneyWritablePayee, part 3 and
 	// the comments in test03_1_1() below.
 
-    // ------------------------------
-    // PART 3.1: High-Level
-    // ------------------------------
+	// ------------------------------
+	// PART 3.1: High-Level
+	// ------------------------------
 
 	@Test
 	public void test03_1_1() throws Exception {
@@ -229,7 +229,7 @@ public class TestKMMWritableAddressImpl {
 			// of the test cases in part 2.
 			int dummy = 1;
 		}
-		
+
 		// ----------------------------
 
 		addr.setStreet("Champs Élysées");
@@ -252,7 +252,7 @@ public class TestKMMWritableAddressImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		                  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test03_1_1_check_persisted(outFile);
@@ -282,10 +282,10 @@ public class TestKMMWritableAddressImpl {
 		assertEquals("+33 - 1 - 99 91 99 91", addr.getTelephone());
 	}
 
-    // ------------------------------
-    // PART 3.2: Low-Level
-    // ------------------------------
-	
+	// ------------------------------
+	// PART 3.2: Low-Level
+	// ------------------------------
+
 	// ::TODO
 
 }

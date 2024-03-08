@@ -34,13 +34,13 @@ public class TestKMyMoneyWritablePricePairImpl {
 	private static final KMMPricePairID PRCPR_2_ID = TestKMyMoneyPricePairImpl.PRCPR_2_ID;
 	private static final KMMPricePairID PRCPR_3_ID = TestKMyMoneyPricePairImpl.PRCPR_3_ID;
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
-    private KMyMoneyWritableFileImpl kmmInFile = null;
-    private KMyMoneyFileImpl kmmOutFile = null;
+	private KMyMoneyWritableFileImpl kmmInFile = null;
+	private KMyMoneyFileImpl kmmOutFile = null;
 
-    private KMMFileStats kmmInFileStats = null;
-    private KMMFileStats kmmOutFileStats = null;
+	private KMMFileStats kmmInFileStats = null;
+	private KMMFileStats kmmOutFileStats = null;
 
 	KMMQualifSecCurrID secID1 = null;
 	KMMQualifSecCurrID secID2 = null;
@@ -49,12 +49,12 @@ public class TestKMyMoneyWritablePricePairImpl {
 
 	private KMMPricePairID newID = null;
 
-    // https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
-    @SuppressWarnings("exports")
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+	// https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
+	@SuppressWarnings("exports")
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
 	public static void main(String[] args) throws Exception {
 		junit.textui.TestRunner.run(suite());
@@ -91,20 +91,20 @@ public class TestKMyMoneyWritablePricePairImpl {
 		secID2 = new KMMQualifSecCurrID(KMMQualifSecCurrID.Type.SECURITY, "E000002");
 
 		currID1 = new KMMQualifCurrID("USD");
-		
+
 		newID = new KMMPricePairID(new KMMQualifCurrID("EUR"), new KMMQualifCurrID("EUR")); // dummy
 	}
 
-    // -----------------------------------------------------------------
-    // PART 1: Read existing objects as modifiable ones
-    // (and see whether they are fully symmetrical to their read-only
-    // counterparts)
-    // -----------------------------------------------------------------
-    // Cf. TestKMyMoneyPricePairImpl.test01_xyz
-    //
-    // Check whether the KMyMoneyWritablePricePair objects returned by
-    // KMyMoneyWritableFileImpl.getWritablePricePairByID() are actually
-    // complete (as complete as returned be KMyMoneyFileImpl.getPricePairByID().
+	// -----------------------------------------------------------------
+	// PART 1: Read existing objects as modifiable ones
+	// (and see whether they are fully symmetrical to their read-only
+	// counterparts)
+	// -----------------------------------------------------------------
+	// Cf. TestKMyMoneyPricePairImpl.test01_xyz
+	//
+	// Check whether the KMyMoneyWritablePricePair objects returned by
+	// KMyMoneyWritableFileImpl.getWritablePricePairByID() are actually
+	// complete (as complete as returned be KMyMoneyFileImpl.getPricePairByID().
 
 	@Test
 	public void test01() throws Exception {
@@ -120,9 +120,9 @@ public class TestKMyMoneyWritablePricePairImpl {
 
 	@Test
 	public void test01_1() throws Exception {
-//		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(TestKMyMoneyPriceImpl.PRC_1_ID);
-//		assertNotEquals(null, prc);
-//		KMyMoneyWritablePricePair prcPr = prc.getWritableParentPricePair();
+		//		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(TestKMyMoneyPriceImpl.PRC_1_ID);
+		//		assertNotEquals(null, prc);
+		//		KMyMoneyWritablePricePair prcPr = prc.getWritableParentPricePair();
 		KMyMoneyWritablePricePair prcPr = kmmInFile.getWritablePricePairByID(PRCPR_1_ID);
 		assertNotEquals(null, prcPr);
 
@@ -160,9 +160,9 @@ public class TestKMyMoneyWritablePricePairImpl {
 
 	@Test
 	public void test01_2() throws Exception {
-//		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(TestKMyMoneyPriceImpl.PRC_2_ID);
-//		assertNotEquals(null, prc);
-//		KMyMoneyWritablePricePair prcPr = prc.getWritableParentPricePair();
+		//		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(TestKMyMoneyPriceImpl.PRC_2_ID);
+		//		assertNotEquals(null, prc);
+		//		KMyMoneyWritablePricePair prcPr = prc.getWritableParentPricePair();
 		KMyMoneyWritablePricePair prcPr = kmmInFile.getWritablePricePairByID(PRCPR_2_ID);
 		assertNotEquals(null, prcPr);
 
@@ -200,9 +200,9 @@ public class TestKMyMoneyWritablePricePairImpl {
 
 	@Test
 	public void test01_3() throws Exception {
-//		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(TestKMyMoneyPriceImpl.PRC_3_ID);
-//		assertNotEquals(null, prc);
-//		KMyMoneyWritablePricePair prcPr = prc.getWritableParentPricePair();
+		//		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(TestKMyMoneyPriceImpl.PRC_3_ID);
+		//		assertNotEquals(null, prc);
+		//		KMyMoneyWritablePricePair prcPr = prc.getWritableParentPricePair();
 		KMyMoneyWritablePricePair prcPr = kmmInFile.getWritablePricePairByID(PRCPR_3_ID);
 		assertNotEquals(null, prcPr);
 
@@ -228,12 +228,12 @@ public class TestKMyMoneyWritablePricePairImpl {
 		}
 	}
 
-    // -----------------------------------------------------------------
-    // PART 2: Modify existing objects
-    // -----------------------------------------------------------------
-    // Check whether the KMyMoneyWritablePricePair objects returned by
-    // can actually be modified -- both in memory and persisted in file.
-	
+	// -----------------------------------------------------------------
+	// PART 2: Modify existing objects
+	// -----------------------------------------------------------------
+	// Check whether the KMyMoneyWritablePricePair objects returned by
+	// can actually be modified -- both in memory and persisted in file.
+
 	@Test
 	public void test02_1() throws Exception {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
@@ -272,7 +272,7 @@ public class TestKMyMoneyWritablePricePairImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-                          // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test02_1_check_persisted(outFile);
@@ -324,13 +324,13 @@ public class TestKMyMoneyWritablePricePairImpl {
 		assertEquals("SGD", prcPr.getToCurrencyCode()); // changed
 	}
 
-    // -----------------------------------------------------------------
-    // PART 3: Create new objects
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
+	// PART 3: Create new objects
+	// -----------------------------------------------------------------
 
-    // ------------------------------
-    // PART 3.1: High-Level
-    // ------------------------------
+	// ------------------------------
+	// PART 3.1: High-Level
+	// ------------------------------
 
 	@Test
 	public void test03_1_1() throws Exception {
@@ -348,7 +348,7 @@ public class TestKMyMoneyWritablePricePairImpl {
 
 		// Additional check for this class -- no, not as trivial as it seems to be. 
 		assertEquals(newID, prcPrID);
-		
+
 		// ----------------------------
 		// Check whether the object can has actually be created
 		// (in memory, not in the file yet).
@@ -364,7 +364,7 @@ public class TestKMyMoneyWritablePricePairImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		                  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test03_1_1_check_persisted(outFile);
@@ -392,9 +392,9 @@ public class TestKMyMoneyWritablePricePairImpl {
 		assertEquals(newID.toString(), sec.getID().toString());
 	}
 
-    // ------------------------------
-    // PART 3.2: Low-Level
-    // ------------------------------
+	// ------------------------------
+	// PART 3.2: Low-Level
+	// ------------------------------
 
 	// ::TODO
 

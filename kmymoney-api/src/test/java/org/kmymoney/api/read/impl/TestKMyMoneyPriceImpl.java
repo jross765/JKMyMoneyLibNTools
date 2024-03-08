@@ -89,12 +89,12 @@ public class TestKMyMoneyPriceImpl {
 		List<KMyMoneyPrice> prcList = new ArrayList<KMyMoneyPrice>(prcColl);
 		prcList.sort(Comparator.naturalOrder());
 
-//		System.err.println("=============");
-//		for ( GnuCashPrice prc : prcList ) {
-//			System.err.println(prc.toString());
-//		}
-//		System.err.println("=============");
-		
+		//		System.err.println("=============");
+		//		for ( GnuCashPrice prc : prcList ) {
+		//			System.err.println(prc.toString());
+		//		}
+		//		System.err.println("=============");
+
 		assertEquals(5, prcList.size());
 		assertEquals(PRC_1_ID, prcList.get(0).getID());
 		assertEquals(PRC_2_ID, prcList.get(1).getID());

@@ -26,26 +26,26 @@ public class TestHasUserDefinedAttributesImpl {
 	public static final KMMTrxID TRX_1_ID = new KMMTrxID( "T000000000000000009" );
 	// public static final KMMTrxID TRX_2_ID = new KMMTrxID( "T000000000000000000" );
 	// public static final KMMTrxID TRX_3_ID = new KMMTrxID( "T000000000000000000" );
-		
+
 	// public static final KMMSecID SEC_1_ID = new KMMSecID( "E000000" );
 	public static final KMMSecID SEC_2_ID = new KMMSecID( "E000002" );
 	public static final KMMSecID SEC_3_ID = new KMMSecID( "E000001" );
 
 	// -----------------------------------------------------------------
 
-    private KMyMoneyFile kmmFile = null;
+	private KMyMoneyFile kmmFile = null;
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
-    public static void main(String[] args) throws Exception {
-    	junit.textui.TestRunner.run(suite());
-    }
+	public static void main(String[] args) throws Exception {
+		junit.textui.TestRunner.run(suite());
+	}
 
-    public static junit.framework.Test suite() {
-    	return new JUnit4TestAdapter(TestHasUserDefinedAttributesImpl.class);
-    }
+	public static junit.framework.Test suite() {
+		return new JUnit4TestAdapter(TestHasUserDefinedAttributesImpl.class);
+	}
 
-    @Before
+	@Before
 	public void initialize() throws Exception {
 		ClassLoader classLoader = getClass().getClassLoader();
 		// URL kmmFileURL = classLoader.getResource(Const.KMM_FILENAME);
@@ -66,134 +66,134 @@ public class TestHasUserDefinedAttributesImpl {
 		}
 	}
 
-    // -----------------------------------------------------------------
-    // Account
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
+	// Account
+	// -----------------------------------------------------------------
 
-    // No kvps
-    @Test
-    public void test_acct_01() throws Exception {
-    	KMyMoneyAccount acct = kmmFile.getAccountByID(ACCT_1_ID);
-    	assertNotEquals(null, acct);
-    	
-    	assertEquals(null, acct.getUserDefinedAttributeKeys());
-    }
+	// No kvps
+	@Test
+	public void test_acct_01() throws Exception {
+		KMyMoneyAccount acct = kmmFile.getAccountByID(ACCT_1_ID);
+		assertNotEquals(null, acct);
 
-    // One kvp
-    @Test
-    public void test_acct_02() throws Exception {
-    	KMyMoneyAccount acct = kmmFile.getAccountByID(ACCT_2_ID);
-    	assertNotEquals(null, acct);
-    	
-    	assertNotEquals(null, acct.getUserDefinedAttributeKeys());
-    	assertEquals(1, acct.getUserDefinedAttributeKeys().size());
-    	assertEquals(ConstTest.KVP_KEY_ACCT_IBAN, acct.getUserDefinedAttributeKeys().get(0));
-    	assertEquals("DE01 1234 2345 3456 4567 99", acct.getUserDefinedAttribute(ConstTest.KVP_KEY_ACCT_IBAN));
-    }
-    
-    // Account, several kvps
-    // ::TODO
+		assertEquals(null, acct.getUserDefinedAttributeKeys());
+	}
 
-    // -----------------------------------------------------------------
-    // Transaction
-    // -----------------------------------------------------------------
+	// One kvp
+	@Test
+	public void test_acct_02() throws Exception {
+		KMyMoneyAccount acct = kmmFile.getAccountByID(ACCT_2_ID);
+		assertNotEquals(null, acct);
 
-    // No kvps
-    @Test
-    public void test_trx_01() throws Exception {
-    	KMyMoneyTransaction trx = kmmFile.getTransactionByID(TRX_1_ID);
-    	assertNotEquals(null, trx);
-    	
-    	assertEquals(null, trx.getUserDefinedAttributeKeys());
-    }
+		assertNotEquals(null, acct.getUserDefinedAttributeKeys());
+		assertEquals(1, acct.getUserDefinedAttributeKeys().size());
+		assertEquals(ConstTest.KVP_KEY_ACCT_IBAN, acct.getUserDefinedAttributeKeys().get(0));
+		assertEquals("DE01 1234 2345 3456 4567 99", acct.getUserDefinedAttribute(ConstTest.KVP_KEY_ACCT_IBAN));
+	}
 
-//    // One kvp
-//    @Test
-//    public void test_trx_02() throws Exception {
-//    	KMyMoneyTransaction trx = kmmFile.getTransactionByID(TRX_2_ID);
-//    	assertNotEquals(null, trx);
-//    	
-//    	assertNotEquals(null, trx.getUserDefinedAttributeKeys());
-//    	assertEquals(1, trx.getUserDefinedAttributeKeys().size());
-//    	assertEquals(ConstTest.SLOT_KEY_TRX_DATE_POSTED, trx.getUserDefinedAttributeKeys().get(0));
-//    	assertEquals("2023-07-01", trx.getUserDefinedAttribute(ConstTest.SLOT_KEY_TRX_DATE_POSTED));
-//    }
-//    
-//    // Several kvps
-//    @Test
-//    public void test_trx_03() throws Exception {
-//    	KMyMoneyTransaction trx = kmmFile.getTransactionByID(TRX_3_ID);
-//    	assertNotEquals(null, trx);
-//    	
-//    	assertNotEquals(null, trx.getUserDefinedAttributeKeys());
-//    	assertEquals(2, trx.getUserDefinedAttributeKeys().size());
-//    	assertEquals(ConstTest.SLOT_KEY_ASSOC_URI, trx.getUserDefinedAttributeKeys().get(0));
-//    	assertEquals(ConstTest.SLOT_KEY_TRX_DATE_POSTED, trx.getUserDefinedAttributeKeys().get(1));
-//    	assertEquals("https://my.transaction.link.01", trx.getUserDefinedAttribute(ConstTest.SLOT_KEY_ASSOC_URI));
-//    	assertEquals("2023-10-01", trx.getUserDefinedAttribute(ConstTest.SLOT_KEY_TRX_DATE_POSTED));
-//    }
-    
-    // -----------------------------------------------------------------
-    // Transaction Split
-    // -----------------------------------------------------------------
-    
-    // ::TODO
-    // There are none with kvps
+	// Account, several kvps
+	// ::TODO
 
-    // -----------------------------------------------------------------
-    // Security
-    // -----------------------------------------------------------------
-    
-    // No kvps
-    // No such case
-    
-    // One kvp
-    @Test
-    public void test_sec_02() throws Exception {
-    	KMyMoneySecurity sec = kmmFile.getSecurityByID(SEC_2_ID);
-    	assertNotEquals(null, sec);
-  	
-    	assertNotEquals(null, sec.getUserDefinedAttributeKeys());
-    	assertEquals(1, sec.getUserDefinedAttributeKeys().size());
-    	assertEquals(ConstTest.KVP_KEY_SEC_SECURITY_ID, sec.getUserDefinedAttributeKeys().get(0));
-    	assertEquals("DE0007100000", sec.getUserDefinedAttribute(ConstTest.KVP_KEY_SEC_SECURITY_ID));
-    }
+	// -----------------------------------------------------------------
+	// Transaction
+	// -----------------------------------------------------------------
 
-    // Several kvps
-    @Test
-    public void test_sec_03() throws Exception {
-    	KMyMoneySecurity sec = kmmFile.getSecurityByID(SEC_3_ID);
-    	assertNotEquals(null, sec);
-  	
-    	assertNotEquals(null, sec.getUserDefinedAttributeKeys());
-    	assertEquals(2, sec.getUserDefinedAttributeKeys().size());
-    	assertEquals(ConstTest.KVP_KEY_SEC_ONLINE_SOURCE, sec.getUserDefinedAttributeKeys().get(0));
-    	assertEquals(ConstTest.KVP_KEY_SEC_SECURITY_ID, sec.getUserDefinedAttributeKeys().get(1));
-    	assertEquals("Finanztreff", sec.getUserDefinedAttribute(ConstTest.KVP_KEY_SEC_ONLINE_SOURCE));
-    	assertEquals("DE0007164600", sec.getUserDefinedAttribute(ConstTest.KVP_KEY_SEC_SECURITY_ID));
-    }
+	// No kvps
+	@Test
+	public void test_trx_01() throws Exception {
+		KMyMoneyTransaction trx = kmmFile.getTransactionByID(TRX_1_ID);
+		assertNotEquals(null, trx);
 
-    // -----------------------------------------------------------------
-    // Stats/Meta
-    // -----------------------------------------------------------------
-    
-//    @Test
-//    public void test_meta() throws Exception {
-//    	for ( KMyMoneyTransactionSplit elt : kmmFile.getTransactionSplits() ) {
-//    		if ( elt.getUserDefinedAttributeKeys() != null ) {
-//    			if ( elt.getUserDefinedAttributeKeys().size() == 1 ) {
-//    				System.err.println("yyy splt: " + elt.getID() );
-//    			}
-//    		}
-//    	}
-//
-//    	for ( KMyMoneySecurity elt : kmmFile.getCommodities() ) {
-//    		if ( elt.getUserDefinedAttributeKeys() != null ) {
-//    			if ( elt.getUserDefinedAttributeKeys().size() == 1 ) {
-//    				System.err.println("yyy sec: " + elt.getQualifID() );
-//    			}
-//    		}
-//    	}
-//    }
+		assertEquals(null, trx.getUserDefinedAttributeKeys());
+	}
+
+	//    // One kvp
+	//    @Test
+	//    public void test_trx_02() throws Exception {
+	//    	KMyMoneyTransaction trx = kmmFile.getTransactionByID(TRX_2_ID);
+	//    	assertNotEquals(null, trx);
+	//    	
+	//    	assertNotEquals(null, trx.getUserDefinedAttributeKeys());
+	//    	assertEquals(1, trx.getUserDefinedAttributeKeys().size());
+	//    	assertEquals(ConstTest.SLOT_KEY_TRX_DATE_POSTED, trx.getUserDefinedAttributeKeys().get(0));
+	//    	assertEquals("2023-07-01", trx.getUserDefinedAttribute(ConstTest.SLOT_KEY_TRX_DATE_POSTED));
+	//    }
+	//    
+	//    // Several kvps
+	//    @Test
+	//    public void test_trx_03() throws Exception {
+	//    	KMyMoneyTransaction trx = kmmFile.getTransactionByID(TRX_3_ID);
+	//    	assertNotEquals(null, trx);
+	//    	
+	//    	assertNotEquals(null, trx.getUserDefinedAttributeKeys());
+	//    	assertEquals(2, trx.getUserDefinedAttributeKeys().size());
+	//    	assertEquals(ConstTest.SLOT_KEY_ASSOC_URI, trx.getUserDefinedAttributeKeys().get(0));
+	//    	assertEquals(ConstTest.SLOT_KEY_TRX_DATE_POSTED, trx.getUserDefinedAttributeKeys().get(1));
+	//    	assertEquals("https://my.transaction.link.01", trx.getUserDefinedAttribute(ConstTest.SLOT_KEY_ASSOC_URI));
+	//    	assertEquals("2023-10-01", trx.getUserDefinedAttribute(ConstTest.SLOT_KEY_TRX_DATE_POSTED));
+	//    }
+
+	// -----------------------------------------------------------------
+	// Transaction Split
+	// -----------------------------------------------------------------
+
+	// ::TODO
+	// There are none with kvps
+
+	// -----------------------------------------------------------------
+	// Security
+	// -----------------------------------------------------------------
+
+	// No kvps
+	// No such case
+
+	// One kvp
+	@Test
+	public void test_sec_02() throws Exception {
+		KMyMoneySecurity sec = kmmFile.getSecurityByID(SEC_2_ID);
+		assertNotEquals(null, sec);
+
+		assertNotEquals(null, sec.getUserDefinedAttributeKeys());
+		assertEquals(1, sec.getUserDefinedAttributeKeys().size());
+		assertEquals(ConstTest.KVP_KEY_SEC_SECURITY_ID, sec.getUserDefinedAttributeKeys().get(0));
+		assertEquals("DE0007100000", sec.getUserDefinedAttribute(ConstTest.KVP_KEY_SEC_SECURITY_ID));
+	}
+
+	// Several kvps
+	@Test
+	public void test_sec_03() throws Exception {
+		KMyMoneySecurity sec = kmmFile.getSecurityByID(SEC_3_ID);
+		assertNotEquals(null, sec);
+
+		assertNotEquals(null, sec.getUserDefinedAttributeKeys());
+		assertEquals(2, sec.getUserDefinedAttributeKeys().size());
+		assertEquals(ConstTest.KVP_KEY_SEC_ONLINE_SOURCE, sec.getUserDefinedAttributeKeys().get(0));
+		assertEquals(ConstTest.KVP_KEY_SEC_SECURITY_ID, sec.getUserDefinedAttributeKeys().get(1));
+		assertEquals("Finanztreff", sec.getUserDefinedAttribute(ConstTest.KVP_KEY_SEC_ONLINE_SOURCE));
+		assertEquals("DE0007164600", sec.getUserDefinedAttribute(ConstTest.KVP_KEY_SEC_SECURITY_ID));
+	}
+
+	// -----------------------------------------------------------------
+	// Stats/Meta
+	// -----------------------------------------------------------------
+
+	//    @Test
+	//    public void test_meta() throws Exception {
+	//    	for ( KMyMoneyTransactionSplit elt : kmmFile.getTransactionSplits() ) {
+	//    		if ( elt.getUserDefinedAttributeKeys() != null ) {
+	//    			if ( elt.getUserDefinedAttributeKeys().size() == 1 ) {
+	//    				System.err.println("yyy splt: " + elt.getID() );
+	//    			}
+	//    		}
+	//    	}
+	//
+	//    	for ( KMyMoneySecurity elt : kmmFile.getCommodities() ) {
+	//    		if ( elt.getUserDefinedAttributeKeys() != null ) {
+	//    			if ( elt.getUserDefinedAttributeKeys().size() == 1 ) {
+	//    				System.err.println("yyy sec: " + elt.getQualifID() );
+	//    			}
+	//    		}
+	//    	}
+	//    }
 
 }

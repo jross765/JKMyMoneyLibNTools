@@ -41,26 +41,26 @@ public class TestKMyMoneyWritableSecurityImpl {
 	private static final String SEC_2_ISIN   = TestKMyMoneySecurityImpl.SEC_1_ISIN;
 	private static final String SEC_2_TICKER = TestKMyMoneySecurityImpl.SEC_1_TICKER;
 
-    // ---------------------------------------------------------------
+	// ---------------------------------------------------------------
 
-    private KMyMoneyWritableFileImpl kmmInFile = null;
-    private KMyMoneyFileImpl kmmOutFile = null;
+	private KMyMoneyWritableFileImpl kmmInFile = null;
+	private KMyMoneyFileImpl kmmOutFile = null;
 
-    private KMMFileStats kmmInFileStats = null;
-    private KMMFileStats kmmOutFileStats = null;
+	private KMMFileStats kmmInFileStats = null;
+	private KMMFileStats kmmOutFileStats = null;
 
-    private KMMSecID newID = new KMMSecID();
+	private KMMSecID newID = new KMMSecID();
 
-    private KMMQualifSecID secID1 = null;
-    private KMMQualifSecID secID2 = null;
-//    private KMMQualifSecID secCurrID3 = null;
+	private KMMQualifSecID secID1 = null;
+	private KMMQualifSecID secID2 = null;
+	//    private KMMQualifSecID secCurrID3 = null;
 
-    // https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
-    @SuppressWarnings("exports")
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+	// https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
+	@SuppressWarnings("exports")
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
 	public static void main(String[] args) throws Exception {
 		junit.textui.TestRunner.run(suite());
@@ -97,16 +97,16 @@ public class TestKMyMoneyWritableSecurityImpl {
 		secID2 = new KMMQualifSecID(SEC_2_ID);
 	}
 
-    // -----------------------------------------------------------------
-    // PART 1: Read existing objects as modifiable ones
-    // (and see whether they are fully symmetrical to their read-only
-    // counterparts)
-    // -----------------------------------------------------------------
-    // Cf. TestKMyMoneySecurityImpl.test01_1/01_4
-    //
-    // Check whether the KMyMoneyWritableSecurity objects returned by
-    // KMyMoneyWritableFileImpl.getWritableSecurityByID() are actually
-    // complete (as complete as returned be KMyMoneyFileImpl.getSecurityByID().
+	// -----------------------------------------------------------------
+	// PART 1: Read existing objects as modifiable ones
+	// (and see whether they are fully symmetrical to their read-only
+	// counterparts)
+	// -----------------------------------------------------------------
+	// Cf. TestKMyMoneySecurityImpl.test01_1/01_4
+	//
+	// Check whether the KMyMoneyWritableSecurity objects returned by
+	// KMyMoneyWritableFileImpl.getWritableSecurityByID() are actually
+	// complete (as complete as returned be KMyMoneyFileImpl.getSecurityByID().
 
 	@Test
 	public void test01_1() throws Exception {
@@ -117,7 +117,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		// *Not* equal because of class
 		assertNotEquals(secID1, sec.getID());
 		// ::TODO: Convert to SecurityID_Exchange, then it should be equal
-//    assertEquals(secCurrID1, sec.getQualifID()); // not trivial!
+		//    assertEquals(secCurrID1, sec.getQualifID()); // not trivial!
 		// ::TODO
 		// assertEquals(SEC_1_ISIN, sec.getSymbol());
 		assertEquals(SEC_1_TICKER, sec.getSymbol());
@@ -133,8 +133,8 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertEquals(secID1.toString(), ((KMyMoneySecurity) secList.toArray()[0]).getQualifID().toString());
 		assertEquals(secID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
 		// ::TODO: Convert to SecurityID_Exchange, then it should be equal
-//    assertEquals(secCurrID1, 
-//	        ((KMyMoneySecurity) secList.toArray()[0]).getQualifID()); // not trivial!
+		//    assertEquals(secCurrID1, 
+		//	        ((KMyMoneySecurity) secList.toArray()[0]).getQualifID()); // not trivial!
 		// ::TODO
 		// assertEquals(SEC_1_ISIN, ((KMyMoneySecurity)
 		// secList.toArray()[0]).getSymbol());
@@ -146,8 +146,8 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertEquals(1, secList.size());
 		assertEquals(secID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
 		// ::TODO: Convert to SecurityID_Exchange, then it should be equal
-//    assertEquals(secCurrID1, 
-//	         ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
+		//    assertEquals(secCurrID1, 
+		//	         ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
 
 		secList = kmmInFile.getWritableSecuritiesByName(" MeRceDeS-bEnZ  ");
 		assertNotEquals(null, secList);
@@ -155,15 +155,15 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertEquals(secID1.toString(), ((KMyMoneySecurity) secList.toArray()[0]).getQualifID().toString());
 		assertEquals(secID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
 		// ::TODO: Convert to SecurityID_Exchange, then it should be equal
-//    assertEquals(secCurrID1, 
-//	         ((KMyMoneySecurity) secList.toArray()[0]).getQualifID()); // not trivial!
+		//    assertEquals(secCurrID1, 
+		//	         ((KMyMoneySecurity) secList.toArray()[0]).getQualifID()); // not trivial!
 	}
 
-    // -----------------------------------------------------------------
-    // PART 2: Modify existing objects
-    // -----------------------------------------------------------------
-    // Check whether the KMyMoneyWritableSecurity objects returned by
-    // can actually be modified -- both in memory and persisted in file.
+	// -----------------------------------------------------------------
+	// PART 2: Modify existing objects
+	// -----------------------------------------------------------------
+	// Check whether the KMyMoneyWritableSecurity objects returned by
+	// can actually be modified -- both in memory and persisted in file.
 
 	@Test
 	public void test02_1() throws Exception {
@@ -208,7 +208,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		                  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test02_1_check_persisted(outFile);
@@ -263,13 +263,13 @@ public class TestKMyMoneyWritableSecurityImpl {
 		// assertEquals(KMMSecCurr.RoundingMethod.CEIL, sec.getRoundingMethod()); // changed
 	}
 
-    // -----------------------------------------------------------------
-    // PART 3: Create new objects
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
+	// PART 3: Create new objects
+	// -----------------------------------------------------------------
 
-    // ------------------------------
-    // PART 3.1: High-Level
-    // ------------------------------
+	// ------------------------------
+	// PART 3.1: High-Level
+	// ------------------------------
 
 	@Test
 	public void test03_1_1() throws Exception {
@@ -297,7 +297,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test01_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		                  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test03_1_1_check_persisted(outFile);
@@ -331,9 +331,9 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertEquals("X11823", sec.getUserDefinedAttribute(ConstTest.KVP_KEY_SEC_SECURITY_ID));
 	}
 
-    // ------------------------------
-    // PART 3.2: Low-Level
-    // ------------------------------
+	// ------------------------------
+	// PART 3.2: Low-Level
+	// ------------------------------
 
 	@Test
 	public void test03_2_1() throws Exception {
@@ -347,41 +347,41 @@ public class TestKMyMoneyWritableSecurityImpl {
 		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
 		// System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test01_1: '" + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		                  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test03_2_1_check_1_xmllint(outFile);
 		test03_2_1_check_2(outFile);
 	}
 
-    // -----------------------------------------------------------------
+	// -----------------------------------------------------------------
 
-//  @Test
-//  public void test03_2_2() throws Exception
-//  {
-//      assertNotEquals(null, outFileGlob);
-//      assertEquals(true, outFileGlob.exists());
-//
-//      // Check if generated document is valid
-//      // ::TODO: in fact, not even the input document is.
-//      // Build document
-//      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-//      DocumentBuilder builder = factory.newDocumentBuilder(); 
-//      Document document = builder.parse(outFileGlob);
-//      System.err.println("xxxx XML parsed");
-//
-//      // https://howtodoinjava.com/java/xml/read-xml-dom-parser-example/
-//      Schema schema = null;
-//      String language = XMLConstants.W3C_XML_SCHEMA_NS_URI;
-//      SchemaFactory factory1 = SchemaFactory.newInstance(language);
-//      schema = factory1.newSchema(outFileGlob);
-//
-//      Validator validator = schema.newValidator();
-//      DOMResult validResult = null; 
-//      validator.validate(new DOMSource(document), validResult);
-//      System.out.println("yyy: " + validResult);
-//      // assertEquals(validResult);
-//  }
+	//  @Test
+	//  public void test03_2_2() throws Exception
+	//  {
+	//      assertNotEquals(null, outFileGlob);
+	//      assertEquals(true, outFileGlob.exists());
+	//
+	//      // Check if generated document is valid
+	//      // ::TODO: in fact, not even the input document is.
+	//      // Build document
+	//      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	//      DocumentBuilder builder = factory.newDocumentBuilder(); 
+	//      Document document = builder.parse(outFileGlob);
+	//      System.err.println("xxxx XML parsed");
+	//
+	//      // https://howtodoinjava.com/java/xml/read-xml-dom-parser-example/
+	//      Schema schema = null;
+	//      String language = XMLConstants.W3C_XML_SCHEMA_NS_URI;
+	//      SchemaFactory factory1 = SchemaFactory.newInstance(language);
+	//      schema = factory1.newSchema(outFileGlob);
+	//
+	//      Validator validator = schema.newValidator();
+	//      DOMResult validResult = null; 
+	//      validator.validate(new DOMSource(document), validResult);
+	//      System.out.println("yyy: " + validResult);
+	//      // assertEquals(validResult);
+	//  }
 
 	// Sort of "soft" variant of above function
 	// CAUTION: Not platform-independent!
@@ -400,7 +400,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 			assertEquals(0, 1);
 		}
 	}
-	
+
 	private void test03_2_1_check_2(File outFile) throws Exception {
 		assertNotEquals(null, outFile);
 		assertEquals(true, outFile.exists());
@@ -409,11 +409,11 @@ public class TestKMyMoneyWritableSecurityImpl {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document document = builder.parse(outFile);
-//      System.err.println("xxxx XML parsed");
+		//      System.err.println("xxxx XML parsed");
 
 		// Normalize the XML structure
 		document.getDocumentElement().normalize();
-//      System.err.println("xxxx XML normalized");
+		//      System.err.println("xxxx XML normalized");
 
 		NodeList nList = document.getElementsByTagName("SECURITY");
 		assertEquals(ConstTest.Stats.NOF_SEC + 1, nList.getLength());
@@ -425,7 +425,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertEquals("" + KMMSecCurr.Type.STOCK.getCode().intValue(), elt.getAttribute("type"));
 		assertEquals("Scam and Screw Corp.", elt.getAttribute("name"));
 		assertEquals("SCAM", elt.getAttribute("symbol"));
-		
+
 		Node kvpsNode = elt.getElementsByTagName("KEYVALUEPAIRS").item(0);
 		assertNotEquals(null, kvpsNode.getNodeType());
 		assertEquals(Node.ELEMENT_NODE, kvpsNode.getNodeType());
@@ -438,7 +438,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertEquals("US0123456789", kvpElt.getAttribute("value"));
 	}
 
-//    // -----------------------------------------------------------------
+	//    // -----------------------------------------------------------------
 
 	@Test
 	public void test03_2_2() throws Exception {
@@ -473,7 +473,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		// System.err.println("Outfile for TestKMyMoneyWritableSecurityImpl.test02_1: '"
 		// + outFile.getPath() + "'");
 		outFile.delete(); // sic, the temp. file is already generated (empty),
-		                  // and the KMyMoney file writer does not like that.
+		// and the KMyMoney file writer does not like that.
 		kmmInFile.writeFile(outFile);
 
 		test03_2_2_check(outFile);
@@ -487,11 +487,11 @@ public class TestKMyMoneyWritableSecurityImpl {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document document = builder.parse(outFile);
-//      System.err.println("xxxx XML parsed");
+		//      System.err.println("xxxx XML parsed");
 
 		// Normalize the XML structure
 		document.getDocumentElement().normalize();
-//      System.err.println("xxxx XML normalized");
+		//      System.err.println("xxxx XML normalized");
 
 		NodeList nList = document.getElementsByTagName("SECURITY");
 		assertEquals(ConstTest.Stats.NOF_SEC + 4, nList.getLength());
@@ -521,7 +521,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertEquals("" + KMMSecCurr.Type.BOND.getCode().intValue(), elt.getAttribute("type"));
 		assertEquals("Chocolaterie de la Grande Place", elt.getAttribute("name"));
 		assertEquals("CHOC", elt.getAttribute("symbol"));
-		
+
 		kvpsNode = elt.getElementsByTagName("KEYVALUEPAIRS").item(0);
 		assertNotEquals(null, kvpsNode.getNodeType());
 		assertEquals(Node.ELEMENT_NODE, kvpsNode.getNodeType());
@@ -539,7 +539,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertEquals("" + KMMSecCurr.Type.MUTUAL_FUND.getCode().intValue(), elt.getAttribute("type"));
 		assertEquals("Ils sont fous ces dingos!", elt.getAttribute("name"));
 		assertEquals("FOUS", elt.getAttribute("symbol"));
-		
+
 		kvpsNode = elt.getElementsByTagName("KEYVALUEPAIRS").item(0);
 		assertNotEquals(null, kvpsNode.getNodeType());
 		assertEquals(Node.ELEMENT_NODE, kvpsNode.getNodeType());
@@ -557,7 +557,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertEquals("" + KMMSecCurr.Type.STOCK.getCode().intValue(), elt.getAttribute("type"));
 		assertEquals("Ye Ole National British Trade Company Ltd.", elt.getAttribute("name"));
 		assertEquals("BTRD", elt.getAttribute("symbol"));
-		
+
 		kvpsNode = elt.getElementsByTagName("KEYVALUEPAIRS").item(0);
 		assertNotEquals(null, kvpsNode.getNodeType());
 		assertEquals(Node.ELEMENT_NODE, kvpsNode.getNodeType());

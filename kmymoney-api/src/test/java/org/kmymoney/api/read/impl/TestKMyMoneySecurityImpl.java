@@ -184,93 +184,93 @@ public class TestKMyMoneySecurityImpl {
 		assertEquals(secCurrID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
 	}
 
-//  // ------------------------------
-//
-//  @Test
-//  public void test02_1() throws Exception
-//  {
-//    sec = kmmFile.getSecurityByQualifID(SEC_3_SECIDTYPE.toString(), SEC_3_ID);
-//    assertNotEquals(null, sec);
-//    
-//    assertEquals(secCurrID3.toString(), sec.getQualifID().toString());
-//    // *Not* equal because of class
-//    assertNotEquals(secCurrID3, sec.getQualifID());
-//    // ::TODO: Convert to CommodityID_Exchange, then it should be equal
-////    assertEquals(secCurrID1, sec.getQualifID()); // not trivial!
-//    assertEquals(SEC_3_ISIN, sec.getXCode());
-//    assertEquals("AstraZeneca Plc", sec.getName());
-//  }
-//
-//  @Test
-//  public void test02_2() throws Exception
-//  {
-//    sec = kmmFile.getSecurityByQualifID(secCurrID3.toString());
-//    assertNotEquals(null, sec);
-//    
-//    assertEquals(secCurrID3.toString(), sec.getQualifID().toString());
-//    // *Not* equal because of class
-//    assertNotEquals(secCurrID3, sec.getQualifID());
-//    // ::TODO: Convert to CommodityID_Exchange, then it should be equal
-////    assertEquals(secCurrID1, sec.getQualifID()); // not trivial!
-//    assertEquals(SEC_3_ISIN, sec.getXCode());
-//    assertEquals("AstraZeneca Plc", sec.getName());
-//  }
-//
-//  @Test
-//  public void test02_3() throws Exception
-//  {
-//    sec = kmmFile.getSecurityBySymbol(SEC_3_ISIN);
-//    assertNotEquals(null, sec);
-//    
-//    assertEquals(secCurrID3.toString(), sec.getQualifID().toString());
-//    // *Not* equal because of class
-//    assertNotEquals(secCurrID3, sec.getQualifID());
-//    // ::TODO: Convert to CommodityID_Exchange, then it should be equal
-////    assertEquals(secCurrID1, sec.getQualifID()); // not trivial!
-//    assertEquals(SEC_3_ISIN, sec.getSymbol());
-//    assertEquals("AstraZeneca Plc", sec.getName());
-//  }
-//
-//  @Test
-//  public void test02_4() throws Exception
-//  {
-//    Collection<KMyMoneySecurity> secList = kmmFile.getSecuritiesByName("astra");
-//    assertNotEquals(null, secList);
-//    assertEquals(1, secList.size());
-//    
-//    assertEquals(secCurrID3.toString(), 
-//	         ((KMyMoneySecurity) secList.toArray()[0]).getQualifID().toString());
-//    // *Not* equal because of class
-//    assertNotEquals(secCurrID3, 
-//	            ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
-//    // ::TODO: Convert to CommodityID_Exchange, then it should be equal
-////    assertEquals(secCurrID1, 
-////	        ((KMyMoneySecurity) secList.toArray()[0]).getQualifID()); // not trivial!
-//    assertEquals(SEC_3_ISIN, 
-//	         ((KMyMoneySecurity) secList.toArray()[0]).getXCode());
-//    assertEquals("AstraZeneca Plc", 
-//	         ((KMyMoneySecurity) secList.toArray()[0]).getName());
-//
-//    secList = kmmFile.getSecuritiesByName("BENZ");
-//    assertNotEquals(null, secList);
-//    assertEquals(1, secList.size());
-//    // *Not* equal because of class
-//    assertNotEquals(secCurrID3, 
-//	            ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
-//    // ::TODO: Convert to CommodityID_Exchange, then it should be equal
-////    assertEquals(secCurrID1, 
-////	         ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
-//    
-//    secList = kmmFile.getSecuritiesByName(" aStrAzENeCA  ");
-//    assertNotEquals(null, secList);
-//    assertEquals(1, secList.size());
-//    assertEquals(secCurrID3.toString(), 
-//	         ((KMyMoneySecurity) secList.toArray()[0]).getQualifID().toString());
-//    // *Not* equal because of class
-//    assertNotEquals(secCurrID3, 
-//	            ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
-//    // ::TODO: Convert to CommodityID_Exchange, then it should be equal
-////    assertEquals(secCurrID1, 
-////	         ((KMyMoneySecurity) secList.toArray()[0]).getQualifID()); // not trivial!
-//  }
+	//  // ------------------------------
+	//
+	//  @Test
+	//  public void test02_1() throws Exception
+	//  {
+	//    sec = kmmFile.getSecurityByQualifID(SEC_3_SECIDTYPE.toString(), SEC_3_ID);
+	//    assertNotEquals(null, sec);
+	//    
+	//    assertEquals(secCurrID3.toString(), sec.getQualifID().toString());
+	//    // *Not* equal because of class
+	//    assertNotEquals(secCurrID3, sec.getQualifID());
+	//    // ::TODO: Convert to CommodityID_Exchange, then it should be equal
+	////    assertEquals(secCurrID1, sec.getQualifID()); // not trivial!
+	//    assertEquals(SEC_3_ISIN, sec.getXCode());
+	//    assertEquals("AstraZeneca Plc", sec.getName());
+	//  }
+	//
+	//  @Test
+	//  public void test02_2() throws Exception
+	//  {
+	//    sec = kmmFile.getSecurityByQualifID(secCurrID3.toString());
+	//    assertNotEquals(null, sec);
+	//    
+	//    assertEquals(secCurrID3.toString(), sec.getQualifID().toString());
+	//    // *Not* equal because of class
+	//    assertNotEquals(secCurrID3, sec.getQualifID());
+	//    // ::TODO: Convert to CommodityID_Exchange, then it should be equal
+	////    assertEquals(secCurrID1, sec.getQualifID()); // not trivial!
+	//    assertEquals(SEC_3_ISIN, sec.getXCode());
+	//    assertEquals("AstraZeneca Plc", sec.getName());
+	//  }
+	//
+	//  @Test
+	//  public void test02_3() throws Exception
+	//  {
+	//    sec = kmmFile.getSecurityBySymbol(SEC_3_ISIN);
+	//    assertNotEquals(null, sec);
+	//    
+	//    assertEquals(secCurrID3.toString(), sec.getQualifID().toString());
+	//    // *Not* equal because of class
+	//    assertNotEquals(secCurrID3, sec.getQualifID());
+	//    // ::TODO: Convert to CommodityID_Exchange, then it should be equal
+	////    assertEquals(secCurrID1, sec.getQualifID()); // not trivial!
+	//    assertEquals(SEC_3_ISIN, sec.getSymbol());
+	//    assertEquals("AstraZeneca Plc", sec.getName());
+	//  }
+	//
+	//  @Test
+	//  public void test02_4() throws Exception
+	//  {
+	//    Collection<KMyMoneySecurity> secList = kmmFile.getSecuritiesByName("astra");
+	//    assertNotEquals(null, secList);
+	//    assertEquals(1, secList.size());
+	//    
+	//    assertEquals(secCurrID3.toString(), 
+	//	         ((KMyMoneySecurity) secList.toArray()[0]).getQualifID().toString());
+	//    // *Not* equal because of class
+	//    assertNotEquals(secCurrID3, 
+	//	            ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
+	//    // ::TODO: Convert to CommodityID_Exchange, then it should be equal
+	////    assertEquals(secCurrID1, 
+	////	        ((KMyMoneySecurity) secList.toArray()[0]).getQualifID()); // not trivial!
+	//    assertEquals(SEC_3_ISIN, 
+	//	         ((KMyMoneySecurity) secList.toArray()[0]).getXCode());
+	//    assertEquals("AstraZeneca Plc", 
+	//	         ((KMyMoneySecurity) secList.toArray()[0]).getName());
+	//
+	//    secList = kmmFile.getSecuritiesByName("BENZ");
+	//    assertNotEquals(null, secList);
+	//    assertEquals(1, secList.size());
+	//    // *Not* equal because of class
+	//    assertNotEquals(secCurrID3, 
+	//	            ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
+	//    // ::TODO: Convert to CommodityID_Exchange, then it should be equal
+	////    assertEquals(secCurrID1, 
+	////	         ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
+	//    
+	//    secList = kmmFile.getSecuritiesByName(" aStrAzENeCA  ");
+	//    assertNotEquals(null, secList);
+	//    assertEquals(1, secList.size());
+	//    assertEquals(secCurrID3.toString(), 
+	//	         ((KMyMoneySecurity) secList.toArray()[0]).getQualifID().toString());
+	//    // *Not* equal because of class
+	//    assertNotEquals(secCurrID3, 
+	//	            ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
+	//    // ::TODO: Convert to CommodityID_Exchange, then it should be equal
+	////    assertEquals(secCurrID1, 
+	////	         ((KMyMoneySecurity) secList.toArray()[0]).getQualifID()); // not trivial!
+	//  }
 }
