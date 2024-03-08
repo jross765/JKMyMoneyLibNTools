@@ -35,7 +35,7 @@ public class FileTransactionManager extends org.kmymoney.api.read.impl.hlp.FileT
 //	    final GncTransaction.TrnSplits.TrnSplit jwsdpTrxSplt,
 //	    final KMyMoneyTransaction trx,
 //	    final boolean addSpltToAcct,
-//	    final boolean addSpltToInvc)  throws IllegalArgumentException {
+//	    final boolean addSpltToInvc) {
 //	KMyMoneyWritableTransactionSplitImpl splt = new KMyMoneyWritableTransactionSplitImpl(jwsdpTrxSplt, trx, 
 //                								           addSpltToAcct, addSpltToInvc);
 //	LOGGER.debug("createTransactionSplit: Generated new writable transaction split: " + splt.getID());

@@ -105,11 +105,11 @@ public class FileTransactionManager {
 
 	// ---------------------------------------------------------------
 
-	public void addTransaction(KMyMoneyTransaction trx) throws IllegalArgumentException {
+	public void addTransaction(KMyMoneyTransaction trx) {
 		addTransaction(trx, true);
 	}
 
-	public void addTransaction(KMyMoneyTransaction trx, boolean withSplt) throws IllegalArgumentException {
+	public void addTransaction(KMyMoneyTransaction trx, boolean withSplt) {
 		trxMap.put(trx.getID(), trx);
 
 		if ( withSplt ) {
@@ -121,11 +121,11 @@ public class FileTransactionManager {
 		LOGGER.debug("addTransaction: Added transaction to cache: " + trx.getID());
 	}
 
-	public void removeTransaction(KMyMoneyTransaction trx) throws IllegalArgumentException {
+	public void removeTransaction(KMyMoneyTransaction trx) {
 		removeTransaction(trx, true);
 	}
 
-	public void removeTransaction(KMyMoneyTransaction trx, boolean withSplt) throws IllegalArgumentException {
+	public void removeTransaction(KMyMoneyTransaction trx, boolean withSplt) {
 		if ( withSplt ) {
 			for ( KMyMoneyTransactionSplit splt : trx.getSplits() ) {
 				removeTransactionSplit(splt, false);
@@ -139,11 +139,11 @@ public class FileTransactionManager {
 
 	// ---------------------------------------------------------------
 
-	public void addTransactionSplit(KMyMoneyTransactionSplit splt) throws IllegalArgumentException {
+	public void addTransactionSplit(KMyMoneyTransactionSplit splt) {
 		addTransactionSplit(splt, true);
 	}
 
-	public void addTransactionSplit(KMyMoneyTransactionSplit splt, boolean withTrx) throws IllegalArgumentException {
+	public void addTransactionSplit(KMyMoneyTransactionSplit splt, boolean withTrx) {
 		trxSpltMap.put(splt.getQualifID(), splt);
 
 		if ( withTrx ) {
@@ -151,12 +151,11 @@ public class FileTransactionManager {
 		}
 	}
 
-	public void removeTransactionSplit(KMyMoneyTransactionSplit splt) throws IllegalArgumentException {
+	public void removeTransactionSplit(KMyMoneyTransactionSplit splt) {
 		removeTransactionSplit(splt, true);
 	}
 
-	public void removeTransactionSplit(KMyMoneyTransactionSplit splt, boolean withTrx)
-			throws IllegalArgumentException {
+	public void removeTransactionSplit(KMyMoneyTransactionSplit splt, boolean withTrx) {
 		if ( withTrx ) {
 			removeTransaction(splt.getTransaction(), false);
 		}

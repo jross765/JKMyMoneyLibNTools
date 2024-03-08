@@ -248,8 +248,7 @@ public class FileAccountManager {
 		return getAccountByIDorNameEx(new KMMComplAcctID(acctID), name);
 	}
 	
-	public List<KMyMoneyAccount> getAccountsByType(Type type)
-			throws UnknownAccountTypeException {
+	public List<KMyMoneyAccount> getAccountsByType(Type type) {
 		List<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
 
 		for ( KMyMoneyAccount acct : getAccounts() ) {
@@ -261,8 +260,7 @@ public class FileAccountManager {
 		return result;
 	}
 
-	public List<KMyMoneyAccount> getAccountsByTypeAndName(Type type, String expr, boolean qualif, boolean relaxed)
-			throws UnknownAccountTypeException {
+	public List<KMyMoneyAccount> getAccountsByTypeAndName(Type type, String expr, boolean qualif, boolean relaxed) {
 		List<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
 
 		for ( KMyMoneyAccount acct : getAccountsByName(expr, qualif, relaxed) ) {

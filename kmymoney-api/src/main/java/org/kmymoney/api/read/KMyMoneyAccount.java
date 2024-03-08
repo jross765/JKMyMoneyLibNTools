@@ -206,7 +206,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
 
     // ----------------------------
 
-    Type getType() throws UnknownAccountTypeException;
+    Type getType();
 
     BigInteger getTypeBigInt();
 

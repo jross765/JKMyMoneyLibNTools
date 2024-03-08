@@ -78,7 +78,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		trx.addSplit(this);
 	}
 
-    public KMyMoneyWritableTransactionSplitImpl(final KMyMoneyTransactionSplitImpl splt) throws IllegalArgumentException {
+    public KMyMoneyWritableTransactionSplitImpl(final KMyMoneyTransactionSplitImpl splt) {
 	super(splt.getJwsdpPeer(), splt.getTransaction(), 
 		  true);
     }

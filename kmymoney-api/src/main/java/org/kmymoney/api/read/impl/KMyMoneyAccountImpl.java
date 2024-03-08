@@ -161,7 +161,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 
 
     @Override
-    public Type getType() throws UnknownAccountTypeException {
+    public Type getType() {
     	try {
     	    Type result = Type.valueOff( getTypeBigInt().intValue() );
     	    return result;

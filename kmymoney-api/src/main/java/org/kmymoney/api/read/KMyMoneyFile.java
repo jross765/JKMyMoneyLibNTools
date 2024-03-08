@@ -149,9 +149,8 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * 
 	 * @param type
 	 * @return
-	 * @throws UnknownAccountTypeException
 	 */
-    Collection<KMyMoneyAccount> getAccountsByType(KMyMoneyAccount.Type type) throws UnknownAccountTypeException;
+    Collection<KMyMoneyAccount> getAccountsByType(KMyMoneyAccount.Type type);
     
 	/**
 	 * @param type
@@ -159,10 +158,9 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param qualif
 	 * @param relaxed
 	 * @return
-	 * @throws UnknownAccountTypeException
 	 */
 	Collection<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, boolean qualif,
-			boolean relaxed) throws UnknownAccountTypeException;
+			boolean relaxed);
 
 	/**
 	 * @return all accounts
@@ -171,28 +169,24 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 
     /**
      * @return
-     * @throws UnknownAccountTypeException
      */
-	KMyMoneyAccount getRootAccount() throws UnknownAccountTypeException;
+	KMyMoneyAccount getRootAccount();
 
     /**
      * @return a read-only collection of all accounts that have no parent (the
      *         result is sorted)
-     * @throws UnknownAccountTypeException 
      */
-    Collection<? extends KMyMoneyAccount> getParentlessAccounts() throws UnknownAccountTypeException;
+    Collection<? extends KMyMoneyAccount> getParentlessAccounts();
 
     /**
      * @return
-     * @throws UnknownAccountTypeException
      */
-    Collection<KMMComplAcctID> getTopAccountIDs() throws UnknownAccountTypeException;
+    Collection<KMMComplAcctID> getTopAccountIDs();
 
     /**
      * @return
-     * @throws UnknownAccountTypeException
      */
-    Collection<KMyMoneyAccount> getTopAccounts() throws UnknownAccountTypeException;
+    Collection<KMyMoneyAccount> getTopAccounts();
 
 	// ---------------------------------------------------------------
 

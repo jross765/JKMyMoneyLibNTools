@@ -648,10 +648,9 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 	/**
 	 * @return a read-only collection of all accounts that have no parent
-	 * @throws UnknownAccountTypeException 
 	 */
 	@SuppressWarnings("unchecked")
-	public Collection<? extends KMyMoneyWritableAccount> getWritableParentlessAccounts() throws UnknownAccountTypeException {
+	public Collection<? extends KMyMoneyWritableAccount> getWritableParentlessAccounts() {
 		return (Collection<? extends KMyMoneyWritableAccount>) getParentlessAccounts();
 	}
 
@@ -694,7 +693,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * @see org.kmm.write.jwsdpimpl.KMyMoneyFileImpl#getRootAccounts()
 	 */
 	@Override
-	public Collection<? extends KMyMoneyAccount> getParentlessAccounts() throws UnknownAccountTypeException {
+	public Collection<? extends KMyMoneyAccount> getParentlessAccounts() {
 		// TODO Auto-generated method stub
 		Collection<? extends KMyMoneyAccount> rootAccounts = super.getParentlessAccounts();
 		if ( rootAccounts.size() > 1 ) {

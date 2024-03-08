@@ -387,13 +387,13 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     }
 
     @Override
-    public Collection<KMyMoneyAccount> getAccountsByType(KMyMoneyAccount.Type type) throws UnknownAccountTypeException {
+    public Collection<KMyMoneyAccount> getAccountsByType(KMyMoneyAccount.Type type) {
     	return acctMgr.getAccountsByType(type);
     }
 
     @Override
     public Collection<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, 
-	                                                        boolean qualif, boolean relaxed) throws UnknownAccountTypeException {
+	                                                        boolean qualif, boolean relaxed) {
 	return acctMgr.getAccountsByTypeAndName(type, expr, qualif, relaxed);
     }
 
@@ -408,10 +408,9 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     /**
      * @return a read-only collection of all accounts that have no parent (the
      *         result is sorted)
-     * @throws UnknownAccountTypeException 
      */
     @Override
-    public KMyMoneyAccount getRootAccount() throws UnknownAccountTypeException {
+    public KMyMoneyAccount getRootAccount() {
 	return null;
     }
 
@@ -420,17 +419,17 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      *         result is sorted)
      */
     @Override
-    public Collection<? extends KMyMoneyAccount> getParentlessAccounts() throws UnknownAccountTypeException {
+    public Collection<? extends KMyMoneyAccount> getParentlessAccounts() {
 	return acctMgr.getParentlessAccounts();
     }
 
     @Override
-    public Collection<KMMComplAcctID> getTopAccountIDs() throws UnknownAccountTypeException {
+    public Collection<KMMComplAcctID> getTopAccountIDs() {
 	return acctMgr.getTopAccountIDs();
     }
 
     @Override
-    public Collection<KMyMoneyAccount> getTopAccounts() throws UnknownAccountTypeException {
+    public Collection<KMyMoneyAccount> getTopAccounts() {
 	return acctMgr.getTopAccounts();
     }
 
