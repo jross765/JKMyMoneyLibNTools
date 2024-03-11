@@ -12,7 +12,6 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
@@ -38,7 +37,6 @@ import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.NoEntryFoundException;
 import org.kmymoney.api.read.TooManyEntriesFoundException;
-import org.kmymoney.api.read.UnknownAccountTypeException;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPayeeImpl;
@@ -106,8 +104,6 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * @param file the file to load
 	 * @throws IOException                   on bsic io-problems such as a
 	 *                                       FileNotFoundException
-	 * @throws InvalidCmdtyCurrIDException
-	 * @throws InvalidCmdtyCurrTypeException
 	 */
 	public KMyMoneyWritableFileImpl(final File file)
 			throws IOException {

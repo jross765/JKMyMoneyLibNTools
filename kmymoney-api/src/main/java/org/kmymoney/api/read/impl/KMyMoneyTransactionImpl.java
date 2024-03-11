@@ -167,10 +167,9 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
     /**
      * The result is in the currency of the transaction.
      *
-     * @throws NumberFormatException if the input is not valid
      * @see KMyMoneyTransaction#getNegatedBalance()
      */
-    public FixedPointNumber getNegatedBalance() throws NumberFormatException {
+    public FixedPointNumber getNegatedBalance() {
 	return getBalance().multiply(new FixedPointNumber("-100/100"));
     }
 
@@ -179,7 +178,7 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
      *
      * @see KMyMoneyTransaction#getNegatedBalanceFormatted()
      */
-    public String getNegatedBalanceFormatted() throws NumberFormatException {
+    public String getNegatedBalanceFormatted() {
 	return getCurrencyFormat().format(getNegatedBalance());
     }
 
@@ -188,7 +187,7 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
      *
      * @see KMyMoneyTransaction#getNegatedBalanceFormatted(java.util.Locale)
      */
-    public String getNegatedBalanceFormatted(final Locale loc) throws NumberFormatException {
+    public String getNegatedBalanceFormatted(final Locale loc) {
 	NumberFormat nf = NumberFormat.getInstance(loc);
 	if ( getQualifSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
 	    nf.setCurrency(Currency.getInstance(getQualifSecCurrID().getCode()));
