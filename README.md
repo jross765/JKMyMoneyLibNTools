@@ -33,7 +33,7 @@ but he has not tested it.
 +---------+------------------+--------------------------------+
 | Version | Backward Compat. | Note                           |
 +---------+------------------+--------------------------------+
-| 0.5     | mostly (?)       | Minor changes, should be largely compatible (untested!) |
+| 0.5     | no               | Some substantial changes       |
 +---------+------------------+--------------------------------+
 | 0.4     | no               | Minor changes in interfaces    |
 +---------+------------------+--------------------------------+
