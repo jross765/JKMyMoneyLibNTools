@@ -1,6 +1,5 @@
 package org.kmymoney.api.write;
 
-import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
