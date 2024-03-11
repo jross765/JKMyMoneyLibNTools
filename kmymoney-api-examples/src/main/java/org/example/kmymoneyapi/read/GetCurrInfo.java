@@ -102,7 +102,7 @@ public class GetCurrInfo {
 
     // -----------------------------------------------------------------
 
-    private void showQuotes(KMyMoneyCurrency curr) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    private void showQuotes(KMyMoneyCurrency curr) {
 	System.out.println("");
 	System.out.println("Quotes:");
 

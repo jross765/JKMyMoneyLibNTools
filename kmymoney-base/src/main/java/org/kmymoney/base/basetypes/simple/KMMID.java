@@ -58,7 +58,7 @@ public abstract class KMMID implements Comparable<Object> {
 
     // -----------------------------------------------------------------
 
-    public void set(KMMID value) throws InvalidKMMIDException, KMMIDNotSetException {
+    public void set(KMMID value) throws KMMIDNotSetException {
 	set(value.get());
     }
 

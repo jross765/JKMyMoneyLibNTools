@@ -51,7 +51,7 @@ public class KMyMoneyCurrencyImpl extends KMyMoneyObjectImpl
     }
 
     @Override
-    public KMMQualifCurrID getQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public KMMQualifCurrID getQualifID() {
 	return new KMMQualifCurrID(getID());
     }
 
@@ -97,7 +97,7 @@ public class KMyMoneyCurrencyImpl extends KMyMoneyObjectImpl
     // ---------------------------------------------------------------
 
     @Override
-    public List<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public List<KMyMoneyPrice> getQuotes() {
     	List<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
 	
 	Collection<KMyMoneyPrice> prices = getKMyMoneyFile().getPrices();
@@ -115,7 +115,7 @@ public class KMyMoneyCurrencyImpl extends KMyMoneyObjectImpl
     }
 
     @Override
-    public KMyMoneyPrice getYoungestQuote() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public KMyMoneyPrice getYoungestQuote() {
 	KMyMoneyPrice result = null;
 
 	LocalDate youngestDate = LocalDate.of(1970, 1, 1); // ::MAGIC

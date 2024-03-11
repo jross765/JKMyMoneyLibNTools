@@ -32,7 +32,7 @@ public class KMMPricePairID {
 	}
 
 	public KMMPricePairID(String fromSecCurr, String toCurr)
-			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+			throws InvalidQualifSecCurrIDException {
 		if ( fromSecCurr == null ) {
 			throw new IllegalArgumentException("null from-security-currency-ID given");
 		}
@@ -68,7 +68,7 @@ public class KMMPricePairID {
         this.fromSecCurr.set(fromSecCurr);
     }
 
-	public void setFromSecCurr(String fromSecCurr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	public void setFromSecCurr(String fromSecCurr) {
 		if ( fromSecCurr == null ) {
 			throw new IllegalArgumentException("null from-security-currency-ID given");
 		}
@@ -92,7 +92,7 @@ public class KMMPricePairID {
         this.toCurr.set(toCurr);
     }
 
-    public void setToCurr(String toCurr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public void setToCurr(String toCurr) {
 		if ( toCurr == null ) {
 			throw new IllegalArgumentException("null to-currency-ID given");
 		}

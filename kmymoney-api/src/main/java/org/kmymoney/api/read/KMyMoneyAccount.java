@@ -210,7 +210,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
 
     BigInteger getTypeBigInt();
 
-    KMMQualifSecCurrID getQualifSecCurrID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMMQualifSecCurrID getQualifSecCurrID() throws InvalidQualifSecCurrIDException;
 
     // -----------------------------------------------------------------
 
@@ -312,7 +312,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
-    String getBalanceFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    String getBalanceFormatted() throws InvalidQualifSecCurrIDException;
 
     /**
      * same as getBalance(new Date()). ignores transactions after the current
@@ -323,7 +323,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
-    String getBalanceFormatted(Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    String getBalanceFormatted(Locale lcl) throws InvalidQualifSecCurrIDException;
 
     // ----------------------------
 
@@ -336,7 +336,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
-    FixedPointNumber getBalanceRecursive() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    FixedPointNumber getBalanceRecursive() throws InvalidQualifSecCurrIDException;
 
     /**
      * Gets the balance including all sub-accounts.
@@ -347,7 +347,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
-    FixedPointNumber getBalanceRecursive(LocalDate date) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    FixedPointNumber getBalanceRecursive(LocalDate date) throws InvalidQualifSecCurrIDException;
 
     /**
      * Ignores accounts for which this conversion is not possible.
@@ -359,7 +359,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @throws InvalidQualifSecCurrIDException 
      * @see {@link KMyMoneyAccount#getBalanceRecursive(LocalDate, Currency)}
      */
-    FixedPointNumber getBalanceRecursive(LocalDate date, KMMQualifSecCurrID secCurrID) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    FixedPointNumber getBalanceRecursive(LocalDate date, KMMQualifSecCurrID secCurrID) throws InvalidQualifSecCurrIDException;
 
     /**
      * Ignores accounts for which this conversion is not possible.
@@ -371,7 +371,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @throws InvalidQualifSecCurrTypeException 
      * @see KMyMoneyAccount#getBalanceRecursive(LocalDate, KMMQualifSecCurrID)
      */
-    FixedPointNumber getBalanceRecursive(LocalDate date, Currency curr) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    FixedPointNumber getBalanceRecursive(LocalDate date, Currency curr) throws InvalidQualifSecCurrIDException;
 
     /**
      * 
@@ -382,7 +382,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @throws InvalidQualifSecCurrIDException
      * @throws KMMIDNotSetException 
      */
-    FixedPointNumber getBalanceRecursive(LocalDate date, KMMSecID secID) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException, KMMIDNotSetException;
+    FixedPointNumber getBalanceRecursive(LocalDate date, KMMSecID secID) throws KMMIDNotSetException;
 
     // ----------------------------
 
@@ -394,7 +394,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
-    String getBalanceRecursiveFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    String getBalanceRecursiveFormatted() throws InvalidQualifSecCurrIDException;
 
     /**
      * Gets the balance including all sub-accounts.
@@ -405,6 +405,6 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
-    String getBalanceRecursiveFormatted(LocalDate date) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    String getBalanceRecursiveFormatted(LocalDate date) throws InvalidQualifSecCurrIDException;
 
 }

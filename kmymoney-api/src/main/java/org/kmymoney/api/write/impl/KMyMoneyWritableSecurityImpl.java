@@ -74,7 +74,7 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 	 *
 	 * @see KMyMoneyWritableSecurity#remove()
 	 */
-	public void remove() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	public void remove() {
 		SECURITY peer = jwsdpPeer;
 		(getKMyMoneyFile()).getRootElement().getSECURITIES().getSECURITY().remove(peer);
 		(getKMyMoneyFile()).removeSecurity(this);

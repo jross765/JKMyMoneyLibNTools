@@ -277,7 +277,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @throws InvalidQualifSecCurrTypeException
 	 */
 	KMyMoneySecurity getSecurityByQualifID(String qualifID)
-			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+			throws InvalidQualifSecCurrIDException;
 
 	/**
 	 * The symbol is usually the ticker, but need not necessarily be so.
@@ -288,7 +288,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @throws InvalidQualifSecCurrTypeException
 	 */
 	KMyMoneySecurity getSecurityBySymbol(String symb)
-			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+			throws InvalidQualifSecCurrIDException;
 
 	/**
 	 * By ISIN/CUSIP/SEDOL/WKN...
@@ -299,7 +299,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @throws InvalidQualifSecCurrTypeException
 	 */
 	KMyMoneySecurity getSecurityByCode(String code)
-			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+			throws InvalidQualifSecCurrIDException;
 
 	/**
 	 * @param expr search expression
@@ -394,6 +394,6 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @throws InvalidQualifSecCurrTypeException 
 	 */
 	FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID)
-			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+			throws InvalidQualifSecCurrIDException;
 
 }

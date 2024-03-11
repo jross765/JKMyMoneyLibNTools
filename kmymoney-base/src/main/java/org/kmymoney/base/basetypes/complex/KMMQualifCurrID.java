@@ -24,7 +24,7 @@ public class KMMQualifCurrID extends KMMQualifSecCurrID {
 		type = Type.CURRENCY;
 	}
 
-	public KMMQualifCurrID(Currency curr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	public KMMQualifCurrID(Currency curr) {
 		super(Type.CURRENCY, curr.getCurrencyCode());
 
 		init();
@@ -33,7 +33,7 @@ public class KMMQualifCurrID extends KMMQualifSecCurrID {
 		setCurrency(curr);
 	}
 
-	public KMMQualifCurrID(String currStr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	public KMMQualifCurrID(String currStr) {
 		super(Type.CURRENCY, currStr);
 
 		init();
@@ -43,7 +43,7 @@ public class KMMQualifCurrID extends KMMQualifSecCurrID {
 	}
 
 	public KMMQualifCurrID(KMMQualifSecCurrID secCurrID)
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+			{
 		super(Type.CURRENCY, secCurrID.getCode());
 
 		if ( getType() != Type.CURRENCY )
@@ -64,7 +64,7 @@ public class KMMQualifCurrID extends KMMQualifSecCurrID {
 	// ---------------------------------------------------------------
 
 	@Override
-	public void setType(Type type) throws InvalidQualifSecCurrIDException {
+	public void setType(Type type) {
 //        if ( type != Type.CURRENCY )
 //            throw new InvalidCmdtyCurrIDException();
 
@@ -73,14 +73,14 @@ public class KMMQualifCurrID extends KMMQualifSecCurrID {
 
     // ---------------------------------------------------------------
 
-	public Currency getCurrency() throws InvalidQualifSecCurrTypeException {
+	public Currency getCurrency() {
 		if ( type != Type.CURRENCY )
 			throw new InvalidQualifSecCurrTypeException();
 
 		return curr;
 	}
 
-	public void setCurrency(Currency currency) throws InvalidQualifSecCurrTypeException {
+	public void setCurrency(Currency currency) {
 		if ( type != Type.CURRENCY )
 			throw new InvalidQualifSecCurrTypeException();
 
@@ -90,7 +90,7 @@ public class KMMQualifCurrID extends KMMQualifSecCurrID {
 		this.curr = currency;
 	}
 
-	public void setCurrency(String iso4217CurrCode) throws InvalidQualifSecCurrTypeException {
+	public void setCurrency(String iso4217CurrCode) {
 		if ( iso4217CurrCode == null )
 			throw new IllegalArgumentException("Argument string is null");
 
@@ -100,7 +100,7 @@ public class KMMQualifCurrID extends KMMQualifSecCurrID {
 	// ---------------------------------------------------------------
 
 	public static KMMQualifCurrID parse(String str)
-			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+			throws InvalidQualifSecCurrIDException {
 		if ( str == null )
 			throw new IllegalArgumentException("Argument string is null");
 

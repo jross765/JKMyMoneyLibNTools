@@ -267,7 +267,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      * @see KMyMoneyTransactionSplit#getAccountBalanceFormatted()
      */
     @Override
-    public String getAccountBalanceFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public String getAccountBalanceFormatted() {
 	return ((KMyMoneyAccountImpl) getAccount()).getCurrencyFormat().format(getAccountBalance());
     }
 
@@ -277,7 +277,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      * @see KMyMoneyTransactionSplit#getAccountBalanceFormatted(java.util.Locale)
      */
     @Override
-    public String getAccountBalanceFormatted(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public String getAccountBalanceFormatted(final Locale lcl) {
 	return getAccount().getBalanceFormatted(lcl);
     }
 
@@ -297,7 +297,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      * @throws InvalidQualifSecCurrTypeException 
      */
     @Override
-    public String getSharesFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public String getSharesFormatted() {
 	return getSharesCurrencyFormat().format(getShares());
     }
 
@@ -310,7 +310,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      * @throws InvalidQualifSecCurrTypeException 
      */
     @Override
-    public String getSharesFormatted(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public String getSharesFormatted(final Locale lcl) {
 	NumberFormat nf = NumberFormat.getCurrencyInstance(lcl);
 	if ( getAccount().getQualifSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
 	    nf.setCurrency(new KMMQualifCurrID(getAccount().getQualifSecCurrID()).getCurrency());
@@ -327,7 +327,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      * @throws InvalidQualifSecCurrTypeException 
      */
     @Override
-    public String getSharesFormattedForHTML() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public String getSharesFormattedForHTML() {
 	return getSharesFormatted().replaceFirst("€", "&euro;");
     }
 
@@ -337,7 +337,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      * @throws InvalidQualifSecCurrTypeException 
      */
     @Override
-    public String getSharesFormattedForHTML(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public String getSharesFormattedForHTML(final Locale lcl) {
 	return getSharesFormatted(lcl).replaceFirst("€", "&euro;");
     }
 
@@ -405,11 +405,11 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
-    protected NumberFormat getSharesCurrencyFormat() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    protected NumberFormat getSharesCurrencyFormat() {
     	return ((KMyMoneyAccountImpl) getAccount()).getCurrencyFormat();
     }
     
-    protected NumberFormat getPriceCurrencyFormat() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    protected NumberFormat getPriceCurrencyFormat() {
     	return getSharesCurrencyFormat(); // ::CHECK ::TODO
     }
     

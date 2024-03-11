@@ -131,8 +131,7 @@ public class FileSecurityManager {
 		return getSecurityByID(secID.getCode());
 	}
 
-	public KMyMoneySecurity getSecurityByQualifID(final String qualifIDStr)
-			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	public KMyMoneySecurity getSecurityByQualifID(final String qualifIDStr) {
 		if ( qualifIDStr == null ) {
 			throw new IllegalStateException("null string given");
 		}

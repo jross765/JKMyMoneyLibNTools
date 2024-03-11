@@ -175,7 +175,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 
 	@Override
 	public FixedPointNumber getBalance(final LocalDate date, final KMMQualifSecCurrID secCurrID)
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+			{
 		FixedPointNumber retval = getBalance(date);
 
 		if ( retval == null ) {
@@ -217,7 +217,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 
 	@Override
 	public FixedPointNumber getBalance(final LocalDate date, final Currency curr)
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+			{
 
 		FixedPointNumber retval = getBalance(date);
 
@@ -278,28 +278,28 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 		return balance;
 	}
 
-	public String getBalanceFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	public String getBalanceFormatted() {
 		return getCurrencyFormat().format(getBalance());
 	}
 
-	public String getBalanceFormatted(final Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	public String getBalanceFormatted(final Locale lcl) {
 		NumberFormat cf = NumberFormat.getCurrencyInstance(lcl);
 		cf.setCurrency(getCurrency());
 		return cf.format(getBalance());
 	}
 
 	public FixedPointNumber getBalanceRecursive()
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+			{
 		return getBalanceRecursive(LocalDate.now());
 	}
 
 	public FixedPointNumber getBalanceRecursive(final LocalDate date)
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+			{
 		return getBalanceRecursive(date, getQualifSecCurrID());
 	}
 
 	public FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMQualifSecCurrID secCurrID)
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+			{
 
 		// BEGIN OLD IMPL
 //	    FixedPointNumber retval = getBalance(date, secCurrID);
@@ -328,7 +328,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 
 	@Override
 	public FixedPointNumber getBalanceRecursive(final LocalDate date, final Currency curr)
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+			{
 
 		FixedPointNumber retval = getBalance(date, curr);
 
@@ -353,7 +353,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 
 	@Override
 	public FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMSecID secID)
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException, KMMIDNotSetException {
+			throws KMMIDNotSetException {
 		// CAUTION: This assumes that under a stock account,
 		// there are no children (which sounds sensible,
 		// but there might be special cases)
@@ -362,13 +362,13 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 
 	@Override
 	public String getBalanceRecursiveFormatted()
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+			{
 		return getCurrencyFormat().format(getBalanceRecursive());
 	}
 
 	@Override
 	public String getBalanceRecursiveFormatted(final LocalDate date)
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+			{
 		return getCurrencyFormat().format(getBalanceRecursive(date));
 	}
 
@@ -426,10 +426,8 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 
 	/**
 	 * @return null if we are no currency but e.g. a fund
-	 * @throws InvalidQualifSecCurrIDException
-	 * @throws InvalidQualifSecCurrTypeException
 	 */
-	public Currency getCurrency() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	public Currency getCurrency() {
 		if ( getQualifSecCurrID().getType() != KMMQualifSecCurrID.Type.CURRENCY ) {
 			return null;
 		}
@@ -438,7 +436,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 		return Currency.getInstance(kmmCurrID);
 	}
 
-	public NumberFormat getCurrencyFormat() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	public NumberFormat getCurrencyFormat() {
 		if ( currencyFormat == null ) {
 			currencyFormat = NumberFormat.getCurrencyInstance();
 		}

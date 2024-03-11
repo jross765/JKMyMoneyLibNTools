@@ -57,7 +57,7 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
     // -----------------------------------------------------------
     
     @Override
-    public KMMPricePairID getID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public KMMPricePairID getID() {
     	if ( jwsdpPeer.getFrom() == null ||
     		 jwsdpPeer.getTo() == null ) {
     		throw new IllegalStateException("from-sec-curr and/or to-curr of JWSDP peer is/are null");
@@ -81,7 +81,7 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
     // ---------------------------------------------------------------
     
     @Override
-    public KMMQualifSecCurrID getFromSecCurrQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public KMMQualifSecCurrID getFromSecCurrQualifID() {
 	String secCurrID = getFromSecCurrStr();
 
 	KMMQualifSecCurrID result = null;
@@ -95,7 +95,7 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
     }
 
     @Override
-    public KMMQualifSecID getFromSecurityQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public KMMQualifSecID getFromSecurityQualifID() {
 	KMMQualifSecCurrID secCurrID = getFromSecCurrQualifID();
 	if ( secCurrID.getType() != KMMQualifSecCurrID.Type.SECURITY )
 	    throw new InvalidQualifSecCurrTypeException();
@@ -104,7 +104,7 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
     }
 
     @Override
-    public KMMQualifCurrID getFromCurrencyQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public KMMQualifCurrID getFromCurrencyQualifID() {
 	KMMQualifSecCurrID secCurrID = getFromSecCurrQualifID();
 	if ( secCurrID.getType() != KMMQualifSecCurrID.Type.CURRENCY )
 	    throw new InvalidQualifSecCurrTypeException();
@@ -113,7 +113,7 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
     }
 
     @Override
-    public KMyMoneySecurity getFromSecurity() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public KMyMoneySecurity getFromSecurity() {
 	KMMQualifSecID secID = getFromSecurityQualifID();
 	
 	KMyMoneySecurity cmdty = getKMyMoneyFile().getSecurityByQualifID(secID);
@@ -122,12 +122,12 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
     }
     
     @Override
-    public String getFromCurrencyCode() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public String getFromCurrencyCode() {
 	return getFromCurrencyQualifID().getCurrency().getCurrencyCode();
     }
 
     @Override
-    public KMyMoneyCurrency getFromCurrency() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public KMyMoneyCurrency getFromCurrency() {
 	KMMQualifCurrID currID = getFromCurrencyQualifID();
 	
 	KMyMoneyCurrency curr = getKMyMoneyFile().getCurrencyByQualifID(currID);
@@ -138,7 +138,7 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
     // ----------------------------
     
     @Override
-    public KMMQualifCurrID getToCurrencyQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public KMMQualifCurrID getToCurrencyQualifID() {
 	String secCurrID = getToCurrStr();
 
 	KMMQualifCurrID result = null;
@@ -152,12 +152,12 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
     }
 
     @Override
-    public String getToCurrencyCode() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public String getToCurrencyCode() {
 	return getToCurrencyQualifID().getCode();
     }
 
     @Override
-    public KMyMoneyCurrency getToCurrency() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public KMyMoneyCurrency getToCurrency() {
 	KMMQualifCurrID currID = getToCurrencyQualifID();
 	
 	KMyMoneyCurrency curr = getKMyMoneyFile().getCurrencyByQualifID(currID);
@@ -187,7 +187,7 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
 
     // -----------------------------------------------------------
     
-    public boolean equals(KMyMoneyPricePair other) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public boolean equals(KMyMoneyPricePair other) {
 	if ( ! getFromSecCurrQualifID().toString().equals(other.getFromSecCurrQualifID().toString()) )
 	    return false;
 

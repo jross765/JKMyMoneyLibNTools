@@ -86,14 +86,14 @@ public class KMMComplAcctID implements Comparable<KMMComplAcctID> {
 	setType(Type.UNSET);
     }
 
-    public KMMComplAcctID(KMMAcctID stdAcctID) throws InvalidKMMComplAcctIDException {
+    public KMMComplAcctID(KMMAcctID stdAcctID) {
 	init();
 	reset();
 	setType(Type.STANDARD);
 	setStdID(stdAcctID);
     }
 
-    public KMMComplAcctID(String str) throws InvalidKMMComplAcctIDException {
+    public KMMComplAcctID(String str) {
 	init();
 	reset();
 	
@@ -127,28 +127,28 @@ public class KMMComplAcctID implements Comparable<KMMComplAcctID> {
         this.type = type;
     }
 
-    public KMMAcctID getStdID() throws InvalidKMMComplAcctIDException {
+    public KMMAcctID getStdID() {
 	if ( type != Type.STANDARD )
 	    throw new InvalidKMMComplAcctIDException();
 	
         return stdID;
     }
 
-    public void setStdID(KMMAcctID stdID) throws InvalidKMMComplAcctIDException {
+    public void setStdID(KMMAcctID stdID) {
 	if ( type != Type.STANDARD )
 	    throw new InvalidKMMComplAcctIDException();
 
         this.stdID = stdID;
     }
 
-    public String getSpecID() throws InvalidKMMComplAcctIDException {
+    public String getSpecID() {
 	if ( type != Type.SPECIAL )
 	    throw new InvalidKMMComplAcctIDException();
 	
         return specID;
     }
 
-    public void setSpecID(String specID) throws InvalidKMMComplAcctIDException {
+    public void setSpecID(String specID) {
 	if ( type != Type.SPECIAL )
 	    throw new InvalidKMMComplAcctIDException();
 	

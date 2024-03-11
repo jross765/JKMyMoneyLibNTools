@@ -215,7 +215,7 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
-    String getAccountBalanceFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    String getAccountBalanceFormatted() throws InvalidQualifSecCurrIDException;
 
     /**
      * @param lcl 
@@ -224,7 +224,7 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * @throws InvalidQualifSecCurrTypeException 
      * @see KMyMoneyAccount#getBalanceFormatted()
      */
-    String getAccountBalanceFormatted(Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    String getAccountBalanceFormatted(Locale lcl) throws InvalidQualifSecCurrIDException;
 
     // ----------------------------
 
@@ -240,7 +240,7 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
-    String getSharesFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    String getSharesFormatted() throws InvalidQualifSecCurrIDException;
 
     /**
      * The quantity is in the currency of the account!
@@ -249,7 +249,7 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
-    String getSharesFormatted(Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    String getSharesFormatted(Locale lcl) throws InvalidQualifSecCurrIDException;
 
     /**
      * The quantity is in the currency of the account!
@@ -257,7 +257,7 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
-    String getSharesFormattedForHTML() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    String getSharesFormattedForHTML() throws InvalidQualifSecCurrIDException;
 
     /**
      * The quantity is in the currency of the account!
@@ -266,7 +266,7 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      */
-    String getSharesFormattedForHTML(Locale lcl) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    String getSharesFormattedForHTML(Locale lcl) throws InvalidQualifSecCurrIDException;
     
     // ----------------------------
 

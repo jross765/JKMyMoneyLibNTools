@@ -27,7 +27,7 @@ public interface KMyMoneyCurrency {
      * @throws InvalidQualifSecCurrIDException
      * {@link KMMSecCurr}
      */
-    KMMQualifCurrID getQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMMQualifCurrID getQualifID() throws InvalidQualifSecCurrIDException;
 
     /**
      * @return Returns the currency symbol (e.g., the dollar symbol, the euro symbol, etc.) 
@@ -76,8 +76,8 @@ public interface KMyMoneyCurrency {
     
     // ------------------------------------------------------------
 
-    List<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    List<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrIDException;
     
-    KMyMoneyPrice getYoungestQuote() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMyMoneyPrice getYoungestQuote() throws InvalidQualifSecCurrIDException;
     
 }

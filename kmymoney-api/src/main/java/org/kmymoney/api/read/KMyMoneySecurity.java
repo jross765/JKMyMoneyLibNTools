@@ -34,7 +34,7 @@ public interface KMyMoneySecurity extends Comparable<KMyMoneySecurity>,
      * @throws InvalidQualifSecCurrTypeException
      * @throws InvalidQualifSecCurrIDException
      */
-    KMMQualifSecID getQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMMQualifSecID getQualifID() throws InvalidQualifSecCurrIDException;
 
     /**
      * @return
@@ -80,7 +80,7 @@ public interface KMyMoneySecurity extends Comparable<KMyMoneySecurity>,
      */
     BigInteger getSAF();
     
-    KMMQualifCurrID getTradingCurrency() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+    KMMQualifCurrID getTradingCurrency() throws InvalidQualifSecCurrIDException;
 
     /**
      * @return
@@ -94,13 +94,13 @@ public interface KMyMoneySecurity extends Comparable<KMyMoneySecurity>,
      * @throws InvalidQualifSecCurrTypeException
      * @throws InvalidQualifSecCurrIDException
      */
-    List<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    List<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrIDException;
     
     /**
      * @return
      * @throws InvalidQualifSecCurrTypeException
      * @throws InvalidQualifSecCurrIDException
      */
-    KMyMoneyPrice getYoungestQuote() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMyMoneyPrice getYoungestQuote() throws InvalidQualifSecCurrIDException;
     
 }

@@ -22,7 +22,7 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
 		type = Type.SECURITY;
 	}
 
-	public KMMQualifSecID(KMMSecID secID) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	public KMMQualifSecID(KMMSecID secID) {
 		super(Type.SECURITY, secID.toString());
 
 		init();
@@ -31,7 +31,7 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
 		setSecID(secID);
 	}
 
-	public KMMQualifSecID(String secIDStr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	public KMMQualifSecID(String secIDStr) {
 		super(Type.SECURITY, secIDStr);
 
 		init();
@@ -41,7 +41,7 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
 	}
 
 	public KMMQualifSecID(KMMQualifSecCurrID secCurrID)
-			throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+			{
 		super(Type.SECURITY, secCurrID.getCode());
 
 		if ( getType() != Type.SECURITY )
@@ -62,7 +62,7 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
     // ---------------------------------------------------------------
 
     @Override
-    public void setType(Type type) throws InvalidQualifSecCurrIDException {
+    public void setType(Type type) {
 //        if ( type != Type.SECURITY )
 //            throw new InvalidCmdtyCurrIDException();
 
@@ -71,14 +71,14 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
     
     // ---------------------------------------------------------------
     
-    public KMMSecID getSecID() throws InvalidQualifSecCurrTypeException {
+    public KMMSecID getSecID() {
     	if ( type != Type.SECURITY )
     		throw new InvalidQualifSecCurrTypeException();
 	
         return secID;
     }
 
-	public void setSecID(KMMSecID secID) throws InvalidQualifSecCurrTypeException {
+	public void setSecID(KMMSecID secID) {
 		if ( type != Type.SECURITY )
 			throw new InvalidQualifSecCurrTypeException();
 
@@ -98,7 +98,7 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
     // ---------------------------------------------------------------
 
 	public static KMMQualifSecID parse(String str)
-			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+			throws InvalidQualifSecCurrIDException {
 		if ( str == null )
 			throw new IllegalArgumentException("Argument string is null");
 

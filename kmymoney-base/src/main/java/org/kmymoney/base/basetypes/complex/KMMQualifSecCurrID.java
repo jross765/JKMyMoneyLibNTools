@@ -29,7 +29,7 @@ public class KMMQualifSecCurrID {
     	this.type = Type.UNSET;
     }
 
-	public KMMQualifSecCurrID(Type type, String code) throws InvalidQualifSecCurrTypeException {
+	public KMMQualifSecCurrID(Type type, String code) {
 
 		if ( code == null )
 			throw new IllegalArgumentException("Security code is null");
@@ -54,7 +54,7 @@ public class KMMQualifSecCurrID {
         return type;
     }
     
-    public void setType(Type type) throws InvalidQualifSecCurrIDException {
+    public void setType(Type type) {
         this.type = type;
     }
     
@@ -62,7 +62,7 @@ public class KMMQualifSecCurrID {
         return code;
     }
     
-    public void setCode(String secCode) throws InvalidQualifSecCurrTypeException {
+    public void setCode(String secCode) {
 	if ( secCode == null )
 	    throw new IllegalArgumentException("Security code is null");
 
@@ -82,7 +82,7 @@ public class KMMQualifSecCurrID {
     // ---------------------------------------------------------------
     
 	public static KMMQualifSecCurrID parse(String str)
-			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+			throws InvalidQualifSecCurrIDException {
 		if ( str == null )
 			throw new IllegalArgumentException("Argument string is null");
 

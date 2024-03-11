@@ -176,7 +176,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     }
 
     @Override
-	public KMMQualifSecCurrID getQualifSecCurrID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+	public KMMQualifSecCurrID getQualifSecCurrID() {
 	
 	KMMQualifSecCurrID result = null;
 	

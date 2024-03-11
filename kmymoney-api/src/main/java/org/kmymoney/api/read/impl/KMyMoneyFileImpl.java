@@ -106,11 +106,9 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @param pFile the file to load and initialize from
      * @throws IOException on low level reading-errors (FileNotFoundException if not
      *                     found)
-     * @throws InvalidQualifSecCurrTypeException 
-     * @throws InvalidQualifSecCurrIDException 
      * @see #loadFile(File)
      */
-    public KMyMoneyFileImpl(final File pFile) throws IOException, InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public KMyMoneyFileImpl(final File pFile) throws IOException {
 	super();
 	loadFile(pFile);
     }
@@ -119,11 +117,9 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @param pFile the file to load and initialize from
      * @throws IOException on low level reading-errors (FileNotFoundException if not
      *                     found)
-     * @throws InvalidQualifSecCurrTypeException 
-     * @throws InvalidQualifSecCurrIDException 
      * @see #loadFile(File)
      */
-    public KMyMoneyFileImpl(final InputStream is) throws IOException, InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public KMyMoneyFileImpl(final InputStream is) throws IOException {
 	super();
 	loadInputStream(is);
     }
@@ -158,11 +154,9 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @param pFile the file to read
      * @throws IOException on low level reading-errors (FileNotFoundException if not
      *                     found)
-     * @throws InvalidQualifSecCurrTypeException 
-     * @throws InvalidQualifSecCurrIDException 
      * @see #setRootElement(KMYMONEYFILE)
      */
-    protected void loadFile(final File pFile) throws IOException, InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    protected void loadFile(final File pFile) throws IOException{
 
 	long start = System.currentTimeMillis();
 
@@ -201,7 +195,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
     }
 
-    protected void loadInputStream(InputStream in) throws UnsupportedEncodingException, IOException, InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    protected void loadInputStream(InputStream in) throws UnsupportedEncodingException, IOException{
 	long start = System.currentTimeMillis();
 
 	NamespaceRemoverReader reader = new NamespaceRemoverReader(new InputStreamReader(in, "utf-8"));
@@ -514,7 +508,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     }
 
     @Override
-    public KMyMoneySecurity getSecurityByQualifID(final String qualifIDStr) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public KMyMoneySecurity getSecurityByQualifID(final String qualifIDStr) {
 	return secMgr.getSecurityByQualifID(qualifIDStr);
     }
 
@@ -591,7 +585,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
     @Override
     public FixedPointNumber getLatestPrice(KMMQualifSecCurrID secCurrID)
-	    throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	    throws InvalidQualifSecCurrIDException {
 	return prcMgr.getLatestPrice(secCurrID);
     }
 
@@ -612,7 +606,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @throws InvalidQualifSecCurrTypeException 
      * @throws InvalidQualifSecCurrIDException 
      */
-    protected void setRootElement(final KMYMONEYFILE pRootElement) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    protected void setRootElement(final KMYMONEYFILE pRootElement) {
 	if (pRootElement == null) {
 	    throw new IllegalArgumentException("null not allowed for field this.rootElement");
 	}
@@ -642,7 +636,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @throws InvalidQualifSecCurrTypeException 
      * @throws InvalidQualifSecCurrIDException 
      */
-    private void loadPriceDatabase(final KMYMONEYFILE pRootElement) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    private void loadPriceDatabase(final KMYMONEYFILE pRootElement) {
 	boolean noPriceDB = true;
 	
 	PRICES priceDB = pRootElement.getPRICES();
@@ -657,7 +651,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 	}
     }
 
-    private void loadPriceDatabaseCore(PRICES priceDB) throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    private void loadPriceDatabaseCore(PRICES priceDB) {
 //  	getCurrencyTable().clear();
 //  	getCurrencyTable().setConversionFactor(KMMSecCurrID.Type.CURRENCY, 
 //  		                               getDefaultCurrencyID(), 

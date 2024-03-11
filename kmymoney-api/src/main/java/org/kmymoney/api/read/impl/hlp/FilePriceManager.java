@@ -220,8 +220,7 @@ public class FilePriceManager {
 		return prcMap.values();
 	}
 
-	public FixedPointNumber getLatestPrice(final String secCurrIDStr)
-			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	public FixedPointNumber getLatestPrice(final String secCurrIDStr) {
 		if ( secCurrIDStr.startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
 			return getLatestPrice(new KMMQualifSecID(secCurrIDStr));
 		} else {
@@ -229,8 +228,7 @@ public class FilePriceManager {
 		}
 	}
 
-	public FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID)
-			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	public FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID) {
 		return getLatestPrice(secCurrID, 0);
 	}
 
@@ -243,13 +241,10 @@ public class FilePriceManager {
 	 *                    recursive quotes (quotes to other then the base- currency)
 	 *                    we abort if the depth reached 6.
 	 * @return the latest price-quote in the KMyMoney file in the default-currency
-	 * @throws InvalidQualifSecCurrTypeException
-	 * @throws InvalidQualifSecCurrIDException
 	 * @see {@link KMyMoneyFile#getLatestPrice(String, String)}
 	 * @see #getDefaultCurrencyID()
 	 */
-	private FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID, final int depth)
-			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	private FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID, final int depth) {
 		if ( secCurrID == null ) {
 			throw new IllegalArgumentException("null parameter 'secCurrID' given");
 		}
@@ -341,8 +336,7 @@ public class FilePriceManager {
 		return factor.multiply(latestQuote);
 	}
 
-	private FixedPointNumber getLatestPrice_readAfresh(final KMMQualifSecCurrID secCurrID, final int depth)
-			throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+	private FixedPointNumber getLatestPrice_readAfresh(final KMMQualifSecCurrID secCurrID, final int depth) {
 		if ( secCurrID == null ) {
 			throw new IllegalArgumentException("null parameter 'secCurrID' given");
 		}

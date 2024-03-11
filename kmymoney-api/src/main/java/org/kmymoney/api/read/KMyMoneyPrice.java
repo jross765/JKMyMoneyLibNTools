@@ -74,7 +74,7 @@ public interface KMyMoneyPrice extends Comparable<KMyMoneyPrice>,
      * @throws InvalidQualifSecCurrIDException
      * @throws InvalidQualifSecCurrTypeException
      */
-    KMMPriceID getID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+    KMMPriceID getID() throws InvalidQualifSecCurrIDException;
     
     /**
      * @return Returns the parent price pair object (essentially the pair ("from-security/currency",
@@ -83,7 +83,7 @@ public interface KMyMoneyPrice extends Comparable<KMyMoneyPrice>,
      * @throws InvalidQualifSecCurrTypeException
      * {@link #getParentPricePair()}
      */
-    KMMPricePairID getParentPricePairID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+    KMMPricePairID getParentPricePairID() throws InvalidQualifSecCurrIDException;
 	
     /**
      * @return Returns the parent price pair object.
@@ -130,6 +130,6 @@ public interface KMyMoneyPrice extends Comparable<KMyMoneyPrice>,
      * @throws InvalidQualifSecCurrIDException
      * {@link #getValue()}
      */
-    String getValueFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    String getValueFormatted() throws InvalidQualifSecCurrIDException;
     
 }

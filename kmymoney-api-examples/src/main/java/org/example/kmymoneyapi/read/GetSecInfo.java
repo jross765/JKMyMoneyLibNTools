@@ -141,7 +141,7 @@ public class GetSecInfo {
 
     // -----------------------------------------------------------------
 
-    private void showQuotes(KMyMoneySecurity sec) throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    private void showQuotes(KMyMoneySecurity sec) {
 	System.out.println("");
 	System.out.println("Quotes:");
 

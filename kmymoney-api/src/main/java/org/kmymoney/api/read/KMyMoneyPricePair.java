@@ -30,7 +30,7 @@ public interface KMyMoneyPricePair extends Comparable<KMyMoneyPricePair>,
      * @throws InvalidQualifSecCurrIDException
      * @throws InvalidQualifSecCurrTypeException
      */
-    KMMPricePairID getID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+    KMMPricePairID getID() throws InvalidQualifSecCurrIDException;
     
     // ---------------------------------------------------------------
     

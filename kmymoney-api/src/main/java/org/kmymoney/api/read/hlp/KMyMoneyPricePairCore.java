@@ -34,67 +34,49 @@ public interface KMyMoneyPricePairCore {
     
     /**
      * @return
-     * @throws InvalidQualifSecCurrTypeException
-     * @throws InvalidQualifSecCurrIDException
      */
-    KMMQualifSecCurrID getFromSecCurrQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMMQualifSecCurrID getFromSecCurrQualifID();
 
     /**
      * @return
-     * @throws InvalidQualifSecCurrTypeException
-     * @throws InvalidQualifSecCurrIDException
      */
-    KMMQualifSecID getFromSecurityQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMMQualifSecID getFromSecurityQualifID();
 
     /**
      * @return
-     * @throws InvalidQualifSecCurrTypeException
-     * @throws InvalidQualifSecCurrIDException
      */
-    KMMQualifCurrID getFromCurrencyQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMMQualifCurrID getFromCurrencyQualifID();
 
     /**
      * @return
-     * @throws InvalidQualifSecCurrIDException
-     * @throws InvalidQualifSecCurrTypeException
      */
-    KMyMoneySecurity getFromSecurity() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+    KMyMoneySecurity getFromSecurity();
 
     /**
      * @return
-     * @throws InvalidQualifSecCurrTypeException
-     * @throws InvalidQualifSecCurrIDException
      */
-    String getFromCurrencyCode() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    String getFromCurrencyCode();
 
     /**
      * @return
-     * @throws InvalidQualifSecCurrIDException
-     * @throws InvalidQualifSecCurrTypeException
      */
-    KMyMoneyCurrency getFromCurrency() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+    KMyMoneyCurrency getFromCurrency();
     
     // ----------------------------
 
     /**
      * @return
-     * @throws InvalidQualifSecCurrTypeException
-     * @throws InvalidQualifSecCurrIDException
      */
-    KMMQualifCurrID getToCurrencyQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    KMMQualifCurrID getToCurrencyQualifID();
 
     /**
      * @return
-     * @throws InvalidQualifSecCurrTypeException
-     * @throws InvalidQualifSecCurrIDException
      */
-    String getToCurrencyCode() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException;
+    String getToCurrencyCode();
 
     /**
      * @return
-     * @throws InvalidQualifSecCurrIDException
-     * @throws InvalidQualifSecCurrTypeException
      */
-    KMyMoneyCurrency getToCurrency() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException;
+    KMyMoneyCurrency getToCurrency();
     
 }

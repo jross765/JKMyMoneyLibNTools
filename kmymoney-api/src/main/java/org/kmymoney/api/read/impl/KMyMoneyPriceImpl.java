@@ -79,14 +79,14 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
     // -----------------------------------------------------------
     
     @Override
-    public KMMPriceID getID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public KMMPriceID getID() {
 	return new KMMPriceID(parent.getFromSecCurrStr(),
 		              parent.getToCurrStr(),
 		              DATE_FORMAT.format(getDate()));
     }
 
     @Override
-    public KMMPricePairID getParentPricePairID() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public KMMPricePairID getParentPricePairID() {
 	return parent.getID();
     }
 
@@ -110,12 +110,12 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
     // ----------------------------
 
     @Override
-    public KMMQualifSecCurrID getFromSecCurrQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public KMMQualifSecCurrID getFromSecCurrQualifID() {
 	return parent.getFromSecCurrQualifID();
     }
 
     @Override
-    public KMMQualifSecID getFromSecurityQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public KMMQualifSecID getFromSecurityQualifID() {
 	KMMQualifSecCurrID secCurrID = getFromSecCurrQualifID();
 	if ( secCurrID.getType() != KMMQualifSecCurrID.Type.SECURITY )
 	    throw new InvalidQualifSecCurrTypeException();
@@ -124,7 +124,7 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
     }
 
     @Override
-    public KMMQualifCurrID getFromCurrencyQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public KMMQualifCurrID getFromCurrencyQualifID() {
 	KMMQualifSecCurrID secCurrID = getFromSecCurrQualifID();
 	if ( secCurrID.getType() != KMMQualifSecCurrID.Type.CURRENCY )
 	    throw new InvalidQualifSecCurrTypeException();
@@ -133,34 +133,34 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
     }
 
     @Override
-    public KMyMoneySecurity getFromSecurity() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public KMyMoneySecurity getFromSecurity() {
 	return parent.getFromSecurity();
     }
     
     @Override
-    public String getFromCurrencyCode() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public String getFromCurrencyCode() {
 	return getFromCurrencyQualifID().getCurrency().getCurrencyCode();
     }
 
     @Override
-    public KMyMoneyCurrency getFromCurrency() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public KMyMoneyCurrency getFromCurrency() {
 	return parent.getFromCurrency();
     }
     
     // ----------------------------
     
     @Override
-    public KMMQualifCurrID getToCurrencyQualifID() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public KMMQualifCurrID getToCurrencyQualifID() {
 	return parent.getToCurrencyQualifID();
     }
 
     @Override
-    public String getToCurrencyCode() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public String getToCurrencyCode() {
 	return getToCurrencyQualifID().getCode();
     }
 
     @Override
-    public KMyMoneyCurrency getToCurrency() throws InvalidQualifSecCurrIDException, InvalidQualifSecCurrTypeException {
+    public KMyMoneyCurrency getToCurrency() {
 	return parent.getToCurrency();
     }
 
@@ -171,7 +171,7 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
      * @throws InvalidQualifSecCurrTypeException 
      * @throws InvalidQualifSecCurrIDException 
      */
-    private NumberFormat getCurrencyFormat() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    private NumberFormat getCurrencyFormat() {
 	if (currencyFormat == null) {
 	    currencyFormat = NumberFormat.getCurrencyInstance();
 	}
@@ -230,7 +230,7 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
     }
 
     @Override
-    public String getValueFormatted() throws InvalidQualifSecCurrTypeException, InvalidQualifSecCurrIDException {
+    public String getValueFormatted() {
 	return getCurrencyFormat().format(getValue());
     }
 
