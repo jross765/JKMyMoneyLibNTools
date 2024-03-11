@@ -30,17 +30,13 @@ As far as the author knows, there should be no issues with other locales,
 but he has not tested it.
 
 ### Version Compatibility
-+---------+------------------+--------------------------------+
+
 | Version | Backward Compat. | Note                           |
-+---------+------------------+--------------------------------+
+|---------|------------------|--------------------------------|
 | 0.5     | no               | Some substantial changes       |
-+---------+------------------+--------------------------------+
 | 0.4     | no               | Minor changes in interfaces    |
-+---------+------------------+--------------------------------+
 | 0.3     | no               | Major changes in interfaces    |
-+---------+------------------+--------------------------------+
 | 0.2     | no               | Major changes in interfaces    |
-+---------+------------------+--------------------------------+
 
 ## Major Changes
 Here, only the top-level changes on module-level are mentioned. For more Details, 
