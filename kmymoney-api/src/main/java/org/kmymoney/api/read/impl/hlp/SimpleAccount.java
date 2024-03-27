@@ -13,8 +13,6 @@ import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
@@ -50,6 +48,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 	/*
 	 * The returned list is sorted by the natural order of the Transaction-Splits.
 	 */
+	@Override
 	public List<KMyMoneyTransaction> getTransactions() {
 		List<KMyMoneyTransaction> retval = new ArrayList<KMyMoneyTransaction>();
 
@@ -62,6 +61,25 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 		return retval;
 	}
 
+	@Override
+	public List<KMyMoneyTransaction> getTransactions(final LocalDate fromDate, final LocalDate toDate) {
+		List<KMyMoneyTransaction> retval = new ArrayList<KMyMoneyTransaction>();
+
+		for ( KMyMoneyTransaction trx : getTransactions() ) {
+			 if ( ( trx.getDatePosted().isEqual( fromDate ) ||
+				    trx.getDatePosted().isAfter( fromDate ) ) &&
+			      ( trx.getDatePosted().isEqual( toDate ) ||
+					trx.getDatePosted().isBefore( toDate ) ) ) {
+				 retval.add(trx);
+			 }
+		}
+
+		// retval.sort(Comparator.reverseOrder()); // not necessary 
+		
+		return retval;
+	}
+
+	@Override
 	public boolean isChildAccountRecursive(final KMyMoneyAccount account) {
 
 		if ( this == account ) {
@@ -87,6 +105,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 	/**
 	 * Get name including the name of the parent accounts.
 	 */
+	@Override
 	public String getQualifiedName() {
 		KMyMoneyAccount acc = getParentAccount();
 
@@ -107,6 +126,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 		}
 	}
 
+	@Override
 	public KMyMoneyAccount getParentAccount() {
 		if ( isRootAccount() )
 			return null;
@@ -278,26 +298,31 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 		return balance;
 	}
 
+	@Override
 	public String getBalanceFormatted() {
 		return getCurrencyFormat().format(getBalance());
 	}
 
+	@Override
 	public String getBalanceFormatted(final Locale lcl) {
 		NumberFormat cf = NumberFormat.getCurrencyInstance(lcl);
 		cf.setCurrency(getCurrency());
 		return cf.format(getBalance());
 	}
 
+	@Override
 	public FixedPointNumber getBalanceRecursive()
 			{
 		return getBalanceRecursive(LocalDate.now());
 	}
 
+	@Override
 	public FixedPointNumber getBalanceRecursive(final LocalDate date)
 			{
 		return getBalanceRecursive(date, getQualifSecCurrID());
 	}
 
+	@Override
 	public FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMQualifSecCurrID secCurrID)
 			{
 
@@ -452,6 +477,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 		return currencyFormat;
 	}
 
+	@Override
 	public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSpltID id) {
 		if ( id == null ) {
 			throw new IllegalArgumentException("null id given!");

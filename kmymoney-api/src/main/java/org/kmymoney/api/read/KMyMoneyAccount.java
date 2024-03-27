@@ -262,6 +262,8 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      */
     List<KMyMoneyTransaction> getTransactions();
 
+    List<KMyMoneyTransaction> getTransactions(LocalDate fromDate, LocalDate toDate);
+
     // -----------------------------------------------------------------
 
     /**

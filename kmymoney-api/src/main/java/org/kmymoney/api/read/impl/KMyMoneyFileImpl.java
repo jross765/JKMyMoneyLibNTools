@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -440,6 +443,22 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public Collection<? extends KMyMoneyTransaction> getTransactions() {
 	return trxMgr.getTransactions();
+    }
+    
+    @Override
+    public Collection<? extends KMyMoneyTransaction> getTransactions(final LocalDate fromDate, final LocalDate toDate) {
+		ArrayList<KMyMoneyTransaction> result = new ArrayList<KMyMoneyTransaction>();
+		
+		for ( KMyMoneyTransaction trx : getTransactions() ) {
+			 if ( ( trx.getDatePosted().isEqual( fromDate ) ||
+				    trx.getDatePosted().isAfter( fromDate ) ) &&
+			      ( trx.getDatePosted().isEqual( toDate ) ||
+					trx.getDatePosted().isBefore( toDate ) ) ) {
+				 result.add(trx);
+			 }
+		}
+		
+		return Collections.unmodifiableCollection(result);
     }
     
     // ---------------------------------------------------------------

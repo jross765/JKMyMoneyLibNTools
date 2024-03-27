@@ -1,6 +1,7 @@
 package org.kmymoney.api.read;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -201,6 +202,8 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 *         the returned collection!
 	 */
 	Collection<? extends KMyMoneyTransaction> getTransactions();
+
+	Collection<? extends KMyMoneyTransaction> getTransactions(LocalDate fromDate, LocalDate toDate);
 
 	// ---------------------------------------------------------------
 
