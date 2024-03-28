@@ -1,11 +1,14 @@
 package org.kmymoney.base.tuples;
 
+import java.math.BigDecimal;
+
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.numbers.FixedPointNumber;
 
 public record AcctIDAmountPair(KMMAcctID accountID, FixedPointNumber amount) {
 	
 	private final static double UNSET_VALUE = -999999;
+	private final static int    SCALE       = 2;
 	
 	// ---------------------------------------------------------------
 	
@@ -21,6 +24,14 @@ public record AcctIDAmountPair(KMMAcctID accountID, FixedPointNumber amount) {
 
 	public boolean isSet() {
 		return accountID.isSet() && ( amount.doubleValue() != UNSET_VALUE );
+	}
+
+	// ---------------------------------------------------------------
+	
+	@Override
+	public String toString() {
+		return "AcctIDAmountPair [accountID=" + accountID + 
+								  ", amount=" + String.format("%." + SCALE + "f", amount.doubleValue() ) + "]";
 	}
 
 }
