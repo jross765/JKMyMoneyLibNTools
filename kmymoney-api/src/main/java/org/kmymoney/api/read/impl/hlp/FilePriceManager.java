@@ -100,7 +100,7 @@ public class FilePriceManager {
 
 	protected KMyMoneyPriceImpl createPrice(final KMyMoneyPricePair prcPr, final PRICE jwsdpPrc) {
 		KMyMoneyPriceImpl prc = new KMyMoneyPriceImpl(prcPr, jwsdpPrc, kmmFile);
-		LOGGER.info("createPrice: Generated new price: " + prc.getID());
+		LOGGER.debug("createPrice: Generated new price: " + prc.getID());
 		return prc;
 	}
 
