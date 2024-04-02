@@ -1,8 +1,9 @@
 package org.kmymoney.api.currency;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import org.kmymoney.base.numbers.FixedPointNumber;
@@ -94,8 +95,8 @@ public class SimpleSecurityQuoteTable implements SimplePriceTable,
      * @return all currency-names
      */
     @Override
-    public Collection<String> getCurrencies() {
-	return mSecID2Factor.keySet();
+    public List<String> getCurrencies() {
+	return new ArrayList<String>(mSecID2Factor.keySet());
     }
     
     /**

@@ -2,9 +2,8 @@ package org.kmymoney.api.currency;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -45,14 +44,14 @@ public class ComplexPriceTable implements Serializable {
 
 	public void addComplexPriceTableChangeListener(final ComplexPriceTableChangeListener listener) {
 		if ( listeners == null ) {
-			listeners = new ArrayList<>();
+			listeners = new ArrayList<ComplexPriceTableChangeListener>();
 		}
 		listeners.add(listener);
 	}
 
 	public void removeComplexPriceTableChangeListener(final ComplexPriceTableChangeListener listener) {
 		if ( listeners == null ) {
-			listeners = new ArrayList<>();
+			listeners = new ArrayList<ComplexPriceTableChangeListener>();
 		}
 		listeners.remove(listener);
 	}
@@ -298,8 +297,10 @@ public class ComplexPriceTable implements Serializable {
 	/**
 	 * @return
 	 */
-	public Collection<KMMQualifSecCurrID.Type> getNameSpaces() {
-		return namespace2CurrTab.keySet();
+	public List<KMMQualifSecCurrID.Type> getNameSpaces() {
+		ArrayList<KMMQualifSecCurrID.Type> result = new ArrayList<KMMQualifSecCurrID.Type>(namespace2CurrTab.keySet());
+		Collections.sort(result);
+		return result;
 	}
 
 	/**
@@ -314,10 +315,10 @@ public class ComplexPriceTable implements Serializable {
 	 * @param tyoe
 	 * @return 
 	 */
-	public Collection<String> getCurrencies(final KMMQualifSecCurrID.Type tyoe) {
+	public List<String> getCurrencies(final KMMQualifSecCurrID.Type tyoe) {
 		SimplePriceTable table = getByNamespace(tyoe);
 		if ( table == null ) {
-			return new HashSet<String>();
+			return new ArrayList<String>();
 		}
 		return table.getCurrencies();
 	}

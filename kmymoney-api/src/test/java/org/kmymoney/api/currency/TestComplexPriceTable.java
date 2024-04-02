@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import java.io.InputStream;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -60,9 +61,9 @@ public class TestComplexPriceTable {
 
 		assertEquals(2, complPriceTab.getNameSpaces().size());
 
-		Object[] nameSpaceArr = complPriceTab.getNameSpaces().toArray();
-		assertEquals(KMMQualifSecCurrID.Type.SECURITY, (KMMQualifSecCurrID.Type) nameSpaceArr[0]);
-		assertEquals(KMMQualifSecCurrID.Type.CURRENCY, (KMMQualifSecCurrID.Type) nameSpaceArr[1]);
+		List<KMMQualifSecCurrID.Type> nameSpaceList = complPriceTab.getNameSpaces();
+		assertEquals(KMMQualifSecCurrID.Type.CURRENCY, (KMMQualifSecCurrID.Type) nameSpaceList.get(0));
+		assertEquals(KMMQualifSecCurrID.Type.SECURITY, (KMMQualifSecCurrID.Type) nameSpaceList.get(1));
 	}
 
 	@Test

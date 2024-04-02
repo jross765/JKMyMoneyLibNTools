@@ -1,6 +1,6 @@
 package org.kmymoney.api.currency;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.kmymoney.base.numbers.FixedPointNumber;
 
@@ -40,7 +40,7 @@ public interface SimplePriceTable {
     /**
      * @return
      */
-    Collection<String> getCurrencies();
+    List<String> getCurrencies();
 
     /**
      * 
