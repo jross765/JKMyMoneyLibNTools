@@ -37,6 +37,13 @@ import org.kmymoney.base.numbers.FixedPointNumber;
 public interface KMyMoneyWritableFile extends KMyMoneyFile, 
                                               KMyMoneyWritableObject
 {
+	public enum CompressMode {
+		COMPRESS,
+		DO_NOT_COMPRESS,
+		GUESS_FROM_FILENAME
+	}
+	
+	// ---------------------------------------------------------------
 
 	/**
 	 * @return true if this file has been modified.
@@ -68,6 +75,8 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * @throws IOException kn io-poblems
 	 */
 	void writeFile(File file) throws IOException;
+
+	void writeFile(File file, CompressMode compMode) throws IOException;
 
 	/**
 	 * @return the underlying JAXB-element

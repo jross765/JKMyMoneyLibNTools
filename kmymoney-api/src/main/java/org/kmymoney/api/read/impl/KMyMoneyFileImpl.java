@@ -73,6 +73,13 @@ import jakarta.xml.bind.Unmarshaller;
  */
 public class KMyMoneyFileImpl implements KMyMoneyFile
 {
+	public enum CompressMode {
+		COMPRESS,
+		DO_NOT_COMPRESS,
+		GUESS_FROM_FILENAME
+	}
+	
+	// ---------------------------------------------------------------
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyFileImpl.class);
 

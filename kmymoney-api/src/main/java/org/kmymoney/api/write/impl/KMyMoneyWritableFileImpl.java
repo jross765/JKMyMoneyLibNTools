@@ -148,6 +148,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * @param pModified true if this file has been modified false after save, load
 	 *                  or undo of changes
 	 */
+	@Override
 	public void setModified(final boolean pModified) {
 		// boolean old = this.modified;
 		modified = pModified;
@@ -158,6 +159,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isModified() {
 		return modified;
 	}
@@ -176,8 +178,13 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	/**
 	 * @see KMyMoneyWritableFile#writeFile(java.io.File)
 	 */
+	@Override
 	public void writeFile(final File file) throws IOException {
+		writeFile(file, org.kmymoney.api.write.KMyMoneyWritableFile.CompressMode.GUESS_FROM_FILENAME);
+	}
 
+	@Override
+	public void writeFile(File file, org.kmymoney.api.write.KMyMoneyWritableFile.CompressMode compMode) throws IOException {
 		if ( file == null ) {
 			throw new IllegalArgumentException("null not allowed for field this file");
 		}
@@ -192,9 +199,13 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 		OutputStream out = new FileOutputStream(file);
 		out = new BufferedOutputStream(out);
-		if ( file.getName().endsWith(".gz") ||
-             file.getName().endsWith(".kmy") ) {
+		if ( compMode == org.kmymoney.api.write.KMyMoneyWritableFile.CompressMode.COMPRESS ) {
 			out = new GZIPOutputStream(out);
+		} else if ( compMode == org.kmymoney.api.write.KMyMoneyWritableFile.CompressMode.GUESS_FROM_FILENAME ) {
+			if ( file.getName().endsWith(".gz") ||
+				 file.getName().endsWith(".kmy") ) {
+				out = new GZIPOutputStream(out);
+			}
 		}
 
 		Writer writer = new OutputStreamWriter(out, CODEPAGE);
@@ -502,6 +513,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * @see KMyMoneyWritableFile#getWritableTransactions()
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public Collection<? extends KMyMoneyWritableTransaction> getWritableTransactions() {
 		return (Collection<? extends KMyMoneyWritableTransaction>) getTransactions();
 	}
@@ -509,6 +521,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	/**
 	 * @param impl what to remove
 	 */
+	@Override
 	public void removeTransaction(final KMyMoneyWritableTransaction trx) {
 
 		Collection<KMyMoneyWritableTransactionSplit> c = new LinkedList<KMyMoneyWritableTransactionSplit>();
@@ -533,6 +546,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * @param pCmdtyNameFraction number of decimal-places after the comma
 	 * @param pCmdtyName         common name of the new currency
 	 */
+	@Override
 	public void addCurrency(final String pCmdtySpace, final String pCmdtyId, final FixedPointNumber conversionFactor,
 			final int pCmdtyNameFraction, final String pCmdtyName) {
 
@@ -600,6 +614,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public KMyMoneyWritableTransaction createWritableTransaction() {
 		KMyMoneyWritableTransactionImpl trx = new KMyMoneyWritableTransactionImpl(this);
 		super.trxMgr.addTransaction(trx);
@@ -623,6 +638,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	/**
 	 * @see KMyMoneyWritableFile#createWritableAccount()
 	 */
+	@Override
 	public KMyMoneyWritableAccount createWritableAccount() {
 		KMyMoneyWritableAccountImpl acct = new KMyMoneyWritableAccountImpl(this);
 		super.acctMgr.addAccount(acct);
@@ -653,6 +669,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	/**
 	 * @return a read-only collection of all accounts
 	 */
+	@Override
 	public Collection<KMyMoneyWritableAccount> getWritableAccounts() {
 		TreeSet<KMyMoneyWritableAccount> retval = new TreeSet<KMyMoneyWritableAccount>();
 		for ( KMyMoneyAccount account : getAccounts() ) {
