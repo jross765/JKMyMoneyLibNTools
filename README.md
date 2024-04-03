@@ -19,7 +19,7 @@ KMyMoney project.
 
 ## Compatibility
 ### System Compatibility
-Version 0.4 of the library has been tested with 
+Version 0.6 of the library has been tested with 
 KMyMoney 5.1.3 on Linux (locale de_DE) and 
 OpenJDK 17.0.
 
@@ -33,6 +33,7 @@ but he has not tested it.
 
 | Version | Backward Compat. | Note                           |
 |---------|------------------|--------------------------------|
+| 0.6     | (WIP) almost     | Only minor changes             |
 | 0.5     | no               | Some substantial changes       |
 | 0.4     | no               | Minor changes in interfaces    |
 | 0.3     | no               | Major changes in interfaces    |
@@ -41,6 +42,9 @@ but he has not tested it.
 ## Major Changes
 Here, only the top-level changes on module-level are mentioned. For more Details, 
 cf. the README files of the resp. modules (links above).
+
+### V. 0.5 &rarr; 0.6
+::TODO
 
 ### V. 0.4 &rarr; 0.5
 Changed project structure:
