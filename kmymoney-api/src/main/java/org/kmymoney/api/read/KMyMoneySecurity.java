@@ -88,6 +88,10 @@ public interface KMyMoneySecurity extends Comparable<KMyMoneySecurity>,
     String getTradingMarket();
 
     // ------------------------------------------------------------
+    
+    List<KMyMoneyAccount> getStockAccounts();
+
+    // ------------------------------------------------------------
 
     /**
      * @return

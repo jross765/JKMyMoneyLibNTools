@@ -2,14 +2,20 @@ package org.kmymoney.api.write.impl;
 
 import java.beans.PropertyChangeSupport;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.kmymoney.api.Const;
 import org.kmymoney.api.generated.KEYVALUEPAIRS;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.read.KMMSecCurr;
+import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneySecurityImpl;
 import org.kmymoney.api.read.impl.hlp.KVPListDoesNotContainKeyException;
+import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.kmymoney.api.write.impl.hlp.HasWritableUserDefinedAttributesImpl;
@@ -118,6 +124,20 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 		LOGGER.debug("createSecurity_int: Created new security (core):" + jwsdpSec.getId());
 
 		return jwsdpSec;
+	}
+
+	// ---------------------------------------------------------------
+
+	@Override
+	public List<KMyMoneyWritableAccount> getWritableStockAccounts() {
+		List<KMyMoneyWritableAccount> result = new ArrayList<KMyMoneyWritableAccount>();
+		
+		for ( KMyMoneyAccount acct : getStockAccounts() ) {
+			KMyMoneyWritableAccountImpl newAcct = new KMyMoneyWritableAccountImpl((KMyMoneyAccountImpl) acct, true);
+			result.add(newAcct);
+		}
+		
+		return result;
 	}
 
 	// ---------------------------------------------------------------

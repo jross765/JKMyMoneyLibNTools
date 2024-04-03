@@ -9,6 +9,7 @@ import java.util.List;
 import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.read.KMMSecCurr;
+import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneySecurity;
@@ -20,6 +21,7 @@ import org.kmymoney.api.read.impl.hlp.KVPListDoesNotContainKeyException;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.slf4j.Logger;
@@ -129,6 +131,23 @@ public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl
 	return jwsdpPeer.getTradingMarket();
     }
     
+    // ---------------------------------------------------------------
+
+	@Override
+	public List<KMyMoneyAccount> getStockAccounts() {
+		List<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
+		
+		for ( KMyMoneyAccount acct : getKMyMoneyFile().getAccountsByType(KMyMoneyAccount.Type.STOCK) ) {
+			KMMQualifSecCurrID secCurrID = acct.getQualifSecCurrID();
+			KMMSecID secID = new KMMSecID(secCurrID.getCode());
+			if ( this.getID().equals(secID) ) {
+				result.add(acct);
+			}
+		}
+		
+		return result;
+	}
+
     // ---------------------------------------------------------------
 
     @Override
