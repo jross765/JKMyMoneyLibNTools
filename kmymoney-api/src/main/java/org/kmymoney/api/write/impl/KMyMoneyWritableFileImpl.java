@@ -29,6 +29,7 @@ import org.kmymoney.api.generated.SPLITS;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneyAccount.Type;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
@@ -749,15 +750,40 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	// ---------------------------------------------------------------
 
 	@Override
-	public KMyMoneyWritableAccount getWritableAccountByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<KMyMoneyWritableAccount> getWritableAccountsByName(String name) {
+		Collection<KMyMoneyWritableAccount> result = new ArrayList<KMyMoneyWritableAccount>();
+		
+		for ( KMyMoneyAccount acct : getAccountsByName(name) ) {
+			KMyMoneyWritableAccountImpl newAcct = new KMyMoneyWritableAccountImpl((KMyMoneyAccountImpl) acct, true);
+			result.add(newAcct);
+		}
+		
+		return result;
 	}
 
 	@Override
-	public Collection<KMyMoneyWritableAccount> getWritableAccountsByType(String type) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<KMyMoneyWritableAccount> getWritableAccountsByType(KMyMoneyAccount.Type type) {
+		Collection<KMyMoneyWritableAccount> result = new ArrayList<KMyMoneyWritableAccount>();
+		
+		for ( KMyMoneyAccount acct : getAccountsByType(type) ) {
+			KMyMoneyWritableAccountImpl newAcct = new KMyMoneyWritableAccountImpl((KMyMoneyAccountImpl) acct, true);
+			result.add(newAcct);
+		}
+		
+		return result;
+	}
+
+	@Override
+	public Collection<KMyMoneyWritableAccount> getWritableAccountsByTypeAndName(Type type, String expr, 
+																				boolean qualif, boolean relaxed) {
+		Collection<KMyMoneyWritableAccount> result = new ArrayList<KMyMoneyWritableAccount>();
+		
+		for ( KMyMoneyAccount acct : getAccountsByTypeAndName(type, expr, qualif, relaxed) ) {
+			KMyMoneyWritableAccountImpl newAcct = new KMyMoneyWritableAccountImpl((KMyMoneyAccountImpl) acct, true);
+			result.add(newAcct);
+		}
+		
+		return result;
 	}
 
 	@Override

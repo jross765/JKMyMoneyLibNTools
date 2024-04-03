@@ -160,8 +160,8 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param relaxed
 	 * @return
 	 */
-	Collection<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, boolean qualif,
-			boolean relaxed);
+	Collection<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, 
+														 boolean qualif, boolean relaxed);
 
 	/**
 	 * @return all accounts

@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.read.KMMSecCurr;
+import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.NoEntryFoundException;
 import org.kmymoney.api.read.TooManyEntriesFoundException;
@@ -91,14 +92,17 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * @param name the name to look for
 	 * @return A changable version of the account.
 	 */
-	KMyMoneyWritableAccount getWritableAccountByName(String name);
+	Collection<KMyMoneyWritableAccount> getWritableAccountsByName(String name);
 
 	/**
 	 * @param type the type to look for
 	 * @return A changable version of all accounts of that type.
 	 */
-	Collection<KMyMoneyWritableAccount> getWritableAccountsByType(String type);
+	Collection<KMyMoneyWritableAccount> getWritableAccountsByType(KMyMoneyAccount.Type type);
 
+	Collection<KMyMoneyWritableAccount> getWritableAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, 
+																		 boolean qualif, boolean relaxed);
+	
 	/**
 	 * @see KMyMoneyFile#getAccountByID(String)
 	 * @param id the id of the account to fetch
