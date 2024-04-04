@@ -18,8 +18,12 @@ import org.slf4j.LoggerFactory;
  * I cannot understand this -- how can you possibly work with hundreds, thousands 
  * or even tens of thousands of prices without properly identifying them?
  * <br>
- * Anyway: this fact is the reason why we here have a price object pseudo-ID: 
- * The tuple ( from-currency, to-currency, date ).
+ * Anyway: this fact is the reason why we here have pseudo-ID for a price object: 
+ * The tuple ( from-currency, to-currency, date ),
+ * or, alternatively:
+ * The tuple ( (ID of parent price-pair object), date ).
+ *
+ * @see KMMPricePairID
  */
 public class KMMPriceID {
     

@@ -344,7 +344,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 			return getBalanceRecursive(date, new KMMQualifCurrID(secCurrID.getCode()).getCurrency());
 		}
 		else {
-//			return new FixedPointNumber(999999).negate();
+//			return new FixedPointNumber(999999).copy().negate();
 			return getBalance(date, secCurrID); // CAUTION: This assumes that under a stock account,
 												// there are no children (which sounds sensible,
 												// but there might be special cases)

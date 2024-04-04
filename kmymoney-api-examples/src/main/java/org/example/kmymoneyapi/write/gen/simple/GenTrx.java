@@ -101,8 +101,8 @@ public class GenTrx {
 	// ---
 
 	KMyMoneyWritableTransactionSplit splt1 = trx.createWritableSplit(kmmFile.getAccountByID(fromAcct1ID));
-	splt1.setValue(new FixedPointNumber(amt1.negate()));
-	splt1.setShares(new FixedPointNumber(qty1.negate()));
+	splt1.setValue(new FixedPointNumber(amt1.copy().negate()));
+	splt1.setShares(new FixedPointNumber(qty1.copy().negate()));
 	splt1.setPayeeID(pye1ID);
 	// This is what we actually want (cf. above):
 	splt1.setDescription(descr1);
@@ -144,8 +144,8 @@ public class GenTrx {
 	// ---
 
 	KMyMoneyWritableTransactionSplit splt1 = trx.createWritableSplit(kmmFile.getAccountByID(fromAcct2ID));
-	splt1.setValue(new FixedPointNumber(amt21.negate()));
-	splt1.setShares(new FixedPointNumber(qty21.negate()));
+	splt1.setValue(new FixedPointNumber(amt21.copy().negate()));
+	splt1.setShares(new FixedPointNumber(qty21.copy().negate()));
 	splt1.setPrice(prc1); // completely optional 
 	// This is what we actually want (cf. above):
 	splt1.setDescription(descr2); // sic, only this one

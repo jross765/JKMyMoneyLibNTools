@@ -189,8 +189,8 @@ public class TestSecuritiesAccountTransactionManager {
 
 		assertEquals(OFFSET_ACCT_ID, splt2.getAccountID().getStdID());
 		assertEquals(null, splt2.getAction());
-		assertEquals(amtGross.negate().doubleValue(), splt2.getShares().doubleValue(), ConstTest.DIFF_TOLERANCE);
-		assertEquals(amtGross.negate().doubleValue(), splt2.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
+		assertEquals(amtGross.copy().negate().doubleValue(), splt2.getShares().doubleValue(), ConstTest.DIFF_TOLERANCE);
+		assertEquals(amtGross.copy().negate().doubleValue(), splt2.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals(DESCR, splt2.getMemo());
 
 		assertEquals(STOCK_BUY_EXP_ACCT_1_ID, splt3.getAccountID().getStdID());
@@ -308,8 +308,8 @@ public class TestSecuritiesAccountTransactionManager {
 
 		assertEquals(INCOME_ACCT_ID, splt3.getAccountID().getStdID());
 		assertEquals(null, splt3.getAction());
-		assertEquals(DIV_GROSS.negate().doubleValue(), splt3.getShares().doubleValue(), ConstTest.DIFF_TOLERANCE);
-		assertEquals(DIV_GROSS.negate().doubleValue(), splt3.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
+		assertEquals(DIV_GROSS.copy().negate().doubleValue(), splt3.getShares().doubleValue(), ConstTest.DIFF_TOLERANCE);
+		assertEquals(DIV_GROSS.copy().negate().doubleValue(), splt3.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals("", splt3.getMemo());
 
 		assertEquals(DIVIDEND_EXP_ACCT_1_ID, splt4.getAccountID().getStdID());

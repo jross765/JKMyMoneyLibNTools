@@ -168,8 +168,8 @@ public class SecuritiesAccountTransactionManager {
 	// ---
 
 	KMyMoneyWritableTransactionSplit splt1 = trx.createWritableSplit(offsetAcct);
-	splt1.setValue(new FixedPointNumber(amtGross.negate()));
-	splt1.setShares(new FixedPointNumber(amtGross.negate()));
+	splt1.setValue(new FixedPointNumber(amtGross.copy().negate()));
+	splt1.setShares(new FixedPointNumber(amtGross.copy().negate()));
 	// splt3.setPrice("1/1"); // completely optional
 	// This is what we actually want (cf. above):
 	splt1.setDescription(descr); // sic, only here
@@ -366,8 +366,8 @@ public class SecuritiesAccountTransactionManager {
 	// ---
 
 	KMyMoneyWritableTransactionSplit splt3 = trx.createWritableSplit(incomeAcct);
-	splt3.setValue(new FixedPointNumber(divGross.negate()));
-	splt3.setShares(new FixedPointNumber(divGross.negate()));
+	splt3.setValue(new FixedPointNumber(divGross.copy().negate()));
+	splt3.setShares(new FixedPointNumber(divGross.copy().negate()));
 	// splt3.setPrice("1/1"); // completely optional
 	LOGGER.debug("genDivivendTrx: Split 3 to write: " + splt3.toString());
 

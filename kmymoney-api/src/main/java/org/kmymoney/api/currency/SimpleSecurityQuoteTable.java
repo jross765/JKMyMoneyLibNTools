@@ -70,7 +70,7 @@ public class SimpleSecurityQuoteTable implements SimplePriceTable,
         if (factor == null) {
             return false;
         }
-        value.divideBy(factor);
+        value.divide(factor);
         return true;
     }
 

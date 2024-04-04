@@ -5,6 +5,18 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * KMyMoney has no IDs for the price objects (neither on the price-pair level
+ * nor on the price level).
+ * <br>
+ * I cannot understand this -- how can you possibly work with hundreds, thousands 
+ * or even tens of thousands of prices without properly identifying them?
+ * <br>
+ * Anyway: this fact is the reason why we here have pseudo-ID for a price-pair object: 
+ * The tuple ( from-currency, to-currency ).
+ *
+ * @see KMMPriceID
+ */
 public class KMMPricePairID {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(KMMPricePairID.class);
