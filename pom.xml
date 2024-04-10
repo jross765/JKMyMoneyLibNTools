@@ -22,6 +22,7 @@
 		<module>kmymoney-api</module>
 		<module>kmymoney-api-ext</module>
 		<module>kmymoney-api-examples</module>
+		<module>kmymoney-tools</module>
 
 	</modules>
 

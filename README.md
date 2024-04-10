@@ -17,6 +17,8 @@ KMyMoney project.
 
 * [Example Programs](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api-examples/README.md)
 
+* [Tools](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-tools/README.md)
+
 ## Compatibility
 ### System Compatibility
 Version 0.6 of the library has been tested with 
@@ -33,7 +35,7 @@ but he has not tested it.
 
 | Version | Backward Compat. | Note                           |
 |---------|------------------|--------------------------------|
-| 0.6     | (WIP) almost     | Only minor changes             |
+| 0.6     | (WIP) almost?    | Only minor changes             |
 | 0.5     | no               | Some substantial changes       |
 | 0.4     | no               | Minor changes in interfaces    |
 | 0.3     | no               | Major changes in interfaces    |
@@ -44,7 +46,10 @@ Here, only the top-level changes on module-level are mentioned. For more Details
 cf. the README files of the resp. modules (links above).
 
 ### V. 0.5 &rarr; 0.6
-::TODO
+* Added module "Tools".
+
+* New external dependency (outside of Maven central): [`SchnorxoLib`](https://github.com/jross765/schnorxolib), a small library that contains some auxiliary stuff that is used both in this and the sister project.
+
 
 ### V. 0.4 &rarr; 0.5
 Changed project structure:

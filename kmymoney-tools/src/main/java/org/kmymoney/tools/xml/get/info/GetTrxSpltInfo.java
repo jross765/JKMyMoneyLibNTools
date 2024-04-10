@@ -1,0 +1,248 @@
+package org.kmymoney.tools.xml.get.info;
+
+import java.io.File;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.log4j.Logger;
+import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
+import org.kmymoney.tools.CommandLineTool;
+
+import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
+import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
+
+import org.kmymoney.api.read.KMyMoneyTransactionSplit;
+import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+
+public class GetTrxSpltInfo extends CommandLineTool
+{
+  // Logger
+  private static Logger logger = Logger.getLogger(GetTrxSpltInfo.class);
+  
+  // private static PropertiesConfiguration cfg = null;
+  private static Options options;
+  
+  private static String  kmmFileName = null;
+  private static String  trxID = null;
+  private static String  spltID = null;
+  
+  private static boolean scriptMode = false; // ::TODO
+
+  public static void main( String[] args )
+  {
+    try
+    {
+      GetTrxSpltInfo tool = new GetTrxSpltInfo ();
+      tool.execute(args);
+    }
+    catch (CouldNotExecuteException exc) 
+    {
+      System.err.println("Execution exception. Aborting.");
+      exc.printStackTrace();
+      System.exit(1);
+    }
+  }
+
+  @Override
+  protected void init() throws Exception
+  {
+    // trxID = UUID.randomUUID();
+
+//    cfg = new PropertiesConfiguration(System.getProperty("config"));
+//    getConfigSettings(cfg);
+
+    // Options
+    // The essential ones
+    Option optFile = OptionBuilder
+      .isRequired()
+      .hasArg()
+      .withArgName("file")
+      .withDescription("KMyMoney file")
+      .withLongOpt("kmymoney-file")
+      .create("f");
+      
+    Option optTrxID = OptionBuilder
+      .isRequired()
+      .hasArg()
+      .withArgName("UUID")
+      .withDescription("Transaction-ID")
+      .withLongOpt("transaction-id")
+      .create("trx");
+      
+    Option optSpltID = OptionBuilder
+      .isRequired()
+      .hasArg()
+      .withArgName("UUID")
+      .withDescription("Transaction-split-ID")
+      .withLongOpt("split-id")
+      .create("splt");
+    
+    // The convenient ones
+          
+    options = new Options();
+    options.addOption(optFile);
+    options.addOption(optTrxID);
+    options.addOption(optSpltID);
+  }
+
+  @Override
+  protected void getConfigSettings(PropertiesConfiguration cs) throws Exception
+  {
+    // ::EMPTY
+  }
+  
+  @Override
+  protected void kernel() throws Exception
+  {
+    KMyMoneyFileImpl kmmFile = new KMyMoneyFileImpl(new File(kmmFileName));
+    
+    KMyMoneyTransactionSplit splt = kmmFile.getTransactionSplitByID(new KMMQualifSpltID(trxID, spltID));
+    
+    try
+    {
+      System.out.println("Qualif. ID:     " + splt.getQualifID());
+    }
+    catch ( Exception exc )
+    {
+      System.out.println("Qualif. ID:     " + "ERROR");
+    }
+    
+    try
+    {
+      System.out.println("toString:       " + splt.toString());
+    }
+    catch ( Exception exc )
+    {
+      System.out.println("toString:       " + "ERROR");
+    }
+    
+    try
+    {
+      System.out.println("Transaction ID: " + splt.getTransaction().getID());
+    }
+    catch ( Exception exc )
+    {
+      System.out.println("Transaction ID: " + "ERROR");
+    }
+    
+    try
+    {
+      System.out.println("Account ID:     " + splt.getAccountID());
+    }
+    catch ( Exception exc )
+    {
+      System.out.println("Account ID:     " + "ERROR");
+    }
+    
+    try
+    {
+      System.out.println("Action:         " + splt.getAction());
+    }
+    catch ( Exception exc )
+    {
+      System.out.println("Action:         " + "ERROR");
+    }
+        
+    try
+    {
+      System.out.println("Value:          " + splt.getValueFormatted());
+    }
+    catch ( Exception exc )
+    {
+      System.out.println("Value:          " + "ERROR");
+    }
+        
+    try
+    {
+      System.out.println("Quantity:       " + splt.getSharesFormatted());
+    }
+    catch ( Exception exc )
+    {
+      System.out.println("Quantity:       " + "ERROR");
+    }
+        
+    try
+    {
+      System.out.println("Description:    '" + splt.getMemo() + "'");
+    }
+    catch ( Exception exc )
+    {
+      System.out.println("Description:    " + "ERROR");
+    }
+  }
+
+  // -----------------------------------------------------------------
+
+  @Override
+  protected void parseCommandLineArgs(String[] args) throws InvalidCommandLineArgsException
+  {
+    CommandLineParser parser = new GnuParser();
+    CommandLine cmdLine = null;
+    try
+    {
+      cmdLine = parser.parse(options, args);
+    }
+    catch (ParseException exc)
+    {
+      System.err.println("Parsing options failed. Reason: " + exc.getMessage());
+    }
+
+    // ---
+
+    // <kmymoney-file>
+    try
+    {
+      kmmFileName = cmdLine.getOptionValue("kmymoney-file");
+    }
+    catch ( Exception exc )
+    {
+      System.err.println("Could not parse <kmymoney-file>");
+      throw new InvalidCommandLineArgsException();
+    }
+    
+    if ( ! scriptMode )
+      System.err.println("KMyMoney file:  '" + kmmFileName + "'");
+    
+    // <transaction-id>
+    try
+    {
+      trxID = cmdLine.getOptionValue("transaction-id");
+    }
+    catch ( Exception exc )
+    {
+      System.err.println("Could not parse <transaction-id>");
+      throw new InvalidCommandLineArgsException();
+    }
+    
+    if ( ! scriptMode )
+      System.err.println("Transaction ID: '" + trxID + "'");
+    
+    // <split-id>
+    try
+    {
+      spltID = cmdLine.getOptionValue("split-id");
+    }
+    catch ( Exception exc )
+    {
+      System.err.println("Could not parse <split-id>");
+      throw new InvalidCommandLineArgsException();
+    }
+    
+    if ( ! scriptMode )
+      System.err.println("Split ID:       '" + spltID + "'");
+  }
+  
+  @Override
+  protected void printUsage()
+  {
+    HelpFormatter formatter = new HelpFormatter();
+    formatter.printHelp( "GetTrxSpltInfo", options );
+  }
+}
