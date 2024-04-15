@@ -1,7 +1,5 @@
 package org.kmymoney.base.tuples;
 
-import java.math.BigDecimal;
-
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.numbers.FixedPointNumber;
 

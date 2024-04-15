@@ -415,7 +415,7 @@ public class GetStockAcct extends CommandLineTool
     }
 
     if (!scriptMode)
-      System.err.println("Securrity ID:  '" + secID + "'");
+      System.err.println("Security ID:   '" + secID + "'");
 
     // <isin>
     if ( cmdLine.hasOption("isin") )
