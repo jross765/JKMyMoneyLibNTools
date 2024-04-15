@@ -168,8 +168,8 @@ public class SecuritiesAccountTransactionManager {
 	// ---
 
 	KMyMoneyWritableTransactionSplit splt1 = trx.createWritableSplit(offsetAcct);
-	splt1.setValue(new FixedPointNumber(amtGross.copy().negate()));
-	splt1.setShares(new FixedPointNumber(amtGross.copy().negate()));
+	splt1.setValue(amtGross.copy().negate());
+	splt1.setShares(amtGross.copy().negate());
 	// splt3.setPrice("1/1"); // completely optional
 	// This is what we actually want (cf. above):
 	splt1.setDescription(descr); // sic, only here
@@ -178,8 +178,8 @@ public class SecuritiesAccountTransactionManager {
 	// ---
 	
 	KMyMoneyWritableTransactionSplit splt2 = trx.createWritableSplit(stockAcct);
-	splt2.setValue(new FixedPointNumber(amtNet));
-	splt2.setShares(new FixedPointNumber(nofStocks));
+	splt2.setValue(amtNet);
+	splt2.setShares(nofStocks);
 	splt2.setPrice(stockPrc); // optional (sic), but advisable
 	splt2.setAction(KMyMoneyTransactionSplit.Action.BUY_SHARES);
 	LOGGER.debug("genBuyStockTrx: Split 2 to write: " + splt2.toString());
@@ -190,8 +190,8 @@ public class SecuritiesAccountTransactionManager {
 	for ( AcctIDAmountPair elt : expensesAcctAmtList ) {
 	    KMyMoneyAccount expensesAcct = kmmFile.getAccountByID(elt.accountID());
 	    KMyMoneyWritableTransactionSplit splt3 = trx.createWritableSplit(expensesAcct);
-	    splt3.setValue(new FixedPointNumber(elt.amount()));
-	    splt3.setShares(new FixedPointNumber(elt.amount()));
+	    splt3.setValue(elt.amount());
+	    splt3.setShares(elt.amount());
 	    // splt3.setPrice("1/1"); // completely optional
 	    LOGGER.debug("genBuyStockTrx: Split 3." + counter + " to write: " + splt3.toString());
 	    counter++;
@@ -356,8 +356,8 @@ public class SecuritiesAccountTransactionManager {
 	// ---
 
 	KMyMoneyWritableTransactionSplit splt2 = trx.createWritableSplit(offsetAcct);
-	splt2.setValue(new FixedPointNumber(divNet));
-	splt2.setShares(new FixedPointNumber(divNet));
+	splt2.setValue(divNet);
+	splt2.setShares(divNet);
 	// splt2.setPrice("1/1"); // completely optional
 	// This is what we actually want (cf. above):
 	splt2.setDescription(descr); // sic, only here
@@ -366,8 +366,8 @@ public class SecuritiesAccountTransactionManager {
 	// ---
 
 	KMyMoneyWritableTransactionSplit splt3 = trx.createWritableSplit(incomeAcct);
-	splt3.setValue(new FixedPointNumber(divGross.copy().negate()));
-	splt3.setShares(new FixedPointNumber(divGross.copy().negate()));
+	splt3.setValue(divGross.copy().negate());
+	splt3.setShares(divGross.copy().negate());
 	// splt3.setPrice("1/1"); // completely optional
 	LOGGER.debug("genDivivendTrx: Split 3 to write: " + splt3.toString());
 
@@ -377,8 +377,8 @@ public class SecuritiesAccountTransactionManager {
 	for ( AcctIDAmountPair elt : expensesAcctAmtList ) {
 	    KMyMoneyAccount expensesAcct = kmmFile.getAccountByID(elt.accountID());
 	    KMyMoneyWritableTransactionSplit splt4 = trx.createWritableSplit(expensesAcct);
-	    splt4.setValue(new FixedPointNumber(elt.amount()));
-	    splt4.setShares(new FixedPointNumber(elt.amount()));
+	    splt4.setValue(elt.amount());
+	    splt4.setShares(elt.amount());
 	    // splt4.setPrice("1/1"); // completely optional
 	    LOGGER.debug("genDivivendTrx: Split 4." + counter + " to write: " + splt4.toString());
 	    counter++;
