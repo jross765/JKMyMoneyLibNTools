@@ -3,15 +3,16 @@ package org.example.kmymoneyapi.write.gen.simple;
 import java.io.File;
 import java.time.LocalDate;
 
-import org.kmymoney.base.basetypes.complex.KMMPricePairID;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.write.KMyMoneyWritablePrice;
 import org.kmymoney.api.write.KMyMoneyWritablePricePair;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
+import org.kmymoney.base.basetypes.complex.KMMPricePairID;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 public class GenPrc {
     // BEGIN Example data -- adapt to your needs

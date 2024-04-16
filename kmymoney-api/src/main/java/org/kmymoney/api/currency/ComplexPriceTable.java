@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 public class ComplexPriceTable implements Serializable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComplexPriceTable.class);

@@ -4,6 +4,13 @@ import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
 
+import org.kmymoney.api.generated.SPLIT;
+import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneyPayee;
+import org.kmymoney.api.read.KMyMoneyTransaction;
+import org.kmymoney.api.read.KMyMoneyTransactionSplit;
+import org.kmymoney.api.read.MappingException;
+import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
@@ -13,16 +20,10 @@ import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSpltID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
-import org.kmymoney.base.numbers.FixedPointNumber;
-import org.kmymoney.api.generated.SPLIT;
-import org.kmymoney.api.read.KMyMoneyAccount;
-import org.kmymoney.api.read.KMyMoneyPayee;
-import org.kmymoney.api.read.KMyMoneyTransaction;
-import org.kmymoney.api.read.KMyMoneyTransactionSplit;
-import org.kmymoney.api.read.MappingException;
-import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 /**
  * Implementation of KMyMoneyTransactionSplit that uses JWSDSP.

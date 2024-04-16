@@ -11,8 +11,9 @@ import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.apiext.secacct.SecuritiesAccountTransactionManager;
 import org.kmymoney.apiext.secacct.SecuritiesAccountTransactionManager.Type;
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.base.tuples.AcctIDAmountPair;
+
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 public class GenDepotTrx {
 	// CAUTION: The following account IDs are all of type

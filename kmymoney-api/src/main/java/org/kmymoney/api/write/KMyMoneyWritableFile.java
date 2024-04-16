@@ -25,7 +25,8 @@ import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
-import org.kmymoney.base.numbers.FixedPointNumber;
+
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 /**
  * Extension of KMyMoneyFile that allows writing. <br/>

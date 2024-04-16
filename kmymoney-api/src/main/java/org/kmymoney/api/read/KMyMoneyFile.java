@@ -5,11 +5,14 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
+import org.kmymoney.api.currency.ComplexPriceTable;
+import org.kmymoney.api.generated.KMYMONEYFILE;
+import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.base.basetypes.complex.KMMPricePairID;
 import org.kmymoney.base.basetypes.complex.KMMPriceID;
+import org.kmymoney.base.basetypes.complex.KMMPricePairID;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
@@ -18,10 +21,8 @@ import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
-import org.kmymoney.base.numbers.FixedPointNumber;
-import org.kmymoney.api.currency.ComplexPriceTable;
-import org.kmymoney.api.generated.KMYMONEYFILE;
-import org.kmymoney.api.read.hlp.KMyMoneyObject;
+
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 /**
  * Interface of a top-level class that gives access to a KMyMoney file

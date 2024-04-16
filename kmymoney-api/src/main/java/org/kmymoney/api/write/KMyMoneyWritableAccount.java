@@ -10,7 +10,8 @@ import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
-import org.kmymoney.base.numbers.FixedPointNumber;
+
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 
 /**

@@ -16,19 +16,18 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.Logger;
 import org.joda.money.BigMoney;
 import org.joda.money.CurrencyUnit;
+import org.kmymoney.api.write.KMyMoneyWritableTransaction;
+import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
+import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.tools.CommandLineTool;
 
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 import xyz.schnorxoborx.base.dateutils.DateHelpers;
 import xyz.schnorxoborx.base.dateutils.LocalDateHelpers;
-
-import org.kmymoney.api.write.KMyMoneyWritableTransaction;
-import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
-import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 public class GenTrx extends CommandLineTool
 {

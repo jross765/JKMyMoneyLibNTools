@@ -22,10 +22,10 @@ import org.kmymoney.apiext.ConstTest;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.base.tuples.AcctIDAmountPair;
 
 import junit.framework.JUnit4TestAdapter;
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 public class TestSecuritiesAccountTransactionManager {
 

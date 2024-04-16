@@ -7,7 +7,8 @@ import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
-import org.kmymoney.base.numbers.FixedPointNumber;
+
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 /**
  * Transaction-Split that can be modified<br/>

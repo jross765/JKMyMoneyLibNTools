@@ -2,7 +2,7 @@ package org.kmymoney.api.currency;
 
 import java.util.List;
 
-import org.kmymoney.base.numbers.FixedPointNumber;
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 public interface SimplePriceTable {
 

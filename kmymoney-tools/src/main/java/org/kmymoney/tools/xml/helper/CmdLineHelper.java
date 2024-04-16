@@ -7,12 +7,12 @@ import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.base.tuples.AcctIDAmountPair;
 
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 import xyz.schnorxoborx.base.dateutils.DateHelpers;
 import xyz.schnorxoborx.base.dateutils.LocalDateHelpers;
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 public class CmdLineHelper
 {

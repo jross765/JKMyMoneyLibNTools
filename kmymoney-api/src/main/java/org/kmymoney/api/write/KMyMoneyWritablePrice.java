@@ -3,12 +3,13 @@ package org.kmymoney.api.write;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import org.kmymoney.base.basetypes.complex.KMMPricePairID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 import org.kmymoney.api.write.hlp.KMyMoneyWritablePricePairCore;
+import org.kmymoney.base.basetypes.complex.KMMPricePairID;
+
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 /**
  * Price that can be modified.

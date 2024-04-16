@@ -1,4 +1,4 @@
-package org.kmymoney.tools.xml.helper;
+package org.kmymoney.tools.xml.gen.complex;
 
 public class ParamTuple
 {

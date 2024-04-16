@@ -4,6 +4,8 @@ module kmymoney.api {
 	requires jakarta.xml.bind;
 	requires java.xml;
 	
+	requires transitive schnorxoborx.schnorxolib;
+	
 	requires transitive kmymoney.base;
 	
 	exports org.kmymoney.api.currency;

@@ -13,22 +13,21 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.Logger;
+import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
+import org.kmymoney.api.write.KMyMoneyWritablePrice;
+import org.kmymoney.api.write.KMyMoneyWritablePricePair;
+import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.base.basetypes.complex.KMMPricePairID;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.tools.CommandLineTool;
 import org.kmymoney.tools.xml.helper.CmdLineHelper;
 import org.kmymoney.tools.xml.helper.Helper;
 
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
-
-import org.kmymoney.api.read.KMyMoneyPrice;
-import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
-import org.kmymoney.api.write.KMyMoneyWritablePrice;
-import org.kmymoney.api.write.KMyMoneyWritablePricePair;
-import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 public class GenPrc extends CommandLineTool
 {

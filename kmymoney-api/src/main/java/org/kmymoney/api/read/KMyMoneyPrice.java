@@ -2,12 +2,13 @@ package org.kmymoney.api.read;
 
 import java.time.LocalDate;
 
+import org.kmymoney.api.read.hlp.KMyMoneyPricePairCore;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.base.basetypes.complex.KMMPricePairID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.base.basetypes.complex.KMMPriceID;
-import org.kmymoney.api.read.hlp.KMyMoneyPricePairCore;
+import org.kmymoney.base.basetypes.complex.KMMPricePairID;
+
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 /**
  * A price is an umbrella term comprising:

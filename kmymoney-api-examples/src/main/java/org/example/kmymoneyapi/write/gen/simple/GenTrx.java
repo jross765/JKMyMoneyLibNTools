@@ -5,12 +5,13 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import org.kmymoney.base.basetypes.simple.KMMAcctID;
-import org.kmymoney.base.basetypes.simple.KMMPyeID;
-import org.kmymoney.base.numbers.FixedPointNumber;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
+import org.kmymoney.base.basetypes.simple.KMMAcctID;
+import org.kmymoney.base.basetypes.simple.KMMPyeID;
+
+import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 public class GenTrx {
     // BEGIN Example data -- adapt to your needs
