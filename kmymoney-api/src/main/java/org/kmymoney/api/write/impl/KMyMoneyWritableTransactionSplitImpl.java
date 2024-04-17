@@ -26,7 +26,7 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSplitImpl 
                                                   implements KMyMoneyWritableTransactionSplit 
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableTransactionImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableTransactionSplitImpl.class);
 
     // ---------------------------------------------------------------
 
