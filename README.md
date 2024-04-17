@@ -1,4 +1,4 @@
-# Project JKMyMoneyLib
+# Project "JKMyMoney Lib 'n' Tools"
 
 `JKMyMoneyLib` is a free and open-source Java-library for reading and writing the XML 
 file format of the KMyMoney open source personal finance software 
@@ -45,11 +45,10 @@ but he has not tested it.
 Here, only the top-level changes on module-level are mentioned. For more Details, 
 cf. the README files of the resp. modules (links above).
 
-### V. 0.5 &rarr; 0.6
+### V. 0.5 &rarr; 0.6 (WIP)
 * Added module "Tools".
 
 * New external dependency (outside of Maven central): [`SchnorxoLib`](https://github.com/jross765/schnorxolib), a small library that contains some auxiliary stuff that is used both in this and the sister project.
-
 
 ### V. 0.4 &rarr; 0.5
 Changed project structure:
@@ -78,6 +77,26 @@ rely on it working correctly in all conceivable edge and corner cases.
 
 In other words: **Make backups before you use this lib!** Take your time and check
 the generated/changed files thoroughly before moving on.
+
+## Compiling the Sources
+To compile the sources, do the following:
+
+1) Make sure that you have Maven installed on your system.
+
+2) Clone the [`SchnorxoLib`](https://github.com/jross765/schnorxolib) repository, compile it and install the resulting JAR file in your local repository by typing:
+
+    `$ ./build.sh`
+
+     Then, either copy the resulting file to whereever you want to have it, 
+     or do it the standard Maven way be typing:
+
+    `$ mvn install`
+
+3) Clone this repository and compile the sources:
+    a) Adapt the path to your local repository in *all* pom.xml files (search for "`schnorxolib-base-systemPath`").
+    b) Type:
+
+        `$ ./build.sh`
 
 ## Sister Project
 This project has a sister project: 
