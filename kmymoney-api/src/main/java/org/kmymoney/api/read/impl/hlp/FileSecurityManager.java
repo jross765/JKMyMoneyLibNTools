@@ -11,16 +11,15 @@ import java.util.Map;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.read.KMyMoneySecurity;
-import org.kmymoney.api.read.NoEntryFoundException;
-import org.kmymoney.api.read.TooManyEntriesFoundException;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.KMyMoneySecurityImpl;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
+import xyz.schnorxoborx.base.beanbase.TooManyEntriesFoundException;
 
 public class FileSecurityManager {
 

@@ -14,7 +14,6 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.Logger;
 import org.kmymoney.api.read.KMyMoneyPrice;
-import org.kmymoney.api.read.NoEntryFoundException;
 // ::TODO
 // import org.kmymoney.api.read.PriceNotFoundException;
 import org.kmymoney.api.write.KMyMoneyWritablePrice;
@@ -26,6 +25,7 @@ import org.kmymoney.tools.CommandLineTool;
 import org.kmymoney.tools.xml.helper.CmdLineHelper;
 import org.kmymoney.tools.xml.helper.Helper;
 
+import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 import xyz.schnorxoborx.base.numbers.FixedPointNumber;

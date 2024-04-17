@@ -3,11 +3,12 @@ package org.example.kmymoneyapi.read;
 import java.io.File;
 import java.util.Collection;
 
-import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.read.KMyMoneyPayee;
-import org.kmymoney.api.read.NoEntryFoundException;
-import org.kmymoney.api.read.TooManyEntriesFoundException;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.base.basetypes.simple.KMMPyeID;
+
+import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
+import xyz.schnorxoborx.base.beanbase.TooManyEntriesFoundException;
 
 public class GetPyeInfo {
     // BEGIN Example data -- adapt to your needs

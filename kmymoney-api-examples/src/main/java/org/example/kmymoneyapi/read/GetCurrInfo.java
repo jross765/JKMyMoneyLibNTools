@@ -2,13 +2,12 @@ package org.example.kmymoneyapi.read;
 
 import java.io.File;
 
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyCurrency;
-import org.kmymoney.api.read.NoEntryFoundException;
+import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+
+import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
 
 public class GetCurrInfo {
     // BEGIN Example data -- adapt to your needs
