@@ -63,11 +63,11 @@ public class KMMQualifSecCurrID {
     }
     
     public void setCode(String secCode) {
-	if ( secCode == null )
-	    throw new IllegalArgumentException("Security code is null");
+    	if ( secCode == null )
+    		throw new IllegalArgumentException("Security code is null");
 
-	if ( secCode.trim().equals("") )
-	    throw new IllegalArgumentException("Security code is empty");
+    	if ( secCode.trim().equals("") )
+    		throw new IllegalArgumentException("Security code is empty");
 
         this.code = secCode.trim();
     }

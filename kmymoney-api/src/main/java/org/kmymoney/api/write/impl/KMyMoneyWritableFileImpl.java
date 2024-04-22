@@ -12,6 +12,7 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Currency;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
@@ -19,6 +20,7 @@ import java.util.zip.GZIPOutputStream;
 
 import org.kmymoney.api.Const;
 import org.kmymoney.api.generated.ACCOUNT;
+import org.kmymoney.api.generated.CURRENCY;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.PAYEE;
 import org.kmymoney.api.generated.PRICE;
@@ -30,6 +32,7 @@ import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyAccount.Type;
+import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
@@ -37,6 +40,7 @@ import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
+import org.kmymoney.api.read.impl.KMyMoneyCurrencyImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPayeeImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPriceImpl;
@@ -45,6 +49,7 @@ import org.kmymoney.api.read.impl.KMyMoneySecurityImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
+import org.kmymoney.api.write.KMyMoneyWritableCurrency;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritablePayee;
 import org.kmymoney.api.write.KMyMoneyWritablePrice;
@@ -117,7 +122,9 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		pyeMgr  = new org.kmymoney.api.write.impl.hlp.FilePayeeManager(this);
 
 		secMgr  = new org.kmymoney.api.write.impl.hlp.FileSecurityManager(this);
+
 		// ::TODO
+		// currMgr  = new org.kmymoney.api.write.impl.hlp.FileCurrencyManager(this);
 		// prcMgr  = new org.kmymoney.api.write.impl.hlp.FilePriceManager(this);
 	}
 
@@ -131,7 +138,9 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		pyeMgr  = new org.kmymoney.api.write.impl.hlp.FilePayeeManager(this);
 
 		secMgr  = new org.kmymoney.api.write.impl.hlp.FileSecurityManager(this);
+
 		// ::TODO
+		// currMgr  = new org.kmymoney.api.write.impl.hlp.FileCurrencyManager(this);
 		// prcMgr  = new org.kmymoney.api.write.impl.hlp.FilePriceManager(this);
 	}
 
@@ -273,6 +282,10 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			getRootElement().getPAYEES().setCount(BigInteger.valueOf(val));
 			setModified(true);
 			return;
+		} else if ( type.trim().equals("currency")  ) {
+			getRootElement().getCURRENCIES().setCount(BigInteger.valueOf(val));
+			setModified(true);
+			return;
 		} else if ( type.trim().equals("security")  ) {
 			getRootElement().getSECURITIES().setCount(BigInteger.valueOf(val));
 			setModified(true);
@@ -350,6 +363,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		int cntAccount = 0;
 		int cntTransaction = 0;
 		int cntPayee = 0;
+		int cntCurrency = 0;
 		int cntSecurity = 0;
 		int cntPricePair = 0;
 
@@ -365,6 +379,10 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			cntPayee++;
 		}
 		
+		for ( CURRENCY curr : getRootElement().getCURRENCIES().getCURRENCY() ) {
+			cntCurrency++;
+		}
+
 		for ( SECURITY sec : getRootElement().getSECURITIES().getSECURITY() ) {
 			cntSecurity++;
 		}
@@ -376,6 +394,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		setCountDataFor("account", cntAccount);
 		setCountDataFor("transaction", cntTransaction);
 		setCountDataFor("payee", cntPayee);
+		setCountDataFor("currency", cntCurrency);
 		setCountDataFor("security", cntSecurity);
 		setCountDataFor("pricepair", cntPricePair);
 
@@ -422,64 +441,54 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	
 	// ---------------------------------------------------------------
 
-	/**
-	 */
 	protected ACCOUNT createAccountType() {
 		ACCOUNT retval = getObjectFactory().createACCOUNT();
 		incrementCountDataFor("account");
 		return retval;
 	}
 
-	/**
-	 */
 	protected TRANSACTION createTransactionType() {
 		TRANSACTION retval = getObjectFactory().createTRANSACTION();
 		incrementCountDataFor("transaction");
 		return retval;
 	}
 
-	/**
-	 */
 	protected SPLITS createSplitsType() {
 		SPLITS retval = getObjectFactory().createSPLITS();
 		// incrementCountDataFor("splits");
 		return retval;
 	}
 
-	/**
-	 */
 	protected SPLIT createSplitType() {
 		SPLIT retval = getObjectFactory().createSPLIT();
 		// incrementCountDataFor("split");
 		return retval;
 	}
 
-	/**
-	 */
 	protected PAYEE createPayeeType() {
 		PAYEE retval = getObjectFactory().createPAYEE();
 		incrementCountDataFor("payee");
 		return retval;
 	}
 	
-	/**
-	 */
 	protected SECURITY createSecurityType() {
 		SECURITY retval = getObjectFactory().createSECURITY();
 		incrementCountDataFor("security");
 		return retval;
 	}
 	
-	/**
-	 */
+	protected CURRENCY createCurrencyType() {
+		CURRENCY retval = getObjectFactory().createCURRENCY();
+		incrementCountDataFor("currency");
+		return retval;
+	}
+	
 	protected PRICEPAIR createPricePairType() {
 		PRICEPAIR retval = getObjectFactory().createPRICEPAIR();
 		incrementCountDataFor("pricepair");
 		return retval;
 	}
 	
-	/**
-	 */
 	protected PRICE createPriceType() {
 		PRICE retval = getObjectFactory().createPRICE();
 		// incrementCountDataFor("price");
@@ -535,81 +544,6 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		getRootElement().getTRANSACTIONS().getTRANSACTION().remove(((KMyMoneyWritableTransactionImpl) trx).getJwsdpPeer());
 		setModified(true);
 
-	}
-
-	/**
-	 * Add a new currency.<br/>
-	 * If the currency already exists, add a new price-quote for it.
-	 *
-	 * @param pCmdtySpace        the namespace (e.g. "GOODS" or "CURRENCY")
-	 * @param pCmdtyId           the currency-name
-	 * @param conversionFactor   the conversion-factor from the base-currency (EUR).
-	 * @param pCmdtyNameFraction number of decimal-places after the comma
-	 * @param pCmdtyName         common name of the new currency
-	 */
-	@Override
-	public void addCurrency(final String pCmdtySpace, final String pCmdtyId, final FixedPointNumber conversionFactor,
-			final int pCmdtyNameFraction, final String pCmdtyName) {
-
-		if ( conversionFactor == null ) {
-			throw new IllegalArgumentException("null conversionFactor given");
-		}
-		if ( pCmdtySpace == null ) {
-			throw new IllegalArgumentException("null comodity-space given");
-		}
-		if ( pCmdtyId == null ) {
-			throw new IllegalArgumentException("null comodity-id given");
-		}
-		if ( pCmdtyName == null ) {
-			throw new IllegalArgumentException("null comodity-name given");
-		}
-		
-		/*
-		 * ::TODO
-		if ( getCurrencyTable().getConversionFactor(pCmdtySpace, pCmdtyId) == null ) {
-
-			CURRENCY newCurrency = getObjectFactory().createGncV2GncBookGncCommodity();
-			newCurrency.setCmdtyFraction(pCmdtyNameFraction);
-			newCurrency.setCmdtySpace(pCmdtySpace);
-			newCurrency.setCmdtyId(pCmdtyId);
-			newCurrency.setCmdtyName(pCmdtyName);
-			newCurrency.setVersion(Const.XML_FORMAT_VERSION);
-			getRootElement().getGncBook().getBookElements().add(newCurrency);
-			incrementCountDataFor("commodity");
-		}
-		// add price-quote
-		CURRENCY currency = new GncV2.GncBook.GncPricedb.Price.PriceCommodity();
-		currency.setCmdtySpace(pCmdtySpace);
-		currency.setCmdtyId(pCmdtyId);
-
-		CURRENCY baseCurrency = getObjectFactory()
-				.createGncV2GncBookGncPricedbPricePriceCurrency();
-		baseCurrency.setCmdtySpace(CurrencyNameSpace.NAMESPACE_CURRENCY);
-		baseCurrency.setCmdtyId(getDefaultCurrencyID());
-
-		PRICE newQuote = getObjectFactory().createGncV2GncBookGncPricedbPrice();
-		newQuote.setPriceSource("JKMyMoneyLib");
-		newQuote.setPriceId(getObjectFactory().createGncV2GncBookGncPricedbPricePriceId());
-		newQuote.getPriceId().setType(Const.XML_DATA_TYPE_GUID);
-		newQuote.getPriceId().setValue(createGUID());
-		newQuote.setPriceCommodity(currency);
-		newQuote.setPriceCurrency(baseCurrency);
-		newQuote.setPriceTime(getObjectFactory().createGncV2GncBookGncPricedbPricePriceTime());
-		newQuote.getPriceTime().setTsDate(PRICE_QUOTE_DATE_FORMAT.format(new Date()));
-		newQuote.setPriceType("last");
-		newQuote.setPriceValue(conversionFactor.toKMyMoneyString());
-
-		List<Object> bookElements = getRootElement().getBookElements();
-		for ( Object element : bookElements ) {
-			if ( element instanceof GncV2.GncBook.GncPricedb ) {
-				GncV2.GncBook.GncPricedb prices = (GncV2.GncBook.GncPricedb) element;
-				prices.getPrice().add(newQuote);
-				getCurrencyTable().setConversionFactor(pCmdtySpace, pCmdtyId, conversionFactor);
-				return;
-			}
-		}
-		throw new IllegalStateException("No priceDB in Book in KMyMoney file");
-		*/
 	}
 
 	/**
@@ -886,6 +820,132 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		pye.setName(name);
 		super.pyeMgr.addPayee(pye);
 		return pye;
+	}
+
+	// ---------------------------------------------------------------
+	
+	@Override
+	public KMyMoneyWritableCurrency getWritableCurrencyByID(String currCode) {
+		if ( currCode == null ) {
+			throw new IllegalArgumentException("null currency code given");
+		}
+
+		if ( currCode.trim().equals("") ) {
+			throw new IllegalArgumentException("currency code is not set");
+		}
+
+		KMyMoneyCurrency curr = super.getCurrencyByID(currCode);
+		return new KMyMoneyWritableCurrencyImpl((KMyMoneyCurrencyImpl) curr);
+	}
+
+	@Override
+	public KMyMoneyWritableCurrency getWritableCurrencyByQualifID(KMMQualifCurrID qualifID) {
+		if ( qualifID == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+
+		// ::TODO
+//		if ( ! qualifID.isSet() ) {
+//			throw new IllegalArgumentException("security ID is not set");
+//		}
+
+		KMyMoneyCurrency curr = super.getCurrencyByQualifID(qualifID);
+		return new KMyMoneyWritableCurrencyImpl((KMyMoneyCurrencyImpl) curr);
+	}
+
+	@Override
+	public Collection<KMyMoneyWritableCurrency> getWritableCurrencies() {
+		Collection<KMyMoneyWritableCurrency> result = new ArrayList<KMyMoneyWritableCurrency>();
+
+		for ( KMyMoneyCurrency curr : super.getCurrencies() ) {
+			KMyMoneyWritableCurrency newCurr = new KMyMoneyWritableCurrencyImpl((KMyMoneyCurrencyImpl) curr);
+			result.add(newCurr);
+		}
+
+		return result;
+	}
+
+	@Override
+	public KMyMoneyWritableCurrency createWritableCurrency(String currID, String name) {
+		KMyMoneyWritableCurrencyImpl curr = new KMyMoneyWritableCurrencyImpl(this, Currency.getInstance(currID));
+		curr.setName(name);
+		super.currMgr.addCurrency(curr);
+		return curr;
+	}
+
+	/**
+	 * Add a new currency.<br/>
+	 * If the currency already exists, add a new price-quote for it.
+	 *
+	 * @param pCmdtySpace        the namespace (e.g. "GOODS" or "CURRENCY")
+	 * @param pCmdtyId           the currency-name
+	 * @param conversionFactor   the conversion-factor from the base-currency (EUR).
+	 * @param pCmdtyNameFraction number of decimal-places after the comma
+	 * @param pCmdtyName         common name of the new currency
+	 */
+	@Override
+	public void addCurrency(final String pCmdtySpace, final String pCmdtyId, final FixedPointNumber conversionFactor,
+			final int pCmdtyNameFraction, final String pCmdtyName) {
+
+		if ( conversionFactor == null ) {
+			throw new IllegalArgumentException("null conversionFactor given");
+		}
+		if ( pCmdtySpace == null ) {
+			throw new IllegalArgumentException("null comodity-space given");
+		}
+		if ( pCmdtyId == null ) {
+			throw new IllegalArgumentException("null comodity-id given");
+		}
+		if ( pCmdtyName == null ) {
+			throw new IllegalArgumentException("null comodity-name given");
+		}
+		
+		/*
+		 * ::TODO
+		if ( getCurrencyTable().getConversionFactor(pCmdtySpace, pCmdtyId) == null ) {
+
+			CURRENCY newCurrency = getObjectFactory().createGncV2GncBookGncCommodity();
+			newCurrency.setCmdtyFraction(pCmdtyNameFraction);
+			newCurrency.setCmdtySpace(pCmdtySpace);
+			newCurrency.setCmdtyId(pCmdtyId);
+			newCurrency.setCmdtyName(pCmdtyName);
+			newCurrency.setVersion(Const.XML_FORMAT_VERSION);
+			getRootElement().getGncBook().getBookElements().add(newCurrency);
+			incrementCountDataFor("commodity");
+		}
+		// add price-quote
+		CURRENCY currency = new GncV2.GncBook.GncPricedb.Price.PriceCommodity();
+		currency.setCmdtySpace(pCmdtySpace);
+		currency.setCmdtyId(pCmdtyId);
+
+		CURRENCY baseCurrency = getObjectFactory()
+				.createGncV2GncBookGncPricedbPricePriceCurrency();
+		baseCurrency.setCmdtySpace(CurrencyNameSpace.NAMESPACE_CURRENCY);
+		baseCurrency.setCmdtyId(getDefaultCurrencyID());
+
+		PRICE newQuote = getObjectFactory().createGncV2GncBookGncPricedbPrice();
+		newQuote.setPriceSource("JKMyMoneyLib");
+		newQuote.setPriceId(getObjectFactory().createGncV2GncBookGncPricedbPricePriceId());
+		newQuote.getPriceId().setType(Const.XML_DATA_TYPE_GUID);
+		newQuote.getPriceId().setValue(createGUID());
+		newQuote.setPriceCommodity(currency);
+		newQuote.setPriceCurrency(baseCurrency);
+		newQuote.setPriceTime(getObjectFactory().createGncV2GncBookGncPricedbPricePriceTime());
+		newQuote.getPriceTime().setTsDate(PRICE_QUOTE_DATE_FORMAT.format(new Date()));
+		newQuote.setPriceType("last");
+		newQuote.setPriceValue(conversionFactor.toKMyMoneyString());
+
+		List<Object> bookElements = getRootElement().getBookElements();
+		for ( Object element : bookElements ) {
+			if ( element instanceof GncV2.GncBook.GncPricedb ) {
+				GncV2.GncBook.GncPricedb prices = (GncV2.GncBook.GncPricedb) element;
+				prices.getPrice().add(newQuote);
+				getCurrencyTable().setConversionFactor(pCmdtySpace, pCmdtyId, conversionFactor);
+				return;
+			}
+		}
+		throw new IllegalStateException("No priceDB in Book in KMyMoney file");
+		*/
 	}
 
 	// ---------------------------------------------------------------
@@ -1244,5 +1304,32 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		
 		return new KMMSecID(counter);
 	}
+	
+	// ---------------------------------------------------------------
+	// For test purposes only
+
+	@Override
+	@SuppressWarnings("exports")
+	public org.kmymoney.api.write.impl.hlp.FilePayeeManager getPayeeManager() {
+		return (org.kmymoney.api.write.impl.hlp.FilePayeeManager) pyeMgr;
+	}
+
+	@Override
+	@SuppressWarnings("exports")
+	public org.kmymoney.api.write.impl.hlp.FileSecurityManager getSecurityManager() {
+		return (org.kmymoney.api.write.impl.hlp.FileSecurityManager) secMgr;
+	}
+
+	@Override
+	@SuppressWarnings("exports")
+	public org.kmymoney.api.write.impl.hlp.FileCurrencyManager getCurrencyManager() {
+		return (org.kmymoney.api.write.impl.hlp.FileCurrencyManager) currMgr;
+	}
+
+//	@Override
+//	@SuppressWarnings("exports")
+//	public org.kmymoney.api.write.impl.hlp.FilePriceManager getPriceManager() {
+//		return (org.kmymoney.api.write.impl.hlp.FilePriceManager) prcMgr;
+//	}
 
 }

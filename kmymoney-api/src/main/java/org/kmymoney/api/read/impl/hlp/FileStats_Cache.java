@@ -31,13 +31,13 @@ public class FileStats_Cache implements FileStats {
 		this.prcMgr = prcMgr;
 	}
 
-	public FileStats_Cache(final KMyMoneyFileImpl gcshFile) {
-		this.acctMgr = gcshFile.getAcctMgr();
-		this.trxMgr = gcshFile.getTrxMgr();
-		this.pyeMgr = gcshFile.getPyeMgr();
-		this.secMgr = gcshFile.getSecMgr();
-		this.currMgr = gcshFile.getCurrMgr();
-		this.prcMgr = gcshFile.getPrcMgr();
+	public FileStats_Cache(final KMyMoneyFileImpl kmmFile) {
+		this.acctMgr = kmmFile.getAcctMgr();
+		this.trxMgr = kmmFile.getTrxMgr();
+		this.pyeMgr = kmmFile.getPyeMgr();
+		this.secMgr = kmmFile.getSecMgr();
+		this.currMgr = kmmFile.getCurrMgr();
+		this.prcMgr = kmmFile.getPrcMgr();
 	}
 
 	// ---------------------------------------------------------------

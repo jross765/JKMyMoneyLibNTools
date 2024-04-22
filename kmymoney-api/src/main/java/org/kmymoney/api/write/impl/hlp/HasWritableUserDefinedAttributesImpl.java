@@ -89,12 +89,12 @@ public class HasWritableUserDefinedAttributesImpl extends HasUserDefinedAttribut
 	// ---------------------------------------------------------------
 
 	private static void addUserDefinedAttributeCore(List<PAIR> kvpList, 
-													final KMyMoneyWritableFile gcshFile,
+													final KMyMoneyWritableFile kmmFile,
 													final String name, final String value) {
 		if ( kvpList == null )
 			throw new IllegalArgumentException("null slot list given");
 
-		if ( gcshFile == null )
+		if ( kmmFile == null )
 			throw new IllegalArgumentException("null KMyMoney file given");
 
 		if ( name == null )
@@ -121,7 +121,7 @@ public class HasWritableUserDefinedAttributesImpl extends HasUserDefinedAttribut
 
 		kvpList.add(newKVP);
 
-		gcshFile.setModified(true);
+		kmmFile.setModified(true);
 	}
 
 	private static void removeUserDefinedAttributeCore(List<PAIR> kvpList, 

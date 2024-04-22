@@ -37,16 +37,6 @@ public interface KMyMoneyCurrency {
     // ------------------------------------------------------------
 
     /**
-     * @return  Returns the security/currency type. This is, strictly speaking, completely
-     *          redundant, as for a currency, the security/currency type is obviously always
-     *          "currency". But we include it nevertheless, as it is explicitly saved in the 
-     *          KMyMoney file.
-     * @throws UnknownSecurityTypeException
-     * {@link #getRoundingMethod()}
-     */
-    KMMSecCurr.Type getType() throws UnknownSecurityTypeException;
-    
-    /**
      * @return Returns the currency name (spelled out, such as "Euro" or "US Dollar")
      */
     String getName();
@@ -57,10 +47,8 @@ public interface KMyMoneyCurrency {
     BigInteger getPP();
     
     /**
-     * @return Returns the rounding method (we suppose that it is fully redundant, 
-     *         similarly to the type)
+     * @return Returns the rounding method (we suppose that it is fully redundant)
      * @throws UnknownRoundingMethodException
-     * {@link #getType()}
      */
     KMMSecCurr.RoundingMethod getRoundingMethod() throws UnknownRoundingMethodException;
     

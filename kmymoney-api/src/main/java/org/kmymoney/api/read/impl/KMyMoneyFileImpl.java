@@ -260,6 +260,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 			return getRootElement().getPAYEES().getCount().intValue();
 		} else if ( type.trim().equals("security")  ) {
 			return getRootElement().getSECURITIES().getCount().intValue();
+		} else if ( type.trim().equals("currency")  ) {
+			return getRootElement().getCURRENCIES().getCount().intValue();
 		} else if ( type.trim().equals("pricepair")  ) {
 			return getRootElement().getPRICES().getCount().intValue();
 		} else {
@@ -817,5 +819,28 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 	
 	return result;
     }
+
+	// ---------------------------------------------------------------
+	// The methods in this section are For test purposes only
+
+	@SuppressWarnings("exports")
+	public FilePayeeManager getPayeeManager() {
+		return pyeMgr;
+	}
+
+	@SuppressWarnings("exports")
+	public FileSecurityManager getSecurityManager() {
+		return secMgr;
+	}
+
+	@SuppressWarnings("exports")
+	public FileCurrencyManager getCurrencyManager() {
+		return currMgr;
+	}
+
+	@SuppressWarnings("exports")
+	public FilePriceManager getPriceManager() {
+		return prcMgr;
+	}
 
 }

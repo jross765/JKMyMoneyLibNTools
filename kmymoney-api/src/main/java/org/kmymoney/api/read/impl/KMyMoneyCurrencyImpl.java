@@ -6,17 +6,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.generated.CURRENCY;
 import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.UnknownRoundingMethodException;
-import org.kmymoney.api.read.UnknownSecurityTypeException;
 import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
-import org.kmymoney.api.generated.CURRENCY;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +27,7 @@ public class KMyMoneyCurrencyImpl extends KMyMoneyObjectImpl
     /**
      * the JWSDP-object we are facading.
      */
-    private final CURRENCY jwsdpPeer;
+    protected final CURRENCY jwsdpPeer;
 
     // ---------------------------------------------------------------
 
@@ -41,6 +38,16 @@ public class KMyMoneyCurrencyImpl extends KMyMoneyObjectImpl
     	super(kmmFile);
     	
     	jwsdpPeer = peer;
+    }
+
+	// ---------------------------------------------------------------
+
+    /**
+     * @return the JWSDP-object we are wrapping.
+     */
+    @SuppressWarnings("exports")
+    public CURRENCY getJwsdpPeer() {
+	return jwsdpPeer;
     }
 
     // ---------------------------------------------------------------
@@ -61,12 +68,6 @@ public class KMyMoneyCurrencyImpl extends KMyMoneyObjectImpl
     }
 
     // ---------------------------------------------------------------
-
-    @Override
-    public KMMSecCurr.Type getType() throws UnknownSecurityTypeException {
-	BigInteger typeVal = jwsdpPeer.getType(); 
-	return KMMSecCurrImpl.getType(typeVal.intValue());
-    }
 
     @Override
     public String getName() {
@@ -137,12 +138,6 @@ public class KMyMoneyCurrencyImpl extends KMyMoneyObjectImpl
 	
 	result += "[id=" + getID();
 	result += ", symbol='" + getSymbol() + "'";
-	
-	try {
-	    result += ", type=" + getType();
-	} catch (UnknownSecurityTypeException e) {
-	    result += ", type=" + "ERROR";
-	}
 	
 	result += ", name='" + getName() + "'";
 	result += ", pp=" + getPP();

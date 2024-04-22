@@ -59,12 +59,6 @@ public class GetCurrInfo {
 	}
 
 	try {
-	    System.out.println("Type:              " + curr.getType());
-	} catch (Exception exc) {
-	    System.out.println("Type:              " + "ERROR");
-	}
-
-	try {
 	    System.out.println("Name:              '" + curr.getName() + "'");
 	} catch (Exception exc) {
 	    System.out.println("Name:              " + "ERROR");

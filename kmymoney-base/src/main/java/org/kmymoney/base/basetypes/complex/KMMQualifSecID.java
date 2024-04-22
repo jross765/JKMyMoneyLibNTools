@@ -96,6 +96,13 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
 	}
 
     // ---------------------------------------------------------------
+    
+    public void set(KMMQualifSecID val) {
+    	super.set(val);
+    	setSecID(val.getSecID());
+    }
+    
+    // ---------------------------------------------------------------
 
 	public static KMMQualifSecID parse(String str)
 			throws InvalidQualifSecCurrIDException {
