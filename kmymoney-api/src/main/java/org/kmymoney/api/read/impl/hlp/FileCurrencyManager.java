@@ -20,7 +20,7 @@ public class FileCurrencyManager {
 
 	// ---------------------------------------------------------------
 
-	private KMyMoneyFileImpl kmmFile;
+	protected KMyMoneyFileImpl kmmFile;
 
 	private Map<String, KMyMoneyCurrency> currMap;
 

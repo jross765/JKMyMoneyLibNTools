@@ -32,15 +32,8 @@ public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceMa
 	 */
 	@Override
 	protected KMyMoneyPricePairImpl createPricePair(final PRICEPAIR jwsdpPrcPr) {
-		KMMQualifSecCurrID fromSecCurrID = null;
-		if ( jwsdpPrcPr.getFrom().startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
-			fromSecCurrID = new KMMQualifSecID(jwsdpPrcPr.getFrom());
-		} else {
-			fromSecCurrID = new KMMQualifCurrID(jwsdpPrcPr.getFrom());
-		}
-		KMMQualifCurrID toCurrID = new KMMQualifCurrID(jwsdpPrcPr.getTo());
-		KMyMoneyWritablePricePairImpl prcPr = new KMyMoneyWritablePricePairImpl(fromSecCurrID, toCurrID,
-																				  (KMyMoneyWritableFileImpl) kmmFile);
+		KMyMoneyWritablePricePairImpl prcPr = new KMyMoneyWritablePricePairImpl(jwsdpPrcPr,
+				  (KMyMoneyWritableFileImpl) kmmFile);
 		LOGGER.debug("createPricePair: Generated new writable price pair: " + prcPr.getID());
 		return prcPr;
 	}
@@ -51,17 +44,17 @@ public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceMa
 	 * Creates the writable version of the returned object.
 	 */
 	@Override
-	protected KMyMoneyPriceImpl createPrice(final KMyMoneyPricePair pricePair, final PRICE jwsdpPrc) {
+	protected KMyMoneyPriceImpl createPrice(final KMyMoneyPricePair prcPr, final PRICE jwsdpPrc) {
 		KMyMoneyWritablePriceImpl prc = new KMyMoneyWritablePriceImpl(
-				new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) pricePair), 
+				new KMyMoneyWritablePricePairImpl((KMyMoneyPricePairImpl) prcPr), 
 				jwsdpPrc, (KMyMoneyWritableFileImpl) kmmFile);
 		LOGGER.debug("createPrice: Generated new writable price: " + prc.getID());
 		return prc;
 	}
 
-	protected KMyMoneyPriceImpl createPrice(final KMyMoneyWritablePricePair pricePair, final PRICE jwsdpPrc) {
+	protected KMyMoneyPriceImpl createPrice(final KMyMoneyWritablePricePair prcPr, final PRICE jwsdpPrc) {
 		KMyMoneyWritablePriceImpl prc = new KMyMoneyWritablePriceImpl(
-				pricePair, 
+				prcPr, 
 				jwsdpPrc, (KMyMoneyWritableFileImpl) kmmFile);
 		LOGGER.debug("createPrice: Generated new writable price: " + prc.getID());
 		return prc;

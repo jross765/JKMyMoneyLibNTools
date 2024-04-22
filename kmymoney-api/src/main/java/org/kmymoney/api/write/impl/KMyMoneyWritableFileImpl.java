@@ -118,14 +118,10 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 		acctMgr = new org.kmymoney.api.write.impl.hlp.FileAccountManager(this);
 		trxMgr  = new org.kmymoney.api.write.impl.hlp.FileTransactionManager(this);
-
 		pyeMgr  = new org.kmymoney.api.write.impl.hlp.FilePayeeManager(this);
-
 		secMgr  = new org.kmymoney.api.write.impl.hlp.FileSecurityManager(this);
-
-		// ::TODO
-		// currMgr  = new org.kmymoney.api.write.impl.hlp.FileCurrencyManager(this);
-		// prcMgr  = new org.kmymoney.api.write.impl.hlp.FilePriceManager(this);
+		currMgr = new org.kmymoney.api.write.impl.hlp.FileCurrencyManager(this);
+		prcMgr  = new org.kmymoney.api.write.impl.hlp.FilePriceManager(this);
 	}
 
 	public KMyMoneyWritableFileImpl(final InputStream is)
@@ -134,14 +130,10 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 		acctMgr = new org.kmymoney.api.write.impl.hlp.FileAccountManager(this);
 		trxMgr  = new org.kmymoney.api.write.impl.hlp.FileTransactionManager(this);
-
 		pyeMgr  = new org.kmymoney.api.write.impl.hlp.FilePayeeManager(this);
-
 		secMgr  = new org.kmymoney.api.write.impl.hlp.FileSecurityManager(this);
-
-		// ::TODO
-		// currMgr  = new org.kmymoney.api.write.impl.hlp.FileCurrencyManager(this);
-		// prcMgr  = new org.kmymoney.api.write.impl.hlp.FilePriceManager(this);
+		currMgr = new org.kmymoney.api.write.impl.hlp.FileCurrencyManager(this);
+		prcMgr  = new org.kmymoney.api.write.impl.hlp.FilePriceManager(this);
 	}
 
 	// ---------------------------------------------------------------
@@ -1305,31 +1297,4 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		return new KMMSecID(counter);
 	}
 	
-	// ---------------------------------------------------------------
-	// For test purposes only
-
-	@Override
-	@SuppressWarnings("exports")
-	public org.kmymoney.api.write.impl.hlp.FilePayeeManager getPayeeManager() {
-		return (org.kmymoney.api.write.impl.hlp.FilePayeeManager) pyeMgr;
-	}
-
-	@Override
-	@SuppressWarnings("exports")
-	public org.kmymoney.api.write.impl.hlp.FileSecurityManager getSecurityManager() {
-		return (org.kmymoney.api.write.impl.hlp.FileSecurityManager) secMgr;
-	}
-
-	@Override
-	@SuppressWarnings("exports")
-	public org.kmymoney.api.write.impl.hlp.FileCurrencyManager getCurrencyManager() {
-		return (org.kmymoney.api.write.impl.hlp.FileCurrencyManager) currMgr;
-	}
-
-//	@Override
-//	@SuppressWarnings("exports")
-//	public org.kmymoney.api.write.impl.hlp.FilePriceManager getPriceManager() {
-//		return (org.kmymoney.api.write.impl.hlp.FilePriceManager) prcMgr;
-//	}
-
 }

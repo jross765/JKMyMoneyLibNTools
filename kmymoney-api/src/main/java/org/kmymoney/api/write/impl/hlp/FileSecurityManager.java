@@ -23,8 +23,8 @@ public class FileSecurityManager extends org.kmymoney.api.read.impl.hlp.FileSecu
 	 * Creates the writable version of the returned object.
 	 */
 	@Override
-	protected KMyMoneySecurityImpl createSecurity(final SECURITY jwsdpCmdty) {
-		KMyMoneyWritableSecurityImpl sec = new KMyMoneyWritableSecurityImpl(jwsdpCmdty, (KMyMoneyWritableFileImpl) kmmFile);
+	protected KMyMoneySecurityImpl createSecurity(final SECURITY jwsdpSec) {
+		KMyMoneyWritableSecurityImpl sec = new KMyMoneyWritableSecurityImpl(jwsdpSec, (KMyMoneyWritableFileImpl) kmmFile);
 		LOGGER.debug("createSecurity: Generated new writable security: " + sec.getQualifID());
 		return sec;
 	}

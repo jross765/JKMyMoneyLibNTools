@@ -44,9 +44,9 @@ public class FilePriceManager {
 
 	protected KMyMoneyFileImpl kmmFile;
 
-	private PRICES                              priceDB  = null;
+	private PRICES                                 priceDB  = null;
 	private Map<KMMPricePairID, KMyMoneyPricePair> prcPrMap = null;
-	private Map<KMMPriceID, KMyMoneyPrice>      prcMap   = null;
+	private Map<KMMPriceID, KMyMoneyPrice>         prcMap   = null;
 
 	// ---------------------------------------------------------------
 
@@ -113,8 +113,8 @@ public class FilePriceManager {
 		prcPrMap.put(prcPr.getID(), prcPr);
 
 		if ( withPrc ) {
-			for ( KMyMoneyPrice splt : prcPr.getPrices() ) {
-				addPrice(splt, false);
+			for ( KMyMoneyPrice prc : prcPr.getPrices() ) {
+				addPrice(prc, false);
 			}
 		}
 
@@ -127,8 +127,8 @@ public class FilePriceManager {
 
 	public void removePricePair(KMyMoneyPricePair prcPr, boolean withPrc) {
 		if ( withPrc ) {
-			for ( KMyMoneyPrice splt : prcPr.getPrices() ) {
-				removePrice(splt, false);
+			for ( KMyMoneyPrice prc : prcPr.getPrices() ) {
+				removePrice(prc, false);
 			}
 		}
 
