@@ -21,6 +21,7 @@ import java.util.zip.GZIPOutputStream;
 import org.kmymoney.api.Const;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.CURRENCY;
+import org.kmymoney.api.generated.INSTITUTION;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.PAYEE;
 import org.kmymoney.api.generated.PRICE;
@@ -33,6 +34,7 @@ import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyAccount.Type;
 import org.kmymoney.api.read.KMyMoneyCurrency;
+import org.kmymoney.api.read.KMyMoneyInstitution;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
@@ -42,6 +44,7 @@ import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneyCurrencyImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.api.read.impl.KMyMoneyInstitutionImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPayeeImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPriceImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
@@ -51,6 +54,7 @@ import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.KMyMoneyWritableCurrency;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
+import org.kmymoney.api.write.KMyMoneyWritableInstitution;
 import org.kmymoney.api.write.KMyMoneyWritablePayee;
 import org.kmymoney.api.write.KMyMoneyWritablePrice;
 import org.kmymoney.api.write.KMyMoneyWritablePricePair;
@@ -116,6 +120,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		super(file);
 		setModified(false);
 
+		instMgr = new org.kmymoney.api.write.impl.hlp.FileInstitutionManager(this);
 		acctMgr = new org.kmymoney.api.write.impl.hlp.FileAccountManager(this);
 		trxMgr  = new org.kmymoney.api.write.impl.hlp.FileTransactionManager(this);
 		pyeMgr  = new org.kmymoney.api.write.impl.hlp.FilePayeeManager(this);
@@ -128,6 +133,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throws IOException {
 		super(is);
 
+		instMgr = new org.kmymoney.api.write.impl.hlp.FileInstitutionManager(this);
 		acctMgr = new org.kmymoney.api.write.impl.hlp.FileAccountManager(this);
 		trxMgr  = new org.kmymoney.api.write.impl.hlp.FileTransactionManager(this);
 		pyeMgr  = new org.kmymoney.api.write.impl.hlp.FilePayeeManager(this);
@@ -262,33 +268,38 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throw new IllegalArgumentException("val < 0 given");
 		}
 	
-		if ( type.trim().equals("account")  ) {
+		if ( type.trim().equals("institution") ) {
+			getRootElement().getINSTITUTIONS().setCount(BigInteger.valueOf(val));
+			setModified(true);
+			return;
+		} else if ( type.trim().equals("account") ) {
 			getRootElement().getACCOUNTS().setCount(BigInteger.valueOf(val));
 			setModified(true);
 			return;
-		} else if ( type.trim().equals("transaction")  ) {
+		} else if ( type.trim().equals("transaction") ) {
 			getRootElement().getTRANSACTIONS().setCount(BigInteger.valueOf(val));
 			setModified(true);
 			return;
-		} else if ( type.trim().equals("payee")  ) {
+		} else if ( type.trim().equals("payee") ) {
 			getRootElement().getPAYEES().setCount(BigInteger.valueOf(val));
 			setModified(true);
 			return;
-		} else if ( type.trim().equals("currency")  ) {
+		} else if ( type.trim().equals("currency") ) {
 			getRootElement().getCURRENCIES().setCount(BigInteger.valueOf(val));
 			setModified(true);
 			return;
-		} else if ( type.trim().equals("security")  ) {
+		} else if ( type.trim().equals("security") ) {
 			getRootElement().getSECURITIES().setCount(BigInteger.valueOf(val));
 			setModified(true);
 			return;
-		} else if ( type.trim().equals("pricepair")  ) {
+		} else if ( type.trim().equals("pricepair") ) {
 			getRootElement().getPRICES().setCount(BigInteger.valueOf(val));
 			setModified(true);
 			return;
 		} else {
 			throw new IllegalArgumentException("Unknown type '" + type + "'");
 		}
+		
 	}
 
 	/**
@@ -352,6 +363,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 */
 	private void checkAllCountData() {
 
+		int cntInstitution = 0;
 		int cntAccount = 0;
 		int cntTransaction = 0;
 		int cntPayee = 0;
@@ -359,6 +371,10 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		int cntSecurity = 0;
 		int cntPricePair = 0;
 
+		for ( INSTITUTION inst : getRootElement().getINSTITUTIONS().getINSTITUTION() ) {
+			cntInstitution++;
+		}
+		
 		for ( ACCOUNT acct : getRootElement().getACCOUNTS().getACCOUNT() ) {
 			cntAccount++;
 		}
@@ -383,6 +399,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			cntPricePair++;
 		}
 
+		setCountDataFor("institution", cntInstitution);
 		setCountDataFor("account", cntAccount);
 		setCountDataFor("transaction", cntTransaction);
 		setCountDataFor("payee", cntPayee);
@@ -433,6 +450,12 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	
 	// ---------------------------------------------------------------
 
+	protected INSTITUTION createInstitutionType() {
+		INSTITUTION retval = getObjectFactory().createINSTITUTION();
+		incrementCountDataFor("institution");
+		return retval;
+	}
+	
 	protected ACCOUNT createAccountType() {
 		ACCOUNT retval = getObjectFactory().createACCOUNT();
 		incrementCountDataFor("account");
@@ -507,6 +530,43 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	protected KMyMoneyTransactionImpl createTransaction(final TRANSACTION jwsdpTrx) {
 		KMyMoneyTransactionImpl account = new KMyMoneyWritableTransactionImpl(jwsdpTrx, this);
 		return account;
+	}
+	
+	// ---------------------------------------------------------------
+
+	@Override
+	public KMyMoneyWritableInstitution getWritableInstitutionByID(KMMInstID instID) {
+		if ( instID == null ) {
+			throw new IllegalArgumentException("null institution ID given");
+		}
+
+		if ( ! instID.isSet() ) {
+			throw new IllegalArgumentException("unset institution ID given");
+		}
+
+		KMyMoneyInstitution inst = super.getInstitutionByID(instID);
+		return new KMyMoneyWritableInstitutionImpl((KMyMoneyInstitutionImpl) inst);
+	}
+
+	/**
+	 * This overridden method creates the writable version of the returned object.
+	 *
+	 * @return the new institution
+	 * @see KMyMoneyFileImpl#createCustomer(GncV2.GncBook.GncGncInstitution)
+	 */
+	@Override
+	public KMyMoneyWritableInstitution createWritableInstitution(final String name) {
+		KMyMoneyWritableInstitutionImpl inst = new KMyMoneyWritableInstitutionImpl(this);
+		inst.setName(name);
+		super.instMgr.addInstitution(inst);
+		return inst;
+	}
+
+	@Override
+	public void removeInstitution(KMyMoneyWritableInstitution inst) {
+		super.instMgr.removeInstitution(inst);
+		getRootElement().getINSTITUTIONS().getINSTITUTION().remove(((KMyMoneyWritableInstitutionImpl) inst).getJwsdpPeer());
+		setModified(true);
 	}
 	
 	// ---------------------------------------------------------------
@@ -783,6 +843,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		KMyMoneyTransactionSplit splt = super.getTransactionSplitByID(spltID);
 		return new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) splt);
 	}
+	
+	// ---------------------------------------------------------------
 
 	@Override
 	public KMyMoneyWritablePayee getWritablePayeeByID(KMMPyeID pyeID) {
@@ -791,7 +853,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		}
 
 		if ( ! pyeID.isSet() ) {
-			throw new IllegalArgumentException("payee ID is not set");
+			throw new IllegalArgumentException("unset payee ID given");
 		}
 
 		KMyMoneyPayee trx = super.getPayeeByID(pyeID);
@@ -801,8 +863,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	/**
 	 * This overridden method creates the writable version of the returned object.
 	 *
-	 * @param jwsdpCust the jwsdp-object the customer shall wrap
-	 * @return the new customer
+	 * @return the new payee
 	 * @see KMyMoneyFileImpl#createCustomer(GncV2.GncBook.GncGncCustomer)
 	 */
 	@Override
@@ -1202,8 +1263,22 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	
 	@Override
 	public KMMInstID getNewInstitutionID() {
-		// ::TODO
-		return null;
+		int counter = 0;
+		
+		for ( KMyMoneyInstitution inst : getInstitutions() ) {
+			try {
+				String coreID = inst.getID().get().substring(1);
+				if ( Integer.parseInt(coreID) > counter ) {
+					counter = Integer.parseInt(coreID);
+				}
+			} catch (Exception e) {
+				throw new CannotGenerateKMMIDException();
+			}
+		}
+		
+		counter++;
+		
+		return new KMMInstID(counter);
 	}
 
 	@Override
@@ -1307,5 +1382,5 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		
 		return new KMMSecID(counter);
 	}
-	
+
 }

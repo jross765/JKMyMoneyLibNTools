@@ -5,14 +5,18 @@ import java.math.BigInteger;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.read.aux.KMMAddress;
+import org.kmymoney.api.read.hlp.HasAddress;
 import org.kmymoney.api.read.hlp.KMyMoneyObject;
+import org.kmymoney.api.write.hlp.HasWritableAddress;
 
 /**
  * Person or entity that is being paid in a transaction.
  * <br>
  * Cf. <a href="https://docs.kde.org/stable5/en/kmymoney/kmymoney/makingmostof.mapping.html#makingmostof.mapping.payees">KMyMoney handbook</a>
  */
-public interface KMyMoneyPayee extends KMyMoneyObject {
+public interface KMyMoneyPayee extends KMyMoneyObject,
+                                       HasAddress
+{
     
     /**
      * @return
@@ -29,10 +33,10 @@ public interface KMyMoneyPayee extends KMyMoneyObject {
      */
     KMMComplAcctID getDefaultAccountID();
     
-    /**
-     * @return
-     */
-    KMMAddress getAddress();
+//    /**
+//     * @return
+//     */
+//    KMMAddress getAddress();
 
     /**
      * @return

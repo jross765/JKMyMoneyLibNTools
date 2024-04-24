@@ -74,14 +74,14 @@ public class FilePayeeManager {
 
 	// ---------------------------------------------------------------
 
-	public KMyMoneyPayee getPayeeByID(final KMMPyeID id) {
+	public KMyMoneyPayee getPayeeByID(final KMMPyeID pyeID) {
 		if ( pyeMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
 
-		KMyMoneyPayee retval = pyeMap.get(id);
+		KMyMoneyPayee retval = pyeMap.get(pyeID);
 		if ( retval == null ) {
-			LOGGER.warn("getPayeeById: No Payee with ID '" + id + "'. We know " + pyeMap.size() + " payees.");
+			LOGGER.warn("getPayeeByID: No Payee with ID '" + pyeID + "'. We know " + pyeMap.size() + " payees.");
 		}
 
 		return retval;

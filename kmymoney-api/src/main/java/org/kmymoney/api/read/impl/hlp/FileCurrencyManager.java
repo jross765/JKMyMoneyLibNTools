@@ -76,7 +76,7 @@ public class FileCurrencyManager {
 
 		KMyMoneyCurrency retval = currMap.get(currID);
 		if ( retval == null ) {
-			LOGGER.warn("getCurrencyById: No Currency with ID '" + currID + "'. We know " + currMap.size()
+			LOGGER.warn("getCurrencyByID: No Currency with ID '" + currID + "'. We know " + currMap.size()
 					+ " currencies.");
 		}
 

@@ -10,37 +10,50 @@ public class FileStats_Cache implements FileStats {
 
 	// ---------------------------------------------------------------
 
+	private FileInstitutionManager instMgr = null;
 	private FileAccountManager     acctMgr = null;
-	private FileTransactionManager trxMgr = null;
-	private FilePayeeManager       pyeMgr = null;
+	private FileTransactionManager trxMgr  = null;
+	private FilePayeeManager       pyeMgr  = null;
 
-	private FileSecurityManager    secMgr = null;
+	private FileSecurityManager    secMgr  = null;
 	private FileCurrencyManager    currMgr = null;
-	private FilePriceManager       prcMgr = null;
+	private FilePriceManager       prcMgr  = null;
 
 	// ---------------------------------------------------------------
 
-	public FileStats_Cache(final FileAccountManager acctMgr, final FileTransactionManager trxMgr,
-			final FilePayeeManager pyeMgr, final FileSecurityManager secMgr, final FileCurrencyManager currMgr,
+	public FileStats_Cache(
+			final FileInstitutionManager instMgr,
+			final FileAccountManager acctMgr, 
+			final FileTransactionManager trxMgr,
+			final FilePayeeManager pyeMgr, 
+			final FileSecurityManager secMgr, 
+			final FileCurrencyManager currMgr,
 			final FilePriceManager prcMgr) {
+		this.instMgr = instMgr;
 		this.acctMgr = acctMgr;
-		this.trxMgr = trxMgr;
-		this.pyeMgr = pyeMgr;
-		this.secMgr = secMgr;
+		this.trxMgr  = trxMgr;
+		this.pyeMgr  = pyeMgr;
+		this.secMgr  = secMgr;
 		this.currMgr = currMgr;
-		this.prcMgr = prcMgr;
+		this.prcMgr  = prcMgr;
 	}
 
 	public FileStats_Cache(final KMyMoneyFileImpl kmmFile) {
+		this.instMgr = kmmFile.getInstMgr();
 		this.acctMgr = kmmFile.getAcctMgr();
-		this.trxMgr = kmmFile.getTrxMgr();
-		this.pyeMgr = kmmFile.getPyeMgr();
-		this.secMgr = kmmFile.getSecMgr();
+		this.trxMgr  = kmmFile.getTrxMgr();
+		this.pyeMgr  = kmmFile.getPyeMgr();
+		this.secMgr  = kmmFile.getSecMgr();
 		this.currMgr = kmmFile.getCurrMgr();
-		this.prcMgr = kmmFile.getPrcMgr();
+		this.prcMgr  = kmmFile.getPrcMgr();
 	}
 
 	// ---------------------------------------------------------------
+
+	@Override
+	public int getNofEntriesInstitutions() {
+		return instMgr.getNofEntriesInstitutionMap();
+	}
 
 	@Override
 	public int getNofEntriesAccounts() {

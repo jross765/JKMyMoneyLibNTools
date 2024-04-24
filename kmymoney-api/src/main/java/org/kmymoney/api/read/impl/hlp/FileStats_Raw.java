@@ -23,6 +23,11 @@ public class FileStats_Raw implements FileStats {
 	// ---------------------------------------------------------------
 
 	@Override
+	public int getNofEntriesInstitutions() {
+		return kmmFile.getRootElement().getINSTITUTIONS().getINSTITUTION().size();
+	}
+
+	@Override
 	public int getNofEntriesAccounts() {
 		return kmmFile.getRootElement().getACCOUNTS().getACCOUNT().size();
 	}

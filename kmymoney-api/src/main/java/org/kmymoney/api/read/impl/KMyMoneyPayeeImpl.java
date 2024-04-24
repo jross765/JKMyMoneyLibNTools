@@ -46,9 +46,9 @@ public class KMyMoneyPayeeImpl extends KMyMoneyObjectImpl
 
 	// ---------------------------------------------------------------
 
-    protected void setAddress(final KMMAddressImpl addr) {
-		jwsdpPeer.setADDRESS(addr.getJwsdpPeer());
-    }
+//    protected void setAddress(final KMMAddressImpl addr) {
+//		jwsdpPeer.setADDRESS(addr.getJwsdpPeer());
+//    }
     
 	// ---------------------------------------------------------------
 

@@ -122,8 +122,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @see #loadFile(File)
      */
     public KMyMoneyFileImpl(final File pFile) throws IOException {
-	super();
-	loadFile(pFile);
+    	super();
+    	loadFile(pFile);
     }
 
     /**
@@ -133,8 +133,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @see #loadFile(File)
      */
     public KMyMoneyFileImpl(final InputStream is) throws IOException {
-	super();
-	loadInputStream(is);
+    	super();
+    	loadInputStream(is);
     }
 
     // ---------------------------------------------------------------
@@ -144,7 +144,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      */
     @Override
     public File getFile() {
-	return file;
+    	return file;
     }
 
     /**
@@ -153,10 +153,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @param pFile the file loaded
      */
     protected void setFile(final File pFile) {
-	if (pFile == null) {
-	    throw new IllegalArgumentException("null not allowed for field this.file");
-	}
-	file = pFile;
+    	if (pFile == null) {
+    		throw new IllegalArgumentException("null not allowed for field this.file");
+    	}
+    	
+    	file = pFile;
     }
 
     // ----------------------------
@@ -254,7 +255,9 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 			throw new IllegalArgumentException("empty type given");
 		}
 		
-		if ( type.trim().equals("account")  ) {
+		if ( type.trim().equals("institution")  ) {
+			return getRootElement().getINSTITUTIONS().getCount().intValue();
+		} else if ( type.trim().equals("account")  ) {
 			return getRootElement().getACCOUNTS().getCount().intValue();
 		} else if ( type.trim().equals("transaction")  ) {
 			return getRootElement().getTRANSACTIONS().getCount().intValue();
@@ -277,7 +280,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @return Returns the currencyTable.
      */
     public ComplexPriceTable getCurrencyTable() {
-	return currencyTable;
+    	return currencyTable;
     }
 
     /**
@@ -935,6 +938,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     
     // ---------------------------------------------------------------
     // Helpers for class FileStats_Cache
+    
+    @SuppressWarnings("exports")
+    public FileInstitutionManager getInstMgr() {
+    	return instMgr;
+    }
     
     @SuppressWarnings("exports")
     public FileAccountManager getAcctMgr() {

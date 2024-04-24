@@ -17,6 +17,7 @@ import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.PRICES;
 import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
@@ -208,7 +209,12 @@ public class FilePriceManager {
 			throw new IllegalStateException("no root-element loaded");
 		}
 
-		return prcMap.get(prcID);
+		KMyMoneyPrice retval = prcMap.get(prcID);
+		if ( retval == null ) {
+			LOGGER.warn("getPriceByID: No Price with ID '" + prcID + "'. We know " + prcMap.size() + " prices.");
+		}
+
+		return retval;
 	}
 
 	public Collection<KMyMoneyPrice> getPrices() {

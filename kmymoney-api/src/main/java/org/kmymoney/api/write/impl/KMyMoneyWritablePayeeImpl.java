@@ -118,10 +118,10 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 
     // ---------------------------------------------------------------
 
-	protected void setAddress(final KMMWritableAddressImpl addr) {
-		super.setAddress(addr);
-	}
-
+//	protected void setAddress(final KMMWritableAddressImpl addr) {
+//		super.setAddress(addr);
+//	}
+//
     /**
      * Delete this Payee and remove it from the file.
      *
@@ -182,7 +182,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 		return addr;
     }
     
-	public void remove(KMMWritableAddress impl) {
+	public void removeAddress(KMMWritableAddress impl) {
 		// ::TODO
 	}
 
@@ -212,8 +212,8 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
     }
 
     @Override
-    public void setAddress(final KMMAddress addr) {
-	if ( addr == null ) {
+    public void setAddress(final KMMAddress adr) {
+	if ( adr == null ) {
 	    throw new IllegalArgumentException("null address given!");
 	}
 
@@ -228,14 +228,14 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 		jwsdpPeer.setADDRESS(getKMyMoneyFile().getObjectFactory().createADDRESS());
 	    }
 
-	    jwsdpPeer.getADDRESS().setCity(addr.getCity());
-	    jwsdpPeer.getADDRESS().setCounty(addr.getCounty());
-	    jwsdpPeer.getADDRESS().setPostcode(addr.getPostCode());
-	    jwsdpPeer.getADDRESS().setState(addr.getState());
-	    jwsdpPeer.getADDRESS().setStreet(addr.getStreet());
-	    jwsdpPeer.getADDRESS().setTelephone(addr.getTelephone());
-	    jwsdpPeer.getADDRESS().setZip(addr.getZip());
-	    jwsdpPeer.getADDRESS().setZipcode(addr.getZipCode());
+	    jwsdpPeer.getADDRESS().setCity(adr.getCity());
+	    jwsdpPeer.getADDRESS().setCounty(adr.getCounty());
+	    jwsdpPeer.getADDRESS().setPostcode(adr.getPostCode());
+	    jwsdpPeer.getADDRESS().setState(adr.getState());
+	    jwsdpPeer.getADDRESS().setStreet(adr.getStreet());
+	    jwsdpPeer.getADDRESS().setTelephone(adr.getTelephone());
+	    jwsdpPeer.getADDRESS().setZip(adr.getZip());
+	    jwsdpPeer.getADDRESS().setZipcode(adr.getZipCode());
 	}
 
 	getKMyMoneyFile().setModified(true);

@@ -20,6 +20,7 @@ import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
+import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
@@ -85,6 +86,27 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 */
 	@SuppressWarnings("exports")
 	KMYMONEYFILE getRootElement();
+
+	// ---------------------------------------------------------------
+
+	/**
+	 * @param id the unique id of the institution to look for
+	 * @return the customer or null if it's not found
+	 */
+	KMyMoneyWritableInstitution getWritableInstitutionByID(KMMInstID instID);
+
+	// ----------------------------
+
+	/**
+	 * @return a new institution with no values that is already added to this file
+	 */
+	KMyMoneyWritableInstitution createWritableInstitution(String name);
+
+	/**
+	 *
+	 * @param inst the transaction to remove.
+	 */
+	void removeInstitution(KMyMoneyWritableInstitution inst);
 
 	// ---------------------------------------------------------------
 
@@ -179,7 +201,7 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param id the unique id of the customer to look for
+	 * @param id the unique id of the payee to look for
 	 * @return the customer or null if it's not found
 	 */
 	KMyMoneyWritablePayee getWritablePayeeByID(KMMPyeID pyeID);
@@ -187,7 +209,7 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	// ----------------------------
 
 	/**
-	 * @return a new customer with no values that is already added to this file
+	 * @return a new payee with no values that is already added to this file
 	 */
 	KMyMoneyWritablePayee createWritablePayee(String name);
 

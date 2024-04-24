@@ -6,6 +6,7 @@ import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.write.aux.KMMWritableAddress;
+import org.kmymoney.api.write.hlp.HasWritableAddress;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 
 /**
@@ -14,19 +15,12 @@ import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
  * @see KMyMoneyPayee
  */
 public interface KMyMoneyWritablePayee extends KMyMoneyPayee,
-                                               KMyMoneyWritableObject 
+                                               KMyMoneyWritableObject,
+                                               HasWritableAddress
 {
 
     void remove();
    
-    // ---------------------------------------------------------------
-
-    KMMWritableAddress getWritableAddress();
-    
-    KMMWritableAddress createWritableAddress();
-    
-	void remove(KMMWritableAddress impl);
-
 	// ---------------------------------------------------------------
 
     void setName(String name);
@@ -37,8 +31,6 @@ public interface KMyMoneyWritablePayee extends KMyMoneyPayee,
     
     void setReference(String ref);
     
-    void setAddress(KMMAddress adr);
-
     void setNotes(String nts);
     
     // ---------------------------------------------------------------

@@ -107,7 +107,7 @@ public class FileSecurityManager {
 
 		KMyMoneySecurity retval = secMap.get(id);
 		if ( retval == null ) {
-			LOGGER.warn("getSecurityById: No Security with ID '" + id + "'. We know " + secMap.size() + " securities.");
+			LOGGER.warn("getSecurityByID: No Security with ID '" + id + "'. We know " + secMap.size() + " securities.");
 		}
 
 		return retval;

@@ -140,10 +140,10 @@ public class KMyMoneyInstitutionImpl extends KMyMoneyObjectImpl
 		result += "[id=" + getID();
 
 		result += ", name='" + getName() + "'";
-		result += ", sort-code=" + getSortCode();
+		result += ", sort-code='" + getSortCode() + "'";
 		// result += ", address=" + getAddress();
-		result += ", bic=" + getBIC();
-		result += ", url=" + getURL();
+		result += ", bic='" + getBIC() + "'";
+		result += ", url='" + getURL() + "'";
 
 		result += "]";
 

@@ -74,14 +74,14 @@ public class FileInstitutionManager {
 
 	// ---------------------------------------------------------------
 
-	public KMyMoneyInstitution getInstitutionByID(final KMMInstID id) {
+	public KMyMoneyInstitution getInstitutionByID(final KMMInstID instID) {
 		if ( instMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
 
-		KMyMoneyInstitution retval = instMap.get(id);
+		KMyMoneyInstitution retval = instMap.get(instID);
 		if ( retval == null ) {
-			LOGGER.warn("getInstitutionById: No Institution with ID '" + id + "'. We know " + instMap.size() + " institutions.");
+			LOGGER.warn("getInstitutionByID: No Institution with ID '" + instID + "'. We know " + instMap.size() + " institutions.");
 		}
 
 		return retval;

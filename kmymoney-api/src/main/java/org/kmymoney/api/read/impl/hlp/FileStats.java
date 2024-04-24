@@ -8,6 +8,8 @@ public interface FileStats {
     
     // ---------------------------------------------------------------
 
+    int getNofEntriesInstitutions();
+
     int getNofEntriesAccounts();
 
     int getNofEntriesTransactions();

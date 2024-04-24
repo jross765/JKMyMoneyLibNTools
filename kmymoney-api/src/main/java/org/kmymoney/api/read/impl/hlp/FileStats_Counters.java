@@ -21,6 +21,11 @@ public class FileStats_Counters implements FileStats {
 	// ---------------------------------------------------------------
 
 	@Override
+	public int getNofEntriesInstitutions() {
+		return kmmFile.getRootElement().getINSTITUTIONS().getCount().intValue();
+	}
+
+	@Override
 	public int getNofEntriesAccounts() {
 		return kmmFile.getRootElement().getACCOUNTS().getCount().intValue();
 	}

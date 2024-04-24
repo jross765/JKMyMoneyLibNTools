@@ -36,6 +36,18 @@ public class KMMFileStats {
 
 	// ---------------------------------------------------------------
 
+	public int getNofEntriesInstitutions(Type type) {
+		if ( type == Type.RAW ) {
+			return raw.getNofEntriesInstitutions();
+		} else if ( type == Type.COUNTER ) {
+			return cnt.getNofEntriesInstitutions();
+		} else if ( type == Type.CACHE ) {
+			return che.getNofEntriesInstitutions();
+		}
+
+		return FileStats.ERROR; // Compiler happy
+	}
+
 	public int getNofEntriesAccounts(Type type) {
 		if ( type == Type.RAW ) {
 			return raw.getNofEntriesAccounts();
@@ -141,6 +153,12 @@ public class KMMFileStats {
 	// ---------------------------------------------------------------
 	
 	public boolean equals(KMMFileStats other) {
+		if ( other.getNofEntriesInstitutions(Type.RAW)     != getNofEntriesInstitutions(Type.RAW) ||
+			 other.getNofEntriesInstitutions(Type.COUNTER) != getNofEntriesInstitutions(Type.COUNTER) ||
+			 other.getNofEntriesInstitutions(Type.CACHE)   != getNofEntriesInstitutions(Type.CACHE)) {
+			return false;
+		}
+			
 		if ( other.getNofEntriesAccounts(Type.RAW)     != getNofEntriesAccounts(Type.RAW) ||
 			 other.getNofEntriesAccounts(Type.COUNTER) != getNofEntriesAccounts(Type.COUNTER) ||
 			 other.getNofEntriesAccounts(Type.CACHE)   != getNofEntriesAccounts(Type.CACHE)) {
