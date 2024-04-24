@@ -18,6 +18,7 @@ import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
+import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
@@ -57,6 +58,41 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @return the default-currencyID to use.
 	 */
 	String getDefaultCurrencyID();
+
+	// ---------------------------------------------------------------
+
+	/**
+	 * @param id the unique ID of the institution to look for
+	 * @return the customer or null if it's not found
+	 */
+	KMyMoneyInstitution getInstitutionByID(KMMInstID id);
+
+	/**
+	 * @param expr search expression
+	 * @return
+	 */
+	Collection<KMyMoneyInstitution> getInstitutionsByName(String expr);
+
+	/**
+	 * @param expr search expression
+	 * @param relaxed
+	 * @return
+	 */
+	Collection<KMyMoneyInstitution> getInstitutionsByName(String expr, boolean relaxed);
+
+	/**
+	 * @param expr search expression
+	 * @return
+	 * @throws NoEntryFoundException
+	 * @throws TooManyEntriesFoundException
+	 */
+	KMyMoneyInstitution getInstitutionByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
+
+	/**
+	 * @return a (possibly read-only) collection of all institutions Do not modify the
+	 *         returned collection!
+	 */
+	Collection<KMyMoneyInstitution> getInstitutions();
 
 	// ---------------------------------------------------------------
 
@@ -224,7 +260,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param id the unique ID of the customer to look for
+	 * @param id the unique ID of the payee to look for
 	 * @return the customer or null if it's not found
 	 */
 	KMyMoneyPayee getPayeeByID(KMMPyeID id);
@@ -251,7 +287,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	KMyMoneyPayee getPayeesByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
 
 	/**
-	 * @return a (possibly read-only) collection of all customers Do not modify the
+	 * @return a (possibly read-only) collection of all payees Do not modify the
 	 *         returned collection!
 	 */
 	Collection<KMyMoneyPayee> getPayees();

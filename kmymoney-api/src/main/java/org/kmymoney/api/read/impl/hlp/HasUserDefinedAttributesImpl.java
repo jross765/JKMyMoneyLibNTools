@@ -117,8 +117,12 @@ public class HasUserDefinedAttributesImpl // implements HasUserDefinedAttributes
 	public static void setKVPsInit(
 			KEYVALUEPAIRS currKVPs,
 			final KEYVALUEPAIRS newKVPs) {
+		if ( currKVPs == null ) {
+			throw new IllegalArgumentException("null current 'kvps' given");
+		}
+
 		if ( newKVPs == null ) {
-			throw new IllegalArgumentException("null 'kvps' given!");
+			throw new IllegalArgumentException("null new 'kvps' given");
 		}
 
 		KEYVALUEPAIRS oldKVPs = currKVPs;

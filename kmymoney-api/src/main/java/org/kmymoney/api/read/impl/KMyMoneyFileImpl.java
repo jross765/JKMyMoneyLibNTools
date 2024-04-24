@@ -26,6 +26,7 @@ import org.kmymoney.api.generated.PRICES;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.KMyMoneyInstitution;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
@@ -35,6 +36,7 @@ import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.api.read.impl.hlp.FileAccountManager;
 import org.kmymoney.api.read.impl.hlp.FileCurrencyManager;
+import org.kmymoney.api.read.impl.hlp.FileInstitutionManager;
 import org.kmymoney.api.read.impl.hlp.FilePayeeManager;
 import org.kmymoney.api.read.impl.hlp.FilePriceManager;
 import org.kmymoney.api.read.impl.hlp.FileSecurityManager;
@@ -51,6 +53,7 @@ import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
+import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
@@ -98,6 +101,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
     // ----------------------------
     
+    protected FileInstitutionManager instMgr = null;
     protected FileAccountManager     acctMgr = null;
     protected FileTransactionManager trxMgr  = null;
     protected FilePayeeManager       pyeMgr  = null;
@@ -212,9 +216,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
 	    JAXBContext myContext = getJAXBContext();
 	    if ( myContext == null ) {
-		// ::TODO: make it fatal
-		LOGGER.error("loadInputStream: JAXB context cannot be found/generated");
-		throw new IOException("JAXB context cannot be found/generated");
+	    	LOGGER.error("loadInputStream: JAXB context cannot be found/generated");
+	    	throw new IOException("JAXB context cannot be found/generated");
 	    }
 	    Unmarshaller unmarshaller = myContext.createUnmarshaller();
 
@@ -303,6 +306,42 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 	
 	// not found
 	return Const.DEFAULT_CURRENCY;
+    }
+
+    // ---------------------------------------------------------------
+
+    @Override
+    public KMyMoneyInstitution getInstitutionByID(final KMMInstID instID) {
+		if ( instID == null ) {
+			throw new IllegalArgumentException("null institution ID given");
+		}
+
+		if ( ! instID.isSet() ) {
+			throw new IllegalArgumentException("unset institution ID given");
+		}
+
+		return instMgr.getInstitutionByID(instID);
+    }
+
+    @Override
+    public Collection<KMyMoneyInstitution> getInstitutionsByName(String expr) {
+    	return instMgr.getInstitutionsByName(expr);
+    }
+
+    @Override
+    public Collection<KMyMoneyInstitution> getInstitutionsByName(String expr, boolean relaxed) {
+    	return instMgr.getInstitutionsByName(expr, relaxed);
+    }
+
+    @Override
+    public KMyMoneyInstitution getInstitutionByNameUniq(String expr)
+	    throws NoEntryFoundException, TooManyEntriesFoundException {
+    	return instMgr.getInstitutionsByNameUniq(expr);
+    }
+
+    @Override
+    public Collection<KMyMoneyInstitution> getInstitutions() {
+    	return instMgr.getInstitutions();
     }
 
     // ---------------------------------------------------------------
@@ -780,6 +819,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     	loadPriceDatabase(pRootElement);
 
     	// fill maps
+    	instMgr = new FileInstitutionManager(this);
     	acctMgr = new FileAccountManager(this);
     	trxMgr  = new FileTransactionManager(this);
     	secMgr  = new FileSecurityManager(this);
