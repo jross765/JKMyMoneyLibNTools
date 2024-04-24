@@ -21,6 +21,14 @@ public class HasUserDefinedAttributesImpl // implements HasUserDefinedAttributes
 		if ( kvps == null )
 			return null;
 		
+		if ( name == null ) {
+			throw new IllegalArgumentException("null name given");
+		}
+
+		if ( name.trim().equals("") ) {
+			throw new IllegalArgumentException("empty name given");
+		}
+
 		return getUserDefinedAttributeCore(kvps.getPAIR(), name);
 	}
 	
@@ -38,8 +46,17 @@ public class HasUserDefinedAttributesImpl // implements HasUserDefinedAttributes
 		if ( kvpList == null )
 			return null;
 
-		if ( name.equals("") )
+		if ( name == null ) {
+			throw new IllegalArgumentException("null name given");
+		}
+
+//		if ( name.trim().equals("") ) {
+//			throw new IllegalArgumentException("empty name given");
+//		}
+
+		if ( name.trim().equals("") ) {
 			return null;
+		}
 
 		// NO:
 //		if ( ! getUserDefinedAttributeKeysCore(kvpList).contains(name) ) {

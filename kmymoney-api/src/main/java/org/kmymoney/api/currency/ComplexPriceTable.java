@@ -57,10 +57,22 @@ public class ComplexPriceTable implements Serializable {
 		listeners.remove(listener);
 	}
 
-	protected void firePriceTableChanged(final String currency, final FixedPointNumber factor) {
+	protected void firePriceTableChanged(final String curr, final FixedPointNumber factor) {
+		if ( curr == null ) {
+			throw new IllegalArgumentException("null currency given");
+		}
+
+		if ( curr.trim().equals("") ) {
+			throw new IllegalArgumentException("empty currency given");
+		}
+		
+		if ( factor == null ) {
+			throw new IllegalArgumentException("null factor given");
+		}
+		
 		if ( listeners != null ) {
 			for ( ComplexPriceTableChangeListener listener : listeners ) {
-				listener.conversionFactorChanged(currency, factor);
+				listener.conversionFactorChanged(curr, factor);
 			}
 		}
 	}
@@ -173,9 +185,12 @@ public class ComplexPriceTable implements Serializable {
 	 * @see SimplePriceTable#setConversionFactor(java.lang.String, FixedPointNumber)
 	 */
 	public FixedPointNumber getConversionFactor(final KMMQualifSecCurrID.Type nameSpace, final String code) {
-
 		if ( code == null ) {
-			throw new IllegalArgumentException("null code!");
+			throw new IllegalArgumentException("null code given");
+		}
+
+		if ( code.trim().equals("") ) {
+			throw new IllegalArgumentException("empty code given");
 		}
 
 		SimplePriceTable table = getByNamespace(nameSpace);
@@ -196,10 +211,14 @@ public class ComplexPriceTable implements Serializable {
 	 */
 	public void setConversionFactor(final KMMQualifSecCurrID.Type nameSpace, final String code,
 			final FixedPointNumber pFactor) {
-
 		if ( code == null ) {
 			throw new IllegalArgumentException("null code given!");
 		}
+
+		if ( code.trim().equals("") ) {
+			throw new IllegalArgumentException("empty code given");
+		}
+
 		if ( pFactor == null ) {
 			throw new IllegalArgumentException("null conversion-factor given!");
 		}
@@ -225,7 +244,17 @@ public class ComplexPriceTable implements Serializable {
 	 *      java.lang.String)
 	 */
 	public boolean convertFromBaseCurrency(FixedPointNumber pValue, final KMMQualifSecCurrID secCurrID) {
+		if ( pValue == null )
+			throw new IllegalArgumentException("null value given");
 
+		if ( secCurrID == null ) {
+			throw new IllegalArgumentException("null security/currency ID given"); 
+		}
+		
+		if ( ! secCurrID.isSet() ) {
+			throw new IllegalArgumentException("unset security/currency ID given"); 
+		}
+		
 		SimplePriceTable table = getByNamespace(secCurrID.getType());
 		if ( table == null ) {
 			return false;
@@ -259,7 +288,18 @@ public class ComplexPriceTable implements Serializable {
 	// ----------------------------
 
 	public boolean convertToBaseCurrency(FixedPointNumber pValue, final KMMQualifSecCurrID secCurrID) {
-
+		if ( pValue == null ) {
+			throw new IllegalArgumentException("null value given"); 
+		}
+		
+		if ( secCurrID == null ) {
+			throw new IllegalArgumentException("null security/currency ID given"); 
+		}
+		
+		if ( ! secCurrID.isSet() ) {
+			throw new IllegalArgumentException("unset security/currency ID given"); 
+		}
+		
 		SimplePriceTable table = getByNamespace(secCurrID.getType());
 
 		if ( table == null ) {

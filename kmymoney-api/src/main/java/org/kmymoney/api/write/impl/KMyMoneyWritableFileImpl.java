@@ -718,10 +718,9 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throw new IllegalArgumentException("null account ID given");
 		}
 
-		// ::TODO
-//		if ( ! acctID.isSet() ) {
-//			throw new IllegalArgumentException("account ID is not set");
-//		}
+		if ( ! acctID.isSet() ) {
+			throw new IllegalArgumentException("account ID is not set");
+		}
 
 		try {
 			KMyMoneyAccount acct = super.getAccountByID(acctID);
@@ -836,10 +835,9 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throw new IllegalArgumentException("null security ID given");
 		}
 
-		// ::TODO
-//		if ( ! qualifID.isSet() ) {
-//			throw new IllegalArgumentException("security ID is not set");
-//		}
+		if ( ! qualifID.isSet() ) {
+			throw new IllegalArgumentException("security ID is not set");
+		}
 
 		KMyMoneyCurrency curr = super.getCurrencyByQualifID(qualifID);
 		return new KMyMoneyWritableCurrencyImpl((KMyMoneyCurrencyImpl) curr);
@@ -962,10 +960,9 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throw new IllegalArgumentException("null security ID given");
 		}
 
-		// ::TODO
-//		if ( ! qualifID.isSet() ) {
-//			throw new IllegalArgumentException("security ID is not set");
-//		}
+		if ( ! qualifID.isSet() ) {
+			throw new IllegalArgumentException("security ID is not set");
+		}
 
 		KMyMoneySecurity sec = super.getSecurityByQualifID(qualifID);
 		return new KMyMoneyWritableSecurityImpl((KMyMoneySecurityImpl) sec);
@@ -1048,10 +1045,9 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throw new IllegalArgumentException("null price pair ID given");
 		}
 
-		// ::TODO
-//		if ( ! prcPrID.isSet() ) {
-//			throw new IllegalArgumentException("price ID is not set");
-//		}
+		if ( ! prcPrID.isSet() ) {
+			throw new IllegalArgumentException("price ID is not set");
+		}
 
 		KMyMoneyPricePair prcPr = super.getPricePairByID(prcPrID);
 		if ( prcPr == null ) {
@@ -1079,6 +1075,22 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	public KMyMoneyWritablePricePair createWritablePricePair(
 			final KMMQualifSecCurrID fromSecCurrID, 
 			final KMMQualifCurrID toCurrID) {
+		if ( fromSecCurrID == null ) {
+			throw new IllegalArgumentException("null from-security/currency ID given");
+		}
+
+		if ( ! fromSecCurrID.isSet() ) {
+			throw new IllegalArgumentException("unset from-security/currency ID given");
+		}
+
+		if ( toCurrID == null ) {
+			throw new IllegalArgumentException("null to-currency ID given");
+		}
+
+		if ( ! toCurrID.isSet() ) {
+			throw new IllegalArgumentException("unset to-currency ID given");
+		}
+
 		KMyMoneyWritablePricePairImpl prc = new KMyMoneyWritablePricePairImpl(fromSecCurrID, toCurrID, 
 																			  this);
 		super.prcMgr.addPricePair(prc);
@@ -1121,10 +1133,9 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throw new IllegalArgumentException("null price ID given");
 		}
 
-		// ::TODO
-//		if ( ! prcID.isSet() ) {
-//			throw new IllegalArgumentException("price ID is not set");
-//		}
+		if ( ! prcID.isSet() ) {
+			throw new IllegalArgumentException("price ID is not set");
+		}
 
 		KMyMoneyPrice prc = super.getPriceByID(prcID);
 		return new KMyMoneyWritablePriceImpl((KMyMoneyPriceImpl) prc);

@@ -85,6 +85,10 @@ public class FileAccountManager {
 	// ---------------------------------------------------------------
 
 	public KMyMoneyAccount getAccountByID(final KMMComplAcctID acctID) {
+		if ( acctID == null ) {
+			throw new IllegalStateException("null account ID given");
+		}
+
 		if ( acctMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -98,10 +102,18 @@ public class FileAccountManager {
 	}
 
 	public KMyMoneyAccount getAccountByID(final KMMAcctID acctID) {
+		if ( acctID == null ) {
+			throw new IllegalArgumentException("null account ID given"); 
+		}
+		
 		return getAccountByID(new KMMComplAcctID(acctID));
 	}
 
 	public List<KMyMoneyAccount> getAccountsByParentID(final KMMComplAcctID acctID) {
+		if ( acctID == null ) {
+			throw new IllegalStateException("null account ID given");
+		}
+
 		if ( acctMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -129,14 +141,33 @@ public class FileAccountManager {
 	}
 
 	public List<KMyMoneyAccount> getAccountsByParentID(final KMMAcctID acctID) {
+		if ( acctID == null ) {
+			throw new IllegalStateException("null account ID given");
+		}
+
 		return getAccountsByParentID(new KMMComplAcctID(acctID));
 	}
 	
 	public List<KMyMoneyAccount> getAccountsByName(final String name) {
+		if ( name == null ) {
+			throw new IllegalStateException("null name given");
+		}
+
+		if ( name.trim().equals("") ) {
+			throw new IllegalStateException("empty name given");
+		}
+
 		return getAccountsByName(name, true, true);
 	}
 
 	public List<KMyMoneyAccount> getAccountsByName(final String expr, boolean qualif, boolean relaxed) {
+		if ( expr == null ) {
+			throw new IllegalStateException("null expression given");
+		}
+
+		if ( expr.trim().equals("") ) {
+			throw new IllegalStateException("empty expression given");
+		}
 
 		if ( acctMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
@@ -173,6 +204,14 @@ public class FileAccountManager {
 
 	public KMyMoneyAccount getAccountByNameUniq(final String name, final boolean qualif)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
+		if ( name == null ) {
+			throw new IllegalStateException("null name given");
+		}
+
+		if ( name.trim().equals("") ) {
+			throw new IllegalStateException("empty name given");
+		}
+
 		List<KMyMoneyAccount> acctList = getAccountsByName(name, qualif, false);
 		if ( acctList.size() == 0 )
 			throw new NoEntryFoundException();
@@ -189,6 +228,13 @@ public class FileAccountManager {
 	 */
 	public KMyMoneyAccount getAccountByNameEx(final String nameRegEx)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
+		if ( nameRegEx == null ) {
+			throw new IllegalStateException("null name given");
+		}
+
+		if ( nameRegEx.trim().equals("") ) {
+			throw new IllegalStateException("empty name given");
+		}
 
 		if ( acctMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
@@ -216,6 +262,18 @@ public class FileAccountManager {
 	 */
 	public KMyMoneyAccount getAccountByIDorName(final KMMComplAcctID acctID, final String name)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
+		if ( acctID == null ) {
+			throw new IllegalStateException("null account ID given");
+		}
+
+		if ( name == null ) {
+			throw new IllegalStateException("null name given");
+		}
+
+		if ( name.trim().equals("") ) {
+			throw new IllegalStateException("empty name given");
+		}
+
 		KMyMoneyAccount retval = getAccountByID(acctID);
 		if ( retval == null ) {
 			retval = getAccountByNameUniq(name, true);
@@ -226,6 +284,18 @@ public class FileAccountManager {
 
 	public KMyMoneyAccount getAccountByIDorName(final KMMAcctID acctID, final String name)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
+		if ( acctID == null ) {
+			throw new IllegalStateException("null account ID given");
+		}
+
+		if ( name == null ) {
+			throw new IllegalStateException("null name given");
+		}
+
+		if ( name.trim().equals("") ) {
+			throw new IllegalStateException("empty name given");
+		}
+
 		return getAccountByIDorName(new KMMComplAcctID(acctID), name);
 	}
 	
@@ -233,9 +303,21 @@ public class FileAccountManager {
 	 * First try to fetch the account by id, then fall back to traversing all
 	 * accounts to get if by it's name.
 	 */
-	public KMyMoneyAccount getAccountByIDorNameEx(final KMMComplAcctID id, final String name)
+	public KMyMoneyAccount getAccountByIDorNameEx(final KMMComplAcctID acctID, final String name)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
-		KMyMoneyAccount retval = getAccountByID(id);
+		if ( acctID == null ) {
+			throw new IllegalStateException("null account ID given");
+		}
+
+		if ( name == null ) {
+			throw new IllegalStateException("null name given");
+		}
+
+		if ( name.trim().equals("") ) {
+			throw new IllegalStateException("empty name given");
+		}
+
+		KMyMoneyAccount retval = getAccountByID(acctID);
 		if ( retval == null ) {
 			retval = getAccountByNameEx(name);
 		}
@@ -245,6 +327,14 @@ public class FileAccountManager {
 
 	public KMyMoneyAccount getAccountByIDorNameEx(final KMMAcctID acctID, final String name)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
+		if ( name == null ) {
+			throw new IllegalStateException("null name given");
+		}
+
+		if ( name.trim().equals("") ) {
+			throw new IllegalStateException("empty name given");
+		}
+
 		return getAccountByIDorNameEx(new KMMComplAcctID(acctID), name);
 	}
 	

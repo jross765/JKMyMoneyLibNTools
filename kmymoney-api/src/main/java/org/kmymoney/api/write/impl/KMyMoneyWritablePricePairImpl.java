@@ -121,10 +121,6 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 		if ( prcPr == null )
 			throw new IllegalArgumentException("null price pair given");
 
-		// ::TODO
-//		if ( ! prcPr.isSet() )
-//			throw new IllegalArgumentException("unset price pair given");
-
 		setFromSecCurrQualifID(prcPr.getFromSecCurrQualifID());
 		setToCurrencyQualifID(prcPr.getToCurrencyQualifID());
 		
@@ -136,9 +132,8 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 		if ( currPr == null )
 			throw new IllegalArgumentException("null currency pair given");
 
-		// ::TODO
-//		if ( ! currPr.isSet() )
-//			throw new IllegalArgumentException("unset currency pair given");
+		if ( ! currPr.isSet() )
+			throw new IllegalArgumentException("unset currency pair given");
 
 		setFromSecCurrQualifID(currPr.getFromSecCurr());
 		setToCurrencyQualifID(currPr.getToCurr());
@@ -177,9 +172,8 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 		if ( qualifID == null )
 			throw new IllegalArgumentException("null ID given");
 
-		// ::TODO
-//		if ( ! qualifID.isSet() )
-//			throw new IllegalArgumentException("unset ID given");
+		if ( ! qualifID.isSet() )
+			throw new IllegalArgumentException("unset ID given");
 
     	jwsdpPeer.setFrom(qualifID.getCode());
     	getWritableKMyMoneyFile().setModified(true);
@@ -190,9 +184,8 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 		if ( qualifID == null )
 			throw new IllegalArgumentException("null ID given");
 
-		// ::TODO
-//		if ( ! qualifID.isSet() )
-//			throw new IllegalArgumentException("unset ID given");
+		if ( ! qualifID.isSet() )
+			throw new IllegalArgumentException("unset ID given");
 
 		jwsdpPeer.setFrom(qualifID.getCode());
 		getWritableKMyMoneyFile().setModified(true);
@@ -203,9 +196,8 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 		if ( qualifID == null )
 			throw new IllegalArgumentException("null ID given");
 
-		// ::TODO
-//		if ( ! qualifID.isSet() )
-//			throw new IllegalArgumentException("unset ID given");
+		if ( ! qualifID.isSet() )
+			throw new IllegalArgumentException("unset ID given");
 
 		jwsdpPeer.setFrom(qualifID.getCode());
 		getWritableKMyMoneyFile().setModified(true);
@@ -215,10 +207,6 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 	public void setFromSecurity(final KMyMoneySecurity sec) {
 		if ( sec == null )
 			throw new IllegalArgumentException("null ID given");
-
-		// ::TODO
-//		if ( ! sec.isSet() )
-//			throw new IllegalArgumentException("unset ID given");
 
 		jwsdpPeer.setFrom(sec.getCode());
 		getWritableKMyMoneyFile().setModified(true);
@@ -240,10 +228,6 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 		if ( curr == null )
 			throw new IllegalArgumentException("null ID given");
 
-		// ::TODO
-//		if ( ! curr.isSet() )
-//			throw new IllegalArgumentException("unset ID given");
-
 		jwsdpPeer.setFrom(curr.getID());
 		getWritableKMyMoneyFile().setModified(true);
 	}
@@ -255,9 +239,8 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 		if ( qualifID == null )
 			throw new IllegalArgumentException("null ID given");
 
-		// ::TODO
-//		if ( ! qualifID.isSet() )
-//			throw new IllegalArgumentException("unset ID given");
+		if ( ! qualifID.isSet() )
+			throw new IllegalArgumentException("unset ID given");
 
 		if ( qualifID.getType() != KMMQualifSecCurrID.Type.CURRENCY )
 			throw new InvalidQualifSecCurrTypeException("Is not a currency: " + qualifID.toString());
@@ -281,10 +264,6 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 	public void setToCurrency(KMyMoneyCurrency curr) {
 		if ( curr == null )
 			throw new IllegalArgumentException("null ID given");
-
-		// ::TODO
-//		if ( ! curr.isSet() )
-//			throw new IllegalArgumentException("unset ID given");
 
 		jwsdpPeer.setTo(curr.getID());
 		setToCurrencyQualifID(curr.getQualifID());

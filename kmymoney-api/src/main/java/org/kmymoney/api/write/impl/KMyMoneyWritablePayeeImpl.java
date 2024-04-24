@@ -193,27 +193,27 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
      */
     @Override
     public void setName(final String name) {
-	if ( name == null ) {
-	    throw new IllegalArgumentException("null name given!");
-	}
+    	if ( name == null ) {
+    		throw new IllegalArgumentException("null name given!");
+    	}
 
-	if ( name.trim().length() == 0 ) {
-	    throw new IllegalArgumentException("empty name given!");
-	}
+    	if ( name.trim().length() == 0 ) {
+    		throw new IllegalArgumentException("empty name given!");
+    	}
 
-	String oldName = getName();
-	jwsdpPeer.setName(name);
-	getKMyMoneyFile().setModified(true);
+    	String oldName = getName();
+    	jwsdpPeer.setName(name);
+    	getKMyMoneyFile().setModified(true);
 
-	PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
-	if (propertyChangeSupport != null) {
-	    propertyChangeSupport.firePropertyChange("name", oldName, name);
-	}
+    	PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+    	if ( propertyChangeSupport != null) {
+    		propertyChangeSupport.firePropertyChange("name", oldName, name);
+    	}
     }
 
     @Override
-    public void setAddress(final KMMAddress adr) {
-	if ( adr == null ) {
+    public void setAddress(final KMMAddress addr) {
+	if ( addr == null ) {
 	    throw new IllegalArgumentException("null address given!");
 	}
 
@@ -228,14 +228,14 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 		jwsdpPeer.setADDRESS(getKMyMoneyFile().getObjectFactory().createADDRESS());
 	    }
 
-	    jwsdpPeer.getADDRESS().setCity(adr.getCity());
-	    jwsdpPeer.getADDRESS().setCounty(adr.getCounty());
-	    jwsdpPeer.getADDRESS().setPostcode(adr.getPostCode());
-	    jwsdpPeer.getADDRESS().setState(adr.getState());
-	    jwsdpPeer.getADDRESS().setStreet(adr.getStreet());
-	    jwsdpPeer.getADDRESS().setTelephone(adr.getTelephone());
-	    jwsdpPeer.getADDRESS().setZip(adr.getZip());
-	    jwsdpPeer.getADDRESS().setZipcode(adr.getZipCode());
+	    jwsdpPeer.getADDRESS().setCity(addr.getCity());
+	    jwsdpPeer.getADDRESS().setCounty(addr.getCounty());
+	    jwsdpPeer.getADDRESS().setPostcode(addr.getPostCode());
+	    jwsdpPeer.getADDRESS().setState(addr.getState());
+	    jwsdpPeer.getADDRESS().setStreet(addr.getStreet());
+	    jwsdpPeer.getADDRESS().setTelephone(addr.getTelephone());
+	    jwsdpPeer.getADDRESS().setZip(addr.getZip());
+	    jwsdpPeer.getADDRESS().setZipcode(addr.getZipCode());
 	}
 
 	getKMyMoneyFile().setModified(true);
@@ -247,23 +247,27 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
      */
     @Override
     public void setNotes(final String notes) {
-	if ( notes == null ) {
-	    throw new IllegalArgumentException("null notesgiven!");
-	}
+		if ( notes == null ) {
+			throw new IllegalArgumentException("null notes given");
+		}
+		
+		if ( notes.isEmpty() ) {
+			throw new IllegalArgumentException("empty notes given");
+		}
 
-	// Caution: empty string allowed here
+		// Caution: empty string allowed here
 //	if ( notes.trim().length() == 0 ) {
 //	    throw new IllegalArgumentException("empty notesgiven!");
 //	}
 
-	String oldNotes = getNotes();
-	jwsdpPeer.setNotes(notes);
-	getKMyMoneyFile().setModified(true);
+		String oldNotes = getNotes();
+		jwsdpPeer.setNotes(notes);
+		getKMyMoneyFile().setModified(true);
 
-	PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
-	if (propertyChangeSupport != null) {
-	    propertyChangeSupport.firePropertyChange("notes", oldNotes, notes);
-	}
+		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+		if ( propertyChangeSupport != null ) {
+			propertyChangeSupport.firePropertyChange("notes", oldNotes, notes);
+		}
     }
 
 	@Override

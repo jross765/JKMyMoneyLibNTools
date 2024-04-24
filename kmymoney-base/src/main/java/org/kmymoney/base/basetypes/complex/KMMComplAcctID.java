@@ -23,9 +23,9 @@ public class KMMComplAcctID implements Comparable<KMMComplAcctID> {
     // ---------------------------------------------------------------
 
     public enum Type {
-	STANDARD,
-	SPECIAL,
-	UNSET
+    	STANDARD,
+    	SPECIAL,
+    	UNSET
     }
 
     public enum Top {
@@ -81,40 +81,51 @@ public class KMMComplAcctID implements Comparable<KMMComplAcctID> {
     // -----------------------------------------------------------------
 
     public KMMComplAcctID() {
-	init();
-	reset();
-	setType(Type.UNSET);
+    	init();
+    	reset();
+    	setType(Type.UNSET);
     }
 
     public KMMComplAcctID(KMMAcctID stdAcctID) {
-	init();
-	reset();
-	setType(Type.STANDARD);
-	setStdID(stdAcctID);
+    	init();
+    	reset();
+    	setType(Type.STANDARD);
+    	setStdID(stdAcctID);
     }
 
     public KMMComplAcctID(String str) {
-	init();
-	reset();
+    	init();
+    	reset();
 	
-	if ( str.startsWith(SPEC_PREFIX) ) {
-	    setType(Type.SPECIAL);
-	    setSpecID(str);
-	} else {
-	    setType(Type.STANDARD);
-	    setStdID(new KMMAcctID(str));
-	}
+    	if ( str.startsWith(SPEC_PREFIX) ) {
+    		setType(Type.SPECIAL);
+    		setSpecID(str);
+    	} else {
+    		setType(Type.STANDARD);
+    		setStdID(new KMMAcctID(str));
+    	}
     }
 
     // -----------------------------------------------------------------
 
     private void init() {
-	stdID = new KMMAcctID();
+    	stdID = new KMMAcctID();
+    }
+
+    public boolean isSet() {
+    	if ( type == Type.UNSET )
+    		return false;
+    	else if ( type == Type.STANDARD )
+    		return stdID.isSet();
+    	else if ( type == Type.SPECIAL )
+    		return ! specID.trim().equals("");
+    	
+		return true; // Compiler happy
     }
 
     public void reset() {
-	stdID.reset();
-	specID = "";
+    	stdID.reset();
+    	specID = "";
     }
 
     // -----------------------------------------------------------------

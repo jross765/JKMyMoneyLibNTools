@@ -243,7 +243,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 	 * @param type  the type to set it for
 	 */
 	protected int getCountDataFor(final String type) {
-	
 		if ( type == null ) {
 			throw new IllegalArgumentException("null type given");
 		}
@@ -310,12 +309,28 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
     @Override
     public KMyMoneyAccount getAccountByID(final KMMComplAcctID acctID) {
-	return acctMgr.getAccountByID(acctID);
+		if ( acctID == null ) {
+			throw new IllegalArgumentException("null account ID given");
+		}
+
+		if ( ! acctID.isSet() ) {
+			throw new IllegalArgumentException("unset account ID given");
+		}
+
+		return acctMgr.getAccountByID(acctID);
     }
 
     @Override
     public KMyMoneyAccount getAccountByID(final KMMAcctID acctID) {
-	return acctMgr.getAccountByID(acctID);
+		if ( acctID == null ) {
+			throw new IllegalArgumentException("null account ID given");
+		}
+
+		if ( ! acctID.isSet() ) {
+			throw new IllegalArgumentException("unset account ID given");
+		}
+
+		return acctMgr.getAccountByID(acctID);
     }
 
     /**
@@ -324,12 +339,28 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      */
     @Override
     public List<KMyMoneyAccount> getAccountsByParentID(final KMMComplAcctID acctID) {
+		if ( acctID == null ) {
+			throw new IllegalArgumentException("null account ID given");
+		}
+
+		if ( ! acctID.isSet() ) {
+			throw new IllegalArgumentException("unset account ID given");
+		}
+
         return acctMgr.getAccountsByParentID(acctID);
     }
 
     @Override
     public Collection<KMyMoneyAccount> getAccountsByName(final String name) {
-	return acctMgr.getAccountsByName(name);
+		if ( name == null ) {
+			throw new IllegalArgumentException("null name given");
+		}
+
+		if ( name.trim().equals("") ) {
+			throw new IllegalArgumentException("empty name given");
+		}
+
+		return acctMgr.getAccountsByName(name);
     }
     
     /**
@@ -337,12 +368,28 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      */
     @Override
     public Collection<KMyMoneyAccount> getAccountsByName(final String expr, boolean qualif, boolean relaxed) {
-	return acctMgr.getAccountsByName(expr, qualif, relaxed);
+		if ( expr == null ) {
+			throw new IllegalArgumentException("null expression given");
+		}
+
+		if ( expr.trim().equals("") ) {
+			throw new IllegalArgumentException("empty expression given");
+		}
+
+    	return acctMgr.getAccountsByName(expr, qualif, relaxed);
     }
 
     @Override
     public KMyMoneyAccount getAccountByNameUniq(final String name, final boolean qualif) throws NoEntryFoundException, TooManyEntriesFoundException {
-	return acctMgr.getAccountByNameUniq(name, qualif);
+		if ( name == null ) {
+			throw new IllegalArgumentException("null name given");
+		}
+
+		if ( name.trim().equals("") ) {
+			throw new IllegalArgumentException("empty name given");
+		}
+
+    	return acctMgr.getAccountByNameUniq(name, qualif);
     }
     
     /**
@@ -357,7 +404,15 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      */
     @Override
     public KMyMoneyAccount getAccountByNameEx(final String nameRegEx) throws NoEntryFoundException, TooManyEntriesFoundException {
-	return acctMgr.getAccountByNameEx(nameRegEx);
+		if ( nameRegEx == null ) {
+			throw new IllegalArgumentException("null name given");
+		}
+
+		if ( nameRegEx.trim().equals("") ) {
+			throw new IllegalArgumentException("empty name given");
+		}
+
+		return acctMgr.getAccountByNameEx(nameRegEx);
     }
 
     /**
@@ -372,7 +427,23 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      */
     @Override
     public KMyMoneyAccount getAccountByIDorName(final KMMComplAcctID acctID, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
-	return acctMgr.getAccountByIDorName(acctID, name);
+		if ( acctID == null ) {
+			throw new IllegalArgumentException("null account ID given");
+		}
+
+		if ( ! acctID.isSet() ) {
+			throw new IllegalArgumentException("unset account ID given");
+		}
+
+		if ( name == null ) {
+			throw new IllegalArgumentException("null name given");
+		}
+
+		if ( name.trim().equals("") ) {
+			throw new IllegalArgumentException("empty name given");
+		}
+
+		return acctMgr.getAccountByIDorName(acctID, name);
     }
 
     /**
@@ -388,7 +459,23 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      */
     @Override
     public KMyMoneyAccount getAccountByIDorNameEx(final KMMComplAcctID acctID, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
-	return acctMgr.getAccountByIDorNameEx(acctID, name);
+		if ( acctID == null ) {
+			throw new IllegalArgumentException("null account ID given");
+		}
+
+		if ( ! acctID.isSet() ) {
+			throw new IllegalArgumentException("unset account ID given");
+		}
+
+		if ( name == null ) {
+			throw new IllegalArgumentException("null name given");
+		}
+
+		if ( name.trim().equals("") ) {
+			throw new IllegalArgumentException("empty name given");
+		}
+
+		return acctMgr.getAccountByIDorNameEx(acctID, name);
     }
 
     @Override
@@ -399,7 +486,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public Collection<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, 
 	                                                        boolean qualif, boolean relaxed) {
-	return acctMgr.getAccountsByTypeAndName(type, expr, qualif, relaxed);
+    	return acctMgr.getAccountsByTypeAndName(type, expr, qualif, relaxed);
     }
 
     /**
@@ -416,7 +503,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      */
     @Override
     public KMyMoneyAccount getRootAccount() {
-	return null;
+    	return null;
     }
 
     /**
@@ -425,24 +512,32 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      */
     @Override
     public Collection<? extends KMyMoneyAccount> getParentlessAccounts() {
-	return acctMgr.getParentlessAccounts();
+    	return acctMgr.getParentlessAccounts();
     }
 
     @Override
     public Collection<KMMComplAcctID> getTopAccountIDs() {
-	return acctMgr.getTopAccountIDs();
+    	return acctMgr.getTopAccountIDs();
     }
 
     @Override
     public Collection<KMyMoneyAccount> getTopAccounts() {
-	return acctMgr.getTopAccounts();
+    	return acctMgr.getTopAccounts();
     }
 
     // ---------------------------------------------------------------
 
     @Override
     public KMyMoneyTransaction getTransactionByID(final KMMTrxID trxID) {
-	return trxMgr.getTransactionByID(trxID);
+		if ( trxID == null ) {
+			throw new IllegalArgumentException("null transaction ID given");
+		}
+
+		if ( ! trxID.isSet() ) {
+			throw new IllegalArgumentException("unset transaction ID given");
+		}
+
+		return trxMgr.getTransactionByID(trxID);
     }
 
     /**
@@ -450,7 +545,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      */
     @Override
     public Collection<? extends KMyMoneyTransaction> getTransactions() {
-	return trxMgr.getTransactions();
+    	return trxMgr.getTransactions();
     }
     
     @Override
@@ -473,147 +568,187 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     
     @Override
     public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSpltID spltID) {
-	return trxMgr.getTransactionSplitByID(spltID);
+		if ( spltID == null ) {
+			throw new IllegalArgumentException("null split ID given");
+		}
+
+		if ( ! spltID.isSet() ) {
+			throw new IllegalArgumentException("unset split ID given");
+		}
+
+		return trxMgr.getTransactionSplitByID(spltID);
     }
 
     @Override
     public Collection<KMyMoneyTransactionSplit> getTransactionSplits() {
-	return trxMgr.getTransactionSplits();
+    	return trxMgr.getTransactionSplits();
     }
 
     public Collection<KMyMoneyTransactionSplitImpl> getTransactionSplits_readAfresh() {
-	return trxMgr.getTransactionSplits_readAfresh();
+    	return trxMgr.getTransactionSplits_readAfresh();
     }
 
     public Collection<KMyMoneyTransactionSplitImpl> getTransactionSplits_readAfresh(final KMMTrxID trxID) {
-	return trxMgr.getTransactionSplits_readAfresh(trxID);
+		if ( trxID == null ) {
+			throw new IllegalArgumentException("null transaction ID given");
+		}
+
+		if ( ! trxID.isSet() ) {
+			throw new IllegalArgumentException("unset transaction ID given");
+		}
+
+		return trxMgr.getTransactionSplits_readAfresh(trxID);
     }
 
     // ---------------------------------------------------------------
 
     @Override
     public KMyMoneyPayee getPayeeByID(final KMMPyeID pyeID) {
-	return pyeMgr.getPayeeByID(pyeID);
+		if ( pyeID == null ) {
+			throw new IllegalArgumentException("null payee ID given");
+		}
+
+		if ( ! pyeID.isSet() ) {
+			throw new IllegalArgumentException("unset payee ID given");
+		}
+
+		return pyeMgr.getPayeeByID(pyeID);
     }
 
     @Override
     public Collection<KMyMoneyPayee> getPayeesByName(String expr) {
-	return pyeMgr.getPayeesByName(expr);
+    	return pyeMgr.getPayeesByName(expr);
     }
 
     @Override
     public Collection<KMyMoneyPayee> getPayeesByName(String expr, boolean relaxed) {
-	return pyeMgr.getPayeesByName(expr, relaxed);
+    	return pyeMgr.getPayeesByName(expr, relaxed);
     }
 
     @Override
     public KMyMoneyPayee getPayeesByNameUniq(String expr)
 	    throws NoEntryFoundException, TooManyEntriesFoundException {
-	return pyeMgr.getPayeesByNameUniq(expr);
+    	return pyeMgr.getPayeesByNameUniq(expr);
     }
 
     @Override
     public Collection<KMyMoneyPayee> getPayees() {
-	return pyeMgr.getPayees();
+    	return pyeMgr.getPayees();
     }
 
     // ---------------------------------------------------------------
 
     @Override
     public KMyMoneySecurity getSecurityByID(final KMMSecID secID) {
-	return secMgr.getSecurityByID(secID);
+		if ( secID == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+
+		if ( ! secID.isSet() ) {
+			throw new IllegalArgumentException("unset security ID given");
+		}
+
+		return secMgr.getSecurityByID(secID);
     }
 
     @Override
     public KMyMoneySecurity getSecurityByID(final String idStr) {
-	return secMgr.getSecurityByID(idStr);
+    	return secMgr.getSecurityByID(idStr);
     }
 
     @Override
     public KMyMoneySecurity getSecurityByQualifID(final KMMQualifSecID secID) {
-	return secMgr.getSecurityByQualifID(secID);
+		if ( secID == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+
+		if ( ! secID.isSet() ) {
+			throw new IllegalArgumentException("unset security ID given");
+		}
+
+		return secMgr.getSecurityByQualifID(secID);
     }
 
     @Override
     public KMyMoneySecurity getSecurityByQualifID(final String qualifIDStr) {
-	return secMgr.getSecurityByQualifID(qualifIDStr);
+    	return secMgr.getSecurityByQualifID(qualifIDStr);
     }
 
     @Override
     public KMyMoneySecurity getSecurityBySymbol(final String symb) {
-	return secMgr.getSecurityBySymbol(symb);
+    	return secMgr.getSecurityBySymbol(symb);
     }
 
     @Override
     public KMyMoneySecurity getSecurityByCode(final String code) {
-	return secMgr.getSecurityByCode(code);
+    	return secMgr.getSecurityByCode(code);
     }
 
     @Override
     public List<KMyMoneySecurity> getSecuritiesByName(final String expr) {
-	return secMgr.getSecuritiesByName(expr);
+    	return secMgr.getSecuritiesByName(expr);
     }
 
     @Override
     public List<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed) {
-	return secMgr.getSecuritiesByName(expr, relaxed);
+    	return secMgr.getSecuritiesByName(expr, relaxed);
     }
 
     @Override
     public KMyMoneySecurity getSecurityByNameUniq(final String expr) throws NoEntryFoundException, TooManyEntriesFoundException {
-	return secMgr.getSecurityByNameUniq(expr);
+    	return secMgr.getSecurityByNameUniq(expr);
     }
     
     @Override
     public Collection<KMyMoneySecurity> getSecurities() {
-	return secMgr.getSecurities();
+    	return secMgr.getSecurities();
     }
 
     // ---------------------------------------------------------------
 
     @Override
     public KMyMoneyCurrency getCurrencyByID(String currID) {
-	return currMgr.getCurrencyByID(currID);
+    	return currMgr.getCurrencyByID(currID);
     }
 
     @Override
     public KMyMoneyCurrency getCurrencyByQualifID(KMMQualifCurrID currID) {
-	return currMgr.getCurrencyByQualifID(currID);
+    	return currMgr.getCurrencyByQualifID(currID);
     }
 
     @Override
     public Collection<KMyMoneyCurrency> getCurrencies() {
-	return currMgr.getCurrencies();
+    	return currMgr.getCurrencies();
     }
 
     // ---------------------------------------------------------------
     
     @Override
     public KMyMoneyPricePair getPricePairByID(KMMPricePairID prcPrID) {
-	return prcMgr.getPricePairByID(prcPrID);
+    	return prcMgr.getPricePairByID(prcPrID);
     }
 
     @Override
     public Collection<KMyMoneyPricePair> getPricePairs() {
-	return prcMgr.getPricePairs();
+    	return prcMgr.getPricePairs();
     }
 
     // ---------------------------------------------------------------
     
     @Override
     public KMyMoneyPrice getPriceByID(KMMPriceID prcID) {
-	return prcMgr.getPriceByID(prcID);
+    	return prcMgr.getPriceByID(prcID);
     }
 
     @Override
     public Collection<KMyMoneyPrice> getPrices() {
-	return prcMgr.getPrices();
+    	return prcMgr.getPrices();
     }
 
     @Override
     public FixedPointNumber getLatestPrice(KMMQualifSecCurrID secCurrID)
 	    throws InvalidQualifSecCurrIDException {
-	return prcMgr.getLatestPrice(secCurrID);
+    	return prcMgr.getLatestPrice(secCurrID);
     }
 
     // ---------------------------------------------------------------
@@ -623,7 +758,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      */
     @SuppressWarnings("exports")
     public KMYMONEYFILE getRootElement() {
-	return rootElement;
+    	return rootElement;
     }
 
     /**
@@ -634,26 +769,22 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @throws InvalidQualifSecCurrIDException 
      */
     protected void setRootElement(final KMYMONEYFILE pRootElement) {
-	if (pRootElement == null) {
-	    throw new IllegalArgumentException("null not allowed for field this.rootElement");
-	}
-	rootElement = pRootElement;
+    	if (pRootElement == null) {
+    		throw new IllegalArgumentException("null not allowed for field this.rootElement");
+    	}
+    	rootElement = pRootElement;
 
-	// fill prices
-	prcMgr  = new FilePriceManager(this);
+    	// fill prices
+    	prcMgr  = new FilePriceManager(this);
 
-	loadPriceDatabase(pRootElement);
+    	loadPriceDatabase(pRootElement);
 
-	// fill maps
-	acctMgr = new FileAccountManager(this);
-	
-	trxMgr  = new FileTransactionManager(this);
-
-	secMgr  = new FileSecurityManager(this);
-	
-	currMgr = new FileCurrencyManager(this);
-
-	pyeMgr  = new FilePayeeManager(this);
+    	// fill maps
+    	acctMgr = new FileAccountManager(this);
+    	trxMgr  = new FileTransactionManager(this);
+    	secMgr  = new FileSecurityManager(this);
+    	currMgr = new FileCurrencyManager(this);
+    	pyeMgr  = new FilePayeeManager(this);
     }
 
     // ---------------------------------------------------------------
@@ -664,18 +795,18 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @throws InvalidQualifSecCurrIDException 
      */
     private void loadPriceDatabase(final KMYMONEYFILE pRootElement) {
-	boolean noPriceDB = true;
+    	boolean noPriceDB = true;
 	
-	PRICES priceDB = pRootElement.getPRICES();
-	if ( priceDB.getPRICEPAIR().size() > 0 )
-	    noPriceDB = false;
+    	PRICES priceDB = pRootElement.getPRICES();
+    	if ( priceDB.getPRICEPAIR().size() > 0 )
+    		noPriceDB = false;
+	
+		loadPriceDatabaseCore(priceDB);
 
-	loadPriceDatabaseCore(priceDB);
-
-	if ( noPriceDB ) {
-	    // no price DB in file
-	    getCurrencyTable().clear();
-	}
+		if ( noPriceDB ) {
+			// no price DB in file
+			getCurrencyTable().clear();
+		}
     }
 
     private void loadPriceDatabaseCore(PRICES priceDB) {
@@ -683,43 +814,43 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 //  	getCurrencyTable().setConversionFactor(KMMSecCurrID.Type.CURRENCY, 
 //  		                               getDefaultCurrencyID(), 
 //  		                               new FixedPointNumber(1));
-
-	String baseCurrency = getDefaultCurrencyID();
 	
-	for ( PRICEPAIR pricePair : priceDB.getPRICEPAIR() ) {
-	    String fromSecCurr = pricePair.getFrom();
-	    // String toCurr      = pricePair.getTo();
+		String baseCurrency = getDefaultCurrencyID();
+	
+		for ( PRICEPAIR pricePair : priceDB.getPRICEPAIR() ) {
+			String fromSecCurr = pricePair.getFrom();
+			// String toCurr      = pricePair.getTo();
 	    
-	    // ::TODO: Try to implement Security type
-	    KMMQualifSecCurrID.Type nameSpace = null;
-	    if ( fromSecCurr.startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) )
-		nameSpace = KMMQualifSecCurrID.Type.SECURITY;
-	    else
-		nameSpace = KMMQualifSecCurrID.Type.CURRENCY;
+			// ::TODO: Try to implement Security type
+			KMMQualifSecCurrID.Type nameSpace = null;
+			if ( fromSecCurr.startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) )
+				nameSpace = KMMQualifSecCurrID.Type.SECURITY;
+			else
+				nameSpace = KMMQualifSecCurrID.Type.CURRENCY;
 
-	    // Check if we already have a latest price for this security
-	    // (= currency, fund, ...)
-	    if ( getCurrencyTable().getConversionFactor(nameSpace, fromSecCurr) != null ) {
-		continue;
-	    }
+			// Check if we already have a latest price for this security
+			// (= currency, fund, ...)
+			if ( getCurrencyTable().getConversionFactor(nameSpace, fromSecCurr) != null ) {
+				continue;
+			}
 
-	    if ( fromSecCurr.equals(baseCurrency) ) {
-		LOGGER.warn("loadPriceDatabaseCore: Ignoring price-quote for " + baseCurrency 
-		    + " because " + baseCurrency + " is our base-currency.");
-		continue;
-	    }
+			if ( fromSecCurr.equals(baseCurrency) ) {
+					LOGGER.warn("loadPriceDatabaseCore: Ignoring price-quote for " + baseCurrency 
+			    + " because " + baseCurrency + " is our base-currency.");
+					continue;
+			}
 
-	    // get the latest price in the file and insert it into
-	    // our currency table
-	    FixedPointNumber factor = getLatestPrice(new KMMQualifSecCurrID(nameSpace, fromSecCurr));
+			// get the latest price in the file and insert it into
+			// our currency table
+			FixedPointNumber factor = getLatestPrice(new KMMQualifSecCurrID(nameSpace, fromSecCurr));
 
-	    if ( factor != null ) {
-		getCurrencyTable().setConversionFactor(nameSpace, fromSecCurr, factor);
-	    } else {
-		LOGGER.warn("loadPriceDatabaseCore: The KMyMoney file defines a factor for a security '" 
-			+ fromSecCurr + "' but has no security for it");
-	    }
-	} // for pricePair
+			if ( factor != null ) {
+				getCurrencyTable().setConversionFactor(nameSpace, fromSecCurr, factor);
+			} else {
+				LOGGER.warn("loadPriceDatabaseCore: The KMyMoney file defines a factor for a security '" 
+						+ fromSecCurr + "' but has no security for it");
+			}
+		} // for pricePair
     }
 
     // ---------------------------------------------------------------
@@ -730,24 +861,26 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      */
     @SuppressWarnings("exports")
     public ObjectFactory getObjectFactory() {
-	if (myJAXBFactory == null) {
-	    myJAXBFactory = new ObjectFactory();
-	}
-	return myJAXBFactory;
+    	if (myJAXBFactory == null) {
+    		myJAXBFactory = new ObjectFactory();
+    	}
+    	
+    	return myJAXBFactory;
     }
 
     /**
      * @return the JAXB-context
      */
     protected JAXBContext getJAXBContext() {
-	if (myJAXBContext == null) {
-	    try {
-		myJAXBContext = JAXBContext.newInstance("org.kmymoney.api.generated", this.getClass().getClassLoader());
-	    } catch (JAXBException e) {
-		LOGGER.error("getJAXBContext: " + e.getMessage(), e);
-	    }
-	}
-	return myJAXBContext;
+    	if (myJAXBContext == null) {
+    		try {
+    			myJAXBContext = JAXBContext.newInstance("org.kmymoney.api.generated", this.getClass().getClassLoader());
+    		} catch (JAXBException e) {
+    			LOGGER.error("getJAXBContext: " + e.getMessage(), e);
+    		}
+    	}
+    	
+    	return myJAXBContext;
     }
 
     // ---------------------------------------------------------------
@@ -757,7 +890,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      */
     @Override
     public KMyMoneyFile getKMyMoneyFile() {
-	return this;
+    	return this;
     }
     
     // ---------------------------------------------------------------
@@ -765,59 +898,59 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     
     @SuppressWarnings("exports")
     public FileAccountManager getAcctMgr() {
-	return acctMgr;
+    	return acctMgr;
     }
     
     @SuppressWarnings("exports")
     public FileTransactionManager getTrxMgr() {
-	return trxMgr;
+    	return trxMgr;
     }
     
     @SuppressWarnings("exports")
     public FilePayeeManager getPyeMgr() {
-	return pyeMgr;
+    	return pyeMgr;
     }
     
     @SuppressWarnings("exports")
     public FileSecurityManager getSecMgr() {
-	return secMgr;
+    	return secMgr;
     }
     
     @SuppressWarnings("exports")
     public FileCurrencyManager getCurrMgr() {
-	return currMgr;
+    	return currMgr;
     }
     
     @SuppressWarnings("exports")
     public FilePriceManager getPrcMgr() {
-	return prcMgr;
+    	return prcMgr;
     }
     
     // ---------------------------------------------------------------
     
     public String toString() {
-	String result = "KMyMoneyFileImpl: [\n";
+    	String result = "KMyMoneyFileImpl: [\n";
 	
-	result += "  Stats (raw):\n"; 
-	KMMFileStats stats;
-	try {
-	    stats = new KMMFileStats(this);
+    	result += "  Stats (raw):\n"; 
+    	KMMFileStats stats;
+    	try {
+    		stats = new KMMFileStats(this);
 
-	    result += "    No. of accounts:           " + stats.getNofEntriesAccounts(KMMFileStats.Type.RAW) + "\n"; 
-	    result += "    No. of transactions:       " + stats.getNofEntriesTransactions(KMMFileStats.Type.RAW) + "\n"; 
-	    result += "    No. of transaction splits: " + stats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW) + "\n"; 
-	    result += "    No. of payees:             " + stats.getNofEntriesPayees(KMMFileStats.Type.RAW) + "\n"; 
-	    result += "    No. of securities:         " + stats.getNofEntriesSecurities(KMMFileStats.Type.RAW) + "\n"; 
-	    result += "    No. of currencies:         " + stats.getNofEntriesCurrencies(KMMFileStats.Type.RAW) + "\n";
-	    result += "    No. of price pairs:        " + stats.getNofEntriesPricePairs(KMMFileStats.Type.RAW) + "\n";
-	    result += "    No. of prices:             " + stats.getNofEntriesPrices(KMMFileStats.Type.RAW) + "\n";
-	} catch (Exception e) {
-	    result += "ERROR\n"; 
-	}
+    		result += "    No. of accounts:           " + stats.getNofEntriesAccounts(KMMFileStats.Type.RAW) + "\n"; 
+    		result += "    No. of transactions:       " + stats.getNofEntriesTransactions(KMMFileStats.Type.RAW) + "\n"; 
+    		result += "    No. of transaction splits: " + stats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW) + "\n"; 
+    		result += "    No. of payees:             " + stats.getNofEntriesPayees(KMMFileStats.Type.RAW) + "\n"; 
+    		result += "    No. of securities:         " + stats.getNofEntriesSecurities(KMMFileStats.Type.RAW) + "\n"; 
+    		result += "    No. of currencies:         " + stats.getNofEntriesCurrencies(KMMFileStats.Type.RAW) + "\n";
+    		result += "    No. of price pairs:        " + stats.getNofEntriesPricePairs(KMMFileStats.Type.RAW) + "\n";
+    		result += "    No. of prices:             " + stats.getNofEntriesPrices(KMMFileStats.Type.RAW) + "\n";
+    	} catch (Exception e) {
+    		result += "ERROR\n"; 
+    	}
 	
-	result += "]";
+    	result += "]";
 	
-	return result;
+    	return result;
     }
 
 }

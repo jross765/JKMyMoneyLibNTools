@@ -21,22 +21,18 @@ public class KMyMoneyFileImplTestHelper extends KMyMoneyFileImpl
 	// ---------------------------------------------------------------
 	// The methods in this section are For test purposes only
 
-	@SuppressWarnings("exports")
 	public FilePayeeManager getPayeeManager() {
 		return pyeMgr;
 	}
 
-	@SuppressWarnings("exports")
 	public FileSecurityManager getSecurityManager() {
 		return secMgr;
 	}
 
-	@SuppressWarnings("exports")
 	public FileCurrencyManager getCurrencyManager() {
 		return currMgr;
 	}
 
-	@SuppressWarnings("exports")
 	public FilePriceManager getPriceManager() {
 		return prcMgr;
 	}

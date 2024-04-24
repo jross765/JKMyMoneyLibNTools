@@ -255,13 +255,22 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
      * @see KMyMoneyTransaction#getSplitByID(java.lang.String)
      */
     public KMyMoneyTransactionSplit getSplitByID(final String id) {
-	for (KMyMoneyTransactionSplit split : getSplits()) {
-	    if (split.getID().equals(id)) {
-		return split;
-	    }
+		if ( id == null ) {
+			throw new IllegalArgumentException("null ID given");
+		}
 
-	}
-	return null;
+		if ( id.trim().equals("") ) {
+			throw new IllegalArgumentException("empty ID given");
+		}
+
+		for (KMyMoneyTransactionSplit split : getSplits()) {
+			if (split.getID().equals(id)) {
+				return split;
+			}
+
+		}
+		
+		return null;
     }
 
     /**
@@ -379,6 +388,14 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
 	 * @return the value or null if not set
 	 */
 	public String getUserDefinedAttribute(final String name) {
+		if ( name == null ) {
+			throw new IllegalArgumentException("null name given");
+		}
+
+		if ( name.trim().equals("") ) {
+			throw new IllegalArgumentException("empty name given");
+		}
+
 		if ( jwsdpPeer.getKEYVALUEPAIRS() == null) {
 			return null;
 		}

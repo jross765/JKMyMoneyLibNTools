@@ -21,22 +21,18 @@ public class KMyMoneyWritableFileImplTestHelper extends KMyMoneyWritableFileImpl
 	// ---------------------------------------------------------------
 	// For test purposes only
 
-	@SuppressWarnings("exports")
 	public org.kmymoney.api.write.impl.hlp.FilePayeeManager getPayeeManager() {
 		return (org.kmymoney.api.write.impl.hlp.FilePayeeManager) pyeMgr;
 	}
 
-	@SuppressWarnings("exports")
 	public org.kmymoney.api.write.impl.hlp.FileSecurityManager getSecurityManager() {
 		return (org.kmymoney.api.write.impl.hlp.FileSecurityManager) secMgr;
 	}
 
-	@SuppressWarnings("exports")
 	public org.kmymoney.api.write.impl.hlp.FileCurrencyManager getCurrencyManager() {
 		return (org.kmymoney.api.write.impl.hlp.FileCurrencyManager) currMgr;
 	}
 
-	@SuppressWarnings("exports")
 	public org.kmymoney.api.write.impl.hlp.FilePriceManager getPriceManager() {
 		return (org.kmymoney.api.write.impl.hlp.FilePriceManager) prcMgr;
 	}

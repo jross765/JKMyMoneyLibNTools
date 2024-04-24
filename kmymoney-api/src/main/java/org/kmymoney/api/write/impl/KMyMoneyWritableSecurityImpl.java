@@ -282,7 +282,11 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 	@Override
 	public void setTradingCurrency(final KMMQualifCurrID currID) {
 		if ( currID == null ) {
-			throw new IllegalArgumentException("null trading currency given!");
+			throw new IllegalArgumentException("unset currency given!");
+		}
+
+		if ( ! currID.isSet() ) {
+			throw new IllegalArgumentException("unset currency given!");
 		}
 
 		KMMQualifCurrID oldCurrID = getTradingCurrency();
@@ -340,6 +344,22 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 
 	@Override
 	public void addUserDefinedAttribute(final String name, final String value) {
+		if ( name == null ) {
+			throw new IllegalArgumentException("null name given");
+		}
+		
+		if ( name.isEmpty() ) {
+			throw new IllegalArgumentException("empty name given");
+		}
+
+		if ( value == null ) {
+			throw new IllegalArgumentException("null value given");
+		}
+		
+		if ( value.isEmpty() ) {
+			throw new IllegalArgumentException("empty value given");
+		}
+
 		if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
 			ObjectFactory fact = getKMyMoneyFile().getObjectFactory();
 			KEYVALUEPAIRS newKVPs = fact.createKEYVALUEPAIRS();
@@ -353,6 +373,14 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 
 	@Override
 	public void removeUserDefinedAttribute(final String name) {
+		if ( name == null ) {
+			throw new IllegalArgumentException("null name given");
+		}
+		
+		if ( name.isEmpty() ) {
+			throw new IllegalArgumentException("empty name given");
+		}
+
 		if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
 			throw new KVPListDoesNotContainKeyException();
 		}
@@ -364,6 +392,22 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 
 	@Override
 	public void setUserDefinedAttribute(final String name, final String value) {
+		if ( name == null ) {
+			throw new IllegalArgumentException("null name given");
+		}
+		
+		if ( name.isEmpty() ) {
+			throw new IllegalArgumentException("empty name given");
+		}
+
+		if ( value == null ) {
+			throw new IllegalArgumentException("null value given");
+		}
+		
+		if ( value.isEmpty() ) {
+			throw new IllegalArgumentException("empty value given");
+		}
+
 		if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
 			throw new KVPListDoesNotContainKeyException();
 		}

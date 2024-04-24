@@ -137,13 +137,12 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	protected static TRANSACTION createTransaction_int(
 			final KMyMoneyWritableFileImpl file, 
 			final KMMTrxID newID) {
-
 		if ( newID == null ) {
-			throw new IllegalArgumentException("null ID given");
+			throw new IllegalArgumentException("null transaction ID given");
 		}
 
 		if ( ! newID.isSet() ) {
-			throw new IllegalArgumentException("unset ID given");
+			throw new IllegalArgumentException("unset transaction ID given");
 		}
 
 		// ObjectFactory fact = file.getObjectFactory();

@@ -195,8 +195,15 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 	}
 
 	@Override
-	public FixedPointNumber getBalance(final LocalDate date, final KMMQualifSecCurrID secCurrID)
-			{
+	public FixedPointNumber getBalance(final LocalDate date, final KMMQualifSecCurrID secCurrID) {
+		if ( secCurrID == null ) {
+			throw new IllegalArgumentException("null security/currency ID given");
+		}
+
+		if ( ! secCurrID.isSet() ) {
+			throw new IllegalArgumentException("unset security/currency ID given");
+		}
+
 		FixedPointNumber retval = getBalance(date);
 
 		if ( retval == null ) {
@@ -324,8 +331,14 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 	}
 
 	@Override
-	public FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMQualifSecCurrID secCurrID)
-			{
+	public FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMQualifSecCurrID secCurrID) {
+		if ( secCurrID == null ) {
+			throw new IllegalArgumentException("null security/currency ID given");
+		}
+
+		if ( ! secCurrID.isSet() ) {
+			throw new IllegalArgumentException("unset security/currency ID given");
+		}
 
 		// BEGIN OLD IMPL
 //	    FixedPointNumber retval = getBalance(date, secCurrID);
@@ -380,6 +393,14 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 	@Override
 	public FixedPointNumber getBalanceRecursive(final LocalDate date, final KMMSecID secID)
 			throws KMMIDNotSetException {
+		if ( secID == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+
+		if ( ! secID.isSet() ) {
+			throw new IllegalArgumentException("unset security ID given");
+		}
+
 		// CAUTION: This assumes that under a stock account,
 		// there are no children (which sounds sensible,
 		// but there might be special cases)
@@ -479,18 +500,17 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 	}
 
 	@Override
-	public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSpltID id) {
-		if ( id == null ) {
-			throw new IllegalArgumentException("null id given!");
+	public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSpltID spltID) {
+		if ( spltID == null ) {
+			throw new IllegalArgumentException("null split id given");
 		}
 
-		// ::TODO
-//		if ( ! id.isSet() ) {
-//			throw new IllegalArgumentException("ID not set!");
-//		}
+		if ( ! spltID.isSet() ) {
+			throw new IllegalArgumentException("unset split ID given");
+		}
 
 		for ( KMyMoneyTransactionSplit split : getTransactionSplits() ) {
-			if ( id.equals(split.getID()) ) {
+			if ( spltID.equals(split.getID()) ) {
 				return split;
 			}
 
@@ -539,6 +559,14 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 	 * number.
 	 */
 	private Long startsWithNumber(final String s) {
+		if ( s == null ) {
+			throw new IllegalArgumentException("null string given");
+		}
+
+//		if ( s.trim().equals("") ) {
+//			throw new IllegalArgumentException("empty string given");
+//		}
+
 		int digitCount = 0;
 		for ( int i = 0; i < s.length() && Character.isDigit(s.charAt(i)); i++ ) {
 			digitCount++;

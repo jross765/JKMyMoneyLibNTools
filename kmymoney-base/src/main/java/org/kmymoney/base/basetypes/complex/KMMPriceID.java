@@ -69,6 +69,25 @@ public class KMMPriceID {
 		// ::EMPTY
 	}
 
+	public boolean isSet() {
+		if ( fromSecCurr.trim().equals("") ||
+			 fromSecCurr.equals("(unset)") ) {
+			return false;
+		}
+		
+		if ( toCurr.trim().equals("") ||
+			 toCurr.equals("(unset)") ) {
+			return false;
+		}
+			
+		if ( dateStr.trim().equals("") ||
+			 dateStr.equals("(unset)") ) {
+			return false;
+		}
+				
+		return true;
+	}
+
 	public void reset() {
 		fromSecCurr = "(unset)";
 		toCurr      = "(unset)";

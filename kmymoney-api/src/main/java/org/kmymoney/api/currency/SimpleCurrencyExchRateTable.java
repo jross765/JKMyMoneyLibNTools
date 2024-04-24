@@ -69,6 +69,18 @@ public class SimpleCurrencyExchRateTable implements SimplePriceTable,
      * @return false if the conversion is not possible
      */
     public boolean convertFromBaseCurrency(FixedPointNumber value, final String iso4217CurrencyCode) {
+		if ( value == null ) {
+			throw new IllegalArgumentException("null value given");
+		}
+
+		if ( iso4217CurrencyCode == null ) {
+			throw new IllegalArgumentException("null ISO code given");
+		}
+
+		if ( iso4217CurrencyCode.trim().equals("") ) {
+			throw new IllegalArgumentException("empty ISO codce given");
+		}
+
         FixedPointNumber factor = getConversionFactor(iso4217CurrencyCode);
         if (factor == null) {
             return false;
@@ -83,12 +95,25 @@ public class SimpleCurrencyExchRateTable implements SimplePriceTable,
      * @return false if the conversion is not possible
      */
     public boolean convertToBaseCurrency(FixedPointNumber value, final String iso4217CurrencyCode) {
-	FixedPointNumber factor = getConversionFactor(iso4217CurrencyCode);
-	if (factor == null) {
-	    return false;
-	}
-	value.multiply(factor);
-	return true;
+		if ( value == null ) {
+			throw new IllegalArgumentException("null value given");
+		}
+
+		if ( iso4217CurrencyCode == null ) {
+			throw new IllegalArgumentException("null ISO code given");
+		}
+
+		if ( iso4217CurrencyCode.trim().equals("") ) {
+			throw new IllegalArgumentException("empty ISO code given");
+		}
+
+		FixedPointNumber factor = getConversionFactor(iso4217CurrencyCode);
+		if (factor == null) {
+			return false;
+		}
+		
+		value.multiply(factor);
+		return true;
     }
 
     /**

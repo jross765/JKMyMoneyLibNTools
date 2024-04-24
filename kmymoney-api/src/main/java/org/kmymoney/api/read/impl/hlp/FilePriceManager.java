@@ -220,6 +220,14 @@ public class FilePriceManager {
 	}
 
 	public FixedPointNumber getLatestPrice(final String secCurrIDStr) {
+		if ( secCurrIDStr == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+
+		if ( secCurrIDStr.trim().equals("") ) {
+			throw new IllegalArgumentException("empty security ID given");
+		}
+
 		if ( secCurrIDStr.startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
 			return getLatestPrice(new KMMQualifSecID(secCurrIDStr));
 		} else {
@@ -228,6 +236,10 @@ public class FilePriceManager {
 	}
 
 	public FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID) {
+		if ( secCurrID == null ) {
+			throw new IllegalArgumentException("null security/currency ID given");
+		}
+
 		return getLatestPrice(secCurrID, 0);
 	}
 
@@ -245,7 +257,7 @@ public class FilePriceManager {
 	 */
 	private FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID, final int depth) {
 		if ( secCurrID == null ) {
-			throw new IllegalArgumentException("null parameter 'secCurrID' given");
+			throw new IllegalArgumentException("null security/currency ID given");
 		}
 		// System.err.println("depth: " + depth);
 
@@ -337,7 +349,7 @@ public class FilePriceManager {
 
 	private FixedPointNumber getLatestPrice_readAfresh(final KMMQualifSecCurrID secCurrID, final int depth) {
 		if ( secCurrID == null ) {
-			throw new IllegalArgumentException("null parameter 'secCurrID' given");
+			throw new IllegalArgumentException("null security/currency ID given");
 		}
 		// System.err.println("depth: " + depth);
 

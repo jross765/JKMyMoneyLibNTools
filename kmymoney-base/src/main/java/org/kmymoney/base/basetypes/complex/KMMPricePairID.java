@@ -66,6 +66,10 @@ public class KMMPricePairID {
 		toCurr      = new KMMQualifCurrID();
 	}
 
+	public boolean isSet() {
+		return ( fromSecCurr.isSet() && toCurr.isSet() );
+	}
+
     // ---------------------------------------------------------------
 
     public KMMQualifSecCurrID getFromSecCurr() {

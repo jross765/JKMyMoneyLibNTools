@@ -115,11 +115,11 @@ public class FileSecurityManager {
 
 	public KMyMoneySecurity getSecurityByID(final String idStr) {
 		if ( idStr == null ) {
-			throw new IllegalStateException("null string given");
+			throw new IllegalStateException("null security ID given");
 		}
 
 		if ( idStr.trim().equals("") ) {
-			throw new IllegalStateException("Search string is empty");
+			throw new IllegalStateException("empty security ID given");
 		}
 
 		KMMSecID secID = new KMMSecID(idStr);
@@ -132,11 +132,11 @@ public class FileSecurityManager {
 
 	public KMyMoneySecurity getSecurityByQualifID(final String qualifIDStr) {
 		if ( qualifIDStr == null ) {
-			throw new IllegalStateException("null string given");
+			throw new IllegalStateException("null security ID given");
 		}
 
 		if ( qualifIDStr.trim().equals("") ) {
-			throw new IllegalStateException("Search string is empty");
+			throw new IllegalStateException("empty security ID given");
 		}
 
 		KMMQualifSecID secID = KMMQualifSecID.parse(qualifIDStr);
@@ -144,6 +144,14 @@ public class FileSecurityManager {
 	}
 
 	public KMyMoneySecurity getSecurityBySymbol(final String symb) {
+		if ( symb == null ) {
+			throw new IllegalArgumentException("null symbol given");
+		}
+
+		if ( symb.trim().equals("") ) {
+			throw new IllegalArgumentException("empty symbol given");
+		}
+
 		if ( secMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -174,6 +182,14 @@ public class FileSecurityManager {
 	}
 
 	public KMyMoneySecurity getSecurityByCode(final String code) {
+		if ( code == null ) {
+			throw new IllegalArgumentException("null code given");
+		}
+
+		if ( code.trim().equals("") ) {
+			throw new IllegalArgumentException("empty code given");
+		}
+
 		if ( secMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -204,10 +220,26 @@ public class FileSecurityManager {
 	}
 
 	public List<KMyMoneySecurity> getSecuritiesByName(final String expr) {
+		if ( expr == null ) {
+			throw new IllegalArgumentException("null expression given");
+		}
+
+		if ( expr.trim().equals("") ) {
+			throw new IllegalArgumentException("empty expression given");
+		}
+
 		return getSecuritiesByName(expr, true);
 	}
 
 	public List<KMyMoneySecurity> getSecuritiesByName(final String expr, final boolean relaxed) {
+		if ( expr == null ) {
+			throw new IllegalArgumentException("null expression given");
+		}
+
+		if ( expr.trim().equals("") ) {
+			throw new IllegalArgumentException("empty expression given");
+		}
+
 		if ( secMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -236,6 +268,14 @@ public class FileSecurityManager {
 
 	public KMyMoneySecurity getSecurityByNameUniq(final String expr)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
+		if ( expr == null ) {
+			throw new IllegalArgumentException("null expression given");
+		}
+
+		if ( expr.trim().equals("") ) {
+			throw new IllegalArgumentException("empty expression given");
+		}
+
 		List<KMyMoneySecurity> cmdtyList = getSecuritiesByName(expr, false);
 		if ( cmdtyList.size() == 0 )
 			throw new NoEntryFoundException();

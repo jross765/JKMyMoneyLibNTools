@@ -39,6 +39,9 @@ public class HasWritableUserDefinedAttributesImpl extends HasUserDefinedAttribut
 		if ( value == null )
 			throw new IllegalArgumentException("null value given");
 		
+		if ( value.trim().equals("") )
+			throw new IllegalArgumentException("empty value given");
+		
 		// CAUTION: Yes, that's valid
 //		if ( value.isEmpty() )
 //			throw new IllegalArgumentException("empty value given");
@@ -79,6 +82,21 @@ public class HasWritableUserDefinedAttributesImpl extends HasUserDefinedAttribut
 		if ( kvps == null )
 			throw new IllegalArgumentException("null slot list given");
 		
+		if ( kmmFile == null )
+			throw new IllegalArgumentException("null KMyMoney file given");
+		
+		if ( name == null )
+			throw new IllegalArgumentException("null name given");
+		
+		if ( name.isEmpty() )
+			throw new IllegalArgumentException("empty name given");
+
+		if ( value == null )
+			throw new IllegalArgumentException("null value given");
+
+		if ( value.trim().equals("") )
+			throw new IllegalArgumentException("empty value given");
+		
 		// This makes sure that the slots list is initialized
 		// in case it had has been null.
 		List<PAIR> dummy = kvps.getPAIR();
@@ -106,6 +124,9 @@ public class HasWritableUserDefinedAttributesImpl extends HasUserDefinedAttribut
 		if ( value == null )
 			throw new IllegalArgumentException("null value given");
 
+		if ( value.trim().equals("") )
+			throw new IllegalArgumentException("empty value given");
+		
 // CAUTION: Yes, that's valid
 //if ( value.isEmpty() )
 //throw new IllegalArgumentException("empty value given");
@@ -172,6 +193,9 @@ public class HasWritableUserDefinedAttributesImpl extends HasUserDefinedAttribut
 
 		if ( value == null )
 			throw new IllegalArgumentException("null value given");
+		
+		if ( value.trim().equals("") )
+			throw new IllegalArgumentException("empty value given");
 		
 		// CAUTION: Yes, that's valid
 //		if ( value.isEmpty() )

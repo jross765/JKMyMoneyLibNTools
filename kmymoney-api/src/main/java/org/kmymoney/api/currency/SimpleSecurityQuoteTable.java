@@ -44,7 +44,15 @@ public class SimpleSecurityQuoteTable implements SimplePriceTable,
      */
     @Override
     public FixedPointNumber getConversionFactor(final String secID) {
-	return mSecID2Factor.get(secID);
+		if ( secID == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+
+		if ( secID.trim().equals("") ) {
+			throw new IllegalArgumentException("empty security ID given");
+		}
+
+		return mSecID2Factor.get(secID);
     }
 
     /**
@@ -55,7 +63,19 @@ public class SimpleSecurityQuoteTable implements SimplePriceTable,
      */
     @Override
     public void setConversionFactor(final String secID, final FixedPointNumber factor) {
-	mSecID2Factor.put(secID, factor);
+		if ( secID == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+
+		if ( secID.trim().equals("") ) {
+			throw new IllegalArgumentException("empty security ID given");
+		}
+
+		if ( factor == null ) {
+			throw new IllegalArgumentException("null conversion factor given");
+		}
+
+		mSecID2Factor.put(secID, factor);
     }
 
     // ---------------------------------------------------------------
@@ -67,10 +87,23 @@ public class SimpleSecurityQuoteTable implements SimplePriceTable,
      */
     @Override
     public boolean convertFromBaseCurrency(FixedPointNumber value, final String secID) {
+		if ( value == null ) {
+			throw new IllegalArgumentException("null value given");
+		}
+
+		if ( secID == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+
+		if ( secID.trim().equals("") ) {
+			throw new IllegalArgumentException("empty security ID given");
+		}
+
         FixedPointNumber factor = getConversionFactor(secID);
         if (factor == null) {
             return false;
         }
+        
         value.divide(factor);
         return true;
     }
@@ -82,12 +115,25 @@ public class SimpleSecurityQuoteTable implements SimplePriceTable,
      */
     @Override
     public boolean convertToBaseCurrency(FixedPointNumber value, final String secID) {
-	FixedPointNumber factor = getConversionFactor(secID);
-	if (factor == null) {
-	    return false;
-	}
-	value.multiply(factor);
-	return true;
+		if ( value == null ) {
+			throw new IllegalArgumentException("null value given");
+		}
+
+		if ( secID == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+
+		if ( secID.trim().equals("") ) {
+			throw new IllegalArgumentException("empty security ID given");
+		}
+
+		FixedPointNumber factor = getConversionFactor(secID);
+		if (factor == null) {
+			return false;
+		}
+		
+		value.multiply(factor);
+		return true;
     }
 
     // ---------------------------------------------------------------

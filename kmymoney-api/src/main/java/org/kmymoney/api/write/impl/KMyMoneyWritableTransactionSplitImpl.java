@@ -196,6 +196,14 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	 */
 	@Override
 	public void setShares(final String n) {
+		if ( n == null ) {
+			throw new IllegalArgumentException("null shares given");
+		}
+		
+		if ( n.isEmpty() ) {
+			throw new IllegalArgumentException("empty shares given");
+		}
+
 		try {
 			this.setShares(new FixedPointNumber(n.toLowerCase().replaceAll("&euro;", "").replaceAll("&pound;", "")));
 		} catch (NumberFormatException e) {
@@ -263,6 +271,14 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	 */
 	@Override
 	public void setValue(final String n) {
+		if ( n == null ) {
+			throw new IllegalArgumentException("null value given");
+		}
+		
+		if ( n.isEmpty() ) {
+			throw new IllegalArgumentException("empty value given");
+		}
+
 		try {
 			this.setValue(new FixedPointNumber(n.toLowerCase().replaceAll("&euro;", "").replaceAll("&pound;", "")));
 		} catch (NumberFormatException e) {
@@ -361,6 +377,10 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		if ( desc == null ) {
 			throw new IllegalArgumentException("null description given! Please use the empty string instead of null for an empty description");
 		}
+
+//		if ( desc.trim().equals("") ) {
+//			throw new IllegalArgumentException("empty description given");
+//		}
 
 		String old = getJwsdpPeer().getMemo();
 		jwsdpPeer.setMemo(desc);

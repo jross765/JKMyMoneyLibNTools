@@ -43,6 +43,11 @@ public class KMMQualifSecCurrID {
 
     // ---------------------------------------------------------------
 	
+	public boolean isSet() {
+		return ( this.type != Type.UNSET && 
+				 ! this.code.trim().equals("") );
+	}
+
 	public void reset() {
 		this.type = Type.UNSET;
 		this.code = "";

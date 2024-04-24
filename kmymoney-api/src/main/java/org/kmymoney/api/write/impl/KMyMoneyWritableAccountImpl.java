@@ -183,8 +183,12 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	 * @see KMyMoneyWritableAccount#setName(java.lang.String)
 	 */
 	public void setName(final String name) {
-		if ( name == null || name.trim().length() == 0 ) {
-			throw new IllegalArgumentException("null or empty name given!");
+		if ( name == null ) {
+			throw new IllegalArgumentException("null name given");
+		}
+		
+		if ( name.isEmpty() ) {
+			throw new IllegalArgumentException("empty name given");
 		}
 
 		String oldName = getName();
@@ -235,10 +239,9 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("null security/currency ID given!");
 		}
 
-		// ::TODO
-//		if ( ! secCurrID.isSet() ) {
-//			throw new IllegalArgumentException("unset security/currency ID given!");
-//		}
+		if ( ! secCurrID.isSet() ) {
+			throw new IllegalArgumentException("unset security/currency ID given!");
+		}
 
 		KMMQualifSecCurrID oldCurrId = getQualifSecCurrID();
 		if ( oldCurrId == secCurrID ) {
@@ -256,16 +259,36 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	
 	@Override
 	public void setSecID(final KMMSecID secID) {
+		if ( secID == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+		
+		if ( ! secID.isSet() ) {
+			throw new IllegalArgumentException("unset security ID given");
+		}
+		
 		setQualifSecCurrID(new KMMQualifSecID(secID));
 	}
 	
 	@Override
 	public void setCurrency(final Currency curr) {
+		if ( curr == null ) {
+			throw new IllegalArgumentException("null curreny given");
+		}
+		
 		setQualifSecCurrID(new KMMQualifCurrID(curr));
 	}
 
 	@Override
 	public void setCurrency(final String currCode) {
+		if ( currCode == null ) {
+			throw new IllegalArgumentException("null currency code given");
+		}
+		
+		if ( currCode.isEmpty() ) {
+			throw new IllegalArgumentException("empty currency code given");
+		}
+
 		setCurrency(Currency.getInstance(currCode));
 	}
 	
@@ -386,8 +409,12 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	 */
 	public void setMemo(final String descr) {
 		if ( descr == null ) {
-			throw new IllegalArgumentException("null or empty description given!");
+			throw new IllegalArgumentException("null description given");
 		}
+		
+//		if ( descr.isEmpty() ) {
+//			throw new IllegalArgumentException("empty description given");
+//		}
 
 		String oldDescr = getMemo();
 		if ( oldDescr == descr ) {
@@ -440,10 +467,9 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			return;
 		}
 
-		// ::TODO
-//		if ( ! prntAcctID.isSet() ) {
-//			throw new IllegalArgumentException("unset account ID given!");
-//		}
+		if ( ! prntAcctID.isSet() ) {
+			throw new IllegalArgumentException("unset account ID given!");
+		}
 
 		setParentAccount(getKMyMoneyFile().getAccountByID(prntAcctID));
 	}
@@ -503,6 +529,22 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 
 	@Override
 	public void addUserDefinedAttribute(final String name, final String value) {
+		if ( name == null ) {
+			throw new IllegalArgumentException("null name given");
+		}
+		
+		if ( name.isEmpty() ) {
+			throw new IllegalArgumentException("empty name given");
+		}
+
+		if ( value == null ) {
+			throw new IllegalArgumentException("null value given");
+		}
+		
+		if ( value.isEmpty() ) {
+			throw new IllegalArgumentException("empty value given");
+		}
+
 		if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
 			ObjectFactory fact = getKMyMoneyFile().getObjectFactory();
 			KEYVALUEPAIRS newKVPs = fact.createKEYVALUEPAIRS();
@@ -516,6 +558,14 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 
 	@Override
 	public void removeUserDefinedAttribute(final String name) {
+		if ( name == null ) {
+			throw new IllegalArgumentException("null name given");
+		}
+		
+		if ( name.isEmpty() ) {
+			throw new IllegalArgumentException("empty name given");
+		}
+
 		if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
 			throw new KVPListDoesNotContainKeyException();
 		}
@@ -527,6 +577,14 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 
 	@Override
 	public void setUserDefinedAttribute(final String name, final String value) {
+		if ( name == null ) {
+			throw new IllegalArgumentException("null name given");
+		}
+		
+		if ( name.isEmpty() ) {
+			throw new IllegalArgumentException("empty name given");
+		}
+
 		if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
 			throw new KVPListDoesNotContainKeyException();
 		}
