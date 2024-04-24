@@ -13,6 +13,7 @@ import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.base.basetypes.simple.KMMIDNotSetException;
+import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 
 import xyz.schnorxoborx.base.numbers.FixedPointNumber;
@@ -176,6 +177,20 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @return e.g. "Asset::Barvermögen::Bargeld"
      */
     String getQualifiedName();
+    
+    // ---------------------------------------------------------------
+
+    /**
+     * @return null if the institution is below the root
+     */
+    KMMInstID getInstitutionID();
+    
+    /**
+     * @return the institution this account belongs to
+     */
+    KMyMoneyInstitution getInstitution();
+
+    // ---------------------------------------------------------------
 
     /**
      * @return null if the account is below the root
@@ -189,6 +204,8 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
     KMyMoneyAccount getParentAccount();
 
     boolean isRootAccount();
+
+    // ----------------------------
 
     /**
      * The returned collection is never null and is sorted by Account-Name.

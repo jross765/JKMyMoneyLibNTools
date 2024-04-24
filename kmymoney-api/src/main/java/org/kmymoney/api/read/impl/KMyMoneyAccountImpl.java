@@ -10,16 +10,16 @@ import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.KMyMoneyInstitution;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.UnknownAccountTypeException;
 import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
 import org.kmymoney.api.read.impl.hlp.SimpleAccount;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,6 +99,27 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     		return new KMMComplAcctID(jwsdpPeer.getId());
     }
     
+    // ---------------------------------------------------------------
+
+	@Override
+	public KMMInstID getInstitutionID() {
+    	try {
+    		return new KMMInstID(jwsdpPeer.getInstitution());
+    	} catch ( Exception exc ) {
+    		return null;
+    	}
+	}
+
+	@Override
+	public KMyMoneyInstitution getInstitution() {
+		KMMInstID instID = getInstitutionID();
+		if ( instID == null ) {
+			return null;
+		}
+		
+    	return getKMyMoneyFile().getInstitutionByID(instID);
+	}
+
     // ---------------------------------------------------------------
 
     /**
@@ -297,6 +318,9 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 	} catch (UnknownAccountTypeException e) {
 	    buffer.append("ERROR");
 	}
+	
+	buffer.append(", institution-id=");
+	buffer.append(getInstitutionID());
 	
 	buffer.append(", qualif-name='");
 	buffer.append(getQualifiedName() + "'");

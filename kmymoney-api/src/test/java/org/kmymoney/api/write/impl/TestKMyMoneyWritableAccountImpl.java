@@ -23,6 +23,7 @@ import org.kmymoney.api.read.impl.TestKMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -42,6 +43,9 @@ public class TestKMyMoneyWritableAccountImpl {
 	private static final KMMComplAcctID ACCT_12_ID = TestKMyMoneyAccountImpl.ACCT_12_ID;
 	private static final KMMComplAcctID ACCT_13_ID = TestKMyMoneyAccountImpl.ACCT_13_ID;
 	private static final KMMComplAcctID ACCT_14_ID = TestKMyMoneyAccountImpl.ACCT_14_ID;
+	
+	private static final KMMInstID INST_1_ID = TestKMyMoneyAccountImpl.INST_1_ID;
+	private static final KMMInstID INST_2_ID = TestKMyMoneyAccountImpl.INST_2_ID;
 
 	// -----------------------------------------------------------------
 
@@ -108,6 +112,8 @@ public class TestKMyMoneyWritableAccountImpl {
 
 		assertEquals(ACCT_1_ID, acct.getID());
 		assertEquals(KMyMoneyAccount.Type.CHECKING, acct.getType());
+		assertEquals(INST_1_ID, acct.getInstitutionID());
+		assertEquals("RaiBa", acct.getInstitution().getName());
 		assertEquals("Giro RaiBa", acct.getName());
 		assertEquals("Asset:Barvermögen:Giro RaiBa", acct.getQualifiedName());
 		assertEquals("Girokonto 1", acct.getMemo());
@@ -131,6 +137,8 @@ public class TestKMyMoneyWritableAccountImpl {
 
 		assertEquals(ACCT_2_ID, acct.getID());
 		assertEquals(KMyMoneyAccount.Type.INVESTMENT, acct.getType());
+		assertEquals(INST_1_ID, acct.getInstitutionID());
+		assertEquals("RaiBa", acct.getInstitution().getName());
 		assertEquals("Depot RaiBa", acct.getName());
 		assertEquals("Asset:Finanzanlagen:Depot RaiBa", acct.getQualifiedName());
 		assertEquals("Aktiendepot 1", acct.getMemo());
@@ -160,6 +168,8 @@ public class TestKMyMoneyWritableAccountImpl {
 
 		assertEquals(ACCT_3_ID, acct.getID());
 		assertEquals(KMyMoneyAccount.Type.INCOME, acct.getType());
+		assertEquals(null, acct.getInstitutionID());
+		assertEquals(null, acct.getInstitution());
 		assertEquals("Gehalt", acct.getName());
 		assertEquals("Income:Gehalt", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
@@ -186,6 +196,8 @@ public class TestKMyMoneyWritableAccountImpl {
 
 		assertEquals(ACCT_4_ID, acct.getID());
 		assertEquals(KMyMoneyAccount.Type.STOCK, acct.getType());
+		assertEquals(null, acct.getInstitutionID());
+		assertEquals(null, acct.getInstitution());
 		assertEquals("DE0007100000 Mercedes-Benz Group AG", acct.getName());
 		assertEquals("Asset:Finanzanlagen:Depot RaiBa:DE0007100000 Mercedes-Benz Group AG", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
@@ -212,6 +224,8 @@ public class TestKMyMoneyWritableAccountImpl {
 
 		assertEquals(ACCT_10_ID, acct.getID());
 		assertEquals(KMyMoneyAccount.Type.ASSET, acct.getType());
+		assertEquals(null, acct.getInstitutionID());
+		assertEquals(null, acct.getInstitution());
 		assertEquals("Asset", acct.getName());
 		assertEquals("Asset", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
@@ -237,6 +251,8 @@ public class TestKMyMoneyWritableAccountImpl {
 
 		assertEquals(ACCT_11_ID, acct.getID());
 		assertEquals(KMyMoneyAccount.Type.LIABILITY, acct.getType());
+		assertEquals(null, acct.getInstitutionID());
+		assertEquals(null, acct.getInstitution());
 		assertEquals("Liability", acct.getName());
 		assertEquals("Liability", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
@@ -262,6 +278,8 @@ public class TestKMyMoneyWritableAccountImpl {
 
 		assertEquals(ACCT_12_ID, acct.getID());
 		assertEquals(KMyMoneyAccount.Type.INCOME, acct.getType());
+		assertEquals(null, acct.getInstitutionID());
+		assertEquals(null, acct.getInstitution());
 		assertEquals("Income", acct.getName());
 		assertEquals("Income", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
@@ -290,6 +308,8 @@ public class TestKMyMoneyWritableAccountImpl {
 
 		assertEquals(ACCT_13_ID, acct.getID());
 		assertEquals(KMyMoneyAccount.Type.EXPENSE, acct.getType());
+		assertEquals(null, acct.getInstitutionID());
+		assertEquals(null, acct.getInstitution());
 		assertEquals("Expense", acct.getName());
 		assertEquals("Expense", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
@@ -317,7 +337,9 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertNotEquals(null, acct);
 
 		assertEquals(ACCT_14_ID, acct.getID());
-		assertEquals("AStd::Equity", acct.getID().toString());
+		assertEquals(KMyMoneyAccount.Type.EQUITY, acct.getType());
+		assertEquals(null, acct.getInstitutionID());
+		assertEquals(null, acct.getInstitution());
 		assertEquals("Equity", acct.getName());
 		assertEquals("Equity", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
@@ -356,6 +378,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		// ----------------------------
 		// Modify the object
 
+		acct.setInstitutionID(INST_2_ID);
 		acct.setName("Giro d'Italia");
 		acct.setMemo("My favorite account");
 
@@ -382,7 +405,63 @@ public class TestKMyMoneyWritableAccountImpl {
 
 	@Test
 	public void test02_2() throws Exception {
-		// ::TODO
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_10_ID);
+		assertNotEquals(null, acct);
+
+		assertEquals(ACCT_10_ID, acct.getID());
+
+		// ----------------------------
+		// Try modifications -- all of them forbidden, because
+		// the account is a top-level account
+
+		try {
+			acct.setType(KMyMoneyAccount.Type.EQUITY); // illegal call for top-level account
+			assertEquals(1, 0);
+		} catch ( Exception exc ) {
+			assertEquals(0, 0);
+		}
+		
+		try {
+			acct.setCurrency("EUR"); // illegal call for top-level account
+			assertEquals(1, 0);
+		} catch ( Exception exc ) {
+			assertEquals(0, 0);
+		}
+		
+		try {
+			acct.setInstitutionID(INST_2_ID); // illegal call for top-level account
+			assertEquals(1, 0);
+		} catch ( Exception exc ) {
+			assertEquals(0, 0);
+		}
+		
+		try {
+			acct.setName("Wurstel con crauti"); // illegal call for top-level account
+			assertEquals(1, 0);
+		} catch ( Exception exc ) {
+			assertEquals(0, 0);
+		}
+		
+		try {
+			acct.setMemo("Bingo bango bongo"); // illegal call for top-level account
+			assertEquals(1, 0);
+		} catch ( Exception exc ) {
+			assertEquals(0, 0);
+		}
+		
+		try {
+			acct.setUserDefinedAttribute("abc", "xyz"); // illegal call for top-level account
+			assertEquals(1, 0);
+		} catch ( Exception exc ) {
+			assertEquals(0, 0);
+		}
+		
 	}
 
 	private void test02_1_check_memory(KMyMoneyWritableAccount acct) throws Exception {
@@ -391,6 +470,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
 
 		assertEquals(ACCT_1_ID, acct.getID()); // unchanged
+		assertEquals(INST_2_ID, acct.getInstitutionID()); // changed
 		assertEquals("Giro d'Italia", acct.getName()); // changed
 		assertEquals("My favorite account", acct.getMemo()); // changed
 	}
@@ -407,6 +487,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertNotEquals(null, acct);
 
 		assertEquals(ACCT_1_ID, acct.getID()); // unchanged
+		assertEquals(INST_2_ID, acct.getInstitutionID()); // changed
 		assertEquals("Giro d'Italia", acct.getName()); // changed
 		assertEquals("My favorite account", acct.getMemo()); // changed
 	}
@@ -428,6 +509,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritableAccount acct = kmmInFile.createWritableAccount();
+		acct.setInstitutionID(INST_2_ID);
 		acct.setName("Various expenses");
 		acct.setType(KMyMoneyAccount.Type.EXPENSE);
 		acct.setParentAccountID(ACCT_13_ID);
@@ -461,6 +543,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals(ConstTest.Stats.NOF_ACCT + 1, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
 
 		newID = acct.getID();
+		assertEquals(INST_2_ID, acct.getInstitutionID());
 		assertEquals("Various expenses", acct.getName());
 		assertEquals(KMyMoneyAccount.Type.EXPENSE, acct.getType());
 		assertEquals(ACCT_13_ID, acct.getParentAccountID());
@@ -480,6 +563,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertNotEquals(null, acct);
 
 		assertEquals(newID, acct.getID());
+		assertEquals(INST_2_ID, acct.getInstitutionID());
 		assertEquals("Various expenses", acct.getName());
 		assertEquals(KMyMoneyAccount.Type.EXPENSE, acct.getType());
 		assertEquals(ACCT_13_ID, acct.getParentAccountID());

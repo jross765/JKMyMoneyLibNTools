@@ -30,6 +30,7 @@ import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
+import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -151,8 +152,17 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	 * @see KMyMoneyAccount#addTransactionSplit(KMyMoneyTransactionSplit)
 	 */
 	@Override
-	public void addTransactionSplit(final KMyMoneyTransactionSplit split) {
-		super.addTransactionSplit(split);
+	public void addTransactionSplit(final KMyMoneyTransactionSplit splt) {
+		if ( splt == null ) {
+			throw new IllegalArgumentException("null split given");
+		}
+		
+		if ( getKMyMoneyFile().getTopAccountIDs().contains(getID()) ) {
+			LOGGER.error("Setting name is forbidden for top-level accounts");
+			throw new UnsupportedOperationException("Setting name is forbidden for top-level accounts");
+		}
+		
+		super.addTransactionSplit(splt);
 
 		setIsModified();
 		// <<insert code to react further to this change here
@@ -165,9 +175,18 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	/**
 	 * @param impl the split to remove
 	 */
-	protected void removeTransactionSplit(final KMyMoneyWritableTransactionSplit impl) {
+	protected void removeTransactionSplit(final KMyMoneyWritableTransactionSplit splt) {
+		if ( splt == null ) {
+			throw new IllegalArgumentException("null split given");
+		}
+		
+		if ( getKMyMoneyFile().getTopAccountIDs().contains(getID()) ) {
+			LOGGER.error("Setting name is forbidden for top-level accounts");
+			throw new UnsupportedOperationException("Setting name is forbidden for top-level accounts");
+		}
+		
 		List<KMyMoneyTransactionSplit> transactionSplits = getTransactionSplits();
-		transactionSplits.remove(impl);
+		transactionSplits.remove(splt);
 
 		setIsModified();
 		// <<insert code to react further to this change here
@@ -191,6 +210,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("empty name given");
 		}
 
+		if ( getKMyMoneyFile().getTopAccountIDs().contains(getID()) ) {
+			LOGGER.error("Setting name is forbidden for top-level accounts");
+			throw new UnsupportedOperationException("Setting name is forbidden for top-level accounts");
+		}
+		
 		String oldName = getName();
 		if ( oldName == name ) {
 			return; // nothing has changed
@@ -205,31 +229,42 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		}
 	}
 
-	// ::TODO
-//	/**
-//	 * @see KMyMoneyWritableAccount#setAccountCode(java.lang.String)
-//	 */
-//	public void setInstitutionID(final KMMInstID instID) {
-//		if ( instID == null ) {
-//			throw new IllegalArgumentException("null institution-ID given!");
-//		}
-//
-//		if ( ! instID.isSet() ) {
-//			throw new IllegalArgumentException("unset institution-ID given!");
-//		}
-//
-//		String oldInstID = getInstitution();
-//		if ( oldInstID == instID.toString() ) {
-//			return; // nothing has changed
-//		}
-//		this.jwsdpPeer.setInstitution(instID.toString());
-//		setIsModified();
-//		// <<insert code to react further to this change here
-//		PropertyChangeSupport propertyChangeFirer = getPropertyChangeSupport();
-//		if ( propertyChangeFirer != null ) {
-//			propertyChangeFirer.firePropertyChange("code", oldInstID, instID);
-//		}
-//	}
+	/**
+	 * @see KMyMoneyWritableAccount#setAccountCode(java.lang.String)
+	 */
+	@Override
+	public void setInstitutionID(final KMMInstID instID) {
+		if ( instID == null ) {
+			throw new IllegalArgumentException("null institution-ID given!");
+		}
+
+		if ( ! instID.isSet() ) {
+			throw new IllegalArgumentException("unset institution-ID given!");
+		}
+
+		if ( getKMyMoneyFile().getTopAccountIDs().contains(getID()) ) {
+			LOGGER.error("Setting institution ID for is forbidden for top-level accounts");
+			throw new UnsupportedOperationException("Setting institution ID is forbidden for top-level accounts");
+		}
+		
+		KMMInstID oldInstID = getInstitutionID();
+		// ::TODO: Diese extra-Abfrage auf null ist bei optionalen Feldern noetig
+		// (oder besser bei allen) ==> ueberall sonst einbauen 
+		if ( oldInstID != null ) {
+			if ( oldInstID == instID ||
+				 oldInstID.equals(instID) ) {
+				return; // nothing has changed
+			}
+		}
+		
+		this.jwsdpPeer.setInstitution(instID.toString());
+		setIsModified();
+		// <<insert code to react further to this change here
+		PropertyChangeSupport propertyChangeFirer = helper.getPropertyChangeSupport();
+		if ( propertyChangeFirer != null ) {
+			propertyChangeFirer.firePropertyChange("institution", oldInstID, instID);
+		}
+	}
 
 	// ----------------------------
 
@@ -243,10 +278,16 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("unset security/currency ID given!");
 		}
 
+		if ( getKMyMoneyFile().getTopAccountIDs().contains(getID()) ) {
+			LOGGER.error("Setting security/currency ID is forbidden for top-level accounts");
+			throw new UnsupportedOperationException("Setting security/currency ID is forbidden for top-level accounts");
+		}
+		
 		KMMQualifSecCurrID oldCurrId = getQualifSecCurrID();
 		if ( oldCurrId == secCurrID ) {
 			return; // nothing has changed
 		}
+		
 		this.jwsdpPeer.setCurrency(secCurrID.getCode());
 		setIsModified();
 		
@@ -416,10 +457,16 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 //			throw new IllegalArgumentException("empty description given");
 //		}
 
+		if ( getKMyMoneyFile().getTopAccountIDs().contains(getID()) ) {
+			LOGGER.error("Setting memo for top-level account is forbidden for top-level accounts");
+			throw new UnsupportedOperationException("Setting memo is forbidden for top-level accounts");
+		}
+		
 		String oldDescr = getMemo();
 		if ( oldDescr == descr ) {
 			return; // nothing has changed
 		}
+		
 		jwsdpPeer.setDescription(descr);
 		setIsModified();
 		// <<insert code to react further to this change here
@@ -445,6 +492,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("type <= 0 given!");
 		}
 
+		if ( getKMyMoneyFile().getTopAccountIDs().contains(getID()) ) {
+			LOGGER.error("Setting type is forbidden for top-level accounts");
+			throw new UnsupportedOperationException("Setting type is forbidden for top-level accounts");
+		}
+		
 		BigInteger oldType = getTypeBigInt();
 		if ( oldType == typeInt ) {
 			return; // nothing has changed
@@ -471,7 +523,26 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("unset account ID given!");
 		}
 
-		setParentAccount(getKMyMoneyFile().getAccountByID(prntAcctID));
+		// check if new parent is a child-account recursively
+		KMyMoneyAccount prntAcct = getKMyMoneyFile().getAccountByID(prntAcctID);
+		if ( isChildAccountRecursive(prntAcct) ) {
+			throw new IllegalArgumentException("An account may not be set as its own (grand-)parent");
+		}
+
+		if ( getKMyMoneyFile().getTopAccountIDs().contains(getID()) ) {
+			LOGGER.error("Setting parent-account ID is forbidden for top-level accounts");
+			throw new UnsupportedOperationException("Setting parent account ID is forbidden for top-level accounts");
+		}
+		
+		KMMComplAcctID oldPrntAcctID = getParentAccountID();
+		jwsdpPeer.setParentaccount(prntAcctID.toString());
+		setIsModified();
+
+		// <<insert code to react further to this change here
+		PropertyChangeSupport propertyChangeFirer = helper.getPropertyChangeSupport();
+		if ( propertyChangeFirer != null ) {
+			propertyChangeFirer.firePropertyChange("parentAccount", oldPrntAcctID, prntAcctID);
+		}
 	}
 
 	/**
@@ -488,20 +559,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("I cannot be my own parent!");
 		}
 
-		// check if newparent is a child-account recursively
-		if ( isChildAccountRecursive(prntAcct) ) {
-			throw new IllegalArgumentException("I cannot be my own (grand-)parent!");
-		}
-
-		KMyMoneyAccount oldPrntAcct = getParentAccount();
-		jwsdpPeer.setParentaccount(prntAcct.getID().toString());
-		setIsModified();
-
-		// <<insert code to react further to this change here
-		PropertyChangeSupport propertyChangeFirer = helper.getPropertyChangeSupport();
-		if ( propertyChangeFirer != null ) {
-			propertyChangeFirer.firePropertyChange("parentAccount", oldPrntAcct, prntAcct);
-		}
+		setParentAccountID(prntAcct.getID());
 	}
 
 	// ---------------------------------------------------------------
@@ -545,6 +603,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("empty value given");
 		}
 
+		if ( getKMyMoneyFile().getTopAccountIDs().contains(getID()) ) {
+			LOGGER.error("Adding user-defined attribute is forbidden for top-level accounts");
+			throw new UnsupportedOperationException("Adding user-defined attribute is forbidden for top-level accounts");
+		}
+		
 		if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
 			ObjectFactory fact = getKMyMoneyFile().getObjectFactory();
 			KEYVALUEPAIRS newKVPs = fact.createKEYVALUEPAIRS();
@@ -566,6 +629,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("empty name given");
 		}
 
+		if ( getKMyMoneyFile().getTopAccountIDs().contains(getID()) ) {
+			LOGGER.error("Removing user-defined attribute is forbidden for top-level accounts");
+			throw new UnsupportedOperationException("Removing user-defined attribute is forbidden for top-level accounts");
+		}
+		
 		if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
 			throw new KVPListDoesNotContainKeyException();
 		}
@@ -585,6 +653,11 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("empty name given");
 		}
 
+		if ( getKMyMoneyFile().getTopAccountIDs().contains(getID()) ) {
+			LOGGER.error("Setting user-defined attribute is forbidden for top-level accounts");
+			throw new UnsupportedOperationException("Setting user-defined attribute is forbidden for top-level accounts");
+		}
+		
 		if ( jwsdpPeer.getKEYVALUEPAIRS() == null ) {
 			throw new KVPListDoesNotContainKeyException();
 		}
@@ -596,33 +669,36 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 
     // -----------------------------------------------------------------
 
-    public String toString() {
-	StringBuffer buffer = new StringBuffer();
-	buffer.append("KMyMoneyWritableAccountImpl [");
-	
-	buffer.append("id=");
-	buffer.append(getID());
-	
-	buffer.append(", type=");
-	try {
-	    buffer.append(getType());
-	} catch (UnknownAccountTypeException e) {
-	    buffer.append("ERROR");
+	public String toString() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("KMyMoneyWritableAccountImpl [");
+
+		buffer.append("id=");
+		buffer.append(getID());
+
+		buffer.append(", type=");
+		try {
+			buffer.append(getType());
+		} catch (UnknownAccountTypeException e) {
+			buffer.append("ERROR");
+		}
+
+		buffer.append(", institution-id=");
+		buffer.append(getInstitutionID());
+
+		buffer.append(", qualif-name='");
+		buffer.append(getQualifiedName() + "'");
+
+		buffer.append(", security/currency='");
+		try {
+			buffer.append(getQualifSecCurrID() + "'");
+		} catch (Exception e) {
+			buffer.append("ERROR");
+		}
+
+		buffer.append("]");
+
+		return buffer.toString();
 	}
-	
-	buffer.append(", qualif-name='");
-	buffer.append(getQualifiedName() + "'");
-	
-	buffer.append(", security/currency='");
-	try {
-	    buffer.append(getQualifSecCurrID() + "'");
-	} catch (Exception e) {
-	    buffer.append("ERROR");
-	}
-	
-	buffer.append("]");
-	
-	return buffer.toString();
-    }
 
 }

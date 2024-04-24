@@ -9,6 +9,7 @@ import org.kmymoney.api.write.hlp.HasWritableUserDefinedAttributes;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 
 import xyz.schnorxoborx.base.numbers.FixedPointNumber;
@@ -95,6 +96,10 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 
 	void setCurrency(String currCode);
 	
+	// ----------------------------
+	
+	void setInstitutionID(KMMInstID instID);
+
 	// ----------------------------
 
 	/**
