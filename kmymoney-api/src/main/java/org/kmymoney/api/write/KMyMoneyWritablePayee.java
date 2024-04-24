@@ -2,12 +2,10 @@ package org.kmymoney.api.write;
 
 import java.math.BigInteger;
 
-import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.api.read.KMyMoneyPayee;
-import org.kmymoney.api.read.aux.KMMAddress;
-import org.kmymoney.api.write.aux.KMMWritableAddress;
 import org.kmymoney.api.write.hlp.HasWritableAddress;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 
 /**
  * Payee that can be modified.

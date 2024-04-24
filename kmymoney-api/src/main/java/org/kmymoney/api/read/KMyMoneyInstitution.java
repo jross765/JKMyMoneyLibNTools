@@ -1,6 +1,5 @@
 package org.kmymoney.api.read;
 
-import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.read.hlp.HasAddress;
 import org.kmymoney.api.read.hlp.HasAttachment;
 import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
@@ -32,8 +31,6 @@ public interface KMyMoneyInstitution extends KMyMoneyObject,
      */
     String getSortCode(); 
 
-//    KMMAddress getAddress();
-    
     // ------------------------------------------------------------
     
     String getBIC();

@@ -150,12 +150,12 @@ public class GetAcctInfo extends CommandLineTool
       acctList = kmmFile.getAccountsByName(acctName, true, true);
       if ( acctList.size() == 0 ) 
       {
-        System.err.println("Found no account with that name.");
+        System.err.println("Found no accounts matching this name.");
         throw new NoEntryFoundException();
       }
       else if ( acctList.size() > 1 ) 
       {
-        System.err.println("Found several accounts with that name.");
+        System.err.println("Found several accounts matching this name.");
         System.err.println("Taking first one.");
       }
       acct = acctList.iterator().next();

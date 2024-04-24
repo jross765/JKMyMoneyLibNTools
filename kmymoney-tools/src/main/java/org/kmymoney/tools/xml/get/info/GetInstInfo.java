@@ -13,7 +13,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.Logger;
-import org.kmymoney.base.basetypes.simple.KMMPyeID;
+import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.tools.CommandLineTool;
 import org.kmymoney.tools.xml.helper.Helper;
 
@@ -22,20 +22,20 @@ import xyz.schnorxoborx.base.beanbase.TooManyEntriesFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 
-import org.kmymoney.api.read.KMyMoneyPayee;
+import org.kmymoney.api.read.KMyMoneyInstitution;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 
-public class GetPyeInfo extends CommandLineTool
+public class GetInstInfo extends CommandLineTool
 {
   // Logger
-  private static Logger logger = Logger.getLogger(GetPyeInfo.class);
+  private static Logger logger = Logger.getLogger(GetInstInfo.class);
   
   // private static PropertiesConfiguration cfg = null;
   private static Options options;
   
   private static String      kmmFileName = null;
   private static Helper.Mode mode        = null;
-  private static KMMPyeID    pyeID       = null;
+  private static KMMInstID   instID       = null;
   private static String      name        = null;
   
   private static boolean scriptMode = false; // ::TODO
@@ -44,7 +44,7 @@ public class GetPyeInfo extends CommandLineTool
   {
     try
     {
-      GetPyeInfo tool = new GetPyeInfo ();
+      GetInstInfo tool = new GetInstInfo ();
       tool.execute(args);
     }
     catch (CouldNotExecuteException exc) 
@@ -81,12 +81,12 @@ public class GetPyeInfo extends CommandLineTool
        .withLongOpt("mode")
        .create("m");
         
-    Option optPyeID = OptionBuilder
+    Option optInstID = OptionBuilder
       .hasArg()
       .withArgName("ID")
-      .withDescription("Payee ID")
-      .withLongOpt("payee-id")
-      .create("pye");
+      .withDescription("Institution ID")
+      .withLongOpt("institution-id")
+      .create("inst");
           
     Option optName = OptionBuilder
       .hasArg()
@@ -101,7 +101,7 @@ public class GetPyeInfo extends CommandLineTool
     options = new Options();
     options.addOption(optFile);
     options.addOption(optMode);
-    options.addOption(optPyeID);
+    options.addOption(optInstID);
     options.addOption(optName);
   }
 
@@ -116,39 +116,39 @@ public class GetPyeInfo extends CommandLineTool
   {
     KMyMoneyFileImpl kmmFile = new KMyMoneyFileImpl(new File(kmmFileName));
 
-    KMyMoneyPayee pye = null;
+    KMyMoneyInstitution inst = null;
     
     if ( mode == Helper.Mode.ID )
     {
-      pye = kmmFile.getPayeeByID(pyeID);
-      if ( pye == null )
+      inst = kmmFile.getInstitutionByID(instID);
+      if ( inst == null )
       {
-        System.err.println("Could not find a payee with this ID.");
+        System.err.println("Could not find an institution with this ID.");
         throw new NoEntryFoundException();
       }
     }
     else if ( mode == Helper.Mode.NAME )
     {
-      Collection<KMyMoneyPayee> cmdtyList = kmmFile.getPayeesByName(name); 
+      Collection<KMyMoneyInstitution> cmdtyList = kmmFile.getInstitutionsByName(name); 
       if ( cmdtyList.size() == 0 )
       {
-        System.err.println("Could not find payees matching this name.");
+        System.err.println("Could not find institutions matching this name.");
         throw new NoEntryFoundException();
       }
       if ( cmdtyList.size() > 1 )
       {
-        System.err.println("Found " + cmdtyList.size() + "payees matching this name.");
+        System.err.println("Found " + cmdtyList.size() + "institutions matching this name.");
         System.err.println("Please specify more precisely.");
         throw new TooManyEntriesFoundException();
       }
-      pye = cmdtyList.iterator().next(); // first element
+      inst = cmdtyList.iterator().next(); // first element
     }
     
     // ----------------------------
 
     try
     {
-      System.out.println("ID:                '" + pye.getID() + "'");
+      System.out.println("ID:                '" + inst.getID() + "'");
     }
     catch (Exception exc)
     {
@@ -157,7 +157,7 @@ public class GetPyeInfo extends CommandLineTool
 
     try
     {
-      System.out.println("toString:          " + pye.toString());
+      System.out.println("toString:          " + inst.toString());
     }
     catch (Exception exc)
     {
@@ -166,7 +166,7 @@ public class GetPyeInfo extends CommandLineTool
     
     try
     {
-      System.out.println("Name:              '" + pye.getName() + "'");
+      System.out.println("Name:              '" + inst.getName() + "'");
     }
     catch (Exception exc)
     {
@@ -175,29 +175,38 @@ public class GetPyeInfo extends CommandLineTool
 
     try
     {
-      System.out.println("Address:           " + pye.getAddress());
+      System.out.println("Sort code:         " + inst.getSortCode());
+    }
+    catch (Exception exc)
+    {
+      System.out.println("Sort code:             " + "ERROR");
+    }
+
+    try
+    {
+      System.out.println("Address:           " + inst.getAddress());
     }
     catch (Exception exc)
     {
       System.out.println("Address:           " + "ERROR");
     }
-
+    
     try
     {
-      System.out.println("eMail:             " + pye.getEmail());
+      System.out.println("BIC:               '" + inst.getBIC() + "'");
     }
     catch (Exception exc)
     {
-      System.out.println("eMail:             " + "ERROR");
+      System.out.println("BIC:               " + "ERROR");
     }
-
+    
     try
     {
-      System.out.println("Notes:             " + pye.getNotes());
+      System.out.println("URL:               '" + inst.getURL() + "'");
     }
     catch (Exception exc)
     {
-      System.out.println("Notes:             " + "ERROR");
+      System.out.println("URL:               " + "ERROR");
     }
   }
 
@@ -248,22 +257,22 @@ public class GetPyeInfo extends CommandLineTool
     if ( ! scriptMode )
       System.err.println("Mode:     " + mode);
 
-    // <payee-id>
-    if ( cmdLine.hasOption("payee-id") )
+    // <institution-id>
+    if ( cmdLine.hasOption("institution-id") )
     {
       if ( mode != Helper.Mode.ID )
       {
-        System.err.println("<payee-id> must only be set with <mode> = '" + Helper.Mode.ID.toString() + "'");
+        System.err.println("<institution-id> must only be set with <mode> = '" + Helper.Mode.ID.toString() + "'");
         throw new InvalidCommandLineArgsException();
       }
       
       try
       {
-        pyeID = new KMMPyeID( cmdLine.getOptionValue("payee-id") );
+        instID = new KMMInstID( cmdLine.getOptionValue("institution-id") );
       }
       catch (Exception exc)
       {
-        System.err.println("Could not parse <payee-id>");
+        System.err.println("Could not parse <institution-id>");
         throw new InvalidCommandLineArgsException();
       }
     }
@@ -271,13 +280,13 @@ public class GetPyeInfo extends CommandLineTool
     {
       if ( mode == Helper.Mode.ID )
       {
-        System.err.println("<payee-id> must be set with <mode> = '" + Helper.Mode.ID.toString() + "'");
+        System.err.println("<institution-id> must be set with <mode> = '" + Helper.Mode.ID.toString() + "'");
         throw new InvalidCommandLineArgsException();
       }
     }
 
     if (!scriptMode)
-      System.err.println("Payee ID: '" + pyeID + "'");
+      System.err.println("Institution ID: '" + instID + "'");
 
     // <name>
     if ( cmdLine.hasOption("name") )
@@ -315,6 +324,6 @@ public class GetPyeInfo extends CommandLineTool
   protected void printUsage()
   {
     HelpFormatter formatter = new HelpFormatter();
-    formatter.printHelp("GetPyeInfo", options);
+    formatter.printHelp("GetInstInfo", options);
   }
 }
