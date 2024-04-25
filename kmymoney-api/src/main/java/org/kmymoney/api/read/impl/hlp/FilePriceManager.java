@@ -17,7 +17,6 @@ import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.PRICES;
 import org.kmymoney.api.read.KMyMoneyFile;
-import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
@@ -107,10 +106,18 @@ public class FilePriceManager {
 	// ---------------------------------------------------------------
 
 	public void addPricePair(KMyMoneyPricePair prcPr) {
+		if ( prcPr == null ) {
+			throw new IllegalStateException("null price pair given");
+		}
+
 		addPricePair(prcPr, true);
 	}
 
 	public void addPricePair(KMyMoneyPricePair prcPr, boolean withPrc) {
+		if ( prcPr == null ) {
+			throw new IllegalStateException("null price pair given");
+		}
+
 		prcPrMap.put(prcPr.getID(), prcPr);
 
 		if ( withPrc ) {
@@ -123,10 +130,18 @@ public class FilePriceManager {
 	}
 
 	public void removePricePair(KMyMoneyPricePair prcPr) {
+		if ( prcPr == null ) {
+			throw new IllegalStateException("null price pair given");
+		}
+
 		removePricePair(prcPr, true);
 	}
 
 	public void removePricePair(KMyMoneyPricePair prcPr, boolean withPrc) {
+		if ( prcPr == null ) {
+			throw new IllegalStateException("null price pair given");
+		}
+
 		if ( withPrc ) {
 			for ( KMyMoneyPrice prc : prcPr.getPrices() ) {
 				removePrice(prc, false);
@@ -141,10 +156,18 @@ public class FilePriceManager {
 	// ---------------------------------------------------------------
 
 	public void addPrice(KMyMoneyPrice prc) {
+		if ( prc == null ) {
+			throw new IllegalStateException("null price given");
+		}
+
 		addPrice(prc, true);
 	}
 
 	public void addPrice(KMyMoneyPrice prc, boolean withPrcPr) {
+		if ( prc == null ) {
+			throw new IllegalStateException("null price given");
+		}
+
 		prcMap.put(prc.getID(), prc);
 		LOGGER.debug("addPrice: Added price to cache: " + prc.getID());
 
@@ -154,10 +177,18 @@ public class FilePriceManager {
 	}
 
 	public void removePrice(KMyMoneyPrice prc) {
+		if ( prc == null ) {
+			throw new IllegalStateException("null price given");
+		}
+
 		removePrice(prc, true);
 	}
 
 	public void removePrice(KMyMoneyPrice prc, boolean withPrcPr) {
+		if ( prc == null ) {
+			throw new IllegalStateException("null price given");
+		}
+
 		if ( withPrcPr ) {
 			removePricePair(prc.getParentPricePair(), false);
 		}
@@ -175,6 +206,14 @@ public class FilePriceManager {
 	// ----------------------------
 
 	public KMyMoneyPricePair getPricePairByID(KMMPricePairID prcPrID) {
+		if ( prcPrID == null ) {
+			throw new IllegalStateException("null price pair ID given");
+		}
+
+		if ( ! prcPrID.isSet() ) {
+			throw new IllegalStateException("unset price pair ID given");
+		}
+
 		if ( prcPrMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -205,6 +244,14 @@ public class FilePriceManager {
 	// ----------------------------
 
 	public KMyMoneyPrice getPriceByID(KMMPriceID prcID) {
+		if ( prcID == null ) {
+			throw new IllegalStateException("null price ID given");
+		}
+
+		if ( ! prcID.isSet() ) {
+			throw new IllegalStateException("unset price ID given");
+		}
+
 		if ( prcMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -243,6 +290,14 @@ public class FilePriceManager {
 
 	public FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID) {
 		if ( secCurrID == null ) {
+			throw new IllegalStateException("null security/currency ID given");
+		}
+
+		if ( ! secCurrID.isSet() ) {
+			throw new IllegalStateException("unset security/currency ID given");
+		}
+
+		if ( secCurrID == null ) {
 			throw new IllegalArgumentException("null security/currency ID given");
 		}
 
@@ -265,6 +320,11 @@ public class FilePriceManager {
 		if ( secCurrID == null ) {
 			throw new IllegalArgumentException("null security/currency ID given");
 		}
+
+		if ( ! secCurrID.isSet() ) {
+			throw new IllegalStateException("unset security/currency ID given");
+		}
+
 		// System.err.println("depth: " + depth);
 
 		LocalDate latestDate = null;
@@ -357,6 +417,11 @@ public class FilePriceManager {
 		if ( secCurrID == null ) {
 			throw new IllegalArgumentException("null security/currency ID given");
 		}
+
+		if ( ! secCurrID.isSet() ) {
+			throw new IllegalStateException("unset security/currency ID given");
+		}
+
 		// System.err.println("depth: " + depth);
 
 		LocalDate latestDate = null;

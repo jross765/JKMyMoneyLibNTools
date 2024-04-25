@@ -71,6 +71,10 @@ public class FileSecurityManager {
 	// ---------------------------------------------------------------
 
 	public void addSecurity(KMyMoneySecurity sec) {
+		if ( sec == null ) {
+			throw new IllegalStateException("null security given");
+		}
+
 		secMap.put(sec.getID(), sec);
 
 		if ( sec.getSymbol() != null )
@@ -83,6 +87,10 @@ public class FileSecurityManager {
 	}
 
 	public void removeSecurity(KMyMoneySecurity sec) {
+		if ( sec == null ) {
+			throw new IllegalStateException("null security given");
+		}
+
 		secMap.remove(sec.getID());
 
 		for ( String symb : symbMap.keySet() ) {
@@ -100,14 +108,22 @@ public class FileSecurityManager {
 
 	// ---------------------------------------------------------------
 
-	public KMyMoneySecurity getSecurityByID(final KMMSecID id) {
+	public KMyMoneySecurity getSecurityByID(final KMMSecID secID) {
+		if ( secID == null ) {
+			throw new IllegalStateException("null security ID given");
+		}
+
+		if ( ! secID.isSet() ) {
+			throw new IllegalStateException("unset security ID given");
+		}
+
 		if ( secMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
 
-		KMyMoneySecurity retval = secMap.get(id);
+		KMyMoneySecurity retval = secMap.get(secID);
 		if ( retval == null ) {
-			LOGGER.warn("getSecurityByID: No Security with ID '" + id + "'. We know " + secMap.size() + " securities.");
+			LOGGER.warn("getSecurityByID: No Security with ID '" + secID + "'. We know " + secMap.size() + " securities.");
 		}
 
 		return retval;

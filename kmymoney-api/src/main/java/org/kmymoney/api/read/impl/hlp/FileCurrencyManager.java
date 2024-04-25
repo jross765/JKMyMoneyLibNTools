@@ -58,11 +58,19 @@ public class FileCurrencyManager {
 	// ---------------------------------------------------------------
 
 	public void addCurrency(KMyMoneyCurrency curr) {
+		if ( curr == null ) {
+			throw new IllegalStateException("null currency given");
+		}
+
 		currMap.put(curr.getID(), curr);
 		LOGGER.debug("addCurrency: Added currency to cache: " + curr.getID());
 	}
 
 	public void removeCurrency(KMyMoneyCurrency curr) {
+		if ( curr == null ) {
+			throw new IllegalStateException("null currency given");
+		}
+
 		currMap.remove(curr.getID());
 		LOGGER.debug("removeCurrency: Removed currency from cache: " + curr.getID());
 	}
@@ -70,6 +78,14 @@ public class FileCurrencyManager {
 	// ---------------------------------------------------------------
 
 	public KMyMoneyCurrency getCurrencyByID(String currID) {
+		if ( currID == null ) {
+			throw new IllegalStateException("null currency code given");
+		}
+
+		if ( currID.trim().equals("") ) {
+			throw new IllegalStateException("empty currency code given");
+		}
+
 		if ( currMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -84,6 +100,14 @@ public class FileCurrencyManager {
 	}
 
 	public KMyMoneyCurrency getCurrencyByQualifID(KMMQualifCurrID currID) {
+		if ( currID == null ) {
+			throw new IllegalStateException("null currency ID given");
+		}
+
+		if ( ! currID.isSet() ) {
+			throw new IllegalStateException("unset currency ID given");
+		}
+
 		return getCurrencyByID(currID.getCode());
 	}
 

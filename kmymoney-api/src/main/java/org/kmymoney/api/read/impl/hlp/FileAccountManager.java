@@ -89,6 +89,10 @@ public class FileAccountManager {
 			throw new IllegalStateException("null account ID given");
 		}
 
+		if ( ! acctID.isSet() ) {
+			throw new IllegalStateException("unset account ID given");
+		}
+
 		if ( acctMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -106,12 +110,20 @@ public class FileAccountManager {
 			throw new IllegalArgumentException("null account ID given"); 
 		}
 		
+		if ( ! acctID.isSet() ) {
+			throw new IllegalStateException("unset account ID given");
+		}
+
 		return getAccountByID(new KMMComplAcctID(acctID));
 	}
 
 	public List<KMyMoneyAccount> getAccountsByParentID(final KMMComplAcctID acctID) {
 		if ( acctID == null ) {
 			throw new IllegalStateException("null account ID given");
+		}
+
+		if ( ! acctID.isSet() ) {
+			throw new IllegalStateException("unset account ID given");
 		}
 
 		if ( acctMap == null ) {
@@ -143,6 +155,10 @@ public class FileAccountManager {
 	public List<KMyMoneyAccount> getAccountsByParentID(final KMMAcctID acctID) {
 		if ( acctID == null ) {
 			throw new IllegalStateException("null account ID given");
+		}
+
+		if ( ! acctID.isSet() ) {
+			throw new IllegalStateException("unset account ID given");
 		}
 
 		return getAccountsByParentID(new KMMComplAcctID(acctID));
@@ -266,6 +282,10 @@ public class FileAccountManager {
 			throw new IllegalStateException("null account ID given");
 		}
 
+		if ( ! acctID.isSet() ) {
+			throw new IllegalStateException("unset account ID given");
+		}
+
 		if ( name == null ) {
 			throw new IllegalStateException("null name given");
 		}
@@ -286,6 +306,10 @@ public class FileAccountManager {
 			throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( acctID == null ) {
 			throw new IllegalStateException("null account ID given");
+		}
+
+		if ( ! acctID.isSet() ) {
+			throw new IllegalStateException("unset account ID given");
 		}
 
 		if ( name == null ) {
@@ -309,6 +333,10 @@ public class FileAccountManager {
 			throw new IllegalStateException("null account ID given");
 		}
 
+		if ( ! acctID.isSet() ) {
+			throw new IllegalStateException("unset account ID given");
+		}
+
 		if ( name == null ) {
 			throw new IllegalStateException("null name given");
 		}
@@ -327,6 +355,14 @@ public class FileAccountManager {
 
 	public KMyMoneyAccount getAccountByIDorNameEx(final KMMAcctID acctID, final String name)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
+		if ( acctID == null ) {
+			throw new IllegalStateException("null account ID given");
+		}
+
+		if ( ! acctID.isSet() ) {
+			throw new IllegalStateException("unset account ID given");
+		}
+
 		if ( name == null ) {
 			throw new IllegalStateException("null name given");
 		}
@@ -351,6 +387,14 @@ public class FileAccountManager {
 	}
 
 	public List<KMyMoneyAccount> getAccountsByTypeAndName(Type type, String expr, boolean qualif, boolean relaxed) {
+		if ( expr == null ) {
+			throw new IllegalStateException("null expression given");
+		}
+
+		if ( expr.trim().equals("") ) {
+			throw new IllegalStateException("empty name given");
+		}
+
 		List<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
 
 		for ( KMyMoneyAccount acct : getAccountsByName(expr, qualif, relaxed) ) {

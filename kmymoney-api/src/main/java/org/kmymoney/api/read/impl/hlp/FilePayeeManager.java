@@ -63,11 +63,19 @@ public class FilePayeeManager {
 	// ---------------------------------------------------------------
 
 	public void addPayee(KMyMoneyPayee pye) {
+		if ( pye == null ) {
+			throw new IllegalStateException("null payee given");
+		}
+
 		pyeMap.put(pye.getID(), pye);
 		LOGGER.debug("addPayee: Added payee to cache: " + pye.getID());
 	}
 
 	public void removePayee(KMyMoneyPayee pye) {
+		if ( pye == null ) {
+			throw new IllegalStateException("null payee given");
+		}
+
 		pyeMap.remove(pye.getID());
 		LOGGER.debug("removePayee: Added payee to cache: " + pye.getID());
 	}
@@ -75,6 +83,14 @@ public class FilePayeeManager {
 	// ---------------------------------------------------------------
 
 	public KMyMoneyPayee getPayeeByID(final KMMPyeID pyeID) {
+		if ( pyeID == null ) {
+			throw new IllegalStateException("null payee ID given");
+		}
+
+		if ( ! pyeID.isSet() ) {
+			throw new IllegalStateException("unset payee ID given");
+		}
+
 		if ( pyeMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -88,10 +104,26 @@ public class FilePayeeManager {
 	}
 
 	public List<KMyMoneyPayee> getPayeesByName(String expr) {
+		if ( expr == null ) {
+			throw new IllegalStateException("null expression given");
+		}
+
+		if ( expr.trim().equals("") ) {
+			throw new IllegalStateException("empty expression given");
+		}
+
 		return getPayeesByName(expr, true);
 	}
 
 	public List<KMyMoneyPayee> getPayeesByName(String expr, boolean relaxed) {
+		if ( expr == null ) {
+			throw new IllegalStateException("null expression given");
+		}
+
+		if ( expr.trim().equals("") ) {
+			throw new IllegalStateException("empty expression given");
+		}
+
 		if ( pyeMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -116,6 +148,14 @@ public class FilePayeeManager {
 	}
 
 	public KMyMoneyPayee getPayeesByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException {
+		if ( expr == null ) {
+			throw new IllegalStateException("null expression given");
+		}
+
+		if ( expr.trim().equals("") ) {
+			throw new IllegalStateException("empty expression given");
+		}
+
 		List<KMyMoneyPayee> cmdtyList = getPayeesByName(expr, false);
 		if ( cmdtyList.size() == 0 )
 			throw new NoEntryFoundException();

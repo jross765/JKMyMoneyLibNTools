@@ -63,11 +63,19 @@ public class FileInstitutionManager {
 	// ---------------------------------------------------------------
 
 	public void addInstitution(KMyMoneyInstitution inst) {
+		if ( inst == null ) {
+			throw new IllegalStateException("null institution given");
+		}
+
 		instMap.put(inst.getID(), inst);
 		LOGGER.debug("addInstitution: Added institution to cache: " + inst.getID());
 	}
 
 	public void removeInstitution(KMyMoneyInstitution inst) {
+		if ( inst == null ) {
+			throw new IllegalStateException("null institution given");
+		}
+
 		instMap.remove(inst.getID());
 		LOGGER.debug("removeInstitution: Added institution to cache: " + inst.getID());
 	}
@@ -75,6 +83,14 @@ public class FileInstitutionManager {
 	// ---------------------------------------------------------------
 
 	public KMyMoneyInstitution getInstitutionByID(final KMMInstID instID) {
+		if ( instID == null ) {
+			throw new IllegalStateException("null institution ID given");
+		}
+
+		if ( ! instID.isSet() ) {
+			throw new IllegalStateException("unset institution ID given");
+		}
+
 		if ( instMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -88,10 +104,26 @@ public class FileInstitutionManager {
 	}
 
 	public List<KMyMoneyInstitution> getInstitutionsByName(String expr) {
+		if ( expr == null ) {
+			throw new IllegalStateException("null expression given");
+		}
+
+		if ( expr.trim().equals("") ) {
+			throw new IllegalStateException("empty expression given");
+		}
+
 		return getInstitutionsByName(expr, true);
 	}
 
 	public List<KMyMoneyInstitution> getInstitutionsByName(String expr, boolean relaxed) {
+		if ( expr == null ) {
+			throw new IllegalStateException("null expression given");
+		}
+
+		if ( expr.trim().equals("") ) {
+			throw new IllegalStateException("empty expression given");
+		}
+
 		if ( instMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -116,6 +148,14 @@ public class FileInstitutionManager {
 	}
 
 	public KMyMoneyInstitution getInstitutionsByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException {
+		if ( expr == null ) {
+			throw new IllegalStateException("null expression given");
+		}
+
+		if ( expr.trim().equals("") ) {
+			throw new IllegalStateException("empty expression given");
+		}
+
 		List<KMyMoneyInstitution> cmdtyList = getInstitutionsByName(expr, false);
 		if ( cmdtyList.size() == 0 )
 			throw new NoEntryFoundException();

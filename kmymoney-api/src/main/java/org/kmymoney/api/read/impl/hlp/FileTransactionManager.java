@@ -106,10 +106,18 @@ public class FileTransactionManager {
 	// ---------------------------------------------------------------
 
 	public void addTransaction(KMyMoneyTransaction trx) {
+		if ( trx == null ) {
+			throw new IllegalStateException("null transaction given");
+		}
+
 		addTransaction(trx, true);
 	}
 
 	public void addTransaction(KMyMoneyTransaction trx, boolean withSplt) {
+		if ( trx == null ) {
+			throw new IllegalStateException("null transaction given");
+		}
+
 		trxMap.put(trx.getID(), trx);
 
 		if ( withSplt ) {
@@ -122,10 +130,18 @@ public class FileTransactionManager {
 	}
 
 	public void removeTransaction(KMyMoneyTransaction trx) {
+		if ( trx == null ) {
+			throw new IllegalStateException("null transaction given");
+		}
+
 		removeTransaction(trx, true);
 	}
 
 	public void removeTransaction(KMyMoneyTransaction trx, boolean withSplt) {
+		if ( trx == null ) {
+			throw new IllegalStateException("null transaction given");
+		}
+
 		if ( withSplt ) {
 			for ( KMyMoneyTransactionSplit splt : trx.getSplits() ) {
 				removeTransactionSplit(splt, false);
@@ -140,10 +156,18 @@ public class FileTransactionManager {
 	// ---------------------------------------------------------------
 
 	public void addTransactionSplit(KMyMoneyTransactionSplit splt) {
+		if ( splt == null ) {
+			throw new IllegalStateException("null split given");
+		}
+
 		addTransactionSplit(splt, true);
 	}
 
 	public void addTransactionSplit(KMyMoneyTransactionSplit splt, boolean withTrx) {
+		if ( splt == null ) {
+			throw new IllegalStateException("null split given");
+		}
+
 		trxSpltMap.put(splt.getQualifID(), splt);
 
 		if ( withTrx ) {
@@ -152,10 +176,18 @@ public class FileTransactionManager {
 	}
 
 	public void removeTransactionSplit(KMyMoneyTransactionSplit splt) {
+		if ( splt == null ) {
+			throw new IllegalStateException("null split given");
+		}
+
 		removeTransactionSplit(splt, true);
 	}
 
 	public void removeTransactionSplit(KMyMoneyTransactionSplit splt, boolean withTrx) {
+		if ( splt == null ) {
+			throw new IllegalStateException("null split given");
+		}
+
 		if ( withTrx ) {
 			removeTransaction(splt.getTransaction(), false);
 		}
@@ -166,6 +198,14 @@ public class FileTransactionManager {
 	// ---------------------------------------------------------------
 
 	public KMyMoneyTransaction getTransactionByID(final KMMTrxID trxID) {
+		if ( trxID == null ) {
+			throw new IllegalStateException("null transaction ID given");
+		}
+
+		if ( ! trxID.isSet() ) {
+			throw new IllegalStateException("unset transaction ID given");
+		}
+
 		if ( trxMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -189,6 +229,14 @@ public class FileTransactionManager {
 	// ---------------------------------------------------------------
 
 	public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSpltID spltID) {
+		if ( spltID == null ) {
+			throw new IllegalStateException("null split ID given");
+		}
+
+		if ( ! spltID.isSet() ) {
+			throw new IllegalStateException("unset split ID given");
+		}
+
 		if ( trxSpltMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -268,6 +316,14 @@ public class FileTransactionManager {
 	}
 
 	public List<KMyMoneyTransactionSplitImpl> getTransactionSplits_readAfresh(final KMMTrxID trxID) {
+		if ( trxID == null ) {
+			throw new IllegalStateException("null transaction ID given");
+		}
+
+		if ( ! trxID.isSet() ) {
+			throw new IllegalStateException("unset transaction ID given");
+		}
+
 		List<KMyMoneyTransactionSplitImpl> result = new ArrayList<KMyMoneyTransactionSplitImpl>();
 
 		for ( KMyMoneyTransaction trx : getTransactions_readAfresh() ) {
@@ -302,6 +358,14 @@ public class FileTransactionManager {
 	}
 
 	private List<SPLIT> getTransactionSplits_raw(final KMMTrxID trxID) {
+		if ( trxID == null ) {
+			throw new IllegalStateException("null transaction ID given");
+		}
+
+		if ( ! trxID.isSet() ) {
+			throw new IllegalStateException("unset transaction ID given");
+		}
+
 		List<SPLIT> result = new ArrayList<SPLIT>();
 
 		for ( TRANSACTION jwsdpTrx : getTransactions_raw() ) {
