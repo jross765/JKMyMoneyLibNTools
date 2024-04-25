@@ -16,7 +16,6 @@ import org.kmymoney.api.generated.KEYVALUEPAIRS;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
-import org.kmymoney.api.read.UnknownAccountTypeException;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.hlp.KVPListDoesNotContainKeyException;
@@ -35,6 +34,7 @@ import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import xyz.schnorxoborx.base.beanbase.UnknownAccountTypeException;
 import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 /**

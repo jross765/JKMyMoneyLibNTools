@@ -12,7 +12,6 @@ import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyInstitution;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
-import org.kmymoney.api.read.UnknownAccountTypeException;
 import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
 import org.kmymoney.api.read.impl.hlp.SimpleAccount;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
@@ -22,6 +21,8 @@ import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import xyz.schnorxoborx.base.beanbase.UnknownAccountTypeException;
 
 /**
  * Implementation of KMyMoneyAccount that used a

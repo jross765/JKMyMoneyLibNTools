@@ -24,7 +24,6 @@ import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
-import org.kmymoney.api.read.SplitNotFoundException;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
@@ -38,6 +37,8 @@ import org.kmymoney.base.basetypes.simple.KMMSpltID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import xyz.schnorxoborx.base.beanbase.TransactionSplitNotFoundException;
 
 /**
  * JWSDP-Implmentation of a Transaction that can be changed.
@@ -223,14 +224,14 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 * @see KMyMoneyWritableTransaction#getWritableFirstSplit()
 	 */
 	@Override
-	public KMyMoneyWritableTransactionSplit getFirstSplit() throws SplitNotFoundException {
+	public KMyMoneyWritableTransactionSplit getFirstSplit() throws TransactionSplitNotFoundException {
 		return (KMyMoneyWritableTransactionSplit) super.getFirstSplit();
 	}
 
 	/**
 	 * @see KMyMoneyWritableTransaction#getWritableFirstSplit()
 	 */
-	public KMyMoneyWritableTransactionSplit getWritableFirstSplit() throws SplitNotFoundException {
+	public KMyMoneyWritableTransactionSplit getWritableFirstSplit() throws TransactionSplitNotFoundException {
 		return (KMyMoneyWritableTransactionSplit) super.getFirstSplit();
 	}
 
@@ -238,14 +239,14 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 * @see KMyMoneyWritableTransaction#getWritableSecondSplit()
 	 */
 	@Override
-	public KMyMoneyWritableTransactionSplit getSecondSplit() throws SplitNotFoundException {
+	public KMyMoneyWritableTransactionSplit getSecondSplit() throws TransactionSplitNotFoundException {
 		return (KMyMoneyWritableTransactionSplit) super.getSecondSplit();
 	}
 
 	/**
 	 * @see KMyMoneyWritableTransaction#getWritableSecondSplit()
 	 */
-	public KMyMoneyWritableTransactionSplit getWritableSecondSplit() throws SplitNotFoundException {
+	public KMyMoneyWritableTransactionSplit getWritableSecondSplit() throws TransactionSplitNotFoundException {
 		return (KMyMoneyWritableTransactionSplit) super.getSecondSplit();
 	}
 
@@ -492,7 +493,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	buffer.append(", amount=");
 	try {
 	    buffer.append(getFirstSplit().getValueFormatted());
-	} catch (SplitNotFoundException e) {
+	} catch (TransactionSplitNotFoundException e) {
 	    buffer.append("ERROR");
 	}
 

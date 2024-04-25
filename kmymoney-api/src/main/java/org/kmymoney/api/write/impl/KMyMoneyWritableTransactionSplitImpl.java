@@ -3,7 +3,6 @@ package org.kmymoney.api.write.impl;
 import java.text.ParseException;
 
 import org.kmymoney.api.generated.SPLIT;
-import org.kmymoney.api.read.IllegalTransactionSplitActionException;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
@@ -18,6 +17,7 @@ import org.kmymoney.base.basetypes.simple.KMMSpltID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import xyz.schnorxoborx.base.beanbase.IllegalTransactionSplitActionException;
 import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 /**

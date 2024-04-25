@@ -9,6 +9,7 @@ import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 
+import xyz.schnorxoborx.base.beanbase.TransactionSplitNotFoundException;
 import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 /**
@@ -123,13 +124,13 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction>,
      * @return the first split of this transaction or null.
      * @throws SplitNotFoundException
      */
-    KMyMoneyTransactionSplit getFirstSplit() throws SplitNotFoundException;
+    KMyMoneyTransactionSplit getFirstSplit() throws TransactionSplitNotFoundException;
 
     /**
      * @return the second split of this transaction or null.
      * @throws SplitNotFoundException
      */
-    KMyMoneyTransactionSplit getSecondSplit() throws SplitNotFoundException;
+    KMyMoneyTransactionSplit getSecondSplit() throws TransactionSplitNotFoundException;
 
     /**
      *

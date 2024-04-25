@@ -447,11 +447,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public KMyMoneyAccount getAccountByNameEx(final String nameRegEx) throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( nameRegEx == null ) {
-			throw new IllegalArgumentException("null name given");
+			throw new IllegalArgumentException("null regular expression given");
 		}
 
 		if ( nameRegEx.trim().equals("") ) {
-			throw new IllegalArgumentException("empty name given");
+			throw new IllegalArgumentException("empty regular expression given");
 		}
 
 		return acctMgr.getAccountByNameEx(nameRegEx);

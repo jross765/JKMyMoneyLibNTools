@@ -20,7 +20,6 @@ import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
-import org.kmymoney.api.read.SplitNotFoundException;
 import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
 import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
@@ -30,6 +29,7 @@ import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import xyz.schnorxoborx.base.beanbase.TransactionSplitNotFoundException;
 import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 /**
@@ -277,9 +277,9 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
      * @throws SplitNotFoundException 
      * @see KMyMoneyTransaction#getFirstSplit()
      */
-    public KMyMoneyTransactionSplit getFirstSplit() throws SplitNotFoundException {
+    public KMyMoneyTransactionSplit getFirstSplit() throws TransactionSplitNotFoundException {
 	if ( getSplits().size() == 0 )
-	    throw new SplitNotFoundException();
+	    throw new TransactionSplitNotFoundException();
 	
 	return getSplits().get(0);
     }
@@ -288,9 +288,9 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
      * @throws SplitNotFoundException 
      * @see KMyMoneyTransaction#getSecondSplit()
      */
-    public KMyMoneyTransactionSplit getSecondSplit() throws SplitNotFoundException {
+    public KMyMoneyTransactionSplit getSecondSplit() throws TransactionSplitNotFoundException {
 	if ( getSplits().size() <= 1 )
-	    throw new SplitNotFoundException();
+	    throw new TransactionSplitNotFoundException();
 	
 	return getSplits().get(1);
     }
@@ -432,7 +432,7 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
 	buffer.append(", amount=");
 	try {
 	    buffer.append(getFirstSplit().getValueFormatted());
-	} catch (SplitNotFoundException e) {
+	} catch (TransactionSplitNotFoundException e) {
 	    buffer.append("ERROR");
 	}
 

@@ -23,7 +23,6 @@ import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 
 import org.kmymoney.api.read.KMyMoneyAccount;
-import org.kmymoney.api.read.UnknownAccountTypeException;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 

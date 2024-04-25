@@ -1,6 +1,5 @@
 package org.kmymoney.api.write;
 
-import org.kmymoney.api.read.IllegalTransactionSplitActionException;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
@@ -8,6 +7,7 @@ import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 
+import xyz.schnorxoborx.base.beanbase.IllegalTransactionSplitActionException;
 import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 /**

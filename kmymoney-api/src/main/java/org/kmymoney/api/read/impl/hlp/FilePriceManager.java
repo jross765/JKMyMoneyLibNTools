@@ -106,10 +106,6 @@ public class FilePriceManager {
 	// ---------------------------------------------------------------
 
 	public void addPricePair(KMyMoneyPricePair prcPr) {
-		if ( prcPr == null ) {
-			throw new IllegalStateException("null price pair given");
-		}
-
 		addPricePair(prcPr, true);
 	}
 
@@ -130,10 +126,6 @@ public class FilePriceManager {
 	}
 
 	public void removePricePair(KMyMoneyPricePair prcPr) {
-		if ( prcPr == null ) {
-			throw new IllegalStateException("null price pair given");
-		}
-
 		removePricePair(prcPr, true);
 	}
 
@@ -156,10 +148,6 @@ public class FilePriceManager {
 	// ---------------------------------------------------------------
 
 	public void addPrice(KMyMoneyPrice prc) {
-		if ( prc == null ) {
-			throw new IllegalStateException("null price given");
-		}
-
 		addPrice(prc, true);
 	}
 
@@ -177,10 +165,6 @@ public class FilePriceManager {
 	}
 
 	public void removePrice(KMyMoneyPrice prc) {
-		if ( prc == null ) {
-			throw new IllegalStateException("null price given");
-		}
-
 		removePrice(prc, true);
 	}
 

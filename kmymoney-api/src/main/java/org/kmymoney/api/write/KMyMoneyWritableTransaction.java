@@ -6,9 +6,10 @@ import java.util.Collection;
 
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransaction;
-import org.kmymoney.api.read.SplitNotFoundException;
 import org.kmymoney.api.write.hlp.HasWritableUserDefinedAttributes;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
+
+import xyz.schnorxoborx.base.beanbase.TransactionSplitNotFoundException;
 
 /**
  * Transaction that can be modified.<br/>
@@ -59,13 +60,13 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
 	 * @return 
 	 * @see KMyMoneyTransaction#getFirstSplit()
 	 */
-	KMyMoneyWritableTransactionSplit getWritableFirstSplit() throws SplitNotFoundException;
+	KMyMoneyWritableTransactionSplit getWritableFirstSplit() throws TransactionSplitNotFoundException;
 
 	/**
 	 * @return 
 	 * @see KMyMoneyTransaction#getSecondSplit()
 	 */
-	KMyMoneyWritableTransactionSplit getWritableSecondSplit() throws SplitNotFoundException;
+	KMyMoneyWritableTransactionSplit getWritableSecondSplit() throws TransactionSplitNotFoundException;
 
 	/**
 	 * @return 
@@ -77,12 +78,12 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
 	 *
 	 * @return the first split of this transaction or null.
 	 */
-	KMyMoneyWritableTransactionSplit getFirstSplit() throws SplitNotFoundException;
+	KMyMoneyWritableTransactionSplit getFirstSplit() throws TransactionSplitNotFoundException;
 
 	/**
 	 * @return the second split of this transaction or null.
 	 */
-	KMyMoneyWritableTransactionSplit getSecondSplit() throws SplitNotFoundException;
+	KMyMoneyWritableTransactionSplit getSecondSplit() throws TransactionSplitNotFoundException;
 
 	/**
 	 * @return 

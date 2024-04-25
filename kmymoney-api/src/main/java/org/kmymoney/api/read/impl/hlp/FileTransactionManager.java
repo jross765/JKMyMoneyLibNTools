@@ -106,10 +106,6 @@ public class FileTransactionManager {
 	// ---------------------------------------------------------------
 
 	public void addTransaction(KMyMoneyTransaction trx) {
-		if ( trx == null ) {
-			throw new IllegalStateException("null transaction given");
-		}
-
 		addTransaction(trx, true);
 	}
 
@@ -130,10 +126,6 @@ public class FileTransactionManager {
 	}
 
 	public void removeTransaction(KMyMoneyTransaction trx) {
-		if ( trx == null ) {
-			throw new IllegalStateException("null transaction given");
-		}
-
 		removeTransaction(trx, true);
 	}
 
@@ -156,10 +148,6 @@ public class FileTransactionManager {
 	// ---------------------------------------------------------------
 
 	public void addTransactionSplit(KMyMoneyTransactionSplit splt) {
-		if ( splt == null ) {
-			throw new IllegalStateException("null split given");
-		}
-
 		addTransactionSplit(splt, true);
 	}
 
@@ -176,10 +164,6 @@ public class FileTransactionManager {
 	}
 
 	public void removeTransactionSplit(KMyMoneyTransactionSplit splt) {
-		if ( splt == null ) {
-			throw new IllegalStateException("null split given");
-		}
-
 		removeTransactionSplit(splt, true);
 	}
 

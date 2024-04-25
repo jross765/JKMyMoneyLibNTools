@@ -245,11 +245,11 @@ public class FileAccountManager {
 	public KMyMoneyAccount getAccountByNameEx(final String nameRegEx)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( nameRegEx == null ) {
-			throw new IllegalStateException("null name given");
+			throw new IllegalStateException("null regular expression given");
 		}
 
 		if ( nameRegEx.trim().equals("") ) {
-			throw new IllegalStateException("empty name given");
+			throw new IllegalStateException("empty regular expression given");
 		}
 
 		if ( acctMap == null ) {
