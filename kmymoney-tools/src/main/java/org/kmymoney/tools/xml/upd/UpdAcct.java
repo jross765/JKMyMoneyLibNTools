@@ -19,7 +19,6 @@ import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.tools.CommandLineTool;
-import org.kmymoney.tools.xml.get.sonstige.GetStockAcct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

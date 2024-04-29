@@ -15,7 +15,6 @@ import org.kmymoney.api.write.KMyMoneyWritableInstitution;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.tools.CommandLineTool;
-import org.kmymoney.tools.xml.get.sonstige.GetStockAcct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

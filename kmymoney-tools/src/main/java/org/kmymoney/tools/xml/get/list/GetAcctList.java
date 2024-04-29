@@ -15,7 +15,6 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.tools.CommandLineTool;
-import org.kmymoney.tools.xml.get.info.GetAcctInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

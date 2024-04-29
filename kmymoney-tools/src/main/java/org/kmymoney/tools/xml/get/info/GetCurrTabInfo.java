@@ -14,7 +14,6 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.kmymoney.api.currency.ComplexPriceTable;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.tools.CommandLineTool;
-import org.kmymoney.tools.xml.gen.complex.GenDepotTrx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
