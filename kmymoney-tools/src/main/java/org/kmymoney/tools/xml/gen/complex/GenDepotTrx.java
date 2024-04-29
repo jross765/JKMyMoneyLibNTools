@@ -32,6 +32,7 @@ import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.kmymoney.base.tuples.AcctIDAmountPair;
 import org.kmymoney.tools.CommandLineTool;
 import org.kmymoney.tools.xml.helper.CmdLineHelper;
+import org.kmymoney.tools.xml.helper.Helper;
 
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
@@ -80,7 +81,7 @@ public class GenDepotTrx extends CommandLineTool
   private static FixedPointNumber stockPrc = null;
   private static FixedPointNumber divGross = null;
   
-  private static org.kmymoney.tools.xml.helper.Helper.DateFormat dateFormat = null;
+  private static Helper.DateFormat dateFormat = null;
   private static LocalDate        datPst = null;
   private static String           descr = null;
 
@@ -96,7 +97,7 @@ public class GenDepotTrx extends CommandLineTool
 
   // ::MAGIC
   private final static String COMMENT_TOKEN = "#";
-  private final static String SEPARATOR     = ","; // sic, not colon  
+  private final static String SEPARATOR     = "§"; // sic, not colon, not comma, not pipe  
 
   // -----------------------------------------------------------------
 
@@ -310,32 +311,128 @@ public class GenDepotTrx extends CommandLineTool
 
   private void bookSingleTrx() throws IOException
   {
+	  BufferedWriter outFile = null;
+	  if ( batch )
+	  {
+		  try 
+		  {
+			  outFile = new BufferedWriter(new FileWriter(batchOutFileName));
+		  } 
+		  catch ( Exception exc )
+		  {
+			  System.err.println("Could not open batch-out-file '" + batchOutFileName + "'");
+			  System.err.println("Aborting");
+			  System.exit( 1 );
+		  }
+	  }
+
+	  // ---
+
+	  bookSingleTrxPrep();
+	  KMMTrxID newID = bookSingleTrxCore(outFile);
+	  
+	  // ---
+
+	  kmmFile.writeFile(new File(kmmOutFileName));
+		    
+	  if ( ! silent )
+		  System.out.println("OK");
+		    
+	  if ( batch )
+		  outFile.close();
+  }
+  
+  private void bookListFile() throws IOException, InvalidCommandLineArgsException
+  {
+	  ArrayList<ParamTuple> paramTupleList = new ArrayList<ParamTuple>();
+	  
+	  try
+	  {
+		  readListFile(paramTupleList);
+		  System.out.println("Params: ");
+//		  for ( ParamTuple elt : paramTupleList )
+//			  System.out.println(" - " + elt.toString());
+	  }
+	  catch ( Exception exc )
+	  {
+		  System.err.println("Could not parse list file ");
+		  logger.error("Could not parse list file ");
+		  return;
+	  }
+	  
+	  BufferedWriter outFile = null;
+	  if ( batch )
+	  {
+		  try 
+		  {
+			  outFile = new BufferedWriter(new FileWriter(batchOutFileName));
+		  } 
+		  catch ( Exception exc )
+		  {
+			  System.err.println("Could not open batch-out-file '" + batchOutFileName + "'");
+			  logger.error("Could not open batch-out-file '" + batchOutFileName + "'");
+			  return;
+		  }
+	  }
+
+	  // ---
+
+	  bookListFileCore( paramTupleList, outFile );
+	  
+	  // ---
+
+	  kmmFile.writeFile(new File(kmmOutFileName));
+		    
+	  if ( ! silent )
+		  System.out.println("OK");
+
+	  if ( batch )
+		  outFile.close();
+  }
+
+  private void bookSingleTrxPrep() throws IOException
+  {
 	KMyMoneyAccount stockAcct = kmmFile.getAccountByID(stockAcctID);
 	if ( stockAcct == null )
+	{
 		System.err.println("Error: Cannot get account with ID '" + stockAcctID + "'");
+		logger.debug("Error: Cannot get account with ID '" + stockAcctID + "'");
+	}
 	
 	KMyMoneyAccount incomeAcct = null;
 	if ( incomeAcctID != null )
 	{
 		incomeAcct = kmmFile.getAccountByID(incomeAcctID);
 		if ( incomeAcct == null )
+		{
 			System.err.println("Error: Cannot get account with ID '" + incomeAcctID + "'");
+			logger.debug("Error: Cannot get account with ID '" + incomeAcctID + "'");
+		}
 	}
 	
 	for ( AcctIDAmountPair elt : expensesAcctAmtList )
 	{
 		KMyMoneyAccount expensesAcct = kmmFile.getAccountByID(elt.accountID());
 		if ( expensesAcct == null )
+		{
 			System.err.println("Error: Cannot get account with ID '" + elt.accountID() + "'");
+			logger.debug("Error: Cannot get account with ID '" + elt.accountID() + "'");
+		}
 	}
 	
 	KMyMoneyAccount offsetAcct = kmmFile.getAccountByID(offsetAcctID);
 	if ( offsetAcct == null )
+	{
 		System.err.println("Error: Cannot get account with ID '" + offsetAcctID + "'");
+		logger.debug("Error: Cannot get account with ID '" + offsetAcctID + "'");
+	}
 
 	System.err.println("Account 1 name (stock):      '" + stockAcct.getQualifiedName() + "'");
 	if ( incomeAcctID != null )
+	{
 		System.err.println("Account 2 name (income):     '" + incomeAcct.getQualifiedName() + "'");
+		logger.debug("Account 2 name (income):     '" + incomeAcct.getQualifiedName() + "'");
+	}
 
 	int counter = 1;
 	for ( AcctIDAmountPair elt : expensesAcctAmtList )
@@ -346,10 +443,11 @@ public class GenDepotTrx extends CommandLineTool
 	}
 	
 	System.err.println("Account 4 name (offsetting): '" + offsetAcct.getQualifiedName() + "'");
-    
-    // ---
-	// BEGIN core
-	
+	logger.debug("Account 4 name (offsetting): '" + offsetAcct.getQualifiedName() + "'");
+  }
+  
+  private KMMTrxID bookSingleTrxCore(BufferedWriter outFile) throws IOException
+  {
     KMyMoneyWritableTransaction trx = null;
 	if ( type == SecuritiesAccountTransactionManager.Type.BUY_STOCK ) 
 	{
@@ -367,76 +465,31 @@ public class GenDepotTrx extends CommandLineTool
 	    					   divGross,
 	    					   datPst, descr);
 	}
-    KMMTrxID newID = trx.getID();
     
-	// END core
-    // ---
+	// ---
+	
+    if ( ! silent )
+    	System.out.println("Transaction to write: " + trx.toString());
 
-	if ( ! silent )
-		System.out.println("Transaction to write: " + trx.toString());
-    kmmFile.writeFile(new File(kmmOutFileName));
-    
-	if ( ! silent )
-		System.out.println("OK");
-    
+    KMMTrxID newID = trx.getID();
+    logger.info( "Generated new Transaction: " + newID);
+
     if ( batch )
     {
     	try 
     	{
-    	    BufferedWriter outFile = new BufferedWriter(new FileWriter(batchOutFileName));
-    	    outFile.write("" + newID);
-    		outFile.close();
+    		outFile.write("" + newID + "\n");
     	} 
     	catch ( Exception exc )
     	{
-    		System.out.println("ERROR");
+    		System.err.println("Could not write Transaction ID into batch-out-file");
+    		logger.error("Could not write Transaction ID into batch-out-file");
     	}
     }
-  }
-  
-  private void bookListFile() throws IOException, InvalidCommandLineArgsException
-  {
-	  ArrayList<ParamTuple> paramTupleList = new ArrayList<ParamTuple>();
 	  
-	  try
-	  {
-		  readListFile(paramTupleList);
-	  }
-	  catch ( Exception exc )
-	  {
-		  logger.error("Could not parse list file ");
-		  return;
-	  }
-	  
-	  int lineNo = 1;
-	  for ( ParamTuple tuple : paramTupleList )
-	  {
-		  logger.debug( "Line no. " + lineNo + ": " + tuple.toString() );
-		  
-		  try
-		  {
-			  parseCoreParams( tuple );
-		  }
-		  catch ( InvalidCommandLineArgsException exc )
-		  {
-			  logger.error("Could not validate set of params, line no. " + lineNo);
-			  lineNo++;
-			  continue;
-		  }
-		  
-		  try
-		  {
-			  bookSingleTrx();
-		  }
-		  catch ( Exception exc )
-		  {
-			  logger.error("Could not book set of params, line no. " + lineNo);
-			  lineNo++;
-			  continue;
-		  }
-		  
-		  lineNo++;
-	  }
+	// ---
+	
+    return newID;
   }
   
   private void readListFile(ArrayList<ParamTuple> paramTuples) throws IOException
@@ -457,6 +510,45 @@ public class GenDepotTrx extends CommandLineTool
         
         paramTuples.add(newTuple);
       }
+  }
+
+  private void bookListFileCore(ArrayList<ParamTuple> paramTupleList, BufferedWriter outFile)
+  {
+	  KMMTrxID newID = null;
+	  int lineNo = 1;
+	  for ( ParamTuple tuple : paramTupleList )
+	  {
+		  System.out.println( "------------------------------------------------" );
+		  System.out.println( "Line no. " + lineNo + ": " );
+		  logger.info( "Line no. " + lineNo + ": " + tuple.toString() );
+		  
+		  try
+		  {
+			  parseCoreParams( tuple );
+		  }
+		  catch ( InvalidCommandLineArgsException exc )
+		  {
+			  System.err.println("Could not validate set of params, line no. " + lineNo);
+			  logger.error("Could not validate set of params, line no. " + lineNo);
+			  lineNo++;
+			  continue;
+		  }
+		  
+		  try
+		  {
+			  bookSingleTrxPrep();
+			  newID = bookSingleTrxCore(outFile);
+		  }
+		  catch ( Exception exc )
+		  {
+			  System.err.println("Could not book set of params, line no. " + lineNo);
+			  logger.error("Could not book set of params, line no. " + lineNo);
+			  lineNo++;
+			  continue;
+		  }
+		  
+		  lineNo++;
+	  }
   }
   
   // -----------------------------------------------------------------
@@ -515,7 +607,7 @@ public class GenDepotTrx extends CommandLineTool
       throw new InvalidCommandLineArgsException();
     }
     if (! silent)
-    	System.err.println("KMyMoney file (in): '" + kmmInFileName + "'");
+    	System.err.println("KMyMoney file (in):  '" + kmmInFileName + "'");
     
     // <kmymoney-out-file>
     try
@@ -558,47 +650,50 @@ public class GenDepotTrx extends CommandLineTool
     	}
     }
     if (! silent)
-    	System.err.println("Booking list file: '" + bookingListFileName + "'");
+    	System.err.println("Booking list file:   '" + bookingListFileName + "'");
     
     // ----------------------------
     // BEGIN Core parameters
     
-    ParamTuple tuple = new ParamTuple();
-    
-    if ( cmdLine.hasOption( "type" ) )
-    	tuple.type = cmdLine.getOptionValue( "type" );
+    if ( mode == BookMode.SINGLE_TRX )
+    {
+        ParamTuple tuple = new ParamTuple();
+        
+        if ( cmdLine.hasOption( "type" ) )
+        	tuple.type = cmdLine.getOptionValue( "type" );
 
-    if ( cmdLine.hasOption( "stock-account-id" ) )
-    	tuple.stockAcctID = cmdLine.getOptionValue( "stock-account-id" );
-    
-    if ( cmdLine.hasOption( "income-account-id" ) )
-    	tuple.incomeAcctID = cmdLine.getOptionValue( "income-account-id" );
-    
-    if ( cmdLine.hasOption( "expense-account-amounts" ) )
-    	tuple.expensesAcctAmtList = cmdLine.getOptionValue( "expense-account-amounts" );
-    
-    if ( cmdLine.hasOption( "offset-account-id" ) )
-    	tuple.offsetAcctID = cmdLine.getOptionValue( "offset-account-id" );
-    
-    if ( cmdLine.hasOption( "nof-stocks" ) )
-    	tuple.nofStocks = cmdLine.getOptionValue( "nof-stocks" );
-    
-    if ( cmdLine.hasOption( "stock-price" ) )
-    	tuple.stockPrc = cmdLine.getOptionValue( "stock-price" );
-    
-    if ( cmdLine.hasOption( "dividend-gross" ) )
-    	tuple.divGross = cmdLine.getOptionValue( "dividend-gross" );
-    
-    if ( cmdLine.hasOption( "date-format" ) )
-    	tuple.dateFormat = cmdLine.getOptionValue( "date-format" );
+        if ( cmdLine.hasOption( "stock-account-id" ) )
+        	tuple.stockAcctID = cmdLine.getOptionValue( "stock-account-id" );
+        
+        if ( cmdLine.hasOption( "income-account-id" ) )
+        	tuple.incomeAcctID = cmdLine.getOptionValue( "income-account-id" );
+        
+        if ( cmdLine.hasOption( "expense-account-amounts" ) )
+        	tuple.expensesAcctAmtList = cmdLine.getOptionValue( "expense-account-amounts" );
+        
+        if ( cmdLine.hasOption( "offset-account-id" ) )
+        	tuple.offsetAcctID = cmdLine.getOptionValue( "offset-account-id" );
+        
+        if ( cmdLine.hasOption( "nof-stocks" ) )
+        	tuple.nofStocks = cmdLine.getOptionValue( "nof-stocks" );
+        
+        if ( cmdLine.hasOption( "stock-price" ) )
+        	tuple.stockPrc = cmdLine.getOptionValue( "stock-price" );
+        
+        if ( cmdLine.hasOption( "dividend-gross" ) )
+        	tuple.divGross = cmdLine.getOptionValue( "dividend-gross" );
+        
+        if ( cmdLine.hasOption( "date-format" ) )
+        	tuple.dateFormat = cmdLine.getOptionValue( "date-format" );
 
-    if ( cmdLine.hasOption( "date-posted" ) )
-    	tuple.datPst = cmdLine.getOptionValue( "date-posted" );
-    
-    if ( cmdLine.hasOption( "description" ) )
-    	tuple.descr = cmdLine.getOptionValue( "description" );
-    
-    parseCoreParams( tuple );
+        if ( cmdLine.hasOption( "date-posted" ) )
+        	tuple.datPst = cmdLine.getOptionValue( "date-posted" );
+        
+        if ( cmdLine.hasOption( "description" ) )
+        	tuple.descr = cmdLine.getOptionValue( "description" );
+        
+        parseCoreParams( tuple );        
+    }
     
     // END Core parameters
     // ----------------------------
@@ -635,11 +730,11 @@ public class GenDepotTrx extends CommandLineTool
     	}
     }
     if (! silent)
-    	System.err.println("Batch-out-file name: '" + batchOutFileName + "'");
+    	System.err.println("Batch-out-file:      '" + batchOutFileName + "'");
   }
 
-private void parseCoreParams(ParamTuple tuple) throws InvalidCommandLineArgsException
-{
+  private void parseCoreParams(ParamTuple tuple) throws InvalidCommandLineArgsException
+  {
 	// <type>
 	if ( tuple.type != null )
 	{
@@ -749,21 +844,34 @@ private void parseCoreParams(ParamTuple tuple) throws InvalidCommandLineArgsExce
     // <nof-stocks>
     if ( tuple.nofStocks != null ) 
     {
-    	if ( type != SecuritiesAccountTransactionManager.Type.BUY_STOCK )
-    	{
-    		System.err.println("Error: <nof-stocks> may only be set with <type> = '" + SecuritiesAccountTransactionManager.Type.BUY_STOCK + "'");
-    		throw new InvalidCommandLineArgsException();
-    	}
-    	
-    	try
-    	{
-    		nofStocks = new FixedPointNumber(Double.parseDouble(tuple.nofStocks));
-    	}
-    	catch ( Exception exc )
-    	{
-    		System.err.println("Could not parse <nof-stocks>");
-    		throw new InvalidCommandLineArgsException();
-    	}
+    	if ( mode == BookMode.LISTFILE &&
+       		 tuple.nofStocks.trim().equals("") )
+       	{
+    		// Technically set, but logically unset
+        	if ( type == SecuritiesAccountTransactionManager.Type.BUY_STOCK )
+        	{
+        		System.err.println("Error: <nof-stocks> must be set with <type> = '" + SecuritiesAccountTransactionManager.Type.BUY_STOCK + "'");
+        		throw new InvalidCommandLineArgsException();
+        	}
+       	}
+       	else
+       	{
+        	if ( type != SecuritiesAccountTransactionManager.Type.BUY_STOCK )
+        	{
+        		System.err.println("Error: <nof-stocks> may only be set with <type> = '" + SecuritiesAccountTransactionManager.Type.BUY_STOCK + "'");
+        		throw new InvalidCommandLineArgsException();
+        	}
+        	
+        	try
+        	{
+        		nofStocks = new FixedPointNumber(Double.parseDouble(tuple.nofStocks));
+        	}
+        	catch ( Exception exc )
+        	{
+        		System.err.println("Could not parse <nof-stocks>");
+        		throw new InvalidCommandLineArgsException();
+        	}
+       	}
     } 
     else 
     {
@@ -779,22 +887,35 @@ private void parseCoreParams(ParamTuple tuple) throws InvalidCommandLineArgsExce
     // <stock-price>
     if ( tuple.stockPrc != null ) 
     {
-    	if ( type != SecuritiesAccountTransactionManager.Type.BUY_STOCK )
+    	if ( mode == BookMode.LISTFILE &&
+    		 tuple.stockPrc.trim().equals("") )
     	{
-    		System.err.println("Error: <stock-price> may only be set with <type> = '" + SecuritiesAccountTransactionManager.Type.BUY_STOCK + "'");
-    		throw new InvalidCommandLineArgsException();
+       		// Technically set, but logically unset
+        	if ( type == SecuritiesAccountTransactionManager.Type.BUY_STOCK )
+        	{
+        		System.err.println("Error: <stock-price> must be set with <type> = '" + SecuritiesAccountTransactionManager.Type.BUY_STOCK + "'");
+        		throw new InvalidCommandLineArgsException();
+        	}
     	}
-    	
-        try
-        {
-          BigMoney betrag = BigMoney.of(CurrencyUnit.EUR, Double.parseDouble(tuple.stockPrc));
-          stockPrc = new FixedPointNumber(betrag.getAmount());
-        }
-        catch ( Exception exc )
-        {
-          System.err.println("Could not parse <stock-price>");
-          throw new InvalidCommandLineArgsException();
-        }
+    	else
+    	{
+    		if ( type != SecuritiesAccountTransactionManager.Type.BUY_STOCK )
+    		{
+    			System.err.println("Error: <stock-price> may only be set with <type> = '" + SecuritiesAccountTransactionManager.Type.BUY_STOCK + "'");
+    			throw new InvalidCommandLineArgsException();
+    		}
+               	
+    		try
+    		{
+    			BigMoney betrag = BigMoney.of(CurrencyUnit.EUR, Double.parseDouble(tuple.stockPrc));
+    			stockPrc = new FixedPointNumber(betrag.getAmount());
+    		}
+    		catch ( Exception exc )
+    		{
+    			System.err.println("Could not parse <stock-price>");
+    			throw new InvalidCommandLineArgsException();
+    		}
+    	}
     } 
     else 
     {
@@ -885,7 +1006,7 @@ private void parseCoreParams(ParamTuple tuple) throws InvalidCommandLineArgsExce
     }
     if (! silent)
     	System.err.println("Description: '" + descr + "'");
-}
+  }
   
   @Override
   protected void printUsage()
