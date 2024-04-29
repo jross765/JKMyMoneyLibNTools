@@ -12,10 +12,12 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.log4j.Logger;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.tools.CommandLineTool;
+import org.kmymoney.tools.xml.gen.complex.GenDepotTrx;
 import org.kmymoney.tools.xml.helper.Helper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
@@ -28,7 +30,7 @@ import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 public class GetAcctInfo extends CommandLineTool
 {
   // Logger
-  private static Logger logger = Logger.getLogger(GetAcctInfo.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GetAcctInfo.class);
   
   // private static PropertiesConfiguration cfg = null;
   private static Options options;
@@ -150,12 +152,12 @@ public class GetAcctInfo extends CommandLineTool
       acctList = kmmFile.getAccountsByName(acctName, true, true);
       if ( acctList.size() == 0 ) 
       {
-        System.err.println("Found no accounts matching this name.");
+        System.err.println("Found no account with that name.");
         throw new NoEntryFoundException();
       }
       else if ( acctList.size() > 1 ) 
       {
-        System.err.println("Found several accounts matching this name.");
+        System.err.println("Found several accounts with that name.");
         System.err.println("Taking first one.");
       }
       acct = acctList.iterator().next();

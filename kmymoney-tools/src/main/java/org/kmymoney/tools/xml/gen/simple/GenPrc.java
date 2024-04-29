@@ -12,7 +12,6 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.log4j.Logger;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.write.KMyMoneyWritablePrice;
@@ -24,6 +23,8 @@ import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.tools.CommandLineTool;
 import org.kmymoney.tools.xml.helper.CmdLineHelper;
 import org.kmymoney.tools.xml.helper.Helper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
@@ -32,7 +33,7 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 public class GenPrc extends CommandLineTool
 {
   // Logger
-  private static Logger logger = Logger.getLogger(GenPrc.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GenPrc.class);
   
   // private static PropertiesConfiguration cfg = null;
   private static Options options;

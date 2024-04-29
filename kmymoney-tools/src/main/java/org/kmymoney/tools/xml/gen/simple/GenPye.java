@@ -11,10 +11,11 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.log4j.Logger;
 import org.kmymoney.api.write.KMyMoneyWritablePayee;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.tools.CommandLineTool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
@@ -22,7 +23,7 @@ import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 public class GenPye extends CommandLineTool
 {
   // Logger
-  private static Logger logger = Logger.getLogger(GenPye.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GenPye.class);
   
   // private static PropertiesConfiguration cfg = null;
   private static Options options;

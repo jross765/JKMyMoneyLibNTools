@@ -11,13 +11,15 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.log4j.Logger;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.tools.CommandLineTool;
+import org.kmymoney.tools.xml.gen.complex.GenDepotTrx;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
@@ -26,7 +28,7 @@ import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 public class GetCurrInfo extends CommandLineTool
 {
   // Logger
-  private static Logger logger = Logger.getLogger(GetCurrInfo.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GetCurrInfo.class);
   
   // private static PropertiesConfiguration cfg = null;
   private static Options options;

@@ -12,11 +12,13 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.log4j.Logger;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.tools.CommandLineTool;
+import org.kmymoney.tools.xml.get.list.GetSecList;
 import org.kmymoney.tools.xml.helper.Helper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
 import xyz.schnorxoborx.base.beanbase.TooManyEntriesFoundException;
@@ -30,7 +32,7 @@ import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 public class GetStockAcct extends CommandLineTool
 {
   // Logger
-  private static Logger logger = Logger.getLogger(GetStockAcct.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GetStockAcct.class);
   
   // private static PropertiesConfiguration cfg = null;
   private static Options options;

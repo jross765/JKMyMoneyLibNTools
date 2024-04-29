@@ -13,7 +13,6 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.log4j.Logger;
 import org.joda.money.BigMoney;
 import org.joda.money.CurrencyUnit;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
@@ -22,6 +21,8 @@ import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.tools.CommandLineTool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
@@ -32,7 +33,7 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 public class GenTrx extends CommandLineTool
 {
   // Logger
-  private static Logger logger = Logger.getLogger(GenTrx.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GenTrx.class);
   
   // private static PropertiesConfiguration cfg = null;
   private static Options options;

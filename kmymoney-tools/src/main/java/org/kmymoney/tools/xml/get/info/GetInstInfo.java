@@ -12,10 +12,12 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.log4j.Logger;
 import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.tools.CommandLineTool;
+import org.kmymoney.tools.xml.gen.complex.GenDepotTrx;
 import org.kmymoney.tools.xml.helper.Helper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
 import xyz.schnorxoborx.base.beanbase.TooManyEntriesFoundException;
@@ -28,7 +30,7 @@ import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 public class GetInstInfo extends CommandLineTool
 {
   // Logger
-  private static Logger logger = Logger.getLogger(GetInstInfo.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GetInstInfo.class);
   
   // private static PropertiesConfiguration cfg = null;
   private static Options options;

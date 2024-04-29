@@ -11,13 +11,13 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.log4j.Logger;
-// ::TODO
-// import org.kmymoney.api.read.InstitutionNotFoundException;
 import org.kmymoney.api.write.KMyMoneyWritableInstitution;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.tools.CommandLineTool;
+import org.kmymoney.tools.xml.get.sonstige.GetStockAcct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
@@ -26,7 +26,7 @@ import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 public class UpdInst extends CommandLineTool
 {
   // Logger
-  private static Logger logger = Logger.getLogger(UpdInst.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UpdInst.class);
   
   // private static PropertiesConfiguration cfg = null;
   private static Options options;

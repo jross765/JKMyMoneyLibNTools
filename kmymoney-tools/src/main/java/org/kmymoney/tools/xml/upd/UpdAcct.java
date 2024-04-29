@@ -13,23 +13,23 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.log4j.Logger;
+import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.write.KMyMoneyWritableAccount;
+import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.basetypes.simple.KMMID;
 import org.kmymoney.tools.CommandLineTool;
+import org.kmymoney.tools.xml.get.sonstige.GetStockAcct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 
-import org.kmymoney.api.read.KMyMoneyAccount;
-import org.kmymoney.api.write.KMyMoneyWritableAccount;
-import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
-
 public class UpdAcct extends CommandLineTool
 {
   // Logger
-  private static Logger logger = Logger.getLogger(UpdAcct.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UpdAcct.class);
   
   // private static PropertiesConfiguration cfg = null;
   private static Options options;

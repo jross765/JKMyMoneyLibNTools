@@ -20,7 +20,6 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.log4j.Logger;
 import org.joda.money.BigMoney;
 import org.joda.money.CurrencyUnit;
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -33,6 +32,8 @@ import org.kmymoney.base.tuples.AcctIDAmountPair;
 import org.kmymoney.tools.CommandLineTool;
 import org.kmymoney.tools.xml.helper.CmdLineHelper;
 import org.kmymoney.tools.xml.helper.Helper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
@@ -50,7 +51,7 @@ public class GenDepotTrx extends CommandLineTool
   // -----------------------------------------------------------------
 
   // Logger
-  private static Logger logger = Logger.getLogger(GenDepotTrx.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GenDepotTrx.class);
   
   // private static PropertiesConfiguration cfg = null;
   private static Options options;
@@ -356,7 +357,7 @@ public class GenDepotTrx extends CommandLineTool
 	  catch ( Exception exc )
 	  {
 		  System.err.println("Could not parse list file ");
-		  logger.error("Could not parse list file ");
+		  LOGGER.error("Could not parse list file ");
 		  return;
 	  }
 	  
@@ -370,7 +371,7 @@ public class GenDepotTrx extends CommandLineTool
 		  catch ( Exception exc )
 		  {
 			  System.err.println("Could not open batch-out-file '" + batchOutFileName + "'");
-			  logger.error("Could not open batch-out-file '" + batchOutFileName + "'");
+			  LOGGER.error("Could not open batch-out-file '" + batchOutFileName + "'");
 			  return;
 		  }
 	  }
@@ -396,7 +397,7 @@ public class GenDepotTrx extends CommandLineTool
 	if ( stockAcct == null )
 	{
 		System.err.println("Error: Cannot get account with ID '" + stockAcctID + "'");
-		logger.debug("Error: Cannot get account with ID '" + stockAcctID + "'");
+		LOGGER.debug("Error: Cannot get account with ID '" + stockAcctID + "'");
 	}
 	
 	KMyMoneyAccount incomeAcct = null;
@@ -406,7 +407,7 @@ public class GenDepotTrx extends CommandLineTool
 		if ( incomeAcct == null )
 		{
 			System.err.println("Error: Cannot get account with ID '" + incomeAcctID + "'");
-			logger.debug("Error: Cannot get account with ID '" + incomeAcctID + "'");
+			LOGGER.debug("Error: Cannot get account with ID '" + incomeAcctID + "'");
 		}
 	}
 	
@@ -416,7 +417,7 @@ public class GenDepotTrx extends CommandLineTool
 		if ( expensesAcct == null )
 		{
 			System.err.println("Error: Cannot get account with ID '" + elt.accountID() + "'");
-			logger.debug("Error: Cannot get account with ID '" + elt.accountID() + "'");
+			LOGGER.debug("Error: Cannot get account with ID '" + elt.accountID() + "'");
 		}
 	}
 	
@@ -424,14 +425,14 @@ public class GenDepotTrx extends CommandLineTool
 	if ( offsetAcct == null )
 	{
 		System.err.println("Error: Cannot get account with ID '" + offsetAcctID + "'");
-		logger.debug("Error: Cannot get account with ID '" + offsetAcctID + "'");
+		LOGGER.debug("Error: Cannot get account with ID '" + offsetAcctID + "'");
 	}
 
 	System.err.println("Account 1 name (stock):      '" + stockAcct.getQualifiedName() + "'");
 	if ( incomeAcctID != null )
 	{
 		System.err.println("Account 2 name (income):     '" + incomeAcct.getQualifiedName() + "'");
-		logger.debug("Account 2 name (income):     '" + incomeAcct.getQualifiedName() + "'");
+		LOGGER.debug("Account 2 name (income):     '" + incomeAcct.getQualifiedName() + "'");
 	}
 
 	int counter = 1;
@@ -443,7 +444,7 @@ public class GenDepotTrx extends CommandLineTool
 	}
 	
 	System.err.println("Account 4 name (offsetting): '" + offsetAcct.getQualifiedName() + "'");
-	logger.debug("Account 4 name (offsetting): '" + offsetAcct.getQualifiedName() + "'");
+	LOGGER.debug("Account 4 name (offsetting): '" + offsetAcct.getQualifiedName() + "'");
   }
   
   private KMMTrxID bookSingleTrxCore(BufferedWriter outFile) throws IOException
@@ -472,7 +473,7 @@ public class GenDepotTrx extends CommandLineTool
     	System.out.println("Transaction to write: " + trx.toString());
 
     KMMTrxID newID = trx.getID();
-    logger.info( "Generated new Transaction: " + newID);
+    LOGGER.info( "Generated new Transaction: " + newID);
 
     if ( batch )
     {
@@ -483,7 +484,7 @@ public class GenDepotTrx extends CommandLineTool
     	catch ( Exception exc )
     	{
     		System.err.println("Could not write Transaction ID into batch-out-file");
-    		logger.error("Could not write Transaction ID into batch-out-file");
+    		LOGGER.error("Could not write Transaction ID into batch-out-file");
     	}
     }
 	  
@@ -520,7 +521,7 @@ public class GenDepotTrx extends CommandLineTool
 	  {
 		  System.out.println( "------------------------------------------------" );
 		  System.out.println( "Line no. " + lineNo + ": " );
-		  logger.info( "Line no. " + lineNo + ": " + tuple.toString() );
+		  LOGGER.info( "Line no. " + lineNo + ": " + tuple.toString() );
 		  
 		  try
 		  {
@@ -529,7 +530,7 @@ public class GenDepotTrx extends CommandLineTool
 		  catch ( InvalidCommandLineArgsException exc )
 		  {
 			  System.err.println("Could not validate set of params, line no. " + lineNo);
-			  logger.error("Could not validate set of params, line no. " + lineNo);
+			  LOGGER.error("Could not validate set of params, line no. " + lineNo);
 			  lineNo++;
 			  continue;
 		  }
@@ -542,7 +543,7 @@ public class GenDepotTrx extends CommandLineTool
 		  catch ( Exception exc )
 		  {
 			  System.err.println("Could not book set of params, line no. " + lineNo);
-			  logger.error("Could not book set of params, line no. " + lineNo);
+			  LOGGER.error("Could not book set of params, line no. " + lineNo);
 			  lineNo++;
 			  continue;
 		  }

@@ -12,18 +12,18 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.log4j.Logger;
 import org.kmymoney.api.read.KMyMoneyPrice;
-// ::TODO
-// import org.kmymoney.api.read.PriceNotFoundException;
 import org.kmymoney.api.write.KMyMoneyWritablePrice;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.base.basetypes.complex.KMMPriceID;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.tools.CommandLineTool;
+import org.kmymoney.tools.xml.get.sonstige.GetStockAcct;
 import org.kmymoney.tools.xml.helper.CmdLineHelper;
 import org.kmymoney.tools.xml.helper.Helper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
@@ -33,7 +33,7 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 public class UpdPrc extends CommandLineTool
 {
   // Logger
-  private static Logger logger = Logger.getLogger(UpdPrc.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UpdPrc.class);
   
   // private static PropertiesConfiguration cfg = null;
   private static Options options;

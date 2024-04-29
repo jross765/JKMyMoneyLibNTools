@@ -12,10 +12,12 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.log4j.Logger;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.tools.CommandLineTool;
+import org.kmymoney.tools.xml.get.info.GetAcctInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
@@ -24,7 +26,7 @@ import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 public class GetSecList extends CommandLineTool
 {
   // Logger
-  private static Logger logger = Logger.getLogger(GetSecList.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GetSecList.class);
   
   // private static PropertiesConfiguration cfg = null;
   private static Options options;
