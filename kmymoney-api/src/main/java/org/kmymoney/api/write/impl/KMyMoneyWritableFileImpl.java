@@ -1067,6 +1067,31 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
     
 	@Override
+	public Collection<KMyMoneyWritableSecurity> getWritableSecuritiesByType(KMMSecCurr.Type type) {
+		Collection<KMyMoneyWritableSecurity> result = new ArrayList<KMyMoneyWritableSecurity>();
+		
+		for ( KMyMoneySecurity sec : getSecuritiesByType(type) ) {
+			KMyMoneyWritableSecurityImpl newSec = new KMyMoneyWritableSecurityImpl((KMyMoneySecurityImpl) sec);
+			result.add(newSec);
+		}
+		
+		return result;
+	}
+
+	@Override
+	public Collection<KMyMoneyWritableSecurity> getWritableSecuritiesByTypeAndName(KMMSecCurr.Type type, String expr, 
+																				   boolean relaxed) {
+		Collection<KMyMoneyWritableSecurity> result = new ArrayList<KMyMoneyWritableSecurity>();
+		
+		for ( KMyMoneySecurity sec : getSecuritiesByTypeAndName(type, expr, relaxed) ) {
+			KMyMoneyWritableSecurityImpl newSec = new KMyMoneyWritableSecurityImpl((KMyMoneySecurityImpl) sec);
+			result.add(newSec);
+		}
+		
+		return result;
+	}
+
+	@Override
 	public Collection<KMyMoneyWritableSecurity> getWritableSecurities() {
 		Collection<KMyMoneyWritableSecurity> result = new ArrayList<KMyMoneyWritableSecurity>();
 

@@ -284,6 +284,15 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
     KMyMoneyWritableSecurity getWritableSecurityByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
     
 	/**
+	 * @param type the type to look for
+	 * @return A changable version of all accounts of that type.
+	 */
+	Collection<KMyMoneyWritableSecurity> getWritableSecuritiesByType(KMMSecCurr.Type type);
+
+	Collection<KMyMoneyWritableSecurity> getWritableSecuritiesByTypeAndName(KMMSecCurr.Type type, String expr, 
+																			boolean relaxed);
+	
+	/**
 	 * @see KMyMoneyFile#getTransactions()
 	 * @return writable versions of all transactions in the book.
 	 */
