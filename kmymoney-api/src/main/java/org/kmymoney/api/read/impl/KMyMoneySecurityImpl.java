@@ -91,7 +91,7 @@ public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl
     // ---------------------------------------------------------------
 
     @Override
-    public KMMSecCurr.Type getType() throws UnknownSecurityTypeException {
+    public KMMSecCurr.Type getType() {
 	BigInteger typeVal = getTypeBigInt(); 
 	return KMMSecCurrImpl.getType(typeVal.intValue());
     }

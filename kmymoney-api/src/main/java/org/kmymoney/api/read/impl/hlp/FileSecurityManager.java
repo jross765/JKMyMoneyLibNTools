@@ -10,7 +10,10 @@ import java.util.Map;
 
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.SECURITY;
+import org.kmymoney.api.read.KMMSecCurr;
+import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneySecurity;
+import org.kmymoney.api.read.KMyMoneyAccount.Type;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.KMyMoneySecurityImpl;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
@@ -299,6 +302,38 @@ public class FileSecurityManager {
 			throw new TooManyEntriesFoundException();
 		else
 			return cmdtyList.get(0);
+	}
+
+	public List<KMyMoneySecurity> getSecuritiesByType(KMMSecCurr.Type type) {
+		List<KMyMoneySecurity> result = new ArrayList<KMyMoneySecurity>();
+
+		for ( KMyMoneySecurity sec : getSecurities() ) {
+			if ( sec.getType() == type ) {
+				result.add(sec);
+			}
+		}
+
+		return result;
+	}
+
+	public List<KMyMoneySecurity> getSecuritiesByTypeAndName(KMMSecCurr.Type type, String expr, boolean relaxed) {
+		if ( expr == null ) {
+			throw new IllegalStateException("null expression given");
+		}
+
+		if ( expr.trim().equals("") ) {
+			throw new IllegalStateException("empty name given");
+		}
+
+		List<KMyMoneySecurity> result = new ArrayList<KMyMoneySecurity>();
+
+		for ( KMyMoneySecurity sec : getSecuritiesByName(expr, relaxed) ) {
+			if ( sec.getType() == type ) {
+				result.add(sec);
+			}
+		}
+
+		return result;
 	}
 
 	public Collection<KMyMoneySecurity> getSecurities() {

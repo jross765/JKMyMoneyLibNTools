@@ -23,6 +23,8 @@ import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.PRICES;
+import org.kmymoney.api.read.KMMSecCurr;
+import org.kmymoney.api.read.KMMSecCurr.Type;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
@@ -527,7 +529,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
     @Override
     public Collection<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, 
-	                                                        boolean qualif, boolean relaxed) {
+	                                                            boolean qualif, boolean relaxed) {
     	return acctMgr.getAccountsByTypeAndName(type, expr, qualif, relaxed);
     }
 
@@ -741,6 +743,18 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     	return secMgr.getSecurityByNameUniq(expr);
     }
     
+
+	@Override
+	public Collection<KMyMoneySecurity> getSecuritiesByType(KMMSecCurr.Type type) {
+    	return secMgr.getSecuritiesByType(type);
+	}
+
+	@Override
+	public Collection<KMyMoneySecurity> getSecuritiesByTypeAndName(KMMSecCurr.Type type, String expr, 
+																   boolean relaxed) {
+    	return secMgr.getSecuritiesByTypeAndName(type, expr, relaxed);
+	}
+
     @Override
     public Collection<KMyMoneySecurity> getSecurities() {
     	return secMgr.getSecurities();

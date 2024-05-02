@@ -1,6 +1,7 @@
 package org.kmymoney.tools.xml.get.list;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.cli.CommandLine;
@@ -12,6 +13,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.tools.CommandLineTool;
@@ -32,8 +34,9 @@ public class GetSecList extends CommandLineTool
   
   private static String                kmmFileName = null;
   private static Helper.SecListMode    mode        = null; 
-  // private static KMyMoneySecurity.Type type        = null;
-  private static String               name        = null;
+  private static KMMSecCurr.Type       type        = null;
+  private static String                isin        = null;
+  private static String                name        = null;
   
   private static boolean scriptMode = false; // ::TODO
 
@@ -78,17 +81,24 @@ public class GetSecList extends CommandLineTool
       .withLongOpt("mode")
       .create("m");
     	      
-//    Option optType = OptionBuilder
-//      .hasArg()
-//      .withArgName("type")
-//      .withDescription("Security type")
-//      .withLongOpt("type")
-//      .create("t");
+    Option optType = OptionBuilder
+      .hasArg()
+      .withArgName("type")
+      .withDescription("Security type")
+      .withLongOpt("type")
+      .create("t");
       
+    Option optISIN = OptionBuilder
+      .hasArg()
+      .withArgName("isin")
+      .withDescription("ISIN")
+      .withLongOpt("isin")
+      .create("is");
+    	    	      
     Option optName = OptionBuilder
       .hasArg()
       .withArgName("name")
-      .withDescription("Account name (part of)")
+      .withDescription("Security name (part of)")
       .withLongOpt("name")
       .create("n");
     	      
@@ -98,7 +108,8 @@ public class GetSecList extends CommandLineTool
     options = new Options();
     options.addOption(optFile);
     options.addOption(optMode);
-    // options.addOption(optType);
+    options.addOption(optType);
+    options.addOption(optISIN);
     options.addOption(optName);
   }
 
@@ -116,8 +127,13 @@ public class GetSecList extends CommandLineTool
     Collection<KMyMoneySecurity> secList = null; 
     if ( mode == Helper.SecListMode.ALL )
         secList = kmmFile.getSecurities();
-//    else if ( mode == Helper.SecListMode.TYPE )
-//    	secList = kmmFile.getSecuritiesByType(type);
+    else if ( mode == Helper.SecListMode.TYPE )
+    	secList = kmmFile.getSecuritiesByType(type);
+    else if ( mode == Helper.SecListMode.ISIN ) {
+    	KMyMoneySecurity sec = kmmFile.getSecurityBySymbol(isin);
+    	secList = new ArrayList<KMyMoneySecurity>();
+    	secList.add( sec );
+    }
     else if ( mode == Helper.SecListMode.NAME )
     	secList = kmmFile.getSecuritiesByName(name, true);
 
@@ -164,7 +180,7 @@ public class GetSecList extends CommandLineTool
     }
     
     if ( ! scriptMode )
-      System.err.println("KMyMoney file:      '" + kmmFileName + "'");
+      System.err.println("KMyMoney file:     '" + kmmFileName + "'");
     
     // <mode>
     try
@@ -178,38 +194,71 @@ public class GetSecList extends CommandLineTool
     }
 
     // <type>
-//    if ( cmdLine.hasOption( "type" ) )
-//    {
-//    	if ( mode != Helper.SecListMode.TYPE )
-//    	{
-//            System.err.println("Error: <type> must only be set with <mode> = '" + Helper.SecListMode.TYPE + "'");
-//            throw new InvalidCommandLineArgsException();
-//    	}
-//    	
-//        try
-//        {
-//        	type = KMyMoneyAccount.Type.valueOf(cmdLine.getOptionValue("type"));
-//        }
-//        catch ( Exception exc )
-//        {
-//        	System.err.println("Could not parse <type>");
-//        	throw new InvalidCommandLineArgsException();
-//        }
-//    }
-//    else
-//    {
-//    	if ( mode == Helper.SecListMode.TYPE )
-//    	{
-//            System.err.println("Error: <type> must be set with <mode> = '" + Helper.SecListMode.TYPE + "'");
-//            throw new InvalidCommandLineArgsException();
-//    	}
-//    	
-//    	type = null;
-//    }
-//    
-//    if ( ! scriptMode )
-//      System.err.println("Type:              " + type);
+    if ( cmdLine.hasOption( "type" ) )
+    {
+    	if ( mode != Helper.SecListMode.TYPE )
+    	{
+            System.err.println("Error: <type> must only be set with <mode> = '" + Helper.SecListMode.TYPE + "'");
+            throw new InvalidCommandLineArgsException();
+    	}
+    	
+        try
+        {
+        	type = KMMSecCurr.Type.valueOf(cmdLine.getOptionValue("type"));
+        }
+        catch ( Exception exc )
+        {
+        	System.err.println("Could not parse <type>");
+        	throw new InvalidCommandLineArgsException();
+        }
+    }
+    else
+    {
+    	if ( mode == Helper.SecListMode.TYPE )
+    	{
+            System.err.println("Error: <type> must be set with <mode> = '" + Helper.SecListMode.TYPE + "'");
+            throw new InvalidCommandLineArgsException();
+    	}
+    	
+    	type = null;
+    }
+    
+    if ( ! scriptMode )
+      System.err.println("Type:              " + type);
 
+    // <isin>
+    if ( cmdLine.hasOption( "isin" ) )
+    {
+    	if ( mode != Helper.SecListMode.ISIN )
+    	{
+            System.err.println("Error: <isin> must only be set with <mode> = '" + Helper.SecListMode.ISIN + "'");
+            throw new InvalidCommandLineArgsException();
+    	}
+    	
+        try
+        {
+        	isin = cmdLine.getOptionValue("isin");
+        }
+        catch ( Exception exc )
+        {
+        	System.err.println("Could not parse <isin>");
+        	throw new InvalidCommandLineArgsException();
+        }
+    }
+    else
+    {
+    	if ( mode == Helper.SecListMode.ISIN )
+    	{
+            System.err.println("Error: <isin> must be set with <mode> = '" + Helper.SecListMode.ISIN + "'");
+            throw new InvalidCommandLineArgsException();
+    	}
+    	
+    	isin = null;
+    }
+    
+    if ( ! scriptMode )
+      System.err.println("ISIN:              " + isin);
+    
     // <name>
     if ( cmdLine.hasOption( "name" ) )
     {
@@ -252,12 +301,12 @@ public class GetSecList extends CommandLineTool
     
     System.out.println("");
     System.out.println("Valid values for <mode>:");
-    for ( Helper.AcctListMode elt : Helper.AcctListMode.values() )
+    for ( Helper.SecListMode elt : Helper.SecListMode.values() )
       System.out.println(" - " + elt);
 
-//    System.out.println("");
-//    System.out.println("Valid values for <type>:");
-//    for ( KMyMoneySecurity.Type elt : KMyMoneySecurity.Type.values() )
-//      System.out.println(" - " + elt);
+    System.out.println("");
+    System.out.println("Valid values for <type>:");
+    for ( KMMSecCurr.Type elt : KMMSecCurr.Type.values() )
+      System.out.println(" - " + elt);
   }
 }

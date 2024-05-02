@@ -51,13 +51,12 @@ public interface KMyMoneySecurity extends Comparable<KMyMoneySecurity>,
 
     /**
      * @return
-     * @throws UnknownSecurityTypeException
      */
     /**
      * @return
      * @throws UnknownSecurityTypeException
      */
-    KMMSecCurr.Type getType() throws UnknownSecurityTypeException;
+    KMMSecCurr.Type getType();
     
     /**
      * @return

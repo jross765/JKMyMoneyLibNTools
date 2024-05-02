@@ -33,7 +33,7 @@ public class KMMSecCurrImpl {
     
     // ---------------------------------------------------------------
 
-    public static KMMSecCurr.Type getType(int typeVal) throws UnknownSecurityTypeException {
+    public static KMMSecCurr.Type getType(int typeVal) {
 	
 	if ( typeVal == KMMSecCurrImpl.TYPE_STOCK )
 	    return KMMSecCurr.Type.STOCK;

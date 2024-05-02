@@ -366,6 +366,22 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 			throws NoEntryFoundException, TooManyEntriesFoundException;
 
 	/**
+	 * 
+	 * @param type
+	 * @return
+	 */
+	Collection<KMyMoneySecurity> getSecuritiesByType(KMMSecCurr.Type type);
+    
+	/**
+	 * @param type
+	 * @param expr search expression
+	 * @param relaxed
+	 * @return
+	 */
+	Collection<KMyMoneySecurity> getSecuritiesByTypeAndName(KMMSecCurr.Type type, String expr, 
+														   boolean relaxed);
+
+	/**
 	 * @return
 	 */
 	Collection<KMyMoneySecurity> getSecurities();
