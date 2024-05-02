@@ -12,22 +12,20 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneySecurity;
+import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.tools.CommandLineTool;
-import org.kmymoney.tools.xml.get.list.GetSecList;
-import org.kmymoney.tools.xml.helper.Helper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
 import xyz.schnorxoborx.base.beanbase.TooManyEntriesFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
+import xyz.schnorxoborx.base.cmdlinetools.Helper;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
-
-import org.kmymoney.api.read.KMyMoneyAccount;
-import org.kmymoney.api.read.KMyMoneySecurity;
-import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 
 public class GetStockAcct extends CommandLineTool
 {
@@ -37,16 +35,16 @@ public class GetStockAcct extends CommandLineTool
   // private static PropertiesConfiguration cfg = null;
   private static Options options;
   
-  private static String         kmmFileName = null;
+  private static String              kmmFileName = null;
   
-  private static Helper.Mode    acctMode    = null;
-  private static Helper.SecMode secMode     = null;
-  private static KMMComplAcctID acctID      = null;
-  private static String         acctName    = null;
+  private static Helper.Mode         acctMode    = null;
+  private static Helper.CmdtySecMode secMode     = null;
+  private static KMMComplAcctID      acctID      = null;
+  private static String              acctName    = null;
   
-  private static KMMSecID       secID       = null;
-  private static String         isin        = null;
-  private static String         secName     = null;
+  private static KMMSecID            secID       = null;
+  private static String              isin        = null;
+  private static String              secName     = null;
   
   private static boolean scriptMode = false;
 
@@ -202,7 +200,7 @@ public class GetStockAcct extends CommandLineTool
 
     KMyMoneySecurity sec = null;
     
-    if ( secMode == Helper.SecMode.ID )
+    if ( secMode == Helper.CmdtySecMode.ID )
     {
       sec = kmmFile.getSecurityByID(secID);
       if ( sec == null )
@@ -212,7 +210,7 @@ public class GetStockAcct extends CommandLineTool
         throw new NoEntryFoundException();
       }
     }
-    else if ( secMode == Helper.SecMode.ISIN )
+    else if ( secMode == Helper.CmdtySecMode.ISIN )
     {
       sec = kmmFile.getSecurityByCode(isin);
       if ( sec == null )
@@ -222,7 +220,7 @@ public class GetStockAcct extends CommandLineTool
         throw new NoEntryFoundException();
       }
     }
-    else if ( secMode == Helper.SecMode.NAME )
+    else if ( secMode == Helper.CmdtySecMode.NAME )
     {
       Collection<KMyMoneySecurity> cmdtyList = kmmFile.getSecuritiesByName(secName); 
       if ( cmdtyList.size() == 0 )
@@ -315,7 +313,7 @@ public class GetStockAcct extends CommandLineTool
     // <security-mode>
     try
     {
-      secMode = Helper.SecMode.valueOf(cmdLine.getOptionValue("security-mode"));
+      secMode = Helper.CmdtySecMode.valueOf(cmdLine.getOptionValue("security-mode"));
     }
     catch ( Exception exc )
     {
@@ -391,9 +389,9 @@ public class GetStockAcct extends CommandLineTool
     // <security-id>
     if ( cmdLine.hasOption("security-id") )
     {
-      if ( secMode != Helper.SecMode.ID )
+      if ( secMode != Helper.CmdtySecMode.ID )
       {
-        System.err.println("<security-id> must only be set with <security-mode> = '" + Helper.SecMode.ID.toString() + "'");
+        System.err.println("<security-id> must only be set with <security-mode> = '" + Helper.CmdtySecMode.ID.toString() + "'");
         throw new InvalidCommandLineArgsException();
       }
       
@@ -409,9 +407,9 @@ public class GetStockAcct extends CommandLineTool
     }
     else
     {
-      if ( secMode == Helper.SecMode.ID )
+      if ( secMode == Helper.CmdtySecMode.ID )
       {
-        System.err.println("<security-id> must be set with <security-mode> = '" + Helper.SecMode.ID.toString() + "'");
+        System.err.println("<security-id> must be set with <security-mode> = '" + Helper.CmdtySecMode.ID.toString() + "'");
         throw new InvalidCommandLineArgsException();
       }
     }
@@ -422,9 +420,9 @@ public class GetStockAcct extends CommandLineTool
     // <isin>
     if ( cmdLine.hasOption("isin") )
     {
-      if ( secMode != Helper.SecMode.ISIN )
+      if ( secMode != Helper.CmdtySecMode.ISIN )
       {
-        System.err.println("<isin> must only be set with <security-mode> = '" + Helper.SecMode.ISIN.toString() + "'");
+        System.err.println("<isin> must only be set with <security-mode> = '" + Helper.CmdtySecMode.ISIN.toString() + "'");
         throw new InvalidCommandLineArgsException();
       }
       
@@ -440,9 +438,9 @@ public class GetStockAcct extends CommandLineTool
     }
     else
     {
-      if ( secMode == Helper.SecMode.ISIN )
+      if ( secMode == Helper.CmdtySecMode.ISIN )
       {
-        System.err.println("<isin> must be set with <security-mode> = '" + Helper.SecMode.ISIN.toString() + "'");
+        System.err.println("<isin> must be set with <security-mode> = '" + Helper.CmdtySecMode.ISIN.toString() + "'");
         throw new InvalidCommandLineArgsException();
       }
     }
@@ -453,9 +451,9 @@ public class GetStockAcct extends CommandLineTool
     // <security-name>
     if ( cmdLine.hasOption("security-name") )
     {
-      if ( secMode != Helper.SecMode.NAME )
+      if ( secMode != Helper.CmdtySecMode.NAME )
       {
-        System.err.println("<security-name> must only be set with <security-mode> = '" + Helper.SecMode.NAME.toString() + "'");
+        System.err.println("<security-name> must only be set with <security-mode> = '" + Helper.CmdtySecMode.NAME.toString() + "'");
         throw new InvalidCommandLineArgsException();
       }
       
@@ -471,9 +469,9 @@ public class GetStockAcct extends CommandLineTool
     }
     else
     {
-      if ( secMode == Helper.SecMode.NAME )
+      if ( secMode == Helper.CmdtySecMode.NAME )
       {
-        System.err.println("<security-name> must be set with <security-mode> = '" + Helper.SecMode.NAME.toString() + "'");
+        System.err.println("<security-name> must be set with <security-mode> = '" + Helper.CmdtySecMode.NAME.toString() + "'");
         throw new InvalidCommandLineArgsException();
       }
     }
@@ -495,7 +493,7 @@ public class GetStockAcct extends CommandLineTool
 
     System.out.println("");
     System.out.println("Valid values for <security-mode>:");
-    for ( Helper.SecMode elt : Helper.SecMode.values() )
+    for ( Helper.CmdtySecMode elt : Helper.CmdtySecMode.values() )
       System.out.println(" - " + elt);
   }
 }

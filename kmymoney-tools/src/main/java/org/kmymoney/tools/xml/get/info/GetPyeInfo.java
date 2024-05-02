@@ -16,13 +16,13 @@ import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.tools.CommandLineTool;
-import org.kmymoney.tools.xml.helper.Helper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
 import xyz.schnorxoborx.base.beanbase.TooManyEntriesFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
+import xyz.schnorxoborx.base.cmdlinetools.Helper;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 
 public class GetPyeInfo extends CommandLineTool

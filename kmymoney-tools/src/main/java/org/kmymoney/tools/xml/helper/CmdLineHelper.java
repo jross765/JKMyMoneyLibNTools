@@ -9,6 +9,7 @@ import org.apache.commons.cli.CommandLine;
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.tuples.AcctIDAmountPair;
 
+import xyz.schnorxoborx.base.cmdlinetools.Helper;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 import xyz.schnorxoborx.base.dateutils.DateHelpers;
 import xyz.schnorxoborx.base.dateutils.LocalDateHelpers;
