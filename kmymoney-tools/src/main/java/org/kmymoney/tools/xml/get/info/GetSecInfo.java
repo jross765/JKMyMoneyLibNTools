@@ -163,7 +163,7 @@ public class GetSecInfo extends CommandLineTool
       }
       if ( secList.size() > 1 )
       {
-        System.err.println("Found " + secList.size() + "securities matching this name.");
+        System.err.println("Found " + secList.size() + " securities matching this name.");
         System.err.println("Please specify more precisely.");
         throw new TooManyEntriesFoundException();
       }

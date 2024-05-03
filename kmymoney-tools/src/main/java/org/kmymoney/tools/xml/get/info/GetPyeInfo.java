@@ -129,19 +129,19 @@ public class GetPyeInfo extends CommandLineTool
     }
     else if ( mode == Helper.Mode.NAME )
     {
-      Collection<KMyMoneyPayee> cmdtyList = kmmFile.getPayeesByName(name); 
-      if ( cmdtyList.size() == 0 )
+      Collection<KMyMoneyPayee> pyeList = kmmFile.getPayeesByName(name); 
+      if ( pyeList.size() == 0 )
       {
-        System.err.println("Could not find securities matching this name.");
+        System.err.println("Could not find payees matching this name.");
         throw new NoEntryFoundException();
       }
-      if ( cmdtyList.size() > 1 )
+      if ( pyeList.size() > 1 )
       {
-        System.err.println("Found " + cmdtyList.size() + "securities matching this name.");
+        System.err.println("Found " + pyeList.size() + " payees matching this name.");
         System.err.println("Please specify more precisely.");
         throw new TooManyEntriesFoundException();
       }
-      pye = cmdtyList.iterator().next(); // first element
+      pye = pyeList.iterator().next(); // first element
     }
     
     // ----------------------------

@@ -129,19 +129,19 @@ public class GetInstInfo extends CommandLineTool
     }
     else if ( mode == Helper.Mode.NAME )
     {
-      Collection<KMyMoneyInstitution> cmdtyList = kmmFile.getInstitutionsByName(name); 
-      if ( cmdtyList.size() == 0 )
+      Collection<KMyMoneyInstitution> instList = kmmFile.getInstitutionsByName(name); 
+      if ( instList.size() == 0 )
       {
         System.err.println("Could not find institutions matching this name.");
         throw new NoEntryFoundException();
       }
-      if ( cmdtyList.size() > 1 )
+      if ( instList.size() > 1 )
       {
-        System.err.println("Found " + cmdtyList.size() + "institutions matching this name.");
+        System.err.println("Found " + instList.size() + " institutions matching this name.");
         System.err.println("Please specify more precisely.");
         throw new TooManyEntriesFoundException();
       }
-      inst = cmdtyList.iterator().next(); // first element
+      inst = instList.iterator().next(); // first element
     }
     
     // ----------------------------
