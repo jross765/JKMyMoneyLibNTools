@@ -219,6 +219,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		if ( oldName == name ) {
 			return; // nothing has changed
 		}
+		
 		this.jwsdpPeer.setName(name);
 		setIsModified();
 		
@@ -453,9 +454,10 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new IllegalArgumentException("null description given");
 		}
 		
-//		if ( descr.isEmpty() ) {
-//			throw new IllegalArgumentException("empty description given");
-//		}
+    	// Caution: empty string allowed here
+		// if ( descr.isEmpty() ) {
+		//   throw new IllegalArgumentException("empty description given");
+		// }
 
 		if ( getKMyMoneyFile().getTopAccountIDs().contains(getID()) ) {
 			LOGGER.error("Setting memo for top-level account is forbidden for top-level accounts");
@@ -469,6 +471,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		
 		jwsdpPeer.setDescription(descr);
 		setIsModified();
+		
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = helper.getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
@@ -501,8 +504,21 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		if ( oldType == typeInt ) {
 			return; // nothing has changed
 		}
+		
+		// ::CHECK
+		// Not sure whether we should allow this action at all...
+		// It does happen that you set an account's type wrong by accident,
+		// and it should be possibly to correct that.
+		// It does not seem prudent to change an account's type when
+		// there are already transactions pointing to/from it.
+		if ( getTransactionSplits().size() > 0 ) {
+	    	LOGGER.error("Changing account type is forbidden for accounts that already contain transactions: " + getID());
+			throw new UnsupportedOperationException("Changing account type is forbidden for accounts that already contain transactions: " + getID());
+		}
+    	
 		jwsdpPeer.setType(typeInt);
 		setIsModified();
+		
 		// <<insert code to react further to this change here
 		PropertyChangeSupport propertyChangeFirer = helper.getPropertyChangeSupport();
 		if ( propertyChangeFirer != null ) {
@@ -549,7 +565,6 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	 * @see KMyMoneyWritableAccount#setParentAccount(KMyMoneyAccount)
 	 */
 	public void setParentAccount(final KMyMoneyAccount prntAcct) {
-
 		if ( prntAcct == null ) {
 			this.jwsdpPeer.setParentaccount(null);
 			return;

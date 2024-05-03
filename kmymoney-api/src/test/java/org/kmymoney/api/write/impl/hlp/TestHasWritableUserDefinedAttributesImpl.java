@@ -21,6 +21,7 @@ import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
@@ -30,6 +31,7 @@ import junit.framework.JUnit4TestAdapter;
 public class TestHasWritableUserDefinedAttributesImpl {
 	public static final KMMAcctID ACCT_1_ID = TestHasUserDefinedAttributesImpl.ACCT_1_ID;
 	public static final KMMAcctID ACCT_2_ID = TestHasUserDefinedAttributesImpl.ACCT_2_ID;
+	public static final KMMComplAcctID ACCT_3_ID = TestHasUserDefinedAttributesImpl.ACCT_3_ID;
 
 	public static final KMMTrxID TRX_1_ID = TestHasUserDefinedAttributesImpl.TRX_1_ID;
 
@@ -281,6 +283,7 @@ public class TestHasWritableUserDefinedAttributesImpl {
 			acct.setUserDefinedAttribute("abc", "def"); // illegal call, because does not exist
 			assertEquals(0, 1);
 		} catch ( KVPListDoesNotContainKeyException exc ) {
+			assertEquals(0, 0);
 			acct.setUserDefinedAttribute(ConstTest.KVP_KEY_ACCT_IBAN, "Snoopy and Woodstock");
 		}
 
@@ -322,6 +325,27 @@ public class TestHasWritableUserDefinedAttributesImpl {
 		assertNotEquals(null, acct.getUserDefinedAttributeKeys()); // unchanged
 		assertEquals(1, acct.getUserDefinedAttributeKeys().size()); // unchanged
 		assertEquals("Snoopy and Woodstock", acct.getUserDefinedAttribute(ConstTest.KVP_KEY_ACCT_IBAN)); // changed
+	}
+
+	// ----------------------------
+	// Top-level account
+
+	@Test
+	public void test_02_acct_03() throws Exception {
+		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_3_ID);
+		assertNotEquals(null, acct);
+
+		assertEquals(ACCT_3_ID.toString(), acct.getID().toString());
+
+		// ----------------------------
+		// Modify the object
+
+		try {
+			acct.setUserDefinedAttribute("abc", "def"); // illegal call, because is top-level account
+			assertEquals(0, 1);
+		} catch ( UnsupportedOperationException exc ) {
+			assertEquals(0, 0);
+		}
 	}
 
 	// -----------------------------------------------------------------
@@ -484,6 +508,7 @@ public class TestHasWritableUserDefinedAttributesImpl {
 			sec.setUserDefinedAttribute("abc", "def"); // illegal call, because does not exist
 			assertEquals(0, 1);
 		} catch ( KVPListDoesNotContainKeyException exc ) {
+			assertEquals(0, 0);
 			sec.setUserDefinedAttribute(ConstTest.KVP_KEY_SEC_SECURITY_ID, "KUXYZPP082");
 		}
 

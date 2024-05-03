@@ -13,6 +13,7 @@ import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
@@ -22,6 +23,7 @@ import junit.framework.JUnit4TestAdapter;
 public class TestHasUserDefinedAttributesImpl {
 	public static final KMMAcctID ACCT_1_ID = new KMMAcctID( "A000006" );
 	public static final KMMAcctID ACCT_2_ID = new KMMAcctID( "A000062" );
+	public static final KMMComplAcctID ACCT_3_ID = KMMComplAcctID.get(KMMComplAcctID.Top.ASSET);
 
 	public static final KMMTrxID TRX_1_ID = new KMMTrxID( "T000000000000000009" );
 	// public static final KMMTrxID TRX_2_ID = new KMMTrxID( "T000000000000000000" );
