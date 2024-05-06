@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Currency;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -24,7 +25,6 @@ import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.PRICES;
 import org.kmymoney.api.read.KMMSecCurr;
-import org.kmymoney.api.read.KMMSecCurr.Type;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
@@ -800,6 +800,31 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     public Collection<KMyMoneyPrice> getPrices() {
     	return prcMgr.getPrices();
     }
+
+	@Override
+	public List<KMyMoneyPrice> getPricesBySecID(final KMMSecID secID) {
+		return prcMgr.getPricesBySecID(secID);
+	}
+
+	@Override
+	public List<KMyMoneyPrice> getPricesByQualifSecID(final KMMQualifSecID secID) {
+		return prcMgr.getPricesByQualifSecCurrID(secID);
+	}
+
+	@Override
+	public List<KMyMoneyPrice> getPricesByCurr(final Currency curr) {
+		return prcMgr.getPricesByCurr(curr);
+	}
+
+	@Override
+	public List<KMyMoneyPrice> getPricesByQualifCurrID(final KMMQualifCurrID currID) {
+		return prcMgr.getPricesByQualifSecCurrID(currID);
+	}
+
+	@Override
+	public List<KMyMoneyPrice> getPricesByQualifSecCurrID(final KMMQualifSecCurrID secCurrID) {
+		return prcMgr.getPricesByQualifSecCurrID(secCurrID);
+	}
 
     @Override
     public FixedPointNumber getLatestPrice(KMMQualifSecCurrID secCurrID)

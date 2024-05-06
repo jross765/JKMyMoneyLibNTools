@@ -1,9 +1,7 @@
 package org.kmymoney.api.read.impl;
 
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.kmymoney.api.generated.PAIR;
@@ -18,8 +16,6 @@ import org.kmymoney.api.read.UnknownSecurityTypeException;
 import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
 import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.kmymoney.api.read.impl.hlp.KVPListDoesNotContainKeyException;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
@@ -152,35 +148,16 @@ public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl
 
     @Override
     public List<KMyMoneyPrice> getQuotes() {
-	List<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
-	
-	Collection<KMyMoneyPrice> prices = getKMyMoneyFile().getPrices();
-	for ( KMyMoneyPrice price : prices ) {
-	    try {
-		if ( price.getFromSecCurrQualifID().toString().equals(getQualifID().toString()) ) {
-		    result.add(price);
-		} 
-	    } catch ( Exception exc ) {
-		LOGGER.error("getQuotes: Could not check price " + price.toString());
-	    }
-	}
-	
-	return result;
+    	return getKMyMoneyFile().getPricesBySecID(getID());
     }
 
     @Override
     public KMyMoneyPrice getYoungestQuote() {
-	KMyMoneyPrice result = null;
-
-	LocalDate youngestDate = LocalDate.of(1970, 1, 1); // ::MAGIC
-	for ( KMyMoneyPrice price : getQuotes() ) {
-	    if ( price.getDate().isAfter(youngestDate) ) {
-		result = price;
-		youngestDate = price.getDate();
-	    }
-	}
-
-	return result;
+    	List<KMyMoneyPrice> qutList = getQuotes();
+    	if ( qutList.size() == 0 )
+    		return null;
+    	
+    	return qutList.get(0);
     }
 
     // ---------------------------------------------------------------

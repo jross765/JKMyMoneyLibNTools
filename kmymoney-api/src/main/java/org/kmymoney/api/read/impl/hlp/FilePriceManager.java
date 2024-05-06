@@ -3,8 +3,10 @@ package org.kmymoney.api.read.impl.hlp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,7 @@ import org.kmymoney.base.basetypes.complex.KMMPricePairID;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -255,6 +258,51 @@ public class FilePriceManager {
 
 		return prcMap.values();
 	}
+
+	public List<KMyMoneyPrice> getPricesBySecID(final KMMSecID secID) {
+		if ( secID == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+		
+		if ( ! secID.isSet() ) {
+			throw new IllegalArgumentException("unset security ID given");
+		}
+		
+		KMMQualifSecID qualifID = new KMMQualifSecID(secID);
+		return getPricesByQualifSecCurrID(qualifID);
+	}
+
+	public List<KMyMoneyPrice> getPricesByCurr(final Currency curr) {
+		if ( curr == null ) {
+			throw new IllegalArgumentException("null currency given");
+		}
+		
+		KMMQualifCurrID qualifID = new KMMQualifCurrID(curr);
+		return getPricesByQualifSecCurrID(qualifID);
+	}
+
+	public List<KMyMoneyPrice> getPricesByQualifSecCurrID(final KMMQualifSecCurrID qualifID) {
+		if ( qualifID == null ) {
+			throw new IllegalArgumentException("null security/currency ID given");
+		}
+		
+		if ( ! qualifID.isSet() ) {
+			throw new IllegalArgumentException("unset security/currency ID given");
+		}
+		
+		List<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
+
+		for ( KMyMoneyPrice prc : getPrices() ) {
+			if ( prc.getFromSecCurrQualifID().toString().equals(qualifID.toString()) ) {
+				result.add(prc);
+			}
+		}
+		
+		Collections.sort(result, Collections.reverseOrder()); // descending, i.e. youngest first
+		return Collections.unmodifiableList(result);
+	}
+
+	// ---------------------------------------------------------------
 
 	public FixedPointNumber getLatestPrice(final String secCurrIDStr) {
 		if ( secCurrIDStr == null ) {

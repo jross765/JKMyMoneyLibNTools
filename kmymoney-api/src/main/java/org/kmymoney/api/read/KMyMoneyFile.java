@@ -3,6 +3,7 @@ package org.kmymoney.api.read;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Currency;
 import java.util.List;
 
 import org.kmymoney.api.currency.ComplexPriceTable;
@@ -443,6 +444,17 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 */
 	Collection<KMyMoneyPrice> getPrices();
 
+    // sic: List, not Collection
+	List<KMyMoneyPrice> getPricesBySecID(KMMSecID secID);
+	
+	List<KMyMoneyPrice> getPricesByQualifSecID(KMMQualifSecID secID);
+	
+	List<KMyMoneyPrice> getPricesByCurr(Currency curr);
+	
+	List<KMyMoneyPrice> getPricesByQualifCurrID(KMMQualifCurrID currID);
+	
+	List<KMyMoneyPrice> getPricesByQualifSecCurrID(KMMQualifSecCurrID secCurrID);
+	
 	/**
 	 * @param secCurrID
 	 * @param pCmdtySpace the name space for pCmdtyId
