@@ -125,11 +125,28 @@ public class HasUserDefinedAttributesImpl // implements HasUserDefinedAttributes
 			throw new IllegalArgumentException("null new 'kvps' given");
 		}
 
-		KEYVALUEPAIRS oldKVPs = currKVPs;
-		if ( oldKVPs == newKVPs ) {
+		if ( currKVPs == newKVPs ) {
 			return; // nothing has changed
 		}
-		// ::TODO Check with equals as well
+
+		if ( currKVPs.getPAIR().size() == newKVPs.getPAIR().size() ) {
+			boolean areEqual = true;
+			int size = currKVPs.getPAIR().size();
+			for ( int i = 0; i < size; i++ ) {
+				if ( ! currKVPs.getPAIR().get(i).equals(newKVPs.getPAIR().get(i)) ) {
+					areEqual = false;
+					LOGGER.debug("setKVPsInit: current and new KVPs objects are not equal");
+				}
+			}
+			if ( areEqual ) {
+				LOGGER.debug("setKVPsInit: current and new KVPs objects are equal");
+				return;
+			}
+		} else {
+			// have changed
+			LOGGER.debug("setKVPsInit: current and new KVPs objects have different sizes");
+		}
+
 		currKVPs = newKVPs;
 
 		// we have an xsd-problem saving empty KVPs so we add a dummy-value
