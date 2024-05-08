@@ -277,6 +277,8 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	
 	KMyMoneyWritableSecurity getWritableSecurityBySymbol(String symb);
 
+	KMyMoneyWritableSecurity getWritableSecurityByCode(String code);
+
 	List<KMyMoneyWritableSecurity> getWritableSecuritiesByName(String expr);
 
     List<KMyMoneyWritableSecurity> getWritableSecuritiesByName(String expr, boolean relaxed);

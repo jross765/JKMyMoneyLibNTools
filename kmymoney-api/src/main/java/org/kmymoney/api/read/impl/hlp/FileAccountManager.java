@@ -137,8 +137,8 @@ public class FileAccountManager {
 			if ( prntID == null ) {
 				if ( acctID == null ) {
 					retval.add((KMyMoneyAccount) acct);
-//				} else /* if ( ! acctID.isSet() ) ::TODO */ {
-//					retval.add((KMyMoneyAccount) acct);
+				} else if ( ! acctID.isSet() ) {
+					retval.add((KMyMoneyAccount) acct);
 				}
 			} else {
 				if ( prntID.equals(acctID) ) {

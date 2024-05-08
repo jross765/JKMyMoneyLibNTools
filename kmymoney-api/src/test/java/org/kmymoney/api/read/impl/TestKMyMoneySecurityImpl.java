@@ -34,9 +34,8 @@ public class TestKMyMoneySecurityImpl {
 	private KMyMoneyFile kmmFile = null;
 	private KMyMoneySecurity sec = null;
 
-	private KMMQualifSecCurrID secCurrID1 = null;
-	private KMMQualifSecCurrID secCurrID2 = null;
-	private KMMQualifSecCurrID secCurrID3 = null;
+	private KMMQualifSecID secID1 = null;
+	private KMMQualifSecID secID2 = null;
 
 	// -----------------------------------------------------------------
 
@@ -71,8 +70,8 @@ public class TestKMyMoneySecurityImpl {
 
 		// ---
 
-		secCurrID1 = new KMMQualifSecID(SEC_1_ID);
-		secCurrID2 = new KMMQualifSecID(SEC_2_ID);
+		secID1 = new KMMQualifSecID(SEC_1_ID);
+		secID2 = new KMMQualifSecID(SEC_2_ID);
 	}
 
 	// -----------------------------------------------------------------
@@ -81,9 +80,9 @@ public class TestKMyMoneySecurityImpl {
 	public void test00() throws Exception {
 		// Cf. TestCmdtyCurrID -- let's just double-check
 		assertEquals(KMMQualifSecCurrID.Type.SECURITY.toString() + KMMQualifSecCurrID.SEPARATOR + SEC_1_ID,
-				secCurrID1.toString());
+				secID1.toString());
 		assertEquals(KMMQualifSecCurrID.Type.SECURITY.toString() + KMMQualifSecCurrID.SEPARATOR + SEC_2_ID,
-				secCurrID2.toString());
+				secID2.toString());
 	}
 
 	// ------------------------------
@@ -93,33 +92,33 @@ public class TestKMyMoneySecurityImpl {
 		sec = kmmFile.getSecurityByQualifID(new KMMQualifSecID(SEC_1_ID));
 		assertNotEquals(null, sec);
 
-		assertEquals(secCurrID1.toString(), sec.getQualifID().toString());
-		assertNotEquals(secCurrID1, sec);
+		assertEquals(secID1.toString(), sec.getQualifID().toString());
+		assertNotEquals(secID1, sec);
 		assertEquals(KMMSecCurr.Type.STOCK, sec.getType());
 		assertEquals(SEC_1_TICKER, sec.getSymbol());
 		assertEquals(SEC_1_ISIN, sec.getCode());
 		assertEquals("Mercedes-Benz Group AG", sec.getName());
 		assertEquals(2, sec.getPP().intValue());
 		assertEquals(100, sec.getSAF().intValue());
-		assertEquals(KMMSecCurr.RoundingMethod.HALF_UP, sec.getRoundingMethod());
+		assertEquals(KMMSecCurr.RoundingMethod.ROUND, sec.getRoundingMethod());
 		assertEquals(new KMMQualifCurrID("EUR"), sec.getTradingCurrency());
 		assertEquals("XETRA", sec.getTradingMarket());
 	}
 
 	@Test
 	public void test01_2() throws Exception {
-		sec = kmmFile.getSecurityByQualifID(secCurrID1.toString());
+		sec = kmmFile.getSecurityByQualifID(secID1.toString());
 		assertNotEquals(null, sec);
 
-		assertEquals(secCurrID1.toString(), sec.getQualifID().toString());
-		assertNotEquals(secCurrID1, sec);
+		assertEquals(secID1.toString(), sec.getQualifID().toString());
+		assertNotEquals(secID1, sec);
 		assertEquals(KMMSecCurr.Type.STOCK, sec.getType());
 		assertEquals(SEC_1_TICKER, sec.getSymbol());
 		assertEquals(SEC_1_ISIN, sec.getCode());
 		assertEquals("Mercedes-Benz Group AG", sec.getName());
 		assertEquals(2, sec.getPP().intValue());
 		assertEquals(100, sec.getSAF().intValue());
-		assertEquals(KMMSecCurr.RoundingMethod.HALF_UP, sec.getRoundingMethod());
+		assertEquals(KMMSecCurr.RoundingMethod.ROUND, sec.getRoundingMethod());
 		assertEquals(new KMMQualifCurrID("EUR"), sec.getTradingCurrency());
 		assertEquals("XETRA", sec.getTradingMarket());
 	}
@@ -129,15 +128,15 @@ public class TestKMyMoneySecurityImpl {
 		sec = kmmFile.getSecurityBySymbol(SEC_1_TICKER);
 		assertNotEquals(null, sec);
 
-		assertEquals(secCurrID1.toString(), sec.getQualifID().toString());
-		assertNotEquals(secCurrID1, sec);
+		assertEquals(secID1.toString(), sec.getQualifID().toString());
+		assertNotEquals(secID1, sec);
 		assertEquals(KMMSecCurr.Type.STOCK, sec.getType());
 		assertEquals(SEC_1_TICKER, sec.getSymbol());
 		assertEquals(SEC_1_ISIN, sec.getCode());
 		assertEquals("Mercedes-Benz Group AG", sec.getName());
 		assertEquals(2, sec.getPP().intValue());
 		assertEquals(100, sec.getSAF().intValue());
-		assertEquals(KMMSecCurr.RoundingMethod.HALF_UP, sec.getRoundingMethod());
+		assertEquals(KMMSecCurr.RoundingMethod.ROUND, sec.getRoundingMethod());
 		assertEquals(new KMMQualifCurrID("EUR"), sec.getTradingCurrency());
 		assertEquals("XETRA", sec.getTradingMarket());
 	}
@@ -147,15 +146,15 @@ public class TestKMyMoneySecurityImpl {
 		sec = kmmFile.getSecurityByCode(SEC_1_ISIN);
 		assertNotEquals(null, sec);
 
-		assertEquals(secCurrID1.toString(), sec.getQualifID().toString());
-		assertNotEquals(secCurrID1, sec);
+		assertEquals(secID1.toString(), sec.getQualifID().toString());
+		assertNotEquals(secID1, sec);
 		assertEquals(KMMSecCurr.Type.STOCK, sec.getType());
 		assertEquals(SEC_1_TICKER, sec.getSymbol());
 		assertEquals(SEC_1_ISIN, sec.getCode());
 		assertEquals("Mercedes-Benz Group AG", sec.getName());
 		assertEquals(2, sec.getPP().intValue());
 		assertEquals(100, sec.getSAF().intValue());
-		assertEquals(KMMSecCurr.RoundingMethod.HALF_UP, sec.getRoundingMethod());
+		assertEquals(KMMSecCurr.RoundingMethod.ROUND, sec.getRoundingMethod());
 		assertEquals(new KMMQualifCurrID("EUR"), sec.getTradingCurrency());
 		assertEquals("XETRA", sec.getTradingMarket());
 	}
@@ -166,8 +165,8 @@ public class TestKMyMoneySecurityImpl {
 		assertNotEquals(null, secList);
 		assertEquals(1, secList.size());
 
-		assertEquals(secCurrID1.toString(), secList.get(0).getQualifID().toString());
-		assertEquals(secCurrID1, secList.get(0).getQualifID());
+		assertEquals(secID1.toString(), secList.get(0).getQualifID().toString());
+		assertEquals(secID1, secList.get(0).getQualifID());
 		assertEquals(SEC_1_TICKER, secList.get(0).getSymbol());
 		assertEquals(SEC_1_ISIN, secList.get(0).getCode());
 		assertEquals("Mercedes-Benz Group AG", secList.get(0).getName());
@@ -175,13 +174,13 @@ public class TestKMyMoneySecurityImpl {
 		secList = kmmFile.getSecuritiesByName("BENZ");
 		assertNotEquals(null, secList);
 		assertEquals(1, secList.size());
-		assertEquals(secCurrID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
+		assertEquals(secID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
 
 		secList = kmmFile.getSecuritiesByName(" MeRceDeS-bEnZ  ");
 		assertNotEquals(null, secList);
 		assertEquals(1, secList.size());
-		assertEquals(secCurrID1.toString(), ((KMyMoneySecurity) secList.toArray()[0]).getQualifID().toString());
-		assertEquals(secCurrID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
+		assertEquals(secID1.toString(), ((KMyMoneySecurity) secList.toArray()[0]).getQualifID().toString());
+		assertEquals(secID1, ((KMyMoneySecurity) secList.toArray()[0]).getQualifID());
 	}
 
 	//  // ------------------------------

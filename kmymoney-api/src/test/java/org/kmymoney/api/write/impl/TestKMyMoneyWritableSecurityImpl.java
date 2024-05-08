@@ -21,6 +21,7 @@ import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneySecurityImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
+import org.kmymoney.api.write.KMyMoneyWritableCurrency;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
@@ -46,6 +47,8 @@ public class TestKMyMoneyWritableSecurityImpl {
 	private KMyMoneyWritableFileImpl kmmInFile = null;
 	private KMyMoneyFileImpl kmmOutFile = null;
 
+	private KMyMoneyWritableSecurity sec = null;
+
 	private KMMFileStats kmmInFileStats = null;
 	private KMMFileStats kmmOutFileStats = null;
 
@@ -53,7 +56,6 @@ public class TestKMyMoneyWritableSecurityImpl {
 
 	private KMMQualifSecID secID1 = null;
 	private KMMQualifSecID secID2 = null;
-	//    private KMMQualifSecID secCurrID3 = null;
 
 	// https://stackoverflow.com/questions/11884141/deleting-file-and-directory-in-junit
 	@SuppressWarnings("exports")
@@ -110,7 +112,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 
 	@Test
 	public void test01_1() throws Exception {
-		KMyMoneyWritableSecurity sec = kmmInFile.getWritableSecurityByQualifID(secID1);
+		sec = kmmInFile.getWritableSecurityByQualifID(secID1);
 		assertNotEquals(null, sec);
 
 		assertEquals(secID1.toString(), sec.getQualifID().toString());
@@ -118,14 +120,55 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertNotEquals(secID1, sec.getID());
 		// ::TODO: Convert to SecurityID_Exchange, then it should be equal
 		//    assertEquals(secCurrID1, sec.getQualifID()); // not trivial!
-		// ::TODO
-		// assertEquals(SEC_1_ISIN, sec.getSymbol());
+		assertEquals(KMMSecCurr.Type.STOCK, sec.getType());
 		assertEquals(SEC_1_TICKER, sec.getSymbol());
+		assertEquals(SEC_1_ISIN, sec.getCode());
 		assertEquals("Mercedes-Benz Group AG", sec.getName());
+		assertEquals(2, sec.getPP().intValue());
+		assertEquals(100, sec.getSAF().intValue());
+		assertEquals(KMMSecCurr.RoundingMethod.ROUND, sec.getRoundingMethod());
+		assertEquals(new KMMQualifCurrID("EUR"), sec.getTradingCurrency());
+		assertEquals("XETRA", sec.getTradingMarket());
 	}
 
 	@Test
-	public void test01_2() throws Exception {
+	public void test01_3() throws Exception {
+		sec = kmmInFile.getWritableSecurityBySymbol(SEC_1_TICKER);
+		assertNotEquals(null, sec);
+
+		assertEquals(secID1.toString(), sec.getQualifID().toString());
+		assertNotEquals(secID1, sec);
+		assertEquals(KMMSecCurr.Type.STOCK, sec.getType());
+		assertEquals(SEC_1_TICKER, sec.getSymbol());
+		assertEquals(SEC_1_ISIN, sec.getCode());
+		assertEquals("Mercedes-Benz Group AG", sec.getName());
+		assertEquals(2, sec.getPP().intValue());
+		assertEquals(100, sec.getSAF().intValue());
+		assertEquals(KMMSecCurr.RoundingMethod.ROUND, sec.getRoundingMethod());
+		assertEquals(new KMMQualifCurrID("EUR"), sec.getTradingCurrency());
+		assertEquals("XETRA", sec.getTradingMarket());
+	}
+
+	@Test
+	public void test01_4() throws Exception {
+		sec = kmmInFile.getWritableSecurityByCode(SEC_1_ISIN);
+		assertNotEquals(null, sec);
+
+		assertEquals(secID1.toString(), sec.getQualifID().toString());
+		assertNotEquals(secID1, sec);
+		assertEquals(KMMSecCurr.Type.STOCK, sec.getType());
+		assertEquals(SEC_1_TICKER, sec.getSymbol());
+		assertEquals(SEC_1_ISIN, sec.getCode());
+		assertEquals("Mercedes-Benz Group AG", sec.getName());
+		assertEquals(2, sec.getPP().intValue());
+		assertEquals(100, sec.getSAF().intValue());
+		assertEquals(KMMSecCurr.RoundingMethod.ROUND, sec.getRoundingMethod());
+		assertEquals(new KMMQualifCurrID("EUR"), sec.getTradingCurrency());
+		assertEquals("XETRA", sec.getTradingMarket());
+	}
+
+	@Test
+	public void test01_5() throws Exception {
 		List<KMyMoneyWritableSecurity> secList = kmmInFile.getWritableSecuritiesByName("mercedes");
 		assertNotEquals(null, secList);
 		assertEquals(1, secList.size());

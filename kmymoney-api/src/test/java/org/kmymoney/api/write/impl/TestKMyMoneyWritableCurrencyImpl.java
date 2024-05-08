@@ -115,7 +115,7 @@ public class TestKMyMoneyWritableCurrencyImpl {
 		assertEquals("Euro", curr.getName());
 		assertEquals(4, curr.getPP().intValue());
 		assertEquals(100, curr.getSAF().intValue());
-		assertEquals(KMMSecCurr.RoundingMethod.HALF_UP, curr.getRoundingMethod());
+		assertEquals(KMMSecCurr.RoundingMethod.ROUND, curr.getRoundingMethod());
 	}
 
 	@Test
@@ -129,7 +129,7 @@ public class TestKMyMoneyWritableCurrencyImpl {
 		assertEquals("US Dollar", curr.getName());
 		assertEquals(4, curr.getPP().intValue());
 		assertEquals(100, curr.getSAF().intValue());
-		assertEquals(KMMSecCurr.RoundingMethod.HALF_UP, curr.getRoundingMethod());
+		assertEquals(KMMSecCurr.RoundingMethod.ROUND, curr.getRoundingMethod());
 	}
 
 	// -----------------------------------------------------------------

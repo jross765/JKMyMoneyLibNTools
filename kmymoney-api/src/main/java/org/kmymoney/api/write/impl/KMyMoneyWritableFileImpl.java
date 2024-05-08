@@ -1036,6 +1036,12 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
 
 	@Override
+	public KMyMoneyWritableSecurity getWritableSecurityByCode(final String code) {
+		KMyMoneySecurity sec = super.getSecurityByCode(code);
+		return new KMyMoneyWritableSecurityImpl((KMyMoneySecurityImpl) sec);
+	}
+
+	@Override
 	public List<KMyMoneyWritableSecurity> getWritableSecuritiesByName(final String expr) {
 		List<KMyMoneyWritableSecurity> result = new ArrayList<KMyMoneyWritableSecurity>();
 

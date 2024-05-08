@@ -82,7 +82,7 @@ public class KMyMoneyCurrencyImpl extends KMyMoneyObjectImpl
     @Override
     public KMMSecCurr.RoundingMethod getRoundingMethod() throws UnknownRoundingMethodException {
 	BigInteger methodVal = jwsdpPeer.getRoundingMethod(); 
-	return KMMSecCurrImpl.getRoundingMethod(methodVal.intValue());
+	return KMMSecCurr.RoundingMethod.valueOff(methodVal.intValue());
     }
 
     @Override
