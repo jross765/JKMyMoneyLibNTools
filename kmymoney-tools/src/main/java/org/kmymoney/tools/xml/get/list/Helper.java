@@ -4,16 +4,22 @@ public class Helper
 {
 	public enum AcctListMode
 	{
-		TYPE, 
-		NAME, 
+		TYPE,
+		NAME,
+		ALL
+	}
+
+	public enum PyeListMode
+	{
+		NAME,
 		ALL
 	}
 
 	public enum SecListMode
 	{
 		TYPE,
-		ISIN, 
-		NAME, 
+		ISIN,
+		NAME,
 		ALL
 	}
 
