@@ -188,7 +188,11 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 			}
 	
 			// the currency of the quantity is the one of the account
-			balance.add(splt.getShares());
+			if ( splt.getAction() == KMyMoneyTransactionSplit.Action.SPLIT_SHARES ) {
+				balance.multiply(splt.getShares());
+			} else {
+				balance.add(splt.getShares());
+			}
 		}
 	
 		return balance;
