@@ -173,12 +173,12 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals(ACCT_2_ID, acct.getParentAccountID());
 		assertEquals(0, acct.getChildren().size());
 
-		assertEquals(17, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
-		assertEquals(17, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
+		assertEquals(34, acct.getBalance().doubleValue(), ConstTest.DIFF_TOLERANCE);
+		assertEquals(34, acct.getBalanceRecursive().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals(1980.50, acct.getBalance(LocalDate.now(), Currency.getInstance("EUR")).doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals(1980.50, acct.getBalanceRecursive(LocalDate.now(), Currency.getInstance("EUR")).doubleValue(), ConstTest.DIFF_TOLERANCE);
 
-		assertEquals(1, acct.getTransactions().size());
+		assertEquals(2, acct.getTransactions().size());
 	}
 
 	// -----------------------------------------------------------------

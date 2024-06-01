@@ -44,6 +44,7 @@ public class TestKMyMoneyWritablePriceImpl {
 	private static final KMMPriceID PRC_3_ID = TestKMyMoneyPriceImpl.PRC_3_ID;
 	private static final KMMPriceID PRC_4_ID = TestKMyMoneyPriceImpl.PRC_4_ID;
 	private static final KMMPriceID PRC_5_ID = TestKMyMoneyPriceImpl.PRC_5_ID;
+	private static final KMMPriceID PRC_6_ID = TestKMyMoneyPriceImpl.PRC_6_ID;
 
 	private static final KMMPricePairID PRCPR_1_ID = TestKMyMoneyPricePairImpl.PRCPR_1_ID;
 	private static final KMMPricePairID PRCPR_2_ID = TestKMyMoneyPricePairImpl.PRCPR_2_ID;
@@ -127,7 +128,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		List<KMyMoneyWritablePrice> prcList = new ArrayList<KMyMoneyWritablePrice>(prcColl);
 		prcList.sort(Comparator.naturalOrder());
 
-		assertEquals(5, prcList.size());
+		assertEquals(ConstTest.Stats.NOF_PRC, prcList.size());
 		assertEquals(PRC_1_ID, prcList.get(0).getID());
 		assertEquals(PRC_2_ID, prcList.get(1).getID());
 		assertEquals(PRC_3_ID, prcList.get(2).getID());
@@ -219,10 +220,10 @@ public class TestKMyMoneyWritablePriceImpl {
 
 	@Test
 	public void test01_3() throws Exception {
-		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(PRC_5_ID);
+		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(PRC_6_ID);
 		assertNotEquals(null, prc);
 
-		assertEquals(PRC_5_ID, prc.getID());
+		assertEquals(PRC_6_ID, prc.getID());
 		assertEquals(currID1.toString(), prc.getFromSecCurrQualifID().toString());
 		assertEquals(currID1.toString(), prc.getFromCurrencyQualifID().toString());
 		assertEquals("USD", prc.getFromCurrencyCode());

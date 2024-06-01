@@ -173,7 +173,7 @@ public class TestKMyMoneyPricePairImpl {
 
 	@Test
 	public void test01_3() throws Exception {
-		prc = kmmFile.getPriceByID(TestKMyMoneyPriceImpl.PRC_5_ID);
+		prc = kmmFile.getPriceByID(TestKMyMoneyPriceImpl.PRC_6_ID);
 		assertNotEquals(null, prc);
 		prcPr = prc.getParentPricePair();
 		assertNotEquals(null, prcPr);

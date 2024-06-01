@@ -15,15 +15,15 @@ public class ConstTest extends Const {
     
     	public static final int NOF_INST      = 2;
     	public static final int NOF_ACCT      = 76;
-    	public static final int NOF_TRX       = 18;
-    	public static final int NOF_TRX_SPLT  = 38;
+    	public static final int NOF_TRX       = 19;
+    	public static final int NOF_TRX_SPLT  = 39;
 	
     	public static final int NOF_PYE       = 9;
 	
     	public static final int NOF_SEC       = 2;
     	public static final int NOF_CURR      = 2;
     	public static final int NOF_PRCPR     = 3;
-    	public static final int NOF_PRC       = 5;
+    	public static final int NOF_PRC       = 6;
     
     }
 

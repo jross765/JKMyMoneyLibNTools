@@ -13,15 +13,15 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.base.basetypes.complex.KMMPriceID;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPrice.Source;
 import org.kmymoney.api.read.KMyMoneySecurity;
+import org.kmymoney.base.basetypes.complex.KMMPriceID;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 
 import junit.framework.JUnit4TestAdapter;
 
@@ -30,7 +30,8 @@ public class TestKMyMoneyPriceImpl {
 	public static final KMMPriceID PRC_2_ID = new KMMPriceID("E000001", "EUR", "2023-11-07"); // SAP/EUR
 	public static final KMMPriceID PRC_3_ID = new KMMPriceID("E000002", "EUR", "2023-10-27"); // MBG/EUR
 	public static final KMMPriceID PRC_4_ID = new KMMPriceID("E000002", "EUR", "2023-11-01"); // MBG/EUR
-	public static final KMMPriceID PRC_5_ID = new KMMPriceID("USD", "EUR", "2023-12-04");
+	public static final KMMPriceID PRC_5_ID = new KMMPriceID("E000002", "EUR", "2024-06-01"); // MBG/EUR
+	public static final KMMPriceID PRC_6_ID = new KMMPriceID("USD", "EUR", "2023-12-04");
 
 	// -----------------------------------------------------------------
 
@@ -95,7 +96,7 @@ public class TestKMyMoneyPriceImpl {
 		//		}
 		//		System.err.println("=============");
 
-		assertEquals(5, prcList.size());
+		assertEquals(ConstTest.Stats.NOF_PRC, prcList.size());
 		assertEquals(PRC_1_ID, prcList.get(0).getID());
 		assertEquals(PRC_2_ID, prcList.get(1).getID());
 		assertEquals(PRC_3_ID, prcList.get(2).getID());
@@ -187,10 +188,10 @@ public class TestKMyMoneyPriceImpl {
 
 	@Test
 	public void test01_3() throws Exception {
-		prc = kmmFile.getPriceByID(PRC_5_ID);
+		prc = kmmFile.getPriceByID(PRC_6_ID);
 		assertNotEquals(null, prc);
 
-		assertEquals(PRC_5_ID, prc.getID());
+		assertEquals(PRC_6_ID, prc.getID());
 		assertEquals(currID1.toString(), prc.getFromSecCurrQualifID().toString());
 		assertEquals(currID1.toString(), prc.getFromCurrencyQualifID().toString());
 		assertEquals("USD", prc.getFromCurrencyCode());
