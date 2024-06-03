@@ -583,12 +583,12 @@ public class SecuritiesAccountTransactionManager {
     	// ::TODO: Reconsider: Should we really reject the input and throw an exception 
     	// (which is kind of overly strict), or shouldn't we rather just issue a warning?
     	if ( nofAddSharesAbs.isLessThan(SPLIT_NOF_ADD_SHARES_MIN) ) {
-    		throw new IllegalArgumentException("unplausible no. of add. shares given (abs. smaller than " + SPLIT_FACTOR_MIN + ")");
+    		throw new IllegalArgumentException("unplausible no. of add. shares given (abs. smaller than " + SPLIT_NOF_ADD_SHARES_MIN + ")");
     	}
 
     	// ::TODO: Cf. above
     	if ( nofAddSharesAbs.isGreaterThan(SPLIT_NOF_ADD_SHARES_MAX) ) {
-    		throw new IllegalArgumentException("unplausible no. of add. shares (abs. greater than " + SPLIT_FACTOR_MAX + ")");
+    		throw new IllegalArgumentException("unplausible no. of add. shares (abs. greater than " + SPLIT_NOF_ADD_SHARES_MAX + ")");
     	}
 
     	// CAUTION: Yes, it actually *is* possible that the no. of add. shares
