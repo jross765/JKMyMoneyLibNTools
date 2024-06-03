@@ -56,13 +56,15 @@ public class GenDepotTrx extends CommandLineTool
   // private static PropertiesConfiguration cfg = null;
   private static Options options;
   
-  private static BookMode         mode = null; 
+  // ------------------------------
+
+  private static BookMode          mode = null; 
   
-  private static String           kmmInFileName = null;
-  private static String           kmmOutFileName = null;
+  private static String            kmmInFileName = null;
+  private static String            kmmOutFileName = null;
   private static KMyMoneyWritableFileImpl kmmFile = null;
 		  
-  private static String           bookingListFileName = null;
+  private static String            bookingListFileName = null;
   
   // ------------------------------
   // BEGIN Core parameters
@@ -73,18 +75,19 @@ public class GenDepotTrx extends CommandLineTool
   // KMMAcctID. Why not KMMComplAcctID? Yes, that would work
   // as well, but we never book to the special top-level 
   // accounts. Thus, this is a precautionary measure.
-  private static KMMAcctID        stockAcctID = null;
-  private static KMMAcctID        incomeAcctID = null;
+  private static KMMAcctID         stockAcctID = null;
+  private static KMMAcctID         incomeAcctID = null;
   private static Collection<AcctIDAmountPair> expensesAcctAmtList = null;
-  private static KMMAcctID        offsetAcctID = null;
+  private static KMMAcctID         offsetAcctID = null;
   
-  private static FixedPointNumber nofStocks = null;
-  private static FixedPointNumber stockPrc = null;
-  private static FixedPointNumber divGross = null;
+  private static FixedPointNumber  nofStocks = null;
+  private static FixedPointNumber  stockPrc = null;
+  private static FixedPointNumber  divGross = null;
+  private static FixedPointNumber  stockSplitFactor = null;
   
   private static Helper.DateFormat dateFormat = null;
-  private static LocalDate        datPst = null;
-  private static String           descr = null;
+  private static LocalDate         datPst = null;
+  private static String            descr = null;
 
   // END Core parameters
   // ------------------------------
@@ -220,6 +223,13 @@ public class GenDepotTrx extends CommandLineTool
       .withLongOpt("dividend-gross")
       .create("divgr");
 
+    Option optSpltFact = OptionBuilder
+      .hasArg()
+      .withArgName("amount")
+      .withDescription("Stock split factor")
+      .withLongOpt("stock-split-factor")
+      .create("fct");
+
     // ---
     
     Option optDatePosted = OptionBuilder
@@ -280,6 +290,7 @@ public class GenDepotTrx extends CommandLineTool
     options.addOption(optNofStocks);
     options.addOption(optStockPrice);
     options.addOption(optDividend);
+    options.addOption(optSpltFact);
     options.addOption(optDatePosted);
     options.addOption(optDateFormat);
     options.addOption(optDescr);
@@ -421,11 +432,16 @@ public class GenDepotTrx extends CommandLineTool
 		}
 	}
 	
-	KMyMoneyAccount offsetAcct = kmmFile.getAccountByID(offsetAcctID);
-	if ( offsetAcct == null )
+	KMyMoneyAccount offsetAcct = null;
+	if ( type == SecuritiesAccountTransactionManager.Type.BUY_STOCK || 
+		 type == SecuritiesAccountTransactionManager.Type.DIVIDEND )
 	{
-		System.err.println("Error: Cannot get account with ID '" + offsetAcctID + "'");
-		LOGGER.debug("Error: Cannot get account with ID '" + offsetAcctID + "'");
+		offsetAcct = kmmFile.getAccountByID(offsetAcctID);
+		if ( offsetAcct == null )
+		{
+			System.err.println("Error: Cannot get account with ID '" + offsetAcctID + "'");
+			LOGGER.debug("Error: Cannot get account with ID '" + offsetAcctID + "'");
+		}
 	}
 
 	System.err.println("Account 1 name (stock):      '" + stockAcct.getQualifiedName() + "'");
@@ -443,8 +459,12 @@ public class GenDepotTrx extends CommandLineTool
 		counter++;
 	}
 	
-	System.err.println("Account 4 name (offsetting): '" + offsetAcct.getQualifiedName() + "'");
-	LOGGER.debug("Account 4 name (offsetting): '" + offsetAcct.getQualifiedName() + "'");
+	if ( type == SecuritiesAccountTransactionManager.Type.BUY_STOCK || 
+		 type == SecuritiesAccountTransactionManager.Type.DIVIDEND )
+	{
+		System.err.println("Account 4 name (offsetting): '" + offsetAcct.getQualifiedName() + "'");
+		LOGGER.debug("Account 4 name (offsetting): '" + offsetAcct.getQualifiedName() + "'");
+	}
   }
   
   private KMMTrxID bookSingleTrxCore(BufferedWriter outFile) throws IOException
@@ -465,6 +485,14 @@ public class GenDepotTrx extends CommandLineTool
 	    					   stockAcctID, incomeAcctID, expensesAcctAmtList, offsetAcctID,
 	    					   divGross,
 	    					   datPst, descr);
+	}
+	else if ( type == SecuritiesAccountTransactionManager.Type.STOCK_SPLIT ) 
+	{
+	    trx = SecuritiesAccountTransactionManager.
+	    		genStockSplitTrx_factor(kmmFile, 
+	    					     		stockAcctID,
+	    					     		stockSplitFactor,
+	    					     		datPst, descr);
 	}
     
 	// ---
@@ -507,7 +535,7 @@ public class GenDepotTrx extends CommandLineTool
         ParamTuple newTuple = new ParamTuple(eintrag[0], eintrag[1], eintrag[2],
         									 eintrag[3], eintrag[4], eintrag[5],
         									 eintrag[6], eintrag[7], eintrag[8],
-        									 eintrag[9], eintrag[10]);
+        									 eintrag[9], eintrag[10], eintrag[11]);
         
         paramTuples.add(newTuple);
       }
@@ -684,6 +712,9 @@ public class GenDepotTrx extends CommandLineTool
         if ( cmdLine.hasOption( "dividend-gross" ) )
         	tuple.divGross = cmdLine.getOptionValue( "dividend-gross" );
         
+        if ( cmdLine.hasOption( "stock-split-factor" ) )
+        	tuple.stockSplitFactor = cmdLine.getOptionValue( "stock-split-factor" );
+        
         if ( cmdLine.hasOption( "date-format" ) )
         	tuple.dateFormat = cmdLine.getOptionValue( "date-format" );
 
@@ -822,6 +853,15 @@ public class GenDepotTrx extends CommandLineTool
     // <offset-account-id>
     if ( tuple.offsetAcctID != null )
     {
+    	if ( type != SecuritiesAccountTransactionManager.Type.BUY_STOCK &&
+    		 type != SecuritiesAccountTransactionManager.Type.DIVIDEND )
+    	{
+    		System.err.println("Error: <offset-account-id> may only be set with <type> = '" + 
+    						   SecuritiesAccountTransactionManager.Type.BUY_STOCK + "' or '" + 
+    						   SecuritiesAccountTransactionManager.Type.DIVIDEND + "'");
+    		throw new InvalidCommandLineArgsException();
+    	}
+    	
         try
         {
           offsetAcctID = new KMMAcctID( tuple.offsetAcctID );
@@ -834,8 +874,14 @@ public class GenDepotTrx extends CommandLineTool
     }
     else
     {
-        System.err.println("<offset-account-id> is not set");
-        throw new InvalidCommandLineArgsException();
+    	if ( type == SecuritiesAccountTransactionManager.Type.BUY_STOCK ||
+       		 type == SecuritiesAccountTransactionManager.Type.DIVIDEND )
+    	{
+    		System.err.println("Error: <offset-account-id> must be set with <type> = '" + 
+    						   SecuritiesAccountTransactionManager.Type.BUY_STOCK + "' or '" + 
+    						   SecuritiesAccountTransactionManager.Type.DIVIDEND + "'");
+    		throw new InvalidCommandLineArgsException();
+    	}
     }
     if (! silent)
     	System.err.println("Offsetting account ID: " + offsetAcctID);
@@ -959,6 +1005,37 @@ public class GenDepotTrx extends CommandLineTool
     }
     if (! silent)
     	System.err.println("Gross dividend: " + divGross);
+
+    // <stock-split-factor>
+    if ( tuple.stockSplitFactor != null ) 
+    {
+    	if ( type != SecuritiesAccountTransactionManager.Type.STOCK_SPLIT )
+    	{
+    		System.err.println("Error: <stock-split-factor> may only be set with <type> = '" + SecuritiesAccountTransactionManager.Type.STOCK_SPLIT + "'");
+    		throw new InvalidCommandLineArgsException();
+    	}
+    	
+        try
+        {
+          BigMoney betrag = BigMoney.of(CurrencyUnit.EUR, Double.parseDouble(tuple.stockSplitFactor));
+          stockSplitFactor = new FixedPointNumber(betrag.getAmount());
+        }
+        catch ( Exception exc )
+        {
+          System.err.println("Could not parse <stock-split-factor>");
+          throw new InvalidCommandLineArgsException();
+        }
+    } 
+    else 
+    {
+    	if ( type == SecuritiesAccountTransactionManager.Type.STOCK_SPLIT )
+    	{
+    		System.err.println("Error: <stock-split-factor> must be set with <type> = '" + SecuritiesAccountTransactionManager.Type.STOCK_SPLIT + "'");
+    		throw new InvalidCommandLineArgsException();
+    	}
+    }
+    if (! silent)
+    	System.err.println("Stock split factor: " + stockSplitFactor);
 
     // --
 
