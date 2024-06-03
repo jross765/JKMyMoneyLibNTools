@@ -842,7 +842,34 @@ public class GenDepotTrx extends CommandLineTool
     	System.err.println("Income account ID: " + incomeAcctID);
 
     // <expense-account-amounts>
-    expensesAcctAmtList = CmdLineHelper.getExpAcctAmtMulti(tuple.expensesAcctAmtList, "expense-account-amounts");
+    // CAUTION: <expense-account-amounts> must *not necessarily* be set for buy-stock or
+    // dividend transactions (although in most cases, it is). However, we have an additional 
+    // option: "DUMMY" may be set for easier handling with scripts (i.e., it is always set in 
+    // scripts), but when calling interactively, it need not be set.
+    if ( tuple.expensesAcctAmtList != null )
+    {
+//    	if ( type != SecuritiesAccountTransactionManager.Type.BUY_STOCK &&
+//       	 type != SecuritiesAccountTransactionManager.Type.DIVIDEND )
+//      {
+//       	System.err.println("Error: <expense-account-amounts> may only be set with <type> = '" + 
+//       					   SecuritiesAccountTransactionManager.Type.BUY_STOCK + "' or '" +
+//       					   SecuritiesAccountTransactionManager.Type.DIVIDEND + "'");
+//       	throw new InvalidCommandLineArgsException();
+//       }
+
+    	expensesAcctAmtList = CmdLineHelper.getExpAcctAmtMulti(tuple.expensesAcctAmtList, "expense-account-amounts");
+    }
+//    else
+//    {
+//    	if ( type == SecuritiesAccountTransactionManager.Type.BUY_STOCK ||
+//    		 type == SecuritiesAccountTransactionManager.Type.DIVIDEND )
+//    	{
+//    		System.err.println("Error: <expense-account-amounts> must be set with <type> = '" + 
+//    						   SecuritiesAccountTransactionManager.Type.BUY_STOCK + "' or '" +
+//    						   SecuritiesAccountTransactionManager.Type.DIVIDEND + "'");
+//    		throw new InvalidCommandLineArgsException();
+//    	}
+//    }
     if (! silent)
     {
         System.err.println("Expenses account/amount pairs");

@@ -54,8 +54,8 @@ public class SecuritiesAccountTransactionManager {
     	// accordingly
     
     // Notes: 
-    //  - It common to specify stock (reverse) splits by a factor (e.g., 2 for a 2-to-1 split,
-    //    or 1/4 for 1-to-4 reverse split). So why use the number of add. shares? Because that
+    //  - It common to specify stock (reverse) splits by a factor (e.g., 2 for a 2-for-1 split,
+    //    or 1/4 for 1-for-4 reverse split). So why use the number of add. shares? Because that
     //    is how GnuCash (cf. the sister project) handles things, as opposed to KMyMoney, both 
     //    on the data and the GUI level, and given that we want to have both projects as symmetrical 
     //    as possibly, we copy that logic here, so that the user can choose between both methods.
@@ -269,10 +269,10 @@ public class SecuritiesAccountTransactionManager {
 	
     	AcctIDAmountPair newPair = new AcctIDAmountPair(taxFeeAcctID, taxesFees);
     	expensesAcctAmtList.add(newPair);
-	
-    	return genDivivendTrx(kmmFile, 
+
+    	return genDivivendTrx(kmmFile,
     				stockAcctID, incomeAcctID, expensesAcctAmtList, offsetAcctID, 
-    				divGross, 
+    				divGross,
     				postDate, descr);
     }
     
@@ -288,23 +288,23 @@ public class SecuritiesAccountTransactionManager {
     	if ( kmmFile == null ) {
     		throw new IllegalArgumentException("null KMyMoney file given");
     	}
-		
+
     	if ( stockAcctID == null ||
     		 incomeAcctID == null ||
     		 offsetAcctID == null ) {
     		throw new IllegalArgumentException("null account ID given");
     	}
-	
+
     	if ( ! ( stockAcctID.isSet() ) ||
     		 ! ( incomeAcctID.isSet() ) ||
     		 ! ( offsetAcctID.isSet() ) ) {
     		throw new IllegalArgumentException("unset account ID given");
     	}
-		
+
     	if ( expensesAcctAmtList == null ) {
     		throw new IllegalArgumentException("null expenses account list given");
     	}
-			
+
     	// CAUTION: Yes, this actually happen in real life, e.g. with specifics 
     	// of German tax law (Freibetrag, Kapitalausschuettung).
 //	if ( expensesAcctAmtList.isEmpty() ) {
@@ -438,7 +438,7 @@ public class SecuritiesAccountTransactionManager {
     	LOGGER.info("genDivivendTrx: Generated new Transaction: " + trx.getID());
     	return trx;
     }
-    
+
     // ---------------------------------------------------------------
     
     public static KMyMoneyWritableTransaction genStockSplitTrx(
@@ -461,10 +461,33 @@ public class SecuritiesAccountTransactionManager {
     	return null; // Compiler happy
     }
     
+    /**
+     * 
+     * @param kmmFile
+     * @param stockAcctID
+     * @param factor E.g., the number 3.0 for a 3-for-1 split (a threefold increase of the number of shares), 
+     * or the number 1/3 (0.333...) for a 1-for-3 reverse stock-split (the number of shares is decreased to a third).
+     * 
+     * <em>Caution:</em> The wording is not standardized, at least not internationally: 
+     * In english-speaking countries, people tend to say "3-for-1" ("3 new shares for 1 old share") 
+     * when they mean a threefold-increase of the stocks, whereas in Germany, e.g., it tends
+     * to be the other way round, i.e. "Aktiensplit 1:4" ("eine alte zu 4 neuen Aktien") is a 
+     * "4-for-1" split).
+     * 
+     * Also, please be aware that KMyMoney uses the former logic internally, but the latter 
+     * logic on the GUI (i.e., a 2-for-1 split (factor 2) is saved as "2/1" in the KMyMoney
+     * file, but the GUI will show "1/2").
+     * @param postDate
+     * @param descr
+     * @return a new share-(reverse-)split transaction
+     * 
+     * @see #genStockSplitTrx_nofShares(KMyMoneyWritableFileImpl, KMMAcctID, FixedPointNumber, LocalDate, String)
+     * @see #genStockSplitTrx(KMyMoneyWritableFileImpl, KMMAcctID, StockSplitVar, FixedPointNumber, LocalDate, String)
+     */
     public static KMyMoneyWritableTransaction genStockSplitTrx_factor(
     		final KMyMoneyWritableFileImpl kmmFile,
     		final KMMAcctID stockAcctID,
-    		final FixedPointNumber factor, // e.g., 3.0 for 3-to-1 split, or 1/3 for 1-to-3 reverse stock-split
+    		final FixedPointNumber factor,
     		final LocalDate postDate,
     		final String descr) {
     	if ( kmmFile == null ) {
@@ -547,6 +570,26 @@ public class SecuritiesAccountTransactionManager {
     	return trx;
     }
     
+    /**
+     * 
+     * @param kmmFile
+     * @param stockAcctID
+     * @param nofAddShares The number of additional shares to be added to the stock account.
+     * E.g., when you have 100 shares and you add 200 more, then you have 300 shares, 
+     * i.e. the number has increased by a factor of 3 (a 3-for-1 split).
+     * Likewise, if you have 100 shares and you take away 75 of them (neg. no. of add. shares),
+     * then you have 25 shares left, i.e. the number of shares as decreased by a factor
+     * of 1/4 (1-for-4). 
+     * 
+     * Also, please be aware that GnuCash does not use the factor-logic, neither internally
+     * nor on the GUI, but instead only shows and stores the number of additional shares.
+     * @param postDate
+     * @param descr
+     * @return a new share-(reverse-)split transaction
+     * 
+     * @see #genStockSplitTrx_factor(KMyMoneyWritableFileImpl, KMMAcctID, FixedPointNumber, LocalDate, String)
+     * @see #genStockSplitTrx(KMyMoneyWritableFileImpl, KMMAcctID, StockSplitVar, FixedPointNumber, LocalDate, String)
+     */
     public static KMyMoneyWritableTransaction genStockSplitTrx_nofShares(
     	    final KMyMoneyWritableFileImpl kmmFile,
     	    final KMMAcctID stockAcctID,

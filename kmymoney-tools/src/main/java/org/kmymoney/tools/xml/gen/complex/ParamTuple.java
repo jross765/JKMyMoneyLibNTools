@@ -4,18 +4,18 @@ public class ParamTuple
 {
 	// ---------------------------------------------------------------
 	
-	public String type;
-	public String stockAcctID;
-	public String incomeAcctID;
-	public String expensesAcctAmtList;
-	public String offsetAcctID;
-	public String nofStocks;
-	public String stockPrc;
-	public String divGross;
-	public String stockSplitFactor;
-	public String dateFormat;
-	public String datPst;
-	public String descr;
+	public String type;                // 0
+	public String stockAcctID;         // 1
+	public String incomeAcctID;        // 2
+	public String expensesAcctAmtList; // 3
+	public String offsetAcctID;        // 4
+	public String nofStocks;           // 5
+	public String stockPrc;            // 6
+	public String divGross;            // 7
+	public String stockSplitFactor;    // 8
+	public String dateFormat;          // 9
+	public String datPst;              // 10
+	public String descr;               // 11
 	
 	// ---------------------------------------------------------------
 	
