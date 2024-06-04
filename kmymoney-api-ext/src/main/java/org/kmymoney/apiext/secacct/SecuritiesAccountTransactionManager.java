@@ -67,15 +67,16 @@ public class SecuritiesAccountTransactionManager {
     //    (to be subtracted) shares cannot as generally be specified. 
     //    E.g., European/US stocks tend to be priced above 1 EUR/USD, else they are considered penny 
     //    stocks (both literally and figuratively) and thus deemed uninvestable for the average Joe, 
-    //    whereas in South-East-Asia (Singapore, say), it is deemed absolutely normal for a stock to 
-    //    be priced by just a few cents or even less. The number of shares in a typical retail portfolio 
+    //    whereas in Singapore, e.g., it is deemed absolutely normal for a stock to be priced by just 
+    //    a few cents or even less. Conversely, it is not uncommon for Japanese stocks to be priced
+    //    very highly by European/US standards. Thus, the number of shares in a typical retail portfolio 
     //    will vary accordingly.
     //    Moreover, we of course know absolutely nothing about the entity/the individual that/who 
     //    will use this lib. A "regular" individual investor might have, say, 100 to 500 or so shares of 
     //    a European/US stock in his/her portfolio (and possibly 50-times that number of shares of a 
-    //    Singaporean stock), whereas a wealthy individual might have 100-times as much or even more 
-    //    (never mind institutional investors, but these entities will very probably use different 
-    //    software...)
+    //    Singaporean stock, and maybe just one single share of a Japanese stock), whereas a wealthy 
+    //    individual might have 100-times as much or even more (never mind institutional investors, but 
+    //    these entities will very probably use different software...)
     //    ==> ::TODO These numbers *must* be extracted into a config. file ASAP, whereas the above 
     //    factor *should* (but in fact can wait a little). 
     // ::MAGIC
@@ -525,11 +526,14 @@ public class SecuritiesAccountTransactionManager {
     		throw new IllegalArgumentException("unplausible factor given (greater than " + SPLIT_FACTOR_MAX + ")");
     	}
 
-    	LOGGER.debug("genStockSplitTrx_factor: Stock account name: '" + kmmFile.getAccountByID(stockAcctID).getQualifiedName() + "'");
-
     	// ---
     	// Check account type
     	KMyMoneyAccount stockAcct  = kmmFile.getAccountByID(stockAcctID);
+    	if ( stockAcct == null ) {
+    		throw new IllegalStateException("Could not find account with that ID");
+    	}
+
+    	LOGGER.debug("genStockSplitTrx_factor: Stock account name: '" + stockAcct.getQualifiedName() + "'");
     	if ( stockAcct.getType() != KMyMoneyAccount.Type.STOCK ) {
     		throw new IllegalArgumentException("Account with ID " + stockAcctID + " is not of type " + KMyMoneyAccount.Type.STOCK);
     	}
@@ -538,8 +542,13 @@ public class SecuritiesAccountTransactionManager {
     	
     	FixedPointNumber nofSharesOld = stockAcct.getBalance();
     	LOGGER.debug("genStockSplitTrx_factor: Old no. of shares: " + nofSharesOld);
+    	if ( nofSharesOld.equals(BigDecimal.ZERO) ) {
+    		throw new IllegalStateException("No. of old shares is zero. Cannot carry out a split.");
+    	}
     	FixedPointNumber nofSharesNew = nofSharesOld.copy().multiply(factor);
     	LOGGER.debug("genStockSplitTrx_factor: New no. of shares: " + nofSharesNew);
+    	FixedPointNumber nofAddShares = nofSharesNew.copy().subtract(nofSharesOld);
+    	LOGGER.debug("genStockSplitTrx_factor: No. of add. shares: " + nofAddShares);
     	
     	// ---
 
@@ -555,6 +564,7 @@ public class SecuritiesAccountTransactionManager {
     	KMyMoneyWritableTransactionSplit splt = trx.createWritableSplit(stockAcct);
     	splt.setValue(new FixedPointNumber());
     	splt.setShares(new FixedPointNumber(factor));
+		// splt.setPrice("1/1"); // completely optional
     	splt.setAction(KMyMoneyTransactionSplit.Action.SPLIT_SHARES);
     	splt.setDescription(descr);
     	LOGGER.debug("genStockSplitTrx_factor: Split 1 to write: " + splt.toString());
@@ -643,11 +653,14 @@ public class SecuritiesAccountTransactionManager {
 //    		throw new IllegalArgumentException("no. of add. shares given is not integer value");
 //    	}
 
-    	LOGGER.debug("genStockSplitTrx_nofShares: Stock account name: '" + kmmFile.getAccountByID(stockAcctID).getQualifiedName() + "'");
-
     	// ---
     	// Check account type
     	KMyMoneyAccount stockAcct  = kmmFile.getAccountByID(stockAcctID);
+    	if ( stockAcct == null ) {
+    		throw new IllegalStateException("Could not find account with that ID");
+    	}
+
+    	LOGGER.debug("genStockSplitTrx_nofShares: Stock account name: '" + stockAcct.getQualifiedName() + "'");
     	if ( stockAcct.getType() != KMyMoneyAccount.Type.STOCK ) {
     		throw new IllegalArgumentException("Account with ID " + stockAcctID + " is not of type " + KMyMoneyAccount.Type.STOCK);
     	}
@@ -656,6 +669,9 @@ public class SecuritiesAccountTransactionManager {
     	
     	FixedPointNumber nofSharesOld = stockAcct.getBalance();
     	LOGGER.debug("genStockSplitTrx_nofShares: Old no. of shares: " + nofSharesOld);
+    	if ( nofSharesOld.equals(BigDecimal.ZERO) ) {
+    		throw new IllegalStateException("No. of old shares is zero. Cannot carry out a split.");
+    	}
     	FixedPointNumber nofSharesNew = nofSharesOld.copy().add(nofAddShares);
     	LOGGER.debug("genStockSplitTrx_nofShares: New no. of shares: " + nofSharesNew);
     	FixedPointNumber factor = nofSharesNew.copy().divide(nofSharesOld);
