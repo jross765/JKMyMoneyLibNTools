@@ -66,7 +66,8 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		      trx,
 		      true);
 
-		// this is a workaound.
+		// ::TODO ::CHECK
+		// this is a workaround.
 		// if super does account.addSplit(this) it adds an instance on
 		// KMyMoneyTransactionSplitImpl that is "!=
 		// (KMyMoneyTransactionSplitWritingImpl)this";

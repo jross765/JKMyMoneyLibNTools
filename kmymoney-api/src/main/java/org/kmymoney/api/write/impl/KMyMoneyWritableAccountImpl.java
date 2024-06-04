@@ -64,7 +64,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	/**
 	 * Used by ${@link #getBalance()} to cache the result.
 	 */
-	private PropertyChangeListener myBalanceCachedInvalidtor = null;
+	private PropertyChangeListener myBalanceCachedInvalidator = null;
 
     // ---------------------------------------------------------------
 
@@ -368,8 +368,8 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			myBalanceCached = balance;
 
 			// add a listener to keep the cache up to date
-			if ( myBalanceCachedInvalidtor != null ) {
-				myBalanceCachedInvalidtor = new PropertyChangeListener() {
+			if ( myBalanceCachedInvalidator != null ) {
+				myBalanceCachedInvalidator = new PropertyChangeListener() {
 					private final Collection<KMyMoneyTransactionSplit> splitsWeAreAddedTo = new HashSet<KMyMoneyTransactionSplit>();
 
 					public void propertyChange(final PropertyChangeEvent evt) {
@@ -407,9 +407,9 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 					}
 				};
 				
-				helper.addPropertyChangeListener("currencyID", myBalanceCachedInvalidtor);
-				helper.addPropertyChangeListener("currencyNameSpace", myBalanceCachedInvalidtor);
-				helper.addPropertyChangeListener("transactionSplits", myBalanceCachedInvalidtor);
+				helper.addPropertyChangeListener("currencyID", myBalanceCachedInvalidator);
+				helper.addPropertyChangeListener("currencyNameSpace", myBalanceCachedInvalidator);
+				helper.addPropertyChangeListener("transactionSplits", myBalanceCachedInvalidator);
 			}
 		}
 
