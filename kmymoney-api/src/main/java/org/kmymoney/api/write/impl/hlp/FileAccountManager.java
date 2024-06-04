@@ -24,9 +24,21 @@ public class FileAccountManager extends org.kmymoney.api.read.impl.hlp.FileAccou
 	 */
 	@Override
 	protected KMyMoneyAccountImpl createAccount(final ACCOUNT jwsdpAcct) {
-		KMyMoneyWritableAccountImpl acct = new KMyMoneyWritableAccountImpl(jwsdpAcct, (KMyMoneyWritableFileImpl) kmmFile);
-		LOGGER.debug("createAccount: Generated new writable account: " + acct.getID());
-		return acct;
+		// ::TODO ::CHECK
+		// CAUTION: As opposed to sister project for GnuCash, we have 
+		// the situation here that the original, "naive" code *has to be* used,
+		// whereas the code analogous to the corrected one in the GnuCash
+		// project *does not work* and produces lots of errors in the
+		// tests. 
+		// Cannot explain this right away, will have to have a closer look
+		// at some time in the future.
+		// YES, this:
+		KMyMoneyWritableAccountImpl wrtblAcct = new KMyMoneyWritableAccountImpl(jwsdpAcct, (KMyMoneyWritableFileImpl) kmmFile);
+		// NO; NOT THIS:
+		// KMyMoneyAccountImpl roAcct = super.createAccount(jwsdpAcct);
+		// KMyMoneyWritableAccountImpl wrtblAcct = new KMyMoneyWritableAccountImpl((KMyMoneyAccountImpl) roAcct, true);
+		LOGGER.debug("createAccount: Generated new writable account: " + wrtblAcct.getID());
+		return wrtblAcct;
 	}
 
 }

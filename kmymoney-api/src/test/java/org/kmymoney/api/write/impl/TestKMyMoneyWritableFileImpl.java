@@ -1,6 +1,8 @@
 package org.kmymoney.api.write.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.InputStream;
@@ -10,13 +12,23 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
+import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.api.read.impl.TestKMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneyWritableFileImpl {
+	
+	private static final KMMComplAcctID ACCT_4_ID = TestKMyMoneyAccountImpl.ACCT_4_ID;
+	
+	// -----------------------------------------------------------------
+
 	private KMyMoneyWritableFileImpl kmmInFile  = null;
 	private KMyMoneyWritableFileImpl kmmOutFile = null;
+	private KMyMoneyFileImpl         kmmROFile = null;
 
 	private KMMFileStats kmmInFileStats  = null;
 	private KMMFileStats kmmOutFileStats = null;
@@ -47,17 +59,25 @@ public class TestKMyMoneyWritableFileImpl {
 			kmmInFileStream = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME_IN);
 		} catch (Exception exc) {
 			System.err.println("Cannot generate input stream from resource");
-			return;
+			throw exc;
 		}
 
 		try {
 			kmmInFile = new KMyMoneyWritableFileImpl(kmmInFileStream);
 		} catch (Exception exc) {
 			System.err.println("Cannot parse KMyMoney in-file");
-			exc.printStackTrace();
+			throw exc;
 		}
 
 		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		try {
+			InputStream gcshInFileStream2 = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME_IN);
+			kmmROFile = new KMyMoneyFileImpl(gcshInFileStream2);
+		} catch (Exception exc) {
+			System.err.println("Cannot parse GnuCash read-only file");
+			throw exc;
+		}
 	}
 
 	// -----------------------------------------------------------------
@@ -72,21 +92,21 @@ public class TestKMyMoneyWritableFileImpl {
 	// complete (as complete as returned be KMyMoneyFileImpl.getFileByID().
 
 	@Test
-	public void test01() throws Exception {
+	public void test01_01() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
 		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
 	}
 
 	@Test
-	public void test02() throws Exception {
+	public void test01_02() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
 	}
 
 	@Test
-	public void test03() throws Exception {
+	public void test01_03() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_TRX_SPLT,
 				kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW));
 		// This one is an exception:
@@ -98,7 +118,7 @@ public class TestKMyMoneyWritableFileImpl {
 
 	// ------------------------------
 	@Test
-	public void test04() throws Exception {
+	public void test01_04() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
@@ -107,21 +127,21 @@ public class TestKMyMoneyWritableFileImpl {
 	// ------------------------------
 
 	@Test
-	public void test05() throws Exception {
+	public void test01_05() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
 	}
 
 	@Test
-	public void test06() throws Exception {
+	public void test01_06() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
 		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
 	}
 
 	@Test
-	public void test07() throws Exception {
+	public void test01_07() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
 		// n/a:
 		// assertEquals(ConstTest.Stats.NOF_PRC,
@@ -207,6 +227,33 @@ public class TestKMyMoneyWritableFileImpl {
 		assertEquals(kmmInFile.getCurrencies().toString(), kmmOutFile.getCurrencies().toString());
 		assertEquals(kmmInFile.getPricePairs().toString(), kmmOutFile.getPricePairs().toString());
 		assertEquals(kmmInFile.getPrices().toString(), kmmOutFile.getPrices().toString());
+	}
+
+	// -----------------------------------------------------------------
+	// PART 5: Symmetry of read-only objects gotten from a) GnucashFile
+	// and b) GnuCashWritableFile (esp. sub-objects)
+	
+	@Test
+	public void test_05_1() throws Exception {
+		// CAUTION: This test case is not trivial! It checks for a subtle
+		// bug that long went unnoticed. 
+		// Notice that the first line calls the *read-only*-method of the *writable* 
+		// file object.
+		// Cf. comments in org.gnucash.api.*write*.FileAccountManager.createAccount()
+		KMyMoneyAccount acct11 = kmmInFile.getAccountByID(ACCT_4_ID);
+		KMyMoneyAccount acct12 = kmmROFile.getAccountByID(ACCT_4_ID);
+		assertNotEquals(null, acct11);
+		assertNotEquals(null, acct12);
+		
+		// The first comparison is not problematic, it just ensures that the
+		// two account objects really belong to the same account. 
+		// The following ones are the real test: They check the correct handling 
+		// of transactions and trx-splits in GnuCash*Writable*Account.
+		assertEquals(acct11.getQualifiedName(), acct12.getQualifiedName());
+		assertTrue(acct11.getTransactions().size() > 0);
+		assertEquals(acct11.getTransactions().size(), acct12.getTransactions().size());
+		assertTrue(acct11.getBalance().getBigDecimal().doubleValue() > 0);
+		assertEquals(acct11.getBalance(), acct12.getBalance());
 	}
 
 }
