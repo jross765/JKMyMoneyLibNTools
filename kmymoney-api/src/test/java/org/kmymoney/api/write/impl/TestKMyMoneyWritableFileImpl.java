@@ -13,16 +13,24 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
 import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneySecurity;
+import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyAccountImpl;
+import org.kmymoney.api.read.impl.TestKMyMoneySecurityImpl;
+import org.kmymoney.api.read.impl.TestKMyMoneyTransactionImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
+import org.kmymoney.base.basetypes.simple.KMMTrxID;
 
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneyWritableFileImpl {
 	
-	private static final KMMComplAcctID ACCT_4_ID = TestKMyMoneyAccountImpl.ACCT_4_ID;
+	private static final KMMComplAcctID ACCT_1_ID = TestKMyMoneyAccountImpl.ACCT_1_ID;
+	private static final KMMTrxID TRX_1_ID        = TestKMyMoneyTransactionImpl.TRX_1_ID;
+	private static final String SEC_2_ID          = TestKMyMoneySecurityImpl.SEC_2_ID;
 	
 	// -----------------------------------------------------------------
 
@@ -72,10 +80,10 @@ public class TestKMyMoneyWritableFileImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		try {
-			InputStream gcshInFileStream2 = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME_IN);
-			kmmROFile = new KMyMoneyFileImpl(gcshInFileStream2);
+			InputStream kmmInFileStream2 = classLoader.getResourceAsStream(ConstTest.KMM_FILENAME_IN);
+			kmmROFile = new KMyMoneyFileImpl(kmmInFileStream2);
 		} catch (Exception exc) {
-			System.err.println("Cannot parse GnuCash read-only file");
+			System.err.println("Cannot parse KMyMoney read-only file");
 			throw exc;
 		}
 	}
@@ -192,14 +200,14 @@ public class TestKMyMoneyWritableFileImpl {
 
 		assertEquals(true, outFile.exists());
 
-		test_04_1_check_1_xmllint(outFile);
-		test_04_1_check_2();
-		test_04_1_check_3();
+		test04_1_check_1_xmllint(outFile);
+		test04_1_check_2();
+		test04_1_check_3();
 	}
 
 	// CAUTION: Not platform-independent!
 	// Tool "xmllint" must be installed and in path
-	private void test_04_1_check_1_xmllint(File outFile) throws Exception {
+	private void test04_1_check_1_xmllint(File outFile) throws Exception {
 		// Check if generated document is valid
 		ProcessBuilder bld = new ProcessBuilder("xmllint", outFile.getAbsolutePath());
 		Process prc = bld.start();
@@ -211,14 +219,14 @@ public class TestKMyMoneyWritableFileImpl {
 		}
 	}
 
-	private void test_04_1_check_2() {
+	private void test04_1_check_2() {
 		// Does not work:
 		// assertEquals(kmmFileStats, kmmFileStats2);
 		// Works:
 		assertEquals(true, kmmInFileStats.equals(kmmOutFileStats));
 	}
 
-	private void test_04_1_check_3() {
+	private void test04_1_check_3() {
 		assertEquals(kmmInFile.getAccounts().toString(), kmmOutFile.getAccounts().toString());
 		assertEquals(kmmInFile.getTransactions().toString(), kmmOutFile.getTransactions().toString());
 		assertEquals(kmmInFile.getTransactionSplits().toString(), kmmOutFile.getTransactionSplits().toString());
@@ -231,29 +239,61 @@ public class TestKMyMoneyWritableFileImpl {
 
 	// -----------------------------------------------------------------
 	// PART 5: Symmetry of read-only objects gotten from a) GnucashFile
-	// and b) GnuCashWritableFile (esp. sub-objects)
+	// and b) KMyMoneyWritableFile (esp. sub-objects)
 	
 	@Test
-	public void test_05_1() throws Exception {
+	public void test05_1() throws Exception {
 		// CAUTION: This test case is not trivial! It checks for a subtle
 		// bug that long went unnoticed. 
 		// Notice that the first line calls the *read-only*-method of the *writable* 
 		// file object.
 		// Cf. comments in org.gnucash.api.*write*.FileAccountManager.createAccount()
-		KMyMoneyAccount acct11 = kmmInFile.getAccountByID(ACCT_4_ID);
-		KMyMoneyAccount acct12 = kmmROFile.getAccountByID(ACCT_4_ID);
+		KMyMoneyAccount acct11 = kmmInFile.getAccountByID(ACCT_1_ID);
+		KMyMoneyAccount acct12 = kmmROFile.getAccountByID(ACCT_1_ID);
 		assertNotEquals(null, acct11);
 		assertNotEquals(null, acct12);
 		
 		// The first comparison is not problematic, it just ensures that the
 		// two account objects really belong to the same account. 
 		// The following ones are the real test: They check the correct handling 
-		// of transactions and trx-splits in GnuCash*Writable*Account.
+		// of transactions and trx-splits in KMyMoney*Writable*Account.
 		assertEquals(acct11.getQualifiedName(), acct12.getQualifiedName());
 		assertTrue(acct11.getTransactions().size() > 0);
 		assertEquals(acct11.getTransactions().size(), acct12.getTransactions().size());
 		assertTrue(acct11.getBalance().getBigDecimal().doubleValue() > 0);
 		assertEquals(acct11.getBalance(), acct12.getBalance());
+	}
+
+	@Test
+	public void test05_2() throws Exception {
+		// Analogous to test05_1, but with transactions
+		KMyMoneyTransaction trx11 = kmmInFile.getTransactionByID(TRX_1_ID);
+		KMyMoneyTransaction trx12 = kmmROFile.getTransactionByID(TRX_1_ID);
+		assertNotEquals(null, trx11);
+		assertNotEquals(null, trx12);
+		
+		// splits
+		assertEquals(trx11.getID(), trx12.getID());
+		assertTrue(trx11.getSplits().size() > 0);
+		assertEquals(trx11.getSplits().size(), trx12.getSplits().size());
+		assertEquals(trx11.getBalance(), trx12.getBalance());
+		assertEquals(trx11.getSplits().get(0).getValue(), trx12.getSplits().get(0).getValue());
+		assertEquals(trx11.getSplits().get(1).getValue(), trx12.getSplits().get(1).getValue());
+	}
+
+	@Test
+	public void test05_4() throws Exception {
+		// Analogous to test05_1, but with commodities
+		KMMSecID secID2 = new KMMSecID(SEC_2_ID);
+		KMyMoneySecurity cmdty11 = kmmInFile.getSecurityByID(secID2);
+		KMyMoneySecurity cmdty12 = kmmROFile.getSecurityByID(secID2);
+		assertNotEquals(null, cmdty11);
+		assertNotEquals(null, cmdty12);
+		
+		// quotes
+		assertEquals(cmdty11.getName(), cmdty12.getName());
+		assertTrue(cmdty11.getQuotes().size() > 0);
+		assertEquals(cmdty11.getQuotes().size(), cmdty12.getQuotes().size());
 	}
 
 }
