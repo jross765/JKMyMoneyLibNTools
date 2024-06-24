@@ -120,6 +120,7 @@ public class TestKMyMoneyPriceImpl {
 		assertEquals("EUR", prc.getToCurrencyCode());
 		assertEquals("Transaction", ((KMyMoneyPriceImpl) prc).getSourceStr());
 		assertEquals(Source.TRANSACTION, prc.getSource());
+		assertEquals("2023-11-03", prc.getDateStr());
 		assertEquals(LocalDate.of(2023, 11, 3), prc.getDate());
 		assertEquals(120.0, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
@@ -161,6 +162,7 @@ public class TestKMyMoneyPriceImpl {
 		assertEquals("EUR", prc.getToCurrencyCode());
 		assertEquals("User", ((KMyMoneyPriceImpl) prc).getSourceStr());
 		assertEquals(Source.USER, prc.getSource());
+		assertEquals("2023-11-01", prc.getDateStr());
 		assertEquals(LocalDate.of(2023, 11, 1), prc.getDate());
 		assertEquals(116.5, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
@@ -199,6 +201,7 @@ public class TestKMyMoneyPriceImpl {
 		assertEquals("EUR", prc.getToCurrencyCode());
 		assertEquals(Source.USER, prc.getSource());
 		assertEquals("User", ((KMyMoneyPriceImpl) prc).getSourceStr());
+		assertEquals("2023-12-04", prc.getDateStr());
 		assertEquals(LocalDate.of(2023, 12, 4), prc.getDate());
 		assertEquals(0.92, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 

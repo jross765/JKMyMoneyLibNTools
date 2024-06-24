@@ -152,6 +152,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals("EUR", prc.getToCurrencyCode());
 		assertEquals(Source.TRANSACTION, prc.getSource()); // unchanged
 		assertEquals("Transaction", ((KMyMoneyWritablePriceImpl) prc).getSourceStr()); // unchanged
+		assertEquals("2023-11-03", prc.getDateStr());
 		assertEquals(LocalDate.of(2023, 11, 3), prc.getDate());
 		assertEquals(120.0, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
@@ -193,6 +194,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals("EUR", prc.getToCurrencyCode());
 		assertEquals(Source.USER, prc.getSource());
 		assertEquals("User", ((KMyMoneyWritablePriceImpl) prc).getSourceStr());
+		assertEquals("2023-11-01", prc.getDateStr());
 		assertEquals(LocalDate.of(2023, 11, 1), prc.getDate());
 		assertEquals(116.5, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
@@ -231,6 +233,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals("EUR", prc.getToCurrencyCode());
 		assertEquals(Source.USER, prc.getSource());
 		assertEquals("User", ((KMyMoneyWritablePriceImpl) prc).getSourceStr());
+		assertEquals("2023-12-04", prc.getDateStr());
 		assertEquals(LocalDate.of(2023, 12, 4), prc.getDate());
 		assertEquals(0.92, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 
@@ -319,6 +322,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals("EUR", prc.getToCurrencyCode()); // unchanged
 		assertEquals("User", ((KMyMoneyWritablePriceImpl) prc).getSourceStr()); // unchanged
 		assertEquals(Source.USER, prc.getSource()); // unchanged
+		assertEquals("2023-11-03", prc.getDateStr());
 		assertEquals(LocalDate.of(2023, 11, 3), prc.getDate()); // unchanged
 		assertEquals(123.71, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE); // changed
 	}
@@ -345,6 +349,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals("EUR", prc.getToCurrencyCode()); // unchanged
 		assertEquals("User", ((KMyMoneyPriceImpl) prc).getSourceStr()); // changed
 		assertEquals(Source.USER, prc.getSource()); // changed
+		assertEquals("2023-11-03", prc.getDateStr());
 		assertEquals(LocalDate.of(2023, 11, 3), prc.getDate()); // unchanged
 		assertEquals(123.71, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE); // changed
 	}
@@ -404,7 +409,7 @@ public class TestKMyMoneyWritablePriceImpl {
 
 		assertEquals(PRCPR_1_ID.getFromSecCurr(), prc.getFromSecCurrQualifID());
 		assertEquals(PRCPR_1_ID.getToCurr(), prc.getToCurrencyQualifID());
-		assertEquals("1910-05-01T00:00:00.000+01:00", prc.getDateStr()); // sic
+		assertEquals("1910-05-01", prc.getDateStr());
 		assertEquals(LocalDate.of(1910, 5, 1), prc.getDate());
 		assertEquals(345.21, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals("User", ((KMyMoneyWritablePriceImpl) prc).getSourceStr());
@@ -430,7 +435,7 @@ public class TestKMyMoneyWritablePriceImpl {
 
 		assertEquals(PRCPR_1_ID.getFromSecCurr(), prc.getFromSecCurrQualifID());
 		assertEquals(PRCPR_1_ID.getToCurr(), prc.getToCurrencyQualifID());
-		assertEquals("1910-05-01+01:00", prc.getDateStr()); // sic
+		assertEquals("1910-05-01", prc.getDateStr());
 		assertEquals(LocalDate.of(1910, 5, 1), prc.getDate());
 		assertEquals(345.21, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals("User", ((KMyMoneyPriceImpl) prc).getSourceStr());
