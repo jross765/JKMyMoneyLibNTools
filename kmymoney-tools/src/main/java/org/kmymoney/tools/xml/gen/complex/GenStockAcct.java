@@ -1,4 +1,4 @@
-package org.kmymoney.tools.xml.get.sonstige;
+package org.kmymoney.tools.xml.gen.complex;
 
 import java.io.File;
 import java.util.Collection;
@@ -14,8 +14,11 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneySecurity;
-import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
-import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.api.write.KMyMoneyWritableAccount;
+import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
+import org.kmymoney.apiext.secacct.SecuritiesAccountManager;
+import org.kmymoney.apiext.secacct.WritableSecuritiesAccountManager;
+import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.tools.CommandLineTool;
 import org.slf4j.Logger;
@@ -27,32 +30,50 @@ import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.Helper;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 
-public class GetStockAcct extends CommandLineTool
+public class GenStockAcct extends CommandLineTool
 {
+  enum BookMode {
+	  SINGLE_TRX,
+	  LISTFILE
+  }
+
+  // -----------------------------------------------------------------
+
   // Logger
-  private static final Logger LOGGER = LoggerFactory.getLogger(GetStockAcct.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GenStockAcct.class);
   
   // private static PropertiesConfiguration cfg = null;
   private static Options options;
   
-  private static String              kmmFileName = null;
+  // ------------------------------
+
+  private static String           kmmInFileName = null;
+  private static String           kmmOutFileName = null;
+  private static KMyMoneyWritableFileImpl kmmFile = null;
+		  
+  // ------------------------------
+
+  private static Helper.Mode           acctMode     = null;
+  private static KMMAcctID             acctID       = null;
+  private static String                acctName     = null;
   
-  private static Helper.Mode         acctMode    = null;
-  private static KMMComplAcctID      acctID      = null;
-  private static String              acctName    = null;
-  
-  private static Helper.CmdtySecMode secMode     = null;
-  private static KMMSecID            secID       = null;
-  private static String              isin        = null;
-  private static String              secName     = null;
-  
-  private static boolean scriptMode = false;
+  private static Helper.CmdtySecMode   secMode      = null;
+  private static KMMSecID              secID        = null;
+  private static String                isin         = null;
+  private static String                secName      = null;
+
+  // ------------------------------
+
+  // batch-mode:
+  private static boolean    silent           = false;
+
+  // -----------------------------------------------------------------
 
   public static void main( String[] args )
   {
     try
     {
-      GetStockAcct tool = new GetStockAcct ();
+      GenStockAcct tool = new GenStockAcct ();
       tool.execute(args);
     }
     catch (CouldNotExecuteException exc) 
@@ -66,19 +87,27 @@ public class GetStockAcct extends CommandLineTool
   @Override
   protected void init() throws Exception
   {
-//    cfg = new PropertiesConfiguration(System.getProperty("config"));
-//    getConfigSettings(cfg);
+    // cfg = new PropertiesConfiguration(System.getProperty("config"));
+    // getConfigSettings(cfg);
 
     // Options
     // The essential ones
-    Option optFile = OptionBuilder
+    Option optFileIn = OptionBuilder
       .isRequired()
       .hasArg()
       .withArgName("file")
-      .withDescription("KMyMoney file")
-      .withLongOpt("kmymoney-file")
-      .create("f");
-      
+      .withDescription("KMyMoney file (in)")
+      .withLongOpt("kmymoney-in-file")
+      .create("if");
+        
+    Option optFileOut = OptionBuilder
+      .isRequired()
+      .hasArg()
+      .withArgName("file")
+      .withDescription("KMyMoney file (out)")
+      .withLongOpt("kmymoney-out-file")
+      .create("of");
+    
     Option optAcctMode = OptionBuilder
       .isRequired()
       .hasArg()
@@ -86,7 +115,21 @@ public class GetStockAcct extends CommandLineTool
       .withDescription("Selection mode for account")
       .withLongOpt("account-mode")
       .create("am");
-      
+    	      
+    Option optAcctID = OptionBuilder
+      .hasArg()
+      .withArgName("acctid")
+      .withDescription("Account-ID")
+      .withLongOpt("account-id")
+      .create("acct");
+    	    
+    Option optAcctName = OptionBuilder
+      .hasArg()
+      .withArgName("name")
+      .withDescription("Account name (or part of)")
+      .withLongOpt("account-name")
+      .create("an");
+    	      
     Option optSecMode = OptionBuilder
       .isRequired()
       .hasArg()
@@ -94,58 +137,46 @@ public class GetStockAcct extends CommandLineTool
       .withDescription("Selection mode for security")
       .withLongOpt("security-mode")
       .create("sm");
-        
-    Option optAcctID = OptionBuilder
-      .hasArg()
-      .withArgName("acctid")
-      .withDescription("Account-ID")
-      .withLongOpt("account-id")
-      .create("acct");
-    
-    Option optAcctName = OptionBuilder
-      .hasArg()
-      .withArgName("name")
-      .withDescription("Account name (or part of)")
-      .withLongOpt("account-name")
-      .create("an");
-      
+    	    	        
     Option optSecID = OptionBuilder
       .hasArg()
       .withArgName("ID")
       .withDescription("Security ID")
       .withLongOpt("security-id")
       .create("sec");
-            
+    	            
     Option optSecISIN = OptionBuilder
       .hasArg()
       .withArgName("isin")
       .withDescription("ISIN")
       .withLongOpt("isin")
       .create("is");
-          
+    	          
     Option optSecName = OptionBuilder
       .hasArg()
       .withArgName("name")
       .withDescription("Security name (or part of)")
       .withLongOpt("security-name")
       .create("sn");
-            
-    // The convenient ones
-    Option optScript = OptionBuilder
-      .withDescription("Script Mode")
-      .withLongOpt("script")
-      .create("sl");            
-          
+    
+    // ---
+    	    
+    Option optSilent = OptionBuilder
+      .withDescription("Silent mode")
+      .withLongOpt("silent")
+      .create("sl");
+
     options = new Options();
-    options.addOption(optFile);
-    options.addOption(optAcctMode);
+    options.addOption(optFileIn);
+    options.addOption(optFileOut);
+    options.addOption(optAcctMode );
     options.addOption(optAcctID);
     options.addOption(optAcctName);
     options.addOption(optSecMode);
     options.addOption(optSecID);
     options.addOption(optSecISIN);
     options.addOption(optSecName);
-    options.addOption(optScript);
+    options.addOption(optSilent);
   }
 
   @Override
@@ -157,16 +188,39 @@ public class GetStockAcct extends CommandLineTool
   @Override
   protected void kernel() throws Exception
   {
-    KMyMoneyFileImpl kmmFile = new KMyMoneyFileImpl(new File(kmmFileName));
+	  kmmFile = new KMyMoneyWritableFileImpl(new File(kmmInFileName));
 
-    KMyMoneyAccount acct = null;
+	  KMyMoneyWritableAccount acct = getSecAccount();
+	  KMyMoneySecurity sec = getSecurity();
+	  
+	  WritableSecuritiesAccountManager secAcctMgr = new WritableSecuritiesAccountManager(acct);
+	  if ( stockAcctAlreadyExists(secAcctMgr, sec) )
+	  {
+		  System.err.println("Error: Stock account already exists");
+		  throw new IllegalStateException("Stock account already exists");
+	  }
+	  
+	  KMyMoneyWritableAccount newStockAcct = secAcctMgr.genShareAcct( sec );
+	  System.out.println("Stock account generated: " + newStockAcct);
+	  
+	  // ---
+
+	  kmmFile.writeFile(new File(kmmOutFileName));
+		    
+	  if ( ! silent )
+		  System.out.println("OK");
+  }
+  
+  private KMyMoneyWritableAccount getSecAccount() throws Exception
+  {
+    KMyMoneyWritableAccount acct = null;
     
     if (acctMode == Helper.Mode.ID)
     {
-      acct = kmmFile.getAccountByID(acctID);
+      acct = kmmFile.getWritableAccountByID(acctID);
       if (acct == null)
       {
-        if ( ! scriptMode )
+        if ( ! silent )
           System.err.println("Found no account with that name");
         throw new NoEntryFoundException();
       }
@@ -175,32 +229,37 @@ public class GetStockAcct extends CommandLineTool
     {
       Collection<KMyMoneyAccount> acctList = null;
       acctList = kmmFile.getAccountsByTypeAndName(KMyMoneyAccount.Type.INVESTMENT, acctName, 
-                                                  true, true);
-      if (acctList.size() == 0)
+    		  									   true, true);
+      if ( acctList.size() == 0 )
       {
-        if ( ! scriptMode )
+        if ( ! silent )
         {
           System.err.println("Could not find accounts matching this name.");
         }
         throw new NoEntryFoundException();
       }
-      else if (acctList.size() > 1)
+      else if ( acctList.size() > 1 )
       {
-        if ( ! scriptMode )
+        if ( ! silent )
         {
           System.err.println("Found " + acctList.size() + " accounts with that name.");
           System.err.println("Please specify more precisely.");
         }
         throw new TooManyEntriesFoundException();
       }
-      acct = acctList.iterator().next();
+      // No:
+      // acct = acctList.iterator().next();
+      acct = kmmFile.getWritableAccountByID(acctList.iterator().next().getID());
     }
 
-    if ( ! scriptMode )
+    if ( ! silent )
       System.out.println("Account:  " + acct.toString());
     
-    // ----------------------------
-
+    return acct;
+  }
+  
+  private KMyMoneySecurity getSecurity() throws Exception
+  {
     KMyMoneySecurity sec = null;
     
     if ( secMode == Helper.CmdtySecMode.ID )
@@ -208,7 +267,7 @@ public class GetStockAcct extends CommandLineTool
       sec = kmmFile.getSecurityByID(secID);
       if ( sec == null )
       {
-        if ( ! scriptMode )
+        if ( ! silent )
           System.err.println("Could not find a security with this ID.");
         throw new NoEntryFoundException();
       }
@@ -218,44 +277,49 @@ public class GetStockAcct extends CommandLineTool
       sec = kmmFile.getSecurityByCode(isin);
       if ( sec == null )
       {
-        if ( ! scriptMode )
+        if ( ! silent )
           System.err.println("Could not find securities with this ISIN.");
         throw new NoEntryFoundException();
       }
     }
     else if ( secMode == Helper.CmdtySecMode.NAME )
     {
-      Collection<KMyMoneySecurity> cmdtyList = kmmFile.getSecuritiesByName(secName); 
-      if ( cmdtyList.size() == 0 )
+      Collection<KMyMoneySecurity> secList = kmmFile.getSecuritiesByName(secName); 
+      if ( secList.size() == 0 )
       {
-        if ( ! scriptMode )
+        if ( ! silent )
           System.err.println("Could not find securities matching this name.");
         throw new NoEntryFoundException();
       }
-      if ( cmdtyList.size() > 1 )
+      if ( secList.size() > 1 )
       {
-        if ( ! scriptMode )
+        if ( ! silent )
         {
-          System.err.println("Found " + cmdtyList.size() + "securities matching this name.");
+          System.err.println("Found " + secList.size() + "securities matching this name.");
           System.err.println("Please specify more precisely.");
         }
         throw new TooManyEntriesFoundException();
       }
-      sec = cmdtyList.iterator().next(); // first element
+      sec = secList.iterator().next(); // first element
     }
     
-    if ( ! scriptMode )
+    if ( ! silent )
       System.out.println("Security: " + sec.toString());
-    
-    // ----------------------------
-    
-    for ( KMyMoneyAccount subAcct : acct.getChildren() ) {
-      if ( subAcct.getType() == KMyMoneyAccount.Type.STOCK &&
-           subAcct.getQualifSecCurrID().equals(sec.getQualifID()) ) {
-          System.out.println(subAcct.getID());
-      }
-    }
 
+    return sec;
+  }
+  
+  private boolean stockAcctAlreadyExists(SecuritiesAccountManager secAcctMgr, KMyMoneySecurity sec)
+  {
+	  for ( KMyMoneyAccount acct : secAcctMgr.getShareAccts() )
+	  {
+		  if ( acct.getQualifSecCurrID().toString().equals( sec.getQualifID().toString() ) ) // Important: toString()
+		  {
+			  return true;
+		  }
+	  }
+	  
+	  return false;
   }
 
   // -----------------------------------------------------------------
@@ -276,28 +340,45 @@ public class GetStockAcct extends CommandLineTool
 
     // ---
 
-    // <script>
-    if ( cmdLine.hasOption("script") )
+    // <silent>
+    if (cmdLine.hasOption("silent"))
     {
-      scriptMode = true; 
+      silent = true;
     }
-    // System.err.println("Script mode: " + scriptMode);
+    else
+    {
+      silent = false;
+    }
+    if (! silent)
+      System.err.println("silent:              " + silent);
     
     // ---
 
-    // <kmymoney-file>
+    // <kmymoney-in-file>
     try
     {
-      kmmFileName = cmdLine.getOptionValue("kmymoney-file");
+      kmmInFileName = cmdLine.getOptionValue("kmymoney-in-file");
     }
     catch ( Exception exc )
     {
-      System.err.println("Could not parse <kmymoney-file>");
+      System.err.println("Could not parse <kmymoney-in-file>");
       throw new InvalidCommandLineArgsException();
     }
+    if (! silent)
+    	System.err.println("KMyMoney file (in):  '" + kmmInFileName + "'");
     
-    if ( ! scriptMode )
-      System.err.println("KMyMoney file:     '" + kmmFileName + "'");
+    // <kmymoney-out-file>
+    try
+    {
+      kmmOutFileName = cmdLine.getOptionValue("kmymoney-out-file");
+    }
+    catch ( Exception exc )
+    {
+      System.err.println("Could not parse <kmymoney-out-file>");
+      throw new InvalidCommandLineArgsException();
+    }
+    if (! silent)
+    	System.err.println("KMyMoney file (out): '" + kmmOutFileName + "'");
     
     // <account-mode>
     try
@@ -310,13 +391,19 @@ public class GetStockAcct extends CommandLineTool
       throw new InvalidCommandLineArgsException();
     }
     
-    if ( ! scriptMode )
+    if ( ! silent )
       System.err.println("Account mode:  " + acctMode);
 
     // <security-mode>
     try
     {
       secMode = Helper.CmdtySecMode.valueOf(cmdLine.getOptionValue("security-mode"));
+      if ( secMode == Helper.CmdtySecMode.TYPE )
+      {
+    	  // sic, not valid
+          System.err.println("Could not parse <security-mode>");
+          throw new InvalidCommandLineArgsException();
+      }
     }
     catch ( Exception exc )
     {
@@ -324,7 +411,7 @@ public class GetStockAcct extends CommandLineTool
       throw new InvalidCommandLineArgsException();
     }
     
-    if ( ! scriptMode )
+    if ( ! silent )
       System.err.println("Security mode: " + secMode);
 
     // <account-id>
@@ -338,7 +425,7 @@ public class GetStockAcct extends CommandLineTool
       
       try
       {
-        acctID = new KMMComplAcctID( cmdLine.getOptionValue("account-id") );
+        acctID = new KMMAcctID( cmdLine.getOptionValue("account-id") );
       }
       catch ( Exception exc )
       {
@@ -355,7 +442,7 @@ public class GetStockAcct extends CommandLineTool
       }      
     }
     
-    if ( ! scriptMode )
+    if ( ! silent )
       System.err.println("Account ID:    '" + acctID + "'");
 
     // <account-name>
@@ -386,7 +473,7 @@ public class GetStockAcct extends CommandLineTool
       }      
     }
     
-    if ( ! scriptMode )
+    if ( ! silent )
       System.err.println("Account name:  '" + acctName + "'");
 
     // <security-id>
@@ -417,7 +504,7 @@ public class GetStockAcct extends CommandLineTool
       }
     }
 
-    if (!scriptMode)
+    if (!silent)
       System.err.println("Security ID:   '" + secID + "'");
 
     // <isin>
@@ -448,7 +535,7 @@ public class GetStockAcct extends CommandLineTool
       }
     }
 
-    if (!scriptMode)
+    if (!silent)
       System.err.println("Security ISIN: '" + isin + "'");
 
     // <security-name>
@@ -479,15 +566,15 @@ public class GetStockAcct extends CommandLineTool
       }
     }
 
-    if (!scriptMode)
+    if (!silent)
       System.err.println("Security name: '" + secName + "'");
   }
-  
+
   @Override
   protected void printUsage()
   {
     HelpFormatter formatter = new HelpFormatter();
-    formatter.printHelp( "GetSubAcct", options );
+    formatter.printHelp( "GenStockAcct", options );
     
     System.out.println("");
     System.out.println("Valid values for <account-mode>:");
@@ -497,6 +584,9 @@ public class GetStockAcct extends CommandLineTool
     System.out.println("");
     System.out.println("Valid values for <security-mode>:");
     for ( Helper.CmdtySecMode elt : Helper.CmdtySecMode.values() )
-      System.out.println(" - " + elt);
+    {
+      if ( elt != Helper.CmdtySecMode.TYPE ) // sic
+        System.out.println(" - " + elt);
+    }
   }
 }
