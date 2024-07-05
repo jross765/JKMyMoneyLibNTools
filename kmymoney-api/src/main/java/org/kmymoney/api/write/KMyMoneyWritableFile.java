@@ -304,7 +304,7 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 
 	/**
 	 * @param type  Security type
-	 * @param secID Security ID (<strong>not</strong> the internal technical ID,
+	 * @param code  Security code (<strong>not</strong> the internal technical ID,
 	 *              but the business ID, such as ISIN, CUSIP, etc. 
 	 *              A ticker will also work, but it is <strong>not</strong> recommended,
 	 *              as tickers typically are not unique, and there is a separate field
@@ -312,7 +312,7 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * @param name  Security name
 	 * @return a new transaction with no splits that is already added to this file
 	 */
-	KMyMoneyWritableSecurity createWritableSecurity(KMMSecCurr.Type type, String secID, String name);
+	KMyMoneyWritableSecurity createWritableSecurity(KMMSecCurr.Type type, String code, String name);
 
 	/**
 	 *

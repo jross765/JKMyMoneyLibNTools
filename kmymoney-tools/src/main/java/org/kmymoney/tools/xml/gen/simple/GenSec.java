@@ -89,7 +89,7 @@ public class GenSec extends CommandLineTool
       .isRequired()
       .hasArg()
       .withArgName("name")
-      .withDescription("Customer name")
+      .withDescription("Name")
       .withLongOpt("name")
       .create("n");
     
@@ -122,8 +122,8 @@ public class GenSec extends CommandLineTool
     KMyMoneyWritableFileImpl kmmFile = new KMyMoneyWritableFileImpl(new File(kmmInFileName));
     
     KMyMoneyWritableSecurity sec = kmmFile.createWritableSecurity(KMMSecCurr.Type.STOCK, isin, name);
+    // sec.setCode(isin);
     // sec.setName(name);
-    // sec.setUserDefinedAttribute(Const.KVP_KEY_SEC_SECURITY_ID, isin);
     
     if ( symbol != null )
     	sec.setSymbol(symbol);

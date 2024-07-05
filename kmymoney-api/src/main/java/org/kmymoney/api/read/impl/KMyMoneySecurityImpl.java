@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kmymoney.api.Const;
 import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.read.KMMSecCurr;
@@ -78,7 +79,7 @@ public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl
      */
     public String getCode() {
     	try {
-    		return getUserDefinedAttribute("kmm-security-id");
+    		return getUserDefinedAttribute(Const.KVP_KEY_SEC_SECURITY_ID);
     	} catch (KVPListDoesNotContainKeyException exc) {
     		return null;
     	}

@@ -1112,12 +1112,12 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritableSecurity createWritableSecurity(
 			final KMMSecCurr.Type type,
-			final String secID, // <-- e.g., ISIN
+			final String code, // <-- e.g., ISIN
 			final String name) {
 		KMyMoneyWritableSecurityImpl sec = new KMyMoneyWritableSecurityImpl(this);
 		sec.setType(type);
 		sec.setName(name);
-	    sec.addUserDefinedAttribute(Const.KVP_KEY_SEC_SECURITY_ID, secID);
+	    sec.setCode(code);
 		super.secMgr.addSecurity(sec);
 		return sec;
 	}
