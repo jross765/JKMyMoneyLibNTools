@@ -183,11 +183,11 @@ public class GetSecInfo extends CommandLineTool
 
     try
     {
-      System.out.println("Symbol:            '" + sec.getSymbol() + "'");
+      System.out.println("ISIN:              '" + sec.getCode() + "'");
     }
     catch (Exception exc)
     {
-      System.out.println("Symbol:            " + "ERROR");
+      System.out.println("ISIN:              " + "ERROR");
     }
 
     try
@@ -206,6 +206,15 @@ public class GetSecInfo extends CommandLineTool
     catch (Exception exc)
     {
       System.out.println("Type:              " + "ERROR");
+    }
+
+    try
+    {
+      System.out.println("Symbol:            '" + sec.getSymbol() + "'");
+    }
+    catch (Exception exc)
+    {
+      System.out.println("Symbol:            " + "ERROR");
     }
 
     try
