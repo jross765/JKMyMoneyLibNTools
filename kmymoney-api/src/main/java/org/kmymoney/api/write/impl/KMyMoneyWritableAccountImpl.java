@@ -14,6 +14,8 @@ import java.util.List;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.KEYVALUEPAIRS;
 import org.kmymoney.api.generated.ObjectFactory;
+import org.kmymoney.api.generated.SUBACCOUNT;
+import org.kmymoney.api.generated.SUBACCOUNTS;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
@@ -540,7 +542,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		}
 
 		// check if new parent is a child-account recursively
-		KMyMoneyAccount prntAcct = getKMyMoneyFile().getAccountByID(prntAcctID);
+		KMyMoneyWritableAccount prntAcct = getWritableKMyMoneyFile().getWritableAccountByID(prntAcctID); // sic, writable version, needed second step
 		if ( isChildAccountRecursive(prntAcct) ) {
 			throw new IllegalArgumentException("An account may not be set as its own (grand-)parent");
 		}
@@ -550,6 +552,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			throw new UnsupportedOperationException("Setting parent account ID is forbidden for top-level accounts");
 		}
 		
+		// 1) In child account, set reference to parent account
 		KMMComplAcctID oldPrntAcctID = getParentAccountID();
 		jwsdpPeer.setParentaccount(prntAcctID.toString());
 		setIsModified();
@@ -559,6 +562,34 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		if ( propertyChangeFirer != null ) {
 			propertyChangeFirer.firePropertyChange("parentAccount", oldPrntAcctID, prntAcctID);
 		}
+		
+		// 2) In parent account, add reference to child account
+		//    (This redundancy is a specific feature of the KMyMoney file format.
+		//    Things will not work correctly if we do not add this reference)
+		// 
+		// ::TODO / ::CHECK: I do not really want to have this code public -- on the other
+		// hand, it would make the code cleaner, and we could add the property change
+		// to the parent account as well. Sleep over it and re-evaluate in a while.
+		ACCOUNT jwsdpPrntAcct = ((KMyMoneyWritableAccountImpl) prntAcct).getJwsdpPeer();
+		// 2.1) Check if list of sub-accounts already contains the new child
+		//      This should not happen, but just in case...
+		if ( jwsdpPrntAcct.getSUBACCOUNTS() == null ) {
+			LOGGER.debug("setParentAccountID: Parent account " + prntAcctID.toString() + " has not references to child accounts yet.");
+			SUBACCOUNTS jwsdpChldAcctWrp = getWritableKMyMoneyFile().getObjectFactory().createSUBACCOUNTS();
+			jwsdpPrntAcct.setSUBACCOUNTS(jwsdpChldAcctWrp);
+		}
+		List<SUBACCOUNT> jwsdpChldAcctList = jwsdpPrntAcct.getSUBACCOUNTS().getSUBACCOUNT();
+		for ( SUBACCOUNT jwsdpChldAcct : jwsdpChldAcctList ) {
+			if ( jwsdpChldAcct.getId().equals( getID().toString() ) ) {
+				LOGGER.warn("setParentAccountID: Parent account " + prntAcctID.toString() + " already contains reference to " + getID().toString() + ". Nothing to do.");
+				return;
+			}
+		}
+		// 2.2) Add reference to child
+		SUBACCOUNT jwsdpChldAcctRef = getWritableKMyMoneyFile().getObjectFactory().createSUBACCOUNT();
+		jwsdpChldAcctRef.setId(getID().toString());
+		jwsdpPrntAcct.getSUBACCOUNTS().getSUBACCOUNT().add(jwsdpChldAcctRef);
+		LOGGER.debug("setParentAccountID: Added reference to child-account " + getID().toString() + " in " + prntAcctID.toString());
 	}
 
 	/**
