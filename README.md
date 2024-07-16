@@ -35,9 +35,9 @@ but he has not tested it.
 
 | Version | Backward Compat. | Note                           |
 |---------|------------------|--------------------------------|
-| 0.6     | (WIP) almost?    | Only minor changes             |
+| 0.6     | almost           | Minor changes in interfaces    |
 | 0.5     | no               | Some substantial changes       |
-| 0.4     | no               | Minor changes in interfaces    |
+| 0.4     | almost           | Minor changes in interfaces    |
 | 0.3     | no               | Major changes in interfaces    |
 | 0.2     | no               | Major changes in interfaces    |
 
