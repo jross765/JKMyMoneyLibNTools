@@ -3,10 +3,30 @@
 This is the core module of the project, providing all low-level read-/write access functions to a KMyMoney file.
 
 ## Major Changes 
-### V. 0.5 &rarr; 0.6 (WIP)
+### V. 0.5 &rarr; 0.6
+* Finally added institutions and dependent code in other classes (e.g. `KMyMoney(Writable)Account(Impl)`).
+
 * `KMyMoney(Writable)Security(Impl)`: New methods `get(Writable)StockAccounts()`, which is a handy short-cut for specific use cases.
 
 * `KMyMoney(Writable)File(Impl)`: Implemented empty skeleton methods that had been forgotten and previously just returned null, such as `getAccountsByName()`.
+
+* Added a few method implementations that had been forgotten here and there.
+
+* Re-iterated over some code, e.g.:
+	* `KMyMoney(Writable)Currency(Impl)`
+	* `KMyMoneySecurityImpl`
+	* `KMyMoney(Writable)FileImpl`
+	* Improved overall robustness by more consistently checking method parameters.
+
+* Finally completed list of internal manager classes `File[XYZ]Manager`.
+
+* Minor changes in interfaces.
+
+* Fixed a couple of bugs.
+
+* Some code-cleanup here and there.
+
+* Improved test coverage.
 
 ### V. 0.4 &rarr; 0.5
 * Extracted some basic packages to new module "Base".

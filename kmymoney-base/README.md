@@ -12,6 +12,11 @@ This might seem overly complicated, but in fact, it was necessary, because the a
 
 * Better test coverage: Now, I feel much better about it.
 
+* Finally: Moved package `numbers` to `SchnorxoLib` (and thus merged it with the almost 100%-redundant code in the sister project's according package).
+
+* Fixed bug with set() methods in `KMMQualifCurrID` / `KMMQualifSecID`.
+
+
 ### V. 0.4 &rarr; 0.5
 * Created, spun off from the API module.
 
