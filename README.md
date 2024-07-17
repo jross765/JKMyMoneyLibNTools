@@ -45,10 +45,10 @@ but he has not tested it.
 Here, only the top-level changes on module-level are mentioned. For more Details, 
 cf. the README files of the resp. modules (links above).
 
-### V. 0.5 &rarr; 0.6 (WIP)
+### V. 0.5 &rarr; 0.6
 * Added module "Tools".
 
-* New external dependency (outside of Maven central): [`SchnorxoLib`](https://github.com/jross765/schnorxolib), a small library that contains some auxiliary stuff that is used both in this and the sister project.
+* New external dependency (outside of Maven central): [`SchnorxoLib`](https://github.com/jross765/schnorxolib), a small library that contains some auxiliary stuff that is used both in this and the sister project. Some of the code in the module "Base" has moved there.
 
 ### V. 0.4 &rarr; 0.5
 Changed project structure:

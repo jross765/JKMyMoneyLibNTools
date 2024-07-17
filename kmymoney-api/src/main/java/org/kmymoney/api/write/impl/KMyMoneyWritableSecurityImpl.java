@@ -173,7 +173,11 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 		}
 
 		String oldCode = getCode();
-		setUserDefinedAttribute(Const.KVP_KEY_SEC_SECURITY_ID, code); // sic, no try-catch-block here
+		if ( oldCode == null ) {
+			addUserDefinedAttribute(Const.KVP_KEY_SEC_SECURITY_ID, code);
+		} else {
+			setUserDefinedAttribute(Const.KVP_KEY_SEC_SECURITY_ID, code); // sic, no try-catch-block here
+		}
 		
 		// Already done:
 		// getKMyMoneyFile().setModified(true);
