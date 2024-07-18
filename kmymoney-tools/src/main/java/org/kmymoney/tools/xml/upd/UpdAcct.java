@@ -6,7 +6,7 @@ import javax.security.auth.login.AccountNotFoundException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
@@ -196,7 +196,7 @@ public class UpdAcct extends CommandLineTool
   @Override
   protected void parseCommandLineArgs(String[] args) throws InvalidCommandLineArgsException
   {
-    CommandLineParser parser = new GnuParser();
+    CommandLineParser parser = new DefaultParser();
     CommandLine cmdLine = null;
     try
     {
