@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.kmymoney</groupId>
 		<artifactId>kmymoney</artifactId>
-		<version>${project.version}</version>
+		<version>0.7.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>kmymoney-api</artifactId>
@@ -28,6 +28,22 @@
 		</repository>
 
 	</repositories>
+
+	<dependencyManagement>
+	
+		<dependencies>
+
+			<dependency>
+				<groupId>org.kmymoney</groupId>
+				<artifactId>kmymoney-base</artifactId>
+				<version>${project.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+		</dependencies>
+		
+	</dependencyManagement>
 
 	<dependencies>
 
@@ -121,7 +137,7 @@
 		</dependency>
 
 		<!-- *********************************************************  -->
-		
+
 		<!-- KMyMoney Base -->
 		<dependency>
 			<groupId>org.kmymoney</groupId>
