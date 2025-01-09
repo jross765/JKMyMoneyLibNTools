@@ -83,7 +83,7 @@ public class UpdPye extends CommandLineTool
     Option optID = OptionBuilder
       .isRequired()
       .hasArg()
-      .withArgName("UUID")
+      .withArgName("pyeid")
       .withDescription("Payee ID")
       .withLongOpt("payee-id")
       .create("id");

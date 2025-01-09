@@ -88,7 +88,7 @@ public class UpdAcct extends CommandLineTool
     Option optID = OptionBuilder
       .isRequired()
       .hasArg()
-      .withArgName("UUID")
+      .withArgName("acctid")
       .withDescription("Account ID")
       .withLongOpt("account-id")
       .create("id");
