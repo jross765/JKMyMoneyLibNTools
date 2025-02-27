@@ -115,7 +115,7 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 	void setParentAccountID(KMMComplAcctID prntAcctID);
 
 	/**
-	 * Remove this account from the sytem.<br/>
+	 * Remove this account from the system.<br/>
 	 * Throws IllegalStateException if this account has splits or childres.
 	 */
 	void remove();

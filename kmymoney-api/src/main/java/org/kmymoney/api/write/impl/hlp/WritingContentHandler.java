@@ -124,7 +124,7 @@ public class WritingContentHandler implements ContentHandler {
 				wrt.write(sb.toString());
 
 		} catch (IOException e) {
-			LOGGER.error("characters: Problem", e);
+			LOGGER.error("charactersCore: Problem", e);
 		}
 	}
 

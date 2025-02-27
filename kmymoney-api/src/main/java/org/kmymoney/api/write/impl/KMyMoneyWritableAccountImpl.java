@@ -133,7 +133,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	}
 
 	/**
-	 * Remove this account from the sytem.<br/>
+	 * Remove this account from the system.<br/>
 	 * Throws IllegalStateException if this account has splits or childres.
 	 */
 	public void remove() {

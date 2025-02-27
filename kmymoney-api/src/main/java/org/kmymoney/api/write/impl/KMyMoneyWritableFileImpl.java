@@ -10,13 +10,21 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Currency;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.zip.GZIPOutputStream;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.kmymoney.api.Const;
 import org.kmymoney.api.generated.ACCOUNT;
@@ -202,6 +210,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		}
 
 		checkAllCountData();
+		updateLastModified();
 
 		setFile(file);
 
@@ -411,6 +420,34 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		// (we do not enforce this in the xml-schema to allow for reading out of order
 		// files)
 		// java.util.Collections.sort(getRootElement(), new BookElementsSorter());
+	}
+
+	/**
+	 * Update the 'last updated' info in the KMM document.
+	 */
+	private void updateLastModified() {
+		try {
+            // https://stackoverflow.com/questions/835889/java-util-date-to-xmlgregoriancalendar
+			// https://stackoverflow.com/questions/49667772/localdate-to-gregoriancalendar-conversion
+			// https://stackoverflow.com/questions/14060161/specify-the-date-format-in-xmlgregoriancalendar
+			LocalDate today = LocalDate.now();
+			// CAUTION: The following two lines with new Date(...) do not work (reliably)
+//	        GregorianCalendar cal = new GregorianCalendar();
+//	        cal.setTime(new Date(this.date.getYear(),
+//	        		             this.date.getMonthValue(),
+//	        		             this.date.getDayOfMonth()));
+			GregorianCalendar cal = GregorianCalendar 
+					.from( today.atStartOfDay(ZoneId.systemDefault()) );
+	        XMLGregorianCalendar xmlCal = 
+	        		DatatypeFactory.newInstance().newXMLGregorianCalendarDate(
+	        				cal.get(Calendar.YEAR), 
+	        				cal.get(Calendar.MONTH) + 1, 
+	        				cal.get(Calendar.DAY_OF_MONTH), 
+	        				DatatypeConstants.FIELD_UNDEFINED);
+	        getRootElement().getFILEINFO().getLASTMODIFIEDDATE().setDate(xmlCal);
+		} catch ( DatatypeConfigurationException exc ) {
+			throw new DateMappingException();
+		}
 	}
 
 	// ---------------------------------------------------------------

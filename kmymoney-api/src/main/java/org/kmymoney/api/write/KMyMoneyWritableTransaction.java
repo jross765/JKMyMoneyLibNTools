@@ -100,7 +100,7 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
 	KMyMoneyWritableTransactionSplit createWritableSplit(KMyMoneyAccount account);
 
 	/**
-	 * Also removes the split from it's account.
+	 * Removes the given split from this transaction.
 	 * 
 	 * @param impl the split to remove from this transaction
 	 */
