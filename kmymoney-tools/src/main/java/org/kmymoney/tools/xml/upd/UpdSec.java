@@ -1,6 +1,7 @@
 package org.kmymoney.tools.xml.upd;
 
 import java.io.File;
+import java.util.Collection;
 
 import javax.security.auth.login.AccountNotFoundException;
 
@@ -14,15 +15,18 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.kmymoney.api.read.KMMSecCurr;
-import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.tools.CommandLineTool;
+import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
+import xyz.schnorxoborx.base.beanbase.TooManyEntriesFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
+import xyz.schnorxoborx.base.cmdlinetools.Helper;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 
 public class UpdSec extends CommandLineTool
@@ -35,9 +39,11 @@ public class UpdSec extends CommandLineTool
   
   private static String         kmmInFileName  = null;
   private static String         kmmOutFileName = null;
-  private static KMMSecID       secID          = null;
-  private static String         isin           = null;
 
+  private static Helper.CmdtySecMode mode        = null;
+  private static KMMSecID            secID       = null;
+  private static String              isin        = null;
+  
   private static String          name = null;
   private static String          descr = null;
   private static KMMSecCurr.Type type = null;
@@ -85,13 +91,27 @@ public class UpdSec extends CommandLineTool
       .withLongOpt("kmymoney-out-file")
       .create("of");
       
-    Option optID = OptionBuilder
-      .isRequired()
+    Option optMode = OptionBuilder
+       .isRequired()
+       .hasArg()
+       .withArgName("mode")
+       .withDescription("Selection mode")
+       .withLongOpt("mode")
+       .create("m");
+    	        
+    Option optSecID = OptionBuilder
       .hasArg()
-      .withArgName("secid")
-      .withDescription("Security ID (not qualified)")
+      .withArgName("ID")
+      .withDescription("Security ID")
       .withLongOpt("security-id")
-      .create("id");
+      .create("sec");
+    	          
+    Option optISIN = OptionBuilder
+      .hasArg()
+      .withArgName("isin")
+      .withDescription("ISIN")
+      .withLongOpt("isin")
+      .create("is");
             
     Option optName = OptionBuilder
       .hasArg()
@@ -113,7 +133,9 @@ public class UpdSec extends CommandLineTool
     options = new Options();
     options.addOption(optFileIn);
     options.addOption(optFileOut);
-    options.addOption(optID);
+    options.addOption(optMode);
+    options.addOption(optSecID);
+    options.addOption(optISIN);
     options.addOption(optName);
     options.addOption(optType);
   }
@@ -129,16 +151,28 @@ public class UpdSec extends CommandLineTool
   {
     KMyMoneyWritableFileImpl kmmFile = new KMyMoneyWritableFileImpl(new File(kmmInFileName));
 
-    try 
+    KMyMoneyWritableSecurity sec = null;
+    
+    if ( mode == Helper.CmdtySecMode.ID )
     {
       sec = kmmFile.getWritableSecurityByID(secID);
-      System.err.println("Security before update: " + sec.toString());
+      if ( sec == null )
+      {
+        System.err.println("Could not find a security with this ID.");
+        throw new NoEntryFoundException();
+      }
     }
-    catch ( Exception exc )
+    else if ( mode == Helper.CmdtySecMode.ISIN )
     {
-      System.err.println("Error: Could not find/instantiate security with ID '" + secID + "'");
-      throw new AccountNotFoundException();
+      sec = kmmFile.getWritableSecurityByCode(isin);
+      if ( sec == null )
+      {
+        System.err.println("Could not find securities with this ISIN.");
+        throw new NoEntryFoundException();
+      }
     }
+    
+    // ----------------------------
     
     doChanges(kmmFile);
     System.err.println("Security after update: " + sec.toString());
@@ -206,17 +240,84 @@ public class UpdSec extends CommandLineTool
     }
     System.err.println("KMyMoney file (out): '" + kmmOutFileName + "'");
     
-    // <account-id>
+    // <mode>
     try
     {
-      secID = new KMMSecID( cmdLine.getOptionValue("security-id") );
+      mode = Helper.CmdtySecMode.valueOf(cmdLine.getOptionValue("mode"));
+      
+      if ( mode != Helper.CmdtySecMode.NAME )
+      {
+        System.err.println("<mode> '" + Helper.CmdtySecMode.NAME + "' must not be used here");
+        throw new InvalidCommandLineArgsException();
+      }
     }
     catch ( Exception exc )
     {
-      System.err.println("Could not parse <security-id>");
+      System.err.println("Could not parse <mode>");
       throw new InvalidCommandLineArgsException();
     }
-    System.err.println("Security ID: " + secID);
+    
+    System.err.println("Mode:         " + mode);
+
+    // <security-id>
+    if ( cmdLine.hasOption("security-id") )
+    {
+      if ( mode != Helper.CmdtySecMode.ID )
+      {
+        System.err.println("<security-id> must only be set with <mode> = '" + Helper.CmdtySecMode.ID.toString() + "'");
+        throw new InvalidCommandLineArgsException();
+      }
+      
+      try
+      {
+        secID = new KMMSecID( cmdLine.getOptionValue("security-id") );
+      }
+      catch (Exception exc)
+      {
+        System.err.println("Could not parse <security-id>");
+        throw new InvalidCommandLineArgsException();
+      }
+    }
+    else
+    {
+      if ( mode == Helper.CmdtySecMode.ID )
+      {
+        System.err.println("<security-id> must be set with <mode> = '" + Helper.CmdtySecMode.ID.toString() + "'");
+        throw new InvalidCommandLineArgsException();
+      }
+    }
+
+    System.err.println("Security ID:  '" + secID + "'");
+
+    // <isin>
+    if ( cmdLine.hasOption("isin") )
+    {
+      if ( mode != Helper.CmdtySecMode.ISIN )
+      {
+        System.err.println("<isin> must only be set with <mode> = '" + Helper.CmdtySecMode.ISIN.toString() + "'");
+        throw new InvalidCommandLineArgsException();
+      }
+      
+      try
+      {
+        isin = cmdLine.getOptionValue("isin");
+      }
+      catch (Exception exc)
+      {
+        System.err.println("Could not parse <isin>");
+        throw new InvalidCommandLineArgsException();
+      }
+    }
+    else
+    {
+      if ( mode == Helper.CmdtySecMode.ISIN )
+      {
+        System.err.println("<isin> must be set with <mode> = '" + Helper.CmdtySecMode.ISIN.toString() + "'");
+        throw new InvalidCommandLineArgsException();
+      }
+    }
+
+    System.err.println("ISIN:         '" + isin + "'");
 
     // <name>
     if ( cmdLine.hasOption("name") ) 
