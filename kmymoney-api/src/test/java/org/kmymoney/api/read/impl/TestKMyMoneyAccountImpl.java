@@ -23,6 +23,7 @@ public class TestKMyMoneyAccountImpl {
 	public static final KMMComplAcctID ACCT_2_ID = new KMMComplAcctID("A000062"); // Asset:Finanzanlagen::Depot RaiBa
 	public static final KMMComplAcctID ACCT_3_ID = new KMMComplAcctID("A000049"); // Fremdkapital
 	public static final KMMComplAcctID ACCT_4_ID = new KMMComplAcctID("A000064"); // Aktiva:Depots:Depot RaiBa:DE0007100000 Mercedes-Benz
+	public static final KMMComplAcctID ACCT_8_ID = new KMMComplAcctID("A000063"); // Aktiva:Depots:Depot RaiBa:DE0007164600 SAP
 
 	// Top-level accounts
 	public static final KMMComplAcctID ACCT_10_ID = KMMComplAcctID.get(KMMComplAcctID.Top.ASSET);
