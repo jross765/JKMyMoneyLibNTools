@@ -76,11 +76,8 @@ public class TestKMyMoneyTransactionSplitImpl {
 		assertEquals("10.000,00 €", splt.getValueFormatted()); // ::TODO: locale-specific!
 		assertEquals("10.000,00 &euro;", splt.getValueFormattedForHTML());
 		assertEquals(10000.00, splt.getShares().doubleValue(), ConstTest.DIFF_TOLERANCE);
-		// ::TODO: The following two do in fact not work:
-		// they should display the Euro-sign
-		// Cf. TestKMyMoneyWritableTransactionSplitImpl
-		assertEquals("10.000", splt.getSharesFormatted());
-		assertEquals("10.000", splt.getSharesFormattedForHTML());
+		assertEquals("10.000,00 €", splt.getSharesFormatted());
+		assertEquals("10.000,00 &euro;", splt.getSharesFormattedForHTML());
 		assertEquals("", splt.getMemo());
 //		assertEquals(null, splt.getUserDefinedAttributeKeys());
 	}
@@ -97,8 +94,8 @@ public class TestKMyMoneyTransactionSplitImpl {
 		assertEquals("1.800,00 €", splt.getValueFormatted()); // ::TODO: locale-specific!
 		assertEquals("1.800,00 &euro;", splt.getValueFormattedForHTML());
 		assertEquals(15.00, splt.getShares().doubleValue(), ConstTest.DIFF_TOLERANCE);
-		assertEquals("15", splt.getSharesFormatted());
-		assertEquals("15", splt.getSharesFormattedForHTML());
+		assertEquals("15 SECURITY:E000001", splt.getSharesFormatted());
+		assertEquals("15 SECURITY:E000001", splt.getSharesFormattedForHTML());
 		assertEquals("", splt.getMemo());
 //		assertEquals(null, splt.getUserDefinedAttributeKeys());
 	}

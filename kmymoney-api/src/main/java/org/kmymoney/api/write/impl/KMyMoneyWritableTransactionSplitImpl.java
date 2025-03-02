@@ -193,33 +193,6 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	}
 
 	/**
-	 * @see KMyMoneyWritableTransactionSplit#setShares(FixedPointNumber)
-	 */
-	@Override
-	public void setShares(final String n) {
-		if ( n == null ) {
-			throw new IllegalArgumentException("null shares given");
-		}
-		
-		if ( n.isEmpty() ) {
-			throw new IllegalArgumentException("empty shares given");
-		}
-
-		try {
-			this.setShares(new FixedPointNumber(n.toLowerCase().replaceAll("&euro;", "").replaceAll("&pound;", "")));
-		} catch (NumberFormatException e) {
-			try {
-				Number parsed = this.getSharesCurrencyFormat().parse(n);
-				this.setShares(new FixedPointNumber(parsed.toString()));
-			} catch (NumberFormatException e1) {
-				throw e;
-			} catch (ParseException e1) {
-				throw e;
-			}
-		}
-	}
-
-	/**
 	 * @return true if the currency of transaction and account match
 	 */
 	private boolean isCurrencyMatching() {
@@ -244,18 +217,18 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	@Override
 	public void setShares(final FixedPointNumber n) {
 		if ( n == null ) {
-			throw new IllegalArgumentException("null quantity given");
+			throw new IllegalArgumentException("null shares given");
 		}
 
 		String old = getJwsdpPeer().getShares();
 		jwsdpPeer.setShares(n.toKMyMoneyString());
 		((KMyMoneyWritableFile) getKMyMoneyFile()).setModified(true);
 		if ( isCurrencyMatching() ) {
-			String oldvalue = getJwsdpPeer().getValue();
-			getJwsdpPeer().setValue(n.toKMyMoneyString());
+			String oldShares = getJwsdpPeer().getShares();
+			getJwsdpPeer().setShares(n.toKMyMoneyString());
 			if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
 				if ( helper.getPropertyChangeSupport() != null ) {
-					helper.getPropertyChangeSupport().firePropertyChange("value", new FixedPointNumber(oldvalue), n);
+					helper.getPropertyChangeSupport().firePropertyChange("shares", new FixedPointNumber(oldShares), n);
 				}
 			}
 		}
@@ -263,6 +236,63 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
 			if ( helper.getPropertyChangeSupport() != null ) {
 				helper.getPropertyChangeSupport().firePropertyChange("shares", new FixedPointNumber(old), n);
+			}
+		}
+	}
+
+	/**
+	 * @see KMyMoneyWritableTransactionSplit#setShares(FixedPointNumber)
+	 */
+	@Override
+	public void setShares(final String n) {
+		if ( n == null ) {
+			throw new IllegalArgumentException("null shares given");
+		}
+		
+		if ( n.isEmpty() ) {
+			throw new IllegalArgumentException("empty shares given");
+		}
+	
+		try {
+			this.setShares(new FixedPointNumber(n.toLowerCase().replaceAll("&euro;", "").replaceAll("&pound;", "")));
+		} catch (NumberFormatException e) {
+			try {
+				Number parsed = this.getSharesCurrencyFormat().parse(n);
+				this.setShares(new FixedPointNumber(parsed.toString()));
+			} catch (NumberFormatException e1) {
+				throw e;
+			} catch (ParseException e1) {
+				throw e;
+			}
+		}
+	}
+
+	/**
+	 * @see KMyMoneyWritableTransactionSplit#setValue(FixedPointNumber)
+	 */
+	@Override
+	public void setValue(final FixedPointNumber n) {
+		if ( n == null ) {
+			throw new IllegalArgumentException("null value given");
+		}
+		
+		String old = getJwsdpPeer().getValue();
+		jwsdpPeer.setValue(n.toKMyMoneyString());
+		((KMyMoneyWritableFile) getKMyMoneyFile()).setModified(true);
+		
+		if ( isCurrencyMatching() ) {
+			String oldValue = getJwsdpPeer().getShares();
+			getJwsdpPeer().setShares(n.toKMyMoneyString());
+			if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
+				if ( helper.getPropertyChangeSupport() != null ) {
+					helper.getPropertyChangeSupport().firePropertyChange("shares", new FixedPointNumber(oldValue), n);
+				}
+			}
+		}
+	
+		if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
+			if ( helper.getPropertyChangeSupport() != null ) {
+				helper.getPropertyChangeSupport().firePropertyChange("value", new FixedPointNumber(old), n);
 			}
 		}
 	}
@@ -290,36 +320,6 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 				throw e;
 			} catch (ParseException e1) {
 				throw e;
-			}
-		}
-	}
-
-	/**
-	 * @see KMyMoneyWritableTransactionSplit#setValue(FixedPointNumber)
-	 */
-	@Override
-	public void setValue(final FixedPointNumber n) {
-		if ( n == null ) {
-			throw new IllegalArgumentException("null value given");
-		}
-		
-		String old = getJwsdpPeer().getValue();
-		jwsdpPeer.setValue(n.toKMyMoneyString());
-		((KMyMoneyWritableFile) getKMyMoneyFile()).setModified(true);
-		
-		if ( isCurrencyMatching() ) {
-			String oldquantity = getJwsdpPeer().getShares();
-			getJwsdpPeer().setShares(n.toKMyMoneyString());
-			if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
-				if ( helper.getPropertyChangeSupport() != null ) {
-					helper.getPropertyChangeSupport().firePropertyChange("shares", new FixedPointNumber(oldquantity), n);
-				}
-			}
-		}
-
-		if ( old == null || !old.equals(n.toKMyMoneyString()) ) {
-			if ( helper.getPropertyChangeSupport() != null ) {
-				helper.getPropertyChangeSupport().firePropertyChange("value", new FixedPointNumber(old), n);
 			}
 		}
 	}

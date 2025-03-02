@@ -22,6 +22,7 @@ import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
+import org.kmymoney.base.basetypes.simple.KMMTagID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
@@ -64,7 +65,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 
 	/**
 	 * @param id the unique ID of the institution to look for
-	 * @return the customer or null if it's not found
+	 * @return the institution or null if it's not found
 	 */
 	KMyMoneyInstitution getInstitutionByID(KMMInstID id);
 
@@ -262,7 +263,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 
 	/**
 	 * @param id the unique ID of the payee to look for
-	 * @return the customer or null if it's not found
+	 * @return the payee or null if it's not found
 	 */
 	KMyMoneyPayee getPayeeByID(KMMPyeID id);
 
@@ -296,8 +297,8 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param id the unique ID of the customer to look for
-	 * @return the customer or null if it's not found
+	 * @param id the unique ID of the security to look for
+	 * @return the security or null if it's not found
 	 */
 	KMyMoneySecurity getSecurityByID(KMMSecID id);
 
@@ -390,8 +391,8 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param id the unique ID of the customer to look for
-	 * @return the customer or null if it's not found
+	 * @param id the unique ID of the currency to look for
+	 * @return the currency or null if it's not found
 	 */
 	KMyMoneyCurrency getCurrencyByID(String id);
 
@@ -403,17 +404,17 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 
 	/**
 	 * warning: this function has to traverse all securities. If it much faster to
-	 * try getCustomerById first and only call this method if the returned account
+	 * try getCurrencyById first and only call this method if the returned account
 	 * does not have the right name.
 	 *
 	 * @param name the name to look for
 	 * @return null if not found
-	 * @see #getCustomerByID(String)
+	 * @see #getCurrencyByID(String)
 	 */
 	// Collection<KMyMoneyCurrency> getCurrenciesByName(String name);
 
 	/**
-	 * @return a (possibly read-only) collection of all customers Do not modify the
+	 * @return a (possibly read-only) collection of all currencies. Do not modify the
 	 *         returned collection!
 	 */
 	Collection<KMyMoneyCurrency> getCurrencies();
@@ -465,5 +466,40 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 */
 	FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID)
 			throws InvalidQualifSecCurrIDException;
+
+	// ---------------------------------------------------------------
+
+//	/**
+//	 * @param id the unique ID of the tag to look for
+//	 * @return the tag or null if it's not found
+//	 */
+//	KMyMoneyTag getTagByID(KMMTagID id);
+//
+//	/**
+//	 * @param expr search expression
+//	 * @return
+//	 */
+//	Collection<KMyMoneyTag> getTagsByName(String expr);
+//
+//	/**
+//	 * @param expr search expression
+//	 * @param relaxed
+//	 * @return
+//	 */
+//	Collection<KMyMoneyTag> getTagsByName(String expr, boolean relaxed);
+//
+//	/**
+//	 * @param expr search expression
+//	 * @return
+//	 * @throws NoEntryFoundException
+//	 * @throws TooManyEntriesFoundException
+//	 */
+//	KMyMoneyTag getTagsByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
+//
+//	/**
+//	 * @return a (possibly read-only) collection of all tags Do not modify the
+//	 *         returned collection!
+//	 */
+//	Collection<KMyMoneyTag> getTags();
 
 }

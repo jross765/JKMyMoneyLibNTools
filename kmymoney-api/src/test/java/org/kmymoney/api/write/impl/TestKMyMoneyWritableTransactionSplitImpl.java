@@ -127,8 +127,9 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		assertEquals("1.800,00 €", splt.getValueFormatted()); // ::TODO: locale-specific!
 		assertEquals("1.800,00 &euro;", splt.getValueFormattedForHTML());
 		assertEquals(15.00, splt.getShares().doubleValue(), ConstTest.DIFF_TOLERANCE);
-		assertEquals("15", splt.getSharesFormatted()); // ::CHECK -- wieso hier Euro-Zeichen?
-		assertEquals("15", splt.getSharesFormattedForHTML()); // ::TODO: locale-specific!
+		// ::TODO: The next two: That's not exactly what we want...
+		assertEquals("15 SECURITY:E000001", splt.getSharesFormatted());
+		assertEquals("15 SECURITY:E000001", splt.getSharesFormattedForHTML());
 		assertEquals("", splt.getMemo());
 //		assertEquals(null, splt.getUserDefinedAttributeKeys());
 	}

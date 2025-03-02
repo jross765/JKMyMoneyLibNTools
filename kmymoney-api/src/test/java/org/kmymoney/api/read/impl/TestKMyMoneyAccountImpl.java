@@ -84,7 +84,7 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals(INST_1_ID, acct.getInstitutionID());
 		assertEquals("RaiBa", acct.getInstitution().getName());
 		assertEquals("Giro RaiBa", acct.getName());
-		assertEquals("Asset:Barvermögen:Giro RaiBa", acct.getQualifiedName());
+		assertEquals("Anlagen:Barvermögen:Giro RaiBa", acct.getQualifiedName());
 		assertEquals("Girokonto 1", acct.getMemo());
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
@@ -109,7 +109,7 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals(INST_1_ID, acct.getInstitutionID());
 		assertEquals("RaiBa", acct.getInstitution().getName());
 		assertEquals("Depot RaiBa", acct.getName());
-		assertEquals("Asset:Finanzanlagen:Depot RaiBa", acct.getQualifiedName());
+		assertEquals("Anlagen:Finanzanlagen:Depot RaiBa", acct.getQualifiedName());
 		assertEquals("Aktiendepot 1", acct.getMemo());
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
@@ -139,7 +139,7 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals(null, acct.getInstitutionID());
 		assertEquals(null, acct.getInstitution());
 		assertEquals("Gehalt", acct.getName());
-		assertEquals("Income:Gehalt", acct.getQualifiedName());
+		assertEquals("Einnahme:Gehalt", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
@@ -167,7 +167,7 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals(null, acct.getInstitutionID());
 		assertEquals(null, acct.getInstitution());
 		assertEquals("DE0007100000 Mercedes-Benz Group AG", acct.getName());
-		assertEquals("Asset:Finanzanlagen:Depot RaiBa:DE0007100000 Mercedes-Benz Group AG", acct.getQualifiedName());
+		assertEquals("Anlagen:Finanzanlagen:Depot RaiBa:DE0007100000 Mercedes-Benz Group AG", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
 		assertEquals("SECURITY:E000002", acct.getQualifSecCurrID().toString());
 
@@ -194,8 +194,8 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals(KMyMoneyAccount.Type.ASSET, acct.getType());
 		assertEquals(null, acct.getInstitutionID());
 		assertEquals(null, acct.getInstitution());
-		assertEquals("Asset", acct.getName());
-		assertEquals("Asset", acct.getQualifiedName());
+		assertEquals("Anlagen", acct.getName());
+		assertEquals("Anlagen", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
@@ -221,8 +221,8 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals(KMyMoneyAccount.Type.LIABILITY, acct.getType());
 		assertEquals(null, acct.getInstitutionID());
 		assertEquals(null, acct.getInstitution());
-		assertEquals("Liability", acct.getName());
-		assertEquals("Liability", acct.getQualifiedName());
+		assertEquals("Verbindlichkeiten", acct.getName());
+		assertEquals("Verbindlichkeiten", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
@@ -246,8 +246,8 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals(KMyMoneyAccount.Type.INCOME, acct.getType());
 		assertEquals(null, acct.getInstitutionID());
 		assertEquals(null, acct.getInstitution());
-		assertEquals("Income", acct.getName());
-		assertEquals("Income", acct.getQualifiedName());
+		assertEquals("Einnahme", acct.getName());
+		assertEquals("Einnahme", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
@@ -276,8 +276,8 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals(KMyMoneyAccount.Type.EXPENSE, acct.getType());
 		assertEquals(null, acct.getInstitutionID());
 		assertEquals(null, acct.getInstitution());
-		assertEquals("Expense", acct.getName());
-		assertEquals("Expense", acct.getQualifiedName());
+		assertEquals("Ausgabe", acct.getName());
+		assertEquals("Ausgabe", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
@@ -306,8 +306,8 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals(KMyMoneyAccount.Type.EQUITY, acct.getType());
 		assertEquals(null, acct.getInstitutionID());
 		assertEquals(null, acct.getInstitution());
-		assertEquals("Equity", acct.getName());
-		assertEquals("Equity", acct.getQualifiedName());
+		assertEquals("Eigenkapital", acct.getName());
+		assertEquals("Eigenkapital", acct.getQualifiedName());
 		assertEquals("", acct.getMemo());
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 

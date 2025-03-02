@@ -47,6 +47,14 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 
 	/**
 	 * If the currencies of transaction and account match, this also does
+	 * ${@link #setShares(String)}.
+	 * 
+	 * @param n the new quantity (in the currency of the account)
+	 */
+	void setShares(FixedPointNumber n);
+
+	/**
+	 * If the currencies of transaction and account match, this also does
 	 * ${@link #setShares(FixedPointNumber)}.
 	 * 
 	 * @param n the new quantity (in the currency of the account)
@@ -62,12 +70,12 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 
 	/**
 	 * If the currencies of transaction and account match, this also does
-	 * ${@link #setShares(FixedPointNumber)}.
+	 * ${@link #setValue(FixedPointNumber)}.
 	 * 
-	 * @param n the new quantity (in the currency of the account)
+	 * @param n the new value (in the currency of the transaction)
 	 */
-	void setShares(FixedPointNumber n);
-
+	void setValue(FixedPointNumber n);
+	
 	/**
 	 * If the currencies of transaction and account match, this also does
 	 * ${@link #setValue(FixedPointNumber)}.
@@ -83,14 +91,6 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 */
 	void setValueFormattedForHTML(String n);
 
-	/**
-	 * If the currencies of transaction and account match, this also does
-	 * ${@link #setValue(FixedPointNumber)}.
-	 * 
-	 * @param n the new value (in the currency of the transaction)
-	 */
-	void setValue(FixedPointNumber n);
-	
 	void setPrice(FixedPointNumber prc);
 	
 	void setPayeeID(KMMPyeID pyeID);

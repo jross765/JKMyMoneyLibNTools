@@ -1,5 +1,6 @@
 package org.kmymoney.api.read;
 
+import java.util.Collection;
 import java.util.Locale;
 
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
@@ -8,6 +9,7 @@ import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSpltID;
+import org.kmymoney.base.basetypes.simple.KMMTagID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 
 import xyz.schnorxoborx.base.numbers.FixedPointNumber;
@@ -288,5 +290,9 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      *         (may contain multiple lines and non-ascii-characters)
      */
     String getMemo();
+    
+    // ---------------------------------------------------------------
+    
+    Collection<KMMTagID> getTagIDs();
 
 }

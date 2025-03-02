@@ -126,7 +126,7 @@ public class TestKMyMoneyWritableCurrencyImpl {
 		assertEquals(currID2.toString(), curr.getQualifID().toString());
 		assertNotEquals(currID2, curr);
 		assertEquals(CURR_2_SYMB, curr.getSymbol());
-		assertEquals("US Dollar", curr.getName());
+		assertEquals("US-Dollar", curr.getName());
 		assertEquals(4, curr.getPP().intValue());
 		assertEquals(100, curr.getSAF().intValue());
 		assertEquals(KMMSecCurr.RoundingMethod.ROUND, curr.getRoundingMethod());

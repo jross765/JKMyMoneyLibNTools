@@ -1,6 +1,8 @@
 package org.kmymoney.api.read.impl;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Currency;
 import java.util.Locale;
 
@@ -18,6 +20,7 @@ import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSpltID;
+import org.kmymoney.base.basetypes.simple.KMMTagID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -299,7 +302,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      */
     @Override
     public String getSharesFormatted() {
-	return getSharesCurrencyFormat().format(getShares());
+    	return getSharesFormatted(Locale.getDefault());
     }
 
     /**
@@ -312,7 +315,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      */
     @Override
     public String getSharesFormatted(final Locale lcl) {
-	NumberFormat nf = NumberFormat.getCurrencyInstance(lcl);
+		NumberFormat nf = getSharesCurrencyFormat();
 	if ( getAccount().getQualifSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
 	    nf.setCurrency(new KMMQualifCurrID(getAccount().getQualifSecCurrID()).getCurrency());
 	    return nf.format(getShares());
@@ -392,6 +395,23 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
 	return jwsdpPeer.getMemo();
     }
     
+    // ---------------------------------------------------------------
+    
+    public Collection<KMMTagID> getTagIDs()
+    {
+    	if ( jwsdpPeer.getTAG() == null )
+    		return null;
+		
+    	ArrayList<KMMTagID> result = new ArrayList<KMMTagID>();
+    	
+    	for ( SPLIT.TAG elt : jwsdpPeer.getTAG() ) {
+    		KMMTagID newID = new KMMTagID(elt.getId());
+    		result.add(newID);
+    	}
+		
+    	return result;
+    }
+
     // ---------------------------------------------------------------
 
     /**
