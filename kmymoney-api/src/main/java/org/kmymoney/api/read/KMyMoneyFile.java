@@ -22,7 +22,6 @@ import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
-import org.kmymoney.base.basetypes.simple.KMMTagID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
@@ -440,7 +439,19 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 */
 	KMyMoneyPrice getPriceByID(KMMPriceID prcID);
 
-	/**
+	KMyMoneyPrice getPriceBySecIDDate(KMMSecID secID, LocalDate date);
+	
+	KMyMoneyPrice getPriceByQualifSecIDDate(KMMQualifSecID secID, LocalDate date);
+	
+	KMyMoneyPrice getPriceByCurrDate(Currency curr, LocalDate date);
+	
+	KMyMoneyPrice getPriceByQualifCurrIDDate(KMMQualifCurrID currID, LocalDate date);
+	
+	KMyMoneyPrice getPriceByQualifSecCurrIDDate(KMMQualifSecCurrID secCurrID, LocalDate date);
+	
+    // ---------------------------------------------------------------
+    
+    /**
 	 * @return all prices defined in the book
 	 */
 	Collection<KMyMoneyPrice> getPrices();

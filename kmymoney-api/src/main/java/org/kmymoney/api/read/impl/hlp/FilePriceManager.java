@@ -251,6 +251,70 @@ public class FilePriceManager {
 		return retval;
 	}
 
+	// ---------------------------------------------------------------
+	
+	public KMyMoneyPrice getPriceBySecIDDate(final KMMSecID secID, final LocalDate date) {
+		if ( secID == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+		
+		if ( ! secID.isSet() ) {
+			throw new IllegalArgumentException("unset security ID given");
+		}
+		
+		KMMQualifSecID qualifID = new KMMQualifSecID(secID);
+		return getPriceByQualifSecIDDate(qualifID, date);
+	}
+	
+	public KMyMoneyPrice getPriceByQualifSecIDDate(final KMMQualifSecID secID, final LocalDate date) {
+		if ( secID == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+		
+		if ( ! secID.isSet() ) {
+			throw new IllegalArgumentException("unset security ID given");
+		}
+		
+		return getPriceByQualifSecCurrIDDate(secID, date);
+	}
+	
+	public KMyMoneyPrice getPriceByCurrDate(final Currency curr, final LocalDate date) {
+		if ( curr == null ) {
+			throw new IllegalArgumentException("null currency given");
+		}
+		
+		KMMQualifCurrID qualifID = new KMMQualifCurrID(curr);
+		return getPriceByQualifCurrIDDate(qualifID, date);
+	}
+
+	public KMyMoneyPrice getPriceByQualifCurrIDDate(final KMMQualifCurrID currID, final LocalDate date) {
+		if ( currID == null ) {
+			throw new IllegalArgumentException("null currency given");
+		}
+		
+		return getPriceByQualifSecCurrIDDate(currID, date);
+	}
+
+	public KMyMoneyPrice getPriceByQualifSecCurrIDDate(final KMMQualifSecCurrID qualifID, final LocalDate date) {
+		if ( qualifID == null ) {
+			throw new IllegalArgumentException("null security/currency ID given");
+		}
+		
+		if ( ! qualifID.isSet() ) {
+			throw new IllegalArgumentException("unset security/currency ID given");
+		}
+		
+		for ( KMyMoneyPrice prc : getPricesByQualifSecCurrID(qualifID) ) {
+			if ( prc.getDate().equals(date) ) {
+				return prc;
+			}
+		}
+		
+		return null;
+	}
+
+	// ---------------------------------------------------------------
+
 	public Collection<KMyMoneyPrice> getPrices() {
 		if ( prcMap == null ) {
 			throw new IllegalStateException("no root-element loaded");

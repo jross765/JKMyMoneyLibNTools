@@ -796,6 +796,28 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     	return prcMgr.getPriceByID(prcID);
     }
 
+    public KMyMoneyPrice getPriceBySecIDDate(final KMMSecID secID, final LocalDate date) {
+    	return prcMgr.getPriceBySecIDDate(secID, date);
+    }
+	
+    public KMyMoneyPrice getPriceByQualifSecIDDate(final KMMQualifSecID secID, final LocalDate date) {
+    	return prcMgr.getPriceByQualifSecIDDate(secID, date);
+    }
+	
+    public KMyMoneyPrice getPriceByCurrDate(final Currency curr, final LocalDate date) {
+    	return prcMgr.getPriceByCurrDate(curr, date);
+    }
+	
+    public KMyMoneyPrice getPriceByQualifCurrIDDate(final KMMQualifCurrID currID, final LocalDate date) {
+    	return prcMgr.getPriceByQualifCurrIDDate(currID, date);
+    }
+	
+    public KMyMoneyPrice getPriceByQualifSecCurrIDDate(final KMMQualifSecCurrID secCurrID, final LocalDate date) {
+    	return prcMgr.getPriceByQualifSecCurrIDDate(secCurrID, date);
+    }
+	
+    // ---------------------------------------------------------------
+    
     @Override
     public Collection<KMyMoneyPrice> getPrices() {
     	return prcMgr.getPrices();
