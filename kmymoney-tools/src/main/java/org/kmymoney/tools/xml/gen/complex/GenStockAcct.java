@@ -8,7 +8,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -92,79 +91,79 @@ public class GenStockAcct extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFileIn = Option.builder()
+    Option optFileIn = Option.builder("if")
       .required()
       .hasArg()
       .argName("file")
-      .withDescription("KMyMoney file (in)")
+      .desc("KMyMoney file (in)")
       .longOpt("kmymoney-in-file")
-      .create("if");
+      .build();
         
-    Option optFileOut = Option.builder()
+    Option optFileOut = Option.builder("of")
       .required()
       .hasArg()
       .argName("file")
-      .withDescription("KMyMoney file (out)")
+      .desc("KMyMoney file (out)")
       .longOpt("kmymoney-out-file")
-      .create("of");
+      .build();
     
-    Option optAcctMode = Option.builder()
+    Option optAcctMode = Option.builder("am")
       .required()
       .hasArg()
       .argName("mode")
-      .withDescription("Selection mode for account")
+      .desc("Selection mode for account")
       .longOpt("account-mode")
-      .create("am");
+      .build();
     	      
-    Option optAcctID = Option.builder()
+    Option optAcctID = Option.builder("acct")
       .hasArg()
       .argName("acctid")
-      .withDescription("Account-ID")
+      .desc("Account-ID")
       .longOpt("account-id")
-      .create("acct");
+      .build();
     	    
-    Option optAcctName = Option.builder()
+    Option optAcctName = Option.builder("an")
       .hasArg()
       .argName("name")
-      .withDescription("Account name (or part of)")
+      .desc("Account name (or part of)")
       .longOpt("account-name")
-      .create("an");
+      .build();
     	      
-    Option optSecMode = Option.builder()
+    Option optSecMode = Option.builder("sm")
       .required()
       .hasArg()
       .argName("mode")
-      .withDescription("Selection mode for security")
+      .desc("Selection mode for security")
       .longOpt("security-mode")
-      .create("sm");
+      .build();
     	    	        
-    Option optSecID = Option.builder()
+    Option optSecID = Option.builder("sec")
       .hasArg()
       .argName("ID")
-      .withDescription("Security ID")
+      .desc("Security ID")
       .longOpt("security-id")
-      .create("sec");
+      .build();
     	            
-    Option optSecISIN = Option.builder()
+    Option optSecISIN = Option.builder("is")
       .hasArg()
       .argName("isin")
-      .withDescription("ISIN")
+      .desc("ISIN")
       .longOpt("isin")
-      .create("is");
+      .build();
     	          
-    Option optSecName = Option.builder()
+    Option optSecName = Option.builder("sn")
       .hasArg()
       .argName("name")
-      .withDescription("Security name (or part of)")
+      .desc("Security name (or part of)")
       .longOpt("security-name")
-      .create("sn");
+      .build();
     
     // ---
     	    
-    Option optSilent = Option.builder()
-      .withDescription("Silent mode")
+    Option optSilent = Option.builder("sl")
+      .desc("Silent mode")
       .longOpt("silent")
-      .create("sl");
+      .build();
 
     options = new Options();
     options.addOption(optFileIn);

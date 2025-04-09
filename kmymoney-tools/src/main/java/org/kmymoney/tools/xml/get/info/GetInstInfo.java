@@ -8,7 +8,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -65,35 +64,35 @@ public class GetInstInfo extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFile = Option.builder()
+    Option optFile = Option.builder("f")
       .required()
       .hasArg()
       .argName("file")
-      .withDescription("KMyMoney file")
+      .desc("KMyMoney file")
       .longOpt("kmymoney-file")
-      .create("f");
+      .build();
       
-    Option optMode = Option.builder()
-       .required()
-       .hasArg()
-       .argName("mode")
-       .withDescription("Selection mode")
-       .longOpt("mode")
-       .create("m");
+    Option optMode = Option.builder("m")
+      .required()
+      .hasArg()
+      .argName("mode")
+      .desc("Selection mode")
+      .longOpt("mode")
+      .build();
         
-    Option optInstID = Option.builder()
+    Option optInstID = Option.builder("inst")
       .hasArg()
       .argName("ID")
-      .withDescription("Institution ID")
+      .desc("Institution ID")
       .longOpt("institution-id")
-      .create("inst");
+      .build();
           
-    Option optName = Option.builder()
+    Option optName = Option.builder("n")
       .hasArg()
       .argName("name")
-      .withDescription("Name (or part of)")
+      .desc("Name (or part of)")
       .longOpt("name")
-      .create("n");
+      .build();
           
     // The convenient ones
     // ::EMPTY

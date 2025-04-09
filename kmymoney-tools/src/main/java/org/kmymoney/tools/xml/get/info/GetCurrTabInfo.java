@@ -7,7 +7,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -57,13 +56,13 @@ public class GetCurrTabInfo extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFile = Option.builder()
+    Option optFile = Option.builder("f")
       .required()
       .hasArg()
       .argName("file")
-      .withDescription("KMyMoney file")
+      .desc("KMyMoney file")
       .longOpt("kmymoney-file")
-      .create("f");
+      .build();
           
     // The convenient ones
     // ::EMPTY

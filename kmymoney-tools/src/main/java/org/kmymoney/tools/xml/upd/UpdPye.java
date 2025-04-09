@@ -7,7 +7,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -64,50 +63,50 @@ public class UpdPye extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFileIn = Option.builder()
+    Option optFileIn = Option.builder("if")
       .required()
       .hasArg()
       .argName("file")
-      .withDescription("KMyMoney file (in)")
+      .desc("KMyMoney file (in)")
       .longOpt("kmymoney-in-file")
-      .create("if");
+      .build();
           
-    Option optFileOut = Option.builder()
+    Option optFileOut = Option.builder("of")
       .required()
       .hasArg()
       .argName("file")
-      .withDescription("KMyMoney file (out)")
+      .desc("KMyMoney file (out)")
       .longOpt("kmymoney-out-file")
-      .create("of");
+      .build();
       
-    Option optID = Option.builder()
+    Option optID = Option.builder("id")
       .required()
       .hasArg()
       .argName("pyeid")
-      .withDescription("Payee ID")
+      .desc("Payee ID")
       .longOpt("payee-id")
-      .create("id");
+      .build();
             
-    Option optNumber = Option.builder()
+    Option optNumber = Option.builder("num")
       .hasArg()
       .argName("number")
-      .withDescription("Payee number")
+      .desc("Payee number")
       .longOpt("number")
-      .create("num");
+      .build();
     	    
-    Option optName = Option.builder()
+    Option optName = Option.builder("nam")
       .hasArg()
       .argName("name")
-      .withDescription("Payee name")
+      .desc("Payee name")
       .longOpt("name")
-      .create("nam");
+      .build();
     
-    Option optDescr = Option.builder()
+    Option optDescr = Option.builder("desc")
       .hasArg()
       .argName("descr")
-      .withDescription("Payee description")
+      .desc("Payee description")
       .longOpt("description")
-      .create("desc");
+      .build();
       
     // The convenient ones
     // ::EMPTY

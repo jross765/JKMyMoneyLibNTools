@@ -8,7 +8,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -76,66 +75,66 @@ public class UpdPrc extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFileIn = Option.builder()
+    Option optFileIn = Option.builder("if")
       .required()
       .hasArg()
       .argName("file")
-      .withDescription("KMyMoney file (in)")
+      .desc("KMyMoney file (in)")
       .longOpt("kmymoney-in-file")
-      .create("if");
+      .build();
           
-    Option optFileOut = Option.builder()
+    Option optFileOut = Option.builder("of")
       .required()
       .hasArg()
       .argName("file")
-      .withDescription("KMyMoney file (out)")
+      .desc("KMyMoney file (out)")
       .longOpt("kmymoney-out-file")
-      .create("of");
+      .build();
       
-    Option optFromSecCurr= Option.builder()
+    Option optFromSecCurr= Option.builder("f")
       .required()
       .hasArg()
       .argName("cmdty/curr")
-      .withDescription("From-commodity/currency")
+      .desc("From-commodity/currency")
       .longOpt("from-cmdty-curr")
-      .create("f");
+      .build();
     	          
-    Option optToCurr = Option.builder()
+    Option optToCurr = Option.builder("t")
       .required()
       .hasArg()
       .argName("curr")
-      .withDescription("To-currency")
+      .desc("To-currency")
       .longOpt("to-curr")
-      .create("t");
+      .build();
     	    
-    Option optDateFormat = Option.builder()
+    Option optDateFormat = Option.builder("df")
       .hasArg()
       .argName("date-format")
-      .withDescription("Date format")
+      .desc("Date format")
       .longOpt("date-format")
-      .create("df");
+      .build();
     	            
-    Option optDate = Option.builder()
+    Option optDate = Option.builder("dat")
        .required()
        .hasArg()
        .argName("date")
-       .withDescription("Date")
+       .desc("Date")
        .longOpt("date")
-       .create("dat");
+       .build();
             
-    Option optSource = Option.builder()
+    Option optSource = Option.builder("s")
       .hasArg()
       .argName("source")
-      .withDescription("Price source")
+      .desc("Price source")
       .longOpt("source")
-      .create("s");
+      .build();
     	    	    
-    Option optValue = Option.builder()
+    Option optValue = Option.builder("v")
       .hasArg()
       .argName("value")
-      .withDescription("Price value")
+      .desc("Price value")
       .longOpt("val")
-      .create("v");
+      .build();
     
     // The convenient ones
     // ::EMPTY

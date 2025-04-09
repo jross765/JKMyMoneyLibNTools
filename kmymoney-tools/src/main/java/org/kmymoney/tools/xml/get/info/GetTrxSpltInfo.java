@@ -7,7 +7,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -60,29 +59,29 @@ public class GetTrxSpltInfo extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFile = Option.builder()
+    Option optFile = Option.builder("f")
       .required()
       .hasArg()
       .argName("file")
-      .withDescription("KMyMoney file")
+      .desc("KMyMoney file")
       .longOpt("kmymoney-file")
-      .create("f");
+      .build();
       
-    Option optTrxID = Option.builder()
+    Option optTrxID = Option.builder("trx")
       .required()
       .hasArg()
       .argName("UUID")
-      .withDescription("Transaction-ID")
+      .desc("Transaction-ID")
       .longOpt("transaction-id")
-      .create("trx");
+      .build();
       
-    Option optSpltID = Option.builder()
+    Option optSpltID = Option.builder("splt")
       .required()
       .hasArg()
       .argName("UUID")
-      .withDescription("Transaction-split-ID")
+      .desc("Transaction-split-ID")
       .longOpt("split-id")
-      .create("splt");
+      .build();
     
     // The convenient ones
           

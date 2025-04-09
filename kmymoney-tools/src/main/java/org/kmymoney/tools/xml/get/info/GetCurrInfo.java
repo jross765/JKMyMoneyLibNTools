@@ -7,7 +7,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -64,26 +63,26 @@ public class GetCurrInfo extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFile = Option.builder()
+    Option optFile = Option.builder("f")
       .required()
       .hasArg()
       .argName("file")
-      .withDescription("KMyMoney file")
+      .desc("KMyMoney file")
       .longOpt("kmymoney-file")
-      .create("f");
+      .build();
       
-    Option optSymbol = Option.builder()
+    Option optSymbol = Option.builder("s")
       .hasArg()
       .argName("symbol")
-      .withDescription("Symbol (ISO 4127)")
+      .desc("Symbol (ISO 4127)")
       .longOpt("symbol")
-      .create("s");
+      .build();
           
     // The convenient ones
-    Option optShowQuote = Option.builder()
-      .withDescription("Show quotes")
+    Option optShowQuote = Option.builder("squt")
+      .desc("Show quotes")
       .longOpt("show-quotes")
-      .create("squt");
+      .build();
             
     options = new Options();
     options.addOption(optFile);

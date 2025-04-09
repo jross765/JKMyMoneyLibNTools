@@ -8,7 +8,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -63,43 +62,43 @@ public class GetPrcList extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFile = Option.builder()
+    Option optFile = Option.builder("f")
       .required()
       .hasArg()
       .argName("file")
-      .withDescription("KMyMoney file")
+      .desc("KMyMoney file")
       .longOpt("kmymoney-file")
-      .create("f");
+      .build();
       
-    Option optMode = Option.builder()
-       .required()
-       .hasArg()
-       .argName("mode")
-       .withDescription("Security/currency selection mode")
-       .longOpt("mode")
-       .create("m");
+    Option optMode = Option.builder("m")
+      .required()
+      .hasArg()
+      .argName("mode")
+      .desc("Security/currency selection mode")
+      .longOpt("mode")
+      .build();
     	        
-    Option optFromSecCurr= Option.builder()
+    Option optFromSecCurr= Option.builder("fr")
       .required()
       .hasArg()
       .argName("qualif-ID")
-      .withDescription("From-security/currency qualified ID")
+      .desc("From-security/currency qualified ID")
       .longOpt("from-sec-curr")
-      .create("fr");
+      .build();
     	    	          
-    Option optFromISIN = Option.builder()
+    Option optFromISIN = Option.builder("is")
       .hasArg()
       .argName("isin")
-      .withDescription("From-security/currency ISIN")
+      .desc("From-security/currency ISIN")
       .longOpt("isin")
-      .create("is");
+      .build();
     	        
-    Option optFromName = Option.builder()
+    Option optFromName = Option.builder("fn")
       .hasArg()
       .argName("name")
-      .withDescription("From-security/currency Name (or part of)")
+      .desc("From-security/currency Name (or part of)")
       .longOpt("name")
-      .create("fn");
+      .build();
     	          
     // The convenient ones
     // ::EMPTY

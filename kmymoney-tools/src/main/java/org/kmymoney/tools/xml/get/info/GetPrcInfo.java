@@ -8,7 +8,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -71,44 +70,44 @@ public class GetPrcInfo extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFile = Option.builder()
+    Option optFile = Option.builder("if")
       .required()
       .hasArg()
       .argName("file")
-      .withDescription("KMyMoney file")
+      .desc("KMyMoney file")
       .longOpt("kmymoney-file")
-      .create("if");
+      .build();
       
-    Option optFromSecCurr= Option.builder()
+    Option optFromSecCurr= Option.builder("fr")
       .required()
       .hasArg()
       .argName("sec/curr")
-      .withDescription("From-commodity/currency")
+      .desc("From-commodity/currency")
       .longOpt("from-sec-curr")
-      .create("fr");
+      .build();
     	          
-    Option optToCurr = Option.builder()
+    Option optToCurr = Option.builder("to")
       .required()
       .hasArg()
       .argName("curr")
-      .withDescription("To-currency")
+      .desc("To-currency")
       .longOpt("to-curr")
-      .create("to");
+      .build();
     	    
-    Option optDateFormat = Option.builder()
+    Option optDateFormat = Option.builder("df")
       .hasArg()
       .argName("date-format")
-      .withDescription("Date format")
+      .desc("Date format")
       .longOpt("date-format")
-      .create("df");
+      .build();
     	            
-    Option optDate = Option.builder()
+    Option optDate = Option.builder("dat")
       .required()
       .hasArg()
       .argName("date")
-      .withDescription("Date")
+      .desc("Date")
       .longOpt("date")
-      .create("dat");    	          
+      .build();    	          
           
     // The convenient ones
     // ::EMPTY

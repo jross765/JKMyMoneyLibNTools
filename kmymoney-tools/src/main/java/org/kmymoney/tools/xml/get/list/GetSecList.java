@@ -9,7 +9,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -65,42 +64,42 @@ public class GetSecList extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFile = Option.builder()
+    Option optFile = Option.builder("f")
       .required()
       .hasArg()
       .argName("file")
-      .withDescription("KMyMoney file")
+      .desc("KMyMoney file")
       .longOpt("kmymoney-file")
-      .create("f");
+      .build();
       
-    Option optMode = Option.builder()
+    Option optMode = Option.builder("m")
       .required()
       .hasArg()
       .argName("Mode")
-      .withDescription("Mode")
+      .desc("Mode")
       .longOpt("mode")
-      .create("m");
+      .build();
     	      
-    Option optType = Option.builder()
+    Option optType = Option.builder("t")
       .hasArg()
       .argName("type")
-      .withDescription("Security type")
+      .desc("Security type")
       .longOpt("type")
-      .create("t");
+      .build();
       
-    Option optISIN = Option.builder()
+    Option optISIN = Option.builder("is")
       .hasArg()
       .argName("isin")
-      .withDescription("ISIN")
+      .desc("ISIN")
       .longOpt("isin")
-      .create("is");
+      .build();
     	    	      
-    Option optName = Option.builder()
+    Option optName = Option.builder("n")
       .hasArg()
       .argName("name")
-      .withDescription("Security name (part of)")
+      .desc("Security name (part of)")
       .longOpt("name")
-      .create("n");
+      .build();
     	      
     // The convenient ones
     // ::EMPTY
