@@ -8,7 +8,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -68,50 +68,50 @@ public class GetAcctInfo extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFile = OptionBuilder
-      .isRequired()
+    Option optFile = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file")
-      .withLongOpt("kmymoney-file")
+      .longOpt("kmymoney-file")
       .create("f");
       
-    Option optMode = OptionBuilder
-      .isRequired()
+    Option optMode = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("mode")
+      .argName("mode")
       .withDescription("Selection mode")
-      .withLongOpt("mode")
+      .longOpt("mode")
       .create("m");
       
-    Option optAcctID = OptionBuilder
+    Option optAcctID = Option.builder()
       .hasArg()
-      .withArgName("acctid")
+      .argName("acctid")
       .withDescription("Account-ID")
-      .withLongOpt("account-id")
+      .longOpt("account-id")
       .create("acct");
     
-    Option optAcctName = OptionBuilder
+    Option optAcctName = Option.builder()
       .hasArg()
-      .withArgName("name")
+      .argName("name")
       .withDescription("Account name (or part of)")
-      .withLongOpt("name")
+      .longOpt("name")
       .create("n");
       
     // The convenient ones
-    Option optShowPrnt = OptionBuilder
+    Option optShowPrnt = Option.builder()
       .withDescription("Show parents")
-      .withLongOpt("show-parents")
+      .longOpt("show-parents")
       .create("sprnt");
         
-    Option optShowChld = OptionBuilder
+    Option optShowChld = Option.builder()
         .withDescription("Show children")
-        .withLongOpt("show-children")
+        .longOpt("show-children")
         .create("schld");
           
-    Option optShowTrx = OptionBuilder
+    Option optShowTrx = Option.builder()
       .withDescription("Show transactions")
-      .withLongOpt("show-transactions")
+      .longOpt("show-transactions")
       .create("strx");
           
     options = new Options();

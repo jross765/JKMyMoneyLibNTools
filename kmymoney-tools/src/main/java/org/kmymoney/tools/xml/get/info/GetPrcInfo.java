@@ -8,7 +8,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -71,43 +71,43 @@ public class GetPrcInfo extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFile = OptionBuilder
-      .isRequired()
+    Option optFile = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file")
-      .withLongOpt("kmymoney-file")
+      .longOpt("kmymoney-file")
       .create("if");
       
-    Option optFromSecCurr= OptionBuilder
-      .isRequired()
+    Option optFromSecCurr= Option.builder()
+      .required()
       .hasArg()
-      .withArgName("sec/curr")
+      .argName("sec/curr")
       .withDescription("From-commodity/currency")
-      .withLongOpt("from-sec-curr")
+      .longOpt("from-sec-curr")
       .create("fr");
     	          
-    Option optToCurr = OptionBuilder
-      .isRequired()
+    Option optToCurr = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("curr")
+      .argName("curr")
       .withDescription("To-currency")
-      .withLongOpt("to-curr")
+      .longOpt("to-curr")
       .create("to");
     	    
-    Option optDateFormat = OptionBuilder
+    Option optDateFormat = Option.builder()
       .hasArg()
-      .withArgName("date-format")
+      .argName("date-format")
       .withDescription("Date format")
-      .withLongOpt("date-format")
+      .longOpt("date-format")
       .create("df");
     	            
-    Option optDate = OptionBuilder
-      .isRequired()
+    Option optDate = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("date")
+      .argName("date")
       .withDescription("Date")
-      .withLongOpt("date")
+      .longOpt("date")
       .create("dat");    	          
           
     // The convenient ones

@@ -9,7 +9,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -73,75 +73,75 @@ public class GenTrx extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFileIn = OptionBuilder
-      .isRequired()
+    Option optFileIn = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file (in)")
-      .withLongOpt("kmymoney-in-file")
+      .longOpt("kmymoney-in-file")
       .create("if");
         
-    Option optFileOut = OptionBuilder
-      .isRequired()
+    Option optFileOut = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file (out)")
-      .withLongOpt("kmymoney-out-file")
+      .longOpt("kmymoney-out-file")
       .create("of");
         
-    Option optFromAcctID = OptionBuilder
-      .isRequired()
+    Option optFromAcctID = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("acctid")
+      .argName("acctid")
       .withDescription("Account-ID to be booked from")
-      .withLongOpt("from-account-id")
+      .longOpt("from-account-id")
       .create("facct");
       
-    Option optToAcctID = OptionBuilder
-      .isRequired()
+    Option optToAcctID = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("acctid")
+      .argName("acctid")
       .withDescription("Account-ID to be booked to")
-      .withLongOpt("to-account-id")
+      .longOpt("to-account-id")
       .create("tacct");
       
-    Option optAmount = OptionBuilder
-      .isRequired()
+    Option optAmount = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("amount")
+      .argName("amount")
       .withDescription("Amount")
-      .withLongOpt("amount")
+      .longOpt("amount")
       .create("amt");
               
-    Option optQuantity = OptionBuilder
-      .isRequired()
+    Option optQuantity = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("quantity")
+      .argName("quantity")
       .withDescription("Quantity")
-      .withLongOpt("quantity")
+      .longOpt("quantity")
       .create("qty");
                 
-    Option optDatePosted = OptionBuilder
-      .isRequired()
+    Option optDatePosted = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("datetime")
+      .argName("datetime")
       .withDescription("Date posted")
-      .withLongOpt("date-posted")
+      .longOpt("date-posted")
       .create("dtp");
             
     // The convenient ones
-    Option optDescr = OptionBuilder
+    Option optDescr = Option.builder()
       .hasArg()
-      .withArgName("descr")
+      .argName("descr")
       .withDescription("Description")
-      .withLongOpt("description")
+      .longOpt("description")
       .create("dscr");
               
-    Option optPye = OptionBuilder
+    Option optPye = Option.builder()
       .hasArg()
-      .withArgName("pyeid")
+      .argName("pyeid")
       .withDescription("Payeee-ID to be booked against")
-      .withLongOpt("payee-id")
+      .longOpt("payee-id")
       .create("pye");
     	      
         

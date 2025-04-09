@@ -7,7 +7,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -61,44 +61,44 @@ public class GenSec extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFileIn = OptionBuilder
-      .isRequired()
+    Option optFileIn = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file (in)")
-      .withLongOpt("kmymoney-in-file")
+      .longOpt("kmymoney-in-file")
       .create("if");
           
-    Option optFileOut = OptionBuilder
-      .isRequired()
+    Option optFileOut = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file (out)")
-      .withLongOpt("kmymoney-out-file")
+      .longOpt("kmymoney-out-file")
       .create("of");
       
-    Option optISIN = OptionBuilder
-      .isRequired()
+    Option optISIN = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("isin")
+      .argName("isin")
       .withDescription("ISIN")
-      .withLongOpt("isin")
+      .longOpt("isin")
       .create("is");
           
-    Option optName = OptionBuilder
-      .isRequired()
+    Option optName = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("name")
+      .argName("name")
       .withDescription("Name")
-      .withLongOpt("name")
+      .longOpt("name")
       .create("n");
     
     // The convenient ones
-    Option optSymbol = OptionBuilder
+    Option optSymbol = Option.builder()
       .hasArg()
-      .withArgName("symb")
+      .argName("symb")
       .withDescription("Symbol (ticker)")
-      .withLongOpt("symbol")
+      .longOpt("symbol")
       .create("sy");
     	          
           

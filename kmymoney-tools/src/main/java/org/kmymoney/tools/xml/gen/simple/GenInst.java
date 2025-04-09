@@ -7,7 +7,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -57,28 +57,28 @@ public class GenInst extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFileIn = OptionBuilder
-      .isRequired()
+    Option optFileIn = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file (in)")
-      .withLongOpt("kmymoney-in-file")
+      .longOpt("kmymoney-in-file")
       .create("if");
           
-    Option optFileOut = OptionBuilder
-      .isRequired()
+    Option optFileOut = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file (out)")
-      .withLongOpt("kmymoney-out-file")
+      .longOpt("kmymoney-out-file")
       .create("of");
       
-    Option optName = OptionBuilder
-      .isRequired()
+    Option optName = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("name")
+      .argName("name")
       .withDescription("Institution name")
-      .withLongOpt("name")
+      .longOpt("name")
       .create("n");
     
     // The convenient ones

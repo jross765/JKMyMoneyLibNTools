@@ -8,7 +8,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
+import xyz.schnorxoborx.base.cmdlinetools.Helper;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 
 public class GetPrcList extends CommandLineTool
@@ -32,7 +33,10 @@ public class GetPrcList extends CommandLineTool
   private static Options options;
   
   private static String                kmmFileName   = null;
+  private static Helper.CmdtySecMode   mode          = null;
   private static KMMQualifSecCurrID    fromSecCurrID = null;
+  private static String                fromSecIsin   = null;
+  private static String                fromSecName   = null;
   
   private static boolean scriptMode = false; // ::TODO
 
@@ -59,28 +63,53 @@ public class GetPrcList extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFile = OptionBuilder
-      .isRequired()
+    Option optFile = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file")
-      .withLongOpt("kmymoney-file")
+      .longOpt("kmymoney-file")
       .create("f");
       
-    Option optFromSecCurr= OptionBuilder
-      .isRequired()
+    Option optMode = Option.builder()
+       .required()
+       .hasArg()
+       .argName("mode")
+       .withDescription("Security/currency selection mode")
+       .longOpt("mode")
+       .create("m");
+    	        
+    Option optFromSecCurr= Option.builder()
+      .required()
       .hasArg()
-      .withArgName("sec/curr")
-      .withDescription("From-commodity/currency")
-      .withLongOpt("from-sec-curr")
+      .argName("qualif-ID")
+      .withDescription("From-security/currency qualified ID")
+      .longOpt("from-sec-curr")
       .create("fr");
     	    	          
+    Option optFromISIN = Option.builder()
+      .hasArg()
+      .argName("isin")
+      .withDescription("From-security/currency ISIN")
+      .longOpt("isin")
+      .create("is");
+    	        
+    Option optFromName = Option.builder()
+      .hasArg()
+      .argName("name")
+      .withDescription("From-security/currency Name (or part of)")
+      .longOpt("name")
+      .create("fn");
+    	          
     // The convenient ones
     // ::EMPTY
           
     options = new Options();
     options.addOption(optFile);
+    options.addOption(optMode);
     options.addOption(optFromSecCurr);
+    options.addOption(optFromISIN);
+    options.addOption(optFromName);
   }
 
   @Override
@@ -142,16 +171,97 @@ public class GetPrcList extends CommandLineTool
       System.err.println("KMyMoney file: '" + kmmFileName + "'");
     
     // <from-sec-curr>
-    try
+    if ( cmdLine.hasOption("from-sec-curr") )
     {
-      fromSecCurrID = KMMQualifSecCurrID.parse(cmdLine.getOptionValue("from-sec-curr")); 
-      System.err.println("from-sec-curr: " + fromSecCurrID);
+      if ( mode != Helper.CmdtySecMode.ID )
+      {
+        System.err.println("<from-sec-curr> must only be set with <mode> = '" + Helper.CmdtySecMode.ID.toString() + "'");
+        throw new InvalidCommandLineArgsException();
+      }
+      
+      try
+      {
+          fromSecCurrID = KMMQualifSecCurrID.parse(cmdLine.getOptionValue("from-sec-curr")); 
+      }
+      catch (Exception exc)
+      {
+        System.err.println("Could not parse <from-sec-curr>");
+        throw new InvalidCommandLineArgsException();
+      }
     }
-    catch ( Exception exc )
+    else
     {
-      System.err.println("Could not parse <from-sec-curr>");
-      throw new InvalidCommandLineArgsException();
+      if ( mode == Helper.CmdtySecMode.ID )
+      {
+        System.err.println("<from-sec-curr> must be set with <mode> = '" + Helper.CmdtySecMode.ID.toString() + "'");
+        throw new InvalidCommandLineArgsException();
+      }
     }
+
+    if (!scriptMode)
+      System.err.println("From-security/currency ID:   '" + fromSecCurrID + "'");
+
+    // <isin>
+    if ( cmdLine.hasOption("isin") )
+    {
+      if ( mode != Helper.CmdtySecMode.ISIN )
+      {
+        System.err.println("<isin> must only be set with <mode> = '" + Helper.CmdtySecMode.ISIN.toString() + "'");
+        throw new InvalidCommandLineArgsException();
+      }
+      
+      try
+      {
+    	  fromSecIsin = cmdLine.getOptionValue("isin");
+      }
+      catch (Exception exc)
+      {
+        System.err.println("Could not parse <isin>");
+        throw new InvalidCommandLineArgsException();
+      }
+    }
+    else
+    {
+      if ( mode == Helper.CmdtySecMode.ISIN )
+      {
+        System.err.println("<isin> must be set with <mode> = '" + Helper.CmdtySecMode.ISIN.toString() + "'");
+        throw new InvalidCommandLineArgsException();
+      }
+    }
+
+    if (!scriptMode)
+      System.err.println("From-security/currency ISIN: '" + fromSecIsin + "'");
+
+    // <name>
+    if ( cmdLine.hasOption("name") )
+    {
+      if ( mode != Helper.CmdtySecMode.NAME )
+      {
+        System.err.println("<name> must only be set with <mode> = '" + Helper.CmdtySecMode.NAME.toString() + "'");
+        throw new InvalidCommandLineArgsException();
+      }
+      
+      try
+      {
+    	  fromSecName = cmdLine.getOptionValue("name");
+      }
+      catch (Exception exc)
+      {
+        System.err.println("Could not parse <name>");
+        throw new InvalidCommandLineArgsException();
+      }
+    }
+    else
+    {
+      if ( mode == Helper.CmdtySecMode.NAME )
+      {
+        System.err.println("<name> must be set with <mode> = '" + Helper.CmdtySecMode.NAME.toString() + "'");
+        throw new InvalidCommandLineArgsException();
+      }
+    }
+
+    if (!scriptMode)
+      System.err.println("From-security/currency name: '" + fromSecName + "'");
   }
   
   @Override
@@ -159,5 +269,10 @@ public class GetPrcList extends CommandLineTool
   {
     HelpFormatter formatter = new HelpFormatter();
     formatter.printHelp( "GetPrcList", options );
+    
+    System.out.println("");
+    System.out.println("Valid values for <mode>:");
+    for ( Helper.CmdtySecMode elt : Helper.CmdtySecMode.values() )
+      System.out.println(" - " + elt);
   }
 }

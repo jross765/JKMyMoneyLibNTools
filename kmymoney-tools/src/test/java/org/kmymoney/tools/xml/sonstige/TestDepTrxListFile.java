@@ -10,7 +10,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -65,12 +65,12 @@ public class TestDepTrxListFile extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optListFile = OptionBuilder
-      .isRequired()
+    Option optListFile = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("List file for bookings")
-      .withLongOpt("booking-list-file")
+      .longOpt("booking-list-file")
       .create("blf");
     	    	        
     // ---

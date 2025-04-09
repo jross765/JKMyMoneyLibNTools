@@ -8,7 +8,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -65,34 +65,34 @@ public class GetPyeInfo extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFile = OptionBuilder
-      .isRequired()
+    Option optFile = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file")
-      .withLongOpt("kmymoney-file")
+      .longOpt("kmymoney-file")
       .create("f");
       
-    Option optMode = OptionBuilder
-       .isRequired()
+    Option optMode = Option.builder()
+       .required()
        .hasArg()
-       .withArgName("mode")
+       .argName("mode")
        .withDescription("Selection mode")
-       .withLongOpt("mode")
+       .longOpt("mode")
        .create("m");
         
-    Option optPyeID = OptionBuilder
+    Option optPyeID = Option.builder()
       .hasArg()
-      .withArgName("ID")
+      .argName("ID")
       .withDescription("Payee ID")
-      .withLongOpt("payee-id")
+      .longOpt("payee-id")
       .create("pye");
           
-    Option optName = OptionBuilder
+    Option optName = Option.builder()
       .hasArg()
-      .withArgName("name")
+      .argName("name")
       .withDescription("Name (or part of)")
-      .withLongOpt("name")
+      .longOpt("name")
       .create("n");
           
     // The convenient ones
@@ -317,5 +317,10 @@ public class GetPyeInfo extends CommandLineTool
   {
     HelpFormatter formatter = new HelpFormatter();
     formatter.printHelp("GetPyeInfo", options);
+    
+    System.out.println("");
+    System.out.println("Valid values for <mode>:");
+    for ( Helper.Mode elt : Helper.Mode.values() )
+      System.out.println(" - " + elt);
   }
 }

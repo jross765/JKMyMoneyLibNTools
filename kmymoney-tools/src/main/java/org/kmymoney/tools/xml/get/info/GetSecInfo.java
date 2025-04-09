@@ -8,7 +8,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -70,47 +70,47 @@ public class GetSecInfo extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFile = OptionBuilder
-      .isRequired()
+    Option optFile = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file")
-      .withLongOpt("kmymoney-file")
+      .longOpt("kmymoney-file")
       .create("f");
       
-    Option optMode = OptionBuilder
-       .isRequired()
+    Option optMode = Option.builder()
+       .required()
        .hasArg()
-       .withArgName("mode")
+       .argName("mode")
        .withDescription("Selection mode")
-       .withLongOpt("mode")
+       .longOpt("mode")
        .create("m");
         
-    Option optSecID = OptionBuilder
+    Option optSecID = Option.builder()
       .hasArg()
-      .withArgName("ID")
+      .argName("ID")
       .withDescription("Security ID")
-      .withLongOpt("security-id")
+      .longOpt("security-id")
       .create("sec");
           
-    Option optISIN = OptionBuilder
+    Option optISIN = Option.builder()
       .hasArg()
-      .withArgName("isin")
+      .argName("isin")
       .withDescription("ISIN")
-      .withLongOpt("isin")
+      .longOpt("isin")
       .create("is");
         
-    Option optName = OptionBuilder
+    Option optName = Option.builder()
       .hasArg()
-      .withArgName("name")
+      .argName("name")
       .withDescription("Name (or part of)")
-      .withLongOpt("name")
+      .longOpt("name")
       .create("n");
           
     // The convenient ones
-    Option optShowQuote = OptionBuilder
+    Option optShowQuote = Option.builder()
       .withDescription("Show quotes")
-      .withLongOpt("show-quotes")
+      .longOpt("show-quotes")
       .create("squt");
             
     options = new Options();
@@ -458,5 +458,10 @@ public class GetSecInfo extends CommandLineTool
   {
     HelpFormatter formatter = new HelpFormatter();
     formatter.printHelp("GetSecInfo", options);
+    
+    System.out.println("");
+    System.out.println("Valid values for <mode>:");
+    for ( Helper.CmdtySecMode elt : Helper.CmdtySecMode.values() )
+      System.out.println(" - " + elt);
   }
 }

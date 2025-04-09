@@ -8,7 +8,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -31,7 +31,7 @@ public class GetAcctList extends CommandLineTool
   private static Options options;
   
   private static String               kmmFileName = null;
-  private static Helper.AcctListMode      mode        = null; 
+  private static Helper.AcctListMode  mode        = null; 
   private static KMyMoneyAccount.Type type        = null;
   private static String               name        = null;
   
@@ -62,34 +62,34 @@ public class GetAcctList extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFile = OptionBuilder
-      .isRequired()
+    Option optFile = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file")
-      .withLongOpt("kmymoney-file")
+      .longOpt("kmymoney-file")
       .create("f");
       
-    Option optMode = OptionBuilder
-      .isRequired()
+    Option optMode = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("Mode")
+      .argName("Mode")
       .withDescription("Mode")
-      .withLongOpt("mode")
+      .longOpt("mode")
       .create("m");
     	      
-    Option optType = OptionBuilder
+    Option optType = Option.builder()
       .hasArg()
-      .withArgName("type")
+      .argName("type")
       .withDescription("Account type")
-      .withLongOpt("type")
+      .longOpt("type")
       .create("t");
       
-    Option optName = OptionBuilder
+    Option optName = Option.builder()
       .hasArg()
-      .withArgName("name")
+      .argName("name")
       .withDescription("Account name (part of)")
-      .withLongOpt("name")
+      .longOpt("name")
       .create("n");
     	      
     // The convenient ones

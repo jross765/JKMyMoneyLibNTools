@@ -1,16 +1,13 @@
 package org.kmymoney.tools.xml.upd;
 
 import java.io.File;
-import java.util.Collection;
-
-import javax.security.auth.login.AccountNotFoundException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -19,12 +16,10 @@ import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.tools.CommandLineTool;
-import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
-import xyz.schnorxoborx.base.beanbase.TooManyEntriesFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.Helper;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
@@ -75,56 +70,56 @@ public class UpdSec extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFileIn = OptionBuilder
-      .isRequired()
+    Option optFileIn = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file (in)")
-      .withLongOpt("kmymoney-in-file")
+      .longOpt("kmymoney-in-file")
       .create("if");
           
-    Option optFileOut = OptionBuilder
-      .isRequired()
+    Option optFileOut = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file (out)")
-      .withLongOpt("kmymoney-out-file")
+      .longOpt("kmymoney-out-file")
       .create("of");
       
-    Option optMode = OptionBuilder
-       .isRequired()
+    Option optMode = Option.builder()
+       .required()
        .hasArg()
-       .withArgName("mode")
+       .argName("mode")
        .withDescription("Selection mode")
-       .withLongOpt("mode")
+       .longOpt("mode")
        .create("m");
     	        
-    Option optSecID = OptionBuilder
+    Option optSecID = Option.builder()
       .hasArg()
-      .withArgName("ID")
+      .argName("ID")
       .withDescription("Security ID")
-      .withLongOpt("security-id")
+      .longOpt("security-id")
       .create("sec");
     	          
-    Option optISIN = OptionBuilder
+    Option optISIN = Option.builder()
       .hasArg()
-      .withArgName("isin")
+      .argName("isin")
       .withDescription("ISIN")
-      .withLongOpt("isin")
+      .longOpt("isin")
       .create("is");
             
-    Option optName = OptionBuilder
+    Option optName = Option.builder()
       .hasArg()
-      .withArgName("name")
+      .argName("name")
       .withDescription("Security name")
-      .withLongOpt("name")
+      .longOpt("name")
       .create("n");
     
-    Option optType = OptionBuilder
+    Option optType = Option.builder()
       .hasArg()
-      .withArgName("type")
+      .argName("type")
       .withDescription("Security type")
-      .withLongOpt("type")
+      .longOpt("type")
       .create("t");
         
     // The convenient ones

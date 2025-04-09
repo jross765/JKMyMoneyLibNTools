@@ -16,7 +16,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -139,140 +139,140 @@ public class GenDepotTrx extends CommandLineTool
     		.desc("Booking mode")
     		.build();
     	        
-    Option optFileIn = OptionBuilder
-      .isRequired()
+    Option optFileIn = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file (in)")
-      .withLongOpt("kmymoney-in-file")
+      .longOpt("kmymoney-in-file")
       .create("if");
         
-    Option optFileOut = OptionBuilder
-      .isRequired()
+    Option optFileOut = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file (out)")
-      .withLongOpt("kmymoney-out-file")
+      .longOpt("kmymoney-out-file")
       .create("of");
     
-    Option optListFile = OptionBuilder
+    Option optListFile = Option.builder()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("List file for bookings")
-      .withLongOpt("booking-list-file")
+      .longOpt("booking-list-file")
       .create("blf");
     	    	        
     // ----------------------------
     // BEGIN Core parameters
         
-    Option optType = OptionBuilder
+    Option optType = Option.builder()
       .hasArg()
-      .withArgName("type")
+      .argName("type")
       .withDescription("Transaction type")
-      .withLongOpt("type")
+      .longOpt("type")
       .create("tp");
     	      
-    Option optStockAcct = OptionBuilder
+    Option optStockAcct = Option.builder()
       .hasArg()
-      .withArgName("acctid")
+      .argName("acctid")
       .withDescription("Account-ID of stock account")
-      .withLongOpt("stock-account-id")
+      .longOpt("stock-account-id")
       .create("stacct");
       
-    Option optIncomeAcct = OptionBuilder
+    Option optIncomeAcct = Option.builder()
       .hasArg()
-      .withArgName("acctid")
+      .argName("acctid")
       .withDescription("Account-ID for (dividend) income")
-      .withLongOpt("income-account-id")
+      .longOpt("income-account-id")
       .create("inacct");
     	      
-    Option optExpensesAcctAmtList = OptionBuilder
+    Option optExpensesAcctAmtList = Option.builder()
       .hasArg()
-      .withArgName("pair-list")
+      .argName("pair-list")
       .withDescription("Account-ID/amount pairs for expenses (taxes and fees), " + 
                        "list separated by '|', pairs separated by ';'")
-      .withLongOpt("expense-account-amounts")
+      .longOpt("expense-account-amounts")
       .create("eaa");
       
-    Option optOffsetAcct = OptionBuilder
+    Option optOffsetAcct = Option.builder()
       .hasArg()
-      .withArgName("acctid")
+      .argName("acctid")
       .withDescription("Account-ID of offsetting account")
-      .withLongOpt("offset-account-id")
+      .longOpt("offset-account-id")
       .create("osacct");
     	      
     // ---
     
-    Option optNofStocks = OptionBuilder
+    Option optNofStocks = Option.builder()
       .hasArg()
-      .withArgName("number")
+      .argName("number")
       .withDescription("Number of stocks to buy/sell")
-      .withLongOpt("nof-stocks")
+      .longOpt("nof-stocks")
       .create("n");
     	                
-    Option optStockPrice = OptionBuilder
+    Option optStockPrice = Option.builder()
       .hasArg()
-      .withArgName("amount")
+      .argName("amount")
       .withDescription("Stock price")
-      .withLongOpt("stock-price")
+      .longOpt("stock-price")
       .create("p");
               
-    Option optDividend = OptionBuilder
+    Option optDividend = Option.builder()
       .hasArg()
-      .withArgName("amount")
+      .argName("amount")
       .withDescription("Gross dividend")
-      .withLongOpt("dividend-gross")
+      .longOpt("dividend-gross")
       .create("divgr");
 
-    Option optSpltFact = OptionBuilder
+    Option optSpltFact = Option.builder()
       .hasArg()
-      .withArgName("amount")
+      .argName("amount")
       .withDescription("Stock split factor")
-      .withLongOpt("stock-split-factor")
+      .longOpt("stock-split-factor")
       .create("fct");
 
     // ---
     
-    Option optDatePosted = OptionBuilder
+    Option optDatePosted = Option.builder()
       .hasArg()
-      .withArgName("datetime")
+      .argName("datetime")
       .withDescription("Date posted")
-      .withLongOpt("date-posted")
+      .longOpt("date-posted")
       .create("dtp");
             
     // The convenient ones
-    Option optDateFormat = OptionBuilder
+    Option optDateFormat = Option.builder()
       .hasArg()
-      .withArgName("date-format")
+      .argName("date-format")
       .withDescription("Date format")
-      .withLongOpt("date-format")
+      .longOpt("date-format")
       .create("df");
 
-    Option optDescr = OptionBuilder
+    Option optDescr = Option.builder()
       .hasArg()
-      .withArgName("descr")
+      .argName("descr")
       .withDescription("Description")
-      .withLongOpt("description")
+      .longOpt("description")
       .create("dscr");
               
     // END Core parameters
     // ----------------------------
 
-    Option optSilent = OptionBuilder
+    Option optSilent = Option.builder()
       .withDescription("Silent mode")
-      .withLongOpt("silent")
+      .longOpt("silent")
       .create("sl");
 
-    Option optBatch = OptionBuilder
+    Option optBatch = Option.builder()
    	  .withDescription("Batch mode")
-   	  .withLongOpt("batch")
+   	  .longOpt("batch")
    	  .create("ba");
 
-    Option optOutFile = OptionBuilder
+    Option optOutFile = Option.builder()
       .hasArg()
-      .withArgName("name")
+      .argName("name")
       .withDescription("Out-file name (for batch mode)")
-      .withLongOpt("batch-out-file")
+      .longOpt("batch-out-file")
       .create("bof");
     
     // ---

@@ -9,16 +9,16 @@ public class Helper
 		ALL
 	}
 
-	public enum PyeListMode
-	{
-		NAME,
-		ALL
-	}
-
 	public enum SecListMode
 	{
 		TYPE,
 		ISIN,
+		NAME,
+		ALL
+	}
+
+	public enum PyeListMode
+	{
 		NAME,
 		ALL
 	}

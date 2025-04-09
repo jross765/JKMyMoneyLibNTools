@@ -9,7 +9,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -69,56 +69,56 @@ public class UpdAcct extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFileIn = OptionBuilder
-      .isRequired()
+    Option optFileIn = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file (in)")
-      .withLongOpt("kmymoney-in-file")
+      .longOpt("kmymoney-in-file")
       .create("if");
           
-    Option optFileOut = OptionBuilder
-      .isRequired()
+    Option optFileOut = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file (out)")
-      .withLongOpt("kmymoney-out-file")
+      .longOpt("kmymoney-out-file")
       .create("of");
       
-    Option optID = OptionBuilder
-      .isRequired()
+    Option optID = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("acctid")
+      .argName("acctid")
       .withDescription("Account ID")
-      .withLongOpt("account-id")
+      .longOpt("account-id")
       .create("id");
             
-    Option optName = OptionBuilder
+    Option optName = Option.builder()
       .hasArg()
-      .withArgName("name")
+      .argName("name")
       .withDescription("Account name")
-      .withLongOpt("name")
+      .longOpt("name")
       .create("n");
     
-    Option optDescr = OptionBuilder
+    Option optDescr = Option.builder()
       .hasArg()
-      .withArgName("descr")
+      .argName("descr")
       .withDescription("Account description")
-      .withLongOpt("description")
+      .longOpt("description")
       .create("desc");
       
-    Option optType = OptionBuilder
+    Option optType = Option.builder()
       .hasArg()
-      .withArgName("type")
+      .argName("type")
       .withDescription("Account type")
-      .withLongOpt("type")
+      .longOpt("type")
       .create("t");
         
-    Option optSecCurr = OptionBuilder
+    Option optSecCurr = Option.builder()
       .hasArg()
-      .withArgName("sec/curr-id")
+      .argName("sec/curr-id")
       .withDescription("Security/currency ID")
-      .withLongOpt("security-currency-id")
+      .longOpt("security-currency-id")
       .create("sec");
       
     // The convenient ones

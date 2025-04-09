@@ -8,7 +8,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option.builder();
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -92,78 +92,78 @@ public class GenStockAcct extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFileIn = OptionBuilder
-      .isRequired()
+    Option optFileIn = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file (in)")
-      .withLongOpt("kmymoney-in-file")
+      .longOpt("kmymoney-in-file")
       .create("if");
         
-    Option optFileOut = OptionBuilder
-      .isRequired()
+    Option optFileOut = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("file")
+      .argName("file")
       .withDescription("KMyMoney file (out)")
-      .withLongOpt("kmymoney-out-file")
+      .longOpt("kmymoney-out-file")
       .create("of");
     
-    Option optAcctMode = OptionBuilder
-      .isRequired()
+    Option optAcctMode = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("mode")
+      .argName("mode")
       .withDescription("Selection mode for account")
-      .withLongOpt("account-mode")
+      .longOpt("account-mode")
       .create("am");
     	      
-    Option optAcctID = OptionBuilder
+    Option optAcctID = Option.builder()
       .hasArg()
-      .withArgName("acctid")
+      .argName("acctid")
       .withDescription("Account-ID")
-      .withLongOpt("account-id")
+      .longOpt("account-id")
       .create("acct");
     	    
-    Option optAcctName = OptionBuilder
+    Option optAcctName = Option.builder()
       .hasArg()
-      .withArgName("name")
+      .argName("name")
       .withDescription("Account name (or part of)")
-      .withLongOpt("account-name")
+      .longOpt("account-name")
       .create("an");
     	      
-    Option optSecMode = OptionBuilder
-      .isRequired()
+    Option optSecMode = Option.builder()
+      .required()
       .hasArg()
-      .withArgName("mode")
+      .argName("mode")
       .withDescription("Selection mode for security")
-      .withLongOpt("security-mode")
+      .longOpt("security-mode")
       .create("sm");
     	    	        
-    Option optSecID = OptionBuilder
+    Option optSecID = Option.builder()
       .hasArg()
-      .withArgName("ID")
+      .argName("ID")
       .withDescription("Security ID")
-      .withLongOpt("security-id")
+      .longOpt("security-id")
       .create("sec");
     	            
-    Option optSecISIN = OptionBuilder
+    Option optSecISIN = Option.builder()
       .hasArg()
-      .withArgName("isin")
+      .argName("isin")
       .withDescription("ISIN")
-      .withLongOpt("isin")
+      .longOpt("isin")
       .create("is");
     	          
-    Option optSecName = OptionBuilder
+    Option optSecName = Option.builder()
       .hasArg()
-      .withArgName("name")
+      .argName("name")
       .withDescription("Security name (or part of)")
-      .withLongOpt("security-name")
+      .longOpt("security-name")
       .create("sn");
     
     // ---
     	    
-    Option optSilent = OptionBuilder
+    Option optSilent = Option.builder()
       .withDescription("Silent mode")
-      .withLongOpt("silent")
+      .longOpt("silent")
       .create("sl");
 
     options = new Options();
