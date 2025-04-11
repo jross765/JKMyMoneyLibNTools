@@ -26,7 +26,6 @@ import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.kmymoney.api.Const;
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.CURRENCY;
 import org.kmymoney.api.generated.INSTITUTION;
@@ -1270,6 +1269,33 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		return new KMyMoneyWritablePriceImpl((KMyMoneyPriceImpl) prc);
 	}
 
+	public KMyMoneyWritablePrice getWritablePriceBySecIDDate(final KMMSecID secID, final LocalDate date) {
+		KMyMoneyPrice prc = prcMgr.getPriceBySecIDDate(secID, date);
+		return new KMyMoneyWritablePriceImpl((KMyMoneyPriceImpl) prc);
+	}
+	
+	public KMyMoneyWritablePrice getWritablePriceByQualifSecIDDate(final KMMQualifSecID secID, final LocalDate date) {
+		KMyMoneyPrice prc = prcMgr.getPriceByQualifSecIDDate(secID, date);
+		return new KMyMoneyWritablePriceImpl((KMyMoneyPriceImpl) prc);
+	}
+	
+	public KMyMoneyWritablePrice getWritablePriceByCurrDate(final Currency curr, final LocalDate date) {
+		KMyMoneyPrice prc = prcMgr.getPriceByCurrDate(curr, date);
+		return new KMyMoneyWritablePriceImpl((KMyMoneyPriceImpl) prc);
+	}
+	
+	public KMyMoneyWritablePrice getWritablePriceByQualifCurrIDDate(final KMMQualifCurrID currID, final LocalDate date) {
+		KMyMoneyPrice prc = prcMgr.getPriceByQualifCurrIDDate(currID, date);
+		return new KMyMoneyWritablePriceImpl((KMyMoneyPriceImpl) prc);
+	}
+	
+	public KMyMoneyWritablePrice getWritablePriceByQualifSecCurrIDDate(final KMMQualifSecCurrID secCurrID, final LocalDate date) {
+		KMyMoneyPrice prc = prcMgr.getPriceByQualifSecCurrIDDate(secCurrID, date);
+		return new KMyMoneyWritablePriceImpl((KMyMoneyPriceImpl) prc);
+	}
+	
+	// ---------------------------------------------------------------
+	
 	@Override
 	public Collection<KMyMoneyWritablePrice> getWritablePrices() {
 		Collection<KMyMoneyWritablePrice> result = new ArrayList<KMyMoneyWritablePrice>();

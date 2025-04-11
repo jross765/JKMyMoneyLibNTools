@@ -4,12 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Currency;
 import java.util.List;
 
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
+import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
@@ -360,6 +362,18 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * @return A changeable version of the transaction.
 	 */
 	KMyMoneyWritablePrice getWritablePriceByID(KMMPriceID prcID);
+	
+	KMyMoneyWritablePrice getWritablePriceBySecIDDate(KMMSecID secID, LocalDate date);
+	
+	KMyMoneyWritablePrice getWritablePriceByQualifSecIDDate(KMMQualifSecID secID, LocalDate date);
+	
+	KMyMoneyWritablePrice getWritablePriceByCurrDate(Currency curr, LocalDate date);
+	
+	KMyMoneyWritablePrice getWritablePriceByQualifCurrIDDate(KMMQualifCurrID currID, LocalDate date);
+	
+	KMyMoneyWritablePrice getWritablePriceByQualifSecCurrIDDate(KMMQualifSecCurrID secCurrID, LocalDate date);
+	
+    // ---------------------------------------------------------------
 	
 	/**
 	 * @see KMyMoneyFile#getPrices()
