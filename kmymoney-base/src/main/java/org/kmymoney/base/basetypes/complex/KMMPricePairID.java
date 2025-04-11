@@ -1,7 +1,9 @@
 package org.kmymoney.base.basetypes.complex;
 
+import java.util.Currency;
 import java.util.Objects;
 
+import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +42,68 @@ public class KMMPricePairID {
 		init();
 		
 		this.fromSecCurr.set(fromSecCurr);
+		this.toCurr.set(toCurr);
+	}
+
+	public KMMPricePairID(KMMQualifSecID fromSec, KMMQualifCurrID toCurr) {
+		if ( fromSec == null ) {
+			throw new IllegalArgumentException("null from-security-currency-ID given");
+		}
+
+		if ( fromSec == null ) {
+			throw new IllegalArgumentException("null to-currency-ID given");
+		}
+		
+		init();
+		
+		this.fromSecCurr.set(fromSec);
+		this.toCurr.set(toCurr);
+	}
+
+	public KMMPricePairID(KMMQualifCurrID fromCurr, KMMQualifCurrID toCurr) {
+		if ( fromCurr == null ) {
+			throw new IllegalArgumentException("null from-security-currency-ID given");
+		}
+
+		if ( fromCurr == null ) {
+			throw new IllegalArgumentException("null to-currency-ID given");
+		}
+		
+		init();
+		
+		this.fromSecCurr.set(fromCurr);
+		this.toCurr.set(toCurr);
+	}
+
+	public KMMPricePairID(KMMSecID fromSec, KMMQualifCurrID toCurr) {
+		if ( fromSec == null ) {
+			throw new IllegalArgumentException("null from-security-currency-ID given");
+		}
+
+		if ( fromSec == null ) {
+			throw new IllegalArgumentException("null to-currency-ID given");
+		}
+		
+		init();
+		
+		KMMQualifSecID qualifID = new KMMQualifSecID(fromSec);
+		this.fromSecCurr.set(qualifID);
+		this.toCurr.set(toCurr);
+	}
+
+	public KMMPricePairID(Currency fromCurr, KMMQualifCurrID toCurr) {
+		if ( fromCurr == null ) {
+			throw new IllegalArgumentException("null from-security-currency-ID given");
+		}
+
+		if ( fromCurr == null ) {
+			throw new IllegalArgumentException("null to-currency-ID given");
+		}
+		
+		init();
+		
+		KMMQualifCurrID qualifID = new KMMQualifCurrID(fromCurr);
+		this.fromSecCurr.set(qualifID);
 		this.toCurr.set(toCurr);
 	}
 
