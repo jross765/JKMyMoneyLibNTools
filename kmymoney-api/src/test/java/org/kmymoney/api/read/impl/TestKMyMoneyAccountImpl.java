@@ -114,7 +114,7 @@ public class TestKMyMoneyAccountImpl {
 		assertEquals("CURRENCY:EUR", acct.getQualifSecCurrID().toString());
 
 		assertEquals("A000061", acct.getParentAccountID().toString());
-		assertEquals(2, acct.getChildren().size());
+		assertEquals(3, acct.getChildren().size());
 		Object[] acctArr = acct.getChildren().toArray();
 		assertEquals("A000064", ((KMyMoneyAccount) acctArr[0]).getID().toString());
 		assertEquals("A000063", ((KMyMoneyAccount) acctArr[1]).getID().toString());

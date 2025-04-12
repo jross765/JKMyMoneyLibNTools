@@ -62,7 +62,7 @@ public class TestSimpleSecurityQuoteTable {
 		simplPriceTab = complPriceTab.getByNamespace(KMMQualifSecCurrID.Type.SECURITY);
 		assertNotEquals(null, simplPriceTab);
 
-		assertEquals(2, simplPriceTab.getCurrencies().size());
+		assertEquals(3, simplPriceTab.getCurrencies().size());
 		assertEquals(119.50, simplPriceTab.getConversionFactor("E000001").doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals(58.25, simplPriceTab.getConversionFactor("E000002").doubleValue(), ConstTest.DIFF_TOLERANCE);
 	}

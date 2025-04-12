@@ -147,7 +147,7 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("A000061", acct.getParentAccountID().toString());
 
 		List<KMyMoneyAccount> acctList = acct.getChildren();
-		assertEquals(2, acctList.size());
+		assertEquals(3, acctList.size());
 		assertEquals("A000064", acctList.get(0).getID().toString());
 		assertEquals("A000063", acctList.get(1).getID().toString());
 

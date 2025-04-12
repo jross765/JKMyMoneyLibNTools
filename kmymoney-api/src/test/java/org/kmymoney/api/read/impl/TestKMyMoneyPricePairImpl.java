@@ -28,6 +28,7 @@ public class TestKMyMoneyPricePairImpl {
 	public static final KMMPricePairID PRCPR_1_ID = new KMMPricePairID("E000001", "EUR"); // SAP/EUR
 	public static final KMMPricePairID PRCPR_2_ID = new KMMPricePairID("E000002", "EUR"); // MBG/EUR
 	public static final KMMPricePairID PRCPR_3_ID = new KMMPricePairID("USD", "EUR");
+	public static final KMMPricePairID PRCPR_4_ID = new KMMPricePairID("E000003", "EUR"); // BASF/EUR
 
 	// -----------------------------------------------------------------
 
@@ -87,10 +88,11 @@ public class TestKMyMoneyPricePairImpl {
 		List<KMyMoneyPricePair> prcPrList = new ArrayList<KMyMoneyPricePair>(prcPrColl);
 		prcPrList.sort(Comparator.naturalOrder());
 
-		assertEquals(3, prcPrList.size());
+		assertEquals(4, prcPrList.size());
 		assertEquals(PRCPR_1_ID, prcPrList.get(0).getID());
 		assertEquals(PRCPR_2_ID, prcPrList.get(1).getID());
-		assertEquals(PRCPR_3_ID, prcPrList.get(2).getID());
+		assertEquals(PRCPR_4_ID, prcPrList.get(2).getID());
+		assertEquals(PRCPR_3_ID, prcPrList.get(3).getID());
 	}
 
 	@Test

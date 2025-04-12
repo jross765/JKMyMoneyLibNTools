@@ -46,6 +46,8 @@ public class TestKMyMoneyWritablePriceImpl {
 	private static final KMMPriceID PRC_5_ID = TestKMyMoneyPriceImpl.PRC_5_ID;
 	private static final KMMPriceID PRC_6_ID = TestKMyMoneyPriceImpl.PRC_6_ID;
 
+	private static final KMMPriceID PRC_12_ID = TestKMyMoneyPriceImpl.PRC_12_ID;
+
 	private static final KMMPricePairID PRCPR_1_ID = TestKMyMoneyPricePairImpl.PRCPR_1_ID;
 	private static final KMMPricePairID PRCPR_2_ID = TestKMyMoneyPricePairImpl.PRCPR_2_ID;
 	private static final KMMPricePairID PRCPR_3_ID = TestKMyMoneyPricePairImpl.PRCPR_3_ID;
@@ -129,11 +131,12 @@ public class TestKMyMoneyWritablePriceImpl {
 		prcList.sort(Comparator.naturalOrder());
 
 		assertEquals(ConstTest.Stats.NOF_PRC, prcList.size());
-		assertEquals(PRC_1_ID, prcList.get(0).getID());
-		assertEquals(PRC_2_ID, prcList.get(1).getID());
-		assertEquals(PRC_3_ID, prcList.get(2).getID());
-		assertEquals(PRC_4_ID, prcList.get(3).getID());
-		assertEquals(PRC_5_ID, prcList.get(4).getID());
+		assertEquals(PRC_12_ID, prcList.get(0).getID());
+		assertEquals(PRC_1_ID, prcList.get(1).getID());
+		assertEquals(PRC_2_ID, prcList.get(2).getID());
+		assertEquals(PRC_3_ID, prcList.get(3).getID());
+		assertEquals(PRC_4_ID, prcList.get(4).getID());
+		assertEquals(PRC_5_ID, prcList.get(5).getID());
 	}
 
 	@Test

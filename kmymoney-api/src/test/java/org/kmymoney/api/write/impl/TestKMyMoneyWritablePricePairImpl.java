@@ -33,6 +33,7 @@ public class TestKMyMoneyWritablePricePairImpl {
 	private static final KMMPricePairID PRCPR_1_ID = TestKMyMoneyPricePairImpl.PRCPR_1_ID;
 	private static final KMMPricePairID PRCPR_2_ID = TestKMyMoneyPricePairImpl.PRCPR_2_ID;
 	private static final KMMPricePairID PRCPR_3_ID = TestKMyMoneyPricePairImpl.PRCPR_3_ID;
+	private static final KMMPricePairID PRCPR_4_ID = TestKMyMoneyPricePairImpl.PRCPR_4_ID;
 
 	// -----------------------------------------------------------------
 
@@ -112,10 +113,11 @@ public class TestKMyMoneyWritablePricePairImpl {
 		List<KMyMoneyWritablePricePair> prcPrList = new ArrayList<KMyMoneyWritablePricePair>(prcPrColl);
 		prcPrList.sort(Comparator.naturalOrder());
 
-		assertEquals(3, prcPrList.size());
+		assertEquals(4, prcPrList.size());
 		assertEquals(PRCPR_1_ID, prcPrList.get(0).getID());
 		assertEquals(PRCPR_2_ID, prcPrList.get(1).getID());
-		assertEquals(PRCPR_3_ID, prcPrList.get(2).getID());
+		assertEquals(PRCPR_4_ID, prcPrList.get(2).getID());
+		assertEquals(PRCPR_3_ID, prcPrList.get(3).getID());
 	}
 
 	@Test

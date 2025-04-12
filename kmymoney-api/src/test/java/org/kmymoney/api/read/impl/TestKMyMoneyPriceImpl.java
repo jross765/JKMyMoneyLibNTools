@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Currency;
 import java.util.List;
 
 import org.junit.Before;
@@ -22,6 +23,7 @@ import org.kmymoney.base.basetypes.complex.KMMPriceID;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
 
 import junit.framework.JUnit4TestAdapter;
 
@@ -33,6 +35,25 @@ public class TestKMyMoneyPriceImpl {
 	public static final KMMPriceID PRC_5_ID = new KMMPriceID("E000002", "EUR", "2024-06-01"); // MBG/EUR
 	public static final KMMPriceID PRC_6_ID = new KMMPriceID("USD", "EUR", "2023-12-04");
 
+	public static final KMMPriceID PRC_12_ID = new KMMPriceID("E000001", "EUR", "2012-03-05"); // SAP/EUR
+
+	public static final KMMPriceID PRC_14_ID = new KMMPriceID("E000003", "EUR", "2023-04-01"); // BASF/EUR
+	public static final KMMPriceID PRC_15_ID = new KMMPriceID("E000003", "EUR", "2023-07-01"); // BASF/EUR
+	public static final KMMPriceID PRC_16_ID = new KMMPriceID("E000003", "EUR", "2023-10-01"); // BASF/EUR
+
+	public static final KMMPriceID PRC_17_ID = new KMMPriceID("USD", "EUR", "2023-12-01");
+	public static final KMMPriceID PRC_18_ID = new KMMPriceID("USD", "EUR", "2024-01-01");
+	public static final KMMPriceID PRC_19_ID = new KMMPriceID("USD", "EUR", "2023-11-01");
+	
+	// SAP SE
+	public static final String SEC_2_ID     = TestKMyMoneySecurityImpl.SEC_2_ID;
+	public static final String SEC_2_ISIN   = TestKMyMoneySecurityImpl.SEC_2_ISIN;
+	public static final String SEC_2_TICKER = TestKMyMoneySecurityImpl.SEC_2_TICKER;
+
+	// BASF SE
+	public static final String SEC_4_ID   = "E000003";
+	public static final String SEC_4_ISIN = "DE000BASF111";
+	
 	// -----------------------------------------------------------------
 
 	private KMyMoneyFile kmmFile = null;
@@ -97,11 +118,12 @@ public class TestKMyMoneyPriceImpl {
 		//		System.err.println("=============");
 
 		assertEquals(ConstTest.Stats.NOF_PRC, prcList.size());
-		assertEquals(PRC_1_ID, prcList.get(0).getID());
-		assertEquals(PRC_2_ID, prcList.get(1).getID());
-		assertEquals(PRC_3_ID, prcList.get(2).getID());
-		assertEquals(PRC_4_ID, prcList.get(3).getID());
-		assertEquals(PRC_5_ID, prcList.get(4).getID());
+		assertEquals(PRC_12_ID, prcList.get(0).getID());
+		assertEquals(PRC_1_ID, prcList.get(1).getID());
+		assertEquals(PRC_2_ID, prcList.get(2).getID());
+		assertEquals(PRC_3_ID, prcList.get(3).getID());
+		assertEquals(PRC_4_ID, prcList.get(4).getID());
+		assertEquals(PRC_5_ID, prcList.get(5).getID());
 	}
 
 	@Test
@@ -220,4 +242,68 @@ public class TestKMyMoneyPriceImpl {
 		}
 	}
 
+	// ---------------------------------------------------------------
+
+	@Test
+	public void test03_1() throws Exception {
+		KMMQualifSecCurrID cmdty21ID = new KMMQualifSecCurrID(KMMQualifSecCurrID.Type.SECURITY, SEC_2_ID);
+		prc = kmmFile.getPriceByQualifSecCurrIDDate(cmdty21ID, LocalDate.of(2012, 3, 5));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_12_ID, prc.getID());
+		
+		KMMQualifSecID cmdty22ID = new KMMQualifSecID(SEC_2_ID);
+		prc = kmmFile.getPriceByQualifSecIDDate(cmdty22ID, LocalDate.of(2012, 3, 5));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_12_ID, prc.getID());
+
+		KMMSecID cmdty23ID = new KMMSecID(SEC_2_ID);
+		prc = kmmFile.getPriceBySecIDDate(cmdty23ID, LocalDate.of(2012, 3, 5));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_12_ID, prc.getID());
+	}
+	
+	@Test
+	public void test03_2() throws Exception {
+		KMMSecID cmdty4ID = new KMMSecID(SEC_4_ID);
+		prc = kmmFile.getPriceBySecIDDate(cmdty4ID, LocalDate.of(2023, 4, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_14_ID, prc.getID());
+		
+		prc = kmmFile.getPriceBySecIDDate(cmdty4ID, LocalDate.of(2023, 7, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_15_ID, prc.getID());
+		
+		prc = kmmFile.getPriceBySecIDDate(cmdty4ID, LocalDate.of(2023, 10, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_16_ID, prc.getID());
+	}
+	
+	@Test
+	public void test04_1() throws Exception {
+		KMMQualifCurrID currID = new KMMQualifCurrID("USD");
+		prc = kmmFile.getPriceByQualifCurrIDDate(currID, LocalDate.of(2023, 12, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_17_ID, prc.getID());
+		
+		Currency curr = Currency.getInstance("USD");
+		prc = kmmFile.getPriceByCurrDate(curr, LocalDate.of(2023, 12, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_17_ID, prc.getID());
+		
+		prc = kmmFile.getPriceByQualifSecCurrIDDate(currID, LocalDate.of(2023, 12, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_17_ID, prc.getID());
+	}
+	
+	@Test
+	public void test04_2() throws Exception {
+		Currency curr = Currency.getInstance("USD");
+		prc = kmmFile.getPriceByCurrDate(curr, LocalDate.of(2024, 1, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_18_ID, prc.getID());
+		
+		prc = kmmFile.getPriceByCurrDate(curr, LocalDate.of(2023, 11, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_19_ID, prc.getID());
+	}
 }
