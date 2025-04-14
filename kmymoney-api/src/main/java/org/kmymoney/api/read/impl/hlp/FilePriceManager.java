@@ -252,13 +252,6 @@ public class FilePriceManager {
 	}
 
 	// ---------------------------------------------------------------
-	// ::TODO:
-	// These are the "clean" but inefficient variants, i.e. the ones that do *not* 
-	// make use of the semantics in the KMyMoney-Price-IDs (s.t. that you generally
-	// should not do, not just in this particular case).
-	// Apart from this, these variants are almost perfectly symmetrical to their
-	// resp. siblings in the sister project/module "JGnuCashLib/gnncash-api", which
-	// also is s.t. that we want to achieve.
 	
 	public KMyMoneyPrice getPriceBySecIDDate(final KMMSecID secID, final LocalDate date) {
 		if ( secID == null ) {
@@ -302,6 +295,15 @@ public class FilePriceManager {
 		return getPriceByQualifSecCurrIDDate(currID, date);
 	}
 
+	// ----------------------------
+	// The core function for the price retrieval by sec/curr-ID and date.
+	// About the two variants cf. the following comments
+	// Apart from this deviation, all the getPriceBy(Qualif)Sec(Curr)IDDate() 
+	// functions are almost perfectly symmetrical to their resp. siblings 
+	// in the sister project/module "JGnuCashLib/gnncash-api", which
+	// also is s.t. that we want to achieve (thus, a second reason
+	// we were reluctant to introduce the second variant).
+
 	public KMyMoneyPrice getPriceByQualifSecCurrIDDate(final KMMQualifSecCurrID qualifID, final LocalDate date) {
 		if ( qualifID == null ) {
 			throw new IllegalArgumentException("null security/currency ID given");
@@ -311,6 +313,19 @@ public class FilePriceManager {
 			throw new IllegalArgumentException("unset security/currency ID given");
 		}
 		
+		// clean but inefficient
+		// return getPriceByQualifSecCurrIDDate_Var1(qualifID, date);
+		// dirty but efficient
+		return getPriceByQualifSecCurrIDDate_Var2(qualifID, date);
+	}
+
+	// ----------------------------
+	// These is the "clean" but inefficient variant of the core function above, 
+	// i.e. the ones that does *not* make use of the semantics 
+	// in the KMyMoney-Price-IDs (s.t. that you generally
+	// should not do, not just in this particular case).
+	
+	private KMyMoneyPrice getPriceByQualifSecCurrIDDate_Var1(final KMMQualifSecCurrID qualifID, final LocalDate date) {
 		for ( KMyMoneyPrice prc : getPricesByQualifSecCurrID(qualifID) ) {
 			if ( prc.getDate().equals(date) ) {
 				return prc;
@@ -321,11 +336,16 @@ public class FilePriceManager {
 	}
 
 	// ---------------------------------------------------------------
-	// ::TODO:
-	// These are the "dirty" but efficient variants, i.e. the ones that *do* make use
-	// of the semantics in the KMyMoney-Price-IDs.
+	// This is the "dirty" but efficient variant of the core function above, 
+	// i.e. the one that *does* make use of the semantics 
+	// in the KMyMoney-Price-IDs.
 	
-	// ::TODO
+	private KMyMoneyPrice getPriceByQualifSecCurrIDDate_Var2(final KMMQualifSecCurrID qualifID, final LocalDate date) {
+		KMMQualifCurrID toCurrID = new KMMQualifCurrID(Const.DEFAULT_CURRENCY);
+		KMMPriceID prcID = new KMMPriceID(qualifID, toCurrID, date); 
+		
+		return getPriceByID(prcID);
+	}
 	
 	// ---------------------------------------------------------------
 
