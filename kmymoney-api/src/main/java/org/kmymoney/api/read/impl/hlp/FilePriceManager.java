@@ -252,6 +252,13 @@ public class FilePriceManager {
 	}
 
 	// ---------------------------------------------------------------
+	// ::TODO:
+	// These are the "clean" but inefficient variants, i.e. the ones that do *not* 
+	// make use of the semantics in the KMyMoney-Price-IDs (s.t. that you generally
+	// should not do, not just in this particular case).
+	// Apart from this, these variants are almost perfectly symmetrical to their
+	// resp. siblings in the sister project/module "JGnuCashLib/gnncash-api", which
+	// also is s.t. that we want to achieve.
 	
 	public KMyMoneyPrice getPriceBySecIDDate(final KMMSecID secID, final LocalDate date) {
 		if ( secID == null ) {
@@ -313,6 +320,13 @@ public class FilePriceManager {
 		return null;
 	}
 
+	// ---------------------------------------------------------------
+	// ::TODO:
+	// These are the "dirty" but efficient variants, i.e. the ones that *do* make use
+	// of the semantics in the KMyMoney-Price-IDs.
+	
+	// ::TODO
+	
 	// ---------------------------------------------------------------
 
 	public Collection<KMyMoneyPrice> getPrices() {

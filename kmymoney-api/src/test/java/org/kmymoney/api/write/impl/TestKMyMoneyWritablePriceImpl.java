@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Currency;
 import java.util.List;
 
 import org.junit.Before;
@@ -34,6 +35,7 @@ import org.kmymoney.base.basetypes.complex.KMMPricePairID;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
 
 import junit.framework.JUnit4TestAdapter;
 import xyz.schnorxoborx.base.numbers.FixedPointNumber;
@@ -48,6 +50,24 @@ public class TestKMyMoneyWritablePriceImpl {
 
 	private static final KMMPriceID PRC_12_ID = TestKMyMoneyPriceImpl.PRC_12_ID;
 
+	private static final KMMPriceID PRC_14_ID = TestKMyMoneyPriceImpl.PRC_14_ID;
+	private static final KMMPriceID PRC_15_ID = TestKMyMoneyPriceImpl.PRC_15_ID;
+	private static final KMMPriceID PRC_16_ID = TestKMyMoneyPriceImpl.PRC_16_ID;
+
+	private static final KMMPriceID PRC_17_ID = TestKMyMoneyPriceImpl.PRC_17_ID;
+	private static final KMMPriceID PRC_18_ID = TestKMyMoneyPriceImpl.PRC_18_ID;
+	private static final KMMPriceID PRC_19_ID = TestKMyMoneyPriceImpl.PRC_19_ID;
+	
+	// SAP SE
+	private static final String SEC_2_ID     = TestKMyMoneyPriceImpl.SEC_2_ID;
+	private static final String SEC_2_ISIN   = TestKMyMoneyPriceImpl.SEC_2_ISIN;
+
+	// BASF SE
+	private static final String SEC_4_ID   = TestKMyMoneyPriceImpl.SEC_4_ID;
+	private static final String SEC_4_ISIN = TestKMyMoneyPriceImpl.SEC_4_ISIN;
+	
+	
+	
 	private static final KMMPricePairID PRCPR_1_ID = TestKMyMoneyPricePairImpl.PRCPR_1_ID;
 	private static final KMMPricePairID PRCPR_2_ID = TestKMyMoneyPricePairImpl.PRCPR_2_ID;
 	private static final KMMPricePairID PRCPR_3_ID = TestKMyMoneyPricePairImpl.PRCPR_3_ID;
@@ -125,7 +145,7 @@ public class TestKMyMoneyWritablePriceImpl {
 	// complete (as complete as returned be KMyMoneyFileImpl.getPriceByID().
 
 	@Test
-	public void test01() throws Exception {
+	public void test01_1() throws Exception {
 		Collection<KMyMoneyWritablePrice> prcColl = kmmInFile.getWritablePrices();
 		List<KMyMoneyWritablePrice> prcList = new ArrayList<KMyMoneyWritablePrice>(prcColl);
 		prcList.sort(Comparator.naturalOrder());
@@ -140,7 +160,7 @@ public class TestKMyMoneyWritablePriceImpl {
 	}
 
 	@Test
-	public void test01_1() throws Exception {
+	public void test01_1_1() throws Exception {
 		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(PRC_1_ID);
 		assertNotEquals(null, prc);
 
@@ -182,7 +202,7 @@ public class TestKMyMoneyWritablePriceImpl {
 	}
 
 	@Test
-	public void test01_2() throws Exception {
+	public void test01_1_2() throws Exception {
 		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(PRC_4_ID);
 		assertNotEquals(null, prc);
 
@@ -224,7 +244,7 @@ public class TestKMyMoneyWritablePriceImpl {
 	}
 
 	@Test
-	public void test01_3() throws Exception {
+	public void test01_1_3() throws Exception {
 		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(PRC_6_ID);
 		assertNotEquals(null, prc);
 
@@ -255,6 +275,71 @@ public class TestKMyMoneyWritablePriceImpl {
 		}
 	}
 
+	// ---------------------------------------------------------------
+
+	@Test
+	public void test01_3_1() throws Exception {
+		KMMQualifSecCurrID cmdty21ID = new KMMQualifSecCurrID(KMMQualifSecCurrID.Type.SECURITY, SEC_2_ID);
+		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByQualifSecCurrIDDate(cmdty21ID, LocalDate.of(2012, 3, 5));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_12_ID, prc.getID());
+		
+		KMMQualifSecID cmdty22ID = new KMMQualifSecID(SEC_2_ID);
+		prc = kmmInFile.getWritablePriceByQualifSecIDDate(cmdty22ID, LocalDate.of(2012, 3, 5));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_12_ID, prc.getID());
+
+		KMMSecID cmdty23ID = new KMMSecID(SEC_2_ID);
+		prc = kmmInFile.getWritablePriceBySecIDDate(cmdty23ID, LocalDate.of(2012, 3, 5));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_12_ID, prc.getID());
+	}
+	
+	@Test
+	public void test01_3_2() throws Exception {
+		KMMSecID cmdty4ID = new KMMSecID(SEC_4_ID);
+		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceBySecIDDate(cmdty4ID, LocalDate.of(2023, 4, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_14_ID, prc.getID());
+		
+		prc = kmmInFile.getWritablePriceBySecIDDate(cmdty4ID, LocalDate.of(2023, 7, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_15_ID, prc.getID());
+		
+		prc = kmmInFile.getWritablePriceBySecIDDate(cmdty4ID, LocalDate.of(2023, 10, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_16_ID, prc.getID());
+	}
+	
+	@Test
+	public void test01_4_1() throws Exception {
+		KMMQualifCurrID currID = new KMMQualifCurrID("USD");
+		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByQualifCurrIDDate(currID, LocalDate.of(2023, 12, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_17_ID, prc.getID());
+		
+		Currency curr = Currency.getInstance("USD");
+		prc = kmmInFile.getWritablePriceByCurrDate(curr, LocalDate.of(2023, 12, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_17_ID, prc.getID());
+		
+		prc = kmmInFile.getWritablePriceByQualifSecCurrIDDate(currID, LocalDate.of(2023, 12, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_17_ID, prc.getID());
+	}
+	
+	@Test
+	public void test01_4_2() throws Exception {
+		Currency curr = Currency.getInstance("USD");
+		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByCurrDate(curr, LocalDate.of(2024, 1, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_18_ID, prc.getID());
+		
+		prc = kmmInFile.getWritablePriceByCurrDate(curr, LocalDate.of(2023, 11, 1));
+		assertNotEquals(null, prc);
+		assertEquals(PRC_19_ID, prc.getID());
+	}
+	
 	// -----------------------------------------------------------------
 	// PART 2: Modify existing objects
 	// -----------------------------------------------------------------
@@ -309,6 +394,52 @@ public class TestKMyMoneyWritablePriceImpl {
 		// ::TODO
 	}
 
+	@Test
+	public void test02_3() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,         kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+
+		KMMSecID sec31ID = new KMMSecID(SEC_2_ID);
+		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceBySecIDDate(sec31ID, LocalDate.of(2012, 3, 5));
+		assertNotEquals(null, prc);
+
+		assertEquals(PRC_12_ID, prc.getID());
+
+		// ----------------------------
+		// Modify the object
+
+		// CAUTION: No, not date, because that would change the "ID".
+		// Cf. TestKMyMoneyWritablePricePair.
+		// prc.setDate(LocalDate.of(1977, 7, 12));
+		prc.setValue(new FixedPointNumber(123.71));
+		prc.setSource(Source.USER);
+
+		// ----------------------------
+		// Check whether the object can has actually be modified
+		// (in memory, not in the file yet).
+
+		test02_3_check_memory(prc);
+
+		// ----------------------------
+		// Now, check whether the modified object can be written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test02_3_check_persisted(outFile);
+	}
+	
+	// ----------------------------
+	
 	private void test02_1_check_memory(KMyMoneyWritablePrice prc) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
 		assertEquals(FileStats.ERROR,         kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
@@ -354,6 +485,56 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals(Source.USER, prc.getSource()); // changed
 		assertEquals("2023-11-03", prc.getDateStr());
 		assertEquals(LocalDate.of(2023, 11, 3), prc.getDate()); // unchanged
+		assertEquals(123.71, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE); // changed
+	}
+
+	// ----------------------------
+
+	private void test02_3_check_memory(KMyMoneyWritablePrice prc) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,         kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+
+		assertEquals(PRC_12_ID, prc.getID()); // unchanged
+		assertEquals(secID1.toString(), prc.getFromSecCurrQualifID().toString()); // unchanged
+		assertEquals(secID1.toString(), prc.getFromSecurityQualifID().toString()); // unchanged
+		assertEquals(secID1.getCode().toString(), prc.getFromSecurityQualifID().getSecID().toString()); // unchanged
+		assertNotEquals(secID1.getCode(), prc.getFromSecurityQualifID().getSecID()); // unchanged
+		assertNotEquals(secID1, prc.getFromSecurityQualifID()); // unchanged
+		assertEquals("SAP AG", prc.getFromSecurity().getName()); // unchanged
+		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString()); // unchanged
+		assertEquals("EUR", prc.getToCurrencyCode()); // unchanged
+		assertEquals("User", ((KMyMoneyWritablePriceImpl) prc).getSourceStr()); // unchanged
+		assertEquals(Source.USER, prc.getSource()); // unchanged
+		assertEquals("2012-03-05", prc.getDateStr());
+		assertEquals(LocalDate.of(2012, 3, 5), prc.getDate()); // unchanged
+		assertEquals(123.71, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE); // changed
+	}
+
+	private void test02_3_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,         kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+
+		KMyMoneyPrice prc = kmmOutFile.getPriceByID(PRC_12_ID);
+		assertNotEquals(null, prc);
+
+		assertEquals(PRC_12_ID, prc.getID());
+		assertEquals(secID1.toString(), prc.getFromSecCurrQualifID().toString()); // unchanged
+		assertEquals(secID1.toString(), prc.getFromSecurityQualifID().toString()); // unchanged
+		assertEquals(secID1.getCode().toString(), prc.getFromSecurityQualifID().getSecID().toString()); // unchanged
+		assertNotEquals(secID1.getCode(), prc.getFromSecurityQualifID().getSecID()); // unchanged
+		assertNotEquals(secID1, prc.getFromSecurityQualifID()); // unchanged
+		assertEquals("SAP AG", prc.getFromSecurity().getName()); // unchanged
+		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString()); // unchanged
+		assertEquals("EUR", prc.getToCurrencyCode()); // unchanged
+		assertEquals("User", ((KMyMoneyPriceImpl) prc).getSourceStr()); // changed
+		assertEquals(Source.USER, prc.getSource()); // changed
+		assertEquals("2012-03-05", prc.getDateStr());
+		assertEquals(LocalDate.of(2012, 3, 5), prc.getDate()); // unchanged
 		assertEquals(123.71, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE); // changed
 	}
 

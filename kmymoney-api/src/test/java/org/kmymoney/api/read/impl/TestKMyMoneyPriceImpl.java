@@ -48,7 +48,6 @@ public class TestKMyMoneyPriceImpl {
 	// SAP SE
 	public static final String SEC_2_ID     = TestKMyMoneySecurityImpl.SEC_2_ID;
 	public static final String SEC_2_ISIN   = TestKMyMoneySecurityImpl.SEC_2_ISIN;
-	public static final String SEC_2_TICKER = TestKMyMoneySecurityImpl.SEC_2_TICKER;
 
 	// BASF SE
 	public static final String SEC_4_ID   = "E000003";
