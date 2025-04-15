@@ -8,4 +8,5 @@ module kmymoney.apiext {
 	requires transitive kmymoney.api;
 
 	exports org.kmymoney.apiext.secacct;
+	exports org.kmymoney.apiext.trxmgr;
 }
