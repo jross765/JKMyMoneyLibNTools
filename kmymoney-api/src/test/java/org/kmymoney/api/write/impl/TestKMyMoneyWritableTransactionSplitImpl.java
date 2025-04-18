@@ -11,11 +11,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
+import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
+import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
@@ -66,7 +68,7 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 	@Before
 	public void initialize() throws Exception {
 		ClassLoader classLoader = getClass().getClassLoader();
-		// URL kmmFileURL = classLoader.getResource(Const.GCSH_FILENAME);
+		// URL kmmFileURL = classLoader.getResource(Const.kmm_FILENAME);
 		// System.err.println("KMyMoney test file resource: '" + kmmFileURL + "'");
 		InputStream kmmInFileStream = null;
 		try {
@@ -188,7 +190,46 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 
 	@Test
 	public void test02_2() throws Exception {
-		// ::TODO
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW));
+		// assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(kmmFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.CACHE));
+
+		// Variant 1
+		KMyMoneyWritableTransaction trx1 = kmmInFile.getWritableTransactionByID(TRX_1_ID);
+		KMyMoneyWritableTransactionSplit splt1 = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_1_ID);
+		assertNotEquals(null, trx1);
+		assertNotEquals(null, splt1);
+		trx1.remove(splt1);
+
+		// Variant 2
+		KMyMoneyWritableTransaction trx2 = kmmInFile.getWritableTransactionByID(TRX_2_ID);
+		KMyMoneyWritableTransactionSplit splt2 = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_2_ID);
+		assertNotEquals(null, trx2);
+		assertNotEquals(null, splt2);
+		splt2.remove();
+
+		// ----------------------------
+		// Check whether the object can has actually be modified
+		// (in memory, not in the file yet).
+
+		test02_2_check_memory(splt1, splt2, 
+							  trx1, trx2);
+
+		// ----------------------------
+		// Now, check whether the modified object can be written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test02_2_check_persisted(trx1, outFile);
 	}
 	
 	// ---------------------------------------------------------------
@@ -225,6 +266,49 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		assertEquals(-67.8901, splt.getShares().doubleValue(), ConstTest.DIFF_TOLERANCE); // changed
 		assertEquals("Alle meine Entchen", splt.getMemo()); // changed
 //		assertEquals(null, splt.getUserDefinedAttributeKeys()); // unchanged
+	}
+
+	// ---------------------------------------------------------------
+
+	private void test02_2_check_memory(KMyMoneyWritableTransactionSplit splt1, 
+									   KMyMoneyWritableTransactionSplit splt2, 
+									   KMyMoneyTransaction trx1,
+									   KMyMoneyTransaction trx2) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_TRX_SPLT - 2, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW));
+		// assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(kmmFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_TRX_SPLT - 2, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.CACHE));
+
+		assertEquals(1, trx1.getSplitsCount());
+		assertEquals("S0002", trx1.getSplits().get(0).getID().toString());
+
+		KMyMoneyWritableTransaction trx1Now = kmmInFile.getWritableTransactionByID(TRX_1_ID);
+		// CAUTION / ::TODO
+		// Don't know what to do about this oddity right now,
+		// but it needs to be addressed at some point.
+		assertEquals(2, trx2.getSplitsCount()); // sic, 3, because it's not persisted yet
+		assertNotEquals(null, trx1Now); // still there
+		try {
+			KMyMoneyWritableTransactionSplit splt1Now = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_1_ID);
+			assertEquals(1, 0);
+		} catch ( NullPointerException exc ) {
+			assertEquals(0, 0);
+		}
+	}
+
+	private void test02_2_check_persisted(KMyMoneyTransaction trx, File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		assertEquals(ConstTest.Stats.NOF_TRX_SPLT - 2, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW));
+		// assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(kmmFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_TRX_SPLT - 2, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.CACHE));
+
+		KMyMoneyTransactionSplit splt = kmmOutFile.getTransactionSplitByID(TRXSPLT_1_ID);
+		assertEquals(null, splt); // sic
+
+		assertEquals(TRX_1_ID, trx.getID()); // unchanged
+		assertEquals(1, trx.getSplitsCount());
+		assertEquals("S0002", trx.getSplits().get(0).getID().toString());
 	}
 
 	// -----------------------------------------------------------------

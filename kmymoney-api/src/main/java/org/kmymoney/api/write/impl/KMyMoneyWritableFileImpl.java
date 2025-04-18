@@ -78,6 +78,7 @@ import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
+import org.kmymoney.base.basetypes.simple.KMMIDNotSetException;
 import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
@@ -862,8 +863,12 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throw new IllegalArgumentException("transaction ID is not set");
 		}
 
-		KMyMoneyTransaction trx = super.getTransactionByID(trxID);
-		return new KMyMoneyWritableTransactionImpl((KMyMoneyTransactionImpl) trx);
+		try {
+			return new KMyMoneyWritableTransactionImpl((KMyMoneyWritableTransactionImpl) super.getTransactionByID(trxID));
+		} catch (Exception exc) {
+			LOGGER.error("getWritableTransactionByID: Could not instantiate writable transaction object from read-only transaction object (ID: " + trxID + ")");
+			throw new RuntimeException("Could not instantiate writable transaction object from read-only transaction object (ID: " + trxID + ")");
+		}
 	}
 
 	@Override
@@ -872,14 +877,57 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throw new IllegalArgumentException("null transaction split ID given");
 		}
 
-		if ( ! spltID.isSet() ) {
+		if ( !spltID.isSet() ) {
 			throw new IllegalArgumentException("transaction split ID is not set");
 		}
 
 		KMyMoneyTransactionSplit splt = super.getTransactionSplitByID(spltID);
-		return new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) splt);
+		// ::TODO
+		// !!! Diese nicht-triviale Änderung nochmal ganz genau abtesten !!!
+		return new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) splt, false);
 	}
 	
+	// By purpose, this method has not been defined in the interface
+	// @Override
+	public void removeTransactionSplit(final KMyMoneyWritableTransactionSplit splt) {
+		// 1) remove avatar in transaction manager
+		super.trxMgr.removeTransactionSplit(splt);
+		
+		// 2) remove transaction split
+		KMMTrxID trxID = splt.getTransactionID();
+		String trxIDStr = null;
+		try {
+			trxIDStr = trxID.get();
+		} catch (KMMIDNotSetException e) {
+			throw new IllegalStateException("Transaction-split " + splt + " does not seem to have a correct transaction (ID)");
+		}
+		
+		for ( TRANSACTION jwsdpTrx : getRootElement().getTRANSACTIONS().getTRANSACTION() ) {
+			if ( jwsdpTrx.getId().equals(trxIDStr) ) {
+				// CAUTION concurrency ::CHECK
+				jwsdpTrx.getSPLITS().getSPLIT().remove(((KMyMoneyWritableTransactionSplitImpl) splt).getJwsdpPeer());
+				break;
+			}
+		}
+		
+		// 3) remove transaction, if no splits left
+		// ::TODO / ::CHECK
+		// uncomment?
+		// cf. according code in removePrice()
+//		for ( TRANSACTION jwsdpTrx : getRootElement().getTRANSACTIONS().getTRANSACTION() ) {
+//			if ( jwsdpTrx.getId().equals(trx.getID().get()) ) {
+//				if ( jwsdpTrx.getSPLITS().size() == 0 ) {
+//					// CAUTION concurrency ::CHECK
+//					getRootElement().getTRANSACTIONS().getTRANSACTION().remove(jwsdpTrx);
+//					break;
+//				}
+//			}
+//		}
+		
+		// 4) set 'modified' flag
+		setModified(true);
+	}
+
 	// ---------------------------------------------------------------
 
 	@Override

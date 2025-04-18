@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -203,17 +202,30 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		jwsdpPeer.getSPLITS().getSPLIT()
 			.remove(((KMyMoneyWritableTransactionSplitImpl) splt).getJwsdpPeer());
 		getWritableFile().setModified(true);
-		if ( mySplits != null ) {
-			mySplits.remove(splt);
+		
+		if ( mySplits == null ) { 
+			// important!
+			List<KMyMoneyTransactionSplit> dummy = getSplits();
+		} else {
+			// That does not work with writable splits:
+		    // mySplits.remove(impl);
+			// Instead:
+			for ( int i = 0; i < mySplits.size(); i++ ) {
+				if ( mySplits.get(i).getID().equals(splt.getID())) {
+					mySplits.remove(i);
+					i--;
+				}
+			}
 		}
+		
 		KMyMoneyWritableAccountImpl account = (KMyMoneyWritableAccountImpl) splt.getAccount();
 		if ( account != null ) {
 			account.removeTransactionSplit(splt);
 		}
 
+		getWritableFile().removeTransactionSplit(splt);
 		// there is no count for splits up to now
 		// getWritableFile().decrementCountDataFor()
-
 		if ( helper.getPropertyChangeSupport() != null ) {
 			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableSplits());
 		}
@@ -253,8 +265,25 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	/**
 	 * @see KMyMoneyWritableTransaction#getWritableSplitByID(java.lang.String)
 	 */
-	public KMyMoneyWritableTransactionSplit getWritableSplitByID(final String id) {
-		return (KMyMoneyWritableTransactionSplit) super.getSplitByID(id);
+	public KMyMoneyWritableTransactionSplit getWritableSplitByID(final KMMSpltID spltID) {
+		// alt:
+		// return (KMyMoneyWritableTransactionSplit) super.getSplitByID(id);
+		if ( spltID == null ) {
+			throw new IllegalArgumentException("null transaction split ID given");
+		}
+
+		if ( !spltID.equals("") ) {
+			throw new IllegalArgumentException("transaction split ID is empty");
+		}
+		// ::TODO
+//		if ( !spltID.isSet() ) {
+//			throw new IllegalArgumentException("transaction split ID is not set");
+//		}
+
+		KMyMoneyTransactionSplit splt = super.getSplitByID(spltID);
+		// ::TODO
+		// !!! Diese nicht-triviale Änderung nochmal ganz genau abtesten !!!
+		return new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) splt, false);
 	}
 
 	/**
@@ -265,7 +294,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		List<KMyMoneyWritableTransactionSplit> result = new ArrayList<KMyMoneyWritableTransactionSplit>();
 		
 		for ( KMyMoneyTransactionSplit split : super.getSplits() ) {
-			KMyMoneyWritableTransactionSplit newSplit = new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) split);
+			KMyMoneyWritableTransactionSplit newSplit = new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) split, false);
 		    result.add(newSplit);
 		}
 
@@ -284,12 +313,11 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 */
 	public void remove() {
 		getWritableFile().removeTransaction(this);
-		Collection<KMyMoneyWritableTransactionSplit> c = new LinkedList<KMyMoneyWritableTransactionSplit>();
-		c.addAll(getWritableSplits());
-		for ( KMyMoneyWritableTransactionSplit element : c ) {
-			element.remove();
-		}
-
+//		Collection<KMyMoneyWritableTransactionSplit> c = new LinkedList<KMyMoneyWritableTransactionSplit>();
+//		c.addAll(getWritableSplits());
+//		for ( KMyMoneyWritableTransactionSplit element : c ) {
+//			element.remove();
+//		}
 	}
 
 	/**

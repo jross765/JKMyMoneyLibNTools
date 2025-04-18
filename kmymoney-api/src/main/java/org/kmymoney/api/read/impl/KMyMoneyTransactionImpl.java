@@ -25,6 +25,7 @@ import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.simple.KMMSpltID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -254,13 +255,13 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
     /**
      * @see KMyMoneyTransaction#getSplitByID(java.lang.String)
      */
-    public KMyMoneyTransactionSplit getSplitByID(final String id) {
+    public KMyMoneyTransactionSplit getSplitByID(final KMMSpltID id) {
 		if ( id == null ) {
-			throw new IllegalArgumentException("null ID given");
+			throw new IllegalArgumentException("split-ID is null");
 		}
 
-		if ( id.trim().equals("") ) {
-			throw new IllegalArgumentException("empty ID given");
+		if ( ! id.isSet() ) {
+			throw new IllegalArgumentException("split-ID is not set");
 		}
 
 		for (KMyMoneyTransactionSplit split : getSplits()) {

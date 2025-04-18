@@ -7,6 +7,7 @@ import java.util.Locale;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.simple.KMMSpltID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 
 import xyz.schnorxoborx.base.beanbase.TransactionSplitNotFoundException;
@@ -117,7 +118,7 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction>,
      * @param spltID the id to look for
      * @return null if not found
      */
-    KMyMoneyTransactionSplit getSplitByID(String spltID);
+    KMyMoneyTransactionSplit getSplitByID(KMMSpltID spltID);
 
     /**
      *

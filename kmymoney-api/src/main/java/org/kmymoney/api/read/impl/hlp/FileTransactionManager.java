@@ -164,7 +164,7 @@ public class FileTransactionManager {
 	}
 
 	public void removeTransactionSplit(KMyMoneyTransactionSplit splt) {
-		removeTransactionSplit(splt, true);
+		removeTransactionSplit(splt, false);
 	}
 
 	public void removeTransactionSplit(KMyMoneyTransactionSplit splt, boolean withTrx) {

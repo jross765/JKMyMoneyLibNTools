@@ -85,6 +85,13 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		  true);
     }
 
+    public KMyMoneyWritableTransactionSplitImpl(
+    		final KMyMoneyTransactionSplitImpl split,
+    		final boolean addSpltToAcct) {
+    	super(split.getJwsdpPeer(), split.getTransaction(), 
+    		  addSpltToAcct);
+    }
+
 	// ---------------------------------------------------------------
 	
 	/**

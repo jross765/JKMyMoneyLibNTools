@@ -8,6 +8,7 @@ import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.write.hlp.HasWritableUserDefinedAttributes;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
+import org.kmymoney.base.basetypes.simple.KMMSpltID;
 
 import xyz.schnorxoborx.base.beanbase.TransactionSplitNotFoundException;
 
@@ -70,9 +71,9 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
 
 	/**
 	 * @return 
-	 * @see KMyMoneyTransaction#getSplitByID(String)
+	 * @see KMyMoneyTransaction#getSplitByID(KMMSpltID)
 	 */
-	KMyMoneyWritableTransactionSplit getWritableSplitByID(String id);
+	KMyMoneyWritableTransactionSplit getWritableSplitByID(KMMSpltID id);
 
 	/**
 	 *
