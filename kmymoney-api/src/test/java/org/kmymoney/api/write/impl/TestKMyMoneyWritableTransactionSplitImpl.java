@@ -34,7 +34,7 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 	public static final KMMComplAcctID ACCT_8_ID = TestKMyMoneyAccountImpl.ACCT_8_ID;
 
 	public static final KMMTrxID TRX_1_ID = TestKMyMoneyTransactionSplitImpl.TRX_1_ID;
-	public static final KMMTrxID TRX_2_ID = TestKMyMoneyTransactionSplitImpl.TRX_2_ID;
+	public static final KMMTrxID TRX_18_ID = TestKMyMoneyTransactionSplitImpl.TRX_18_ID;
 
 	public static final KMMQualifSpltID TRXSPLT_1_ID = TestKMyMoneyTransactionSplitImpl.TRXSPLT_1_ID;
 	public static final KMMQualifSpltID TRXSPLT_2_ID = TestKMyMoneyTransactionSplitImpl.TRXSPLT_2_ID;
@@ -122,7 +122,7 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		KMyMoneyWritableTransactionSplit splt = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_2_ID);
 
 		assertEquals(TRXSPLT_2_ID, splt.getQualifID());
-		assertEquals(TRX_2_ID, splt.getTransactionID());
+		assertEquals(TRX_18_ID, splt.getTransactionID());
 		assertEquals(ACCT_8_ID, splt.getAccountID());
 		assertEquals(KMyMoneyTransactionSplit.Action.BUY_SHARES, splt.getAction());
 		assertEquals(1800.00, splt.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
@@ -190,46 +190,7 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 
 	@Test
 	public void test02_2() throws Exception {
-		kmmInFileStats = new KMMFileStats(kmmInFile);
-
-		assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW));
-		// assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(kmmFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.CACHE));
-
-		// Variant 1
-		KMyMoneyWritableTransaction trx1 = kmmInFile.getWritableTransactionByID(TRX_1_ID);
-		KMyMoneyWritableTransactionSplit splt1 = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_1_ID);
-		assertNotEquals(null, trx1);
-		assertNotEquals(null, splt1);
-		trx1.remove(splt1);
-
-		// Variant 2
-		KMyMoneyWritableTransaction trx2 = kmmInFile.getWritableTransactionByID(TRX_2_ID);
-		KMyMoneyWritableTransactionSplit splt2 = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_2_ID);
-		assertNotEquals(null, trx2);
-		assertNotEquals(null, splt2);
-		splt2.remove();
-
-		// ----------------------------
-		// Check whether the object can has actually be modified
-		// (in memory, not in the file yet).
-
-		test02_2_check_memory(splt1, splt2, 
-							  trx1, trx2);
-
-		// ----------------------------
-		// Now, check whether the modified object can be written to the
-		// output file, then re-read from it, and whether is is what
-		// we expect it is.
-
-		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
-		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
-		// + outFile.getPath() + "'");
-		outFile.delete(); // sic, the temp. file is already generated (empty),
-		// and the KMyMoney file writer does not like that.
-		kmmInFile.writeFile(outFile);
-
-		test02_2_check_persisted(trx1, outFile);
+		// ::TODO
 	}
 	
 	// ---------------------------------------------------------------
@@ -268,9 +229,77 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 //		assertEquals(null, splt.getUserDefinedAttributeKeys()); // unchanged
 	}
 
+	// -----------------------------------------------------------------
+	// PART 3: Create new objects
+	// -----------------------------------------------------------------
+
+	// ------------------------------
+	// PART 3.1: High-Level
+	// ------------------------------
+
+	// ::TODO
+
+	// ------------------------------
+	// PART 3.2: Low-Level
+	// ------------------------------
+
+	// ::TODO
+
+	// -----------------------------------------------------------------
+	// PART 4: Create new objects
+	// -----------------------------------------------------------------
+
+	// ------------------------------
+	// PART 4.1: High-Level
+	// ------------------------------
+	
+	@Test
+	public void test04_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW));
+		// assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(kmmFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.CACHE));
+
+		// Variant 1
+		KMyMoneyWritableTransaction trx1 = kmmInFile.getWritableTransactionByID(TRX_1_ID);
+		KMyMoneyWritableTransactionSplit splt1 = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_1_ID);
+		assertNotEquals(null, trx1);
+		assertNotEquals(null, splt1);
+		trx1.remove(splt1);
+
+		// Variant 2
+		KMyMoneyWritableTransaction trx2 = kmmInFile.getWritableTransactionByID(TRX_18_ID);
+		KMyMoneyWritableTransactionSplit splt2 = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_2_ID);
+		assertNotEquals(null, trx2);
+		assertNotEquals(null, splt2);
+		splt2.remove();
+
+		// ----------------------------
+		// Check whether the object can has actually be modified
+		// (in memory, not in the file yet).
+
+		test04_1_check_memory(splt1, splt2, 
+							  trx1, trx2);
+
+		// ----------------------------
+		// Now, check whether the modified object can be written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test04_1_check_persisted(trx1, outFile);
+	}
+	
 	// ---------------------------------------------------------------
 
-	private void test02_2_check_memory(KMyMoneyWritableTransactionSplit splt1, 
+	private void test04_1_check_memory(KMyMoneyWritableTransactionSplit splt1, 
 									   KMyMoneyWritableTransactionSplit splt2, 
 									   KMyMoneyTransaction trx1,
 									   KMyMoneyTransaction trx2) throws Exception {
@@ -295,7 +324,7 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		}
 	}
 
-	private void test02_2_check_persisted(KMyMoneyTransaction trx, File outFile) throws Exception {
+	private void test04_1_check_persisted(KMyMoneyTransaction trx, File outFile) throws Exception {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
@@ -311,18 +340,8 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		assertEquals("S0002", trx.getSplits().get(0).getID().toString());
 	}
 
-	// -----------------------------------------------------------------
-	// PART 3: Create new objects
-	// -----------------------------------------------------------------
-
 	// ------------------------------
-	// PART 3.1: High-Level
-	// ------------------------------
-
-	// ::TODO
-
-	// ------------------------------
-	// PART 3.2: Low-Level
+	// PART 4.2: Low-Level
 	// ------------------------------
 
 	// ::TODO

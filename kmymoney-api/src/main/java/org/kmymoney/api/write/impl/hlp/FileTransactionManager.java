@@ -1,5 +1,6 @@
 package org.kmymoney.api.write.impl.hlp;
 
+import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.KMyMoneyTransaction;
@@ -9,6 +10,8 @@ import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritableTransactionImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritableTransactionSplitImpl;
+import org.kmymoney.base.basetypes.simple.KMMSpltID;
+import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,5 +53,31 @@ public class FileTransactionManager extends org.kmymoney.api.read.impl.hlp.FileT
     	LOGGER.debug("createTransactionSplit: Generated new writable transaction split: " + splt.getID());
     	return splt;
     }
+
+	// ---------------------------------------------------------------
+	
+	public void removeTransaction_raw(final KMMTrxID trxID) {
+		KMYMONEYFILE pRootElement = kmmFile.getRootElement();
+
+		for ( int i = 0; i < pRootElement.getTRANSACTIONS().getTRANSACTION().size(); i++ ) {
+			TRANSACTION jwsdpTrx = pRootElement.getTRANSACTIONS().getTRANSACTION().get(i);
+			if ( jwsdpTrx.getId().equals(trxID.toString())) {
+				pRootElement.getTRANSACTIONS().getTRANSACTION().remove(i);
+				i--;
+			}
+		}
+	}
+
+	public void removeTransactionSplit_raw(final KMMTrxID trxID, final KMMSpltID spltID) {
+		TRANSACTION trxRaw = getTransaction_raw(trxID);
+		
+		for ( int i = 0; i < trxRaw.getSPLITS().getSPLIT().size(); i++ ) {
+			SPLIT jwsdpTrxSplt = trxRaw.getSPLITS().getSPLIT().get(i);
+			if ( jwsdpTrxSplt.getId().equals(spltID.toString())) {
+				trxRaw.getSPLITS().getSPLIT().remove(i);
+				i--;
+			}
+		}
+	}
 
 }

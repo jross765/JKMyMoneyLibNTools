@@ -188,7 +188,15 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		}
 		
 		List<KMyMoneyTransactionSplit> transactionSplits = getTransactionSplits();
-		transactionSplits.remove(splt);
+		// That does not work with writable splits:
+		// transactionSplits.remove(splt);
+		// Instead:
+		for ( int i = 0; i < transactionSplits.size(); i++ ) {
+			if ( transactionSplits.get(i).getID().equals(splt.getID())) {
+				transactionSplits.remove(i);
+				i--;
+			}
+		}
 
 		setIsModified();
 		// <<insert code to react further to this change here

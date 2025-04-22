@@ -179,6 +179,8 @@ public class TestKMyMoneyWritableTransactionImpl {
 	public void test02_2() throws Exception {
 		// ::TODO
 	}
+	
+	// ---------------------------------------------------------------
 
 	private void test02_1_check_memory(KMyMoneyWritableTransaction trx) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
@@ -286,6 +288,8 @@ public class TestKMyMoneyWritableTransactionImpl {
 		test03_1_check_persisted(outFile);
 	}
 
+	// ---------------------------------------------------------------
+
 	private void test03_1_check_memory(KMyMoneyWritableTransaction trx) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_TRX + 1, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
 		// CAUTION: The counter has not been updated yet.
@@ -371,6 +375,138 @@ public class TestKMyMoneyWritableTransactionImpl {
 
 	// ------------------------------
 	// PART 3.2: Low-Level
+	// ------------------------------
+
+	// ::TODO
+
+	// -----------------------------------------------------------------
+	// PART 4: Delete objects
+	// -----------------------------------------------------------------
+
+	// ------------------------------
+	// PART 4.1: High-Level
+	// ------------------------------
+
+	@Test
+	public void test04_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
+
+
+		// ----------------------------
+		// Delete the object
+
+		// Variant 1
+		KMyMoneyWritableTransaction trx1 = kmmInFile.getWritableTransactionByID(TRX_1_ID);
+		assertNotEquals(null, trx1);
+		kmmInFile.removeTransaction(trx1);
+
+		// Variant 2
+		KMyMoneyWritableTransaction trx2 = kmmInFile.getWritableTransactionByID(TRX_2_ID);
+		trx2.remove();
+
+		// ----------------------------
+		// Check whether the objects have actually been deleted
+		// (in memory, not in the file yet).
+
+		test04_1_check_memory(trx1, trx2);
+
+		// ----------------------------
+		// Now, check whether the deletions have been written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test04_1_check_persisted(outFile);
+	}
+
+	// ---------------------------------------------------------------
+
+	private void test04_1_check_memory(KMyMoneyWritableTransaction trx1,
+									   KMyMoneyWritableTransaction trx2) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
+		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
+
+		// ---
+		// First transaction:
+		
+		// CAUTION / ::TODO
+		// Old Object still exists and is unchanged
+		// Exception: no splits any more
+		// Don't know what to do about this oddity right now,
+		// but it needs to be addressed at some point.
+		assertEquals(0.0, trx1.getBalance().getBigDecimal().doubleValue(), ConstTest.DIFF_TOLERANCE); // unchanged
+		assertEquals("", trx1.getMemo()); // unchanged
+		assertEquals("2023-01-01", trx1.getDatePosted().toString()); // unchanged
+		assertEquals("2023-11-03", trx1.getEntryDate().toString()); // unchanged
+		assertEquals(0, trx1.getSplitsCount()); // changed
+		
+		// However, the transaction cannot newly be instantiated any more,
+		// just as you would expect.
+		try {
+			KMyMoneyWritableTransaction trx1Now = kmmInFile.getWritableTransactionByID(TRX_1_ID);
+			assertEquals(1, 0);
+		} catch ( Exception exc ) {
+			assertEquals(0, 0);
+		}
+		
+		// ---
+		// Second transaction, same as above:
+		
+		// CAUTION / ::TODO
+		// Cf. above.
+		assertEquals(TRX_2_ID, trx2.getID()); // unchanged
+		assertEquals(0.0, trx2.getBalance().getBigDecimal().doubleValue(), ConstTest.DIFF_TOLERANCE); // unchanged
+		assertEquals("", trx2.getMemo()); // unchanged
+		assertEquals("2023-01-03", trx2.getDatePosted().toString()); // unchanged
+		assertEquals("2023-10-14", trx2.getEntryDate().toString()); // unchanged
+		assertEquals(0, trx2.getSplitsCount()); // changed
+		
+		// Cf. above.
+		try {
+			KMyMoneyWritableTransaction trx2Now = kmmInFile.getWritableTransactionByID(TRX_2_ID);
+			assertEquals(1, 0);
+		} catch ( Exception exc ) {
+			assertEquals(0, 0);
+		}
+	}
+
+	private void test04_1_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
+
+		// ---
+		// First transaction:
+		
+		// The transaction does not exist any more, just as you would expect.
+		// However, no exception is thrown, as opposed to test04_1_check_memory()
+		KMyMoneyTransaction trx1 = kmmOutFile.getTransactionByID(TRX_1_ID);
+		assertEquals(null, trx1); // sic
+
+		// ---
+		// Second transaction, same as above:
+		
+		// Cf. above
+		KMyMoneyTransaction trx2 = kmmOutFile.getTransactionByID(TRX_2_ID);
+		assertEquals(null, trx2); // sic
+	}
+
+	// ------------------------------
+	// PART 4.2: Low-Level
 	// ------------------------------
 
 	// ::TODO

@@ -623,16 +623,15 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public void removeTransaction(final KMyMoneyWritableTransaction trx) {
 
-		Collection<KMyMoneyWritableTransactionSplit> c = new LinkedList<KMyMoneyWritableTransactionSplit>();
-		c.addAll(trx.getWritableSplits());
-		for ( KMyMoneyWritableTransactionSplit element : c ) {
-			element.remove();
+		Collection<KMyMoneyWritableTransactionSplit> spltList = new LinkedList<KMyMoneyWritableTransactionSplit>();
+		spltList.addAll(trx.getWritableSplits());
+		for ( KMyMoneyWritableTransactionSplit splt : spltList ) {
+			splt.remove();
 		}
 
-		super.trxMgr.removeTransaction(trx);
 		getRootElement().getTRANSACTIONS().getTRANSACTION().remove(((KMyMoneyWritableTransactionImpl) trx).getJwsdpPeer());
-		setModified(true);
-
+		setModified(true);		
+		super.trxMgr.removeTransaction(trx);
 	}
 
 	/**
@@ -888,27 +887,31 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
 	
 	// By purpose, this method has not been defined in the interface
+	// ::TODO: Symetry w/ sister project
 	// @Override
 	public void removeTransactionSplit(final KMyMoneyWritableTransactionSplit splt) {
 		// 1) remove avatar in transaction manager
 		super.trxMgr.removeTransactionSplit(splt);
 		
 		// 2) remove transaction split
-		KMMTrxID trxID = splt.getTransactionID();
-		String trxIDStr = null;
-		try {
-			trxIDStr = trxID.get();
-		} catch (KMMIDNotSetException e) {
-			throw new IllegalStateException("Transaction-split " + splt + " does not seem to have a correct transaction (ID)");
-		}
+//		KMMTrxID trxID = splt.getTransactionID();
+//		String trxIDStr = null;
+//		try {
+//			trxIDStr = trxID.get();
+//		} catch (KMMIDNotSetException e) {
+//			throw new IllegalStateException("Transaction-split " + splt + " does not seem to have a correct transaction (ID)");
+//		}
 		
-		for ( TRANSACTION jwsdpTrx : getRootElement().getTRANSACTIONS().getTRANSACTION() ) {
-			if ( jwsdpTrx.getId().equals(trxIDStr) ) {
-				// CAUTION concurrency ::CHECK
-				jwsdpTrx.getSPLITS().getSPLIT().remove(((KMyMoneyWritableTransactionSplitImpl) splt).getJwsdpPeer());
-				break;
-			}
-		}
+//		for ( TRANSACTION jwsdpTrx : getRootElement().getTRANSACTIONS().getTRANSACTION() ) {
+//			if ( jwsdpTrx.getId().equals(trxIDStr) ) {
+//				// CAUTION concurrency ::CHECK
+//				jwsdpTrx.getSPLITS().getSPLIT().remove(((KMyMoneyWritableTransactionSplitImpl) splt).getJwsdpPeer());
+//				break;
+//			}
+//		}
+		
+		((org.kmymoney.api.write.impl.hlp.FileTransactionManager) trxMgr)
+			.removeTransactionSplit_raw(splt.getTransactionID(), splt.getID());
 		
 		// 3) remove transaction, if no splits left
 		// ::TODO / ::CHECK

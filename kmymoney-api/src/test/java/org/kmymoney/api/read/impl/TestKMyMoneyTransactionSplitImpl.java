@@ -19,11 +19,11 @@ public class TestKMyMoneyTransactionSplitImpl {
 	public static final KMMComplAcctID ACCT_1_ID = TestKMyMoneyAccountImpl.ACCT_1_ID;
 	public static final KMMComplAcctID ACCT_8_ID = TestKMyMoneyAccountImpl.ACCT_8_ID;
 
-	public static final KMMTrxID TRX_1_ID = new KMMTrxID("T000000000000000001");
-	public static final KMMTrxID TRX_2_ID = new KMMTrxID("T000000000000000018");
+	public static final KMMTrxID TRX_1_ID = TestKMyMoneyTransactionImpl.TRX_1_ID;
+	public static final KMMTrxID TRX_18_ID = new KMMTrxID("T000000000000000018");
 
-	public static final KMMQualifSpltID TRXSPLT_1_ID = new KMMQualifSpltID("T000000000000000001", "S0001");
-	public static final KMMQualifSpltID TRXSPLT_2_ID = new KMMQualifSpltID("T000000000000000018", "S0003");
+	public static final KMMQualifSpltID TRXSPLT_1_ID = new KMMQualifSpltID(TRX_1_ID.toString(), "S0001");
+	public static final KMMQualifSpltID TRXSPLT_2_ID = new KMMQualifSpltID(TRX_18_ID.toString(), "S0003");
 
 	// -----------------------------------------------------------------
 
@@ -87,7 +87,7 @@ public class TestKMyMoneyTransactionSplitImpl {
 		splt = kmmFile.getTransactionSplitByID(TRXSPLT_2_ID);
 
 		assertEquals(TRXSPLT_2_ID, splt.getQualifID());
-		assertEquals(TRX_2_ID, splt.getTransactionID());
+		assertEquals(TRX_18_ID, splt.getTransactionID());
 		assertEquals(ACCT_8_ID, splt.getAccountID());
 		assertEquals(KMyMoneyTransactionSplit.Action.BUY_SHARES, splt.getAction());
 		assertEquals(1800.00, splt.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);

@@ -17,6 +17,7 @@ import org.kmymoney.api.read.impl.KMyMoneyTransactionImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
+import org.kmymoney.base.basetypes.simple.KMMSpltID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -361,6 +362,18 @@ public class FileTransactionManager {
 		}
 
 		return result;
+	}
+
+	// ---------------------------------------------------------------
+	
+	protected TRANSACTION getTransaction_raw(final KMMTrxID trxID) {
+		for ( TRANSACTION jwsdpTrx : getTransactions_raw() ) {
+			if ( jwsdpTrx.getId().equals(trxID.toString())) {
+				return jwsdpTrx;
+			}
+		}
+		
+		return null;
 	}
 
 	// ---------------------------------------------------------------
