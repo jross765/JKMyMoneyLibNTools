@@ -12,6 +12,7 @@ import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import xyz.schnorxoborx.base.dateutils.JulianDate;
 import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 public class TransactionMerger {
@@ -21,30 +22,32 @@ public class TransactionMerger {
     
     // ---------------------------------------------------------------
     
-	private KMyMoneyWritableFile gcshFile = null;
+	private KMyMoneyWritableFile kmmFile = null;
 	
     // ---------------------------------------------------------------
 	
-	public TransactionMerger(KMyMoneyWritableFile gcshFile) {
-		this.gcshFile = gcshFile;
+	public TransactionMerger(KMyMoneyWritableFile kmmFile) {
+		this.kmmFile = kmmFile;
 	}
     
     // ---------------------------------------------------------------
     
 	public void merge(KMMTrxID survivorID, KMMTrxID dierID) throws MergePlausiCheckException {
-		KMyMoneyTransaction survivor = gcshFile.getTransactionByID(survivorID);
-		KMyMoneyWritableTransaction dier = gcshFile.getWritableTransactionByID(dierID);
+		KMyMoneyTransaction survivor = kmmFile.getTransactionByID(survivorID);
+		KMyMoneyWritableTransaction dier = kmmFile.getWritableTransactionByID(dierID);
 		merge(survivor, dier);
 	}
 
 	public void merge(KMyMoneyTransaction survivor, KMyMoneyWritableTransaction dier) throws MergePlausiCheckException {
+		// 1) Perform plausi checks
 		if ( ! plausiCheck(survivor, dier) ) {
 			LOGGER.error("merge: survivor-dier-pair did not pass plausi check: " + survivor.getID() + "/" + dier.getID());
 			throw new MergePlausiCheckException();
 		}
 		
+		// 2) If OK, remove dier
 		KMMTrxID dierID = dier.getID();
-		gcshFile.removeTransaction(dier);
+		kmmFile.removeTransaction(dier);
 		LOGGER.info("merge: Transaction " + dierID + " (dier) removed");
 	}
 
@@ -52,15 +55,24 @@ public class TransactionMerger {
 	
 	private boolean plausiCheck(KMyMoneyTransaction survivor, KMyMoneyTransaction dier) {
 		// Level 1:
-		// ::TODO: Tolerance
-		if ( ! survivor.getDatePosted().equals(dier.getDatePosted()) ) {
+		double survDateFromJul = 0.0;
+		double dierDateToJul   = 0.0;
+		try {
+			survDateFromJul = JulianDate.toJulian(survivor.getDatePosted());
+			dierDateToJul   = JulianDate.toJulian(dier.getDatePosted());
+		} catch ( Exception exc ) {
+			// pro forma
+			exc.printStackTrace();
+		}
+		
+		if ( Math.abs( survDateFromJul - dierDateToJul ) > Const.DIFF_TOLERANCE_DAYS ) {
 			LOGGER.warn("plausiCheck: Survivor- and dier-transaction do not have the same post-date");
 			LOGGER.debug("plausiCheck: Survivor-date: " + survivor.getDatePosted());
 			LOGGER.debug("plausiCheck: Dier-date: " + dier.getDatePosted());
 			return false;
 		}
 
-		TransactionManager trxMgr = new TransactionManager(gcshFile);
+		TransactionManager trxMgr = new TransactionManager(kmmFile);
 		if ( ! trxMgr.isSane(survivor) ) {
 			LOGGER.warn("plausiCheck: Survivor-transaction is not sane");
 			return false;

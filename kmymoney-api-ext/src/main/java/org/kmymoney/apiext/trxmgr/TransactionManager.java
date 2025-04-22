@@ -20,18 +20,18 @@ public class TransactionManager {
     
     // ---------------------------------------------------------------
     
-	private KMyMoneyWritableFile gcshFile = null;
+	private KMyMoneyWritableFile kmmFile = null;
 	
     // ---------------------------------------------------------------
 	
-	public TransactionManager(KMyMoneyWritableFile gcshFile) {
-		this.gcshFile = gcshFile;
+	public TransactionManager(KMyMoneyWritableFile kmmFile) {
+		this.kmmFile = kmmFile;
 	}
     
     // ---------------------------------------------------------------
     
 	public boolean isSane(KMMTrxID trxID) {
-		KMyMoneyTransaction trx = gcshFile.getTransactionByID(trxID);
+		KMyMoneyTransaction trx = kmmFile.getTransactionByID(trxID);
 		return isSane(trx);
 	}
 
