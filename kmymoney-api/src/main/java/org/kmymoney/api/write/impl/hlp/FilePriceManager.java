@@ -2,6 +2,7 @@ package org.kmymoney.api.write.impl.hlp;
 
 import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.generated.PRICEPAIR;
+import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.impl.KMyMoneyPriceImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
@@ -58,6 +59,84 @@ public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceMa
 				jwsdpPrc, (KMyMoneyWritableFileImpl) kmmFile);
 		LOGGER.debug("createPrice: Generated new writable price: " + prc.getID());
 		return prc;
+	}
+
+	// ---------------------------------------------------------------
+
+	public void addPricePair(KMyMoneyPricePair prcPr) {
+		addPricePair(prcPr, true);
+	}
+
+	public void addPricePair(KMyMoneyPricePair prcPr, boolean withPrc) {
+		if ( prcPr == null ) {
+			throw new IllegalStateException("null price pair given");
+		}
+
+		prcPrMap.put(prcPr.getID(), prcPr);
+
+		if ( withPrc ) {
+			for ( KMyMoneyPrice prc : prcPr.getPrices() ) {
+				addPrice(prc, false);
+			}
+		}
+
+		LOGGER.debug("addPricePair: Added price pair to cache: " + prcPr.getID());
+	}
+
+	public void removePricePair(KMyMoneyPricePair prcPr) {
+		removePricePair(prcPr, true);
+	}
+
+	public void removePricePair(KMyMoneyPricePair prcPr, boolean withPrc) {
+		if ( prcPr == null ) {
+			throw new IllegalStateException("null price pair given");
+		}
+
+		if ( withPrc ) {
+			for ( KMyMoneyPrice prc : prcPr.getPrices() ) {
+				removePrice(prc, false);
+			}
+		}
+
+		prcPrMap.remove(prcPr.getID());
+
+		LOGGER.debug("removePricePair: Removed price pair from cache: " + prcPr.getID());
+	}
+
+	// ---------------------------------------------------------------
+
+	public void addPrice(KMyMoneyPrice prc) {
+		addPrice(prc, true);
+	}
+
+	public void addPrice(KMyMoneyPrice prc, boolean withPrcPr) {
+		if ( prc == null ) {
+			throw new IllegalStateException("null price given");
+		}
+
+		prcMap.put(prc.getID(), prc);
+		LOGGER.debug("addPrice: Added price to cache: " + prc.getID());
+
+		if ( withPrcPr ) {
+			addPricePair(prc.getParentPricePair(), false);
+		}
+	}
+
+	public void removePrice(KMyMoneyPrice prc) {
+		removePrice(prc, true);
+	}
+
+	public void removePrice(KMyMoneyPrice prc, boolean withPrcPr) {
+		if ( prc == null ) {
+			throw new IllegalStateException("null price given");
+		}
+
+		if ( withPrcPr ) {
+			removePricePair(prc.getParentPricePair(), false);
+		}
+
+		prcMap.remove(prc.getID());
+		LOGGER.debug("removePrice: Removed price from cache: " + prc.getID());
 	}
 
 }

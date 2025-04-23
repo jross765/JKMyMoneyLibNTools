@@ -1285,21 +1285,24 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 		KMyMoneyWritablePricePairImpl prc = new KMyMoneyWritablePricePairImpl(fromSecCurrID, toCurrID, 
 																			  this);
-		super.prcMgr.addPricePair(prc);
+		((org.kmymoney.api.write.impl.hlp.FilePriceManager) super.prcMgr)
+			.addPricePair(prc);
 		return prc;
 	}
 
 	@Override
 	public KMyMoneyWritablePricePair createWritablePricePair(KMMPricePairID prcPrID) {
 		KMyMoneyWritablePricePairImpl prc = new KMyMoneyWritablePricePairImpl(prcPrID, this);
-		super.prcMgr.addPricePair(prc);
+		((org.kmymoney.api.write.impl.hlp.FilePriceManager) super.prcMgr)
+			.addPricePair(prc);
 		return prc;
 	}
 	
 	@Override
 	public void removePricePair(KMyMoneyWritablePricePair prcPr) {
 		// 1) remove avatar in price manager
-		super.prcMgr.removePricePair(prcPr);
+		((org.kmymoney.api.write.impl.hlp.FilePriceManager) super.prcMgr)
+			.removePricePair(prcPr);
 		
 		// 2) remove price pair, if no prices left
 		for ( PRICEPAIR jwsdpPrcPr : getRootElement().getPRICES().getPRICEPAIR() ) {
@@ -1380,14 +1383,16 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			final LocalDate date) {
 		KMyMoneyWritablePriceImpl prc = new KMyMoneyWritablePriceImpl(prcPr, this);
 		prc.setDate(date);
-		super.prcMgr.addPrice(prc);
+		((org.kmymoney.api.write.impl.hlp.FilePriceManager) super.prcMgr)
+			.addPrice(prc);
 		return prc;
 	}
 
 	@Override
 	public void removePrice(KMyMoneyWritablePrice prc) {
 		// 1) remove avatar in price manager
-		super.prcMgr.removePrice(prc);
+		((org.kmymoney.api.write.impl.hlp.FilePriceManager) super.prcMgr)
+			.removePrice(prc);
 		
 		// 2) remove price
 		KMyMoneyPricePair prcPr = prc.getParentPricePair();

@@ -47,9 +47,9 @@ public class FilePriceManager {
 
 	protected KMyMoneyFileImpl kmmFile;
 
-	private PRICES                                 priceDB  = null;
-	private Map<KMMPricePairID, KMyMoneyPricePair> prcPrMap = null;
-	private Map<KMMPriceID, KMyMoneyPrice>         prcMap   = null;
+	private   PRICES                                 priceDB  = null;
+	protected Map<KMMPricePairID, KMyMoneyPricePair> prcPrMap = null;
+	protected Map<KMMPriceID, KMyMoneyPrice>         prcMap   = null;
 
 	// ---------------------------------------------------------------
 
@@ -104,84 +104,6 @@ public class FilePriceManager {
 		KMyMoneyPriceImpl prc = new KMyMoneyPriceImpl(prcPr, jwsdpPrc, kmmFile);
 		LOGGER.debug("createPrice: Generated new price: " + prc.getID());
 		return prc;
-	}
-
-	// ---------------------------------------------------------------
-
-	public void addPricePair(KMyMoneyPricePair prcPr) {
-		addPricePair(prcPr, true);
-	}
-
-	public void addPricePair(KMyMoneyPricePair prcPr, boolean withPrc) {
-		if ( prcPr == null ) {
-			throw new IllegalStateException("null price pair given");
-		}
-
-		prcPrMap.put(prcPr.getID(), prcPr);
-
-		if ( withPrc ) {
-			for ( KMyMoneyPrice prc : prcPr.getPrices() ) {
-				addPrice(prc, false);
-			}
-		}
-
-		LOGGER.debug("addPricePair: Added price pair to cache: " + prcPr.getID());
-	}
-
-	public void removePricePair(KMyMoneyPricePair prcPr) {
-		removePricePair(prcPr, true);
-	}
-
-	public void removePricePair(KMyMoneyPricePair prcPr, boolean withPrc) {
-		if ( prcPr == null ) {
-			throw new IllegalStateException("null price pair given");
-		}
-
-		if ( withPrc ) {
-			for ( KMyMoneyPrice prc : prcPr.getPrices() ) {
-				removePrice(prc, false);
-			}
-		}
-
-		prcPrMap.remove(prcPr.getID());
-
-		LOGGER.debug("removePricePair: Removed price pair from cache: " + prcPr.getID());
-	}
-
-	// ---------------------------------------------------------------
-
-	public void addPrice(KMyMoneyPrice prc) {
-		addPrice(prc, true);
-	}
-
-	public void addPrice(KMyMoneyPrice prc, boolean withPrcPr) {
-		if ( prc == null ) {
-			throw new IllegalStateException("null price given");
-		}
-
-		prcMap.put(prc.getID(), prc);
-		LOGGER.debug("addPrice: Added price to cache: " + prc.getID());
-
-		if ( withPrcPr ) {
-			addPricePair(prc.getParentPricePair(), false);
-		}
-	}
-
-	public void removePrice(KMyMoneyPrice prc) {
-		removePrice(prc, true);
-	}
-
-	public void removePrice(KMyMoneyPrice prc, boolean withPrcPr) {
-		if ( prc == null ) {
-			throw new IllegalStateException("null price given");
-		}
-
-		if ( withPrcPr ) {
-			removePricePair(prc.getParentPricePair(), false);
-		}
-
-		prcMap.remove(prc.getID());
-		LOGGER.debug("removePrice: Removed price from cache: " + prc.getID());
 	}
 
 	// ---------------------------------------------------------------
