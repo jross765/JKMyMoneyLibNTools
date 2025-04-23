@@ -27,7 +27,7 @@ public class FilePayeeManager {
 
 	protected KMyMoneyFileImpl kmmFile;
 
-	private Map<KMMPyeID, KMyMoneyPayee> pyeMap;
+	protected Map<KMMPyeID, KMyMoneyPayee> pyeMap;
 
 	// ---------------------------------------------------------------
 
@@ -58,26 +58,6 @@ public class FilePayeeManager {
 		KMyMoneyPayeeImpl pye = new KMyMoneyPayeeImpl(jwsdpPye, kmmFile);
 		LOGGER.debug("createPayee: Generated new payee: " + pye.getID());
 		return pye;
-	}
-
-	// ---------------------------------------------------------------
-
-	public void addPayee(KMyMoneyPayee pye) {
-		if ( pye == null ) {
-			throw new IllegalStateException("null payee given");
-		}
-
-		pyeMap.put(pye.getID(), pye);
-		LOGGER.debug("addPayee: Added payee to cache: " + pye.getID());
-	}
-
-	public void removePayee(KMyMoneyPayee pye) {
-		if ( pye == null ) {
-			throw new IllegalStateException("null payee given");
-		}
-
-		pyeMap.remove(pye.getID());
-		LOGGER.debug("removePayee: Added payee to cache: " + pye.getID());
 	}
 
 	// ---------------------------------------------------------------

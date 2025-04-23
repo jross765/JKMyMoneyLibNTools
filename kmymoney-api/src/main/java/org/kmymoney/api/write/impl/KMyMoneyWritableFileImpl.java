@@ -654,7 +654,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 */
 	@Override
 	public void removePayee(final KMyMoneyWritablePayee pye) {
-		super.pyeMgr.removePayee(pye);
+		((org.kmymoney.api.write.impl.hlp.FilePayeeManager) super.pyeMgr)
+			.removePayee(pye);
 		getRootElement().getPAYEES().getPAYEE().remove(((KMyMoneyWritablePayeeImpl) pye).getJwsdpPeer());
 		setModified(true);
 	}
@@ -963,7 +964,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	public KMyMoneyWritablePayee createWritablePayee(final String name) {
 		KMyMoneyWritablePayeeImpl pye = new KMyMoneyWritablePayeeImpl(this);
 		pye.setName(name);
-		super.pyeMgr.addPayee(pye);
+		((org.kmymoney.api.write.impl.hlp.FilePayeeManager) super.pyeMgr)
+			.addPayee(pye);
 		return pye;
 	}
 
