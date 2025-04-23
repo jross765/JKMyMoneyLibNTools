@@ -27,7 +27,7 @@ public class FileInstitutionManager {
 
 	protected KMyMoneyFileImpl kmmFile;
 
-	private Map<KMMInstID, KMyMoneyInstitution> instMap;
+	protected Map<KMMInstID, KMyMoneyInstitution> instMap;
 
 	// ---------------------------------------------------------------
 
@@ -58,26 +58,6 @@ public class FileInstitutionManager {
 		KMyMoneyInstitutionImpl inst = new KMyMoneyInstitutionImpl(jwsdpInst, kmmFile);
 		LOGGER.debug("createInstitution: Generated new institution: " + inst.getID());
 		return inst;
-	}
-
-	// ---------------------------------------------------------------
-
-	public void addInstitution(KMyMoneyInstitution inst) {
-		if ( inst == null ) {
-			throw new IllegalStateException("null institution given");
-		}
-
-		instMap.put(inst.getID(), inst);
-		LOGGER.debug("addInstitution: Added institution to cache: " + inst.getID());
-	}
-
-	public void removeInstitution(KMyMoneyInstitution inst) {
-		if ( inst == null ) {
-			throw new IllegalStateException("null institution given");
-		}
-
-		instMap.remove(inst.getID());
-		LOGGER.debug("removeInstitution: Added institution to cache: " + inst.getID());
 	}
 
 	// ---------------------------------------------------------------

@@ -596,13 +596,15 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	public KMyMoneyWritableInstitution createWritableInstitution(final String name) {
 		KMyMoneyWritableInstitutionImpl inst = new KMyMoneyWritableInstitutionImpl(this);
 		inst.setName(name);
-		super.instMgr.addInstitution(inst);
+		((org.kmymoney.api.write.impl.hlp.FileInstitutionManager) super.instMgr)
+			.addInstitution(inst);
 		return inst;
 	}
 
 	@Override
 	public void removeInstitution(KMyMoneyWritableInstitution inst) {
-		super.instMgr.removeInstitution(inst);
+		((org.kmymoney.api.write.impl.hlp.FileInstitutionManager) super.instMgr)
+			.removeInstitution(inst);
 		getRootElement().getINSTITUTIONS().getINSTITUTION().remove(((KMyMoneyWritableInstitutionImpl) inst).getJwsdpPeer());
 		setModified(true);
 	}

@@ -1,6 +1,7 @@
 package org.kmymoney.api.write.impl.hlp;
 
 import org.kmymoney.api.generated.INSTITUTION;
+import org.kmymoney.api.read.KMyMoneyInstitution;
 import org.kmymoney.api.read.impl.KMyMoneyInstitutionImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritableInstitutionImpl;
@@ -27,6 +28,26 @@ public class FileInstitutionManager extends org.kmymoney.api.read.impl.hlp.FileI
 		KMyMoneyWritableInstitutionImpl inst = new KMyMoneyWritableInstitutionImpl(jwsdpInst, (KMyMoneyWritableFileImpl) kmmFile);
 		LOGGER.debug("createInstitution: Generated new writable institution: " + inst.getID());
 		return inst;
+	}
+
+	// ---------------------------------------------------------------
+
+	public void addInstitution(KMyMoneyInstitution inst) {
+		if ( inst == null ) {
+			throw new IllegalStateException("null institution given");
+		}
+
+		instMap.put(inst.getID(), inst);
+		LOGGER.debug("addInstitution: Added institution to cache: " + inst.getID());
+	}
+
+	public void removeInstitution(KMyMoneyInstitution inst) {
+		if ( inst == null ) {
+			throw new IllegalStateException("null institution given");
+		}
+
+		instMap.remove(inst.getID());
+		LOGGER.debug("removeInstitution: Added institution to cache: " + inst.getID());
 	}
 
 }
