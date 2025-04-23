@@ -664,7 +664,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritableAccount createWritableAccount() {
 		KMyMoneyWritableAccountImpl acct = new KMyMoneyWritableAccountImpl(this);
-		super.acctMgr.addAccount(acct);
+		((org.kmymoney.api.write.impl.hlp.FileAccountManager) super.acctMgr)
+			.addAccount(acct);
 		return acct;
 	}
 
@@ -678,7 +679,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 		getRootElement().getACCOUNTS().getACCOUNT().remove(((KMyMoneyWritableAccountImpl) acct).getJwsdpPeer());
 		setModified(true);
-		super.acctMgr.removeAccount(acct);
+		((org.kmymoney.api.write.impl.hlp.FileAccountManager) super.acctMgr)
+			.removeAccount(acct);
 	}
 
 	/**

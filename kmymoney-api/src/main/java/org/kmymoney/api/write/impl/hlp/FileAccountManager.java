@@ -1,6 +1,7 @@
 package org.kmymoney.api.write.impl.hlp;
 
 import org.kmymoney.api.generated.ACCOUNT;
+import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritableAccountImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
@@ -39,6 +40,18 @@ public class FileAccountManager extends org.kmymoney.api.read.impl.hlp.FileAccou
 		// KMyMoneyWritableAccountImpl wrtblAcct = new KMyMoneyWritableAccountImpl((KMyMoneyAccountImpl) roAcct, true);
 		LOGGER.debug("createAccount: Generated new writable account: " + wrtblAcct.getID());
 		return wrtblAcct;
+	}
+
+	// ---------------------------------------------------------------
+
+	public void addAccount(KMyMoneyAccount acct) {
+		acctMap.put(acct.getID(), acct);
+		LOGGER.debug("addAccount: Added account to cache: " + acct.getID());
+	}
+
+	public void removeAccount(KMyMoneyAccount acct) {
+		acctMap.remove(acct.getID());
+		LOGGER.debug("removeAccount: Removed account from cache: " + acct.getID());
 	}
 
 }

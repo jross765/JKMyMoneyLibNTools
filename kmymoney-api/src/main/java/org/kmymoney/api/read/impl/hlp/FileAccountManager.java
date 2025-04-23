@@ -33,7 +33,7 @@ public class FileAccountManager {
 
 	protected KMyMoneyFileImpl kmmFile;
 
-	private Map<KMMComplAcctID, KMyMoneyAccount> acctMap;
+	protected Map<KMMComplAcctID, KMyMoneyAccount> acctMap;
 
 	// ---------------------------------------------------------------
 
@@ -68,18 +68,6 @@ public class FileAccountManager {
 		KMyMoneyAccountImpl acct = new KMyMoneyAccountImpl(jwsdpAcct, kmmFile);
 		LOGGER.debug("createAccount: Generated new account: " + acct.getID());
 		return acct;
-	}
-
-	// ---------------------------------------------------------------
-
-	public void addAccount(KMyMoneyAccount acct) {
-		acctMap.put(acct.getID(), acct);
-		LOGGER.debug("addAccount: Added account to cache: " + acct.getID());
-	}
-
-	public void removeAccount(KMyMoneyAccount acct) {
-		acctMap.remove(acct.getID());
-		LOGGER.debug("removeAccount: Removed account from cache: " + acct.getID());
 	}
 
 	// ---------------------------------------------------------------
