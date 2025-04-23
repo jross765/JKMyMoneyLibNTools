@@ -4,6 +4,7 @@ import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.KMyMoneyTransaction;
+import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
@@ -55,6 +56,48 @@ public class FileTransactionManager extends org.kmymoney.api.read.impl.hlp.FileT
     }
 
 	// ---------------------------------------------------------------
+
+	public void addTransaction(KMyMoneyTransaction trx) {
+		addTransaction(trx, true);
+	}
+
+	public void addTransaction(KMyMoneyTransaction trx, boolean withSplt) {
+		if ( trx == null ) {
+			throw new IllegalStateException("null transaction given");
+		}
+
+		trxMap.put(trx.getID(), trx);
+
+		if ( withSplt ) {
+			for ( KMyMoneyTransactionSplit splt : trx.getSplits() ) {
+				addTransactionSplit(splt, false);
+			}
+		}
+
+		LOGGER.debug("addTransaction: Added transaction to cache: " + trx.getID());
+	}
+
+	public void removeTransaction(KMyMoneyTransaction trx) {
+		removeTransaction(trx, true);
+	}
+
+	public void removeTransaction(KMyMoneyTransaction trx, boolean withSplt) {
+		if ( trx == null ) {
+			throw new IllegalStateException("null transaction given");
+		}
+
+		if ( withSplt ) {
+			for ( KMyMoneyTransactionSplit splt : trx.getSplits() ) {
+				removeTransactionSplit(splt, false);
+			}
+		}
+
+		trxMap.remove(trx.getID());
+
+		LOGGER.debug("removeTransaction: Removed transaction from cache: " + trx.getID());
+	}
+
+	// ----------------------------
 	
 	public void removeTransaction_raw(final KMMTrxID trxID) {
 		KMYMONEYFILE pRootElement = kmmFile.getRootElement();
@@ -68,6 +111,42 @@ public class FileTransactionManager extends org.kmymoney.api.read.impl.hlp.FileT
 		}
 	}
 
+	// ---------------------------------------------------------------
+
+	public void addTransactionSplit(KMyMoneyTransactionSplit splt) {
+		addTransactionSplit(splt, true);
+	}
+
+	public void addTransactionSplit(KMyMoneyTransactionSplit splt, boolean withTrx) {
+		if ( splt == null ) {
+			throw new IllegalStateException("null split given");
+		}
+
+		trxSpltMap.put(splt.getQualifID(), splt);
+
+		if ( withTrx ) {
+			addTransaction(splt.getTransaction(), false);
+		}
+	}
+
+	public void removeTransactionSplit(KMyMoneyTransactionSplit splt) {
+		removeTransactionSplit(splt, false);
+	}
+
+	public void removeTransactionSplit(KMyMoneyTransactionSplit splt, boolean withTrx) {
+		if ( splt == null ) {
+			throw new IllegalStateException("null split given");
+		}
+
+		if ( withTrx ) {
+			removeTransaction(splt.getTransaction(), false);
+		}
+
+		trxSpltMap.remove(splt.getQualifID());
+	}
+
+	// ----------------------------
+	
 	public void removeTransactionSplit_raw(final KMMTrxID trxID, final KMMSpltID spltID) {
 		TRANSACTION trxRaw = getTransaction_raw(trxID);
 		

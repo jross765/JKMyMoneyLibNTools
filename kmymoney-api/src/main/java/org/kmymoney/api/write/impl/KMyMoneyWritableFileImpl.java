@@ -463,7 +463,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 		getRootElement().getTRANSACTIONS().getTRANSACTION().add(trx.getJwsdpPeer());
 		setModified(true);
-		super.trxMgr.addTransaction(trx);
+		((org.kmymoney.api.write.impl.hlp.FileTransactionManager) super.trxMgr)
+			.addTransaction(trx);
 	}
 
 	/**
@@ -631,7 +632,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 		getRootElement().getTRANSACTIONS().getTRANSACTION().remove(((KMyMoneyWritableTransactionImpl) trx).getJwsdpPeer());
 		setModified(true);		
-		super.trxMgr.removeTransaction(trx);
+		((org.kmymoney.api.write.impl.hlp.FileTransactionManager) super.trxMgr)
+			.removeTransaction(trx);
 	}
 
 	/**
@@ -640,7 +642,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritableTransaction createWritableTransaction() {
 		KMyMoneyWritableTransactionImpl trx = new KMyMoneyWritableTransactionImpl(this);
-		super.trxMgr.addTransaction(trx);
+		((org.kmymoney.api.write.impl.hlp.FileTransactionManager) super.trxMgr)
+			.addTransaction(trx);
 		return trx;
 	}
 
@@ -893,7 +896,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	// @Override
 	public void removeTransactionSplit(final KMyMoneyWritableTransactionSplit splt) {
 		// 1) remove avatar in transaction manager
-		super.trxMgr.removeTransactionSplit(splt);
+		((org.kmymoney.api.write.impl.hlp.FileTransactionManager) super.trxMgr)
+			.removeTransactionSplit(splt);
 		
 		// 2) remove transaction split
 //		KMMTrxID trxID = splt.getTransactionID();

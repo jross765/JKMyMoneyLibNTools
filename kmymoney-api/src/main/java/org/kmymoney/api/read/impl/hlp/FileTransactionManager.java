@@ -30,8 +30,8 @@ public class FileTransactionManager {
 
 	protected KMyMoneyFileImpl kmmFile;
 
-	private Map<KMMTrxID, KMyMoneyTransaction>             trxMap;
-	private Map<KMMQualifSpltID, KMyMoneyTransactionSplit> trxSpltMap;
+	protected Map<KMMTrxID, KMyMoneyTransaction>             trxMap;
+	protected Map<KMMQualifSpltID, KMyMoneyTransactionSplit> trxSpltMap;
 
 	// ---------------------------------------------------------------
 
@@ -102,82 +102,6 @@ public class FileTransactionManager {
 																			 addSpltToAcct);
 		LOGGER.debug("createTransactionSplit: Generated new transaction split: " + splt.getQualifID());
 		return splt;
-	}
-
-	// ---------------------------------------------------------------
-
-	public void addTransaction(KMyMoneyTransaction trx) {
-		addTransaction(trx, true);
-	}
-
-	public void addTransaction(KMyMoneyTransaction trx, boolean withSplt) {
-		if ( trx == null ) {
-			throw new IllegalStateException("null transaction given");
-		}
-
-		trxMap.put(trx.getID(), trx);
-
-		if ( withSplt ) {
-			for ( KMyMoneyTransactionSplit splt : trx.getSplits() ) {
-				addTransactionSplit(splt, false);
-			}
-		}
-
-		LOGGER.debug("addTransaction: Added transaction to cache: " + trx.getID());
-	}
-
-	public void removeTransaction(KMyMoneyTransaction trx) {
-		removeTransaction(trx, true);
-	}
-
-	public void removeTransaction(KMyMoneyTransaction trx, boolean withSplt) {
-		if ( trx == null ) {
-			throw new IllegalStateException("null transaction given");
-		}
-
-		if ( withSplt ) {
-			for ( KMyMoneyTransactionSplit splt : trx.getSplits() ) {
-				removeTransactionSplit(splt, false);
-			}
-		}
-
-		trxMap.remove(trx.getID());
-
-		LOGGER.debug("removeTransaction: Removed transaction from cache: " + trx.getID());
-	}
-
-	// ---------------------------------------------------------------
-
-	public void addTransactionSplit(KMyMoneyTransactionSplit splt) {
-		addTransactionSplit(splt, true);
-	}
-
-	public void addTransactionSplit(KMyMoneyTransactionSplit splt, boolean withTrx) {
-		if ( splt == null ) {
-			throw new IllegalStateException("null split given");
-		}
-
-		trxSpltMap.put(splt.getQualifID(), splt);
-
-		if ( withTrx ) {
-			addTransaction(splt.getTransaction(), false);
-		}
-	}
-
-	public void removeTransactionSplit(KMyMoneyTransactionSplit splt) {
-		removeTransactionSplit(splt, false);
-	}
-
-	public void removeTransactionSplit(KMyMoneyTransactionSplit splt, boolean withTrx) {
-		if ( splt == null ) {
-			throw new IllegalStateException("null split given");
-		}
-
-		if ( withTrx ) {
-			removeTransaction(splt.getTransaction(), false);
-		}
-
-		trxSpltMap.remove(splt.getQualifID());
 	}
 
 	// ---------------------------------------------------------------
