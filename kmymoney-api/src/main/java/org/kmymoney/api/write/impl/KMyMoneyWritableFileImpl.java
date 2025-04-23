@@ -1017,7 +1017,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	public KMyMoneyWritableCurrency createWritableCurrency(String currID, String name) {
 		KMyMoneyWritableCurrencyImpl curr = new KMyMoneyWritableCurrencyImpl(this, Currency.getInstance(currID));
 		curr.setName(name);
-		super.currMgr.addCurrency(curr);
+		((org.kmymoney.api.write.impl.hlp.FileCurrencyManager) super.currMgr)
+			.addCurrency(curr);
 		return curr;
 	}
 

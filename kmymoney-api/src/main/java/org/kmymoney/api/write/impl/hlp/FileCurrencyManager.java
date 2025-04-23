@@ -1,6 +1,7 @@
 package org.kmymoney.api.write.impl.hlp;
 
 import org.kmymoney.api.generated.CURRENCY;
+import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.impl.KMyMoneyCurrencyImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritableCurrencyImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
@@ -27,6 +28,26 @@ public class FileCurrencyManager extends org.kmymoney.api.read.impl.hlp.FileCurr
 		KMyMoneyWritableCurrencyImpl curr = new KMyMoneyWritableCurrencyImpl(jwsdpCurr, (KMyMoneyWritableFileImpl) kmmFile);
 		LOGGER.debug("createCurrency: Generated new writable currency: " + curr.getID());
 		return curr;
+	}
+
+	// ---------------------------------------------------------------
+
+	public void addCurrency(KMyMoneyCurrency curr) {
+		if ( curr == null ) {
+			throw new IllegalStateException("null currency given");
+		}
+
+		currMap.put(curr.getID(), curr);
+		LOGGER.debug("addCurrency: Added currency to cache: " + curr.getID());
+	}
+
+	public void removeCurrency(KMyMoneyCurrency curr) {
+		if ( curr == null ) {
+			throw new IllegalStateException("null currency given");
+		}
+
+		currMap.remove(curr.getID());
+		LOGGER.debug("removeCurrency: Removed currency from cache: " + curr.getID());
 	}
 
 }

@@ -22,7 +22,7 @@ public class FileCurrencyManager {
 
 	protected KMyMoneyFileImpl kmmFile;
 
-	private Map<String, KMyMoneyCurrency> currMap;
+	protected Map<String, KMyMoneyCurrency> currMap;
 
 	// ---------------------------------------------------------------
 
@@ -53,26 +53,6 @@ public class FileCurrencyManager {
 		KMyMoneyCurrencyImpl curr = new KMyMoneyCurrencyImpl(jwsdpCurr, kmmFile);
 		LOGGER.debug("Generated new currency: " + curr.getID());
 		return curr;
-	}
-
-	// ---------------------------------------------------------------
-
-	public void addCurrency(KMyMoneyCurrency curr) {
-		if ( curr == null ) {
-			throw new IllegalStateException("null currency given");
-		}
-
-		currMap.put(curr.getID(), curr);
-		LOGGER.debug("addCurrency: Added currency to cache: " + curr.getID());
-	}
-
-	public void removeCurrency(KMyMoneyCurrency curr) {
-		if ( curr == null ) {
-			throw new IllegalStateException("null currency given");
-		}
-
-		currMap.remove(curr.getID());
-		LOGGER.debug("removeCurrency: Removed currency from cache: " + curr.getID());
 	}
 
 	// ---------------------------------------------------------------
