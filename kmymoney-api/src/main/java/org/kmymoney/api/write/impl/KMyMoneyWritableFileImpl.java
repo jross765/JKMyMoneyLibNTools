@@ -1207,13 +1207,15 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		sec.setType(type);
 		sec.setName(name);
 	    sec.setCode(code);
-		super.secMgr.addSecurity(sec);
+		((org.kmymoney.api.write.impl.hlp.FileSecurityManager) super.secMgr)
+			.addSecurity(sec);
 		return sec;
 	}
 
 	@Override
 	public void removeSecurity(KMyMoneyWritableSecurity sec) {
-		super.secMgr.removeSecurity(sec);
+		((org.kmymoney.api.write.impl.hlp.FileSecurityManager) super.secMgr)
+			.removeSecurity(sec);
 		getRootElement().getSECURITIES().getSECURITY().remove(((KMyMoneyWritableSecurityImpl) sec).getJwsdpPeer());
 		setModified(true);
 	}

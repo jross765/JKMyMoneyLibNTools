@@ -32,9 +32,9 @@ public class FileSecurityManager {
 
 	protected KMyMoneyFileImpl kmmFile;
 
-	private Map<KMMSecID, KMyMoneySecurity> secMap;
-	private Map<String, KMMSecID>           symbMap;
-	private Map<String, KMMSecID>           codeMap;
+	protected Map<KMMSecID, KMyMoneySecurity> secMap;
+	protected Map<String, KMMSecID>           symbMap;
+	protected Map<String, KMMSecID>           codeMap;
 
 	// ---------------------------------------------------------------
 
@@ -69,44 +69,6 @@ public class FileSecurityManager {
 		KMyMoneySecurityImpl sec = new KMyMoneySecurityImpl(jwsdpSec, kmmFile);
 		LOGGER.debug("createSecurity: Generated new security: " + sec.getID());
 		return sec;
-	}
-
-	// ---------------------------------------------------------------
-
-	public void addSecurity(KMyMoneySecurity sec) {
-		if ( sec == null ) {
-			throw new IllegalStateException("null security given");
-		}
-
-		secMap.put(sec.getID(), sec);
-
-		if ( sec.getSymbol() != null )
-			symbMap.put(sec.getSymbol(), sec.getQualifID().getSecID());
-
-		if ( sec.getCode() != null )
-			codeMap.put(sec.getCode(), sec.getQualifID().getSecID());
-
-		LOGGER.debug("addSecurity: Added security to cache: " + sec.getID());
-	}
-
-	public void removeSecurity(KMyMoneySecurity sec) {
-		if ( sec == null ) {
-			throw new IllegalStateException("null security given");
-		}
-
-		secMap.remove(sec.getID());
-
-		for ( String symb : symbMap.keySet() ) {
-			if ( symbMap.get(symb).equals(sec.getQualifID().getSecID()) )
-				symbMap.remove(symb);
-		}
-
-		for ( String code : codeMap.keySet() ) {
-			if ( codeMap.get(code).equals(sec.getQualifID().getSecID()) )
-				codeMap.remove(code);
-		}
-
-		LOGGER.debug("removeSecurity: Removed security from cache: " + sec.getID());
 	}
 
 	// ---------------------------------------------------------------
