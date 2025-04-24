@@ -6,54 +6,47 @@ import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
-import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.apiext.Const;
-import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.dateutils.JulianDate;
 import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
-public class TransactionMerger {
+public abstract class TransactionMergerBase {
+	
+	public enum Var {
+		VAR_1,
+		VAR_2
+	}
 	
     // Logger
-    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionMerger.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionMergerBase.class);
     
     // ---------------------------------------------------------------
     
-	private KMyMoneyWritableFile kmmFile = null;
+	protected KMyMoneyWritableFile kmmFile = null;
+	private   Var                 var      = null;
 	
     // ---------------------------------------------------------------
 	
-	public TransactionMerger(KMyMoneyWritableFile kmmFile) {
+	public TransactionMergerBase(KMyMoneyWritableFile kmmFile) {
 		this.kmmFile = kmmFile;
 	}
     
     // ---------------------------------------------------------------
-    
-	public void merge(KMMTrxID survivorID, KMMTrxID dierID) throws MergePlausiCheckException {
-		KMyMoneyTransaction survivor = kmmFile.getTransactionByID(survivorID);
-		KMyMoneyWritableTransaction dier = kmmFile.getWritableTransactionByID(dierID);
-		merge(survivor, dier);
+	
+	public Var getVar() {
+		return var;
 	}
-
-	public void merge(KMyMoneyTransaction survivor, KMyMoneyWritableTransaction dier) throws MergePlausiCheckException {
-		// 1) Perform plausi checks
-		if ( ! plausiCheck(survivor, dier) ) {
-			LOGGER.error("merge: survivor-dier-pair did not pass plausi check: " + survivor.getID() + "/" + dier.getID());
-			throw new MergePlausiCheckException();
-		}
-		
-		// 2) If OK, remove dier
-		KMMTrxID dierID = dier.getID();
-		kmmFile.removeTransaction(dier);
-		LOGGER.info("merge: Transaction " + dierID + " (dier) removed");
+	
+	public void setVar(Var var) {
+		this.var = var;
 	}
-
+	
     // ---------------------------------------------------------------
 	
-	private boolean plausiCheck(KMyMoneyTransaction survivor, KMyMoneyTransaction dier) {
+	public boolean plausiCheck(KMyMoneyTransaction survivor, KMyMoneyTransaction dier) {
 		// Level 1:
 		double survDateFromJul = 0.0;
 		double dierDateToJul   = 0.0;
