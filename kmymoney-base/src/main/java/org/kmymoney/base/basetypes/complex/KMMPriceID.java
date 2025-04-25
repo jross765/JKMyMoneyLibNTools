@@ -212,6 +212,12 @@ public class KMMPriceID {
 	}
         
     // ---------------------------------------------------------------
+	
+	public KMMPricePairID getPricePairID() {
+		return new KMMPricePairID(getFromSecCurr(), getToCurr());
+	}
+
+    // ---------------------------------------------------------------
 
     @Override
     public int hashCode() {
