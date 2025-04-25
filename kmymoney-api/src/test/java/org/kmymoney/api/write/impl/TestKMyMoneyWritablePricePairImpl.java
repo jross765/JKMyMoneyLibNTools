@@ -16,12 +16,14 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
 import org.kmymoney.api.read.KMyMoneyCurrency;
+import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyPricePairImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.api.write.KMyMoneyWritablePricePair;
+import org.kmymoney.base.basetypes.complex.KMMPriceID;
 import org.kmymoney.base.basetypes.complex.KMMPricePairID;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
@@ -34,6 +36,10 @@ public class TestKMyMoneyWritablePricePairImpl {
 	private static final KMMPricePairID PRCPR_2_ID = TestKMyMoneyPricePairImpl.PRCPR_2_ID;
 	private static final KMMPricePairID PRCPR_3_ID = TestKMyMoneyPricePairImpl.PRCPR_3_ID;
 	private static final KMMPricePairID PRCPR_4_ID = TestKMyMoneyPricePairImpl.PRCPR_4_ID;
+	
+	private static final KMMPriceID PRC_1_ID = TestKMyMoneyPricePairImpl.PRC_1_ID;
+	private static final KMMPriceID PRC_2_ID = TestKMyMoneyPricePairImpl.PRC_2_ID;
+	private static final KMMPriceID PRC_12_ID = TestKMyMoneyPricePairImpl.PRC_12_ID;
 
 	// -----------------------------------------------------------------
 
@@ -399,5 +405,114 @@ public class TestKMyMoneyWritablePricePairImpl {
 	// ------------------------------
 
 	// ::TODO
+
+	// -----------------------------------------------------------------
+	// PART 4: Delete objects
+	// -----------------------------------------------------------------
+
+	// ------------------------------
+	// PART 4.1: High-Level
+	// ------------------------------
+
+	@Test
+	public void test04_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritablePricePair prc = kmmInFile.getWritablePricePairByID(PRCPR_1_ID);
+		assertNotEquals(null, prc);
+		assertEquals(PRCPR_1_ID, prc.getID());
+
+		// ----------------------------
+		// Delete the object
+
+		kmmInFile.removePricePair(prc);
+
+		// ----------------------------
+		// Check whether the object can has actually be modified
+		// (in memory, not in the file yet).
+
+		test04_1_check_memory(prc);
+
+		// ----------------------------
+		// Now, check whether the modified object can be written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritablePriceImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test04_1_check_persisted(outFile);
+	}
+	
+	// ---------------------------------------------------------------
+
+	private void test04_1_check_memory(KMyMoneyWritablePricePair prcPr) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
+		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
+
+		// CAUTION / ::TODO
+		// Old Object still exists and is unchanged
+		// Don't know what to do about this oddity right now,
+		// but it needs to be addressed at some point.
+		assertEquals(secID1.toString(), prcPr.getFromSecCurrQualifID().toString());
+		assertEquals("CURRENCY:EUR", prcPr.getToCurrencyQualifID().toString());
+		assertEquals("EUR", prcPr.getToCurrencyCode());
+		// etc.
+		// CAUTION / ::TODO: Here, as opposed to transactions with splits,
+		// there are still all prices in the price pair object.
+		assertEquals(3, prcPr.getPrices().size());
+		assertEquals(PRC_12_ID, prcPr.getPrices().get(0).getID());
+		assertEquals(PRC_1_ID, prcPr.getPrices().get(1).getID());
+		assertEquals(PRC_2_ID, prcPr.getPrices().get(2).getID());
+		
+		// However, the price pair cannot newly be instantiated any more,
+		// just as you would expect.
+		// CAUTION / ::TODO: As opposed to the other entities / sister test cases,
+		// no exception is thrown here, but the method simply returns null.
+		KMyMoneyWritablePricePair prcPrNow1 = kmmInFile.getWritablePricePairByID(PRCPR_1_ID);
+		assertEquals(null, prcPrNow1);
+		// Same for a non non-writable instance. 
+		// However, due to design asymmetry, no exception is thrown here,
+		// but the method just returns null.
+		KMyMoneyPricePair prcPrNow2 = kmmInFile.getPricePairByID(PRCPR_1_ID);
+		assertEquals(null, prcPrNow2);
+		
+		// Same with prices under the price pair.
+		KMyMoneyPrice prcNow1 = kmmInFile.getPriceByID(PRC_1_ID);
+		assertEquals(null, prcNow1);
+	}
+
+	private void test04_1_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
+
+		// The price pair does not exist any more, just as you would expect.
+		// However, no exception is thrown, as opposed to test04_1_check_memory()
+		KMyMoneyPricePair prcPr = kmmOutFile.getPricePairByID(PRCPR_1_ID);
+		assertEquals(null, prcPr); // sic
+		
+		// Same with prices under the price pair.
+		KMyMoneyPrice prcNow1 = kmmInFile.getPriceByID(PRC_1_ID);
+		assertEquals(null, prcNow1);
+	}
+
+	// ------------------------------
+	// PART 4.2: Low-Level
+	// ------------------------------
+	
+	// ::EMPTY
 
 }

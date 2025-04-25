@@ -10,11 +10,12 @@ import org.kmymoney.api.write.KMyMoneyWritablePricePair;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritablePriceImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritablePricePairImpl;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.complex.KMMPriceID;
+import org.kmymoney.base.basetypes.complex.KMMPricePairID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
 
 public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceManager {
 
@@ -131,12 +132,54 @@ public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceMa
 			throw new IllegalStateException("null price given");
 		}
 
+		// remove price pair as well, if the removed price object 
+		// was the last one.
 		if ( withPrcPr ) {
-			removePricePair(prc.getParentPricePair(), false);
+			if ( prc.getParentPricePair().getPrices().size() == 0 ) {
+				removePricePair(prc.getParentPricePair(), false);
+			}
 		}
 
 		prcMap.remove(prc.getID());
 		LOGGER.debug("removePrice: Removed price from cache: " + prc.getID());
+	}
+
+	// ----------------------------
+	
+	public void removePricePair_raw(final KMMPricePairID prcPairID) {
+		for ( int i = 0; i < priceDB.getPRICEPAIR().size(); i++ ) {
+			PRICEPAIR jwsdpPrcPr = priceDB.getPRICEPAIR().get(i); 
+			if ( jwsdpPrcPr.getFrom().equals(prcPairID.getFromSecCurr().getCode()) &&
+				 jwsdpPrcPr.getTo().equals(prcPairID.getToCurr().getCode()) ) {
+				priceDB.getPRICEPAIR().remove(i);
+				i--;
+			}
+		}
+	}
+
+	public void removePrice_raw(final KMMPriceID prcID) {
+		removePrice_raw(prcID, true);
+	}
+	
+	public void removePrice_raw(final KMMPriceID prcID, boolean withPrcPr) {
+		KMMPricePairID prcPrID = prcID.getPricePairID();
+		PRICEPAIR jwsdpPrcPr = getPricePair_raw(prcPrID);
+		for ( int i = 0; i < jwsdpPrcPr.getPRICE().size(); i++ ) {
+			PRICE jwsdpPrc = jwsdpPrcPr.getPRICE().get(i); 
+			if ( jwsdpPrc.getDate().toString().equals(prcID.getDateStr()) ) {
+				jwsdpPrcPr.getPRICE().remove(i);
+				i--;
+			}
+		}
+		
+		// remove price pair as well, if the removed price object 
+		// was the last one.
+		if ( withPrcPr ) {
+			PRICEPAIR jwsdpPrcPrNow = getPricePair_raw(prcPrID); // get it again, the other one is not up-to-date
+			if ( jwsdpPrcPrNow.getPRICE().size() == 0 ) {
+				removePricePair_raw(prcPrID);
+			}
+		}
 	}
 
 }

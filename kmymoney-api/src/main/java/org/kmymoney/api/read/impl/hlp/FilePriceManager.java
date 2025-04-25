@@ -47,7 +47,7 @@ public class FilePriceManager {
 
 	protected KMyMoneyFileImpl kmmFile;
 
-	private   PRICES                                 priceDB  = null;
+	protected PRICES                                 priceDB  = null;
 	protected Map<KMMPricePairID, KMyMoneyPricePair> prcPrMap = null;
 	protected Map<KMMPriceID, KMyMoneyPrice>         prcMap   = null;
 
@@ -589,6 +589,54 @@ public class FilePriceManager {
 		}
 
 		return factor.multiply(latestQuote);
+	}
+
+	// ----------------------------
+	
+	private List<PRICEPAIR> getPricePairs_raw() {
+		List<PRICEPAIR> result = new ArrayList<PRICEPAIR>();
+
+		for ( PRICEPAIR jwsdpPrcPr : priceDB.getPRICEPAIR() ) {
+			result.add(jwsdpPrcPr);
+		}
+
+		return result;
+	}
+
+	protected PRICEPAIR getPricePair_raw(final KMMPricePairID prcPairID) {
+		for ( PRICEPAIR jwsdpPrcPr : getPricePairs_raw() ) {
+			if ( jwsdpPrcPr.getFrom().equals(prcPairID.getFromSecCurr().getCode()) &&
+				 jwsdpPrcPr.getTo().equals(prcPairID.getToCurr().getCode()) ) {
+				return jwsdpPrcPr;
+			}
+		}
+		
+		return null;
+	}
+
+	// ----------------------------
+	
+	private List<PRICE> getPrices_raw(final KMMPricePairID prcPairID) {
+		List<PRICE> result = new ArrayList<PRICE>();
+
+		PRICEPAIR prcPr = getPricePair_raw(prcPairID);
+		for ( PRICE jwsdpPrc : prcPr.getPRICE() ) {
+			result.add(jwsdpPrc);
+		}
+
+		return result;
+	}
+
+	protected PRICE getPrice_raw(final KMMPriceID prcID) {
+		KMMPricePairID prcPrID = prcID.getPricePairID();
+		PRICEPAIR jwsdpPrcPr = getPricePair_raw(prcPrID);
+		for ( PRICE jwsdpPrc : jwsdpPrcPr.getPRICE() ) {
+			if ( jwsdpPrc.getDate().toString().equals(prcID.getDateStr()) ) {
+				return jwsdpPrc;
+			}
+		}
+		
+		return null;
 	}
 
 	// ---------------------------------------------------------------

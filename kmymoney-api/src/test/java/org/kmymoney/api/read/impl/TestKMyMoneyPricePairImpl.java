@@ -12,15 +12,16 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.base.basetypes.complex.KMMPricePairID;
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
-import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
+import org.kmymoney.base.basetypes.complex.KMMPriceID;
+import org.kmymoney.base.basetypes.complex.KMMPricePairID;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 
 import junit.framework.JUnit4TestAdapter;
 
@@ -29,6 +30,17 @@ public class TestKMyMoneyPricePairImpl {
 	public static final KMMPricePairID PRCPR_2_ID = new KMMPricePairID("E000002", "EUR"); // MBG/EUR
 	public static final KMMPricePairID PRCPR_3_ID = new KMMPricePairID("USD", "EUR");
 	public static final KMMPricePairID PRCPR_4_ID = new KMMPricePairID("E000003", "EUR"); // BASF/EUR
+
+	public static final KMMPriceID PRC_1_ID = TestKMyMoneyPriceImpl.PRC_1_ID;
+	public static final KMMPriceID PRC_2_ID = TestKMyMoneyPriceImpl.PRC_2_ID;
+	public static final KMMPriceID PRC_3_ID = TestKMyMoneyPriceImpl.PRC_3_ID;
+	public static final KMMPriceID PRC_4_ID = TestKMyMoneyPriceImpl.PRC_4_ID;
+	public static final KMMPriceID PRC_5_ID = TestKMyMoneyPriceImpl.PRC_5_ID;
+	public static final KMMPriceID PRC_6_ID = TestKMyMoneyPriceImpl.PRC_6_ID;
+	public static final KMMPriceID PRC_12_ID = TestKMyMoneyPriceImpl.PRC_12_ID;
+	public static final KMMPriceID PRC_17_ID = TestKMyMoneyPriceImpl.PRC_17_ID;
+	public static final KMMPriceID PRC_18_ID = TestKMyMoneyPriceImpl.PRC_18_ID;
+	public static final KMMPriceID PRC_19_ID = TestKMyMoneyPriceImpl.PRC_19_ID;
 
 	// -----------------------------------------------------------------
 
@@ -132,6 +144,11 @@ public class TestKMyMoneyPricePairImpl {
 		} catch (Exception exc) {
 			assertEquals(0, 0);
 		}
+		
+		assertEquals(3, prcPr.getPrices().size());
+		assertEquals(PRC_12_ID, prcPr.getPrices().get(0).getID());
+		assertEquals(PRC_1_ID, prcPr.getPrices().get(1).getID());
+		assertEquals(PRC_2_ID, prcPr.getPrices().get(2).getID());
 	}
 
 	@Test
@@ -171,6 +188,11 @@ public class TestKMyMoneyPricePairImpl {
 		} catch (Exception exc) {
 			assertEquals(0, 0);
 		}
+		
+		assertEquals(3, prcPr.getPrices().size());
+		assertEquals(PRC_3_ID, prcPr.getPrices().get(0).getID());
+		assertEquals(PRC_4_ID, prcPr.getPrices().get(1).getID());
+		assertEquals(PRC_5_ID, prcPr.getPrices().get(2).getID());
 	}
 
 	@Test
@@ -200,6 +222,12 @@ public class TestKMyMoneyPricePairImpl {
 		} catch (Exception exc) {
 			assertEquals(0, 0);
 		}
+		
+		assertEquals(4, prcPr.getPrices().size());
+		assertEquals(PRC_19_ID, prcPr.getPrices().get(0).getID());
+		assertEquals(PRC_17_ID, prcPr.getPrices().get(1).getID());
+		assertEquals(PRC_6_ID, prcPr.getPrices().get(2).getID());
+		assertEquals(PRC_18_ID, prcPr.getPrices().get(3).getID());
 	}
 
 }

@@ -632,4 +632,103 @@ public class TestKMyMoneyWritablePriceImpl {
 
 	// ::TODO
 
+	// -----------------------------------------------------------------
+	// PART 4: Delete objects
+	// -----------------------------------------------------------------
+
+	// ------------------------------
+	// PART 4.1: High-Level
+	// ------------------------------
+
+	@Test
+	public void test04_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,         kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByID(PRC_1_ID);
+		assertNotEquals(null, prc);
+		assertEquals(PRC_1_ID, prc.getID());
+
+		// ----------------------------
+		// Delete the object
+
+		kmmInFile.removePrice(prc);
+
+		// ----------------------------
+		// Check whether the object can has actually be modified
+		// (in memory, not in the file yet).
+
+		test04_1_check_memory(prc);
+
+		// ----------------------------
+		// Now, check whether the modified object can be written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritablePriceImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test04_1_check_persisted(outFile);
+	}
+	
+	// ---------------------------------------------------------------
+
+	private void test04_1_check_memory(KMyMoneyWritablePrice prc) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_PRC - 1, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,             kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
+		assertEquals(ConstTest.Stats.NOF_PRC - 1, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+
+		// CAUTION / ::TODO
+		// Old Object still exists and is unchanged
+		// Exception: no splits any more
+		// Don't know what to do about this oddity right now,
+		// but it needs to be addressed at some point.
+		assertEquals(secID1.toString(), prc.getFromSecurityQualifID().toString());
+		assertEquals("CURRENCY:EUR", prc.getToCurrencyQualifID().toString());
+		assertEquals(LocalDate.of(2023, 11, 3), prc.getDate());
+		assertEquals(120.0, prc.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
+		// etc.
+		
+		// However, the price cannot newly be instantiated any more,
+		// just as you would expect.
+		try {
+			KMyMoneyWritablePrice prcNow1 = kmmInFile.getWritablePriceByID(PRC_1_ID);
+			assertEquals(1, 0);
+		} catch ( Exception exc ) {
+			assertEquals(0, 0);
+		}
+		// Same for a non non-writable instance. 
+		// However, due to design asymmetry, no exception is thrown here,
+		// but the method just returns null.
+		KMyMoneyPrice prcNow2 = kmmInFile.getPriceByID(PRC_1_ID);
+		assertEquals(null, prcNow2);
+	}
+
+	private void test04_1_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		assertEquals(ConstTest.Stats.NOF_PRC - 1, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,             kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRC - 1, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+
+		// The price does not exist any more, just as you would expect.
+		// However, no exception is thrown, as opposed to test04_1_check_memory()
+		KMyMoneyPrice prc = kmmOutFile.getPriceByID(PRC_1_ID);
+		assertEquals(null, prc); // sic
+	}
+
+	// ------------------------------
+	// PART 4.2: Low-Level
+	// ------------------------------
+	
+	// ::EMPTY
+
 }

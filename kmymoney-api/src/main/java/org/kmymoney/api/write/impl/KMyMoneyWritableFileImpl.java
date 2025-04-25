@@ -70,6 +70,7 @@ import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import org.kmymoney.api.write.hlp.IDManager;
 import org.kmymoney.api.write.impl.hlp.WritingContentHandler;
+import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.complex.KMMPriceID;
 import org.kmymoney.base.basetypes.complex.KMMPricePairID;
@@ -1303,20 +1304,12 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		// 1) remove avatar in price manager
 		((org.kmymoney.api.write.impl.hlp.FilePriceManager) super.prcMgr)
 			.removePricePair(prcPr);
-		
-		// 2) remove price pair, if no prices left
-		for ( PRICEPAIR jwsdpPrcPr : getRootElement().getPRICES().getPRICEPAIR() ) {
-			if ( jwsdpPrcPr.getFrom().equals(prcPr.getFromCurrencyCode()) &&
-				 jwsdpPrcPr.getTo().equals(prcPr.getToCurrencyCode()) ) {
-				if ( jwsdpPrcPr.getPRICE().size() == 0 ) {
-					// CAUTION concurrency ::CHECK
-					getRootElement().getPRICES().getPRICEPAIR().remove(jwsdpPrcPr);
-					break;
-				}
-			}
-		}
-		
-		// 4) set 'modified' flag
+
+		// 2) remove price pair
+		((org.kmymoney.api.write.impl.hlp.FilePriceManager) super.prcMgr)
+			.removePricePair_raw(prcPr.getID());
+	
+		// 3) set 'modified' flag
 		setModified(true);
 	}
 
@@ -1395,30 +1388,10 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			.removePrice(prc);
 		
 		// 2) remove price
-		KMyMoneyPricePair prcPr = prc.getParentPricePair();
+		((org.kmymoney.api.write.impl.hlp.FilePriceManager) super.prcMgr)
+			.removePrice_raw(prc.getID());
 		
-		for ( PRICEPAIR jwsdpPrcPr : getRootElement().getPRICES().getPRICEPAIR() ) {
-			if ( jwsdpPrcPr.getFrom().equals(prcPr.getFromCurrencyCode()) &&
-				 jwsdpPrcPr.getTo().equals(prcPr.getToCurrencyCode()) ) {
-				// CAUTION concurrency ::CHECK
-				jwsdpPrcPr.getPRICE().remove(((KMyMoneyWritablePriceImpl) prc).getJwsdpPeer());
-				break;
-			}
-		}
-		
-		// 3) remove price pair, if no prices left
-		for ( PRICEPAIR jwsdpPrcPr : getRootElement().getPRICES().getPRICEPAIR() ) {
-			if ( jwsdpPrcPr.getFrom().equals(prcPr.getFromCurrencyCode()) &&
-				 jwsdpPrcPr.getTo().equals(prcPr.getToCurrencyCode()) ) {
-				if ( jwsdpPrcPr.getPRICE().size() == 0 ) {
-					// CAUTION concurrency ::CHECK
-					getRootElement().getPRICES().getPRICEPAIR().remove(jwsdpPrcPr);
-					break;
-				}
-			}
-		}
-		
-		// 4) set 'modified' flag
+		// 3) set 'modified' flag
 		setModified(true);
 	}
 
