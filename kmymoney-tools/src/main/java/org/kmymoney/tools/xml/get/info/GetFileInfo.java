@@ -54,13 +54,13 @@ public class GetFileInfo extends CommandLineTool
 
     // Options
     // The essential ones
-    Option optFile = Option.builder()
+    Option optFile = Option.builder("f")
       .required()
       .hasArg()
       .argName("file")
-      .withDescription("KMyMoney file")
+      .desc("KMyMoney file")
       .longOpt("kmymoney-file")
-      .create("f");
+      .build();
 
     // The convenient ones
     // ::EMPTY
