@@ -49,4 +49,21 @@ public class TestKMMQualifSecID {
 		}
 	}
 
+	@Test
+	public void test03() throws Exception {
+		KMMQualifSecID secID = KMMQualifSecID.parse("SECURITY:E000001");
+
+		assertEquals(KMMQualifSecCurrID.Type.SECURITY, secID.getType());
+		assertEquals(new KMMSecID("E000001"), secID.getSecID());
+		assertEquals("E000001", secID.getCode());
+		assertEquals("SECURITY:E000001", secID.toString());
+
+		try {
+			secID = new KMMQualifSecID("C000001"); // invalid string
+			assertEquals(1, 0);
+		} catch (Exception exc) {
+			assertEquals(0, 0);
+		}
+	}
+
 }

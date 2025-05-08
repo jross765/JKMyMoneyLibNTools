@@ -1,5 +1,6 @@
 package org.kmymoney.base.basetypes.complex;
 
+import org.kmymoney.base.basetypes.simple.KMMIDNotSetException;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,12 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
 		init();
 		
 		setType(Type.SECURITY);
-		setSecID(secIDStr);
+		try {
+			setSecID(secIDStr);
+		} catch (KMMIDNotSetException e) {
+			LOGGER.error("Security ID cannot be set from '" + secIDStr + "'");
+			throw new IllegalArgumentException("Security ID cannot be set from '" + secIDStr + "'");
+		}
 	}
 
 	public KMMQualifSecID(KMMQualifSecCurrID secCurrID)
@@ -50,7 +56,12 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
 		init();
 		
 		setType(Type.SECURITY);
-		setSecID(code);
+		try {
+			setSecID(code);
+		} catch (KMMIDNotSetException e) {
+			LOGGER.debug("KMMQualifSecID: Could not set Security-ID from '" + code + "'");
+			throw new IllegalArgumentException("KMMQualifSecID: Could not set Security-ID from '" + code + "'");
+		}
 	}
 
 	// ---------------------------------------------------------------
@@ -88,11 +99,12 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
 		this.secID = secID;
 	}
 
-	public void setSecID(String secIDStr) {
+	public void setSecID(String secIDStr) throws KMMIDNotSetException {
 		if ( secIDStr == null )
 			throw new IllegalArgumentException("Argument string is null");
 
 		setSecID(new KMMSecID(secIDStr));
+		setCode(secID.get());
 	}
 
     // ---------------------------------------------------------------
@@ -124,7 +136,12 @@ public class KMMQualifSecID extends KMMQualifSecCurrID {
 
 		if ( typeStr.equals(Type.SECURITY.toString()) ) {
 			result.setType(Type.SECURITY);
-			result.setCode(secCodeStr);
+			try {
+				result.setSecID(secCodeStr);
+			} catch (KMMIDNotSetException e) {
+				LOGGER.error("parse: Cannot set KMMSecID with code '" + secCodeStr + "'");
+				throw new InvalidQualifSecCurrIDException();
+			}
 		} else {
 			LOGGER.error("parse: Unknown security/currency type '" + typeStr + "'");
 			throw new InvalidQualifSecCurrTypeException();
