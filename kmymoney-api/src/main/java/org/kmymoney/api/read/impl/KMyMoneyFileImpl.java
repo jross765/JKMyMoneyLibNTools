@@ -77,15 +77,18 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
  */
 public class KMyMoneyFileImpl implements KMyMoneyFile
 {
-	public enum CompressMode {
-		COMPRESS,
-		DO_NOT_COMPRESS,
-		GUESS_FROM_FILENAME
-	}
-	
-	// ---------------------------------------------------------------
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyFileImpl.class);
+	protected static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyFileImpl.class);
+
+    // ---------------------------------------------------------------
+    // ::MAGIC
+	
+	// Cf. https://en.wikipedia.org/wiki/List_of_file_signatures
+	private static final int GZIP_HEADER_BYTE_1 = 31;
+    private static final int GZIP_HEADER_BYTE_2 = -117;
+    
+    protected static final String FILE_EXT_ZIPPED_1 = ".gz";
+    protected static final String FILE_EXT_ZIPPED_2 = ".kmy";
 
     // ---------------------------------------------------------------
 
@@ -187,8 +190,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 	setFile(pFile);
 
 	InputStream in = new FileInputStream(pFile);
-	if ( pFile.getName().endsWith(".gz") ||
-	     pFile.getName().endsWith(".kmy") ) {
+	if ( pFile.getName().endsWith(FILE_EXT_ZIPPED_1) ||
+	     pFile.getName().endsWith(FILE_EXT_ZIPPED_2) ) {
 	    in = new BufferedInputStream(in);
 	    in = new GZIPInputStream(in);
 	} else {
@@ -199,8 +202,9 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
 	    in = new FileInputStream(pFile);
 	    in = new BufferedInputStream(in);
-	    if (magic[0] == 31 && magic[1] == -117) {
-		in = new GZIPInputStream(in);
+	    if ( magic[0] == GZIP_HEADER_BYTE_1 && 
+	    	 magic[1] == GZIP_HEADER_BYTE_2 ) {
+	    	in = new GZIPInputStream(in);
 	    }
 	}
 

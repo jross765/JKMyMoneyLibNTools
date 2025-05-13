@@ -11,7 +11,6 @@ import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
-import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
@@ -41,6 +40,7 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
  */
 public interface KMyMoneyWritableFile extends KMyMoneyFile, 
                                               KMyMoneyWritableObject
+                                              // HasWritableUserDefinedAttributes
 {
 	public enum CompressMode {
 		COMPRESS,

@@ -26,7 +26,6 @@ public class WritingContentHandler implements ContentHandler {
     private static final int LAST_WAS_CHARACTER_DATA = 3;
 
     private static final int MAX_DEPTH_1 = 4;
-    private static final int MAX_DEPTH_2 = 6;
 
     // ---------------------------------------------------------------
 
@@ -92,11 +91,6 @@ public class WritingContentHandler implements ContentHandler {
 			
 			charactersCore(ch, start, length);
 
-			// String s = sb.toString();
-			// if(s.indexOf("bis 410") != -1) {
-			// System.err.println(s+"---"+Integer.toHexString(s.charAt(s.length()-1)));
-			// }
-
 			last_was = LAST_WAS_CHARACTER_DATA;
 		} catch (IOException e) {
 			LOGGER.error("characters: Problem", e);
@@ -110,19 +104,18 @@ public class WritingContentHandler implements ContentHandler {
 	
 	public void charactersCore(char[] ch, int start, int length) throws SAXException {
 		try {
-				StringBuffer sb = new StringBuffer();
-				sb.append(ch, start, length);
+			StringBuffer sb = new StringBuffer();
+			sb.append(ch, start, length);
 
-				for ( int j = 0; j < encodeme.length; j++ ) {
-					int index = 0;
-					while ( (index = sb.indexOf(encodeme[j], index)) != -1 ) {
-						sb.replace(index, index + encodeme[j].length(), encoded[j]);
-						index += encoded[j].length() - encodeme[j].length() + 1;
-					}
+			for ( int j = 0; j < encodeme.length; j++ ) {
+				int index = 0;
+				while ( (index = sb.indexOf(encodeme[j], index)) != -1 ) {
+					sb.replace(index, index + encodeme[j].length(), encoded[j]);
+					index += encoded[j].length() - encodeme[j].length() + 1;
 				}
+			}
 
-				wrt.write(sb.toString());
-
+			wrt.write(sb.toString());
 		} catch (IOException e) {
 			LOGGER.error("charactersCore: Problem", e);
 		}
@@ -206,8 +199,8 @@ public class WritingContentHandler implements ContentHandler {
 	}
 
 	public void startElement(
-			final String namespaceURI, 
-			final String localName, 
+			final String namespaceURI,
+			final String localName,
 			final String qName,
 			final Attributes atts) throws SAXException {
 		try {
@@ -268,7 +261,7 @@ public class WritingContentHandler implements ContentHandler {
 			return;
 		}
 
-		wrt.write(getSpaces(), 0, depth - 4);
+		wrt.write(getSpaces(), 0, depth - MAX_DEPTH_1);
 	}
 
 	protected char[] getSpaces() {

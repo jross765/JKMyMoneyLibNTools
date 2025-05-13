@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
+import java.util.zip.GZIPInputStream;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,6 +22,7 @@ import org.kmymoney.api.read.impl.TestKMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneySecurityImpl;
 import org.kmymoney.api.read.impl.TestKMyMoneyTransactionImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
+import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
@@ -199,6 +202,7 @@ public class TestKMyMoneyWritableFileImpl {
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
 		assertEquals(true, outFile.exists());
+		assertEquals(false, isGZipped(outFile));
 
 		test04_1_check_1_xmllint(outFile);
 		test04_1_check_2();
@@ -235,6 +239,27 @@ public class TestKMyMoneyWritableFileImpl {
 		assertEquals(kmmInFile.getCurrencies().toString(), kmmOutFile.getCurrencies().toString());
 		assertEquals(kmmInFile.getPricePairs().toString(), kmmOutFile.getPricePairs().toString());
 		assertEquals(kmmInFile.getPrices().toString(), kmmOutFile.getPrices().toString());
+	}
+
+	// Same as test04_1, but with compressed file
+	@Test
+	public void test04_2() throws Exception {
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile, KMyMoneyWritableFile.CompressMode.COMPRESS);
+
+		kmmOutFile = new KMyMoneyWritableFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		assertEquals(true, outFile.exists());
+		assertEquals(true, isGZipped(outFile));
+
+		test04_1_check_1_xmllint(outFile);
+		test04_1_check_2();
+		test04_1_check_3();
 	}
 
 	// -----------------------------------------------------------------
@@ -296,4 +321,18 @@ public class TestKMyMoneyWritableFileImpl {
 		assertEquals(cmdty11.getQuotes().size(), cmdty12.getQuotes().size());
 	}
 
+	// ---------------------------------------------------------------
+	
+	// https://stackoverflow.com/questions/30507653/how-to-check-whether-file-is-gzip-or-not-in-java
+	public boolean isGZipped(File f) {
+		int magic = 0;
+		try {
+			RandomAccessFile raf = new RandomAccessFile(f, "r");
+			magic = raf.read() & 0xff | ((raf.read() << 8) & 0xff00);
+			raf.close();
+		} catch (Throwable e) {
+			e.printStackTrace(System.err);
+		}
+		return magic == GZIPInputStream.GZIP_MAGIC;
+	}
 }

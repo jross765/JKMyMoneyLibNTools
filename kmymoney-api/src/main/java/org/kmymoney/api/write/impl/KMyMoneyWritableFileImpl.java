@@ -70,7 +70,6 @@ import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import org.kmymoney.api.write.hlp.IDManager;
 import org.kmymoney.api.write.impl.hlp.WritingContentHandler;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.complex.KMMPriceID;
 import org.kmymoney.base.basetypes.complex.KMMPricePairID;
@@ -79,7 +78,6 @@ import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
-import org.kmymoney.base.basetypes.simple.KMMIDNotSetException;
 import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
@@ -197,11 +195,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 */
 	@Override
 	public void writeFile(final File file) throws IOException {
-		writeFile(file, org.kmymoney.api.write.KMyMoneyWritableFile.CompressMode.GUESS_FROM_FILENAME);
+		writeFile(file, CompressMode.GUESS_FROM_FILENAME);
 	}
 
 	@Override
-	public void writeFile(File file, org.kmymoney.api.write.KMyMoneyWritableFile.CompressMode compMode) throws IOException {
+	public void writeFile(File file, CompressMode compMode) throws IOException {
 		if ( file == null ) {
 			throw new IllegalArgumentException("null not allowed for field this file");
 		}
@@ -217,11 +215,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 		OutputStream out = new FileOutputStream(file);
 		out = new BufferedOutputStream(out);
-		if ( compMode == org.kmymoney.api.write.KMyMoneyWritableFile.CompressMode.COMPRESS ) {
+		if ( compMode == CompressMode.COMPRESS ) {
 			out = new GZIPOutputStream(out);
-		} else if ( compMode == org.kmymoney.api.write.KMyMoneyWritableFile.CompressMode.GUESS_FROM_FILENAME ) {
-			if ( file.getName().endsWith(".gz") ||
-				 file.getName().endsWith(".kmy") ) {
+		} else if ( compMode == CompressMode.GUESS_FROM_FILENAME ) {
+			if ( file.getName().endsWith(FILE_EXT_ZIPPED_1) ||
+				 file.getName().endsWith(FILE_EXT_ZIPPED_2) ) {
 				out = new GZIPOutputStream(out);
 			}
 		}
