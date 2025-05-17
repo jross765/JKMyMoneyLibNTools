@@ -252,7 +252,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 	 *
 	 * @param type  the type to set it for
 	 */
-	protected int getCountDataFor(final String type) {
+	public int getCountDataFor(final String type) {
 		if ( type == null ) {
 			throw new IllegalArgumentException("null type given");
 		}
@@ -612,6 +612,48 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 		return Collections.unmodifiableCollection(result);
     }
     
+    // ----------------------------
+    
+    /**
+     * @return
+     */
+    @Override
+    public List<KMyMoneyTransactionSplit> getTransactionSplitsBySecID(final KMMSecID secID) {
+		return trxMgr.getTransactionSplitsBySecID(secID);
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public List<KMyMoneyTransactionSplit> getTransactionSplitsByQualifSecID(final KMMQualifSecID qualifID) {
+		return trxMgr.getTransactionSplitsByQualifSecID(qualifID);
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public List<KMyMoneyTransactionSplit> getTransactionSplitsByCurr(final Currency curr) {
+		return trxMgr.getTransactionSplitsByCurr(curr);
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public List<KMyMoneyTransactionSplit> getTransactionSplitsByQualifCurrID(final KMMQualifCurrID qualifID) {
+		return trxMgr.getTransactionSplitsByQualifCurrID(qualifID);
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public List<KMyMoneyTransactionSplit> getTransactionSplitsByQualifSecCurrID(final KMMQualifSecCurrID secID) {
+		return trxMgr.getTransactionSplitsByQualifSecCurrID(secID);
+    }
+
     // ---------------------------------------------------------------
     
     @Override

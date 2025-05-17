@@ -106,4 +106,8 @@ public interface KMyMoneySecurity extends Comparable<KMyMoneySecurity>,
      */
     KMyMoneyPrice getYoungestQuote() throws InvalidQualifSecCurrIDException;
     
+    // ------------------------------------------------------------
+
+    List<KMyMoneyTransactionSplit> getTransactionSplits();
+    
 }

@@ -23,6 +23,7 @@ import org.kmymoney.api.read.impl.TestKMyMoneySecurityImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.api.write.KMyMoneyWritableCurrency;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
+import org.kmymoney.api.write.ObjectCascadeException;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
@@ -34,13 +35,18 @@ import org.w3c.dom.NodeList;
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneyWritableSecurityImpl {
-	private static final String SEC_1_ID     = TestKMyMoneySecurityImpl.SEC_1_ID;
+	
+	private static final KMMSecID SEC_1_ID   = TestKMyMoneySecurityImpl.SEC_1_ID;
 	private static final String SEC_1_ISIN   = TestKMyMoneySecurityImpl.SEC_1_ISIN;
 	private static final String SEC_1_TICKER = TestKMyMoneySecurityImpl.SEC_1_TICKER;
 
-	private static final String SEC_2_ID     = TestKMyMoneySecurityImpl.SEC_2_ID;
-	private static final String SEC_2_ISIN   = TestKMyMoneySecurityImpl.SEC_1_ISIN;
-	private static final String SEC_2_TICKER = TestKMyMoneySecurityImpl.SEC_1_TICKER;
+	private static final KMMSecID SEC_2_ID   = TestKMyMoneySecurityImpl.SEC_2_ID;
+	private static final String SEC_2_ISIN   = TestKMyMoneySecurityImpl.SEC_2_ISIN;
+	private static final String SEC_2_TICKER = TestKMyMoneySecurityImpl.SEC_2_TICKER;
+
+	private static final KMMSecID SEC_4_ID   = TestKMyMoneySecurityImpl.SEC_4_ID;
+	private static final String SEC_4_ISIN   = TestKMyMoneySecurityImpl.SEC_4_ISIN;
+	private static final String SEC_4_TICKER = TestKMyMoneySecurityImpl.SEC_4_TICKER;
 
 	// ---------------------------------------------------------------
 
@@ -220,7 +226,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertNotEquals(null, sec);
 
 		assertEquals(secID1, sec.getQualifID());
-		assertEquals(SEC_1_ID, sec.getQualifID().getCode());
+		assertEquals(SEC_1_ID.toString(), sec.getQualifID().getCode());
 
 		// ----------------------------
 		// Modify the object
@@ -268,7 +274,7 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
 
 		assertEquals(secID1, sec.getQualifID()); // unchanged
-		assertEquals(SEC_1_ID, sec.getQualifID().getCode()); // unchanged
+		assertEquals(SEC_1_ID.toString(), sec.getQualifID().getCode()); // unchanged
 		assertEquals(KMMSecCurr.Type.MUTUAL_FUND, sec.getType()); // changed
 		assertEquals("Benzedes Merc", sec.getName()); // changed
 		assertEquals("BNZMRC", sec.getCode()); // changed
@@ -285,15 +291,15 @@ public class TestKMyMoneyWritableSecurityImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmOutFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmOutFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmOutFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
 
 		KMyMoneySecurity sec = kmmOutFile.getSecurityByID(SEC_1_ID);
 		assertNotEquals(null, sec);
 
 		assertEquals(secID1, sec.getQualifID()); // unchanged
-		assertEquals(SEC_1_ID, sec.getQualifID().getCode()); // unchanged
+		assertEquals(SEC_1_ID.toString(), sec.getQualifID().getCode()); // unchanged
 		assertEquals(KMMSecCurr.Type.MUTUAL_FUND, sec.getType()); // changed
 		assertEquals("Benzedes Merc", sec.getName()); // changed
 		assertEquals("BNZMRC", sec.getCode()); // changed
@@ -361,9 +367,9 @@ public class TestKMyMoneyWritableSecurityImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmOutFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmOutFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_SEC + 1, kmmOutFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
 
 		KMyMoneySecurity sec = kmmOutFile.getSecurityByID(newID);
 		assertNotEquals(null, sec);
@@ -506,10 +512,11 @@ public class TestKMyMoneyWritableSecurityImpl {
 						"Ils sont fous ces dingos!");
 		sec3.setSymbol("FOUS"); // dto.
 
-		KMyMoneyWritableSecurity sec4 = kmmInFile.createWritableSecurity(
-				KMMSecCurr.Type.STOCK, 
-				"GB10000A2222", 
-				"Ye Ole National British Trade Company Ltd.");
+		KMyMoneyWritableSecurity sec4 = 
+				kmmInFile.createWritableSecurity(
+						KMMSecCurr.Type.STOCK, 
+						"GB10000A2222", 
+						"Ye Ole National British Trade Company Ltd.");
 		sec4.setSymbol("BTRD"); // dto.
 
 		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
@@ -612,5 +619,139 @@ public class TestKMyMoneyWritableSecurityImpl {
 		assertEquals(ConstTest.KVP_KEY_SEC_SECURITY_ID, kvpElt.getAttribute("key"));
 		assertEquals("GB10000A2222", kvpElt.getAttribute("value"));
 	}
+
+	// -----------------------------------------------------------------
+	// PART 4: Delete objects
+	// -----------------------------------------------------------------
+
+	// ------------------------------
+	// PART 4.1: High-Level
+	// ------------------------------
+
+	@Test
+	public void test04_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic +1 for template
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritableSecurity sec = kmmInFile.getWritableSecurityByID(SEC_1_ID);
+		assertNotEquals(null, sec);
+		assertEquals(SEC_1_ID.toString(), sec.getID().toString());
+
+		// Objects attached
+		assertNotEquals(0, sec.getQuotes().size()); // there are quotes (prices)
+		assertNotEquals(0, sec.getTransactionSplits().size()); // there are transactions
+
+		// ----------------------------
+		// Delete the object
+
+		try {
+			kmmInFile.removeSecurity(sec); // Correctly fails because prices are attached
+			assertEquals(1, 0);
+		} catch ( ObjectCascadeException exc ) {
+			assertEquals(0, 0);
+		}
+	}
+	
+	@Test
+	public void test04_2() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic +1 for template
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
+		assertEquals(ConstTest.Stats.NOF_SEC, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritableSecurity sec = kmmInFile.getWritableSecurityByID(SEC_4_ID);
+		assertNotEquals(null, sec);
+		assertEquals(SEC_4_ID.toString(), sec.getID().toString());
+
+		// Objects attached
+		assertEquals(0, sec.getQuotes().size()); // no quotes (prices)
+		assertEquals(0, sec.getTransactionSplits().size()); // no transactions
+
+		// ----------------------------
+		// Delete the object
+
+		kmmInFile.removeSecurity(sec);
+
+		// ----------------------------
+		// Check whether the object can has actually be modified
+		// (in memory, not in the file yet).
+
+		test04_2_check_memory(sec);
+
+		// ----------------------------
+		// Now, check whether the modified object can be written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCommodityImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test04_2_check_persisted(outFile);
+	}
+	
+	// ---------------------------------------------------------------
+
+	private void test04_2_check_memory(KMyMoneyWritableSecurity sec) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_SEC - 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic +1 for template
+		assertEquals(ConstTest.Stats.NOF_SEC    , kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
+		assertEquals(ConstTest.Stats.NOF_SEC - 1, kmmInFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
+
+		// CAUTION / ::TODO
+		// Old Object still exists and is unchanged
+		// Exception: no splits any more
+		// Don't know what to do about this oddity right now,
+		// but it needs to be addressed at some point.
+		assertEquals(SEC_4_ID.toString(), sec.getID().toString());
+		assertEquals("The Coca Cola Co.", sec.getName());
+		
+		// However, the commodity cannot newly be instantiated any more,
+		// just as you would expect.
+		try {
+			KMyMoneyWritableSecurity secNow1 = kmmInFile.getWritableSecurityByID(SEC_4_ID);
+			assertEquals(1, 0);
+		} catch ( Exception exc ) {
+			assertEquals(0, 0);
+		}
+		// Same for a non non-writable instance. 
+		// However, due to design asymmetry, no exception is thrown here,
+		// but the method just returns null.
+		KMyMoneySecurity secNow2 = kmmInFile.getSecurityByID(SEC_4_ID);
+		assertEquals(null, secNow2);
+
+		// Attached objects (*not dependent*)
+		// Bill terms, however, still exist because they are not
+		// customer-specific (not in principle, at least).
+		// xxx TODO
+//		KMMBillTerms prcNow = kmmInFile.getBillTermsByID(BLLTRM_1_ID);
+//		assertNotEquals(null, bllTrmNow);
+	}
+
+	private void test04_2_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+		
+		assertEquals(ConstTest.Stats.NOF_SEC - 1, kmmOutFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW)); // sic +1 for template
+		assertEquals(ConstTest.Stats.NOF_SEC - 1, kmmOutFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_SEC - 1, kmmOutFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
+
+		// The transaction does not exist any more, just as you would expect.
+		// However, no exception is thrown, as opposed to test04_1_check_memory()
+		KMyMoneySecurity sec = kmmOutFile.getSecurityByID(SEC_4_ID);
+		assertEquals(null, sec); // sic
+	}
+
+	// ------------------------------
+	// PART 4.2: Low-Level
+	// ------------------------------
+	
+	// ::EMPTY
 
 }

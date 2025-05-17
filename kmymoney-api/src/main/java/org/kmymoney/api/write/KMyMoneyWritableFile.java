@@ -320,7 +320,7 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 *
 	 * @param sec the transaction to remove.
 	 */
-	void removeSecurity(KMyMoneyWritableSecurity sec);
+	void removeSecurity(KMyMoneyWritableSecurity sec) throws ObjectCascadeException;
 
 	// ---------------------------------------------------------------
 

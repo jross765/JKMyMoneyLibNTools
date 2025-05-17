@@ -22,17 +22,17 @@ public class FileStats_Counters implements FileStats {
 
 	@Override
 	public int getNofEntriesInstitutions() {
-		return kmmFile.getRootElement().getINSTITUTIONS().getCount().intValue();
+		return kmmFile.getCountDataFor("institution");
 	}
 
 	@Override
 	public int getNofEntriesAccounts() {
-		return kmmFile.getRootElement().getACCOUNTS().getCount().intValue();
+		return kmmFile.getCountDataFor("account");
 	}
 
 	@Override
 	public int getNofEntriesTransactions() {
-		return kmmFile.getRootElement().getTRANSACTIONS().getCount().intValue();
+		return kmmFile.getCountDataFor("transaction");
 	}
 
 	@Override
@@ -42,26 +42,26 @@ public class FileStats_Counters implements FileStats {
 
 	@Override
 	public int getNofEntriesPayees() {
-		return kmmFile.getRootElement().getPAYEES().getCount().intValue();
+		return kmmFile.getCountDataFor("payee");
 	}
 
 	// ----------------------------
 
 	@Override
 	public int getNofEntriesSecurities() {
-		return kmmFile.getRootElement().getSECURITIES().getCount().intValue();
+		return kmmFile.getCountDataFor("security");
 	}
 
 	@Override
 	public int getNofEntriesCurrencies() {
-		return kmmFile.getRootElement().getCURRENCIES().getCount().intValue();
+		return kmmFile.getCountDataFor("currency");
 	}
 
 	// ----------------------------
 
 	@Override
 	public int getNofEntriesPricePairs() {
-		return kmmFile.getRootElement().getPRICES().getCount().intValue();
+		return kmmFile.getCountDataFor("pricepair");
 	}
 
 	@Override

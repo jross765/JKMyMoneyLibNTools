@@ -485,9 +485,9 @@ public class TestKMyMoneyWritableTransactionImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmOutFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmOutFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmOutFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
 
 		// ---
 		// First transaction:

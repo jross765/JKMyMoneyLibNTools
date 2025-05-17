@@ -479,9 +479,9 @@ public class TestKMyMoneyWritableAccountImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmOutFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmOutFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmOutFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
 
 		KMyMoneyAccount acct = kmmOutFile.getAccountByID(ACCT_1_ID);
 		assertNotEquals(null, acct);
@@ -555,9 +555,9 @@ public class TestKMyMoneyWritableAccountImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_ACCT + 1, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_ACCT + 1, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_ACCT + 1, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_ACCT + 1, kmmOutFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_ACCT + 1, kmmOutFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_ACCT + 1, kmmOutFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
 
 		KMyMoneyAccount acct = kmmOutFile.getAccountByID(newID);
 		assertNotEquals(null, acct);

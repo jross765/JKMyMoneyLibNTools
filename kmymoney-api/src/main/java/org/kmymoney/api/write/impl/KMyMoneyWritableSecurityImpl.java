@@ -3,7 +3,6 @@ package org.kmymoney.api.write.impl;
 import java.beans.PropertyChangeSupport;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.kmymoney.api.Const;
@@ -18,6 +17,7 @@ import org.kmymoney.api.read.impl.hlp.KVPListDoesNotContainKeyException;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
+import org.kmymoney.api.write.ObjectCascadeException;
 import org.kmymoney.api.write.impl.hlp.HasWritableUserDefinedAttributesImpl;
 import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
@@ -75,10 +75,11 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 
 	/**
 	 * Delete this security and remove it from the file.
+	 * @throws ObjectCascadeException 
 	 *
 	 * @see KMyMoneyWritableSecurity#remove()
 	 */
-	public void remove() {
+	public void remove() throws ObjectCascadeException {
 		SECURITY peer = jwsdpPeer;
 		(getKMyMoneyFile()).getRootElement().getSECURITIES().getSECURITY().remove(peer);
 		(getKMyMoneyFile()).removeSecurity(this);

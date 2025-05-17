@@ -15,19 +15,25 @@ import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
 
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMyMoneySecurityImpl {
 	// Mercedes-Benz Group AG
-	public static final String SEC_1_ID     = "E000002";
-	public static final String SEC_1_ISIN   = "DE0007100000";
-	public static final String SEC_1_TICKER = "MBG";
+	public static final KMMSecID SEC_1_ID     = new KMMSecID("E000002");
+	public static final String   SEC_1_ISIN   = "DE0007100000";
+	public static final String   SEC_1_TICKER = "MBG";
 
 	// SAP SE
-	public static final String SEC_2_ID     = "E000001";
-	public static final String SEC_2_ISIN   = "DE0007164600";
-	public static final String SEC_2_TICKER = "SAP";
+	public static final KMMSecID SEC_2_ID     = new KMMSecID("E000001");
+	public static final String   SEC_2_ISIN   = "DE0007164600";
+	public static final String   SEC_2_TICKER = "SAP";
+
+	// Coca Cola
+	public static final KMMSecID SEC_4_ID     = new KMMSecID("E000004");
+	public static final String   SEC_4_ISIN   = "US1912161007";
+	public static final String   SEC_4_TICKER = "KO";
 
 	// -----------------------------------------------------------------
 

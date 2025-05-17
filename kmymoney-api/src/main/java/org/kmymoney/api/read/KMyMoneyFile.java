@@ -245,6 +245,18 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 
 	Collection<? extends KMyMoneyTransaction> getTransactions(LocalDate fromDate, LocalDate toDate);
 
+	// ----------------------------
+
+    List<KMyMoneyTransactionSplit> getTransactionSplitsBySecID(KMMSecID secID);
+
+    List<KMyMoneyTransactionSplit> getTransactionSplitsByQualifSecID(KMMQualifSecID qualifID);
+    
+    List<KMyMoneyTransactionSplit> getTransactionSplitsByCurr(Currency curr);
+
+    List<KMyMoneyTransactionSplit> getTransactionSplitsByQualifCurrID(KMMQualifCurrID qualifID);
+    
+    List<KMyMoneyTransactionSplit> getTransactionSplitsByQualifSecCurrID(KMMQualifSecCurrID qualifID);
+    
 	// ---------------------------------------------------------------
 
 	/**

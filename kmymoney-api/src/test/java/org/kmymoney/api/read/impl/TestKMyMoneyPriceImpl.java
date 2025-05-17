@@ -46,12 +46,12 @@ public class TestKMyMoneyPriceImpl {
 	public static final KMMPriceID PRC_19_ID = new KMMPriceID("USD", "EUR", "2023-11-01");
 	
 	// SAP SE
-	public static final String SEC_2_ID     = TestKMyMoneySecurityImpl.SEC_2_ID;
-	public static final String SEC_2_ISIN   = TestKMyMoneySecurityImpl.SEC_2_ISIN;
+	public static final KMMSecID SEC_2_ID    = TestKMyMoneySecurityImpl.SEC_2_ID;
+	public static final String   SEC_2_ISIN  = TestKMyMoneySecurityImpl.SEC_2_ISIN;
 
 	// BASF SE
-	public static final String SEC_4_ID   = "E000003";
-	public static final String SEC_4_ISIN = "DE000BASF111";
+	public static final KMMSecID SEC_4_ID    = new KMMSecID("E000003");
+	public static final String   SEC_4_ISIN  = "DE000BASF111";
 	
 	// -----------------------------------------------------------------
 
@@ -245,34 +245,33 @@ public class TestKMyMoneyPriceImpl {
 
 	@Test
 	public void test03_1() throws Exception {
-		KMMQualifSecCurrID cmdty21ID = new KMMQualifSecCurrID(KMMQualifSecCurrID.Type.SECURITY, SEC_2_ID);
-		prc = kmmFile.getPriceByQualifSecCurrIDDate(cmdty21ID, LocalDate.of(2012, 3, 5));
+		KMMQualifSecCurrID sec21ID = new KMMQualifSecCurrID(KMMQualifSecCurrID.Type.SECURITY, SEC_2_ID.toString());
+		prc = kmmFile.getPriceByQualifSecCurrIDDate(sec21ID, LocalDate.of(2012, 3, 5));
 		assertNotEquals(null, prc);
 		assertEquals(PRC_12_ID, prc.getID());
 		
-		KMMQualifSecID cmdty22ID = new KMMQualifSecID(SEC_2_ID);
-		prc = kmmFile.getPriceByQualifSecIDDate(cmdty22ID, LocalDate.of(2012, 3, 5));
+		KMMQualifSecID sec22ID = new KMMQualifSecID(SEC_2_ID);
+		prc = kmmFile.getPriceByQualifSecIDDate(sec22ID, LocalDate.of(2012, 3, 5));
 		assertNotEquals(null, prc);
 		assertEquals(PRC_12_ID, prc.getID());
 
-		KMMSecID cmdty23ID = new KMMSecID(SEC_2_ID);
-		prc = kmmFile.getPriceBySecIDDate(cmdty23ID, LocalDate.of(2012, 3, 5));
+		KMMSecID sec23ID = SEC_2_ID;
+		prc = kmmFile.getPriceBySecIDDate(sec23ID, LocalDate.of(2012, 3, 5));
 		assertNotEquals(null, prc);
 		assertEquals(PRC_12_ID, prc.getID());
 	}
 	
 	@Test
 	public void test03_2() throws Exception {
-		KMMSecID cmdty4ID = new KMMSecID(SEC_4_ID);
-		prc = kmmFile.getPriceBySecIDDate(cmdty4ID, LocalDate.of(2023, 4, 1));
+		prc = kmmFile.getPriceBySecIDDate(SEC_4_ID, LocalDate.of(2023, 4, 1));
 		assertNotEquals(null, prc);
 		assertEquals(PRC_14_ID, prc.getID());
 		
-		prc = kmmFile.getPriceBySecIDDate(cmdty4ID, LocalDate.of(2023, 7, 1));
+		prc = kmmFile.getPriceBySecIDDate(SEC_4_ID, LocalDate.of(2023, 7, 1));
 		assertNotEquals(null, prc);
 		assertEquals(PRC_15_ID, prc.getID());
 		
-		prc = kmmFile.getPriceBySecIDDate(cmdty4ID, LocalDate.of(2023, 10, 1));
+		prc = kmmFile.getPriceBySecIDDate(SEC_4_ID, LocalDate.of(2023, 10, 1));
 		assertNotEquals(null, prc);
 		assertEquals(PRC_16_ID, prc.getID());
 	}

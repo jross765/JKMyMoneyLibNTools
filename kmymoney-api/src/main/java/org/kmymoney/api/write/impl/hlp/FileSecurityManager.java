@@ -55,15 +55,8 @@ public class FileSecurityManager extends org.kmymoney.api.read.impl.hlp.FileSecu
 
 		secMap.remove(sec.getID());
 
-		for ( String symb : symbMap.keySet() ) {
-			if ( symbMap.get(symb).equals(sec.getQualifID().getSecID()) )
-				symbMap.remove(symb);
-		}
-
-		for ( String code : codeMap.keySet() ) {
-			if ( codeMap.get(code).equals(sec.getQualifID().getSecID()) )
-				codeMap.remove(code);
-		}
+		symbMap.remove(sec.getQualifID().getSecID().toString());
+		codeMap.remove(sec.getQualifID().getCode());
 
 		LOGGER.debug("removeSecurity: Removed security from cache: " + sec.getID());
 	}

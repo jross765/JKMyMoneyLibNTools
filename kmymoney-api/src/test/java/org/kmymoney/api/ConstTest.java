@@ -20,7 +20,7 @@ public class ConstTest extends Const {
 	
     	public static final int NOF_PYE       = 9;
 	
-    	public static final int NOF_SEC       = 3;
+    	public static final int NOF_SEC       = 4;
     	public static final int NOF_CURR      = 2;
     	public static final int NOF_PRCPR     = 4;
     	public static final int NOF_PRC       = 20;

@@ -59,12 +59,12 @@ public class TestKMyMoneyWritablePriceImpl {
 	private static final KMMPriceID PRC_19_ID = TestKMyMoneyPriceImpl.PRC_19_ID;
 	
 	// SAP SE
-	private static final String SEC_2_ID     = TestKMyMoneyPriceImpl.SEC_2_ID;
-	private static final String SEC_2_ISIN   = TestKMyMoneyPriceImpl.SEC_2_ISIN;
+	private static final KMMSecID SEC_2_ID    = TestKMyMoneyPriceImpl.SEC_2_ID;
+	private static final String   SEC_2_ISIN  = TestKMyMoneyPriceImpl.SEC_2_ISIN;
 
 	// BASF SE
-	private static final String SEC_4_ID   = TestKMyMoneyPriceImpl.SEC_4_ID;
-	private static final String SEC_4_ISIN = TestKMyMoneyPriceImpl.SEC_4_ISIN;
+	private static final KMMSecID SEC_4_ID    = TestKMyMoneyPriceImpl.SEC_4_ID;
+	private static final String   SEC_4_ISIN  = TestKMyMoneyPriceImpl.SEC_4_ISIN;
 	
 	
 	
@@ -279,34 +279,33 @@ public class TestKMyMoneyWritablePriceImpl {
 
 	@Test
 	public void test01_3_1() throws Exception {
-		KMMQualifSecCurrID cmdty21ID = new KMMQualifSecCurrID(KMMQualifSecCurrID.Type.SECURITY, SEC_2_ID);
-		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByQualifSecCurrIDDate(cmdty21ID, LocalDate.of(2012, 3, 5));
+		KMMQualifSecCurrID sec21ID = new KMMQualifSecCurrID(KMMQualifSecCurrID.Type.SECURITY, SEC_2_ID.toString());
+		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceByQualifSecCurrIDDate(sec21ID, LocalDate.of(2012, 3, 5));
 		assertNotEquals(null, prc);
 		assertEquals(PRC_12_ID, prc.getID());
 		
-		KMMQualifSecID cmdty22ID = new KMMQualifSecID(SEC_2_ID);
-		prc = kmmInFile.getWritablePriceByQualifSecIDDate(cmdty22ID, LocalDate.of(2012, 3, 5));
+		KMMQualifSecID sec22ID = new KMMQualifSecID(SEC_2_ID);
+		prc = kmmInFile.getWritablePriceByQualifSecIDDate(sec22ID, LocalDate.of(2012, 3, 5));
 		assertNotEquals(null, prc);
 		assertEquals(PRC_12_ID, prc.getID());
 
-		KMMSecID cmdty23ID = new KMMSecID(SEC_2_ID);
-		prc = kmmInFile.getWritablePriceBySecIDDate(cmdty23ID, LocalDate.of(2012, 3, 5));
+		KMMSecID sec23ID = SEC_2_ID;
+		prc = kmmInFile.getWritablePriceBySecIDDate(sec23ID, LocalDate.of(2012, 3, 5));
 		assertNotEquals(null, prc);
 		assertEquals(PRC_12_ID, prc.getID());
 	}
 	
 	@Test
 	public void test01_3_2() throws Exception {
-		KMMSecID cmdty4ID = new KMMSecID(SEC_4_ID);
-		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceBySecIDDate(cmdty4ID, LocalDate.of(2023, 4, 1));
+		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceBySecIDDate(SEC_4_ID, LocalDate.of(2023, 4, 1));
 		assertNotEquals(null, prc);
 		assertEquals(PRC_14_ID, prc.getID());
 		
-		prc = kmmInFile.getWritablePriceBySecIDDate(cmdty4ID, LocalDate.of(2023, 7, 1));
+		prc = kmmInFile.getWritablePriceBySecIDDate(SEC_4_ID, LocalDate.of(2023, 7, 1));
 		assertNotEquals(null, prc);
 		assertEquals(PRC_15_ID, prc.getID());
 		
-		prc = kmmInFile.getWritablePriceBySecIDDate(cmdty4ID, LocalDate.of(2023, 10, 1));
+		prc = kmmInFile.getWritablePriceBySecIDDate(SEC_4_ID, LocalDate.of(2023, 10, 1));
 		assertNotEquals(null, prc);
 		assertEquals(PRC_16_ID, prc.getID());
 	}
@@ -402,7 +401,7 @@ public class TestKMyMoneyWritablePriceImpl {
 		assertEquals(FileStats.ERROR,         kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
 
-		KMMSecID sec31ID = new KMMSecID(SEC_2_ID);
+		KMMSecID sec31ID = SEC_2_ID;
 		KMyMoneyWritablePrice prc = kmmInFile.getWritablePriceBySecIDDate(sec31ID, LocalDate.of(2012, 3, 5));
 		assertNotEquals(null, prc);
 
@@ -465,9 +464,9 @@ public class TestKMyMoneyWritablePriceImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
-		assertEquals(FileStats.ERROR,         kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmOutFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,         kmmOutFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmOutFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
 
 		KMyMoneyPrice prc = kmmOutFile.getPriceByID(PRC_1_ID);
 		assertNotEquals(null, prc);
@@ -515,9 +514,9 @@ public class TestKMyMoneyWritablePriceImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
-		assertEquals(FileStats.ERROR,         kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_PRC, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmOutFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,         kmmOutFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRC, kmmOutFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
 
 		KMyMoneyPrice prc = kmmOutFile.getPriceByID(PRC_12_ID);
 		assertNotEquals(null, prc);
@@ -604,9 +603,9 @@ public class TestKMyMoneyWritablePriceImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_PRC + 1, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
-		assertEquals(FileStats.ERROR,             kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_PRC + 1, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_PRC + 1, kmmOutFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,             kmmOutFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRC + 1, kmmOutFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
 
 		KMyMoneyPrice prc = kmmOutFile.getPriceByID(newID);
 		assertNotEquals(null, prc);
@@ -715,9 +714,9 @@ public class TestKMyMoneyWritablePriceImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_PRC - 1, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
-		assertEquals(FileStats.ERROR,             kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_PRC - 1, kmmInFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_PRC - 1, kmmOutFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+		assertEquals(FileStats.ERROR,             kmmOutFileStats.getNofEntriesPrices(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRC - 1, kmmOutFileStats.getNofEntriesPrices(KMMFileStats.Type.CACHE));
 
 		// The price does not exist any more, just as you would expect.
 		// However, no exception is thrown, as opposed to test04_1_check_memory()

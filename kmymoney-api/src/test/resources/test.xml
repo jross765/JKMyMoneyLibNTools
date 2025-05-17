@@ -433,7 +433,7 @@
   <PAIR key="kmm-id" value="{1f7ec5d2-f982-48eb-9ae3-22095e2362ee}"/>
  </KEYVALUEPAIRS>
  <SCHEDULES count="0"/>
- <SECURITIES count="3">
+ <SECURITIES count="4">
   <SECURITY symbol="SAP" pp="2" id="E000001" trading-currency="EUR" trading-market="XETRA" name="SAP AG" type="0" saf="100" rounding-method="7">
    <KEYVALUEPAIRS>
     <PAIR key="kmm-online-source" value="Finanztreff"/>
@@ -448,6 +448,12 @@
   <SECURITY symbol="BAS" pp="2" id="E000003" trading-currency="EUR" trading-market="XETRA" name="BASF SE" type="0" saf="100" rounding-method="7">
    <KEYVALUEPAIRS>
     <PAIR key="kmm-security-id" value="DE000BASF111"/>
+   </KEYVALUEPAIRS>
+  </SECURITY>
+  <SECURITY symbol="KO" pp="2" id="E000004" trading-currency="EUR" trading-market="XETRA" name="The Coca Cola Co." type="0" saf="100" rounding-method="7">
+   <KEYVALUEPAIRS>
+    <PAIR key="kmm-online-source" value="Finanztreff"/>
+    <PAIR key="kmm-security-id" value="US1912161007"/>
    </KEYVALUEPAIRS>
   </SECURITY>
  </SECURITIES>

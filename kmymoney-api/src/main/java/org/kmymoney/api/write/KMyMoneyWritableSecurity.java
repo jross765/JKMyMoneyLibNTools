@@ -19,7 +19,7 @@ public interface KMyMoneyWritableSecurity extends KMyMoneySecurity,
                                                   HasWritableUserDefinedAttributes
 {
 
-	void remove();
+	void remove() throws ObjectCascadeException;
 
 	// ------------------------------------------------------------
     

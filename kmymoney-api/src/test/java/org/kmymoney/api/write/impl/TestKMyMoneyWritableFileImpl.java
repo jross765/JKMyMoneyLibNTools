@@ -33,7 +33,7 @@ public class TestKMyMoneyWritableFileImpl {
 	
 	private static final KMMComplAcctID ACCT_1_ID = TestKMyMoneyAccountImpl.ACCT_1_ID;
 	private static final KMMTrxID TRX_1_ID        = TestKMyMoneyTransactionImpl.TRX_1_ID;
-	private static final String SEC_2_ID          = TestKMyMoneySecurityImpl.SEC_2_ID;
+	private static final KMMSecID SEC_2_ID        = TestKMyMoneySecurityImpl.SEC_2_ID;
 	
 	// -----------------------------------------------------------------
 
@@ -309,9 +309,8 @@ public class TestKMyMoneyWritableFileImpl {
 	@Test
 	public void test05_4() throws Exception {
 		// Analogous to test05_1, but with commodities
-		KMMSecID secID2 = new KMMSecID(SEC_2_ID);
-		KMyMoneySecurity cmdty11 = kmmInFile.getSecurityByID(secID2);
-		KMyMoneySecurity cmdty12 = kmmROFile.getSecurityByID(secID2);
+		KMyMoneySecurity cmdty11 = kmmInFile.getSecurityByID(SEC_2_ID);
+		KMyMoneySecurity cmdty12 = kmmROFile.getSecurityByID(SEC_2_ID);
 		assertNotEquals(null, cmdty11);
 		assertNotEquals(null, cmdty12);
 		

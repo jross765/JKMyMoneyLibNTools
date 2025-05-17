@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.kmymoney.api.ConstTest;
 import org.kmymoney.api.read.KMyMoneyPrice;
-import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.base.basetypes.complex.KMMPriceID;
 
 import junit.framework.JUnit4TestAdapter;

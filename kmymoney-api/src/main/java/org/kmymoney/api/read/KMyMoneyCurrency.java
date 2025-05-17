@@ -68,4 +68,8 @@ public interface KMyMoneyCurrency {
     
     KMyMoneyPrice getYoungestQuote() throws InvalidQualifSecCurrIDException;
     
+    // ------------------------------------------------------------
+
+    List<KMyMoneyTransactionSplit> getTransactionSplits();
+    
 }

@@ -68,6 +68,7 @@ import org.kmymoney.api.write.KMyMoneyWritablePricePair;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
+import org.kmymoney.api.write.ObjectCascadeException;
 import org.kmymoney.api.write.hlp.IDManager;
 import org.kmymoney.api.write.impl.hlp.WritingContentHandler;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
@@ -1221,9 +1222,26 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
 
 	@Override
-	public void removeSecurity(KMyMoneyWritableSecurity sec) {
+	public void removeSecurity(KMyMoneyWritableSecurity sec) throws ObjectCascadeException {
+		if ( sec == null ) {
+			throw new IllegalArgumentException("null security given");
+		}
+
+		if ( sec.getQuotes().size() > 0 ) {
+			LOGGER.error("removeSecurity: Security with ID '" + sec.getID() + "' cannot be removed because "
+					+ "there are price objects in the Price DB that depend on it");
+			throw new ObjectCascadeException();
+		}
+
+		if ( sec.getTransactionSplits().size() > 0 ) {
+			LOGGER.error("removeSecurity: Security with ID '" + sec.getID() + "' cannot be removed because "
+					+ "there are transactions (splits) that depend on it");
+			throw new ObjectCascadeException();
+		}
+
 		((org.kmymoney.api.write.impl.hlp.FileSecurityManager) super.secMgr)
 			.removeSecurity(sec);
+		
 		getRootElement().getSECURITIES().getSECURITY().remove(((KMyMoneyWritableSecurityImpl) sec).getJwsdpPeer());
 		setModified(true);
 	}

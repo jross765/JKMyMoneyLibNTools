@@ -312,9 +312,9 @@ public class TestKMyMoneyWritablePricePairImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
 
 		// CAUTION: As opposed to the symmetrical test case in the other
 		// entities, we *cannot* search with the original ID here because
@@ -390,9 +390,9 @@ public class TestKMyMoneyWritablePricePairImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
 
 		KMyMoneyPricePair sec = kmmOutFile.getPricePairByID(newID);
 		assertNotEquals(null, sec);
@@ -495,9 +495,9 @@ public class TestKMyMoneyWritablePricePairImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
 
 		// The price pair does not exist any more, just as you would expect.
 		// However, no exception is thrown, as opposed to test04_1_check_memory()

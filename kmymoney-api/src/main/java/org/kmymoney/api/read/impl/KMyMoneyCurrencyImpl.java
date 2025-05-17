@@ -11,6 +11,7 @@ import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPrice;
+import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.UnknownRoundingMethodException;
 import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
@@ -128,6 +129,13 @@ public class KMyMoneyCurrencyImpl extends KMyMoneyObjectImpl
 	}
 
 	return result;
+    }
+
+    // -----------------------------------------------------------------
+
+    @Override
+    public List<KMyMoneyTransactionSplit> getTransactionSplits() {
+    	return getKMyMoneyFile().getTransactionSplitsByQualifCurrID(getQualifID());
     }
 
     // ---------------------------------------------------------------

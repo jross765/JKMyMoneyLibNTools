@@ -3,6 +3,7 @@ package org.kmymoney.api.read.impl.hlp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +17,11 @@ import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecCurrID;
+import org.kmymoney.base.basetypes.complex.KMMQualifSecID;
 import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
-import org.kmymoney.base.basetypes.simple.KMMSpltID;
+import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,6 +137,75 @@ public class FileTransactionManager {
 		}
 		
 		return Collections.unmodifiableCollection(trxMap.values());
+	}
+
+	// ----------------------------
+
+	public List<KMyMoneyTransactionSplit> getTransactionSplitsBySecID(final KMMSecID secID) {
+		if ( secID == null ) {
+			throw new IllegalArgumentException("null security ID given");
+		}
+		
+		if ( ! secID.isSet() ) {
+			throw new IllegalArgumentException("unset security ID given");
+		}
+		
+		KMMQualifSecID qualifID = new KMMQualifSecID(secID);
+		return getTransactionSplitsByQualifSecID(qualifID);
+	}
+
+	public List<KMyMoneyTransactionSplit> getTransactionSplitsByQualifSecID(final KMMQualifSecID qualifID) {
+		if ( qualifID == null ) {
+			throw new IllegalArgumentException("null quailf. security ID given");
+		}
+		
+		if ( ! qualifID.isSet() ) {
+			throw new IllegalArgumentException("unset quailf. security ID given");
+		}
+		
+		return getTransactionSplitsByQualifSecCurrID(qualifID);
+	}
+
+	public List<KMyMoneyTransactionSplit> getTransactionSplitsByCurr(final Currency curr) {
+		if ( curr == null ) {
+			throw new IllegalArgumentException("null currency given");
+		}
+		
+		KMMQualifCurrID qualifID = new KMMQualifCurrID(curr);
+		return getTransactionSplitsByQualifCurrID(qualifID);
+	}
+
+	public List<KMyMoneyTransactionSplit> getTransactionSplitsByQualifCurrID(final KMMQualifCurrID qualifID) {
+		if ( qualifID == null ) {
+			throw new IllegalArgumentException("null qualif. currency ID given");
+		}
+		
+		if ( ! qualifID.isSet() ) {
+			throw new IllegalArgumentException("unset qualif. currency ID given");
+		}
+		
+		return getTransactionSplitsByQualifSecCurrID(qualifID);
+	}
+
+	public List<KMyMoneyTransactionSplit> getTransactionSplitsByQualifSecCurrID(final KMMQualifSecCurrID qualifID) {
+		if ( qualifID == null ) {
+			throw new IllegalArgumentException("null qualif. security/currendcy ID given");
+		}
+		
+		if ( ! qualifID.isSet() ) {
+			throw new IllegalArgumentException("unset qualif. security/currendcy ID given");
+		}
+		
+		List<KMyMoneyTransactionSplit> result = new ArrayList<KMyMoneyTransactionSplit>();
+
+		for ( KMyMoneyTransactionSplit splt : trxSpltMap.values() ) {
+			if ( splt.getAccount().getQualifSecCurrID().toString().equals(qualifID.toString()) ) {
+				KMyMoneyTransactionSplit newSplt = kmmFile.getTransactionSplitByID(splt.getQualifID());
+				result.add(newSplt);
+			}
+		}
+
+		return result;
 	}
 
 	// ---------------------------------------------------------------

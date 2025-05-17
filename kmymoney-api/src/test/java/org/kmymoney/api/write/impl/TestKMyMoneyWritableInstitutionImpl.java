@@ -172,9 +172,9 @@ public class TestKMyMoneyWritableInstitutionImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_INST, kmmInFileStats.getNofEntriesInstitutions(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_INST, kmmInFileStats.getNofEntriesInstitutions(KMMFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_INST, kmmInFileStats.getNofEntriesInstitutions(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_INST, kmmOutFileStats.getNofEntriesInstitutions(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_INST, kmmOutFileStats.getNofEntriesInstitutions(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_INST, kmmOutFileStats.getNofEntriesInstitutions(KMMFileStats.Type.CACHE));
 
 		KMyMoneyInstitution inst = kmmOutFile.getInstitutionByID(INST_1_ID);
 		assertNotEquals(null, inst);
@@ -238,9 +238,9 @@ public class TestKMyMoneyWritableInstitutionImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_INST + 1, kmmInFileStats.getNofEntriesInstitutions(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_INST + 1, kmmInFileStats.getNofEntriesInstitutions(KMMFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_INST + 1, kmmInFileStats.getNofEntriesInstitutions(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_INST + 1, kmmOutFileStats.getNofEntriesInstitutions(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_INST + 1, kmmOutFileStats.getNofEntriesInstitutions(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_INST + 1, kmmOutFileStats.getNofEntriesInstitutions(KMMFileStats.Type.CACHE));
 
 		KMyMoneyInstitution inst = kmmOutFile.getInstitutionByID(newID);
 		assertNotEquals(null, inst);

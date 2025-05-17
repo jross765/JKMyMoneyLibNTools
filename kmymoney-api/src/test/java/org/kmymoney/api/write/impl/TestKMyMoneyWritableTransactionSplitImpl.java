@@ -213,9 +213,9 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmOutFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW));
 		// assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmOutFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.CACHE));
 
 		KMyMoneyTransactionSplit splt = kmmOutFile.getTransactionSplitByID(TRXSPLT_1_ID);
 		assertNotEquals(null, splt);
@@ -328,9 +328,9 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		kmmOutFile = new KMyMoneyFileImpl(outFile);
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
-		assertEquals(ConstTest.Stats.NOF_TRX_SPLT - 2, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_TRX_SPLT - 2, kmmOutFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW));
 		// assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(kmmFileStats.Type.COUNTER));
-		assertEquals(ConstTest.Stats.NOF_TRX_SPLT - 2, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.CACHE));
+		assertEquals(ConstTest.Stats.NOF_TRX_SPLT - 2, kmmOutFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.CACHE));
 
 		KMyMoneyTransactionSplit splt = kmmOutFile.getTransactionSplitByID(TRXSPLT_1_ID);
 		assertEquals(null, splt); // sic

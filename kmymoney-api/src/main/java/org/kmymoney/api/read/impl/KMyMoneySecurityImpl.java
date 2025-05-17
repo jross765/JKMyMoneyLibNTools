@@ -12,6 +12,7 @@ import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneySecurity;
+import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.UnknownRoundingMethodException;
 import org.kmymoney.api.read.UnknownSecurityTypeException;
 import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
@@ -159,6 +160,13 @@ public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl
     		return null;
     	
     	return qutList.get(0);
+    }
+
+    // -----------------------------------------------------------------
+
+    @Override
+    public List<KMyMoneyTransactionSplit> getTransactionSplits() {
+    	return getKMyMoneyFile().getTransactionSplitsByQualifSecID(getQualifID());
     }
 
     // ---------------------------------------------------------------
