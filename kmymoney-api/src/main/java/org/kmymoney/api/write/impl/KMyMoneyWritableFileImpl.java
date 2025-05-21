@@ -380,33 +380,13 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		int cntSecurity = 0;
 		int cntPricePair = 0;
 
-		for ( INSTITUTION inst : getRootElement().getINSTITUTIONS().getINSTITUTION() ) {
-			cntInstitution++;
-		}
-		
-		for ( ACCOUNT acct : getRootElement().getACCOUNTS().getACCOUNT() ) {
-			cntAccount++;
-		}
-		
-		for ( TRANSACTION trx : getRootElement().getTRANSACTIONS().getTRANSACTION() ) {
-			cntTransaction++;
-		}
-		
-		for ( PAYEE pye : getRootElement().getPAYEES().getPAYEE() ) {
-			cntPayee++;
-		}
-		
-		for ( CURRENCY curr : getRootElement().getCURRENCIES().getCURRENCY() ) {
-			cntCurrency++;
-		}
-
-		for ( SECURITY sec : getRootElement().getSECURITIES().getSECURITY() ) {
-			cntSecurity++;
-		}
-
-		for ( PRICEPAIR prc : getRootElement().getPRICES().getPRICEPAIR() ) {
-			cntPricePair++;
-		}
+		cntInstitution = getRootElement().getINSTITUTIONS().getINSTITUTION().size();
+		cntAccount     = getRootElement().getACCOUNTS().getACCOUNT().size();
+		cntTransaction = getRootElement().getTRANSACTIONS().getTRANSACTION().size();
+		cntPayee       = getRootElement().getPAYEES().getPAYEE().size();
+		cntCurrency    = getRootElement().getCURRENCIES().getCURRENCY().size();
+		cntSecurity    = getRootElement().getSECURITIES().getSECURITY().size();
+		cntPricePair   = getRootElement().getPRICES().getPRICEPAIR().size();
 
 		setCountDataFor("institution", cntInstitution);
 		setCountDataFor("account", cntAccount);
