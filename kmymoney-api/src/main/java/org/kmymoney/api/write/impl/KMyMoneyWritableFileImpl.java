@@ -659,14 +659,17 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * @param acct what to remove
 	 */
 	public void removeAccount(final KMyMoneyWritableAccount acct) {
-		if ( acct.getTransactionSplits().size() > 0 ) {
+		if ( acct.hasTransactions() ) {
 			throw new IllegalStateException("cannot remove account while it contains transaction-splits!");
 		}
 
-		getRootElement().getACCOUNTS().getACCOUNT().remove(((KMyMoneyWritableAccountImpl) acct).getJwsdpPeer());
-		setModified(true);
+		// 1) Remove avatar in account manager
 		((org.kmymoney.api.write.impl.hlp.FileAccountManager) super.acctMgr)
 			.removeAccount(acct);
+		
+		// 2) remove account
+		getRootElement().getACCOUNTS().getACCOUNT().remove(((KMyMoneyWritableAccountImpl) acct).getJwsdpPeer());
+		setModified(true);
 	}
 
 	/**

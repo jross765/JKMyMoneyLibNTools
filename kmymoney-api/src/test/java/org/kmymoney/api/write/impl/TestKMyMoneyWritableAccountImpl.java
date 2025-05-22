@@ -36,6 +36,7 @@ public class TestKMyMoneyWritableAccountImpl {
 	private static final KMMComplAcctID ACCT_2_ID = TestKMyMoneyAccountImpl.ACCT_2_ID;
 	private static final KMMComplAcctID ACCT_3_ID = TestKMyMoneyAccountImpl.ACCT_3_ID;
 	private static final KMMComplAcctID ACCT_4_ID = TestKMyMoneyAccountImpl.ACCT_4_ID;
+	private static final KMMComplAcctID ACCT_9_ID = TestKMyMoneyAccountImpl.ACCT_9_ID;
 
 	// Top-level accounts
 	private static final KMMComplAcctID ACCT_10_ID = TestKMyMoneyAccountImpl.ACCT_10_ID;
@@ -740,5 +741,174 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals("Bug-Out Cash", elt.getAttribute("name"));
 		assertEquals("My hopefully secret cash wallet for crises", elt.getAttribute("description"));
 	}
+
+	// -----------------------------------------------------------------
+	// PART 4: Delete objects
+	// -----------------------------------------------------------------
+
+	// ------------------------------
+	// PART 4.1: High-Level
+	// ------------------------------
+
+	@Test
+	public void test04_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_1_ID);
+		assertNotEquals(null, acct);
+		assertEquals(ACCT_1_ID, acct.getID());
+
+		// Check if modifiable
+		assertEquals(true, acct.hasTransactions()); // there are payments
+
+		// Variant 1
+		try {
+			kmmInFile.removeAccount(acct); // Correctly fails because there are transactions/trx splits to it
+			assertEquals(1, 0);
+		} catch ( IllegalStateException exc ) {
+			assertEquals(0, 0);
+		}
+
+		// Variant 2
+		try {
+			acct.remove(); // Correctly fails because there are transactions/trx splits to it
+			assertEquals(1, 0);
+		} catch ( IllegalStateException exc ) {
+			assertEquals(0, 0);
+		}
+	}
+	
+	@Test
+	public void test04_2_var1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_9_ID);
+		assertNotEquals(null, acct);
+
+		// Check if modifiable
+		assertEquals(false, acct.hasTransactions()); // there are transactions/trx splits
+
+
+		// Core (variant-specific):
+		kmmInFile.removeAccount(acct);
+
+		// ----------------------------
+		// Check whether the objects have actually been deleted
+		// (in memory, not in the file yet).
+
+		test04_2_check_memory(acct);
+
+		// ----------------------------
+		// Now, check whether the deletions have been written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test04_2_check_persisted(outFile);
+	}
+
+	@Test
+	public void test04_2_var2() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritableAccount acct = kmmInFile.getWritableAccountByID(ACCT_9_ID);
+		assertNotEquals(null, acct);
+
+		// Check if modifiable
+		assertEquals(false, acct.hasTransactions()); // there are no transactions/trx splits
+
+		// Core (variant-specific):
+		acct.remove();
+
+		// ----------------------------
+		// Check whether the objects have actually been deleted
+		// (in memory, not in the file yet).
+
+		test04_2_check_memory(acct);
+
+		// ----------------------------
+		// Now, check whether the deletions have been written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test04_2_check_persisted(outFile);
+	}
+
+	// ---------------------------------------------------------------
+
+	private void test04_2_check_memory(KMyMoneyWritableAccount acct) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_ACCT - 1, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_ACCT    , kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
+		assertEquals(ConstTest.Stats.NOF_ACCT - 1, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
+
+		// CAUTION / ::TODO
+		// Old Object still exists and is unchanged
+		// Exception: no splits any more
+		// Don't know what to do about this oddity right now,
+		// but it needs to be addressed at some point.
+		assertEquals(ACCT_9_ID, acct.getID());
+    	assertEquals(KMyMoneyAccount.Type.EXPENSE, acct.getType());
+    	assertEquals("Gas", acct.getName());
+    	// usw.
+		
+		// However, the account cannot newly be instantiated any more,
+		// just as you would expect.
+		try {
+			KMyMoneyWritableAccount acctNow1 = kmmInFile.getWritableAccountByID(ACCT_9_ID);
+			assertEquals(1, 0);
+		} catch ( Exception exc ) {
+			assertEquals(0, 0);
+		}
+		// Same for a non non-writable instance. 
+		// However, due to design asymmetry, no exception is thrown here,
+		// but the method just returns null.
+		KMyMoneyAccount acctNow2 = kmmInFile.getAccountByID(ACCT_9_ID);
+		assertEquals(null, acctNow2);
+	}
+
+	private void test04_2_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		assertEquals(ConstTest.Stats.NOF_ACCT - 1, kmmOutFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_ACCT - 1, kmmOutFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_ACCT - 1, kmmOutFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
+
+		// The transaction does not exist any more, just as you would expect.
+		// However, no exception is thrown, as opposed to test04_1_check_memory()
+		KMyMoneyAccount acct = kmmOutFile.getAccountByID(ACCT_9_ID);
+		assertEquals(null, acct); // sic
+	}
+
+	// ------------------------------
+	// PART 4.2: Low-Level
+	// ------------------------------
+	
+	// ::EMPTY
 
 }

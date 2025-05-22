@@ -87,7 +87,7 @@ public class FileAccountManager {
 
 		KMyMoneyAccount retval = acctMap.get(acctID);
 		if ( retval == null ) {
-			System.err.println("getAccountById: No Account with ID '" + acctID + "'. We know " + acctMap.size() + " accounts.");
+			LOGGER.error("getAccountByID: No Account with ID '" + acctID + "'. We know " + acctMap.size() + " accounts.");
 		}
 
 		return retval;

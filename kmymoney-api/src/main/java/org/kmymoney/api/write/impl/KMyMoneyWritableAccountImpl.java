@@ -137,7 +137,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	 * Throws IllegalStateException if this account has splits or childres.
 	 */
 	public void remove() {
-		if ( getTransactionSplits().size() > 0 ) {
+		if ( hasTransactions() ) {
 			throw new IllegalStateException("Cannot remove account while it contains transaction-splits!");
 		}
 		if ( this.getChildren().size() > 0 ) {
@@ -521,7 +521,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		// and it should be possibly to correct that.
 		// It does not seem prudent to change an account's type when
 		// there are already transactions pointing to/from it.
-		if ( getTransactionSplits().size() > 0 ) {
+		if ( hasTransactions() ) {
 	    	LOGGER.error("Changing account type is forbidden for accounts that already contain transactions: " + getID());
 			throw new UnsupportedOperationException("Changing account type is forbidden for accounts that already contain transactions: " + getID());
 		}
