@@ -12,6 +12,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.kmymoney.api.read.KMyMoneyPayee;
+import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.tools.CommandLineTool;
@@ -37,6 +38,8 @@ public class GetPyeInfo extends CommandLineTool
   private static KMMPyeID    pyeID       = null;
   private static String      name        = null;
   
+  private static boolean showTrx      = false;
+
   private static boolean scriptMode = false; // ::TODO
 
   public static void main( String[] args )
@@ -95,13 +98,17 @@ public class GetPyeInfo extends CommandLineTool
       .build();
           
     // The convenient ones
-    // ::EMPTY
+    Option optShowTrx = Option.builder("strx")
+      .desc("Show transactions")
+      .longOpt("show-transactions")
+      .build();
             
     options = new Options();
     options.addOption(optFile);
     options.addOption(optMode);
     options.addOption(optPyeID);
     options.addOption(optName);
+    options.addOption(optShowTrx);
   }
 
   @Override
@@ -197,6 +204,22 @@ public class GetPyeInfo extends CommandLineTool
     catch (Exception exc)
     {
       System.out.println("Notes:             " + "ERROR");
+    }
+    
+    // ---
+    
+    if ( showTrx )
+      showTransactions(pye);
+  }
+
+  private void showTransactions(KMyMoneyPayee pye)
+  {
+    System.out.println("");
+    System.out.println("Transactions:");
+    
+    for ( KMyMoneyTransaction trx : pye.getTransactions() )
+    {
+      System.out.println(" - " + trx.toString());
     }
   }
 
@@ -309,6 +332,19 @@ public class GetPyeInfo extends CommandLineTool
 
     if (!scriptMode)
       System.err.println("Name:     '" + name + "'");
+    
+    // <show-transactions>
+    if ( cmdLine.hasOption("show-transactions"))
+    {
+      showTrx = true;
+    }
+    else
+    {
+      showTrx = false;
+    }
+    
+    if ( ! scriptMode )
+      System.err.println("Show transactions: " + showTrx);
   }
 
   @Override
