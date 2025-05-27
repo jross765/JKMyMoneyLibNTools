@@ -1,6 +1,7 @@
 package org.kmymoney.api.read.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.InputStream;
 
@@ -67,6 +68,7 @@ public class TestKMyMoneyTransactionSplitImpl {
 	@Test
 	public void test01() throws Exception {
 		splt = kmmFile.getTransactionSplitByID(TRXSPLT_1_ID);
+		assertNotEquals(null, splt);
 
 		assertEquals(TRXSPLT_1_ID, splt.getQualifID());
 		assertEquals(TRX_1_ID, splt.getTransactionID());
@@ -85,6 +87,7 @@ public class TestKMyMoneyTransactionSplitImpl {
 	@Test
 	public void test02() throws Exception {
 		splt = kmmFile.getTransactionSplitByID(TRXSPLT_2_ID);
+		assertNotEquals(null, splt);
 
 		assertEquals(TRXSPLT_2_ID, splt.getQualifID());
 		assertEquals(TRX_18_ID, splt.getTransactionID());

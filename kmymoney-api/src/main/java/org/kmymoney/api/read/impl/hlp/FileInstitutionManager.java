@@ -64,11 +64,11 @@ public class FileInstitutionManager {
 
 	public KMyMoneyInstitution getInstitutionByID(final KMMInstID instID) {
 		if ( instID == null ) {
-			throw new IllegalStateException("null institution ID given");
+			throw new IllegalArgumentException("null institution ID given");
 		}
 
 		if ( ! instID.isSet() ) {
-			throw new IllegalStateException("unset institution ID given");
+			throw new IllegalArgumentException("unset institution ID given");
 		}
 
 		if ( instMap == null ) {
@@ -85,11 +85,11 @@ public class FileInstitutionManager {
 
 	public List<KMyMoneyInstitution> getInstitutionsByName(String expr) {
 		if ( expr == null ) {
-			throw new IllegalStateException("null expression given");
+			throw new IllegalArgumentException("null expression given");
 		}
 
 		if ( expr.trim().equals("") ) {
-			throw new IllegalStateException("empty expression given");
+			throw new IllegalArgumentException("empty expression given");
 		}
 
 		return getInstitutionsByName(expr, true);
@@ -97,11 +97,11 @@ public class FileInstitutionManager {
 
 	public List<KMyMoneyInstitution> getInstitutionsByName(String expr, boolean relaxed) {
 		if ( expr == null ) {
-			throw new IllegalStateException("null expression given");
+			throw new IllegalArgumentException("null expression given");
 		}
 
 		if ( expr.trim().equals("") ) {
-			throw new IllegalStateException("empty expression given");
+			throw new IllegalArgumentException("empty expression given");
 		}
 
 		if ( instMap == null ) {
@@ -129,11 +129,11 @@ public class FileInstitutionManager {
 
 	public KMyMoneyInstitution getInstitutionsByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( expr == null ) {
-			throw new IllegalStateException("null expression given");
+			throw new IllegalArgumentException("null expression given");
 		}
 
 		if ( expr.trim().equals("") ) {
-			throw new IllegalStateException("empty expression given");
+			throw new IllegalArgumentException("empty expression given");
 		}
 
 		List<KMyMoneyInstitution> cmdtyList = getInstitutionsByName(expr, false);

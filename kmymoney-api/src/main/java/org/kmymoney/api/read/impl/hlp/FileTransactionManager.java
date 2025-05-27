@@ -69,12 +69,12 @@ public class FileTransactionManager {
 				List<KMyMoneyTransactionSplit> spltList = null;
 				if ( kmmFile instanceof KMyMoneyWritableFileImpl ) {
 					// CAUTION: As opposed to the code in the sister project,
-					// the second arg here has to be set to "true", else the
+					// the second and third arg here has to be set to "true", else the
 					// whole shebang will not work.
 					// Cannot explain this...
-					spltList = ((KMyMoneyTransactionImpl) trx).getSplits(true);
+					spltList = ((KMyMoneyTransactionImpl) trx).getSplits(true, true);
 				} else {
-					spltList = ((KMyMoneyTransactionImpl) trx).getSplits(true);
+					spltList = ((KMyMoneyTransactionImpl) trx).getSplits(true, true);
 				}
 				for ( KMyMoneyTransactionSplit splt : spltList ) {
 					trxSpltMap.put(splt.getQualifID(), splt);
@@ -101,9 +101,10 @@ public class FileTransactionManager {
 	protected KMyMoneyTransactionSplitImpl createTransactionSplit(
 			final SPLIT jwsdpTrxSplt,
 			final KMyMoneyTransaction trx, 
-			final boolean addSpltToAcct) {
+			final boolean addSpltToAcct,
+			final boolean addSpltToPye) {
 		KMyMoneyTransactionSplitImpl splt = new KMyMoneyTransactionSplitImpl(jwsdpTrxSplt, trx, 
-																			 addSpltToAcct);
+																			 addSpltToAcct, addSpltToPye);
 		LOGGER.debug("createTransactionSplit: Generated new transaction split: " + splt.getQualifID());
 		return splt;
 	}
@@ -112,11 +113,11 @@ public class FileTransactionManager {
 
 	public KMyMoneyTransaction getTransactionByID(final KMMTrxID trxID) {
 		if ( trxID == null ) {
-			throw new IllegalStateException("null transaction ID given");
+			throw new IllegalArgumentException("null transaction ID given");
 		}
 
 		if ( ! trxID.isSet() ) {
-			throw new IllegalStateException("unset transaction ID given");
+			throw new IllegalArgumentException("unset transaction ID given");
 		}
 
 		if ( trxMap == null ) {
@@ -212,11 +213,11 @@ public class FileTransactionManager {
 
 	public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSpltID spltID) {
 		if ( spltID == null ) {
-			throw new IllegalStateException("null split ID given");
+			throw new IllegalArgumentException("null split ID given");
 		}
 
 		if ( ! spltID.isSet() ) {
-			throw new IllegalStateException("unset split ID given");
+			throw new IllegalArgumentException("unset split ID given");
 		}
 
 		if ( trxSpltMap == null ) {
@@ -282,7 +283,7 @@ public class FileTransactionManager {
 			for ( SPLIT jwsdpTrxSplt : getTransactionSplits_raw(trx.getID()) ) {
 				try {
 					KMyMoneyTransactionSplitImpl splt = createTransactionSplit(jwsdpTrxSplt, trx,
-																			   false);
+																			   false, false);
 					result.add(splt);
 				} catch (RuntimeException e) {
 					LOGGER.error("getTransactionSplits_readAfresh(1): [RuntimeException] Problem in "
@@ -299,11 +300,11 @@ public class FileTransactionManager {
 
 	public List<KMyMoneyTransactionSplitImpl> getTransactionSplits_readAfresh(final KMMTrxID trxID) {
 		if ( trxID == null ) {
-			throw new IllegalStateException("null transaction ID given");
+			throw new IllegalArgumentException("null transaction ID given");
 		}
 
 		if ( ! trxID.isSet() ) {
-			throw new IllegalStateException("unset transaction ID given");
+			throw new IllegalArgumentException("unset transaction ID given");
 		}
 
 		List<KMyMoneyTransactionSplitImpl> result = new ArrayList<KMyMoneyTransactionSplitImpl>();
@@ -313,7 +314,7 @@ public class FileTransactionManager {
 				for ( SPLIT jwsdpTrxSplt : getTransactionSplits_raw(trx.getID()) ) {
 					try {
 						KMyMoneyTransactionSplitImpl splt = createTransactionSplit(jwsdpTrxSplt, trx, 
-																				   true);
+																				   true, true);
 						result.add(splt);
 					} catch (RuntimeException e) {
 						LOGGER.error("getTransactionSplits_readAfresh(2): [RuntimeException] Problem in "
@@ -341,11 +342,11 @@ public class FileTransactionManager {
 
 	private List<SPLIT> getTransactionSplits_raw(final KMMTrxID trxID) {
 		if ( trxID == null ) {
-			throw new IllegalStateException("null transaction ID given");
+			throw new IllegalArgumentException("null transaction ID given");
 		}
 
 		if ( ! trxID.isSet() ) {
-			throw new IllegalStateException("unset transaction ID given");
+			throw new IllegalArgumentException("unset transaction ID given");
 		}
 
 		List<SPLIT> result = new ArrayList<SPLIT>();

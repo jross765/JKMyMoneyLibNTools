@@ -21,6 +21,7 @@ import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.generated.SPLITS;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
@@ -102,18 +103,19 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	/**
 	 * Create a new split for a split found in the jaxb-data.
 	 *
-	 * @param splt the jaxb-data
+	 * @param jwsdpSplt the jaxb-data
 	 * @return the new split-instance
 	 */
 	@Override
 	protected KMyMoneyTransactionSplitImpl createSplit(
-			final SPLIT splt,
-		    final boolean addToAcct) {
+			final SPLIT jwsdpSplt,
+		    final boolean addToAcct,
+		    final boolean addToPye) {
 		KMyMoneyWritableTransactionSplitImpl kmmTrxSplt = 
-				new KMyMoneyWritableTransactionSplitImpl(splt, this,
-						                                 addToAcct);
+				new KMyMoneyWritableTransactionSplitImpl(jwsdpSplt, this,
+						                                 addToAcct, addToPye);
 		if ( helper.getPropertyChangeSupport() != null ) {
-			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableSplits());
+			 helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableSplits());
 		}
 		return kmmTrxSplt;
 	}
@@ -122,7 +124,31 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	 * @see KMyMoneyWritableTransaction#createWritableSplit(KMyMoneyAccount)
 	 */
 	public KMyMoneyWritableTransactionSplit createWritableSplit(final KMyMoneyAccount acct) {
+		if ( acct == null ) {
+			throw new IllegalArgumentException("null account given");
+		}
+
 		KMyMoneyWritableTransactionSplitImpl splt = new KMyMoneyWritableTransactionSplitImpl(this, acct);
+		addSplit(splt);
+		if ( helper.getPropertyChangeSupport() != null ) {
+			 helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableSplits());
+		}
+		return splt;
+	}
+
+	/**
+	 * @see KMyMoneyWritableTransaction#createWritableSplit(KMyMoneyAccount)
+	 */
+	public KMyMoneyWritableTransactionSplit createWritableSplit(final KMyMoneyAccount acct, final KMyMoneyPayee pye) {
+		if ( acct == null ) {
+			throw new IllegalArgumentException("null account given");
+		}
+
+		if ( pye == null ) {
+			throw new IllegalArgumentException("null payee given");
+		}
+		
+		KMyMoneyWritableTransactionSplitImpl splt = new KMyMoneyWritableTransactionSplitImpl(this, acct, pye);
 		addSplit(splt);
 		if ( helper.getPropertyChangeSupport() != null ) {
 			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableSplits());
@@ -283,7 +309,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		KMyMoneyTransactionSplit splt = super.getSplitByID(spltID);
 		// ::TODO
 		// !!! Diese nicht-triviale Änderung nochmal ganz genau abtesten !!!
-		return new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) splt, false);
+		return new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) splt, false, false);
 	}
 
 	/**
@@ -294,7 +320,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		List<KMyMoneyWritableTransactionSplit> result = new ArrayList<KMyMoneyWritableTransactionSplit>();
 		
 		for ( KMyMoneyTransactionSplit split : super.getSplits() ) {
-			KMyMoneyWritableTransactionSplit newSplit = new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) split, false);
+			KMyMoneyWritableTransactionSplit newSplit = new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) split, false, false);
 		    result.add(newSplit);
 		}
 
@@ -549,6 +575,5 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 
 	return buffer.toString();
     }
-
 
 }

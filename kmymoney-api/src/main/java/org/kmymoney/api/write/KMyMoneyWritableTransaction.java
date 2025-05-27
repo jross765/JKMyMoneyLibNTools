@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.write.hlp.HasWritableUserDefinedAttributes;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
@@ -99,6 +100,8 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
 	 * @return a new split, already atached to this transaction
 	 */
 	KMyMoneyWritableTransactionSplit createWritableSplit(KMyMoneyAccount account);
+
+	KMyMoneyWritableTransactionSplit createWritableSplit(KMyMoneyAccount account, KMyMoneyPayee pye);
 
 	/**
 	 * Removes the given split from this transaction.

@@ -75,11 +75,11 @@ public class FileSecurityManager {
 
 	public KMyMoneySecurity getSecurityByID(final KMMSecID secID) {
 		if ( secID == null ) {
-			throw new IllegalStateException("null security ID given");
+			throw new IllegalArgumentException("null security ID given");
 		}
 
 		if ( ! secID.isSet() ) {
-			throw new IllegalStateException("unset security ID given");
+			throw new IllegalArgumentException("unset security ID given");
 		}
 
 		if ( secMap == null ) {
@@ -96,11 +96,11 @@ public class FileSecurityManager {
 
 	public KMyMoneySecurity getSecurityByID(final String idStr) {
 		if ( idStr == null ) {
-			throw new IllegalStateException("null security ID given");
+			throw new IllegalArgumentException("null security ID given");
 		}
 
 		if ( idStr.trim().equals("") ) {
-			throw new IllegalStateException("empty security ID given");
+			throw new IllegalArgumentException("empty security ID given");
 		}
 
 		KMMSecID secID = new KMMSecID(idStr);
@@ -113,11 +113,11 @@ public class FileSecurityManager {
 
 	public KMyMoneySecurity getSecurityByQualifID(final String qualifIDStr) {
 		if ( qualifIDStr == null ) {
-			throw new IllegalStateException("null security ID given");
+			throw new IllegalArgumentException("null security ID given");
 		}
 
 		if ( qualifIDStr.trim().equals("") ) {
-			throw new IllegalStateException("empty security ID given");
+			throw new IllegalArgumentException("empty security ID given");
 		}
 
 		KMMQualifSecID secID = KMMQualifSecID.parse(qualifIDStr);
@@ -280,11 +280,11 @@ public class FileSecurityManager {
 
 	public List<KMyMoneySecurity> getSecuritiesByTypeAndName(KMMSecCurr.Type type, String expr, boolean relaxed) {
 		if ( expr == null ) {
-			throw new IllegalStateException("null expression given");
+			throw new IllegalArgumentException("null expression given");
 		}
 
 		if ( expr.trim().equals("") ) {
-			throw new IllegalStateException("empty name given");
+			throw new IllegalArgumentException("empty name given");
 		}
 
 		List<KMyMoneySecurity> result = new ArrayList<KMyMoneySecurity>();

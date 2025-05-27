@@ -5,6 +5,8 @@ import java.text.ParseException;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyPayee;
+import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
+import org.kmymoney.api.read.impl.KMyMoneyPayeeImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
@@ -41,14 +43,16 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	 * @param jwsdpPeer   the JWSDP-object we are facading.
 	 * @param trx the transaction we belong to
      * @param addSpltToAcct 
+	 * @param addSpltToPye 
 	 */
 	@SuppressWarnings("exports")
 	public KMyMoneyWritableTransactionSplitImpl(
 			final SPLIT jwsdpPeer,
 			final KMyMoneyWritableTransaction trx, 
-    		final boolean addSpltToAcct) {
+    		final boolean addSpltToAcct,
+    		final boolean addSpltToPye) {
 		super(jwsdpPeer, trx, 
-			  addSpltToAcct);
+			  addSpltToAcct, addSpltToPye);
 	}
 
     /**
@@ -61,35 +65,76 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 			final KMyMoneyWritableTransactionImpl trx,
 			final KMyMoneyAccount acct) {
 		super(createTransactionSplit_int(trx.getWritableFile(), 
-				                         trx, acct, 
+				                         trx, acct, null, 
 				                         trx.getNewSplitID()),
 		      trx,
-		      true);
+		      true, false);
 
 		// ::TODO ::CHECK
-		// this is a workaround.
-		// if super does account.addSplit(this) it adds an instance on
-		// KMyMoneyTransactionSplitImpl that is "!=
-		// (KMyMoneyTransactionSplitWritingImpl)this";
-		// thus we would get warnings about dublicate split-ids and can no longer
+		// This is a workaround:
+		// When super executes acct.addSplit(this), it adds an instance on
+		// KMyMoneyTransactionSplitImpl that is != (KMyMoneyWritableTransactionSplitImpl) this;
+		// thus we would get warnings about duplicate split-ids and could no longer
 		// compare splits by instance.
-		// if(account!=null)
-		// ((KMyMoneyAccountImpl)account).replaceTransactionSplit(account.getTransactionSplitByID(getId()),
-		// KMyMoneyTransactionSplitWritingImpl.this);
+//		 if( acct != null ) {
+//			 ((KMyMoneyAccountImpl) acct)
+//			 	.replaceTransactionSplit(acct.getTransactionSplitByID(getQualifID()),
+//			 							 KMyMoneyWritableTransactionSplitImpl.this);
+//		 }
 
-		trx.addSplit(this);
+		 trx.addSplit(this);
+	}
+
+    /**
+	 * create a new split and and add it to the given transaction.
+	 * @param trx transaction the transaction we will belong to
+	 * @param acct     the account we take money (or other things) from or give
+	 *                    it to
+     * @param pye 
+	 */
+	public KMyMoneyWritableTransactionSplitImpl(
+			final KMyMoneyWritableTransactionImpl trx,
+			final KMyMoneyAccount acct,
+			final KMyMoneyPayee pye) {
+		super(createTransactionSplit_int(trx.getWritableFile(), 
+				                         trx, acct, pye, 
+				                         trx.getNewSplitID()),
+		      trx,
+		      true, 
+		      ( pye  == null ? false : true ) );
+
+		// ::TODO ::CHECK
+		// This is a workaround:
+		// When super executes acct.addSplit(this), it adds an instance on
+		// KMyMoneyTransactionSplitImpl that is != (KMyMoneyWritableTransactionSplitImpl) this;
+		// thus we would get warnings about duplicate split-ids and could no longer
+		// compare splits by instance.
+//		 if( acct != null ) {
+//			 ((KMyMoneyAccountImpl) acct)
+//			 	.replaceTransactionSplit(acct.getTransactionSplitByID(getQualifID()),
+//			 							 KMyMoneyWritableTransactionSplitImpl.this);
+//		 }
+//
+//		 if( pye != null ) {
+//			 ((KMyMoneyPayeeImpl) pye)
+//			 	.replaceTransactionSplit(pye.getTransactionSplitByID(getQualifID()),
+//			 							 KMyMoneyWritableTransactionSplitImpl.this);
+//		 }
+
+		 trx.addSplit(this);
 	}
 
     public KMyMoneyWritableTransactionSplitImpl(final KMyMoneyTransactionSplitImpl splt) {
 	super(splt.getJwsdpPeer(), splt.getTransaction(), 
-		  true);
+		  true, true);
     }
 
     public KMyMoneyWritableTransactionSplitImpl(
     		final KMyMoneyTransactionSplitImpl split,
-    		final boolean addSpltToAcct) {
+    		final boolean addSpltToAcct,
+    		final boolean addSpltToPye) {
     	super(split.getJwsdpPeer(), split.getTransaction(), 
-    		  addSpltToAcct);
+    		  addSpltToAcct, addSpltToPye);
     }
 
 	// ---------------------------------------------------------------
@@ -102,6 +147,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 			final KMyMoneyWritableFileImpl file, 
 			final KMyMoneyWritableTransactionImpl trx, 
 			final KMyMoneyAccount acct, 
+			final KMyMoneyPayee pye, 
 			final KMMSpltID newID) {
 
 		if ( trx == null ) {
@@ -111,6 +157,11 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		if ( acct == null ) {
 			throw new IllegalArgumentException("null account given");
 		}
+
+		// Sic: null is allowed!
+//		if ( pye == null ) {
+//			throw new IllegalArgumentException("null payee given");
+//		}
 
 		if ( newID == null ) {
 			throw new IllegalArgumentException("null ID given");
@@ -134,6 +185,9 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		
 		jwsdpSplt.setId(newID.toString());
 		jwsdpSplt.setAccount(acct.getID().toString());
+		if ( pye != null ) {
+			jwsdpSplt.setPayee(pye.getID().toString());
+		}
 		jwsdpSplt.setShares(new FixedPointNumber().toKMyMoneyString());
 		jwsdpSplt.setValue(new FixedPointNumber().toKMyMoneyString());
 		

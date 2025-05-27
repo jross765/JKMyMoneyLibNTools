@@ -43,14 +43,15 @@ public class FileTransactionManager extends org.kmymoney.api.read.impl.hlp.FileT
 			final SPLIT jwsdpTrxSplt,
 			final KMyMoneyTransaction trx, // actually, should be KMyMoney*Writable*Transaction, 
 			                               // but then the compiler is not happy...
-			final boolean addSpltToAcct) {
+			final boolean addSpltToAcct,
+			final boolean addSpltToPye) {
     	if ( ! ( trx instanceof KMyMoneyWritableTransaction ) ) {
     		throw new IllegalArgumentException("transaction must be a writable one");
     	}
     	
     	KMyMoneyWritableTransactionSplitImpl splt = new KMyMoneyWritableTransactionSplitImpl(jwsdpTrxSplt, 
     																						 (KMyMoneyWritableTransaction) trx, 
-                								           									 addSpltToAcct);
+                								           									 addSpltToAcct, addSpltToPye);
     	LOGGER.debug("createTransactionSplit: Generated new writable transaction split: " + splt.getID());
     	return splt;
     }
@@ -63,7 +64,7 @@ public class FileTransactionManager extends org.kmymoney.api.read.impl.hlp.FileT
 
 	public void addTransaction(KMyMoneyTransaction trx, boolean withSplt) {
 		if ( trx == null ) {
-			throw new IllegalStateException("null transaction given");
+			throw new IllegalArgumentException("null transaction given");
 		}
 
 		trxMap.put(trx.getID(), trx);
@@ -83,7 +84,7 @@ public class FileTransactionManager extends org.kmymoney.api.read.impl.hlp.FileT
 
 	public void removeTransaction(KMyMoneyTransaction trx, boolean withSplt) {
 		if ( trx == null ) {
-			throw new IllegalStateException("null transaction given");
+			throw new IllegalArgumentException("null transaction given");
 		}
 
 		if ( withSplt ) {
@@ -119,7 +120,7 @@ public class FileTransactionManager extends org.kmymoney.api.read.impl.hlp.FileT
 
 	public void addTransactionSplit(KMyMoneyTransactionSplit splt, boolean withTrx) {
 		if ( splt == null ) {
-			throw new IllegalStateException("null split given");
+			throw new IllegalArgumentException("null split given");
 		}
 
 		trxSpltMap.put(splt.getQualifID(), splt);
@@ -135,7 +136,7 @@ public class FileTransactionManager extends org.kmymoney.api.read.impl.hlp.FileT
 
 	public void removeTransactionSplit(KMyMoneyTransactionSplit splt, boolean withTrx) {
 		if ( splt == null ) {
-			throw new IllegalStateException("null split given");
+			throw new IllegalArgumentException("null split given");
 		}
 
 		if ( withTrx ) {

@@ -3,19 +3,21 @@ package org.kmymoney.api.write.impl;
 import java.beans.PropertyChangeSupport;
 import java.math.BigInteger;
 
-import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
-import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.generated.ADDRESS;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PAYEE;
 import org.kmymoney.api.read.KMyMoneyPayee;
+import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.aux.KMMAddress;
+import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPayeeImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritablePayee;
 import org.kmymoney.api.write.aux.KMMWritableAddress;
 import org.kmymoney.api.write.impl.aux.KMMWritableAddressImpl;
 import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
+import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,12 +62,26 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
      * @param id   the ID we shall have
      */
     protected KMyMoneyWritablePayeeImpl(final KMyMoneyWritableFileImpl file) {
-	super(createPayee_int(file, file.getNewPayeeID()), file);
+    	super(createPayee_int(file, file.getNewPayeeID()), file);
     }
 
-    public KMyMoneyWritablePayeeImpl(final KMyMoneyPayeeImpl pye) {
-	super(pye.getJwsdpPeer(), pye.getKMyMoneyFile());
-    }
+	public KMyMoneyWritablePayeeImpl(final KMyMoneyPayeeImpl pye, final boolean addSplits) {
+		super(pye.getJwsdpPeer(), pye.getKMyMoneyFile());
+
+		if ( addSplits ) {
+		    for ( KMyMoneyTransactionSplit splt : ((KMyMoneyFileImpl) pye.getKMyMoneyFile()).getTransactionSplits_readAfresh() ) {
+		    	if ( splt.getPayeeID() != null ) { // Caution: Payee is optional for split, as opposed to account
+		    									   // Cf. KMyMoneyWritableAccountImpl
+		    		if ( splt.getPayeeID().equals(pye.getID()) ) {
+			    		super.addTransactionSplit(splt);
+				    // NO:
+//					    addTransactionSplit(new KMyMoneyTransactionSplitImpl(splt.getJwsdpPeer(), splt.getTransaction(), 
+//			                                false, false));
+			    	}
+		    	}
+		    }
+		}
+	}
 
     // ---------------------------------------------------------------
 

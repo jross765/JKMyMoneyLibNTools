@@ -59,11 +59,11 @@ public class FileCurrencyManager {
 
 	public KMyMoneyCurrency getCurrencyByID(String currID) {
 		if ( currID == null ) {
-			throw new IllegalStateException("null currency code given");
+			throw new IllegalArgumentException("null currency code given");
 		}
 
 		if ( currID.trim().equals("") ) {
-			throw new IllegalStateException("empty currency code given");
+			throw new IllegalArgumentException("empty currency code given");
 		}
 
 		if ( currMap == null ) {
@@ -81,11 +81,11 @@ public class FileCurrencyManager {
 
 	public KMyMoneyCurrency getCurrencyByQualifID(KMMQualifCurrID currID) {
 		if ( currID == null ) {
-			throw new IllegalStateException("null currency ID given");
+			throw new IllegalArgumentException("null currency ID given");
 		}
 
 		if ( ! currID.isSet() ) {
-			throw new IllegalStateException("unset currency ID given");
+			throw new IllegalArgumentException("unset currency ID given");
 		}
 
 		return getCurrencyByID(currID.getCode());

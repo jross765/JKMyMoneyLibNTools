@@ -64,11 +64,11 @@ public class FilePayeeManager {
 
 	public KMyMoneyPayee getPayeeByID(final KMMPyeID pyeID) {
 		if ( pyeID == null ) {
-			throw new IllegalStateException("null payee ID given");
+			throw new IllegalArgumentException("null payee ID given");
 		}
 
 		if ( ! pyeID.isSet() ) {
-			throw new IllegalStateException("unset payee ID given");
+			throw new IllegalArgumentException("unset payee ID given");
 		}
 
 		if ( pyeMap == null ) {
@@ -85,11 +85,11 @@ public class FilePayeeManager {
 
 	public List<KMyMoneyPayee> getPayeesByName(String expr) {
 		if ( expr == null ) {
-			throw new IllegalStateException("null expression given");
+			throw new IllegalArgumentException("null expression given");
 		}
 
 		if ( expr.trim().equals("") ) {
-			throw new IllegalStateException("empty expression given");
+			throw new IllegalArgumentException("empty expression given");
 		}
 
 		return getPayeesByName(expr, true);
@@ -97,11 +97,11 @@ public class FilePayeeManager {
 
 	public List<KMyMoneyPayee> getPayeesByName(String expr, boolean relaxed) {
 		if ( expr == null ) {
-			throw new IllegalStateException("null expression given");
+			throw new IllegalArgumentException("null expression given");
 		}
 
 		if ( expr.trim().equals("") ) {
-			throw new IllegalStateException("empty expression given");
+			throw new IllegalArgumentException("empty expression given");
 		}
 
 		if ( pyeMap == null ) {
@@ -129,11 +129,11 @@ public class FilePayeeManager {
 
 	public KMyMoneyPayee getPayeesByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( expr == null ) {
-			throw new IllegalStateException("null expression given");
+			throw new IllegalArgumentException("null expression given");
 		}
 
 		if ( expr.trim().equals("") ) {
-			throw new IllegalStateException("empty expression given");
+			throw new IllegalArgumentException("empty expression given");
 		}
 
 		List<KMyMoneyPayee> cmdtyList = getPayeesByName(expr, false);

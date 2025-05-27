@@ -130,8 +130,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 		instMgr = new org.kmymoney.api.write.impl.hlp.FileInstitutionManager(this);
 		acctMgr = new org.kmymoney.api.write.impl.hlp.FileAccountManager(this);
-		trxMgr  = new org.kmymoney.api.write.impl.hlp.FileTransactionManager(this);
 		pyeMgr  = new org.kmymoney.api.write.impl.hlp.FilePayeeManager(this);
+		trxMgr  = new org.kmymoney.api.write.impl.hlp.FileTransactionManager(this);
 		secMgr  = new org.kmymoney.api.write.impl.hlp.FileSecurityManager(this);
 		currMgr = new org.kmymoney.api.write.impl.hlp.FileCurrencyManager(this);
 		prcMgr  = new org.kmymoney.api.write.impl.hlp.FilePriceManager(this);
@@ -143,8 +143,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 		instMgr = new org.kmymoney.api.write.impl.hlp.FileInstitutionManager(this);
 		acctMgr = new org.kmymoney.api.write.impl.hlp.FileAccountManager(this);
-		trxMgr  = new org.kmymoney.api.write.impl.hlp.FileTransactionManager(this);
 		pyeMgr  = new org.kmymoney.api.write.impl.hlp.FilePayeeManager(this);
+		trxMgr  = new org.kmymoney.api.write.impl.hlp.FileTransactionManager(this);
 		secMgr  = new org.kmymoney.api.write.impl.hlp.FileSecurityManager(this);
 		currMgr = new org.kmymoney.api.write.impl.hlp.FileCurrencyManager(this);
 		prcMgr  = new org.kmymoney.api.write.impl.hlp.FilePriceManager(this);
@@ -636,8 +636,15 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 */
 	@Override
 	public void removePayee(final KMyMoneyWritablePayee pye) {
+		if ( pye.hasTransactions() ) {
+			throw new IllegalStateException("cannot remove account while it contains transaction-splits!");
+		}
+
+		// 1) Remove avatar in payee manager
 		((org.kmymoney.api.write.impl.hlp.FilePayeeManager) super.pyeMgr)
 			.removePayee(pye);
+		
+		// 2) Remove payee
 		getRootElement().getPAYEES().getPAYEE().remove(((KMyMoneyWritablePayeeImpl) pye).getJwsdpPeer());
 		setModified(true);
 	}
@@ -874,7 +881,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		KMyMoneyTransactionSplit splt = super.getTransactionSplitByID(spltID);
 		// ::TODO
 		// !!! Diese nicht-triviale Änderung nochmal ganz genau abtesten !!!
-		return new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) splt, false);
+		return new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) splt, false, false);
 	}
 	
 	// By purpose, this method has not been defined in the interface
@@ -935,8 +942,16 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throw new IllegalArgumentException("unset payee ID given");
 		}
 
-		KMyMoneyPayee trx = super.getPayeeByID(pyeID);
-		return new KMyMoneyWritablePayeeImpl((KMyMoneyPayeeImpl) trx);
+		try {
+			KMyMoneyPayee pye = super.getPayeeByID(pyeID);
+			return new KMyMoneyWritablePayeeImpl((KMyMoneyPayeeImpl) pye, true);
+		} catch (Exception exc) {
+			LOGGER.error(
+					"getWritablePayeeByID: Could not instantiate writable payee object from read-only account object (ID: "
+							+ pyeID + ")");
+			throw new RuntimeException(
+					"Could not instantiate writable payee object from read-only account object (ID: " + pyeID + ")");
+		}
 	}
 
 	/**

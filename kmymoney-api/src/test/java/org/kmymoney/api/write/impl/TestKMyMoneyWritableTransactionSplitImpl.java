@@ -100,6 +100,7 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 	@Test
 	public void test01_1() throws Exception {
 		KMyMoneyWritableTransactionSplit splt = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_1_ID);
+		assertNotEquals(null, splt);
 
 		assertEquals(TRXSPLT_1_ID, splt.getQualifID());
 		assertEquals(TRX_1_ID, splt.getTransactionID());
@@ -120,6 +121,7 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 	@Test
 	public void test01_2() throws Exception {
 		KMyMoneyWritableTransactionSplit splt = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_2_ID);
+		assertNotEquals(null, splt);
 
 		assertEquals(TRXSPLT_2_ID, splt.getQualifID());
 		assertEquals(TRX_18_ID, splt.getTransactionID());

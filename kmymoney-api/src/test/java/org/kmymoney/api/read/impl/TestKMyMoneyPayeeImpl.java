@@ -65,6 +65,8 @@ public class TestKMyMoneyPayeeImpl {
 
 		assertEquals(PYE_1_ID, pye.getID());
 		assertEquals("Gehalt", pye.getName());
+		
+		assertEquals(false, pye.hasTransactions());
 	}
 
 	@Test
@@ -73,6 +75,9 @@ public class TestKMyMoneyPayeeImpl {
 
 		assertEquals(PYE_2_ID, pye.getID());
 		assertEquals("Geldautomat", pye.getName());
+		
+		assertEquals(true, pye.hasTransactions());
+		assertEquals(1, pye.getTransactions().size());
 	}
 
 	@Test
@@ -89,5 +94,7 @@ public class TestKMyMoneyPayeeImpl {
 		KMMAddress addr = pye.getAddress();
 		assertNotEquals(null, addr);
 		// Detailed test of the address: Cf. TestKMMAddressImpl
+		
+		assertEquals(false, pye.hasTransactions());
 	}
 }

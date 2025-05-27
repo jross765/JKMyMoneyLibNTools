@@ -229,6 +229,10 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      * @see KMyMoneyAccount#addTransactionSplit(KMyMoneyTransactionSplit)
      */
     public void addTransactionSplit(final KMyMoneyTransactionSplit splt) {
+    	if ( splt == null ) {
+    		throw new IllegalArgumentException("null transaction-split given");
+    	}
+    	
 	KMyMoneyTransactionSplit old = getTransactionSplitByID(splt.getQualifID());
 	if ( old != null ) {
 	    // There already is a split with that ID
@@ -245,7 +249,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 					"old=" + old.toString());
 			IllegalStateException exc = new IllegalStateException("DEBUG");
 			exc.printStackTrace();
-			replaceTransactionSplit(old, splt);
+			replaceTransactionSplit(old, (KMyMoneyTransactionSplitImpl) splt);
 	    }
 	} else {
 	    // There is no split with that ID yet
@@ -258,9 +262,11 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      * For internal use only.
      *
      * @param splt
+     * @param impl 
      */
-    private void replaceTransactionSplit(final KMyMoneyTransactionSplit splt,
-	    final KMyMoneyTransactionSplit impl) {
+    public void replaceTransactionSplit(
+    		final KMyMoneyTransactionSplit splt,
+    		final KMyMoneyTransactionSplitImpl impl) {
     	if ( ! mySplits.remove(splt) ) {
     		throw new IllegalArgumentException("old object not found!");
     	}

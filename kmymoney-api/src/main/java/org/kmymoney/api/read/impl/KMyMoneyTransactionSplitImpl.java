@@ -52,29 +52,42 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
 
     /**
      * @param peer the JWSDP-object we are facading.
-     * @param kmmFile 
      * @param trx  the transaction this split belongs to
+     * @param addSpltToAcct 
+     * @param addSpltToPye 
      */
     @SuppressWarnings("exports")
     public KMyMoneyTransactionSplitImpl(
 	    final SPLIT peer,
 	    final KMyMoneyTransaction trx,
-	    final boolean addSpltToAcct) {
-    super(trx.getKMyMoneyFile());
+	    final boolean addSpltToAcct,
+	    final boolean addSpltToPye) {
+    	super(trx.getKMyMoneyFile());
     	
-	this.jwsdpPeer = peer;
-	this.myTrx = trx;
+    	this.jwsdpPeer = peer;
+    	this.myTrx = trx;
 
-	if ( addSpltToAcct ) {
-		KMyMoneyAccount acct = getAccount();
-		if (acct == null) {
-		    LOGGER.error("No such Account id='" + getAccountID() + "' for Transactions-Split with id '" + getQualifID()
-			    + "' description '" + getMemo() + "' in transaction with id '" + getTransaction().getID()
-			    + "' description '" + getTransaction().getMemo() + "'");
-		} else {
-		    acct.addTransactionSplit(this);
-		}
-	}
+    	if ( addSpltToAcct ) {
+    		KMyMoneyAccount acct = getAccount();
+    		if (acct == null) {
+    			LOGGER.error("No such Account id='" + getAccountID() + "' for Transactions-Split with id '" + getQualifID()
+			    	+ "' description '" + getMemo() + "' in transaction with id '" + getTransaction().getID()
+			    	+ "' description '" + getTransaction().getMemo() + "'");
+    		} else {
+    			acct.addTransactionSplit(this);
+    		}
+    	}
+
+    	if ( addSpltToPye ) {
+    		KMyMoneyPayee pye = getPayee();
+    		if (pye == null) {
+    			LOGGER.error("No such Payee id='" + getPayeeID() + "' for Transactions-Split with id '" + getQualifID() 
+			    	+ "' description '" + getMemo() + "' in transaction with id '" + getTransaction().getID()
+			    	+ "' description '" + getTransaction().getMemo() + "'");
+    		} else {
+    			pye.addTransactionSplit(this);
+    		}
+    	}
     }
 
     // ---------------------------------------------------------------

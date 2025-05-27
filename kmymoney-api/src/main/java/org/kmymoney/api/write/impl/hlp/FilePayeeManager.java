@@ -34,7 +34,7 @@ public class FilePayeeManager extends org.kmymoney.api.read.impl.hlp.FilePayeeMa
 
 	public void addPayee(KMyMoneyPayee pye) {
 		if ( pye == null ) {
-			throw new IllegalStateException("null payee given");
+			throw new IllegalArgumentException("null payee given");
 		}
 
 		pyeMap.put(pye.getID(), pye);
@@ -43,7 +43,7 @@ public class FilePayeeManager extends org.kmymoney.api.read.impl.hlp.FilePayeeMa
 
 	public void removePayee(KMyMoneyPayee pye) {
 		if ( pye == null ) {
-			throw new IllegalStateException("null payee given");
+			throw new IllegalArgumentException("null payee given");
 		}
 
 		pyeMap.remove(pye.getID());

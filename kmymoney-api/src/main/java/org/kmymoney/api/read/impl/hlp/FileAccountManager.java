@@ -74,11 +74,11 @@ public class FileAccountManager {
 
 	public KMyMoneyAccount getAccountByID(final KMMComplAcctID acctID) {
 		if ( acctID == null ) {
-			throw new IllegalStateException("null account ID given");
+			throw new IllegalArgumentException("null account ID given");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalStateException("unset account ID given");
+			throw new IllegalArgumentException("unset account ID given");
 		}
 
 		if ( acctMap == null ) {
@@ -99,7 +99,7 @@ public class FileAccountManager {
 		}
 		
 		if ( ! acctID.isSet() ) {
-			throw new IllegalStateException("unset account ID given");
+			throw new IllegalArgumentException("unset account ID given");
 		}
 
 		return getAccountByID(new KMMComplAcctID(acctID));
@@ -107,11 +107,11 @@ public class FileAccountManager {
 
 	public List<KMyMoneyAccount> getAccountsByParentID(final KMMComplAcctID acctID) {
 		if ( acctID == null ) {
-			throw new IllegalStateException("null account ID given");
+			throw new IllegalArgumentException("null account ID given");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalStateException("unset account ID given");
+			throw new IllegalArgumentException("unset account ID given");
 		}
 
 		if ( acctMap == null ) {
@@ -142,11 +142,11 @@ public class FileAccountManager {
 
 	public List<KMyMoneyAccount> getAccountsByParentID(final KMMAcctID acctID) {
 		if ( acctID == null ) {
-			throw new IllegalStateException("null account ID given");
+			throw new IllegalArgumentException("null account ID given");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalStateException("unset account ID given");
+			throw new IllegalArgumentException("unset account ID given");
 		}
 
 		return getAccountsByParentID(new KMMComplAcctID(acctID));
@@ -154,11 +154,11 @@ public class FileAccountManager {
 	
 	public List<KMyMoneyAccount> getAccountsByName(final String name) {
 		if ( name == null ) {
-			throw new IllegalStateException("null name given");
+			throw new IllegalArgumentException("null name given");
 		}
 
 		if ( name.trim().equals("") ) {
-			throw new IllegalStateException("empty name given");
+			throw new IllegalArgumentException("empty name given");
 		}
 
 		return getAccountsByName(name, true, true);
@@ -166,11 +166,11 @@ public class FileAccountManager {
 
 	public List<KMyMoneyAccount> getAccountsByName(final String expr, boolean qualif, boolean relaxed) {
 		if ( expr == null ) {
-			throw new IllegalStateException("null expression given");
+			throw new IllegalArgumentException("null expression given");
 		}
 
 		if ( expr.trim().equals("") ) {
-			throw new IllegalStateException("empty expression given");
+			throw new IllegalArgumentException("empty expression given");
 		}
 
 		if ( acctMap == null ) {
@@ -209,11 +209,11 @@ public class FileAccountManager {
 	public KMyMoneyAccount getAccountByNameUniq(final String name, final boolean qualif)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( name == null ) {
-			throw new IllegalStateException("null name given");
+			throw new IllegalArgumentException("null name given");
 		}
 
 		if ( name.trim().equals("") ) {
-			throw new IllegalStateException("empty name given");
+			throw new IllegalArgumentException("empty name given");
 		}
 
 		List<KMyMoneyAccount> acctList = getAccountsByName(name, qualif, false);

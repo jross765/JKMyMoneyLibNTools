@@ -513,7 +513,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 		}
 
 		for ( KMyMoneyTransactionSplit split : getTransactionSplits() ) {
-			if ( spltID.equals(split.getID()) ) {
+			if ( spltID.equals(split.getQualifID()) ) {
 				return split;
 			}
 

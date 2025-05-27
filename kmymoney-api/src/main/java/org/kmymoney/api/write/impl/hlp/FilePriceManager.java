@@ -70,7 +70,7 @@ public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceMa
 
 	public void addPricePair(KMyMoneyPricePair prcPr, boolean withPrc) {
 		if ( prcPr == null ) {
-			throw new IllegalStateException("null price pair given");
+			throw new IllegalArgumentException("null price pair given");
 		}
 
 		prcPrMap.put(prcPr.getID(), prcPr);
@@ -90,7 +90,7 @@ public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceMa
 
 	public void removePricePair(KMyMoneyPricePair prcPr, boolean withPrc) {
 		if ( prcPr == null ) {
-			throw new IllegalStateException("null price pair given");
+			throw new IllegalArgumentException("null price pair given");
 		}
 
 		if ( withPrc ) {
@@ -112,7 +112,7 @@ public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceMa
 
 	public void addPrice(KMyMoneyPrice prc, boolean withPrcPr) {
 		if ( prc == null ) {
-			throw new IllegalStateException("null price given");
+			throw new IllegalArgumentException("null price given");
 		}
 
 		prcMap.put(prc.getID(), prc);
@@ -129,7 +129,7 @@ public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceMa
 
 	public void removePrice(KMyMoneyPrice prc, boolean withPrcPr) {
 		if ( prc == null ) {
-			throw new IllegalStateException("null price given");
+			throw new IllegalArgumentException("null price given");
 		}
 
 		// remove price pair as well, if the removed price object 

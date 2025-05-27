@@ -116,11 +116,11 @@ public class FilePriceManager {
 
 	public KMyMoneyPricePair getPricePairByID(KMMPricePairID prcPrID) {
 		if ( prcPrID == null ) {
-			throw new IllegalStateException("null price pair ID given");
+			throw new IllegalArgumentException("null price pair ID given");
 		}
 
 		if ( ! prcPrID.isSet() ) {
-			throw new IllegalStateException("unset price pair ID given");
+			throw new IllegalArgumentException("unset price pair ID given");
 		}
 
 		if ( prcPrMap == null ) {
@@ -154,11 +154,11 @@ public class FilePriceManager {
 
 	public KMyMoneyPrice getPriceByID(KMMPriceID prcID) {
 		if ( prcID == null ) {
-			throw new IllegalStateException("null price ID given");
+			throw new IllegalArgumentException("null price ID given");
 		}
 
 		if ( ! prcID.isSet() ) {
-			throw new IllegalStateException("unset price ID given");
+			throw new IllegalArgumentException("unset price ID given");
 		}
 
 		if ( prcMap == null ) {
@@ -347,11 +347,11 @@ public class FilePriceManager {
 
 	public FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID) {
 		if ( secCurrID == null ) {
-			throw new IllegalStateException("null security/currency ID given");
+			throw new IllegalArgumentException("null security/currency ID given");
 		}
 
 		if ( ! secCurrID.isSet() ) {
-			throw new IllegalStateException("unset security/currency ID given");
+			throw new IllegalArgumentException("unset security/currency ID given");
 		}
 
 		if ( secCurrID == null ) {
@@ -379,7 +379,7 @@ public class FilePriceManager {
 		}
 
 		if ( ! secCurrID.isSet() ) {
-			throw new IllegalStateException("unset security/currency ID given");
+			throw new IllegalArgumentException("unset security/currency ID given");
 		}
 
 		// System.err.println("depth: " + depth);
@@ -476,7 +476,7 @@ public class FilePriceManager {
 		}
 
 		if ( ! secCurrID.isSet() ) {
-			throw new IllegalStateException("unset security/currency ID given");
+			throw new IllegalArgumentException("unset security/currency ID given");
 		}
 
 		// System.err.println("depth: " + depth);

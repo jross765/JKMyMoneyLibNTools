@@ -411,4 +411,171 @@ public class TestKMyMoneyWritablePayeeImpl {
 		assertEquals("P000012", elt.getAttribute("id"));
 	}
 
+	// -----------------------------------------------------------------
+	// PART 4: Delete objects
+	// -----------------------------------------------------------------
+
+	// ------------------------------
+	// PART 4.1: High-Level
+	// ------------------------------
+
+	@Test
+	public void test04_1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
+		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritablePayee pye = kmmInFile.getWritablePayeeByID(PYE_2_ID);
+		assertNotEquals(null, pye);
+		assertEquals(PYE_2_ID, pye.getID());
+
+		// Check if modifiable
+		assertEquals(true, pye.hasTransactions()); // there are payments
+
+		// Variant 1
+		try {
+			kmmInFile.removePayee(pye); // Correctly fails because there are transactions/trx splits to it
+			assertEquals(1, 0);
+		} catch ( IllegalStateException exc ) {
+			assertEquals(0, 0);
+		}
+
+		// Variant 2
+		try {
+			pye.remove(); // Correctly fails because there are transactions/trx splits to it
+			assertEquals(1, 0);
+		} catch ( IllegalStateException exc ) {
+			assertEquals(0, 0);
+		}
+	}
+	
+	@Test
+	public void test04_2_var1() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritablePayee pye = kmmInFile.getWritablePayeeByID(PYE_1_ID);
+		assertNotEquals(null, pye);
+
+		// Check if modifiable
+		assertEquals(false, pye.hasTransactions()); // there are transactions/trx splits
+
+
+		// Core (variant-specific):
+		kmmInFile.removePayee(pye);
+
+		// ----------------------------
+		// Check whether the objects have actually been deleted
+		// (in memory, not in the file yet).
+
+		test04_2_check_memory(pye);
+
+		// ----------------------------
+		// Now, check whether the deletions have been written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test04_2_check_persisted(outFile);
+	}
+
+	@Test
+	public void test04_2_var2() throws Exception {
+		kmmInFileStats = new KMMFileStats(kmmInFile);
+
+		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
+
+		KMyMoneyWritablePayee pye = kmmInFile.getWritablePayeeByID(PYE_1_ID);
+		assertNotEquals(null, pye);
+
+		// Check if modifiable
+		assertEquals(false, pye.hasTransactions()); // there are no transactions/trx splits
+
+		// Core (variant-specific):
+		pye.remove();
+
+		// ----------------------------
+		// Check whether the objects have actually been deleted
+		// (in memory, not in the file yet).
+
+		test04_2_check_memory(pye);
+
+		// ----------------------------
+		// Now, check whether the deletions have been written to the
+		// output file, then re-read from it, and whether is is what
+		// we expect it is.
+
+		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
+		// System.err.println("Outfile for TestKMyMoneyWritableCustomerImpl.test01_1: '"
+		// + outFile.getPath() + "'");
+		outFile.delete(); // sic, the temp. file is already generated (empty),
+		// and the KMyMoney file writer does not like that.
+		kmmInFile.writeFile(outFile);
+
+		test04_2_check_persisted(outFile);
+	}
+
+	// ---------------------------------------------------------------
+
+	private void test04_2_check_memory(KMyMoneyWritablePayee pye) throws Exception {
+		assertEquals(ConstTest.Stats.NOF_PYE - 1, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PYE    , kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
+		assertEquals(ConstTest.Stats.NOF_PYE - 1, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
+
+		// CAUTION / ::TODO
+		// Old Object still exists and is unchanged
+		// Exception: no splits any more
+		// Don't know what to do about this oddity right now,
+		// but it needs to be addressed at some point.
+		assertEquals(PYE_1_ID, pye.getID());
+		assertEquals("Gehalt", pye.getName());
+		
+		// However, the account cannot newly be instantiated any more,
+		// just as you would expect.
+		try {
+			KMyMoneyWritablePayee pyeNow1 = kmmInFile.getWritablePayeeByID(PYE_1_ID);
+			assertEquals(1, 0);
+		} catch ( Exception exc ) {
+			assertEquals(0, 0);
+		}
+		// Same for a non non-writable instance. 
+		// However, due to design asymmetry, no exception is thrown here,
+		// but the method just returns null.
+		KMyMoneyPayee pyeNow2 = kmmInFile.getPayeeByID(PYE_1_ID);
+		assertEquals(null, pyeNow2);
+	}
+
+	private void test04_2_check_persisted(File outFile) throws Exception {
+		kmmOutFile = new KMyMoneyFileImpl(outFile);
+		kmmOutFileStats = new KMMFileStats(kmmOutFile);
+
+		assertEquals(ConstTest.Stats.NOF_PYE - 1, kmmOutFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_PYE - 1, kmmOutFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_PYE - 1, kmmOutFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
+
+		// The transaction does not exist any more, just as you would expect.
+		// However, no exception is thrown, as opposed to test04_1_check_memory()
+		KMyMoneyPayee pye = kmmOutFile.getPayeeByID(PYE_1_ID);
+		assertEquals(null, pye); // sic
+	}
+
+	// ------------------------------
+	// PART 4.2: Low-Level
+	// ------------------------------
+	
+	// ::EMPTY
+
 }

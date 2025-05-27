@@ -931,10 +931,10 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     	// fill maps
     	instMgr = new FileInstitutionManager(this);
     	acctMgr = new FileAccountManager(this);
+    	pyeMgr  = new FilePayeeManager(this);
     	trxMgr  = new FileTransactionManager(this);
     	secMgr  = new FileSecurityManager(this);
     	currMgr = new FileCurrencyManager(this);
-    	pyeMgr  = new FilePayeeManager(this);
     }
 
     // ---------------------------------------------------------------
