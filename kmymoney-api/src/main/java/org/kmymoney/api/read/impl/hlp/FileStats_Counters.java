@@ -45,6 +45,11 @@ public class FileStats_Counters implements FileStats {
 		return kmmFile.getCountDataFor("payee");
 	}
 
+	@Override
+	public int getNofEntriesTags() {
+		return kmmFile.getCountDataFor("tag");
+	}
+
 	// ----------------------------
 
 	@Override

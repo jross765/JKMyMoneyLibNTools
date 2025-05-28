@@ -91,20 +91,27 @@ public class TestKMyMoneyFileImpl {
 
 	@Test
 	public void test05() throws Exception {
+		assertEquals(ConstTest.Stats.NOF_TAG, kmmFileStats.getNofEntriesTags(KMMFileStats.Type.RAW));
+		assertEquals(ConstTest.Stats.NOF_TAG, kmmFileStats.getNofEntriesTags(KMMFileStats.Type.COUNTER));
+		assertEquals(ConstTest.Stats.NOF_TAG, kmmFileStats.getNofEntriesTags(KMMFileStats.Type.CACHE));
+	}
+
+	@Test
+	public void test06() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
 	}
 
 	@Test
-	public void test06() throws Exception {
+	public void test07() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_CURR, kmmFileStats.getNofEntriesCurrencies(KMMFileStats.Type.RAW));
 		assertEquals(ConstTest.Stats.NOF_CURR, kmmFileStats.getNofEntriesCurrencies(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_CURR, kmmFileStats.getNofEntriesCurrencies(KMMFileStats.Type.CACHE));
 	}
 
 	@Test
-	public void test07() throws Exception {
+	public void test08() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_PRC, kmmFileStats.getNofEntriesPrices(KMMFileStats.Type.RAW));
 		// This one is an exception:
 		// assertEquals(ConstTest.Stats.NOF_PRC,
@@ -119,7 +126,7 @@ public class TestKMyMoneyFileImpl {
 	// are not that trivial and redundant as they seem to be.
 
 	@Test
-	public void test08() throws Exception {
+	public void test09() throws Exception {
 		assertEquals(kmmFile.toString(), kmmFile2.toString());
 		// Does not work:
 		// assertEquals(kmmFileStats, kmmFileStats2);

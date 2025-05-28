@@ -300,23 +300,29 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
      * @see KMyMoneyTransaction#getSplits()
      */
     public List<KMyMoneyTransactionSplit> getSplits() {
-    	return getSplits(false, false);
+    	return getSplits(false, false, false);
     }
 
-    public List<KMyMoneyTransactionSplit> getSplits(final boolean addToAcct, final boolean addToPye) {
+    public List<KMyMoneyTransactionSplit> getSplits(
+    		final boolean addToAcct, 
+    		final boolean addToPye,
+    		final boolean addToTags) {
 	if (mySplits == null) {
-	    initSplits(addToAcct, addToPye);
+	    initSplits(addToAcct, addToPye, addToTags);
 	}
 	return mySplits;
     }
 
-    private void initSplits(final boolean addToAcct, final boolean addToPye) {
+    private void initSplits(
+    		final boolean addToAcct, 
+    		final boolean addToPye,
+    		final boolean addToTags) {
 	    List<SPLIT> jwsdpSplits = jwsdpPeer.getSPLITS().getSPLIT();
 
 	    mySplits = new ArrayList<KMyMoneyTransactionSplit>();
 	    for (SPLIT jwsdpSplt : jwsdpSplits) {
 		mySplits.add(createSplit(jwsdpSplt,
-								 addToAcct, addToPye));
+								 addToAcct, addToPye, addToTags));
 	    }
     }
 
@@ -329,9 +335,10 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
     protected KMyMoneyTransactionSplitImpl createSplit(
     		final SPLIT jwsdpSplt, 
     		final boolean addToAcct,
-    		final boolean addToPye) {
+    		final boolean addToPye,
+    		final boolean addToTags) {
 	return new KMyMoneyTransactionSplitImpl(jwsdpSplt, this, 
-											addToAcct, addToPye);
+											addToAcct, addToPye, addToTags);
     }
 
     /**

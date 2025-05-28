@@ -44,14 +44,15 @@ public class FileTransactionManager extends org.kmymoney.api.read.impl.hlp.FileT
 			final KMyMoneyTransaction trx, // actually, should be KMyMoney*Writable*Transaction, 
 			                               // but then the compiler is not happy...
 			final boolean addSpltToAcct,
-			final boolean addSpltToPye) {
+			final boolean addSpltToPye,
+			final boolean addSpltToTags) {
     	if ( ! ( trx instanceof KMyMoneyWritableTransaction ) ) {
     		throw new IllegalArgumentException("transaction must be a writable one");
     	}
     	
     	KMyMoneyWritableTransactionSplitImpl splt = new KMyMoneyWritableTransactionSplitImpl(jwsdpTrxSplt, 
     																						 (KMyMoneyWritableTransaction) trx, 
-                								           									 addSpltToAcct, addSpltToPye);
+                								           									 addSpltToAcct, addSpltToPye, addSpltToTags);
     	LOGGER.debug("createTransactionSplit: Generated new writable transaction split: " + splt.getID());
     	return splt;
     }

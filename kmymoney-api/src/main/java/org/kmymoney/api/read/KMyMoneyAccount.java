@@ -6,6 +6,7 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
+import org.kmymoney.api.read.hlp.HasTransactions;
 import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
@@ -34,6 +35,7 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
  * Cf. <a href="https://docs.kde.org/stable5/en/kmymoney/kmymoney/makingmostof.mapping.html#makingmostof.mapping.accounts">KMyMoney handbook</a>
  */
 public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
+										 HasTransactions,
                                          HasUserDefinedAttributes
 {
 

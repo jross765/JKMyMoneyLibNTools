@@ -62,6 +62,7 @@ public class TestKMyMoneyPayeeImpl {
 	@Test
 	public void test01_1() throws Exception {
 		pye = kmmFile.getPayeeByID(PYE_1_ID);
+		assertNotEquals(null, pye);
 
 		assertEquals(PYE_1_ID, pye.getID());
 		assertEquals("Gehalt", pye.getName());
@@ -72,6 +73,7 @@ public class TestKMyMoneyPayeeImpl {
 	@Test
 	public void test01_2() throws Exception {
 		pye = kmmFile.getPayeeByID(PYE_2_ID);
+		assertNotEquals(null, pye);
 
 		assertEquals(PYE_2_ID, pye.getID());
 		assertEquals("Geldautomat", pye.getName());
@@ -83,6 +85,7 @@ public class TestKMyMoneyPayeeImpl {
 	@Test
 	public void test01_3() throws Exception {
 		pye = kmmFile.getPayeeByID(PYE_3_ID);
+		assertNotEquals(null, pye);
 
 		assertEquals(PYE_3_ID, pye.getID());
 		assertEquals("Fürchtegott Schnorzelmöller", pye.getName());

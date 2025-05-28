@@ -33,6 +33,7 @@ import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
+import org.kmymoney.api.read.KMyMoneyTag;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
@@ -42,6 +43,7 @@ import org.kmymoney.api.read.impl.hlp.FileInstitutionManager;
 import org.kmymoney.api.read.impl.hlp.FilePayeeManager;
 import org.kmymoney.api.read.impl.hlp.FilePriceManager;
 import org.kmymoney.api.read.impl.hlp.FileSecurityManager;
+import org.kmymoney.api.read.impl.hlp.FileTagManager;
 import org.kmymoney.api.read.impl.hlp.FileTransactionManager;
 import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
 import org.kmymoney.api.read.impl.hlp.NamespaceRemoverReader;
@@ -58,6 +60,7 @@ import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
+import org.kmymoney.base.basetypes.simple.KMMTagID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,6 +113,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     protected FileAccountManager     acctMgr = null;
     protected FileTransactionManager trxMgr  = null;
     protected FilePayeeManager       pyeMgr  = null;
+    protected FileTagManager         tagMgr  = null;
     protected FileSecurityManager    secMgr  = null;
     protected FileCurrencyManager    currMgr = null;
     
@@ -269,6 +273,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 			return getRootElement().getTRANSACTIONS().getCount().intValue();
 		} else if ( type.trim().equals("payee")  ) {
 			return getRootElement().getPAYEES().getCount().intValue();
+		} else if ( type.trim().equals("tag")  ) {
+			return getRootElement().getTAGS().getCount().intValue();
 		} else if ( type.trim().equals("security")  ) {
 			return getRootElement().getSECURITIES().getCount().intValue();
 		} else if ( type.trim().equals("currency")  ) {
@@ -728,6 +734,42 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
     // ---------------------------------------------------------------
 
+	@Override
+	public KMyMoneyTag getTagByID(KMMTagID tagID) {
+		if ( tagID == null ) {
+			throw new IllegalArgumentException("null tag ID given");
+		}
+
+		if ( ! tagID.isSet() ) {
+			throw new IllegalArgumentException("unset tag ID given");
+		}
+
+		return tagMgr.getTagByID(tagID);
+	}
+
+	@Override
+	public Collection<KMyMoneyTag> getTagsByName(String expr) {
+    	return tagMgr.getTagsByName(expr);
+	}
+
+	@Override
+	public Collection<KMyMoneyTag> getTagsByName(String expr, boolean relaxed) {
+    	return tagMgr.getTagsByName(expr, relaxed);
+	}
+
+	@Override
+	public KMyMoneyTag getTagsByNameUniq(String expr) 
+			throws NoEntryFoundException, TooManyEntriesFoundException {
+    	return tagMgr.getTagsByNameUniq(expr);
+	}
+
+	@Override
+	public Collection<KMyMoneyTag> getTags() {
+    	return tagMgr.getTags();
+	}
+
+    // ---------------------------------------------------------------
+
     @Override
     public KMyMoneySecurity getSecurityByID(final KMMSecID secID) {
 		if ( secID == null ) {
@@ -929,9 +971,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     	loadPriceDatabase(pRootElement);
 
     	// fill maps
+    	// CAUTION: The order matters
     	instMgr = new FileInstitutionManager(this);
     	acctMgr = new FileAccountManager(this);
     	pyeMgr  = new FilePayeeManager(this);
+    	tagMgr  = new FileTagManager(this);
     	trxMgr  = new FileTransactionManager(this);
     	secMgr  = new FileSecurityManager(this);
     	currMgr = new FileCurrencyManager(this);
@@ -1064,6 +1108,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @SuppressWarnings("exports")
     public FilePayeeManager getPyeMgr() {
     	return pyeMgr;
+    }
+    
+    @SuppressWarnings("exports")
+    public FileTagManager getTagMgr() {
+    	return tagMgr;
     }
     
     @SuppressWarnings("exports")

@@ -151,6 +151,12 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     
     // ----------------------------
 
+    Collection<KMMTagID> getTagIDs();
+    
+    Collection<KMyMoneyTag> getTags();
+    
+    // ----------------------------
+
     /**
      * @return the ID of the transaction this is a split of.
      */
@@ -291,8 +297,4 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      */
     String getMemo();
     
-    // ---------------------------------------------------------------
-    
-    Collection<KMMTagID> getTagIDs();
-
 }

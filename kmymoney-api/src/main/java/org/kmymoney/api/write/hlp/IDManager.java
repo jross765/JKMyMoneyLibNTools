@@ -5,6 +5,7 @@ import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.basetypes.simple.KMMSpltID;
+import org.kmymoney.base.basetypes.simple.KMMTagID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 
 public interface IDManager {
@@ -18,6 +19,8 @@ public interface IDManager {
 	KMMSpltID getNewSplitID();
 
 	KMMPyeID getNewPayeeID();
+
+	KMMTagID getNewTagID();
 
 	KMMSecID getNewSecurityID();
 

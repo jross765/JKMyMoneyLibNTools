@@ -20,6 +20,8 @@ public interface FileStats {
     
     int getNofEntriesPayees();
     
+    int getNofEntriesTags();
+    
     // ----------------------------
     
     int getNofEntriesSecurities();

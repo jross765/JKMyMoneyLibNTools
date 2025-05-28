@@ -47,7 +47,7 @@ public class FilePayeeManager extends org.kmymoney.api.read.impl.hlp.FilePayeeMa
 		}
 
 		pyeMap.remove(pye.getID());
-		LOGGER.debug("removePayee: Added payee to cache: " + pye.getID());
+		LOGGER.debug("removePayee: Removed payee from cache: " + pye.getID());
 	}
 
 }

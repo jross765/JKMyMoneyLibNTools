@@ -24,6 +24,7 @@ import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
+import org.kmymoney.base.basetypes.simple.KMMTagID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
@@ -203,14 +204,15 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param id the unique id of the payee to look for
-	 * @return the customer or null if it's not found
+	 * @param pyeID the unique id of the payee to look for
+	 * @return the payee or null if it's not found
 	 */
 	KMyMoneyWritablePayee getWritablePayeeByID(KMMPyeID pyeID);
 
 	// ----------------------------
 
 	/**
+	 * @param name 
 	 * @return a new payee with no values that is already added to this file
 	 */
 	KMyMoneyWritablePayee createWritablePayee(String name);
@@ -220,6 +222,28 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * @param pye the transaction to remove.
 	 */
 	void removePayee(KMyMoneyWritablePayee pye);
+
+	// ---------------------------------------------------------------
+
+	/**
+	 * @param tagID the unique id of the tag to look for
+	 * @return the tag or null if it's not found
+	 */
+	KMyMoneyWritableTag getWritableTagByID(KMMTagID tagID);
+
+	// ----------------------------
+
+	/**
+	 * @param name 
+	 * @return a new tag with no values that is already added to this file
+	 */
+	KMyMoneyWritableTag createWritableTag(String name);
+
+	/**
+	 *
+	 * @param tag the tag to remove.
+	 */
+	void removeTag(KMyMoneyWritableTag tag);
 
 	// ---------------------------------------------------------------
 

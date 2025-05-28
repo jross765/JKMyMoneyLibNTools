@@ -1,10 +1,12 @@
 package org.kmymoney.api.write.impl;
 
 import java.text.ParseException;
+import java.util.Collection;
 
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyPayee;
+import org.kmymoney.api.read.KMyMoneyTag;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPayeeImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
@@ -44,15 +46,17 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	 * @param trx the transaction we belong to
      * @param addSpltToAcct 
 	 * @param addSpltToPye 
+	 * @param addSpltToTags 
 	 */
 	@SuppressWarnings("exports")
 	public KMyMoneyWritableTransactionSplitImpl(
 			final SPLIT jwsdpPeer,
 			final KMyMoneyWritableTransaction trx, 
     		final boolean addSpltToAcct,
-    		final boolean addSpltToPye) {
+    		final boolean addSpltToPye,
+    		final boolean addSpltToTags) {
 		super(jwsdpPeer, trx, 
-			  addSpltToAcct, addSpltToPye);
+			  addSpltToAcct, addSpltToPye, addSpltToTags);
 	}
 
     /**
@@ -65,10 +69,10 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 			final KMyMoneyWritableTransactionImpl trx,
 			final KMyMoneyAccount acct) {
 		super(createTransactionSplit_int(trx.getWritableFile(), 
-				                         trx, acct, null, 
+				                         trx, acct, null, null,
 				                         trx.getNewSplitID()),
 		      trx,
-		      true, false);
+		      true, false, false);
 
 		// ::TODO ::CHECK
 		// This is a workaround:
@@ -95,13 +99,15 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	public KMyMoneyWritableTransactionSplitImpl(
 			final KMyMoneyWritableTransactionImpl trx,
 			final KMyMoneyAccount acct,
-			final KMyMoneyPayee pye) {
+			final KMyMoneyPayee pye,
+			final Collection<KMyMoneyTag> tagList) {
 		super(createTransactionSplit_int(trx.getWritableFile(), 
-				                         trx, acct, pye, 
+				                         trx, acct, pye, tagList,
 				                         trx.getNewSplitID()),
 		      trx,
 		      true, 
-		      ( pye  == null ? false : true ) );
+		      ( pye     == null ? false : true ),
+		      ( tagList == null ? false : true ) );
 
 		// ::TODO ::CHECK
 		// This is a workaround:
@@ -126,15 +132,16 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 
     public KMyMoneyWritableTransactionSplitImpl(final KMyMoneyTransactionSplitImpl splt) {
 	super(splt.getJwsdpPeer(), splt.getTransaction(), 
-		  true, true);
+		  true, true, true);
     }
 
     public KMyMoneyWritableTransactionSplitImpl(
     		final KMyMoneyTransactionSplitImpl split,
     		final boolean addSpltToAcct,
-    		final boolean addSpltToPye) {
+    		final boolean addSpltToPye,
+    		final boolean addSpltToTags) {
     	super(split.getJwsdpPeer(), split.getTransaction(), 
-    		  addSpltToAcct, addSpltToPye);
+    		  addSpltToAcct, addSpltToPye, addSpltToTags);
     }
 
 	// ---------------------------------------------------------------
@@ -148,6 +155,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 			final KMyMoneyWritableTransactionImpl trx, 
 			final KMyMoneyAccount acct, 
 			final KMyMoneyPayee pye, 
+			final Collection<KMyMoneyTag> tagList, 
 			final KMMSpltID newID) {
 
 		if ( trx == null ) {
@@ -161,6 +169,11 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		// Sic: null is allowed!
 //		if ( pye == null ) {
 //			throw new IllegalArgumentException("null payee given");
+//		}
+
+		// Sic: null is allowed!
+//		if ( tagList == null ) {
+//			throw new IllegalArgumentException("null tag-list given");
 //		}
 
 		if ( newID == null ) {
@@ -184,10 +197,20 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		SPLIT jwsdpSplt = file.createSplitType();
 		
 		jwsdpSplt.setId(newID.toString());
+		
 		jwsdpSplt.setAccount(acct.getID().toString());
+		
 		if ( pye != null ) {
 			jwsdpSplt.setPayee(pye.getID().toString());
 		}
+		
+		if ( tagList != null ) {
+			for ( KMyMoneyTag tag : tagList ) {
+				// ::TODO
+				System.err.println("NOT IMPLEMENTED YET");
+			}
+		}
+		
 		jwsdpSplt.setShares(new FixedPointNumber().toKMyMoneyString());
 		jwsdpSplt.setValue(new FixedPointNumber().toKMyMoneyString());
 		

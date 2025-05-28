@@ -100,6 +100,20 @@ public class KMMFileStats {
 
 	// ----------------------------
 
+	public int getNofEntriesTags(Type type) {
+		if ( type == Type.RAW ) {
+			return raw.getNofEntriesTags();
+		} else if ( type == Type.COUNTER ) {
+			return cnt.getNofEntriesTags();
+		} else if ( type == Type.CACHE ) {
+			return che.getNofEntriesTags();
+		}
+
+		return FileStats.ERROR; // Compiler happy
+	}
+
+	// ----------------------------
+
 	public int getNofEntriesSecurities(Type type) {
 		if ( type == Type.RAW ) {
 			return raw.getNofEntriesSecurities();

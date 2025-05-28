@@ -14,6 +14,7 @@ public class FileStats_Cache implements FileStats {
 	private FileAccountManager     acctMgr = null;
 	private FileTransactionManager trxMgr  = null;
 	private FilePayeeManager       pyeMgr  = null;
+	private FileTagManager         tagMgr  = null;
 
 	private FileSecurityManager    secMgr  = null;
 	private FileCurrencyManager    currMgr = null;
@@ -26,6 +27,7 @@ public class FileStats_Cache implements FileStats {
 			final FileAccountManager acctMgr, 
 			final FileTransactionManager trxMgr,
 			final FilePayeeManager pyeMgr, 
+			final FileTagManager tagMgr, 
 			final FileSecurityManager secMgr, 
 			final FileCurrencyManager currMgr,
 			final FilePriceManager prcMgr) {
@@ -33,6 +35,7 @@ public class FileStats_Cache implements FileStats {
 		this.acctMgr = acctMgr;
 		this.trxMgr  = trxMgr;
 		this.pyeMgr  = pyeMgr;
+		this.tagMgr  = tagMgr;
 		this.secMgr  = secMgr;
 		this.currMgr = currMgr;
 		this.prcMgr  = prcMgr;
@@ -43,6 +46,7 @@ public class FileStats_Cache implements FileStats {
 		this.acctMgr = kmmFile.getAcctMgr();
 		this.trxMgr  = kmmFile.getTrxMgr();
 		this.pyeMgr  = kmmFile.getPyeMgr();
+		this.tagMgr  = kmmFile.getTagMgr();
 		this.secMgr  = kmmFile.getSecMgr();
 		this.currMgr = kmmFile.getCurrMgr();
 		this.prcMgr  = kmmFile.getPrcMgr();
@@ -75,6 +79,11 @@ public class FileStats_Cache implements FileStats {
 	@Override
 	public int getNofEntriesPayees() {
 		return pyeMgr.getNofEntriesPayeeMap();
+	}
+
+	@Override
+	public int getNofEntriesTags() {
+		return tagMgr.getNofEntriesTagMap();
 	}
 
 	// ----------------------------

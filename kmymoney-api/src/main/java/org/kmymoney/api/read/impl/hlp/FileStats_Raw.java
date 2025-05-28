@@ -55,6 +55,11 @@ public class FileStats_Raw implements FileStats {
 		return kmmFile.getRootElement().getPAYEES().getPAYEE().size();
 	}
 
+	@Override
+	public int getNofEntriesTags() {
+		return kmmFile.getRootElement().getTAGS().getTAG().size();
+	}
+
 	// ----------------------------
 
 	@Override

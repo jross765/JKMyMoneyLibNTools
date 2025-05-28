@@ -72,9 +72,9 @@ public class FileTransactionManager {
 					// the second and third arg here has to be set to "true", else the
 					// whole shebang will not work.
 					// Cannot explain this...
-					spltList = ((KMyMoneyTransactionImpl) trx).getSplits(true, true);
+					spltList = ((KMyMoneyTransactionImpl) trx).getSplits(true, true, true);
 				} else {
-					spltList = ((KMyMoneyTransactionImpl) trx).getSplits(true, true);
+					spltList = ((KMyMoneyTransactionImpl) trx).getSplits(true, true, true);
 				}
 				for ( KMyMoneyTransactionSplit splt : spltList ) {
 					trxSpltMap.put(splt.getQualifID(), splt);
@@ -102,9 +102,10 @@ public class FileTransactionManager {
 			final SPLIT jwsdpTrxSplt,
 			final KMyMoneyTransaction trx, 
 			final boolean addSpltToAcct,
-			final boolean addSpltToPye) {
+			final boolean addSpltToPye,
+			final boolean addSpltToTags) {
 		KMyMoneyTransactionSplitImpl splt = new KMyMoneyTransactionSplitImpl(jwsdpTrxSplt, trx, 
-																			 addSpltToAcct, addSpltToPye);
+																			 addSpltToAcct, addSpltToPye, addSpltToTags);
 		LOGGER.debug("createTransactionSplit: Generated new transaction split: " + splt.getQualifID());
 		return splt;
 	}
@@ -283,7 +284,7 @@ public class FileTransactionManager {
 			for ( SPLIT jwsdpTrxSplt : getTransactionSplits_raw(trx.getID()) ) {
 				try {
 					KMyMoneyTransactionSplitImpl splt = createTransactionSplit(jwsdpTrxSplt, trx,
-																			   false, false);
+																			   false, false, false);
 					result.add(splt);
 				} catch (RuntimeException e) {
 					LOGGER.error("getTransactionSplits_readAfresh(1): [RuntimeException] Problem in "
@@ -314,7 +315,7 @@ public class FileTransactionManager {
 				for ( SPLIT jwsdpTrxSplt : getTransactionSplits_raw(trx.getID()) ) {
 					try {
 						KMyMoneyTransactionSplitImpl splt = createTransactionSplit(jwsdpTrxSplt, trx, 
-																				   true, true);
+																				   true, true, true);
 						result.add(splt);
 					} catch (RuntimeException e) {
 						LOGGER.error("getTransactionSplits_readAfresh(2): [RuntimeException] Problem in "

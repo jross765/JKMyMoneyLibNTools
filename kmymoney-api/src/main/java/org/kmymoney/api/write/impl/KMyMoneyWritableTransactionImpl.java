@@ -22,6 +22,7 @@ import org.kmymoney.api.generated.SPLITS;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyPayee;
+import org.kmymoney.api.read.KMyMoneyTag;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
@@ -110,10 +111,11 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	protected KMyMoneyTransactionSplitImpl createSplit(
 			final SPLIT jwsdpSplt,
 		    final boolean addToAcct,
-		    final boolean addToPye) {
+		    final boolean addToPye,
+		    final boolean addToTags) {
 		KMyMoneyWritableTransactionSplitImpl kmmTrxSplt = 
 				new KMyMoneyWritableTransactionSplitImpl(jwsdpSplt, this,
-						                                 addToAcct, addToPye);
+						                                 addToAcct, addToPye, addToTags);
 		if ( helper.getPropertyChangeSupport() != null ) {
 			 helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableSplits());
 		}
@@ -139,16 +141,25 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	/**
 	 * @see KMyMoneyWritableTransaction#createWritableSplit(KMyMoneyAccount)
 	 */
-	public KMyMoneyWritableTransactionSplit createWritableSplit(final KMyMoneyAccount acct, final KMyMoneyPayee pye) {
+	public KMyMoneyWritableTransactionSplit createWritableSplit(
+			final KMyMoneyAccount acct, 
+			final KMyMoneyPayee pye,
+			final Collection<KMyMoneyTag> tagList) {
 		if ( acct == null ) {
 			throw new IllegalArgumentException("null account given");
 		}
 
-		if ( pye == null ) {
-			throw new IllegalArgumentException("null payee given");
-		}
+		// Sic, null allowed here
+//		if ( pye == null ) {
+//			throw new IllegalArgumentException("null payee given");
+//		}
 		
-		KMyMoneyWritableTransactionSplitImpl splt = new KMyMoneyWritableTransactionSplitImpl(this, acct, pye);
+		// Sic, null allowed here
+//		if ( tagList == null ) {
+//			throw new IllegalArgumentException("null tag-list given");
+//		}
+		
+		KMyMoneyWritableTransactionSplitImpl splt = new KMyMoneyWritableTransactionSplitImpl(this, acct, pye, tagList);
 		addSplit(splt);
 		if ( helper.getPropertyChangeSupport() != null ) {
 			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableSplits());
@@ -309,7 +320,8 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		KMyMoneyTransactionSplit splt = super.getSplitByID(spltID);
 		// ::TODO
 		// !!! Diese nicht-triviale Änderung nochmal ganz genau abtesten !!!
-		return new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) splt, false, false);
+		return new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) splt, 
+														false, false, false);
 	}
 
 	/**
@@ -320,7 +332,8 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		List<KMyMoneyWritableTransactionSplit> result = new ArrayList<KMyMoneyWritableTransactionSplit>();
 		
 		for ( KMyMoneyTransactionSplit split : super.getSplits() ) {
-			KMyMoneyWritableTransactionSplit newSplit = new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) split, false, false);
+			KMyMoneyWritableTransactionSplit newSplit = new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) split, 
+																								 false, false, false);
 		    result.add(newSplit);
 		}
 

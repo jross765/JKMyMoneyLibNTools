@@ -36,6 +36,7 @@ import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.generated.SPLITS;
+import org.kmymoney.api.generated.TAG;
 import org.kmymoney.api.generated.TRANSACTION;
 import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -46,6 +47,7 @@ import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
+import org.kmymoney.api.read.KMyMoneyTag;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
@@ -56,6 +58,7 @@ import org.kmymoney.api.read.impl.KMyMoneyPayeeImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPriceImpl;
 import org.kmymoney.api.read.impl.KMyMoneyPricePairImpl;
 import org.kmymoney.api.read.impl.KMyMoneySecurityImpl;
+import org.kmymoney.api.read.impl.KMyMoneyTagImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
@@ -66,6 +69,7 @@ import org.kmymoney.api.write.KMyMoneyWritablePayee;
 import org.kmymoney.api.write.KMyMoneyWritablePrice;
 import org.kmymoney.api.write.KMyMoneyWritablePricePair;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
+import org.kmymoney.api.write.KMyMoneyWritableTag;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.KMyMoneyWritableTransactionSplit;
 import org.kmymoney.api.write.ObjectCascadeException;
@@ -83,6 +87,7 @@ import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
 import org.kmymoney.base.basetypes.simple.KMMSpltID;
+import org.kmymoney.base.basetypes.simple.KMMTagID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 
 import jakarta.xml.bind.JAXBContext;
@@ -128,9 +133,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		super(file);
 		setModified(false);
 
+    	// CAUTION: The order matters
 		instMgr = new org.kmymoney.api.write.impl.hlp.FileInstitutionManager(this);
 		acctMgr = new org.kmymoney.api.write.impl.hlp.FileAccountManager(this);
 		pyeMgr  = new org.kmymoney.api.write.impl.hlp.FilePayeeManager(this);
+		tagMgr  = new org.kmymoney.api.write.impl.hlp.FileTagManager(this);
 		trxMgr  = new org.kmymoney.api.write.impl.hlp.FileTransactionManager(this);
 		secMgr  = new org.kmymoney.api.write.impl.hlp.FileSecurityManager(this);
 		currMgr = new org.kmymoney.api.write.impl.hlp.FileCurrencyManager(this);
@@ -141,9 +148,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throws IOException {
 		super(is);
 
+    	// CAUTION: The order matters
 		instMgr = new org.kmymoney.api.write.impl.hlp.FileInstitutionManager(this);
 		acctMgr = new org.kmymoney.api.write.impl.hlp.FileAccountManager(this);
 		pyeMgr  = new org.kmymoney.api.write.impl.hlp.FilePayeeManager(this);
+		tagMgr  = new org.kmymoney.api.write.impl.hlp.FileTagManager(this);
 		trxMgr  = new org.kmymoney.api.write.impl.hlp.FileTransactionManager(this);
 		secMgr  = new org.kmymoney.api.write.impl.hlp.FileSecurityManager(this);
 		currMgr = new org.kmymoney.api.write.impl.hlp.FileCurrencyManager(this);
@@ -504,6 +513,12 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		return retval;
 	}
 	
+	protected TAG createTagType() {
+		TAG retval = getObjectFactory().createTAG();
+		incrementCountDataFor("tag");
+		return retval;
+	}
+	
 	protected SECURITY createSecurityType() {
 		SECURITY retval = getObjectFactory().createSECURITY();
 		incrementCountDataFor("security");
@@ -637,7 +652,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public void removePayee(final KMyMoneyWritablePayee pye) {
 		if ( pye.hasTransactions() ) {
-			throw new IllegalStateException("cannot remove account while it contains transaction-splits!");
+			throw new IllegalStateException("cannot remove payee while it contains transaction-splits!");
 		}
 
 		// 1) Remove avatar in payee manager
@@ -646,6 +661,26 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		
 		// 2) Remove payee
 		getRootElement().getPAYEES().getPAYEE().remove(((KMyMoneyWritablePayeeImpl) pye).getJwsdpPeer());
+		setModified(true);
+	}
+
+	// ----------------------------
+
+	/**
+	 * @param pye what to remove
+	 */
+	@Override
+	public void removeTag(final KMyMoneyWritableTag tag) {
+		if ( tag.hasTransactions() ) {
+			throw new IllegalStateException("cannot remove tag while it contains transaction-splits!");
+		}
+
+		// 1) Remove avatar in tag manager
+		((org.kmymoney.api.write.impl.hlp.FileTagManager) super.tagMgr)
+			.removeTag(tag);
+		
+		// 2) Remove payee
+		getRootElement().getPAYEES().getPAYEE().remove(((KMyMoneyWritablePayeeImpl) tag).getJwsdpPeer());
 		setModified(true);
 	}
 
@@ -881,7 +916,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		KMyMoneyTransactionSplit splt = super.getTransactionSplitByID(spltID);
 		// ::TODO
 		// !!! Diese nicht-triviale Änderung nochmal ganz genau abtesten !!!
-		return new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) splt, false, false);
+		return new KMyMoneyWritableTransactionSplitImpl((KMyMoneyTransactionSplitImpl) splt, 
+														false, false, false);
 	}
 	
 	// By purpose, this method has not been defined in the interface
@@ -958,7 +994,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * This overridden method creates the writable version of the returned object.
 	 *
 	 * @return the new payee
-	 * @see KMyMoneyFileImpl#createCustomer(GncV2.GncBook.GncGncCustomer)
+	 * @see KMyMoneyFileImpl#createPayee()
 	 */
 	@Override
 	public KMyMoneyWritablePayee createWritablePayee(final String name) {
@@ -967,6 +1003,45 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		((org.kmymoney.api.write.impl.hlp.FilePayeeManager) super.pyeMgr)
 			.addPayee(pye);
 		return pye;
+	}
+
+	// ---------------------------------------------------------------
+
+	@Override
+	public KMyMoneyWritableTag getWritableTagByID(KMMTagID tagID) {
+		if ( tagID == null ) {
+			throw new IllegalArgumentException("null tag ID given");
+		}
+
+		if ( ! tagID.isSet() ) {
+			throw new IllegalArgumentException("unset tag ID given");
+		}
+
+		try {
+			KMyMoneyTag tag = super.getTagByID(tagID);
+			return new KMyMoneyWritableTagImpl((KMyMoneyTagImpl) tag, true);
+		} catch (Exception exc) {
+			LOGGER.error(
+					"getWritableTagByID: Could not instantiate writable tag object from read-only account object (ID: "
+							+ tagID + ")");
+			throw new RuntimeException(
+					"Could not instantiate writable tag object from read-only account object (ID: " + tagID + ")");
+		}
+	}
+
+	/**
+	 * This overridden method creates the writable version of the returned object.
+	 *
+	 * @return the new tag
+	 * @see KMyMoneyFileImpl#createTag()
+	 */
+	@Override
+	public KMyMoneyWritableTag createWritableTag(final String name) {
+		KMyMoneyWritableTagImpl tag = new KMyMoneyWritableTagImpl(this);
+		tag.setName(name);
+		((org.kmymoney.api.write.impl.hlp.FileTagManager) super.tagMgr)
+			.addTag(tag);
+		return tag;
 	}
 
 	// ---------------------------------------------------------------
@@ -1511,6 +1586,26 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		counter++;
 		
 		return new KMMPyeID(counter);
+	}
+
+	@Override
+	public KMMTagID getNewTagID() {
+		int counter = 0;
+		
+		for ( KMyMoneyTag tag : getTags() ) {
+			try {
+				String coreID = tag.getID().get().substring(1);
+				if ( Integer.parseInt(coreID) > counter ) {
+					counter = Integer.parseInt(coreID);
+				}
+			} catch (Exception e) {
+				throw new CannotGenerateKMMIDException();
+			}
+		}
+		
+		counter++;
+		
+		return new KMMTagID(counter);
 	}
 
 	@Override

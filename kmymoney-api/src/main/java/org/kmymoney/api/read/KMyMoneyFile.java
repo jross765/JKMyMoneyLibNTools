@@ -22,6 +22,7 @@ import org.kmymoney.base.basetypes.simple.KMMAcctID;
 import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.base.basetypes.simple.KMMSecID;
+import org.kmymoney.base.basetypes.simple.KMMTagID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
@@ -492,37 +493,37 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 
 	// ---------------------------------------------------------------
 
-//	/**
-//	 * @param id the unique ID of the tag to look for
-//	 * @return the tag or null if it's not found
-//	 */
-//	KMyMoneyTag getTagByID(KMMTagID id);
-//
-//	/**
-//	 * @param expr search expression
-//	 * @return
-//	 */
-//	Collection<KMyMoneyTag> getTagsByName(String expr);
-//
-//	/**
-//	 * @param expr search expression
-//	 * @param relaxed
-//	 * @return
-//	 */
-//	Collection<KMyMoneyTag> getTagsByName(String expr, boolean relaxed);
-//
-//	/**
-//	 * @param expr search expression
-//	 * @return
-//	 * @throws NoEntryFoundException
-//	 * @throws TooManyEntriesFoundException
-//	 */
-//	KMyMoneyTag getTagsByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
-//
-//	/**
-//	 * @return a (possibly read-only) collection of all tags Do not modify the
-//	 *         returned collection!
-//	 */
-//	Collection<KMyMoneyTag> getTags();
+	/**
+	 * @param id the unique ID of the tag to look for
+	 * @return the tag or null if it's not found
+	 */
+	KMyMoneyTag getTagByID(KMMTagID id);
+
+	/**
+	 * @param expr search expression
+	 * @return
+	 */
+	Collection<KMyMoneyTag> getTagsByName(String expr);
+
+	/**
+	 * @param expr search expression
+	 * @param relaxed
+	 * @return
+	 */
+	Collection<KMyMoneyTag> getTagsByName(String expr, boolean relaxed);
+
+	/**
+	 * @param expr search expression
+	 * @return
+	 * @throws NoEntryFoundException
+	 * @throws TooManyEntriesFoundException
+	 */
+	KMyMoneyTag getTagsByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
+
+	/**
+	 * @return a (possibly read-only) collection of all tags Do not modify the
+	 *         returned collection!
+	 */
+	Collection<KMyMoneyTag> getTags();
 
 }

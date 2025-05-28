@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyPayee;
+import org.kmymoney.api.read.KMyMoneyTag;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.write.hlp.HasWritableUserDefinedAttributes;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
@@ -101,7 +102,9 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
 	 */
 	KMyMoneyWritableTransactionSplit createWritableSplit(KMyMoneyAccount account);
 
-	KMyMoneyWritableTransactionSplit createWritableSplit(KMyMoneyAccount account, KMyMoneyPayee pye);
+	KMyMoneyWritableTransactionSplit createWritableSplit(KMyMoneyAccount account, 
+														 KMyMoneyPayee pye,
+														 Collection<KMyMoneyTag> tagList);
 
 	/**
 	 * Removes the given split from this transaction.

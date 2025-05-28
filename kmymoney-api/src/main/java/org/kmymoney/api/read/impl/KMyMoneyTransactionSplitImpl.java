@@ -9,6 +9,7 @@ import java.util.Locale;
 import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyPayee;
+import org.kmymoney.api.read.KMyMoneyTag;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
@@ -55,13 +56,15 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      * @param trx  the transaction this split belongs to
      * @param addSpltToAcct 
      * @param addSpltToPye 
+     * @param addSpltToTags
      */
     @SuppressWarnings("exports")
     public KMyMoneyTransactionSplitImpl(
 	    final SPLIT peer,
 	    final KMyMoneyTransaction trx,
 	    final boolean addSpltToAcct,
-	    final boolean addSpltToPye) {
+	    final boolean addSpltToPye,
+	    final boolean addSpltToTags) {
     	super(trx.getKMyMoneyFile());
     	
     	this.jwsdpPeer = peer;
@@ -77,7 +80,6 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     			acct.addTransactionSplit(this);
     		}
     	}
-
     	if ( addSpltToPye ) {
     		KMyMoneyPayee pye = getPayee();
     		if (pye == null) {
@@ -86,6 +88,19 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
 			    	+ "' description '" + getTransaction().getMemo() + "'");
     		} else {
     			pye.addTransactionSplit(this);
+    		}
+    	}
+
+    	if ( addSpltToTags ) {
+    		Collection<KMyMoneyTag> tagList = getTags();
+    		if (tagList == null) {
+    			LOGGER.error("No such Tag for Transactions-Split with id '" + getQualifID() 
+			    	+ "' description '" + getMemo() + "' in transaction with id '" + getTransaction().getID()
+			    	+ "' description '" + getTransaction().getMemo() + "'");
+    		} else {
+    			for ( KMyMoneyTag tag : tagList ) {
+        			tag.addTransactionSplit(this);
+    			}
     		}
     	}
     }
@@ -158,6 +173,39 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     		return null;
     	
     	return getKMyMoneyFile().getPayeeByID(getPayeeID()); 
+    }
+
+    // ----------------------------
+
+    @Override
+    public Collection<KMMTagID> getTagIDs()
+    {
+    	if ( jwsdpPeer.getTAG() == null )
+    		return null;
+		
+    	ArrayList<KMMTagID> result = new ArrayList<KMMTagID>();
+    	
+    	for ( SPLIT.TAG elt : jwsdpPeer.getTAG() ) {
+    		KMMTagID newID = new KMMTagID(elt.getId());
+    		result.add(newID);
+    	}
+		
+    	return result;
+    }
+
+    @Override
+    public Collection<KMyMoneyTag> getTags() {
+    	if ( getTagIDs() == null )
+    		return null;
+    	
+    	Collection<KMyMoneyTag> result = new ArrayList<KMyMoneyTag>();
+    	
+    	for ( KMMTagID tagID : getTagIDs() ) {
+        	KMyMoneyTag newTag = getKMyMoneyFile().getTagByID(tagID);
+        	result.add(newTag);
+    	}
+    	
+    	return result;
     }
 
     // ----------------------------
@@ -408,23 +456,6 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
 	return jwsdpPeer.getMemo();
     }
     
-    // ---------------------------------------------------------------
-    
-    public Collection<KMMTagID> getTagIDs()
-    {
-    	if ( jwsdpPeer.getTAG() == null )
-    		return null;
-		
-    	ArrayList<KMMTagID> result = new ArrayList<KMMTagID>();
-    	
-    	for ( SPLIT.TAG elt : jwsdpPeer.getTAG() ) {
-    		KMMTagID newID = new KMMTagID(elt.getId());
-    		result.add(newID);
-    	}
-		
-    	return result;
-    }
-
     // ---------------------------------------------------------------
 
     /**
