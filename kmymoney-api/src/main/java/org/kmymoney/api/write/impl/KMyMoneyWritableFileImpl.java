@@ -302,6 +302,10 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			getRootElement().getPAYEES().setCount(BigInteger.valueOf(val));
 			setModified(true);
 			return;
+		} else if ( type.trim().equals("tag") ) {
+			getRootElement().getTAGS().setCount(BigInteger.valueOf(val));
+			setModified(true);
+			return;
 		} else if ( type.trim().equals("currency") ) {
 			getRootElement().getCURRENCIES().setCount(BigInteger.valueOf(val));
 			setModified(true);
@@ -385,6 +389,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		int cntAccount = 0;
 		int cntTransaction = 0;
 		int cntPayee = 0;
+		int cntTag = 0;
 		int cntCurrency = 0;
 		int cntSecurity = 0;
 		int cntPricePair = 0;
@@ -393,6 +398,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		cntAccount     = getRootElement().getACCOUNTS().getACCOUNT().size();
 		cntTransaction = getRootElement().getTRANSACTIONS().getTRANSACTION().size();
 		cntPayee       = getRootElement().getPAYEES().getPAYEE().size();
+		cntTag         = getRootElement().getTAGS().getTAG().size();
 		cntCurrency    = getRootElement().getCURRENCIES().getCURRENCY().size();
 		cntSecurity    = getRootElement().getSECURITIES().getSECURITY().size();
 		cntPricePair   = getRootElement().getPRICES().getPRICEPAIR().size();
@@ -401,6 +407,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		setCountDataFor("account", cntAccount);
 		setCountDataFor("transaction", cntTransaction);
 		setCountDataFor("payee", cntPayee);
+		setCountDataFor("tag", cntTag);
 		setCountDataFor("currency", cntCurrency);
 		setCountDataFor("security", cntSecurity);
 		setCountDataFor("pricepair", cntPricePair);
@@ -680,7 +687,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			.removeTag(tag);
 		
 		// 2) Remove payee
-		getRootElement().getPAYEES().getPAYEE().remove(((KMyMoneyWritablePayeeImpl) tag).getJwsdpPeer());
+		getRootElement().getTAGS().getTAG().remove(((KMyMoneyWritableTagImpl) tag).getJwsdpPeer());
 		setModified(true);
 	}
 
