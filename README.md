@@ -9,23 +9,21 @@ KMyMoney project.
 
 ## Modules and Further Details
 
-* [Base](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-base/README.md)
+* [Base](https://github.com/jross765/JKMyMoneyLibNTools/tree/master/kmymoney-base/README.md)
 
-* [API](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api/README.md)
+* [API](https://github.com/jross765/JKMyMoneyLibNTools/tree/master/kmymoney-api/README.md)
 
-* [API Extensions](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api-ext/README.md)
+* [API Extensions](https://github.com/jross765/JKMyMoneyLibNTools/tree/master/kmymoney-api-ext/README.md)
 
-* [Example Programs](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-api-examples/README.md)
+* [Example Programs](https://github.com/jross765/JKMyMoneyLibNTools/tree/master/kmymoney-api-examples/README.md)
 
-* [Tools](https://github.com/jross765/jkmymoneylib/tree/master/kmymoney-tools/README.md)
+* [Tools](https://github.com/jross765/JKMyMoneyLibNTools/tree/master/kmymoney-tools/README.md)
 
 ## Compatibility
 ### System Compatibility
-Version 0.6 of the library has been tested with 
+Version 0.7 of the library has been tested with 
 KMyMoney 5.1.3 on Linux (locale de_DE) and 
-OpenJDK 17.0.
-
-Java 11 or earlier won't work.
+OpenJDK 21.0.
 
 ### Locale/Language Compatibility
 As far as the author knows, there should be no issues with other locales, 
@@ -35,6 +33,7 @@ but he has not tested it.
 
 | Version | Backward Compat. | Note                           |
 |---------|------------------|--------------------------------|
+| 0.7     | almost           | Minor changes in interfaces, partially extensions |
 | 0.6     | almost           | Minor changes in interfaces    |
 | 0.5     | no               | Some substantial changes       |
 | 0.4     | almost           | Minor changes in interfaces    |
@@ -45,10 +44,15 @@ but he has not tested it.
 Here, only the top-level changes on module-level are mentioned. For more Details, 
 cf. the README files of the resp. modules (links above).
 
+### V. 0.6 &rarr; 0.7
+** ::TODO**
+
 ### V. 0.5 &rarr; 0.6
 * Added module "Tools".
 
-* New external dependency (outside of Maven central): [`SchnorxoLib`](https://github.com/jross765/schnorxolib), a small library that contains some auxiliary stuff that is used both in this and the sister project. Some of the code in the module "Base" has moved there.
+* New external dependency (outside of Maven central): 
+[`SchnorxoLib`](https://github.com/jross765/Schnorxolib), 
+a small library that contains some auxiliary stuff that is used both in this and the sister project. Some of the code in the module "Base" has moved there.
 
 ### V. 0.4 &rarr; 0.5
 Changed project structure:
@@ -65,29 +69,36 @@ Changed project structure:
 Cf. the README file of modules "API" and "Example programs" (links below).
 
 ## Level of Maturity
-This software is still in its beta stage.
+This software is beta.
 
-Although the author, at this stage, feels more or less comfortable with using this
-library for write-access (given all the test cases he has contributed), he still 
-recommends not just taking it and "wildly" changing things in your valuable KMyMoney
-files that you may have been building for years or possibly even decades. Although 
-he is using it for his own needs, he reckons that it still contains non-trivial bugs,
-and it definitely has not been sufficiently exposed to real-world data yet to blindly 
-rely on it working correctly in all conceivable edge and corner cases.
+It is worth noting, though, that the author has been using both the published tools 
+as well as some unpublished ones on a nearly daily basis for over a year now to 
+facilitate and part-automate his private finances' accounting. This proves that the 
+software is well-tested and stable enough for a real-world setting (as opposed to 
+theoretical test cases and arbitrary examples).
 
-In other words: **Make backups before you use this lib!** Take your time and check
-the generated/changed files thoroughly before moving on.
+Therefore, the author now feels confident not just to use the software in his own particular productive environment, but also to encourage others to use it. However, he is experienced a developer enough to know that there are other production environments and other use cases out there, and that only by further usage and testing by at least a handful of other users in real-world scenarios for a year or so, the software can mature to finally attain genuine "production-ready" status.
+
+In short: You are encouraged to use this software, but be advised to use it under the following principles:
+
+*  Consider the API's read-branch and the read-only tools to be safe (i.e., they are not only *called* read-only, but they actually *are*).
+
+* As for the write-branch, take the usual precautions: 
+
+  * Do not just take the software and "wildly" change things in your valuable KMyMoney files that you may have been building for years or possibly even decades. It still might contain some non-trivial bugs, and you should not assume that it works correctly in all conceivable edge and corner cases.
+  * If you write your own tools, do not *change* the KMyMoney file but *generate a new one* instead (as done in the published tools) and keep the old version for a while.
+  * If you have to change your file, **make backups before you use this lib/these tools!** Take your time and check the generated/changed files thoroughly before moving on.
 
 ## Compiling the Sources
 To compile the sources, do the following:
 
 1) Make sure that you have Maven installed on your system.
 
-2) Build and install [`SchnorxoLib`](https://github.com/jross765/schnorxolib) (cf. details there).
+2) Build and install [`SchnorxoLib`](https://github.com/jross765/Schnorxolib) (cf. details there).
 
 3) Clone this repository.
 
-4) Check out the latest version tag. In this case: `V_1_5_0`.
+4) Check out the latest version tag. In this case: `V_0_7`.
 
    The author has, in the course of his professional career, met plenty of self-appointed super-pro developers 
    who do not seem to understand the concept of version tags and configuration management, 
@@ -101,15 +112,14 @@ To compile the sources, do the following:
 
 ## Sister Project
 This project has a sister project: 
-[`JGnuCashLib`](https://github.com/jross765/jgnucashlib)
+[`JGnuCashLib`](https://github.com/jross765/JGnuCashLibNTools)
 
-Both projects have roughly the same level of maturity, `JGnuCashLib` currently being a little 
-more advanced than `JKMyMoneyLib`. Obviously, the author strives to keep both projects 
-symmetrical and to eventually have them both on a comparable level of maturity.
+By now, both projects have roughly the same level of maturity. 
+Obviously, the author strives to keep both projects symmetrical.
 
-What is meant by "symmetry" is this context? It means that this project has, in the early
+What does "symmetry" mean in this context? It means that this project has, in the early
 stages, literally evolved from a source-code copy of its sister, `JGnuCashLib`.
-Meanwhile, changes and adaptations are going in both directions.
+Meanwhile, changes and adaptations are going in both directions. Let's call this "coupled development". 
 Given that KMyMoney and GnuCash are two finance applications with quite a few 
 similarities (both in business logic and file format), this approach makes sense
 and has been working well so far.
