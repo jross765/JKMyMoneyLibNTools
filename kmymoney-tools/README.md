@@ -12,6 +12,7 @@ You will notice that the tools partially pull on the examples in the "Examples" 
 * Existing tools: 
   * For parsing command-line options: Replaced `GnuParser` by `DefaultParser` (the former has been deprecated)
   * Payees have transactions (cf. module "API") ==> adapted GetPyeInfo
+  * Analogously: Institutions have accounts ==> adapted GetInstInfo
   * Fixed a few small bugs
 
 ### V. 0.5 &rarr; 0.6

@@ -11,7 +11,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.kmymoney.api.read.KMyMoneyPayee;
+import org.kmymoney.api.read.KMyMoneyTag;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.tools.CommandLineTool;
 import org.slf4j.Logger;
@@ -21,16 +21,16 @@ import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 
-public class GetPyeList extends CommandLineTool
+public class GetTagList extends CommandLineTool
 {
   // Logger
-  private static final Logger LOGGER = LoggerFactory.getLogger(GetPyeList.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(GetTagList.class);
   
   // private static PropertiesConfiguration cfg = null;
   private static Options options;
   
   private static String               kmmFileName = null;
-  private static Helper.PyeListMode   mode        = null; 
+  private static Helper.TagListMode   mode        = null; 
   private static String               name        = null;
   
   private static boolean scriptMode = false; // ::TODO
@@ -39,7 +39,7 @@ public class GetPyeList extends CommandLineTool
   {
     try
     {
-      GetPyeList tool = new GetPyeList ();
+      GetTagList tool = new GetTagList ();
       tool.execute(args);
     }
     catch (CouldNotExecuteException exc) 
@@ -79,7 +79,7 @@ public class GetPyeList extends CommandLineTool
     Option optName = Option.builder("n")
       .hasArg()
       .argName("name")
-      .desc("Payee name (part of)")
+      .desc("Tag name (part of)")
       .longOpt("name")
       .build();
     	      
@@ -103,20 +103,20 @@ public class GetPyeList extends CommandLineTool
   {
     KMyMoneyFileImpl kmmFile = new KMyMoneyFileImpl(new File(kmmFileName));
     
-    Collection<KMyMoneyPayee> cmdtyList = null; 
-    if ( mode == Helper.PyeListMode.ALL )
-        cmdtyList = kmmFile.getPayees();
-    else if ( mode == Helper.PyeListMode.NAME )
-    	cmdtyList = kmmFile.getPayeesByName(name, true);
+    Collection<KMyMoneyTag> cmdtyList = null; 
+    if ( mode == Helper.TagListMode.ALL )
+        cmdtyList = kmmFile.getTags();
+    else if ( mode == Helper.TagListMode.NAME )
+    	cmdtyList = kmmFile.getTagsByName(name, true);
 
     if ( cmdtyList.size() == 0 ) 
     {
-    	System.err.println("Found no payee with that type.");
+    	System.err.println("Found no tag with that type.");
     	throw new NoEntryFoundException();
     }
 
-    System.err.println("Found " + cmdtyList.size() + " payees.");
-    for ( KMyMoneyPayee cmdty : cmdtyList )
+    System.err.println("Found " + cmdtyList.size() + " tags.");
+    for ( KMyMoneyTag cmdty : cmdtyList )
     {
     	System.out.println(cmdty.toString());	
     }
@@ -158,7 +158,7 @@ public class GetPyeList extends CommandLineTool
     // <mode>
     try
     {
-      mode = Helper.PyeListMode.valueOf(cmdLine.getOptionValue("mode"));
+      mode = Helper.TagListMode.valueOf(cmdLine.getOptionValue("mode"));
     }
     catch ( Exception exc )
     {
@@ -169,9 +169,9 @@ public class GetPyeList extends CommandLineTool
     // <name>
     if ( cmdLine.hasOption( "name" ) )
     {
-    	if ( mode != Helper.PyeListMode.NAME )
+    	if ( mode != Helper.TagListMode.NAME )
     	{
-            System.err.println("Error: <name> must only be set with <mode> = '" + Helper.PyeListMode.NAME + "'");
+            System.err.println("Error: <name> must only be set with <mode> = '" + Helper.TagListMode.NAME + "'");
             throw new InvalidCommandLineArgsException();
     	}
     	
@@ -187,9 +187,9 @@ public class GetPyeList extends CommandLineTool
     }
     else
     {
-    	if ( mode == Helper.PyeListMode.NAME )
+    	if ( mode == Helper.TagListMode.NAME )
     	{
-            System.err.println("Error: <name> must be set with <mode> = '" + Helper.PyeListMode.NAME + "'");
+            System.err.println("Error: <name> must be set with <mode> = '" + Helper.TagListMode.NAME + "'");
             throw new InvalidCommandLineArgsException();
     	}
     	
@@ -204,11 +204,11 @@ public class GetPyeList extends CommandLineTool
   protected void printUsage()
   {
     HelpFormatter formatter = new HelpFormatter();
-    formatter.printHelp( "GetPyeList", options );
+    formatter.printHelp( "GetTagList", options );
     
     System.out.println("");
     System.out.println("Valid values for <mode>:");
-    for ( Helper.PyeListMode elt : Helper.PyeListMode.values() )
+    for ( Helper.TagListMode elt : Helper.TagListMode.values() )
       System.out.println(" - " + elt);
   }
 }

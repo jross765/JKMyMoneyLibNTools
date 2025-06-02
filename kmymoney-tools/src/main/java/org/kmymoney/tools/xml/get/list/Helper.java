@@ -23,4 +23,16 @@ public class Helper
 		ALL
 	}
 
+	public enum TagListMode
+	{
+		NAME,
+		ALL
+	}
+
+	public enum InstListMode
+	{
+		NAME,
+		ALL
+	}
+
 }

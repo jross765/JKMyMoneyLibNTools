@@ -228,7 +228,7 @@ public class GetInstInfo extends CommandLineTool
     
     for ( KMyMoneyAccount acct : inst.getAccounts() )
     {
-      System.out.println(" - " + inst.toString());
+      System.out.println(" - " + acct.toString());
     }
   }
 
