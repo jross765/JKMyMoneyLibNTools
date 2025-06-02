@@ -972,8 +972,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
     	// fill maps
     	// CAUTION: The order matters
-    	instMgr = new FileInstitutionManager(this);
     	acctMgr = new FileAccountManager(this);
+    	instMgr = new FileInstitutionManager(this);
     	pyeMgr  = new FilePayeeManager(this);
     	tagMgr  = new FileTagManager(this);
     	trxMgr  = new FileTransactionManager(this);

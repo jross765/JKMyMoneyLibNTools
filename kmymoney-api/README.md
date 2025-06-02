@@ -8,7 +8,7 @@ This is the core module of the project, providing all low-level read-/write acce
 
 * Introduced `KMyMoney(Writable)Tag(Impl)`.
 
-* `KMyMoneyWritableTransactionSplitImpl`: Fixed bug in setShares().
+* `KMyMoneyWritableTransactionSplitImpl`: Fixed bug in `setShares()`.
 
 * `KMyMoneyWritableAccount(Impl)`, `KMyMoney(Writable)File(Impl)`: Expanded interface and implemented it.
 

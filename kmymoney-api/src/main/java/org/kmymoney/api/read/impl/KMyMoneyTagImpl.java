@@ -106,8 +106,6 @@ public class KMyMoneyTagImpl extends KMyMoneyObjectImpl
 
 	// ---------------------------------------------------------------
 
-    // -----------------------------------------------------------------
-
     /**
      * @see KMyMoneyPayee#addTransactionSplit(KMyMoneyTransactionSplit)
      */

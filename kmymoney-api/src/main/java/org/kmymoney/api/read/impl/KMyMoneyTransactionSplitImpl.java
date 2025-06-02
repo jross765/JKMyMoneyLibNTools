@@ -80,6 +80,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     			acct.addTransactionSplit(this);
     		}
     	}
+    	
     	if ( addSpltToPye ) {
     		KMyMoneyPayee pye = getPayee();
     		if (pye == null) {

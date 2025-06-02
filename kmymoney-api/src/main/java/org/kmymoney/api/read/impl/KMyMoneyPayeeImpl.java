@@ -37,7 +37,7 @@ public class KMyMoneyPayeeImpl extends KMyMoneyObjectImpl
     // protected KMyMoneyObjectImpl helper;
 
     /**
-     * The splits of this transaction. May not be fully initialized during loading
+     * The splits of this payee. May not be fully initialized during loading
      * of the KMyMoney-file.
      *
      * @see #mySplitsNeedSorting
@@ -142,9 +142,6 @@ public class KMyMoneyPayeeImpl extends KMyMoneyObjectImpl
 
     // -----------------------------------------------------------------
 
-    /**
-     * @see KMyMoneyPayee#addTransactionSplit(KMyMoneyTransactionSplit)
-     */
     public void addTransactionSplit(final KMyMoneyTransactionSplit splt) {
     	if ( splt == null ) {
     		throw new IllegalArgumentException("null transaction split given");

@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.kmymoney.api.generated.ACCOUNT;
+import org.kmymoney.api.generated.ACCOUNTID;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyAccount.Type;
@@ -68,6 +69,19 @@ public class FileAccountManager {
 		KMyMoneyAccountImpl acct = new KMyMoneyAccountImpl(jwsdpAcct, kmmFile);
 		LOGGER.debug("createAccount: Generated new account: " + acct.getID());
 		return acct;
+	}
+	
+	// ---------------------------------------------------------------
+
+	public ACCOUNT getAccountByID_raw(final ACCOUNTID acctID) {
+		for ( ACCOUNT jwsdpAcct : kmmFile.getRootElement().getACCOUNTS().getACCOUNT() ) {
+			if ( jwsdpAcct.getId().equals(acctID.getId()) ) {
+				return jwsdpAcct;
+			}
+		}
+
+		LOGGER.error("getAccountByID_raw: Could not find low-level account object with ID: " + acctID.getId());
+		return null;
 	}
 
 	// ---------------------------------------------------------------

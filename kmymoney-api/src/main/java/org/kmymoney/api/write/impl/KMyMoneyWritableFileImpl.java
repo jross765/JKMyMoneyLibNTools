@@ -134,8 +134,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		setModified(false);
 
     	// CAUTION: The order matters
-		instMgr = new org.kmymoney.api.write.impl.hlp.FileInstitutionManager(this);
 		acctMgr = new org.kmymoney.api.write.impl.hlp.FileAccountManager(this);
+		instMgr = new org.kmymoney.api.write.impl.hlp.FileInstitutionManager(this);
 		pyeMgr  = new org.kmymoney.api.write.impl.hlp.FilePayeeManager(this);
 		tagMgr  = new org.kmymoney.api.write.impl.hlp.FileTagManager(this);
 		trxMgr  = new org.kmymoney.api.write.impl.hlp.FileTransactionManager(this);
@@ -149,8 +149,8 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		super(is);
 
     	// CAUTION: The order matters
-		instMgr = new org.kmymoney.api.write.impl.hlp.FileInstitutionManager(this);
 		acctMgr = new org.kmymoney.api.write.impl.hlp.FileAccountManager(this);
+		instMgr = new org.kmymoney.api.write.impl.hlp.FileInstitutionManager(this);
 		pyeMgr  = new org.kmymoney.api.write.impl.hlp.FilePayeeManager(this);
 		tagMgr  = new org.kmymoney.api.write.impl.hlp.FileTagManager(this);
 		trxMgr  = new org.kmymoney.api.write.impl.hlp.FileTransactionManager(this);

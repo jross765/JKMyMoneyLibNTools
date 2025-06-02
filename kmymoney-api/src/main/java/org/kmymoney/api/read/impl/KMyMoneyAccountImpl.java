@@ -72,6 +72,26 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 	// helper = new KMyMoneyObjectImpl(kmmFile);
     }
 
+    @SuppressWarnings("exports")
+    public KMyMoneyAccountImpl(
+	    final ACCOUNT peer,
+	    final KMyMoneyFile kmmFile,
+	    final boolean addToInst) {
+    	super(kmmFile);
+    	
+    	this.jwsdpPeer = peer;
+
+    	if ( addToInst ) {
+    		KMyMoneyInstitution inst = getInstitution();
+    		if (inst == null) {
+    			LOGGER.error("No such Account id='" + getInstitutionID() + "' for Transactions-Split with id '" + getID()
+			    	+ "' description '" + getMemo() + "' in institution with id '" + getInstitution().getID() + "'");
+    		} else {
+    			((KMyMoneyInstitutionImpl) inst).addAccount(this);
+    		}
+    	}
+    }
+
     // ---------------------------------------------------------------
 
     /**
@@ -225,9 +245,6 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     	return mySplits;
     }
 
-    /**
-     * @see KMyMoneyAccount#addTransactionSplit(KMyMoneyTransactionSplit)
-     */
     public void addTransactionSplit(final KMyMoneyTransactionSplit splt) {
     	if ( splt == null ) {
     		throw new IllegalArgumentException("null transaction-split given");
