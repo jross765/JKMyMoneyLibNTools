@@ -11,6 +11,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyInstitution;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.base.basetypes.simple.KMMInstID;
@@ -34,9 +35,11 @@ public class GetInstInfo extends CommandLineTool
   
   private static String      kmmFileName = null;
   private static Helper.Mode mode        = null;
-  private static KMMInstID   instID       = null;
+  private static KMMInstID   instID      = null;
   private static String      name        = null;
   
+  private static boolean showAcct   = false;
+
   private static boolean scriptMode = false; // ::TODO
 
   public static void main( String[] args )
@@ -95,13 +98,17 @@ public class GetInstInfo extends CommandLineTool
       .build();
           
     // The convenient ones
-    // ::EMPTY
+    Option optShowAcct = Option.builder("sacct")
+      .desc("Show accounts")
+      .longOpt("show-accounts")
+      .build();
             
     options = new Options();
     options.addOption(optFile);
     options.addOption(optMode);
     options.addOption(optInstID);
     options.addOption(optName);
+    options.addOption(optShowAcct);
   }
 
   @Override
@@ -206,6 +213,22 @@ public class GetInstInfo extends CommandLineTool
     catch (Exception exc)
     {
       System.out.println("URL:               " + "ERROR");
+    }
+    
+    // ---
+    
+    if ( showAcct )
+      showAccounts(inst);
+  }
+
+  private void showAccounts(KMyMoneyInstitution inst)
+  {
+    System.out.println("");
+    System.out.println("Accounts:");
+    
+    for ( KMyMoneyAccount acct : inst.getAccounts() )
+    {
+      System.out.println(" - " + inst.toString());
     }
   }
 
@@ -318,6 +341,19 @@ public class GetInstInfo extends CommandLineTool
 
     if (!scriptMode)
       System.err.println("Name:     '" + name + "'");
+    
+    // <show-transactions>
+    if ( cmdLine.hasOption("show-accounts"))
+    {
+      showAcct = true;
+    }
+    else
+    {
+    	showAcct = false;
+    }
+    
+    if ( ! scriptMode )
+      System.err.println("Show accounts: " + showAcct);
   }
 
   @Override

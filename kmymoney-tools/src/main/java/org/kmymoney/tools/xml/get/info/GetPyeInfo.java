@@ -38,7 +38,7 @@ public class GetPyeInfo extends CommandLineTool
   private static KMMPyeID    pyeID       = null;
   private static String      name        = null;
   
-  private static boolean showTrx      = false;
+  private static boolean showTrx    = false;
 
   private static boolean scriptMode = false; // ::TODO
 
@@ -181,7 +181,7 @@ public class GetPyeInfo extends CommandLineTool
 
     try
     {
-      System.out.println("Address:           '" + pye.getAddress() + "'");
+      System.out.println("Address:           " + pye.getAddress());
     }
     catch (Exception exc)
     {
