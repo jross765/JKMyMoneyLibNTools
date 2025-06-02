@@ -3,6 +3,21 @@
 This is the core module of the project, providing all low-level read-/write access functions to a KMyMoney file.
 
 ## Major Changes 
+### V. 0.6 &rarr; 0.7
+* Fixed a couple of bugs in write-branch of API (for various entities), esp. in object-deleting code.
+
+* Introduced `KMyMoney(Writable)Tag(Impl)`.
+
+* `KMyMoneyWritableTransactionSplitImpl`: Fixed bug in setShares().
+
+* `KMyMoneyWritableAccount(Impl)`, `KMyMoney(Writable)File(Impl)`: Expanded interface and implemented it.
+
+* `KMyMoneyWritableFileImpl`: setting file info "last modified" just before writing out file.
+    
+* Significantly improved overall test coverage, esp. in write-branch.
+
+* Various minor changes, cleaning and improving code.
+
 ### V. 0.5 &rarr; 0.6
 * Finally added institutions and dependent code in other classes (e.g. `KMyMoney(Writable)Account(Impl)`).
 

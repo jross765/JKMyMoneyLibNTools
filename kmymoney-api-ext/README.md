@@ -1,17 +1,35 @@
 # Notes on the Module "API Extensions"
 
-This module provides simplified, high-level access functions to a KMyMoney file 
-via the "API" module (sort of "macros") for specialized, complex tasks.
+This module provides simplified, high-level access functions to a 
+KMyMoney 
+file via the "API" module (sort of "macros") for specialized, complex tasks.
 
 ## Sub-Modules
-Currently, the module consists of just one single sub-module: "SecAcct".
+Currently, the module consists of two sub-modules:
+
+* "SecAcct"
+* "TrxMgr"
 
 ### SecAcct
-Currently, this sub-module contains just one single class: `SecuritiesAccountTransactionManager`, 
-which provides a simplified, high-level interface for generating buy- and dividend transactions 
-in a securities account (brokerage account).
+This sub-module contains classes that provide a simplified, high-level interface for...
+
+* ...generating and maintaining stock accounts,
+* ...generating buy- and dividend transactions in a securities account (brokerage account).
+
+### TrxMgr
+This sub-module contains classes that help to...
+
+* ...find transaction and splits by setting filter criteria,
+* ...merge stock account transcations,
+* ...generally manipulate transactions in a more convenient way than by using the pure API.
 
 ## Major Changes
+### V. 0.6 &rarr; 0.7
+* Added sub-module TrxMgr.
+  * New: `Transaction(Split)Filter`
+  * New: `TransactionFinder`
+  * New: `TransactionManager`, `TransactionMergerXYZ` (the latter in two variants)
+
 ### V. 0.5 &rarr; 0.6
 * Sub-module SecAcct:
   * Added support for stock splits / reverse splits.

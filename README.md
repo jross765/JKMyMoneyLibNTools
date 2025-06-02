@@ -1,10 +1,12 @@
-# Project "JKMyMoney Lib 'n' Tools"
+# Project "Java KMyMoney Lib 'n' Tools"
 
-`JKMyMoneyLib` is a free and open-source Java-library for reading and writing the XML 
-file format of the KMyMoney open source personal finance software 
+`JKMyMoneyLibNTools` 
+is a free and open-source set of Java-libraries for reading and writing the XML file 
+format of the 
+KMyMoney open source personal finance software 
 ([kmymoney.org](https://kmymoney.org)).
 
-It is not directly affiliated with / sponsored or coordinated by the developers of the 
+This project is not directly affiliated with / sponsored or coordinated by the developers of the 
 KMyMoney project.
 
 ## Modules and Further Details
@@ -45,7 +47,17 @@ Here, only the top-level changes on module-level are mentioned. For more Details
 cf. the README files of the resp. modules (links above).
 
 ### V. 0.6 &rarr; 0.7
-** ::TODO**
+* Module "API":
+  * Some bug-fixing and cleanup-work, making code more robust.
+  * New functionalities.
+
+* Module "API Extensions": 
+  * New sub-module.
+  * Expanded functionality of already-existing module.
+
+* Module "Tools": 
+  * New Tools
+  * Maintenance.
 
 ### V. 0.5 &rarr; 0.6
 * Added module "Tools".
@@ -110,16 +122,32 @@ To compile the sources, do the following:
 
         `$ ./build.sh`
 
+## Planned
+
+### Overall
+* Split up the all-encompassing repository into several ones: One per module plus one for the parent.
+
+  I know, I know, that will come with some disadvantages, and there are people who would advise 
+  against it, for valid reasons. But life is not black and white, and while I acknowledge that 
+  having everything in one single repository makes things easier in the early stages of development, 
+  I am convinced that in the long run, the advantages of doing so will outweigh the disadvantages.
+
+* Possibly contribute some more Java tools / wrapper scripts that already exist in separate repositories that currently are not published.
+
+### Module-Specific
+Cf. the according module's README file (links above).
+
 ## Sister Project
 This project has a sister project: 
-[`JGnuCashLib`](https://github.com/jross765/JGnuCashLibNTools)
+[`JGnuCashLibNTools`](https://github.com/jross765/JGnuCashLibNTools)
 
 By now, both projects have roughly the same level of maturity. 
 Obviously, the author strives to keep both projects symmetrical.
 
-What does "symmetry" mean in this context? It means that this project has, in the early
-stages, literally evolved from a source-code copy of its sister, `JGnuCashLib`.
-Meanwhile, changes and adaptations are going in both directions. Let's call this "coupled development". 
+What does "symmetry" mean in this context? It means that this project has 
+literally evolved from a source-code copy of its sister, `JGnuCashLibNTools`.
+Meanwhile, changes and adaptations are going in both directions.
+Let's call this "coupled development". 
 Given that KMyMoney and GnuCash are two finance applications with quite a few 
 similarities (both in business logic and file format), this approach makes sense
 and has been working well so far.
@@ -127,9 +155,9 @@ and has been working well so far.
 Of course, this is a "10.000-metre bird's-eye view". As always in life, things are a little more
 complicated once you go into the details. Still, looking at the big picture and at least 
 up to the current state of development, the author has managed to keep both projects very 
-similar on a source code level -- so much so that you partially can use `diff`. You will, 
-however, also see some exceptions here and there where that "low-level-symmetry" is not 
-maintainable.
+similar on a source code level -- so much so that you partially can use `diff`. 
+You will, however, also see some exceptions here and there where that "low-level-symmetry" 
+is not maintainable.
 
 ## Acknowledgements
 
