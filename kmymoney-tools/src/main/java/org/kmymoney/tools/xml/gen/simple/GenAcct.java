@@ -158,7 +158,8 @@ public class GenAcct extends CommandLineTool
 	    		      type == KMyMoneyAccount.Type.SAVINGS ||
 	    			  type == KMyMoneyAccount.Type.MONEY_MARKET ||
 	    			  type == KMyMoneyAccount.Type.CASH ||
-	    			  type == KMyMoneyAccount.Type.CERTIFICATE_DEPOSIT ) &&
+	    			  type == KMyMoneyAccount.Type.CERTIFICATE_DEPOSIT ||
+	    			  type == KMyMoneyAccount.Type.INVESTMENT ) &&
 	       	        parentAcct.getType() != KMyMoneyAccount.Type.ASSET ) {
 	    	System.err.println("Error: <type> = " + type + ", but parent's type is not " + KMyMoneyAccount.Type.ASSET);
 	    	return false;
@@ -170,7 +171,8 @@ public class GenAcct extends CommandLineTool
 	    } else if ( ( type == KMyMoneyAccount.Type.ASSET ||
 	    		      type == KMyMoneyAccount.Type.LIABILITY ||
 	    		      type == KMyMoneyAccount.Type.INCOME ||
-	    		      type == KMyMoneyAccount.Type.EXPENSE ) &&
+	    		      type == KMyMoneyAccount.Type.EXPENSE ||
+	    		      type == KMyMoneyAccount.Type.EQUITY ) &&
 		            type != parentAcct.getType() ) {
 	    	System.err.println("Error: <type> = " + type + ", but parent's type is not");
 	    	return false;
