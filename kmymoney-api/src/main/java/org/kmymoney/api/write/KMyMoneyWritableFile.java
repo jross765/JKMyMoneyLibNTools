@@ -156,7 +156,33 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * @return a new account that is already added to this file as a top-level
 	 *         account
 	 */
+	@Deprecated
 	KMyMoneyWritableAccount createWritableAccount();
+
+	KMyMoneyWritableAccount createWritableAccount(KMyMoneyAccount.Type type, 
+												  KMMQualifSecCurrID secCurrID, 
+												  KMMComplAcctID parentID, 
+												  String name);
+
+	KMyMoneyWritableAccount createWritableAccount(KMyMoneyAccount.Type type, 
+			  									  KMMQualifSecID secID, 
+			  									  KMMComplAcctID parentID, 
+			  									  String name);
+
+	KMyMoneyWritableAccount createWritableAccount(KMyMoneyAccount.Type type, 
+			  									  KMMQualifCurrID currID, 
+			  									  KMMComplAcctID parentID, 
+			  									  String name);
+
+	KMyMoneyWritableAccount createWritableAccount(KMyMoneyAccount.Type type, 
+			  									  KMMSecID secID, 
+			  									  KMMComplAcctID parentID, 
+			  									  String name);
+
+	KMyMoneyWritableAccount createWritableAccount(KMyMoneyAccount.Type type, 
+			  									  Currency curr, 
+			  									  KMMComplAcctID parentID, 
+			  									  String name);
 
 	/**
 	 * @param acct the account to remove

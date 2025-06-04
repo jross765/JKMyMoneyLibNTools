@@ -509,12 +509,13 @@ public class TestKMyMoneyWritableAccountImpl {
 		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_ACCT, kmmInFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
 
-		KMyMoneyWritableAccount acct = kmmInFile.createWritableAccount();
+		KMyMoneyWritableAccount acct = 
+				kmmInFile
+					.createWritableAccount(KMyMoneyAccount.Type.EXPENSE,
+										   Currency.getInstance(kmmInFile.getDefaultCurrencyID()),
+										   ACCT_13_ID,
+										   "Various expenses");
 		acct.setInstitutionID(INST_2_ID);
-		acct.setName("Various expenses");
-		acct.setType(KMyMoneyAccount.Type.EXPENSE);
-		acct.setParentAccountID(ACCT_13_ID);
-		acct.setCurrency(kmmInFile.getDefaultCurrencyID());
 		acct.setMemo("All the stuff that does not fit into the other expenses accounts");
 
 		// ----------------------------
@@ -578,10 +579,12 @@ public class TestKMyMoneyWritableAccountImpl {
 
 	@Test
 	public void test03_2_1() throws Exception {
-		KMyMoneyWritableAccount acct = kmmInFile.createWritableAccount();
-		acct.setType(KMyMoneyAccount.Type.LIABILITY);
-		acct.setParentAccountID(ACCT_3_ID);
-		acct.setName("SNAF");
+		KMyMoneyWritableAccount acct = 
+				kmmInFile
+					.createWritableAccount(KMyMoneyAccount.Type.LIABILITY,
+										   Currency.getInstance(kmmInFile.getDefaultCurrencyID()),
+										   ACCT_3_ID,
+										   "SNAF");
 		acct.setMemo("Stuff never accounted for");
 
 		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);
@@ -672,22 +675,28 @@ public class TestKMyMoneyWritableAccountImpl {
 
 	@Test
 	public void test03_2_4() throws Exception {
-		KMyMoneyWritableAccount acct1 = kmmInFile.createWritableAccount();
-		acct1.setType(KMyMoneyAccount.Type.LIABILITY);
-		acct1.setParentAccountID(ACCT_3_ID);
-		acct1.setName("SNAF");
+		KMyMoneyWritableAccount acct1 = 
+				kmmInFile
+					.createWritableAccount(KMyMoneyAccount.Type.LIABILITY,
+										   Currency.getInstance(kmmInFile.getDefaultCurrencyID()),
+										   ACCT_3_ID,
+										   "SNAF");
 		acct1.setMemo("Stuff never accounted for");
 
-		KMyMoneyWritableAccount acct2 = kmmInFile.createWritableAccount();
-		acct2.setType(KMyMoneyAccount.Type.CHECKING);
-		acct2.setParentAccountID(ACCT_2_ID);
-		acct2.setName("BAHAMAS SECRET");
+		KMyMoneyWritableAccount acct2 = 
+				kmmInFile
+					.createWritableAccount(KMyMoneyAccount.Type.CHECKING,
+										   Currency.getInstance(kmmInFile.getDefaultCurrencyID()),
+										   ACCT_2_ID,
+										   "BAHAMAS SECRET");
 		acct2.setMemo("My very VERY secret account on the Bahamas");
 
-		KMyMoneyWritableAccount acct3 = kmmInFile.createWritableAccount();
-		acct3.setType(KMyMoneyAccount.Type.CASH);
-		acct3.setParentAccountID(ACCT_1_ID);
-		acct3.setName("Bug-Out Cash");
+		KMyMoneyWritableAccount acct3 = 
+				kmmInFile
+					.createWritableAccount(KMyMoneyAccount.Type.CASH,
+										   Currency.getInstance(kmmInFile.getDefaultCurrencyID()),
+										   ACCT_1_ID,
+										   "Bug-Out Cash");
 		acct3.setMemo("My hopefully secret cash wallet for crises");
 
 		File outFile = folder.newFile(ConstTest.KMM_FILENAME_OUT);

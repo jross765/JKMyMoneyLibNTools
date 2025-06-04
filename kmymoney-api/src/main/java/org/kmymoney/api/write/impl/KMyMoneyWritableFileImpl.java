@@ -694,14 +694,80 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	// ----------------------------
 
 	/**
-	 * @see KMyMoneyWritableFile#createWritableAccount()
+	 * @see KMyMoneyWritableFile#createWritableAccount(Type, KMMQualifSecCurrID, KMMComplAcctID, String)
 	 */
 	@Override
+	@Deprecated
 	public KMyMoneyWritableAccount createWritableAccount() {
 		KMyMoneyWritableAccountImpl acct = new KMyMoneyWritableAccountImpl(this);
 		((org.kmymoney.api.write.impl.hlp.FileAccountManager) super.acctMgr)
 			.addAccount(acct);
+		
 		return acct;
+	}
+
+	/**
+	 * @see KMyMoneyWritableFile#createWritableAccount(Type, KMMQualifSecCurrID, KMMComplAcctID, String)
+	 */
+	@Override
+	public KMyMoneyWritableAccount createWritableAccount(KMyMoneyAccount.Type type, 
+			  											 KMMQualifSecCurrID secCurrID,
+			  											 KMMComplAcctID parentID,
+			  											 String name) {
+		KMyMoneyWritableAccountImpl acct = new KMyMoneyWritableAccountImpl(this);
+		((org.kmymoney.api.write.impl.hlp.FileAccountManager) super.acctMgr)
+			.addAccount(acct);
+		
+		acct.setType(type);
+		acct.setQualifSecCurrID(secCurrID);
+		acct.setParentAccountID(parentID);
+		acct.setName(name);
+		
+		return acct;
+	}
+
+	/**
+	 * @see KMyMoneyWritableFile#createWritableAccount(Type, KMMQualifSecCurrID, KMMComplAcctID, String)
+	 */
+	@Override
+	public KMyMoneyWritableAccount createWritableAccount(KMyMoneyAccount.Type type, 
+			  											 KMMQualifSecID secID,
+			  											 KMMComplAcctID parentID,
+			  											 String name) {
+		return createWritableAccount(type, (KMMQualifSecCurrID) secID, parentID, name);
+	}
+
+	/**
+	 * @see KMyMoneyWritableFile#createWritableAccount(Type, KMMQualifCurrID, KMMComplAcctID, String)
+	 */
+	@Override
+	public KMyMoneyWritableAccount createWritableAccount(KMyMoneyAccount.Type type, 
+			  											 KMMQualifCurrID currID,
+			  											 KMMComplAcctID parentID,
+			  											 String name) {
+		return createWritableAccount(type, (KMMQualifSecCurrID) currID, parentID, name);
+	}
+
+	/**
+	 * @see KMyMoneyWritableFile#createWritableAccount(Type, KMMSecID, KMMComplAcctID, String)
+	 */
+	@Override
+	public KMyMoneyWritableAccount createWritableAccount(KMyMoneyAccount.Type type, 
+			  											 KMMSecID secID,
+			  											 KMMComplAcctID parentID,
+			  											 String name) {
+		return createWritableAccount(type, new KMMQualifSecID(secID), parentID, name);
+	}
+
+	/**
+	 * @see KMyMoneyWritableFile#createWritableAccount(Type, Currency, KMMComplAcctID, String)
+	 */
+	@Override
+	public KMyMoneyWritableAccount createWritableAccount(KMyMoneyAccount.Type type, 
+			  											 Currency curr,
+			  											 KMMComplAcctID parentID,
+			  											 String name) {
+		return createWritableAccount(type, new KMMQualifCurrID(curr), parentID, name);
 	}
 
 	/**

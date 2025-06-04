@@ -8,11 +8,15 @@ This is the core module of the project, providing all low-level read-/write acce
 
 * Introduced `KMyMoney(Writable)Tag(Impl)`.
 
+* Institutions have accounts, obviously. Changed implementation of `KMyMoneyInstitutionImpl`, `KMyMoneyAccountImpl` and other classes that reflect this.
+
 * `KMyMoneyWritableTransactionSplitImpl`: Fixed bug in `setShares()`.
 
 * `KMyMoneyWritableAccount(Impl)`, `KMyMoney(Writable)File(Impl)`: Expanded interface and implemented it.
 
-* `KMyMoneyWritableFileImpl`: setting file info "last modified" just before writing out file.
+* `KMyMoneyWritableFileImpl`: 
+  * Changed interface: Method `createWritableAccount()`: Deprecated old variant without arguments, introduced new variants with arguments.
+  * Setting file info "last modified" just before writing out file.
     
 * Significantly improved overall test coverage, esp. in write-branch.
 
