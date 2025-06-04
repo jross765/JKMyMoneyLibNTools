@@ -130,12 +130,12 @@ public class GenDepotTrx extends CommandLineTool
     // Options
     // The essential ones
     Option optMode = Option.builder("m")
-    	.longOpt("book-mode")
-    	.required(true)
-    	.hasArg(true)
-    	.argName("mode")
-    	.desc("Booking mode")
-    	.build();
+      .required()
+      .hasArg()
+      .argName("mode")
+      .desc("Booking mode")
+      .longOpt("book-mode")
+      .build();
     	        
     Option optFileIn = Option.builder("if")
       .required()

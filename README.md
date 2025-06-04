@@ -163,7 +163,7 @@ is not maintainable.
 
 Special thanks to **Marcus Wolschon (Sofware-Design u. Beratung)** and **Deniss Larka** -- 
 they don't / did not contribute directly to this project, but they did the pioneering and 
-stewardship work of the sister project `JGnuCashLib` (and its predecessor, resp.) for quite
+stewardship work of the sister project `JGnuCashLibNTools` (and its predecessor, resp.) for quite
 a few years, long before the author got into it. This project heavily makes use of the 
 approaches and techniques in said project.
 
