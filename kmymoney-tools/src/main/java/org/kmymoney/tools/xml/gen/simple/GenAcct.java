@@ -11,7 +11,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.kmymoney.api.read.KMyMoneyAccount;
-import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.write.KMyMoneyWritableAccount;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
@@ -105,7 +104,7 @@ public class GenAcct extends CommandLineTool
       .required()
       .hasArg()
       .argName("sec/curr")
-      .desc("Account currency: a qualified security or a currency ID")
+      .desc("Account currency: a (qualified) security or a currency ID")
       .longOpt("security-currency")
       .build();
     	    
@@ -123,6 +122,9 @@ public class GenAcct extends CommandLineTool
     options.addOption(optFileIn);
     options.addOption(optFileOut);
     options.addOption(optName);
+    options.addOption(optType);
+    options.addOption(optSecCurr);
+    options.addOption(optParent);
   }
 
   @Override
