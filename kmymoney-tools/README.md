@@ -10,7 +10,7 @@ You will notice that the tools partially pull on the examples in the "Examples" 
   * UpdSec, GenAcct (finally!), GenPrcList
   * Tag tools (new entity): GenTag, GetTagInfo, etc. (**::TODO**)
 * Existing tools: 
-  * For parsing command-line options: Replaced `GnuParser` by `DefaultParser` (the former has been deprecated)
+  * For parsing command-line options: Replaced `GnuParser` by `DefaultParser` (the former has been deprecated).
   * Payees have transactions (cf. module "API") ==> adapted GetPyeInfo
   * Analogously: Institutions have accounts ==> adapted GetInstInfo
   * Fixed a few small bugs
