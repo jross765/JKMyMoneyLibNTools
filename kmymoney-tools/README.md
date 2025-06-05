@@ -8,7 +8,7 @@ You will notice that the tools partially pull on the examples in the "Examples" 
 ### V. 0.6 &rarr; 0.7
 * New tools: 
   * UpdSec, GenAcct (finally!), GenPrcList
-  * Tag tools (new entity): GenTag, GetTagInfo, etc. (**::TODO**)
+  * Tag tools (new entity): GenTag, GetTagInfo, getTatList, UpdTag.
 * Existing tools: 
   * For parsing command-line options: Replaced `GnuParser` by `DefaultParser` (the former has been deprecated).
   * Payees have transactions (cf. module "API") ==> adapted GetPyeInfo
