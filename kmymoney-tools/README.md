@@ -7,7 +7,7 @@ You will notice that the tools partially pull on the examples in the "Examples" 
 ## Major Changes 
 ### V. 0.6 &rarr; 0.7
 * New tools: 
-  * UpdSec, GenAcct (finally!), GenPrcList
+  * UpdSec, GenAcct (finally!), GetCurrList, GetPrcList.
   * Tag tools (new entity): GenTag, GetTagInfo, getTatList, UpdTag.
 * Existing tools: 
   * For parsing command-line options: Replaced `GnuParser` by `DefaultParser` (the former has been deprecated).
