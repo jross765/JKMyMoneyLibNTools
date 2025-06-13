@@ -1,7 +1,6 @@
 package org.kmymoney.tools.xml.get.list;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.cli.CommandLine;
@@ -34,7 +33,6 @@ public class GetSecList extends CommandLineTool
   private static String                kmmFileName = null;
   private static Helper.SecListMode    mode        = null; 
   private static KMMSecCurr.Type       type        = null;
-  private static String                isin        = null;
   private static String                name        = null;
   
   private static boolean scriptMode = false; // ::TODO
@@ -57,8 +55,6 @@ public class GetSecList extends CommandLineTool
   @Override
   protected void init() throws Exception
   {
-    // secID = UUID.randomUUID();
-
 //    cfg = new PropertiesConfiguration(System.getProperty("config"));
 //    getConfigSettings(cfg);
 
@@ -87,13 +83,6 @@ public class GetSecList extends CommandLineTool
       .longOpt("type")
       .build();
       
-    Option optISIN = Option.builder("is")
-      .hasArg()
-      .argName("isin")
-      .desc("ISIN")
-      .longOpt("isin")
-      .build();
-    	    	      
     Option optName = Option.builder("n")
       .hasArg()
       .argName("name")
@@ -108,7 +97,6 @@ public class GetSecList extends CommandLineTool
     options.addOption(optFile);
     options.addOption(optMode);
     options.addOption(optType);
-    options.addOption(optISIN);
     options.addOption(optName);
   }
 
@@ -128,11 +116,6 @@ public class GetSecList extends CommandLineTool
         secList = kmmFile.getSecurities();
     else if ( mode == Helper.SecListMode.TYPE )
     	secList = kmmFile.getSecuritiesByType(type);
-    else if ( mode == Helper.SecListMode.ISIN ) {
-    	KMyMoneySecurity sec = kmmFile.getSecurityBySymbol(isin);
-    	secList = new ArrayList<KMyMoneySecurity>();
-    	secList.add( sec );
-    }
     else if ( mode == Helper.SecListMode.NAME )
     	secList = kmmFile.getSecuritiesByName(name, true);
 
@@ -226,39 +209,6 @@ public class GetSecList extends CommandLineTool
     if ( ! scriptMode )
       System.err.println("Type:              " + type);
 
-    // <isin>
-    if ( cmdLine.hasOption( "isin" ) )
-    {
-    	if ( mode != Helper.SecListMode.ISIN )
-    	{
-            System.err.println("Error: <isin> must only be set with <mode> = '" + Helper.SecListMode.ISIN + "'");
-            throw new InvalidCommandLineArgsException();
-    	}
-    	
-        try
-        {
-        	isin = cmdLine.getOptionValue("isin");
-        }
-        catch ( Exception exc )
-        {
-        	System.err.println("Could not parse <isin>");
-        	throw new InvalidCommandLineArgsException();
-        }
-    }
-    else
-    {
-    	if ( mode == Helper.SecListMode.ISIN )
-    	{
-            System.err.println("Error: <isin> must be set with <mode> = '" + Helper.SecListMode.ISIN + "'");
-            throw new InvalidCommandLineArgsException();
-    	}
-    	
-    	isin = null;
-    }
-    
-    if ( ! scriptMode )
-      System.err.println("ISIN:              " + isin);
-    
     // <name>
     if ( cmdLine.hasOption( "name" ) )
     {

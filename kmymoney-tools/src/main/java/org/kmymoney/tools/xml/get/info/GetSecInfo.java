@@ -1,7 +1,6 @@
 package org.kmymoney.tools.xml.get.info;
 
 import java.io.File;
-import java.util.Collection;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -21,13 +20,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
-import xyz.schnorxoborx.base.beanbase.TooManyEntriesFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
-import xyz.schnorxoborx.base.cmdlinetools.Helper;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 
 public class GetSecInfo extends CommandLineTool
 {
+  enum SecSelectMode
+  {
+    ID,
+    ISIN,
+    NAME
+  }
+
   // Logger
   private static final Logger LOGGER = LoggerFactory.getLogger(GetSecInfo.class);
   
@@ -35,7 +39,7 @@ public class GetSecInfo extends CommandLineTool
   private static Options options;
   
   private static String              kmmFileName = null;
-  private static Helper.CmdtySecMode mode        = null;
+  private static SecSelectMode       mode        = null;
   private static KMMSecID            secID       = null;
   private static String              isin        = null;
   private static String              name        = null;
@@ -88,21 +92,24 @@ public class GetSecInfo extends CommandLineTool
     Option optSecID = Option.builder("sec")
       .hasArg()
       .argName("ID")
-      .desc("Security ID")
+      .desc("Security ID " + 
+      		"(for <mode> = " + SecSelectMode.ID + " only)")
       .longOpt("security-id")
       .build();
           
     Option optISIN = Option.builder("is")
       .hasArg()
       .argName("isin")
-      .desc("ISIN")
+      .desc("ISIN " + 
+    		"(for <mode> = " + SecSelectMode.ISIN + " only)")
       .longOpt("isin")
       .build();
         
     Option optName = Option.builder("n")
       .hasArg()
       .argName("name")
-      .desc("Name (or part of)")
+      .desc("Name (full) " + 
+      		"(for <mode> = " + SecSelectMode.NAME + " only)")
       .longOpt("name")
       .build();
           
@@ -133,8 +140,7 @@ public class GetSecInfo extends CommandLineTool
     KMyMoneyFileImpl kmmFile = new KMyMoneyFileImpl(new File(kmmFileName));
 
     KMyMoneySecurity sec = null;
-    
-    if ( mode == Helper.CmdtySecMode.ID )
+    if ( mode == SecSelectMode.ID )
     {
       sec = kmmFile.getSecurityByID(secID);
       if ( sec == null )
@@ -143,30 +149,23 @@ public class GetSecInfo extends CommandLineTool
         throw new NoEntryFoundException();
       }
     }
-    else if ( mode == Helper.CmdtySecMode.ISIN )
+    else if ( mode == SecSelectMode.ISIN )
     {
       sec = kmmFile.getSecurityByCode(isin);
       if ( sec == null )
       {
-        System.err.println("Could not find securities with this ISIN.");
+        System.err.println("Could not find security with this ISIN.");
         throw new NoEntryFoundException();
       }
     }
-    else if ( mode == Helper.CmdtySecMode.NAME )
+    else if ( mode == SecSelectMode.NAME )
     {
-      Collection<KMyMoneySecurity> secList = kmmFile.getSecuritiesByName(name); 
-      if ( secList.size() == 0 )
+      sec = kmmFile.getSecurityByNameUniq(name); 
+      if ( sec == null )
       {
-        System.err.println("Could not find securities matching this name.");
+        System.err.println("Could not find security (uniquely) matching this name.");
         throw new NoEntryFoundException();
       }
-      if ( secList.size() > 1 )
-      {
-        System.err.println("Found " + secList.size() + " securities matching this name.");
-        System.err.println("Please specify more precisely.");
-        throw new TooManyEntriesFoundException();
-      }
-      sec = secList.iterator().next(); // first element
     }
     
     // ----------------------------
@@ -287,7 +286,7 @@ public class GetSecInfo extends CommandLineTool
     System.out.println("Number of quotes: " + sec.getQuotes().size());
     
     System.out.println("");
-    for (KMyMoneyPrice prc : sec.getQuotes())
+    for ( KMyMoneyPrice prc : sec.getQuotes() )
     {
       System.out.println(" - " + prc.toString());
     }
@@ -334,7 +333,7 @@ public class GetSecInfo extends CommandLineTool
     // <mode>
     try
     {
-      mode = Helper.CmdtySecMode.valueOf(cmdLine.getOptionValue("mode"));
+      mode = SecSelectMode.valueOf(cmdLine.getOptionValue("mode"));
     }
     catch ( Exception exc )
     {
@@ -348,9 +347,9 @@ public class GetSecInfo extends CommandLineTool
     // <security-id>
     if ( cmdLine.hasOption("security-id") )
     {
-      if ( mode != Helper.CmdtySecMode.ID )
+      if ( mode != SecSelectMode.ID )
       {
-        System.err.println("<security-id> must only be set with <mode> = '" + Helper.CmdtySecMode.ID.toString() + "'");
+        System.err.println("<security-id> must only be set with <mode> = '" + SecSelectMode.ID.toString() + "'");
         throw new InvalidCommandLineArgsException();
       }
       
@@ -366,9 +365,9 @@ public class GetSecInfo extends CommandLineTool
     }
     else
     {
-      if ( mode == Helper.CmdtySecMode.ID )
+      if ( mode == SecSelectMode.ID )
       {
-        System.err.println("<security-id> must be set with <mode> = '" + Helper.CmdtySecMode.ID.toString() + "'");
+        System.err.println("<security-id> must be set with <mode> = '" + SecSelectMode.ID.toString() + "'");
         throw new InvalidCommandLineArgsException();
       }
     }
@@ -379,9 +378,9 @@ public class GetSecInfo extends CommandLineTool
     // <isin>
     if ( cmdLine.hasOption("isin") )
     {
-      if ( mode != Helper.CmdtySecMode.ISIN )
+      if ( mode != SecSelectMode.ISIN )
       {
-        System.err.println("<isin> must only be set with <mode> = '" + Helper.CmdtySecMode.ISIN.toString() + "'");
+        System.err.println("<isin> must only be set with <mode> = '" + SecSelectMode.ISIN.toString() + "'");
         throw new InvalidCommandLineArgsException();
       }
       
@@ -397,9 +396,9 @@ public class GetSecInfo extends CommandLineTool
     }
     else
     {
-      if ( mode == Helper.CmdtySecMode.ISIN )
+      if ( mode == SecSelectMode.ISIN )
       {
-        System.err.println("<isin> must be set with <mode> = '" + Helper.CmdtySecMode.ISIN.toString() + "'");
+        System.err.println("<isin> must be set with <mode> = '" + SecSelectMode.ISIN.toString() + "'");
         throw new InvalidCommandLineArgsException();
       }
     }
@@ -410,9 +409,9 @@ public class GetSecInfo extends CommandLineTool
     // <name>
     if ( cmdLine.hasOption("name") )
     {
-      if ( mode != Helper.CmdtySecMode.NAME )
+      if ( mode != SecSelectMode.NAME )
       {
-        System.err.println("<name> must only be set with <mode> = '" + Helper.CmdtySecMode.NAME.toString() + "'");
+        System.err.println("<name> must only be set with <mode> = '" + SecSelectMode.NAME.toString() + "'");
         throw new InvalidCommandLineArgsException();
       }
       
@@ -428,9 +427,9 @@ public class GetSecInfo extends CommandLineTool
     }
     else
     {
-      if ( mode == Helper.CmdtySecMode.NAME )
+      if ( mode == SecSelectMode.NAME )
       {
-        System.err.println("<name> must be set with <mode> = '" + Helper.CmdtySecMode.NAME.toString() + "'");
+        System.err.println("<name> must be set with <mode> = '" + SecSelectMode.NAME.toString() + "'");
         throw new InvalidCommandLineArgsException();
       }
     }
@@ -460,7 +459,7 @@ public class GetSecInfo extends CommandLineTool
     
     System.out.println("");
     System.out.println("Valid values for <mode>:");
-    for ( Helper.CmdtySecMode elt : Helper.CmdtySecMode.values() )
+    for ( SecSelectMode elt : SecSelectMode.values() )
       System.out.println(" - " + elt);
   }
 }

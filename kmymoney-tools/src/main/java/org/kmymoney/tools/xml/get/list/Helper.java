@@ -12,7 +12,6 @@ public class Helper
 	public enum SecListMode
 	{
 		TYPE,
-		ISIN,
 		NAME,
 		ALL
 	}

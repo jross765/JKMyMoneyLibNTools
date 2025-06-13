@@ -267,7 +267,6 @@ public class GetAcctInfo extends CommandLineTool
 
   private void showParents(KMyMoneyAccount acct, int depth)
   {
-    // ::MAGIC
     if ( depth <= 0 &&
          ! acct.isRootAccount() ) 
     {
