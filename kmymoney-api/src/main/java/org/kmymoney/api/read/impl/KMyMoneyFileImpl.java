@@ -36,6 +36,7 @@ import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.KMyMoneyTag;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
+import org.kmymoney.api.read.impl.aux.KMMFileMetaInfo;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.api.read.impl.hlp.FileAccountManager;
 import org.kmymoney.api.read.impl.hlp.FileCurrencyManager;
@@ -1135,6 +1136,19 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     public String toString() {
     	String result = "KMyMoneyFileImpl: [\n";
 	
+    	result += "  Meta info:\n"; 
+    	KMMFileMetaInfo metaInfo;
+    	try {
+    		metaInfo = new KMMFileMetaInfo(this);
+
+    		result += "    Creation date:      " + metaInfo.getCreationDate() + "\n"; 
+    		result += "    Last-modified date: " + metaInfo.getLastModifiedDate() + "\n"; 
+    		result += "    Version:            " + metaInfo.getVersion() + "\n"; 
+    		result += "    Fix version:        " + metaInfo.getFixVersion() + "\n"; 
+    	} catch (Exception e) {
+    		result += "ERROR\n"; 
+    	}
+
     	result += "  Stats (raw):\n"; 
     	KMMFileStats stats;
     	try {
