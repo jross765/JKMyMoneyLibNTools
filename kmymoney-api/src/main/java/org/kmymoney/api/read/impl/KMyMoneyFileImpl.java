@@ -1145,6 +1145,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     		result += "    Last-modified date: " + metaInfo.getLastModifiedDate() + "\n"; 
     		result += "    Version:            " + metaInfo.getVersion() + "\n"; 
     		result += "    Fix version:        " + metaInfo.getFixVersion() + "\n"; 
+    		result += "    Base currency:      " + metaInfo.getBaseCurrency() + "\n"; 
+    		result += "    File ID:            " + metaInfo.getFileID() + "\n"; 
     	} catch (Exception e) {
     		result += "ERROR\n"; 
     	}

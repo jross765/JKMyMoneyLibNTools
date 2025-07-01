@@ -5,7 +5,11 @@ import java.time.LocalDate;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.kmymoney.api.Const;
 import org.kmymoney.api.generated.FILEINFO;
+import org.kmymoney.api.generated.KEYVALUEPAIRS;
+import org.kmymoney.api.generated.KMYMONEYFILE;
+import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +23,16 @@ public class KMMFileMetaInfo {
 	private KMyMoneyFileImpl kmmFile = null;
 	
 	private FILEINFO info = null;
+	private KMYMONEYFILE rootElt = null;
+	private KEYVALUEPAIRS kvpList = null;
 
 	// ---------------------------------------------------------------
 
 	public KMMFileMetaInfo(KMyMoneyFileImpl kmmFile) {
 		this.kmmFile = kmmFile;
-		this.info = kmmFile.getRootElement().getFILEINFO();
+		this.rootElt = kmmFile.getRootElement();
+		this.info = rootElt.getFILEINFO();
+		this.kvpList = rootElt.getKEYVALUEPAIRS();
 	}
 
 	// ---------------------------------------------------------------
@@ -57,6 +65,26 @@ public class KMMFileMetaInfo {
 
 	public BigInteger getFixVersion() {
 		return info.getFIXVERSION().getId();
+	}
+
+	public String getBaseCurrency() {
+		for ( PAIR kvp : kvpList.getPAIR() ) {
+		    if ( kvp.getKey().equals("kmm-baseCurrency") ) { // ::MAGIC
+		    	return kvp.getValue();
+		    }
+		}
+		
+		return null;
+	}
+
+	public String getFileID() {
+		for ( PAIR kvp : kvpList.getPAIR() ) {
+		    if ( kvp.getKey().equals("kmm-id") ) { // ::MAGIC
+		    	return kvp.getValue();
+		    }
+		}
+		
+		return null;
 	}
 
 }
