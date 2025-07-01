@@ -298,13 +298,18 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 	
 		FixedPointNumber balance = new FixedPointNumber();
 	
-		for ( KMyMoneyTransactionSplit split : getTransactionSplits() ) {
-			balance.add(split.getShares());
+		for ( KMyMoneyTransactionSplit splt : getTransactionSplits() ) {
+			try {
+				balance.add(splt.getShares());
 	
-			if ( split == lastIncludesSplit ) {
-				break;
+				if ( splt == lastIncludesSplit ) {
+					break;
+				}
+			} catch ( Exception exc ) {
+				// Yes, it does happen!
+				LOGGER.error("getBalance: Could not add Split " + splt.getID() + 
+						     " of Transaction " + splt.getTransactionID());
 			}
-	
 		}
 	
 		return balance;
@@ -388,7 +393,13 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 
 		// So here is another implementation which works for both read- and write-branch:
 		for ( KMyMoneyAccount child : getChildrenRecursive() ) {
-			retval.add( child.getBalance(date, curr) );
+			try {
+				retval.add( child.getBalance(date, curr) );
+			} catch ( Exception exc ) {
+				// Yes, it does happen sometimes!
+				LOGGER.error("getBalanceRecursive: Error adding balance for child account " + child.getID());
+				throw exc;
+			}
 		}
 
 		return retval;
