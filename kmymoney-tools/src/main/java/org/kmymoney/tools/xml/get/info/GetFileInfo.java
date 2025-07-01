@@ -24,10 +24,14 @@ public class GetFileInfo extends CommandLineTool
   // Logger
   private static final Logger LOGGER = LoggerFactory.getLogger(GetFileInfo.class);
   
+  // -----------------------------------------------------------------
+
   // private static PropertiesConfiguration cfg = null;
   private static Options options;
   
   private static String  kmmFileName = null;
+
+  // -----------------------------------------------------------------
 
   public static void main( String[] args )
   {
@@ -80,7 +84,7 @@ public class GetFileInfo extends CommandLineTool
   {
     KMyMoneyFileImpl kmmFile = new KMyMoneyFileImpl(new File(kmmFileName));
     
-    printStats(kmmFile);
+    printMetaInfoAndStats(kmmFile);
     printRootAcct(kmmFile);
     printTopAccts(kmmFile);
     printStatement(kmmFile);
@@ -88,10 +92,10 @@ public class GetFileInfo extends CommandLineTool
 
   // -----------------------------------------------------------------
 
-  private void printStats(KMyMoneyFileImpl kmmFile)
+  private void printMetaInfoAndStats(KMyMoneyFileImpl kmmFile)
   {
     System.out.println("");
-    System.out.println("Stats:");
+    System.out.println("Meta Info and Stats:");
     System.out.println(kmmFile.toString());
   }
 
