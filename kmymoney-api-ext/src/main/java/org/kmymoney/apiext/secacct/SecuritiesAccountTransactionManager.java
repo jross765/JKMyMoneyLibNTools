@@ -30,12 +30,13 @@ public class SecuritiesAccountTransactionManager {
     public enum Type {
     	BUY_STOCK,
     	DIVIDEND,
-    	STOCK_SPLIT,
+    	DISTRIBUTION,
+    	STOCK_SPLIT
     }
     
     public enum StockSplitVar {
     	FACTOR,
-    	NOF_ADD_SHARES,
+    	NOF_ADD_SHARES
     }
     
     // ---------------------------------------------------------------
@@ -262,7 +263,8 @@ public class SecuritiesAccountTransactionManager {
     		final KMMAcctID incomeAcctID,
     		final KMMAcctID taxFeeAcctID,
     		final KMMAcctID offsetAcctID,
-    		final FixedPointNumber divGross,
+    	    final KMyMoneyTransactionSplit.Action spltAct,
+    		final FixedPointNumber divDistrGross,
     		final FixedPointNumber taxesFees,
     		final LocalDate postDate,
     		final String descr) {
@@ -271,19 +273,20 @@ public class SecuritiesAccountTransactionManager {
     	AcctIDAmountPair newPair = new AcctIDAmountPair(taxFeeAcctID, taxesFees);
     	expensesAcctAmtList.add(newPair);
 
-    	return genDivivendTrx(kmmFile,
+    	return genDividDistribTrx(kmmFile,
     				stockAcctID, incomeAcctID, expensesAcctAmtList, offsetAcctID, 
-    				divGross,
+    				spltAct, divDistrGross,
     				postDate, descr);
     }
     
-    public static KMyMoneyWritableTransaction genDivivendTrx(
+    public static KMyMoneyWritableTransaction genDividDistribTrx(
     		final KMyMoneyWritableFileImpl kmmFile,
     		final KMMAcctID stockAcctID,
     		final KMMAcctID incomeAcctID,
     		final Collection<AcctIDAmountPair> expensesAcctAmtList,
     		final KMMAcctID offsetAcctID,
-    		final FixedPointNumber divGross,
+    	    final KMyMoneyTransactionSplit.Action spltAct,
+    		final FixedPointNumber divDistrGross,
     		final LocalDate postDate,
     		final String descr) {
     	if ( kmmFile == null ) {
@@ -322,8 +325,8 @@ public class SecuritiesAccountTransactionManager {
     		}
     	}
 
-    	if ( divGross == null ) {
-    		throw new IllegalArgumentException("null gross dividend given");
+    	if ( divDistrGross == null ) {
+    		throw new IllegalArgumentException("null gross dividend/distribution given");
     	}
 
 	// CAUTION: The following two: In fact, this can happen
@@ -338,14 +341,14 @@ public class SecuritiesAccountTransactionManager {
 //	    }
 //	}
 
-    	LOGGER.debug("genDivivendTrx: Account 1 name (stock):      '" + kmmFile.getAccountByID(stockAcctID).getQualifiedName() + "'");
-    	LOGGER.debug("genDivivendTrx: Account 2 name (income):     '" + kmmFile.getAccountByID(incomeAcctID).getQualifiedName() + "'");
+    	LOGGER.debug("genDividDistribTrx: Account 1 name (stock):      '" + kmmFile.getAccountByID(stockAcctID).getQualifiedName() + "'");
+    	LOGGER.debug("genDividDistribTrx: Account 2 name (income):     '" + kmmFile.getAccountByID(incomeAcctID).getQualifiedName() + "'");
     	int counter = 1;
     	for ( AcctIDAmountPair elt : expensesAcctAmtList ) {
-    		LOGGER.debug("genDivivendTrx: Account 3." + counter + " name (expenses): '" + kmmFile.getAccountByID(elt.accountID()).getQualifiedName() + "'");
+    		LOGGER.debug("genDividDistribTrx: Account 3." + counter + " name (expenses): '" + kmmFile.getAccountByID(elt.accountID()).getQualifiedName() + "'");
     		counter++;
     	}
-    	LOGGER.debug("genDivivendTrx: Account 4 name (offsetting): '" + kmmFile.getAccountByID(offsetAcctID).getQualifiedName() + "'");
+    	LOGGER.debug("genDividDistribTrx: Account 4 name (offsetting): '" + kmmFile.getAccountByID(offsetAcctID).getQualifiedName() + "'");
 
     	// ---
     	// Check account types
@@ -377,10 +380,10 @@ public class SecuritiesAccountTransactionManager {
     	for ( AcctIDAmountPair elt : expensesAcctAmtList ) {
     		expensesSum.add(elt.amount());
     	}
-    	LOGGER.debug("genDivivendTrx: Sum of all expenses: " + expensesSum);
+    	LOGGER.debug("genDividDistribTrx: Sum of all expenses: " + expensesSum);
 
-    	FixedPointNumber divNet = divGross.copy().subtract(expensesSum);
-    	LOGGER.debug("genDivivendTrx: Net dividend: " + divNet);
+    	FixedPointNumber divDistrNet = divDistrGross.copy().subtract(expensesSum);
+    	LOGGER.debug("genDividDistribTrx: Net dividend: " + divDistrNet);
 
     	// ---
 
@@ -398,25 +401,25 @@ public class SecuritiesAccountTransactionManager {
     	splt1.setShares(new FixedPointNumber());
     	splt1.setAction(KMyMoneyTransactionSplit.Action.DIVIDEND);
     	// splt1.setPrice("1/1"); // completely optional
-    	LOGGER.debug("genDivivendTrx: Split 1 to write: " + splt1.toString());
+    	LOGGER.debug("genDividDistribTrx: Split 1 to write: " + splt1.toString());
 
     	// ---
 
     	KMyMoneyWritableTransactionSplit splt2 = trx.createWritableSplit(offsetAcct);
-    	splt2.setValue(divNet);
-    	splt2.setShares(divNet);
+    	splt2.setValue(divDistrNet);
+    	splt2.setShares(divDistrNet);
     	// splt2.setPrice("1/1"); // completely optional
     	// This is what we actually want (cf. above):
     	splt2.setDescription(descr); // sic, only here
-    	LOGGER.debug("genDivivendTrx: Split 2 to write: " + splt2.toString());
+    	LOGGER.debug("genDividDistribTrx: Split 2 to write: " + splt2.toString());
 
     	// ---
 
     	KMyMoneyWritableTransactionSplit splt3 = trx.createWritableSplit(incomeAcct);
-    	splt3.setValue(divGross.copy().negate());
-    	splt3.setShares(divGross.copy().negate());
+    	splt3.setValue(divDistrGross.copy().negate());
+    	splt3.setShares(divDistrGross.copy().negate());
     	// splt3.setPrice("1/1"); // completely optional
-    	LOGGER.debug("genDivivendTrx: Split 3 to write: " + splt3.toString());
+    	LOGGER.debug("genDividDistribTrx: Split 3 to write: " + splt3.toString());
 
     	// ---
 
@@ -427,7 +430,7 @@ public class SecuritiesAccountTransactionManager {
     		splt4.setValue(elt.amount());
     		splt4.setShares(elt.amount());
     		// splt4.setPrice("1/1"); // completely optional
-    		LOGGER.debug("genDivivendTrx: Split 4." + counter + " to write: " + splt4.toString());
+    		LOGGER.debug("genDividDistribTrx: Split 4." + counter + " to write: " + splt4.toString());
     		counter++;
     	}
 
@@ -438,7 +441,7 @@ public class SecuritiesAccountTransactionManager {
 
     	// ---
 
-    	LOGGER.info("genDivivendTrx: Generated new Transaction: " + trx.getID());
+    	LOGGER.info("genDividDistribTrx: Generated new Transaction: " + trx.getID());
     	return trx;
     }
 

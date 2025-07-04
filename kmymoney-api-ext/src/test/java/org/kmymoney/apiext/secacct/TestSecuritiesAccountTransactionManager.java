@@ -206,9 +206,9 @@ public class TestSecuritiesAccountTransactionManager {
 
 		KMyMoneyWritableTransaction trx = 
 				SecuritiesAccountTransactionManager
-					.genDivivendTrx(gcshInFile, 
+					.genDividDistribTrx(gcshInFile, 
 									STOCK_ACCT_ID, INCOME_ACCT_ID, EXPENSES_ACCT_AMT_LIST, OFFSET_ACCT_ID,
-									DIV_GROSS, 
+									KMyMoneyTransactionSplit.Action.DIVIDEND, DIV_GROSS, 
 									DATE_POSTED, DESCR);
 		assertNotEquals(null, trx);
 		newTrxID.set(trx.getID());
