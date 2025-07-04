@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.kmymoney.api.read.KMyMoneyAccount;
+import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
 import org.kmymoney.apiext.secacct.SecuritiesAccountTransactionManager;
@@ -32,9 +33,9 @@ public class GenDepotTrx {
 	private static List<AcctIDAmountPair> expensesAcctAmtList = new ArrayList<AcctIDAmountPair>(); // only for dividend, not for buy/sell
 	private static KMMAcctID offsetAcctID = new KMMAcctID( "A000004" );
 	
-	private static FixedPointNumber nofStocks = new FixedPointNumber(15); // only for buy/sell, not for dividend
-	private static FixedPointNumber stockPrc  = new FixedPointNumber("23080/100"); // only for buy/sell, not for dividend
-	private static FixedPointNumber divGross  = new FixedPointNumber("11223/100"); // only for dividend, not for buy/sell
+	private static FixedPointNumber nofStocks      = new FixedPointNumber(15); // only for buy/sell, not for dividend
+	private static FixedPointNumber stockPrc       = new FixedPointNumber("23080/100"); // only for buy/sell, not for dividend
+	private static FixedPointNumber divDistrGross  = new FixedPointNumber("11223/100"); // only for dividend, not for buy/sell
 
 	private static LocalDate datPst = LocalDate.of(2024, 3, 1);
 	private static String descr = "Dividend payment";
@@ -102,10 +103,16 @@ public class GenDepotTrx {
 									datPst, descr);
 		} else if ( type == SecuritiesAccountTransactionManager.Type.DIVIDEND ) {
 			trx = SecuritiesAccountTransactionManager
-					.genDivivendTrx(kmmFile, 
+					.genDividDistribTrx(kmmFile, 
 									stockAcctID, incomeAcctID, expensesAcctAmtList, offsetAcctID, 
-									divGross, datPst, 
+									KMyMoneyTransactionSplit.Action.DIVIDEND, divDistrGross, datPst, 
 									descr);
+		} else if ( type == SecuritiesAccountTransactionManager.Type.DISTRIBUTION ) {
+			trx = SecuritiesAccountTransactionManager
+					.genDividDistribTrx(kmmFile, 
+									stockAcctID, incomeAcctID, expensesAcctAmtList, offsetAcctID, 
+									KMyMoneyTransactionSplit.Action.YIELD, divDistrGross, datPst, // This specific split-action does not really make any difference in KMyMoney --
+									descr);                                                       // it will essentially be ignored
 		}
 
 		// ---
@@ -122,7 +129,7 @@ public class GenDepotTrx {
 	// account is not in the test file yet).
 	private void initExpAccts() {
 		KMMAcctID expAcct1 = new KMMAcctID( "A000067" ); // Kapitalertragsteuer
-		FixedPointNumber amt1 = divGross.copy().multiply(new FixedPointNumber("25/100"));
+		FixedPointNumber amt1 = divDistrGross.copy().multiply(new FixedPointNumber("25/100"));
 		AcctIDAmountPair acctAmtPr1 = new AcctIDAmountPair(expAcct1, amt1);
 		expensesAcctAmtList.add(acctAmtPr1);
 		
