@@ -5,7 +5,6 @@ import java.time.LocalDate;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.kmymoney.api.Const;
 import org.kmymoney.api.generated.FILEINFO;
 import org.kmymoney.api.generated.KEYVALUEPAIRS;
 import org.kmymoney.api.generated.KMYMONEYFILE;
@@ -31,7 +30,7 @@ public class KMMFileMetaInfo {
 	public KMMFileMetaInfo(KMyMoneyFileImpl kmmFile) {
 		this.kmmFile = kmmFile;
 		this.rootElt = kmmFile.getRootElement();
-		this.info = rootElt.getFILEINFO();
+		this.info    = rootElt.getFILEINFO();
 		this.kvpList = rootElt.getKEYVALUEPAIRS();
 	}
 
