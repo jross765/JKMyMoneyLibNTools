@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
-/**
+/*
  * This is a base-class that helps implementing the KMyMoneyAccount interface
  * with its extensive number of convenience-methods.<br/>
  */
@@ -160,6 +160,14 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 		}
 	}
 
+	/**
+	 * Same as getBalance(new Date()).<br/>
+	 * Ignores transactions after the current date+time<br/>
+	 * This implementation caches the result.<br/>
+	 * We assume that time does never move backwards.
+	 * 
+	 * @see #getBalance(LocalDate)
+	 */
 	@Override
 	public FixedPointNumber getBalance() {
 		return getBalance(LocalDate.now());
@@ -233,8 +241,8 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 					.getCurrencies(getQualifSecCurrID().getType());
 			LOGGER.error("getBalance: Cannot transfer " + "from our currency '"
 					+ getQualifSecCurrID().toString() + "' to the base-currency!" + " \n(we know "
-					+ getKMyMoneyFile().getCurrencyTable().getNameSpaces().size() + " currency-namespaces and "
-					+ (currList == null ? "no" : "" + currList.size()) + " currencies in our namespace)");
+					+ getKMyMoneyFile().getCurrencyTable().getNameSpaces().size() + " currency-name-spaces and "
+					+ (currList == null ? "no" : "" + currList.size()) + " currencies in our name space)");
 			return null;
 		}
 	
@@ -554,10 +562,12 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 		return getID().toString().compareTo(otherAcct.getID().toString());
 	}
 
+	@SuppressWarnings("unused")
 	private int compareToByNumber(final KMyMoneyAccount otherAcct) {
 		return getNumber().toString().compareTo(otherAcct.getNumber().toString());
 	}
 
+	@SuppressWarnings("unused")
 	private int compareToByName(final KMyMoneyAccount otherAcct) {
 		return getName().compareTo(otherAcct.getName());
 	}
@@ -572,6 +582,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 	 * Helper used in ${@link #compareTo(Object)} to compare names starting with a
 	 * number.
 	 */
+	@SuppressWarnings("unused")
 	private Long startsWithNumber(final String s) {
 		if ( s == null ) {
 			throw new IllegalArgumentException("null string given");

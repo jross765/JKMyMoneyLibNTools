@@ -11,7 +11,6 @@ import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.hlp.KMyMoneyObjectImpl;
-import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrTypeException;
 import org.kmymoney.base.basetypes.complex.KMMPricePairID;
 import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
@@ -27,15 +26,14 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
 
     // -----------------------------------------------------------
 
-    /**
-     * The JWSDP-object we are wrapping.
-     */
+    // The JWSDP-object we are wrapping.
     protected final PRICEPAIR jwsdpPeer;
 
     // -----------------------------------------------------------
 
     /**
      * @param newPeer the JWSDP-object we are wrapping.
+     * @param kmmFile 
      */
     @SuppressWarnings("exports")
     public KMyMoneyPricePairImpl(final PRICEPAIR newPeer, final KMyMoneyFile kmmFile) {

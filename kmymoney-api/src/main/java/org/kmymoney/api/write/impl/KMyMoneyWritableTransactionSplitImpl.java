@@ -7,8 +7,6 @@ import org.kmymoney.api.generated.SPLIT;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyTag;
-import org.kmymoney.api.read.impl.KMyMoneyAccountImpl;
-import org.kmymoney.api.read.impl.KMyMoneyPayeeImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTransactionSplitImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableTransaction;
@@ -34,9 +32,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 
     // ---------------------------------------------------------------
 
-	/**
-	 * Our helper to implement the KMyMoneyWritableObject-interface.
-	 */
+	// Our helper to implement the KMyMoneyWritableObject-interface.
 	private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
 	// ---------------------------------------------------------------
@@ -458,7 +454,7 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	 * @param desc the new description
 	 */
 	@Override
-	public void setDescription(final String desc) {
+	public void setMemo(final String desc) {
 		if ( desc == null ) {
 			throw new IllegalArgumentException("null description given! Please use the empty string instead of null for an empty description");
 		}
@@ -507,24 +503,6 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 				helper.getPropertyChangeSupport().firePropertyChange("splitAction", old, actStr);
 			}
 		}
-	}
-
-	// ---------------------------------------------------------------
-
-	/**
-	 * @see KMyMoneyWritableTransactionSplit#setSharesFormattedForHTML(java.lang.String)
-	 */
-	@Override
-	public void setSharesFormattedForHTML(final String n) {
-		this.setShares(n);
-	}
-
-	/**
-	 * @see KMyMoneyWritableTransactionSplit#setValueFormattedForHTML(java.lang.String)
-	 */
-	@Override
-	public void setValueFormattedForHTML(final String n) {
-		this.setValue(n);
 	}
 
 	// ---------------------------------------------------------------

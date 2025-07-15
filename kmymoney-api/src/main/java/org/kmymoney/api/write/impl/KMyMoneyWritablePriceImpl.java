@@ -46,9 +46,7 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 
     private KMyMoneyWritablePricePair wrtblParent = null;
 
-    /**
-     * Our helper to implement the KMyMoneyWritableObject-interface.
-     */
+    // Our helper to implement the KMyMoneyWritableObject-interface.
     private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
     // ---------------------------------------------------------------
@@ -408,7 +406,6 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 	try {
 	    result += ", value=" + getValueFormatted() + "]";
 	} catch (Exception e) {
-	    // TODO Auto-generated catch block
 	    result += ", value=" + "ERROR" + "]";
 	}
 	

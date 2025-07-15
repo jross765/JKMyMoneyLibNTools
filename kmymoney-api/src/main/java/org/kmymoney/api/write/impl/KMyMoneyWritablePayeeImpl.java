@@ -28,16 +28,12 @@ import org.slf4j.LoggerFactory;
 public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl 
                                        implements KMyMoneyWritablePayee 
 {
-    /**
-     * Automatically created logger for debug and error-output.
-     */
+
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritablePayeeImpl.class);
 
     // ---------------------------------------------------------------
 
-    /**
-     * Our helper to implement the KMyMoneyWritableObject-interface.
-     */
+    // Our helper to implement the KMyMoneyWritableObject-interface.
     private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
     // ---------------------------------------------------------------

@@ -1,7 +1,6 @@
 package org.kmymoney.api.write.impl;
 
 import java.beans.PropertyChangeSupport;
-import java.math.BigInteger;
 
 import org.kmymoney.api.generated.ADDRESS;
 import org.kmymoney.api.generated.INSTITUTION;
@@ -28,16 +27,12 @@ import org.slf4j.LoggerFactory;
 public class KMyMoneyWritableInstitutionImpl extends KMyMoneyInstitutionImpl 
                                              implements KMyMoneyWritableInstitution 
 {
-    /**
-     * Automatically created logger for debug and error-output.
-     */
+
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableInstitutionImpl.class);
 
     // ---------------------------------------------------------------
 
-    /**
-     * Our helper to implement the KMyMoneyWritableObject-interface.
-     */
+    // Our helper to implement the KMyMoneyWritableObject-interface.
     private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
     // ---------------------------------------------------------------

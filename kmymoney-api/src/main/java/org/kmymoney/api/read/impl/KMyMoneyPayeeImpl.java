@@ -27,24 +27,20 @@ public class KMyMoneyPayeeImpl extends KMyMoneyObjectImpl
 
 	// ---------------------------------------------------------------
 
-	/**
-	 * the JWSDP-object we are facading.
-	 */
+	// the JWSDP-object we are facading.
 	protected final PAYEE jwsdpPeer;
 
     // ---------------------------------------------------------------
 
     // protected KMyMoneyObjectImpl helper;
 
-    /**
+    /*
      * The splits of this payee. May not be fully initialized during loading
      * of the KMyMoney-file.
-     *
-     * @see #mySplitsNeedSorting
      */
     private final List<KMyMoneyTransactionSplit> mySplits = new ArrayList<KMyMoneyTransactionSplit>();
 
-    /**
+    /*
      * If {@link #mySplits} needs to be sorted because it was modified. Sorting is
      * done in a lazy way.
      */
@@ -247,7 +243,7 @@ public class KMyMoneyPayeeImpl extends KMyMoneyObjectImpl
 	}
 
     /**
-     * @param trxID the transaction-id to look for
+     * @param spltID the transaction-split id to look for
      * @return the identified split or null
      */
     public KMyMoneyTransactionSplit getTransactionSplitByID(KMMQualifSpltID spltID) {

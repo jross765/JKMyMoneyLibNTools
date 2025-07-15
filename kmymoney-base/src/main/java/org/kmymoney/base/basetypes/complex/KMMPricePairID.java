@@ -21,7 +21,8 @@ import org.slf4j.LoggerFactory;
  */
 public class KMMPricePairID {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMMPricePairID.class);
+    @SuppressWarnings("unused")
+	private static final Logger LOGGER = LoggerFactory.getLogger(KMMPricePairID.class);
 
     // ---------------------------------------------------------------
 
@@ -50,7 +51,7 @@ public class KMMPricePairID {
 			throw new IllegalArgumentException("null from-security-currency-ID given");
 		}
 
-		if ( fromSec == null ) {
+		if ( toCurr == null ) {
 			throw new IllegalArgumentException("null to-currency-ID given");
 		}
 		
@@ -65,7 +66,7 @@ public class KMMPricePairID {
 			throw new IllegalArgumentException("null from-security-currency-ID given");
 		}
 
-		if ( fromCurr == null ) {
+		if ( toCurr == null ) {
 			throw new IllegalArgumentException("null to-currency-ID given");
 		}
 		
@@ -80,7 +81,7 @@ public class KMMPricePairID {
 			throw new IllegalArgumentException("null from-security-currency-ID given");
 		}
 
-		if ( fromSec == null ) {
+		if ( toCurr == null ) {
 			throw new IllegalArgumentException("null to-currency-ID given");
 		}
 		
@@ -96,7 +97,7 @@ public class KMMPricePairID {
 			throw new IllegalArgumentException("null from-security-currency-ID given");
 		}
 
-		if ( fromCurr == null ) {
+		if ( toCurr == null ) {
 			throw new IllegalArgumentException("null to-currency-ID given");
 		}
 		

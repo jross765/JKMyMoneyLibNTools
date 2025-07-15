@@ -16,7 +16,8 @@ import org.slf4j.LoggerFactory;
  */
 public class KMMQualifSpltID {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMMQualifSpltID.class);
+    @SuppressWarnings("unused")
+	private static final Logger LOGGER = LoggerFactory.getLogger(KMMQualifSpltID.class);
 
     // ---------------------------------------------------------------
 

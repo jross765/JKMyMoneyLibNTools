@@ -14,9 +14,10 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 public class SimpleSecurityQuoteTable implements SimplePriceTable,
                                                  Serializable 
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleSecurityQuoteTable.class);
+	@SuppressWarnings("unused")
+	private static final Logger LOGGER = LoggerFactory.getLogger(SimpleSecurityQuoteTable.class);
 
-    private static final long serialVersionUID = -1023793498877236292L;
+    private static final long serialVersionUID = 3010667150767387238L;
 
     // -----------------------------------------------------------
 

@@ -46,26 +46,17 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl 
                                          implements KMyMoneyWritableAccount 
 {
-	/**
-	 * Our logger for debug- and error-output.
-	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableAccountImpl.class);
 
     // ---------------------------------------------------------------
 
-    /**
-     * Our helper to implement the KMyMoneyWritableObject-interface.
-     */
+    // Our helper to implement the KMyMoneyWritableObject-interface.
     private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
-	/**
-	 * Used by ${@link #getBalance()} to cache the result.
-	 */
+	// Used by ${@link #getBalance()} to cache the result.
 	private FixedPointNumber myBalanceCached = null;
 
-	/**
-	 * Used by ${@link #getBalance()} to cache the result.
-	 */
+	// Used by ${@link #getBalance()} to cache the result.
 	private PropertyChangeListener myBalanceCachedInvalidator = null;
 
     // ---------------------------------------------------------------
@@ -209,7 +200,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	// ---------------------------------------------------------------
 
 	/**
-	 * @see KMyMoneyWritableAccount#setName(java.lang.String)
+	 * {@inheritDoc}
 	 */
 	public void setName(final String name) {
 		if ( name == null ) {
@@ -241,7 +232,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	}
 
 	/**
-	 * @see KMyMoneyWritableAccount#setAccountCode(java.lang.String)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void setInstitutionID(final KMMInstID instID) {
@@ -279,6 +270,9 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 
 	// ----------------------------
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setQualifSecCurrID(final KMMQualifSecCurrID secCurrID) {
 		if ( secCurrID == null ) {
@@ -309,6 +303,9 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setSecID(final KMMSecID secID) {
 		if ( secID == null ) {
@@ -322,6 +319,9 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		setQualifSecCurrID(new KMMQualifSecID(secID));
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setCurrency(final Currency curr) {
 		if ( curr == null ) {
@@ -331,6 +331,9 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		setQualifSecCurrID(new KMMQualifCurrID(curr));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setCurrency(final String currCode) {
 		if ( currCode == null ) {
@@ -346,9 +349,6 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	
 	// ----------------------------
 
-	/**
-	 * set getWritableFile().setModified(true).
-	 */
 	protected void setIsModified() {
 		KMyMoneyWritableFile writableFile = getWritableKMyMoneyFile();
 		writableFile.setModified(true);
@@ -357,12 +357,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	// ---------------------------------------------------------------
 
 	/**
-	 * same as getBalance(new Date()).<br/>
-	 * ignores transactions after the current date+time<br/>
-	 * This implementation caches the result.<br/>
-	 * We assume that time does never move backwards
-	 *
-	 * @see #getBalance(LocalDate)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public FixedPointNumber getBalance() {
@@ -427,13 +422,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	}
 
 	/**
-	 * Get the sum of all transaction-splits affecting this account in the given
-	 * time-frame.
-	 *
-	 * @param from when to start, inclusive
-	 * @param to   when to stop, exlusive.
-	 * @return the sum of all transaction-splits affecting this account in the given
-	 *         time-frame.
+	 * {@inheritDoc}
 	 */
 	public FixedPointNumber getBalanceChange(final LocalDate from, final LocalDate to) {
 		FixedPointNumber retval = new FixedPointNumber();
@@ -457,7 +446,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	// ---------------------------------------------------------------
 
 	/**
-	 * @see KMyMoneyWritableAccount#setName(java.lang.String)
+	 * {@inheritDoc}
 	 */
 	public void setMemo(final String descr) {
 		if ( descr == null ) {
@@ -490,13 +479,16 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	}
 
 	/**
-	 * @see KMyMoneyWritableAccount#setInvcType(java.lang.String)
+	 * {@inheritDoc}
 	 */
 	public void setType(final KMyMoneyAccount.Type type) {
-		setTypeInt(type.getCodeBig());
+		setTypeBigInt(type.getCodeBig());
 	}
 
-	public void setTypeInt(final BigInteger typeInt) {
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setTypeBigInt(final BigInteger typeInt) {
 		if ( typeInt == null ) {
 			throw new IllegalArgumentException("null type given!");
 		}
@@ -537,7 +529,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	}
 
 	/**
-	 * @see KMyMoneyWritableAccount#setParentAccount(KMyMoneyAccount)
+	 * {@inheritDoc}
 	 */
 	public void setParentAccountID(final KMMComplAcctID prntAcctID) {
 		if ( prntAcctID == null ) {
@@ -601,7 +593,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	}
 
 	/**
-	 * @see KMyMoneyWritableAccount#setParentAccount(KMyMoneyAccount)
+	 * {@inheritDoc}
 	 */
 	public void setParentAccount(final KMyMoneyAccount prntAcct) {
 		if ( prntAcct == null ) {
@@ -619,18 +611,14 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	// ---------------------------------------------------------------
 
 	/**
-	 * The KMyMoney file is the top-level class to contain everything.
-	 *
-	 * @return the file we are associated with
+	 * {@inheritDoc}
 	 */
 	public KMyMoneyWritableFileImpl getWritableKMyMoneyFile() {
 		return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
 	}
 
 	/**
-	 * The KMyMoney file is the top-level class to contain everything.
-	 *
-	 * @return the file we are associated with
+	 * {@inheritDoc}
 	 */
 	@Override
 	public KMyMoneyWritableFileImpl getKMyMoneyFile() {
@@ -639,6 +627,9 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 
 	// -------------------------------------------------------
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addUserDefinedAttribute(final String name, final String value) {
 		if ( name == null ) {
@@ -673,6 +664,9 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			                             name, value);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void removeUserDefinedAttribute(final String name) {
 		if ( name == null ) {
@@ -697,6 +691,9 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			                             	name);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setUserDefinedAttribute(final String name, final String value) {
 		if ( name == null ) {

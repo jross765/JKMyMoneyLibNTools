@@ -14,6 +14,8 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
  * Transaction-Split that can be modified<br/>
  * For propertyChange we support the properties "value", "shares"
  * "description",  "splitAction" and "accountID".
+ * 
+ * @see KMyMoneyTransactionSplit
  */
 public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSplit,
                                                           KMyMoneyWritableObject
@@ -34,6 +36,9 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 * another one then the old!
 	 * 
 	 * @param acctID the new account to give this money to/take it from.
+	 * 
+	 * @see #getAccount()
+	 * @see #getAccountID()
 	 */
 	void setAccountID(KMMComplAcctID acctID);
 
@@ -42,6 +47,9 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 * another one then the old!
 	 * 
 	 * @param acct the new account to give this money to/take it from.
+	 * 
+	 * @see #getAccount()
+	 * @see #getAccountID()
 	 */
 	void setAccount(KMyMoneyAccount acct);
 
@@ -50,6 +58,8 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 * ${@link #setShares(String)}.
 	 * 
 	 * @param n the new quantity (in the currency of the account)
+	 * 
+	 * @see #getShares()
 	 */
 	void setShares(FixedPointNumber n);
 
@@ -58,21 +68,18 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 * ${@link #setShares(FixedPointNumber)}.
 	 * 
 	 * @param n the new quantity (in the currency of the account)
+	 * 
+	 * @see #getShares()
 	 */
 	void setShares(String n);
-
-	/**
-	 * Same as ${@link #setShares(String)}.
-	 * 
-	 * @param n the new quantity (in the currency of the account)
-	 */
-	void setSharesFormattedForHTML(String n);
 
 	/**
 	 * If the currencies of transaction and account match, this also does
 	 * ${@link #setValue(FixedPointNumber)}.
 	 * 
 	 * @param n the new value (in the currency of the transaction)
+	 * 
+	 * @see #getValue()
 	 */
 	void setValue(FixedPointNumber n);
 	
@@ -81,34 +88,54 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 * ${@link #setValue(FixedPointNumber)}.
 	 * 
 	 * @param n the new value (in the currency of the transaction)
+	 * 
+	 * @see #getValue()
 	 */
 	void setValue(String n);
 
 	/**
-	 * Same as ${@link #setValue(String)}.
 	 * 
-	 * @param n the new value (in the currency of the transaction)
+	 * @param prc
+	 * 
+	 * @see #getPrice()
 	 */
-	void setValueFormattedForHTML(String n);
-
 	void setPrice(FixedPointNumber prc);
 	
+	/**
+	 * 
+	 * @param pyeID
+	 * 
+	 * @see #getPayee()
+	 * @see #getPayeeID()
+	 */
 	void setPayeeID(KMMPyeID pyeID);
 
+	/**
+	 * 
+	 * @param pye
+	 * 
+	 * @see #getPayee()
+	 * @see #getPayeeID()
+	 */
 	void setPayee(KMyMoneyPayee pye);
 
 	/**
 	 * Set the description-text.
 	 * 
 	 * @param desc the new description
+	 * 
+	 * @see #getMemo()
 	 */
-	void setDescription(String desc);
+	void setMemo(String desc);
 
 	/**
 	 * Set the type of association this split has with an invoice's lot.
+	 * @param act 
 	 * 
 	 * @param action null, or one of the ACTION_xyz values defined
 	 * @throws IllegalTransactionSplitActionException
+	 * 
+	 * @see #getAction()
 	 */
 	void setAction(Action act) throws IllegalTransactionSplitActionException;
 

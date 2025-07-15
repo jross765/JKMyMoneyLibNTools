@@ -27,24 +27,78 @@ public interface KMyMoneyWritableSecurity extends KMyMoneySecurity,
 
 	// ---------------------------------------------------------------
 
+    /**
+     * 
+     * @param symb
+     * 
+     * @see #getSymbol()
+     */
 	void setSymbol(String symb);
 
+	/**
+	 * 
+	 * @param code
+	 * 
+	 * @see #getCode()
+	 */
 	void setCode(String code);
 
 	// ---------------------------------------------------------------
 
+	/**
+	 * 
+	 * @param type
+	 * 
+	 * @see #getType()
+	 */
 	void setType(KMMSecCurr.Type type);
 
+	/**
+	 * 
+	 * @param name
+	 * 
+	 * @see #getName()
+	 */
 	void setName(String name);
 
+	/**
+	 * 
+	 * @param pp
+	 * 
+	 * @see #getPP()
+	 */
 	void setPP(BigInteger pp);
 
+	/**
+	 * 
+	 * @param meth
+	 * 
+	 * @see #getRoundingMethod()
+	 */
 	void setRoundingMethod(KMMSecCurr.RoundingMethod meth);
 
+	/**
+	 * 
+	 * @param saf
+	 * 
+	 * @see #getSAF()
+	 */
 	void setSAF(BigInteger saf);
 
+	/**
+	 * 
+	 * @param currID
+	 * 
+	 * @see #getTradingCurrency()
+	 */
 	void setTradingCurrency(KMMQualifCurrID currID);
 
+	/**
+	 * 
+	 * @param mkt
+	 * 
+	 * @see #getTradingMarket()
+	 */
 	void setTradingMarket(String mkt);
 
 }

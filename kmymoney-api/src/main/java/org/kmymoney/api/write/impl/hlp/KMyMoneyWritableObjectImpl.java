@@ -17,9 +17,7 @@ public class KMyMoneyWritableObjectImpl extends KMyMoneyObjectImpl
                                         implements KMyMoneyWritableObject 
 {
 
-	/**
-	 * Automatically created logger for debug and error-output.
-	 */
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableObjectImpl.class);
 
 	// ---------------------------------------------------------------

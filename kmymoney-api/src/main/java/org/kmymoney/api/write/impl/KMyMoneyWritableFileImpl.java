@@ -111,14 +111,10 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 	// ---------------------------------------------------------------
 
-	/**
-	 * true if this file has been modified.
-	 */
+	// true if this file has been modified.
 	private boolean modified = false;
 
-	/**
-	 * @see {@link #getLastWriteTime()}
-	 */
+	// @see {@link #getLastWriteTime()}
 	private long lastWriteTime = 0;
 
 	// ---------------------------------------------------------------
@@ -1172,7 +1168,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * Add a new currency.<br/>
 	 * If the currency already exists, add a new price-quote for it.
 	 *
-	 * @param pCmdtySpace        the namespace (e.g. "GOODS" or "CURRENCY")
+	 * @param pCmdtySpace        the name space (e.g. "GOODS" or "CURRENCY")
 	 * @param pCmdtyId           the currency-name
 	 * @param conversionFactor   the conversion-factor from the base-currency (EUR).
 	 * @param pCmdtyNameFraction number of decimal-places after the comma

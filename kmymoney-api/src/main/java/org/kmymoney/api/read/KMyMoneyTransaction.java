@@ -89,7 +89,7 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction>,
      *
      * @return the date the transaction was entered into the system
      */
-    LocalDate getEntryDate();
+    LocalDate getDateEntered();
 
     /**
      *
@@ -109,6 +109,10 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction>,
      * Do not modify the returned collection!
      * 
      * @return all splits of this transaction.
+     * 
+     * @see #getSplitByID(KMMSpltID)
+     * @see #getFirstSplit()
+     * @see #getSecondSplit()
      */
     List<KMyMoneyTransactionSplit> getSplits();
 
@@ -117,19 +121,39 @@ public interface KMyMoneyTransaction extends Comparable<KMyMoneyTransaction>,
      * 
      * @param spltID the id to look for
      * @return null if not found
+     * 
+     * @see #getSplits()
      */
     KMyMoneyTransactionSplit getSplitByID(KMMSpltID spltID);
 
     /**
      *
      * @return the first split of this transaction or null.
-     * @throws SplitNotFoundException
+     * <br>
+     * <em>Caution</em>: This only makes sense for simple transactions
+     * that consist of only two splits. 
+     * By no means is that guaranteed or even "normal"!
+     *  
+     * @throws TransactionSplitNotFoundException
+     * 
+     * @see #getSecondSplit()
+     * @see #getSplits()
+     * @see #getSplitsCount()
      */
     KMyMoneyTransactionSplit getFirstSplit() throws TransactionSplitNotFoundException;
 
     /**
      * @return the second split of this transaction or null.
-     * @throws SplitNotFoundException
+     * <br>
+     * <em>Caution</em>: This only makes sense for simple transactions
+     * that consist of only two splits.
+     * By no means is that guaranteed or even "normal"!
+     * 
+     * @throws TransactionSplitNotFoundException
+     *
+     * @see #getFirstSplit()
+     * @see #getSplits()
+     * @see #getSplitsCount()
      */
     KMyMoneyTransactionSplit getSecondSplit() throws TransactionSplitNotFoundException;
 

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
  */
 public class KMyMoneyObjectImpl implements KMyMoneyObject {
 
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyObjectImpl.class);
 
 	// -----------------------------------------------------------------

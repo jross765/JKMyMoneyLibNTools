@@ -108,12 +108,10 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		assertEquals(null, splt.getAction());
 		assertEquals(10000.00, splt.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals("10.000,00 €", splt.getValueFormatted()); // ::TODO: locale-specific!
-		assertEquals("10.000,00 &euro;", splt.getValueFormattedForHTML());
 		assertEquals(10000.00, splt.getShares().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		// ::TODO: Here, it works correctly, as opposed to 
 		// TestKMyMoneyTransactionSplitImpl
 		assertEquals("10.000,00 €", splt.getSharesFormatted());
-		assertEquals("10.000,00 &euro;", splt.getSharesFormattedForHTML());
 		assertEquals("", splt.getMemo());
 //		assertEquals(null, splt.getUserDefinedAttributeKeys());
 	}
@@ -129,11 +127,9 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		assertEquals(KMyMoneyTransactionSplit.Action.BUY_SHARES, splt.getAction());
 		assertEquals(1800.00, splt.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals("1.800,00 €", splt.getValueFormatted()); // ::TODO: locale-specific!
-		assertEquals("1.800,00 &euro;", splt.getValueFormattedForHTML());
 		assertEquals(15.00, splt.getShares().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		// ::TODO: The next two: That's not exactly what we want...
 		assertEquals("15 SECURITY:E000001", splt.getSharesFormatted());
-		assertEquals("15 SECURITY:E000001", splt.getSharesFormattedForHTML());
 		assertEquals("", splt.getMemo());
 //		assertEquals(null, splt.getUserDefinedAttributeKeys());
 	}
@@ -163,7 +159,7 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		splt.setAccountID(ACCT_2_ID);
 		splt.setValue(new FixedPointNumber("-123.45"));
 		splt.setShares(new FixedPointNumber("-67.8901"));
-		splt.setDescription("Alle meine Entchen");
+		splt.setMemo("Alle meine Entchen");
 
 		// ::TODO not possible yet
 		// trx.getSplitByID("7abf90fe15124254ac3eb7ec33f798e7").remove()

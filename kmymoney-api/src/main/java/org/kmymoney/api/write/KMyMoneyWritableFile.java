@@ -34,10 +34,9 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 /**
  * Extension of KMyMoneyFile that allows writing. <br/>
  * All the instances for accounts,... it returns can be assumed
- * to implement the respetive *Writable-interfaces.
+ * to implement the respective *Writable-interfaces.
  *
  * @see KMyMoneyFile
- * @see org.kmymoney.write.impl.KMyMoneyWritableFileImpl
  */
 public interface KMyMoneyWritableFile extends KMyMoneyFile, 
                                               KMyMoneyWritableObject
@@ -57,10 +56,11 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	boolean isModified();
 
 	/**
-	 * The value is guaranteed not to be bigger then the maximum of the current
+	 * The value is guaranteed not to be later than then the maximum of the current
 	 * system-time and the modification-time in the file at the time of the last
-	 * (full) read or sucessfull write.<br/ It is thus suitable to detect if the
-	 * file has been modified outside of this library
+	 * (full) read or sucessful write operation.
+	 * <br> 
+	 * It is thus suitable to detect if the file has been modified outside of this library.
 	 * 
 	 * @return the time in ms (compatible with File.lastModified) of the last
 	 *         write-operation
@@ -93,14 +93,18 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	// ---------------------------------------------------------------
 
 	/**
+	 * @param instID 
 	 * @param id the unique id of the institution to look for
 	 * @return the customer or null if it's not found
+	 * 
+	 * @see #getInstitutionByID(KMMInstID)
 	 */
 	KMyMoneyWritableInstitution getWritableInstitutionByID(KMMInstID instID);
 
 	// ----------------------------
 
 	/**
+	 * @param name 
 	 * @return a new institution with no values that is already added to this file
 	 */
 	KMyMoneyWritableInstitution createWritableInstitution(String name);
@@ -114,39 +118,67 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	// ---------------------------------------------------------------
 
 	/**
-	 * @see KMyMoneyFile#getAccountByName(String)
 	 * @param name the name to look for
-	 * @return A changable version of the account.
+	 * @return A modifiable version of the account.
+	 * 
+	 * @see #getAccountByNameEx(String)
 	 */
 	Collection<KMyMoneyWritableAccount> getWritableAccountsByName(String name);
 
 	/**
 	 * @param type the type to look for
-	 * @return A changable version of all accounts of that type.
+	 * @return A modifiable version of all accounts of the given type.
+	 * 
+	 * @see #getAccountsByType(org.kmymoney.api.read.KMyMoneyAccount.Type)
 	 */
 	Collection<KMyMoneyWritableAccount> getWritableAccountsByType(KMyMoneyAccount.Type type);
 
+	/**
+	 * 
+	 * @param type
+	 * @param expr
+	 * @param qualif
+	 * @param relaxed
+	 * @return
+	 * 
+	 * @see #getAccountsByTypeAndName(org.kmymoney.api.read.KMyMoneyAccount.Type, String, boolean, boolean)
+	 */
 	Collection<KMyMoneyWritableAccount> getWritableAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, 
 																		 boolean qualif, boolean relaxed);
 	
 	/**
-	 * @see KMyMoneyFile#getAccountByID(String)
+	 * @param acctID 
 	 * @param id the id of the account to fetch
-	 * @return A changable version of the account or null of not found.
+	 * @return A modifiable version of the account or null of not found.
+	 * 
+	 * @see #getAccountByID(KMMAcctID)
+	 * @see #getAccountByID(KMMComplAcctID)
 	 */
 	KMyMoneyWritableAccount getWritableAccountByID(KMMComplAcctID acctID);
 
+	/**
+	 * 
+	 * @param acctID
+	 * @return
+	 * 
+	 * @see #getAccountByID(KMMAcctID)
+	 * @see #getAccountByID(KMMComplAcctID)
+	 */
 	KMyMoneyWritableAccount getWritableAccountByID(KMMAcctID acctID);
 
 	/**
 	 *
 	 * @return a read-only collection of all accounts
+	 * 
+	 * @see #getAccounts()
 	 */
 	Collection<? extends KMyMoneyWritableAccount> getWritableAccounts();
 
 	/**
 	 *
 	 * @return a read-only collection of all accounts that have no parent
+	 * 
+	 * @see #getRootAccount()
 	 */
 	Collection<? extends KMyMoneyWritableAccount> getWritableRootAccounts();
 
@@ -192,14 +224,17 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	// ---------------------------------------------------------------
 
 	/**
-	 * @see KMyMoneyFile#getTransactionByID(String)
-	 * @return A changable version of the transaction.
+	 * @param trxID 
+	 * @return A modifiable version of the transaction.
+	 * 
+	 * @see #getTransactionByID(KMMTrxID)
 	 */
 	KMyMoneyWritableTransaction getWritableTransactionByID(KMMTrxID trxID);
 	
 	/**
-	 * @see KMyMoneyFile#getTransactions()
 	 * @return writable versions of all transactions in the book.
+	 * 
+	 * @see #getTransactions()
 	 */
 	Collection<? extends KMyMoneyWritableTransaction> getWritableTransactions();
 
@@ -222,6 +257,8 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * 
 	 * @param spltID
 	 * @return
+	 * 
+	 * @see #getTransactionSplitByID(KMMQualifSpltID)
 	 */
 	KMyMoneyWritableTransactionSplit getWritableTransactionSplitByID(KMMQualifSpltID spltID);
 	
@@ -232,6 +269,8 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	/**
 	 * @param pyeID the unique id of the payee to look for
 	 * @return the payee or null if it's not found
+	 * 
+	 * @see #getPayeeByID(KMMPyeID)
 	 */
 	KMyMoneyWritablePayee getWritablePayeeByID(KMMPyeID pyeID);
 
@@ -254,6 +293,8 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	/**
 	 * @param tagID the unique id of the tag to look for
 	 * @return the tag or null if it's not found
+	 * 
+	 * @see #getTagByID(KMMTagID)
 	 */
 	KMyMoneyWritableTag getWritableTagByID(KMMTagID tagID);
 
@@ -273,8 +314,22 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 
 	// ---------------------------------------------------------------
 
+	/**
+	 * 
+	 * @param currCode
+	 * @return
+	 * 
+	 * @see #getCurrencyByID(String)
+	 */
 	KMyMoneyWritableCurrency getWritableCurrencyByID(String currCode);
 	
+	/**
+	 * 
+	 * @param qualifID
+	 * @return
+	 * 
+	 * @see #getCurrencyByQualifID(KMMQualifCurrID)
+	 */
 	KMyMoneyWritableCurrency getWritableCurrencyByQualifID(KMMQualifCurrID qualifID);
 	
 //	List<KMyMoneyWritableCurrency> getWritableCurrencyByName(String expr);
@@ -283,6 +338,12 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 //    
 //    KMyMoneyWritableCurrency getWritableCurrencyByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
     
+	/**
+	 * 
+	 * @return
+	 * 
+	 * @see #getCurrencies()
+	 */
 	Collection<KMyMoneyWritableCurrency> getWritableCurrencies();
 
 	// ----------------------------
@@ -298,7 +359,7 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	 * Add a new currency.<br/>
 	 * If the currency already exists, add a new price-quote for it.
 	 * 
-	 * @param pCmdtySpace        the namespace (e.g. "GOODS" or "CURRENCY")
+	 * @param pCmdtySpace        the name space (e.g. "GOODS" or "CURRENCY")
 	 * @param pCmdtyId           the currency-name
 	 * @param conversionFactor   the conversion-factor from the base-currency (EUR).
 	 * @param pCmdtyNameFraction number of decimal-places after the comma
@@ -320,35 +381,94 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	// ---------------------------------------------------------------
 
 	/**
-	 * @see KMyMoneyFile#getTransactionByID(String)
-	 * @return A changable version of the transaction.
+	 * @param secID 
+	 * @return A modifiable version of the transaction.
+	 * 
+	 * @see #getSecurityByID(KMMSecID)
 	 */
 	KMyMoneyWritableSecurity getWritableSecurityByID(KMMSecID secID);
 	
+	/**
+	 * 
+	 * @param qualifID
+	 * @return
+	 * 
+	 * @see #getSecurityByQualifID(KMMQualifSecID)
+	 */
 	KMyMoneyWritableSecurity getWritableSecurityByQualifID(KMMQualifSecID qualifID);
 	
+	/**
+	 * 
+	 * @param symb
+	 * @return
+	 * 
+	 * @see #getSecurityBySymbol(String)
+	 */
 	KMyMoneyWritableSecurity getWritableSecurityBySymbol(String symb);
-
+	
+	/**
+	 * 
+	 * @param code
+	 * @return
+	 * 
+	 * @see #getSecurityByCode(String)
+	 */
 	KMyMoneyWritableSecurity getWritableSecurityByCode(String code);
 
+	/**
+	 * 
+	 * @param expr
+	 * @return
+	 * 
+	 * @see #getSecurityByNameUniq(String)
+	 */
 	List<KMyMoneyWritableSecurity> getWritableSecuritiesByName(String expr);
 
+	/**
+	 * 
+	 * @param expr
+	 * @param relaxed
+	 * @return
+	 * 
+	 * @see #getSecuritiesByName(String, boolean)
+	 */
     List<KMyMoneyWritableSecurity> getWritableSecuritiesByName(String expr, boolean relaxed);
     
+    /**
+     * 
+     * @param expr
+     * @return
+     * @throws NoEntryFoundException
+     * @throws TooManyEntriesFoundException
+     * 
+     * @see #getSecurityByNameUniq(String)
+     */
     KMyMoneyWritableSecurity getWritableSecurityByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
     
 	/**
 	 * @param type the type to look for
-	 * @return A changable version of all accounts of that type.
+	 * @return A modifiable version of all accounts of that type.
+	 * 
+	 * @see #getSecuritiesByType(org.kmymoney.api.read.KMMSecCurr.Type)
 	 */
 	Collection<KMyMoneyWritableSecurity> getWritableSecuritiesByType(KMMSecCurr.Type type);
 
+	/**
+	 * 
+	 * @param type
+	 * @param expr
+	 * @param relaxed
+	 * @return
+	 * 
+	 * @see #getSecuritiesByTypeAndName(org.kmymoney.api.read.KMMSecCurr.Type, String, boolean)
+	 */
 	Collection<KMyMoneyWritableSecurity> getWritableSecuritiesByTypeAndName(KMMSecCurr.Type type, String expr, 
 																			boolean relaxed);
 	
 	/**
-	 * @see KMyMoneyFile#getTransactions()
 	 * @return writable versions of all transactions in the book.
+	 * 
+	 * @see #getSecurities()
 	 */
 	Collection<KMyMoneyWritableSecurity> getWritableSecurities();
 
@@ -369,32 +489,40 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	/**
 	 *
 	 * @param sec the transaction to remove.
+	 * @throws ObjectCascadeException 
 	 */
 	void removeSecurity(KMyMoneyWritableSecurity sec) throws ObjectCascadeException;
 
 	// ---------------------------------------------------------------
 
 	/**
-	 * @see KMyMoneyFile#getPriceByID(KMMPriceID)
-	 * @return A changeable version of the transaction.
+	 * @param prcPrID 
+	 * @return A modifiable version of the transaction.
+	 * 
+	 * @see #getPricePairByID(KMMPricePairID)
 	 */
 	KMyMoneyWritablePricePair getWritablePricePairByID(KMMPricePairID prcPrID);
 	
 	/**
 	 * @see KMyMoneyFile#getPricePairs()
 	 * @return writable versions of all prices in the book.
+	 * 
+	 * @see #getPricePairs()
 	 */
 	Collection<KMyMoneyWritablePricePair> getWritablePricePairs();
 
 	// ----------------------------
 
 	/**
+	 * @param fromSecCurrID 
+	 * @param toCurrID 
 	 * @return a new price pair with no splits that is already added to this file
 	 */
 	KMyMoneyWritablePricePair createWritablePricePair(KMMQualifSecCurrID fromSecCurrID,
 													  KMMQualifCurrID toCurrID);
 
 	/**
+	 * @param prcPrID 
 	 * @return a new price pair with no splits that is already added to this file
 	 */
 	KMyMoneyWritablePricePair createWritablePricePair(KMMPricePairID prcPrID);
@@ -408,26 +536,69 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 	// ---------------------------------------------------------------
 
 	/**
-	 * @see KMyMoneyFile#getPriceByID(KMMPriceID)
-	 * @return A changeable version of the transaction.
+	 * @param prcID 
+	 * @return A modifiable version of the transaction.
+	 * 
+	 * @see #getPriceByID(KMMPriceID)
 	 */
 	KMyMoneyWritablePrice getWritablePriceByID(KMMPriceID prcID);
 	
+	/**
+	 * 
+	 * @param secID
+	 * @param date
+	 * @return
+	 * 
+	 * @see #getPriceBySecIDDate(KMMSecID, LocalDate)
+	 */
 	KMyMoneyWritablePrice getWritablePriceBySecIDDate(KMMSecID secID, LocalDate date);
 	
+	/**
+	 * 
+	 * @param secID
+	 * @param date
+	 * @return
+	 * 
+	 * @see #getPriceByQualifSecIDDate(KMMQualifSecID, LocalDate)
+	 */
 	KMyMoneyWritablePrice getWritablePriceByQualifSecIDDate(KMMQualifSecID secID, LocalDate date);
 	
+	/**
+	 * 
+	 * @param curr
+	 * @param date
+	 * @return
+	 * 
+	 * @see #getPriceByCurrDate(Currency, LocalDate)
+	 */
 	KMyMoneyWritablePrice getWritablePriceByCurrDate(Currency curr, LocalDate date);
 	
+	/**
+	 * 
+	 * @param currID
+	 * @param date
+	 * @return
+	 * 
+	 * @see #getPriceByQualifCurrIDDate(KMMQualifCurrID, LocalDate)
+	 */
 	KMyMoneyWritablePrice getWritablePriceByQualifCurrIDDate(KMMQualifCurrID currID, LocalDate date);
 	
+	/**
+	 * 
+	 * @param secCurrID
+	 * @param date
+	 * @return
+	 * 
+	 * @see #getPriceByQualifSecCurrIDDate(KMMQualifSecCurrID, LocalDate)
+	 */
 	KMyMoneyWritablePrice getWritablePriceByQualifSecCurrIDDate(KMMQualifSecCurrID secCurrID, LocalDate date);
 	
     // ---------------------------------------------------------------
 	
 	/**
-	 * @see KMyMoneyFile#getPrices()
 	 * @return writable versions of all prices in the book.
+	 * 
+	 * @see #getPrices()
 	 */
 	Collection<KMyMoneyWritablePrice> getWritablePrices();
 
@@ -435,12 +606,14 @@ public interface KMyMoneyWritableFile extends KMyMoneyFile,
 
 	/**
 	 * @param prcPr 
+	 * @param date 
 	 * @return a new price with no splits that is already added to this file
 	 */
 	KMyMoneyWritablePrice createWritablePrice(KMyMoneyPricePairImpl prcPr, LocalDate date);
 
 	/**
 	 *
+	 * @param prc 
 	 * @param sec the transaction to remove.
 	 */
 	void removePrice(KMyMoneyWritablePrice prc);

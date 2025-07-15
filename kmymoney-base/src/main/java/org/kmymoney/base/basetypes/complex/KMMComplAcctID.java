@@ -18,7 +18,8 @@ import org.slf4j.LoggerFactory;
  */
 public class KMMComplAcctID implements Comparable<KMMComplAcctID> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMMComplAcctID.class);
+    @SuppressWarnings("unused")
+	private static final Logger LOGGER = LoggerFactory.getLogger(KMMComplAcctID.class);
 
     // ---------------------------------------------------------------
 
@@ -67,8 +68,6 @@ public class KMMComplAcctID implements Comparable<KMMComplAcctID> {
 
     // -----------------------------------------------------------------
 
-    private static final Logger logger = LoggerFactory.getLogger(KMMComplAcctID.class);
-    
     // ::MAGIC
     public static final String SPEC_PREFIX = "AStd::";
 

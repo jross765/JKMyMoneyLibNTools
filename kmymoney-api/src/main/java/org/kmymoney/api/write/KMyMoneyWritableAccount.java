@@ -27,6 +27,8 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
  * <li>parentAccount</li>
  * <li>transactionSplits (not giving the old value of the list)</li>
  * </ul>
+ * 
+ * @see KMyMoneyAccount
  */
 public interface KMyMoneyWritableAccount extends KMyMoneyAccount, 
                                                  KMyMoneyWritableObject,
@@ -34,7 +36,9 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 {
 
 	/**
-	 * @return the file we belong to
+	 * The KMyMoney file is the top-level class to contain everything.
+	 *
+	 * @return the file we are associated with
 	 */
 	KMyMoneyWritableFile getWritableKMyMoneyFile();
 
@@ -43,21 +47,16 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 	 * non-ascii and non-western characters.
 	 *
 	 * @param name the new name (not null)
+	 * 
+	 * @see #getName()
 	 */
 	void setName(String name);
-
-	// :.TODO
-//	/**
-//	 * Change the user-definable account-number. It should contain no newlines but
-//	 * may contain non-ascii and non-western characters.
-//	 *
-//	 * @param code the new code (not null)
-//	 */
-//	void setInstitutionID(KMMInstID instID);
 
 	/**
 	 * @param desc the user-defined description (may contain multiple lines and
 	 *             non-ascii-characters)
+	 * 
+	 * @see #getMemo()
 	 */
 	void setMemo(String desc);
 
@@ -69,6 +68,8 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 	 * @param to   when to stop, exlusive.
 	 * @return the sum of all transaction-splits affecting this account in the given
 	 *         time-frame.
+	 *         
+	 * @see #getBalanceChange(LocalDate, LocalDate)
 	 */
 	FixedPointNumber getBalanceChange(LocalDate from, LocalDate to);
 
@@ -76,47 +77,87 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 	 * Set the type of the account (income, ...).
 	 *
 	 * @param type the new type.
-	 * @see {@link KMyMoneyAccount#getType()}
+	 * 
+	 * @see #getType()
 	 */
 	void setType(KMyMoneyAccount.Type type);
 
-	void setTypeInt(BigInteger typeInt);
+	/**
+	 * 
+	 * @param typeInt
+	 * 
+	 * @see #getTypeBigInt()
+	 */
+	void setTypeBigInt(BigInteger typeInt);
 
 	// ----------------------------
 
+	/**
+	 * 
+	 * @param secCurrID
+	 * 
+	 * @see #getQualifSecCurrID()
+	 */
 	void setQualifSecCurrID(KMMQualifSecCurrID secCurrID);
 	
 //	void setQualifSecID(KMMQualifSecID secID);
 //	
 //	void setQualifCurrID(KMMQualifCurrID currID);
 	
+	/**
+	 * 
+	 * @param secID
+	 * 
+	 * @see #getQualifSecCurrID()
+	 */
 	void setSecID(KMMSecID secID);
 	
+	/**
+	 * 
+	 * @param curr
+	 * 
+	 * @see #getQualifSecCurrID()
+	 */
 	void setCurrency(Currency curr);
 
+	/**
+	 * 
+	 * @param currCode
+	 * 
+	 * @set {@link #getQualifSecCurrID()}
+	 */
 	void setCurrency(String currCode);
 	
 	// ----------------------------
 	
+	/**
+	 * 
+	 * @param instID
+	 * 
+	 * @see #getInstitutionID()
+	 */
 	void setInstitutionID(KMMInstID instID);
 
 	// ----------------------------
 
 	/**
 	 * @param newparent the new account or null to make it a top-level-account
+	 * 
+	 * @see #getParentAccount()
 	 */
 	void setParentAccount(KMyMoneyAccount newparent);
 
 	/**
 	 * If the accountId is invalid, make this a top-level-account.
+	 * @param prntAcctID 
 	 *
-	 * @see {@link #setParentAccount(KMyMoneyAccount)}
+	 * @see #getParentAccountID()
 	 */
 	void setParentAccountID(KMMComplAcctID prntAcctID);
 
 	/**
 	 * Remove this account from the system.<br/>
-	 * Throws IllegalStateException if this account has splits or childres.
+	 * Throws IllegalStateException if this account has splits or children.
 	 */
 	void remove();
 	

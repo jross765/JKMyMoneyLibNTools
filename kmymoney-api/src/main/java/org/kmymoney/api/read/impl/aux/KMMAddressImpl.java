@@ -7,7 +7,8 @@ import org.slf4j.LoggerFactory;
 
 public class KMMAddressImpl implements KMMAddress {
 	
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMMAddressImpl.class);
+    @SuppressWarnings("unused")
+	private static final Logger LOGGER = LoggerFactory.getLogger(KMMAddressImpl.class);
 
 	// ---------------------------------------------------------------
 

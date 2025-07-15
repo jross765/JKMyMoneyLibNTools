@@ -25,9 +25,7 @@ public class KMyMoneyCurrencyImpl extends KMyMoneyObjectImpl
 
     // ---------------------------------------------------------------
     
-    /**
-     * the JWSDP-object we are facading.
-     */
+    // the JWSDP-object we are facading.
     protected final CURRENCY jwsdpPeer;
 
     // ---------------------------------------------------------------

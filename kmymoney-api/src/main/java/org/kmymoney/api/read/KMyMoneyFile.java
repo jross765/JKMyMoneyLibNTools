@@ -64,10 +64,10 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param id the unique ID of the institution to look for
+	 * @param instID the unique ID of the institution to look for
 	 * @return the institution or null if it's not found
 	 */
-	KMyMoneyInstitution getInstitutionByID(KMMInstID id);
+	KMyMoneyInstitution getInstitutionByID(KMMInstID instID);
 
 	/**
 	 * @param expr search expression
@@ -91,7 +91,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	KMyMoneyInstitution getInstitutionByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
 
 	/**
-	 * @return a (possibly read-only) collection of all institutions Do not modify the
+	 * @return a (read-only) collection of all institutions Do not modify the
 	 *         returned collection!
 	 */
 	Collection<KMyMoneyInstitution> getInstitutions();
@@ -101,9 +101,18 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	/**
 	 * @param acctID the unique ID of the account to look for
 	 * @return the account or null if it's not found
+	 * 
+	 * @see #getAccountByID(KMMAcctID)
 	 */
 	KMyMoneyAccount getAccountByID(KMMComplAcctID acctID);
 
+	/**
+	 * 
+	 * @param acctID
+	 * @return
+	 * 
+	 * @see #getAccountByID(KMMComplAcctID)
+	 */
 	KMyMoneyAccount getAccountByID(KMMAcctID acctID);
 	
 	/**
@@ -120,7 +129,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * 
 	 * @param expr search expression
 	 *
-	 * @param name the <stronig>unqualified</strong> name to look for
+	 * @param name the <strong>unqualified</strong> name to look for
 	 * @return null if not found
 	 * @see #getAccountByID(KMMComplAcctID)
 	 * @see #getAccountsByParentID(KMMComplAcctID)
@@ -139,7 +148,8 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	/**
 	 * @param expr search expression
 	 * @param qualif
-	 * @return
+	 * @return read-only account object whose name uniquely matches the
+	 * expression
 	 * @throws NoEntryFoundException
 	 * @throws TooManyEntriesFoundException
 	 */
@@ -153,8 +163,8 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 *
 	 * @param name the regular expression of the name to look for
 	 * @return null if not found
-	 * @throws org.kmymoney.api.read.TooManyEntriesFoundException
-	 * @throws org.kmymoney.api.read.NoEntryFoundException
+	 * @throws NoEntryFoundException 
+	 * @throws TooManyEntriesFoundException 
 	 * @see #getAccountByID(KMMComplAcctID)
 	 * @see #getAccountsByName(String)
 	 */
@@ -167,8 +177,8 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param acctID the id to look for
 	 * @param name   the name to look for if nothing is found for the id
 	 * @return null if not found
-	 * @throws org.kmymoney.api.read.TooManyEntriesFoundException
-	 * @throws org.kmymoney.api.read.NoEntryFoundException
+	 * @throws NoEntryFoundException 
+	 * @throws TooManyEntriesFoundException 
 	 */
 	KMyMoneyAccount getAccountByIDorName(KMMComplAcctID acctID, String name)
 			throws NoEntryFoundException, TooManyEntriesFoundException;
@@ -181,8 +191,8 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param name   the regular expression of the name to look for if nothing is
 	 *               found for the id
 	 * @return null if not found
-	 * @throws org.kmymoney.api.read.TooManyEntriesFoundException
-	 * @throws org.kmymoney.api.read.NoEntryFoundException
+	 * @throws NoEntryFoundException 
+	 * @throws TooManyEntriesFoundException 
 	 */
 	KMyMoneyAccount getAccountByIDorNameEx(KMMComplAcctID acctID, String name)
 			throws NoEntryFoundException, TooManyEntriesFoundException;
@@ -190,7 +200,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	/**
 	 * 
 	 * @param type
-	 * @return
+	 * @return list of read-only account objects of the given type
 	 */
     Collection<KMyMoneyAccount> getAccountsByType(KMyMoneyAccount.Type type);
     
@@ -199,7 +209,8 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param expr search expression
 	 * @param qualif
 	 * @param relaxed
-	 * @return
+	 * @return list of read-only account objects of the given type and
+     *   matching the other parameters for the name.
 	 */
 	Collection<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, 
 														 boolean qualif, boolean relaxed);
@@ -210,7 +221,9 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	Collection<KMyMoneyAccount> getAccounts();
 
     /**
-     * @return
+     * THERE IS NO ROOT ACCOUNT!
+     * 
+     * @return ID of the root account
      */
 	KMyMoneyAccount getRootAccount();
 
@@ -221,12 +234,14 @@ public interface KMyMoneyFile extends KMyMoneyObject {
     Collection<? extends KMyMoneyAccount> getParentlessAccounts();
 
     /**
-     * @return
+     * @return collection of the IDs of all top-level accounts (i.e., 
+     * one level under root, if there was a root) 
      */
     Collection<KMMComplAcctID> getTopAccountIDs();
 
     /**
-     * @return
+     * @return collection of all top-level accounts (ro-objects) (i.e., 
+     * one level under root, if there was a root)
      */
     Collection<KMyMoneyAccount> getTopAccounts();
 
@@ -239,49 +254,93 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	KMyMoneyTransaction getTransactionByID(KMMTrxID trxID);
 
 	/**
-	 * @return a (possibly read-only) collection of all transactions Do not modify
+	 * @return a (read-only) collection of all transactions Do not modify
 	 *         the returned collection!
+	 *         
+	 * @see #getTransactions(LocalDate, LocalDate)
 	 */
 	Collection<? extends KMyMoneyTransaction> getTransactions();
 
+	/**
+	 * 
+	 * @param fromDate
+	 * @param toDate
+	 * @return
+	 * 
+	 * @see #getTransactions()
+	 */
 	Collection<? extends KMyMoneyTransaction> getTransactions(LocalDate fromDate, LocalDate toDate);
 
 	// ----------------------------
 
+	/**
+	 * 
+	 * @param secID
+     * @return list of all transaction splits (ro-objects)
+     *   denominated in the given security. 
+	 */
     List<KMyMoneyTransactionSplit> getTransactionSplitsBySecID(KMMSecID secID);
-
-    List<KMyMoneyTransactionSplit> getTransactionSplitsByQualifSecID(KMMQualifSecID qualifID);
     
+    /**
+     * 
+     * @param qualifID
+     * @return list of all transaction splits (ro-objects)
+     *   denominated in the given security. 
+     */
+    List<KMyMoneyTransactionSplit> getTransactionSplitsByQualifSecID(KMMQualifSecID qualifID);
+
+    /**
+     * 
+     * @param curr
+     * @return list of all transaction splits (ro-objects)
+     *   denominated in the given currency. 
+     */
     List<KMyMoneyTransactionSplit> getTransactionSplitsByCurr(Currency curr);
 
+    /**
+     * 
+     * @param qualifID
+     * @return list of all transaction splits (ro-objects)
+     *   denominated in the given currency. 
+     */
     List<KMyMoneyTransactionSplit> getTransactionSplitsByQualifCurrID(KMMQualifCurrID qualifID);
     
+    /**
+     * 
+     * @param qualifID
+     * @return list of all transaction splits (ro-objects)
+     *   denominated in the given security/currency. 
+     */
     List<KMyMoneyTransactionSplit> getTransactionSplitsByQualifSecCurrID(KMMQualifSecCurrID qualifID);
     
 	// ---------------------------------------------------------------
 
-	/**
-	 * @param spltID the unique ID of the transaction split to look for
-	 * @return the transaction split or null if it's not found
-	 */
+    /**
+     * @param spltID the unique ID of the transaction split to look for
+     * @return the transaction split or null if it's not found
+     * 
+     * @see #getTransactionSplits()
+     */
 	KMyMoneyTransactionSplit getTransactionSplitByID(KMMQualifSpltID spltID);
 
-	/**
-	 * @return
-	 */
+    /**
+     * @return list of all transaction splits (ro-objects)
+     */
 	Collection<KMyMoneyTransactionSplit> getTransactionSplits();
 
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param id the unique ID of the payee to look for
+	 * @param pyeID the unique ID of the payee to look for
 	 * @return the payee or null if it's not found
 	 */
-	KMyMoneyPayee getPayeeByID(KMMPyeID id);
+	KMyMoneyPayee getPayeeByID(KMMPyeID pyeID);
 
 	/**
 	 * @param expr search expression
 	 * @return
+	 * 
+	 * @see #getPayeesByName(String, boolean)
 	 */
 	Collection<KMyMoneyPayee> getPayeesByName(String expr);
 
@@ -289,6 +348,8 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param expr search expression
 	 * @param relaxed
 	 * @return
+	 * 
+	 * @see #getPayeesByName(String)
 	 */
 	Collection<KMyMoneyPayee> getPayeesByName(String expr, boolean relaxed);
 
@@ -297,11 +358,13 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @return
 	 * @throws NoEntryFoundException
 	 * @throws TooManyEntriesFoundException
+	 * 
+	 * @see #getPayeesByName(String)
 	 */
-	KMyMoneyPayee getPayeesByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
+	KMyMoneyPayee getPayeeByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
 
 	/**
-	 * @return a (possibly read-only) collection of all payees Do not modify the
+	 * @return a (read-only) collection of all payees Do not modify the
 	 *         returned collection!
 	 */
 	Collection<KMyMoneyPayee> getPayees();
@@ -309,22 +372,22 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param id the unique ID of the security to look for
+	 * @param secID the unique ID of the security to look for
 	 * @return the security or null if it's not found
 	 */
-	KMyMoneySecurity getSecurityByID(KMMSecID id);
+	KMyMoneySecurity getSecurityByID(KMMSecID secID);
 
 	/**
-	 * @param id
+	 * @param secIDStr
 	 * @return
 	 */
-	KMyMoneySecurity getSecurityByID(String id);
+	KMyMoneySecurity getSecurityByID(String secIDStr);
 
 	/**
 	 * @param secID
 	 * @return
 	 */
-	KMyMoneySecurity getSecurityByQualifID(KMMQualifSecID secID);
+	KMyMoneySecurity getSecurityByQualifID(KMMQualifSecID qualifID);
 
 	/**
 	 * @param qualifID
@@ -426,7 +489,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	// Collection<KMyMoneyCurrency> getCurrenciesByName(String name);
 
 	/**
-	 * @return a (possibly read-only) collection of all currencies. Do not modify the
+	 * @return a (read-only) collection of all currencies. Do not modify the
 	 *         returned collection!
 	 */
 	Collection<KMyMoneyCurrency> getCurrencies();
@@ -494,14 +557,16 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	// ---------------------------------------------------------------
 
 	/**
-	 * @param id the unique ID of the tag to look for
+	 * @param tagID the unique ID of the tag to look for
 	 * @return the tag or null if it's not found
 	 */
-	KMyMoneyTag getTagByID(KMMTagID id);
+	KMyMoneyTag getTagByID(KMMTagID tagID);
 
 	/**
 	 * @param expr search expression
 	 * @return
+	 * 
+	 * @see #getTagsByName(String, boolean)
 	 */
 	Collection<KMyMoneyTag> getTagsByName(String expr);
 
@@ -509,6 +574,8 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param expr search expression
 	 * @param relaxed
 	 * @return
+	 * 
+	 * @see #getTagsByName(String)
 	 */
 	Collection<KMyMoneyTag> getTagsByName(String expr, boolean relaxed);
 
@@ -518,10 +585,10 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @throws NoEntryFoundException
 	 * @throws TooManyEntriesFoundException
 	 */
-	KMyMoneyTag getTagsByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
+	KMyMoneyTag getTagByNameUniq(String expr) throws NoEntryFoundException, TooManyEntriesFoundException;
 
 	/**
-	 * @return a (possibly read-only) collection of all tags Do not modify the
+	 * @return a (read-only) collection of all tags Do not modify the
 	 *         returned collection!
 	 */
 	Collection<KMyMoneyTag> getTags();

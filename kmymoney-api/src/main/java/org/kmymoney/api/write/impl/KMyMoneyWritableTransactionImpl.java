@@ -48,14 +48,9 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
                                              implements KMyMoneyWritableTransaction 
 {
 
-	/**
-	 * Our logger for debug- and error-ourput.
-	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableTransactionImpl.class);
 
-	/**
-	 * Our helper to implement the KMyMoneyWritableObject-interface.
-	 */
+	// Our helper to implement the KMyMoneyWritableObject-interface.
 	private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
 	// -----------------------------------------------------------
@@ -268,10 +263,9 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		}
 	}
 
-	/**
-	 * @throws SplitNotFoundException
-	 * @see KMyMoneyWritableTransaction#getWritableFirstSplit()
-	 */
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public KMyMoneyWritableTransactionSplit getFirstSplit() throws TransactionSplitNotFoundException {
 		return (KMyMoneyWritableTransactionSplit) super.getFirstSplit();
@@ -284,9 +278,9 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 		return (KMyMoneyWritableTransactionSplit) super.getFirstSplit();
 	}
 
-	/**
-	 * @see KMyMoneyWritableTransaction#getWritableSecondSplit()
-	 */
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public KMyMoneyWritableTransactionSplit getSecondSplit() throws TransactionSplitNotFoundException {
 		return (KMyMoneyWritableTransactionSplit) super.getSecondSplit();
@@ -300,7 +294,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	}
 
 	/**
-	 * @see KMyMoneyWritableTransaction#getWritableSplitByID(java.lang.String)
+     * {@inheritDoc}
 	 */
 	public KMyMoneyWritableTransactionSplit getWritableSplitByID(final KMMSpltID spltID) {
 		// alt:
@@ -403,7 +397,7 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	/**
 	 * @see KMyMoneyWritableTransaction#setNotes(java.lang.String)
 	 */
-	public void setDescription(final String desc) {
+	public void setMemo(final String desc) {
 		if ( desc == null ) {
 			throw new IllegalArgumentException(
 					"null description given! Please use the empty string instead of null for an empty description");
@@ -579,9 +573,9 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 
 	buffer.append(", entry-date=");
 	try {
-	    buffer.append(getEntryDate().format(DATE_ENTERED_FORMAT));
+	    buffer.append(getDateEntered().format(DATE_ENTERED_FORMAT));
 	} catch (Exception e) {
-	    buffer.append(getEntryDate().toString());
+	    buffer.append(getDateEntered().toString());
 	}
 
 	buffer.append("]");

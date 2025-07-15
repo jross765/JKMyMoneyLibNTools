@@ -65,6 +65,9 @@ public interface KMyMoneyPayee extends KMyMoneyObject,
      */
     BigInteger getUsingMatchKey();
 
+    /**
+     * @return
+     */
     BigInteger getMatchIgnoreCase();
 
 }

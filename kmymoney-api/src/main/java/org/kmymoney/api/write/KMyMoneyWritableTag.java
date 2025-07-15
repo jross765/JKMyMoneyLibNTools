@@ -16,10 +16,28 @@ public interface KMyMoneyWritableTag extends KMyMoneyTag,
    
 	// ---------------------------------------------------------------
 
+    /**
+     * 
+     * @param name
+     * 
+     * @see #getName()
+     */
     void setName(String name);
 
+    /**
+     * 
+     * @param nts
+     * 
+     * @see #getNotes()
+     */
     void setNotes(String nts);
     
+    /**
+     * 
+     * @param clr
+     * 
+     * @see #getColor()
+     */
     void setColor(String clr);
     
 	// ---------------------------------------------------------------

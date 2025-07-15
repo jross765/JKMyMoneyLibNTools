@@ -1,6 +1,8 @@
 # Notes on the Module "API"
 
-This is the core module of the project, providing all low-level read-/write access functions to a KMyMoney file.
+This is the core module of the project, providing all low-level read-/write access functions to a 
+KMyMoney 
+file.
 
 ## Major Changes 
 ### V. 0.6 &rarr; 0.7
@@ -18,6 +20,10 @@ This is the core module of the project, providing all low-level read-/write acce
   * Changed interface: Method `createWritableAccount()`: Deprecated old variant without arguments, introduced new variants with arguments.
   * Setting file info "last modified" just before writing out file.
     
+* `KMyMoney(Writable)TransactionSplit(Impl)`: 
+   * Removed "formatted for HTML" methods -- don't see a real need for it, and even if there was one, then it would belong elsewhere (still thinking of removing the "formatted (without HTML)" methods as well; I see them in the grey area).
+   * Renamed methods in writable variant: `setMemo()` instead of `setDescription()` (for consistency with read-only variant).
+
 * Significantly improved overall test coverage, esp. in write-branch.
 
 * Various minor changes, cleaning and improving code.
@@ -77,11 +83,11 @@ However, still only read-access.
 ## Planned
 It should go without saying, but the following points are of course subject to change and by no means a promise that they will actually be implemented soon:
 
-* Add support for other entities (institution, budget, etc.)
+* Add support for other entities (budget, etc.)
+
+* Introduce special variant of transaction: Simple transaction (with just two splits).
 
 * Better test case coverage.
-
-* Possibly write a set of generally-usable command-line tools for basic handling of reading/writing activities, based on existing set of simple examples (but in a separate module).
 
 * Last not least: Provide user documentation.
 

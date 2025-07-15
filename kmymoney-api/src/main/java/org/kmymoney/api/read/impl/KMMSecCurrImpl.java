@@ -1,7 +1,6 @@
 package org.kmymoney.api.read.impl;
 
 import org.kmymoney.api.read.KMMSecCurr;
-import org.kmymoney.api.read.UnknownRoundingMethodException;
 import org.kmymoney.api.read.UnknownSecurityTypeException;
 
 public class KMMSecCurrImpl {

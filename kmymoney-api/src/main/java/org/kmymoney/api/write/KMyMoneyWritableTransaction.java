@@ -1,7 +1,6 @@
 package org.kmymoney.api.write;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.kmymoney.api.read.KMyMoneyAccount;
@@ -18,6 +17,8 @@ import xyz.schnorxoborx.base.beanbase.TransactionSplitNotFoundException;
  * Transaction that can be modified.<br/>
  * For PropertyChange-Listeners we support the properties: "description" and
  * "splits".
+ * 
+ * @see KMyMoneyTransaction
  */
 public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
                                                      KMyMoneyWritableObject,
@@ -27,13 +28,15 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
 	/**
 	 * @param id the new currency
 	 * @see #setCurrencyNameSpace(String)
-	 * @see {@link KMyMoneyTransaction#getCurrencyID()}
+	 * 
+	 * @see #getQualifSecCurrID()
 	 */
 	void setCurrencyID(String id);
 
 	/**
-	 * @param id the new namespace
-	 * @see {@link KMyMoneyTransaction#getCurrencyNameSpace()}
+	 * @param id the new name space
+	 * 
+	 * @see #getQualifSecCurrID()
 	 */
 	void setCurrencyNameSpace(String id);
 
@@ -41,41 +44,56 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
 	 * The KMyMoney file is the top-level class to contain everything.
 	 * 
 	 * @return the file we are associated with
+	 * 
+	 * @see #getKMyMoneyFile()
 	 */
 	KMyMoneyWritableFile getWritableFile();
 
 	/**
 	 * @param dateEntered the day (time is ignored) that this transaction has been
 	 *                    entered into the system
-	 * @see {@link #setDatePosted(LocalDateTime)}
+	 *                    
+	 * @see #getDateEntered()
+	 * @see #setDatePosted(LocalDate)
 	 */
 	void setDateEntered(LocalDate dateEntered);
 
 	/**
 	 * @param datePosted the day (time is ignored) that the money was transfered
-	 * @see {@link #setDateEntered(LocalDateTime)}
+	 * 
+	 * @see #getDatePosted()
+	 * @see #setDateEntered(LocalDate)
 	 */
 	void setDatePosted(LocalDate datePosted);
 
-	void setDescription(String desc);
+	/**
+	 * 
+	 * @param desc
+	 * 
+	 * @see #getMemo()
+	 */
+	void setMemo(String desc);
 
 	/**
-	 * @return 
+	 * @return first split of a transaction
+	 * @throws TransactionSplitNotFoundException 
 	 * @see KMyMoneyTransaction#getFirstSplit()
 	 */
 	KMyMoneyWritableTransactionSplit getWritableFirstSplit() throws TransactionSplitNotFoundException;
 
 	/**
-	 * @return 
+	 * @return second split of a transaction
+	 * @throws TransactionSplitNotFoundException 
 	 * @see KMyMoneyTransaction#getSecondSplit()
 	 */
 	KMyMoneyWritableTransactionSplit getWritableSecondSplit() throws TransactionSplitNotFoundException;
 
 	/**
+	 * @param spltID 
 	 * @return 
 	 * @see KMyMoneyTransaction#getSplitByID(KMMSpltID)
 	 */
-	KMyMoneyWritableTransactionSplit getWritableSplitByID(KMMSpltID id);
+	KMyMoneyWritableTransactionSplit getWritableSplitByID(KMMSpltID spltID);
 
 	/**
 	 *
@@ -95,10 +113,10 @@ public interface KMyMoneyWritableTransaction extends KMyMoneyTransaction,
 	Collection<? extends KMyMoneyWritableTransactionSplit> getWritableSplits();
 
 	/**
-	 * Create a new split, already atached to this transaction.
+	 * Create a new split, already attached to this transaction.
 	 * 
 	 * @param account the account for the new split
-	 * @return a new split, already atached to this transaction
+	 * @return a new split, already attached to this transaction
 	 */
 	KMyMoneyWritableTransactionSplit createWritableSplit(KMyMoneyAccount account);
 

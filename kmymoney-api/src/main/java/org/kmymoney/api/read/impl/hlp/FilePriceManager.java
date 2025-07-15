@@ -248,6 +248,7 @@ public class FilePriceManager {
 	// not just in this particular case -- we consider semantics in IDs 
 	// a bad design decision, although one seen quite often in the wild).
 	
+	@SuppressWarnings("unused")
 	private KMyMoneyPrice getPriceByQualifSecCurrIDDate_Var1(final KMMQualifSecCurrID qualifID, final LocalDate date) {
 		for ( KMyMoneyPrice prc : getPricesByQualifSecCurrID(qualifID) ) {
 			if ( prc.getDate().equals(date) ) {
@@ -352,10 +353,6 @@ public class FilePriceManager {
 
 		if ( ! secCurrID.isSet() ) {
 			throw new IllegalArgumentException("unset security/currency ID given");
-		}
-
-		if ( secCurrID == null ) {
-			throw new IllegalArgumentException("null security/currency ID given");
 		}
 
 		return getLatestPrice(secCurrID, 0);
@@ -470,6 +467,7 @@ public class FilePriceManager {
 		return factor.multiply(latestQuote);
 	}
 
+	@SuppressWarnings("unused")
 	private FixedPointNumber getLatestPrice_readAfresh(final KMMQualifSecCurrID secCurrID, final int depth) {
 		if ( secCurrID == null ) {
 			throw new IllegalArgumentException("null security/currency ID given");
@@ -616,6 +614,7 @@ public class FilePriceManager {
 
 	// ----------------------------
 	
+	@SuppressWarnings("unused")
 	private List<PRICE> getPrices_raw(final KMMPricePairID prcPairID) {
 		List<PRICE> result = new ArrayList<PRICE>();
 

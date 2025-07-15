@@ -45,31 +45,48 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
     /**
      * The current assignment is as follows:
      *
-     * - Asset
-     *   - Asset
-     *   - Checkings
-     *   - Savings
-     *   - Cash
-     *   - Currency
-     *   - Investment
-     *   - MoneyMarket
-     *   - CertificateDep
-     *   - AssetLoan
-     *   - Stock
+     * <ul>
+     *   <li>Asset
+     *     <ul>
+     *       <li>Asset</li>
+     *       <li>Checkings</li>
+     *       <li>Savings</li>
+     *       <li>Cash</li>
+     *       <li>Currency</li>
+     *       <li>Investment</li>
+     *       <li>MoneyMarket</li>
+     *       <li>CertificateDep</li>
+     *       <li>AssetLoan</li>
+     *       <li>Stock</li>
+     *     </ul>
+     *   </li>
      *
-     * - Liability
-     *   - Liability
-     *   - CreditCard
-     *   - Loan
+     *   <li>Liability
+     *     <ul>
+     *       <li>Liability</li>
+     *       <li>CreditCard</li>
+     *       <li>Loan</li>
+     *     </ul>
+     *   </li>
      *
-     * - Income
-     *   - Income
+     *   <li>Income
+     *     <ul>
+     *       <li>Income</li>
+     *     </ul>
+     *   </li>
      *
-     * - Expense
-     *   - Expense
+     *   <li>Expense
+     *     <ul>
+     *       <li>Expense</li>
+     *     </ul>
+     *   </li>
      *
-     * - Equity
-     *   - Equity
+     *   <li>Equity
+     *     <ul>
+     *       <li>Equity</li>
+     *     </ul>
+     *   </li>
+     * </ul>
      */
     
     // For the following types cf.:
@@ -212,30 +229,62 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
     /**
      * The returned collection is never null and is sorted by Account-Name.
      *
-     * @return all child-accounts
+     * @return all child-accounts (only one level, no grand-children etc.)
+     * 
+     * @see #getChildrenRecursive()
+     * @see #isChildAccountRecursive(KMyMoneyAccount)
      */
     List<KMyMoneyAccount> getChildren();
 
+    /**
+     * 
+     * @return all child accounts including their children, grand-children etc.
+     * 
+     * @see #getChildren()
+     * @see #isChildAccountRecursive(KMyMoneyAccount)
+     */
     List<KMyMoneyAccount> getChildrenRecursive();
 
     /**
      * @param account the account to test
+     * 
      * @return true if this is a child of us or any child's or us.
+     * 
+     * @see #getChildren()
+     * #see #getChildrenRecursive()
      */
     boolean isChildAccountRecursive(KMyMoneyAccount account);
 
     // ----------------------------
 
+    /**
+     * 
+     * @return
+     * 
+     * @see #getTypeBigInt()
+     */
     Type getType();
 
+    /**
+     * 
+     * @return
+     * 
+     * @see #getType()
+     */
     BigInteger getTypeBigInt();
 
+    /**
+     * 
+     * @return fully-qualified security/currency ID
+     * 
+     * @throws InvalidQualifSecCurrIDException
+     */
     KMMQualifSecCurrID getQualifSecCurrID() throws InvalidQualifSecCurrIDException;
 
     // -----------------------------------------------------------------
 
     /**
-     * The returned list ist sorted by the natural order of the Transaction-Splits.
+     * The returned list is sorted by the natural order of the Transaction-Splits.
      *
      * @return all splits
      * {@link KMyMoneyTransactionSplit}
@@ -243,10 +292,10 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
     List<KMyMoneyTransactionSplit> getTransactionSplits();
 
     /**
-     * @param id the split-id to look for
+     * @param spltID the split-id to look for
      * @return the identified split or null
      */
-    KMyMoneyTransactionSplit getTransactionSplitByID(KMMQualifSpltID id);
+    KMyMoneyTransactionSplit getTransactionSplitByID(KMMQualifSpltID spltID);
 
     /**
      * Gets the last transaction-split before the given date.

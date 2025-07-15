@@ -27,7 +27,8 @@ import org.slf4j.LoggerFactory;
  */
 public class KMMPriceID {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMMPriceID.class);
+    @SuppressWarnings("unused")
+	private static final Logger LOGGER = LoggerFactory.getLogger(KMMPriceID.class);
 
     protected static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
     

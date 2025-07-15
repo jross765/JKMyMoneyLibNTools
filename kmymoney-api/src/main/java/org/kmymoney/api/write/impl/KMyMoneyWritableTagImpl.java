@@ -1,22 +1,15 @@
 package org.kmymoney.api.write.impl;
 
 import java.beans.PropertyChangeSupport;
-import java.math.BigInteger;
 
-import org.kmymoney.api.generated.ADDRESS;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.TAG;
-import org.kmymoney.api.read.KMyMoneyTag;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
-import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.KMyMoneyTagImpl;
 import org.kmymoney.api.write.KMyMoneyWritableFile;
 import org.kmymoney.api.write.KMyMoneyWritableTag;
-import org.kmymoney.api.write.aux.KMMWritableAddress;
-import org.kmymoney.api.write.impl.aux.KMMWritableAddressImpl;
 import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
-import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.base.basetypes.simple.KMMTagID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,16 +21,12 @@ import org.slf4j.LoggerFactory;
 public class KMyMoneyWritableTagImpl extends KMyMoneyTagImpl 
                                      implements KMyMoneyWritableTag 
 {
-    /**
-     * Automatically created logger for debug and error-output.
-     */
+
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableTagImpl.class);
 
     // ---------------------------------------------------------------
 
-    /**
-     * Our helper to implement the KMyMoneyWritableObject-interface.
-     */
+    // Our helper to implement the KMyMoneyWritableObject-interface.
     private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
     // ---------------------------------------------------------------

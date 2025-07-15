@@ -25,20 +25,62 @@ public interface KMyMoneyWritablePrice extends KMyMoneyPrice,
 	
     // ----------------------------
 
+	/**
+	 * 
+	 * @param prcPrID
+	 * 
+	 * @see #getParentPricePair()
+	 * @see #getParentPricePairID()
+	 */
     void setParentPricePairID(KMMPricePairID prcPrID);
 	
+    /**
+     * 
+     * @param prcPr
+     * 
+     * @see #getParentPricePair()
+     * @see #getParentPricePairID()
+     */
     void setParentPricePair(KMyMoneyPricePair prcPr);
 	
     // ----------------------------
 
+    /**
+     * 
+     * @param date
+     * 
+     * @see #getDate()
+     */
     void setDate(LocalDate date);
 
+    /**
+     * 
+     * @param dateTime
+     */
     void setDateTime(LocalDateTime dateTime);
 
+    /**
+     * 
+     * @param src
+     * 
+     * @see #getSource()
+     */
     void setSource(Source src);
 
+    /**
+     * 
+     * @param src
+     * 
+     * @see #getSource()
+     */
     void setSourceStr(String src);
 
+    /**
+     * 
+     * @param val
+     * 
+     * @see #getValue()
+     */
     void setValue(FixedPointNumber val);
 
 }

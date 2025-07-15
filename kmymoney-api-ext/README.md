@@ -14,7 +14,7 @@ Currently, the module consists of two sub-modules:
 This sub-module contains classes that provide a simplified, high-level interface for...
 
 * ...generating and maintaining stock accounts,
-* ...generating buy- and dividend transactions in a securities account (brokerage account).
+* ...generating buy- and dividend/distribution transactions in a securities account (brokerage account).
 
 ### TrxMgr
 This sub-module contains classes that help to...
@@ -29,6 +29,12 @@ This sub-module contains classes that help to...
   * New: `Transaction(Split)Filter`
   * New: `TransactionFinder`
   * New: `TransactionManager`, `TransactionMergerXYZ` (the latter in two variants)
+
+* Extended sub-module SecAcct:
+  * `SecuritiesAccountTransactionManager`: new type "distribution" (as opposed to "dividend"). 
+    As opposed to the sister project, this effectively *does not* lead to any difference in the generated transaction: 
+    One of the splits generated will have another split action, as inteded,
+    but it won't make any difference.
 
 ### V. 0.5 &rarr; 0.6
 * Sub-module SecAcct:

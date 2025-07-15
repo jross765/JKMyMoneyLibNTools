@@ -30,7 +30,8 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl 
 							   implements KMyMoneyPrice 
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyPriceImpl.class);
+    @SuppressWarnings("unused")
+	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyPriceImpl.class);
 
     protected static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
     
@@ -44,9 +45,7 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
 
 	protected LocalDate date;
 
-	/**
-     * The currency-format to use for formatting.<br/>
-     */
+	// The currency-format to use for formatting.<br/>
     private NumberFormat currencyFormat = null;
 
     // -----------------------------------------------------------
@@ -289,7 +288,6 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
 	try {
 	    result += ", value=" + getValueFormatted() + "]";
 	} catch (Exception e) {
-	    // TODO Auto-generated catch block
 	    result += ", value=" + "ERROR" + "]";
 	}
 	

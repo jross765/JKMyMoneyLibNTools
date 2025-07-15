@@ -39,14 +39,10 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
 
     // ---------------------------------------------------------------
 
-    /**
-     * the JWSDP-object we are facading.
-     */
+    // the JWSDP-object we are facading.
     protected final SPLIT jwsdpPeer;
     
-    /**
-     * the transaction this split belongs to.
-     */
+    // the transaction this split belongs to.
     protected final KMyMoneyTransaction myTrx;
 
     // ---------------------------------------------------------------
@@ -237,6 +233,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
 
     /**
      * see {@link #getAction()}
+     * @return 
      */
     public String getActionStr() {
     	if (getJwsdpPeer().getAction() == null) {
@@ -299,22 +296,6 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     		// nf = NumberFormat.getNumberInstance(lcl);
     		return nf.format(getValue()) + " " + getTransaction().getQualifSecCurrID().toString();
     	}
-    }
-
-    /**
-     * @see KMyMoneyTransactionSplit#getValueFormattedForHTML()
-     */
-    @Override
-    public String getValueFormattedForHTML() {
-	return getValueFormatted().replaceFirst("€", "&euro;");
-    }
-
-    /**
-     * @see KMyMoneyTransactionSplit#getValueFormattedForHTML(java.util.Locale)
-     */
-    @Override
-    public String getValueFormattedForHTML(final Locale lcl) {
-	return getValueFormatted(lcl).replaceFirst("€", "&euro;");
     }
 
     // ---------------------------------------------------------------
@@ -387,26 +368,6 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
 	}
     }
 
-    /**
-     * The value is in the currency of the account!
-     * @throws InvalidQualifSecCurrIDException 
-     * @throws InvalidQualifSecCurrTypeException 
-     */
-    @Override
-    public String getSharesFormattedForHTML() {
-	return getSharesFormatted().replaceFirst("€", "&euro;");
-    }
-
-    /**
-     * The value is in the currency of the account!
-     * @throws InvalidQualifSecCurrIDException 
-     * @throws InvalidQualifSecCurrTypeException 
-     */
-    @Override
-    public String getSharesFormattedForHTML(final Locale lcl) {
-	return getSharesFormatted(lcl).replaceFirst("€", "&euro;");
-    }
-
     // ---------------------------------------------------------------
     
     @Override
@@ -437,16 +398,6 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     	}
     }
 
-    @Override
-    public String getPriceFormattedForHTML() {
-    	return getPriceFormatted().replaceFirst("€", "&euro;");
-    }
-
-    @Override
-    public String getPriceFormattedForHTML(Locale lcl) {
-    	return getPriceFormatted(lcl).replaceFirst("€", "&euro;");
-    }
-    
     // ---------------------------------------------------------------
 
     @Override

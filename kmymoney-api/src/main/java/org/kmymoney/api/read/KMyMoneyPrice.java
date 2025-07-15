@@ -28,7 +28,7 @@ public interface KMyMoneyPrice extends Comparable<KMyMoneyPrice>,
 	 * "everything's a string".
 	 * That includes the price source. At present, the author does not even
 	 * know precisely whether the strings written by KMyMoney for a price
-	 * source are locale-specfic or not (hopefully not).
+	 * source are locale-specific or not (hopefully not).
 	 * It seems that we generally *cannot" map from/to an enum. However, 
 	 * it might be that we can define a sort of "base enum" for the most
 	 * basic/common cases.
@@ -82,13 +82,15 @@ public interface KMyMoneyPrice extends Comparable<KMyMoneyPrice>,
      *         "to-currency")
      * @throws InvalidQualifSecCurrIDException
      * @throws InvalidQualifSecCurrTypeException
-     * {@link #getParentPricePair()}
+     * 
+     * @see #getParentPricePair()
      */
     KMMPricePairID getParentPricePairID() throws InvalidQualifSecCurrIDException;
 	
     /**
      * @return Returns the parent price pair object.
-     * {@link #getParentPricePairID()}
+     * 
+     * @see #getParentPricePairID()
      */
     KMyMoneyPricePair getParentPricePair();
 	
@@ -96,31 +98,32 @@ public interface KMyMoneyPrice extends Comparable<KMyMoneyPrice>,
 
     /**
      * @return Returns the value date of the price.
-     * {@link #getDateStr()}
+     * 
+     * @see #getDateStr()
      */
     LocalDate getDate();
 
     /**
      * @return Returns the value date of the price.
-     * {@link #getDate()}
+     * 
+     * @see #getDate()
      */
     String getDateStr();
 
     /**
      * @return Returns the price source (e.g., "User" or "Transaction")
-     * {@link #getSourceStr()}
      */
     Source getSource();
 
 //    /**
 //     * @return
-//     * {@link #getSource()}
 //     */
 //    String getSourceStr();
 
     /**
      * @return Returns the price value (the actual "price" in the narrower sense)
-     * {@link #getValueFormatted()}
+     * 
+     * @see #getValueFormatted()
      */
     FixedPointNumber getValue();
     
@@ -129,7 +132,8 @@ public interface KMyMoneyPrice extends Comparable<KMyMoneyPrice>,
      *         as a formatted string.
      * @throws InvalidQualifSecCurrTypeException
      * @throws InvalidQualifSecCurrIDException
-     * {@link #getValue()}
+     * 
+     * @see #getValue()
      */
     String getValueFormatted() throws InvalidQualifSecCurrIDException;
     

@@ -34,24 +34,20 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 
     // ---------------------------------------------------------------
 
-    /**
-     * the JWSDP-object we are facading.
-     */
+    // the JWSDP-object we are facading.
     protected final ACCOUNT jwsdpPeer;
 
     // ---------------------------------------------------------------
 
     // protected KMyMoneyObjectImpl helper;
 
-    /**
+    /*
      * The splits of this transaction. May not be fully initialized during loading
      * of the KMyMoney-file.
-     *
-     * @see #mySplitsNeedSorting
      */
     private final List<KMyMoneyTransactionSplit> mySplits = new ArrayList<KMyMoneyTransactionSplit>();
 
-    /**
+    /*
      * If {@link #mySplits} needs to be sorted because it was modified. Sorting is
      * done in a lazy way.
      */

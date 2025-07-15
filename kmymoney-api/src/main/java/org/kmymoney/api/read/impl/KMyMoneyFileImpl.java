@@ -137,10 +137,10 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     }
 
     /**
-     * @param pFile the file to load and initialize from
+     * @param is the input stream to load and initialize from
      * @throws IOException on low level reading-errors (FileNotFoundException if not
      *                     found)
-     * @see #loadFile(File)
+     * @see #loadInputStream(InputStream)
      */
     public KMyMoneyFileImpl(final InputStream is) throws IOException {
     	super();
@@ -256,6 +256,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 	 * Get count data for specific type.
 	 *
 	 * @param type  the type to set it for
+	 * @return 
 	 */
 	public int getCountDataFor(final String type) {
 		if ( type == null ) {
@@ -723,7 +724,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     }
 
     @Override
-    public KMyMoneyPayee getPayeesByNameUniq(String expr)
+    public KMyMoneyPayee getPayeeByNameUniq(String expr)
 	    throws NoEntryFoundException, TooManyEntriesFoundException {
     	return pyeMgr.getPayeesByNameUniq(expr);
     }
@@ -759,7 +760,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 	}
 
 	@Override
-	public KMyMoneyTag getTagsByNameUniq(String expr) 
+	public KMyMoneyTag getTagByNameUniq(String expr) 
 			throws NoEntryFoundException, TooManyEntriesFoundException {
     	return tagMgr.getTagsByNameUniq(expr);
 	}

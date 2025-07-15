@@ -20,16 +20,52 @@ public interface KMyMoneyWritableCurrency extends KMyMoneyCurrency,
    
 	// ---------------------------------------------------------------
 
+	/**
+	 * 
+	 * @param symb
+	 * 
+	 * @see #getSymbol()
+	 */
     void setSymbol(String symb);
 
+    /**
+     * 
+     * @param name
+     * 
+     * @see #getName()
+     */
     void setName(String name);
     
+    /**
+     * 
+     * @param pp
+     * 
+     * @see #getPP()
+     */
     void setPP(BigInteger pp);
     
+    /**
+     * 
+     * @param mthd
+     * 
+     * @see #getRoundingMethod()
+     */
     void setRoundingMethod(KMMSecCurr.RoundingMethod mthd);
     
+    /**
+     * 
+     * @param saf
+     * 
+     * @see #getSAF()
+     */
     void setSAF(BigInteger saf);
     
+    /**
+     * 
+     * @param scf
+     * 
+     * @see #getSCF()
+     */
     void getSCF(BigInteger scf);
     
 }

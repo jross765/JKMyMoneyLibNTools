@@ -28,24 +28,20 @@ public class KMyMoneyInstitutionImpl extends KMyMoneyObjectImpl
 
     // ---------------------------------------------------------------
     
-    /**
-     * the JWSDP-object we are facading.
-     */
+    // the JWSDP-object we are facading.
     protected final INSTITUTION jwsdpPeer;
 
     // ---------------------------------------------------------------
 
     // protected KMyMoneyObjectImpl helper;
 
-    /**
+    /*
      * The accountsof this institution. May not be fully initialized during loading
      * of the KMyMoney-file.
-     *
-     * @see #myAcctsNeedSorting
      */
     private List<KMyMoneyAccount> myAccts = null;
 
-    /**
+    /*
      * If {@link #myAccts} needs to be sorted because it was modified. Sorting is
      * done in a lazy way.
      */

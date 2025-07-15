@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public class FileStats_Raw implements FileStats {
 
+	@SuppressWarnings("unused")
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileStats_Raw.class);
 
 	// ---------------------------------------------------------------

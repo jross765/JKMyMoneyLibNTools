@@ -331,6 +331,7 @@ public class FileTransactionManager {
 		return result;
 	}
 
+	@SuppressWarnings("unused")
 	private List<SPLIT> getTransactionSplits_raw(final TRANSACTION jwsdpTrx) {
 		List<SPLIT> result = new ArrayList<SPLIT>();
 

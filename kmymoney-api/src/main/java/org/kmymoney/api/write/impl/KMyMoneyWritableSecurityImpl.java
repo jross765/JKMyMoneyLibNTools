@@ -32,16 +32,12 @@ import org.slf4j.LoggerFactory;
 public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl 
                                           implements KMyMoneyWritableSecurity
 {
-	/**
-	 * Automatically created logger for debug and error-output.
-	 */
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableSecurityImpl.class);
 
     // ---------------------------------------------------------------
 
-    /**
-     * Our helper to implement the KMyMoneyWritableObject-interface.
-     */
+    // Our helper to implement the KMyMoneyWritableObject-interface.
     private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
 	// ---------------------------------------------------------------

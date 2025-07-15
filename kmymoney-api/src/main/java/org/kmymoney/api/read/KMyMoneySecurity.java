@@ -26,6 +26,8 @@ public interface KMyMoneySecurity extends Comparable<KMyMoneySecurity>,
 
     /**
      * @return
+     * 
+     * @see #getQualifID()
      */
     KMMSecID getID();
 
@@ -33,6 +35,8 @@ public interface KMyMoneySecurity extends Comparable<KMyMoneySecurity>,
      * @return
      * @throws InvalidQualifSecCurrTypeException
      * @throws InvalidQualifSecCurrIDException
+     * 
+     * @see #getID()
      */
     KMMQualifSecID getQualifID() throws InvalidQualifSecCurrIDException;
 
@@ -51,9 +55,7 @@ public interface KMyMoneySecurity extends Comparable<KMyMoneySecurity>,
 
     /**
      * @return
-     */
-    /**
-     * @return
+     * 
      * @throws UnknownSecurityTypeException
      */
     KMMSecCurr.Type getType();
@@ -96,6 +98,8 @@ public interface KMyMoneySecurity extends Comparable<KMyMoneySecurity>,
      * @return
      * @throws InvalidQualifSecCurrTypeException
      * @throws InvalidQualifSecCurrIDException
+     * 
+     * @see #getYoungestQuote()
      */
     List<KMyMoneyPrice> getQuotes() throws InvalidQualifSecCurrIDException;
     
@@ -103,6 +107,8 @@ public interface KMyMoneySecurity extends Comparable<KMyMoneySecurity>,
      * @return
      * @throws InvalidQualifSecCurrTypeException
      * @throws InvalidQualifSecCurrIDException
+     * 
+     * @see #getQuotes()
      */
     KMyMoneyPrice getYoungestQuote() throws InvalidQualifSecCurrIDException;
     

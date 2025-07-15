@@ -39,16 +39,15 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl 
 									 implements KMyMoneyTransaction 
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyTransactionImpl.class);
+    @SuppressWarnings("unused")
+	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyTransactionImpl.class);
 
     protected static final DateTimeFormatter DATE_POSTED_FORMAT  = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
     protected static final DateTimeFormatter DATE_ENTERED_FORMAT = DateTimeFormatter.ofPattern(Const.STANDARD_DATE_FORMAT);
     
     // ---------------------------------------------------------------
 
-    /**
-     * the JWSDP-object we are facading.
-     */
+    // the JWSDP-object we are facading.
     protected final TRANSACTION jwsdpPeer;
 
     // ---------------------------------------------------------------
@@ -59,7 +58,7 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
     protected LocalDate postDate;
 
     /**
-     * @see KMyMoneyTransaction#getEntryDate()
+     * @see KMyMoneyTransaction#getDateEntered()
      */
     protected LocalDate entryDate;
 
@@ -253,19 +252,19 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
     }
 
     /**
-     * @see KMyMoneyTransaction#getSplitByID(java.lang.String)
+     * 
      */
-    public KMyMoneyTransactionSplit getSplitByID(final KMMSpltID id) {
-		if ( id == null ) {
+    public KMyMoneyTransactionSplit getSplitByID(final KMMSpltID spltID) {
+		if ( spltID == null ) {
 			throw new IllegalArgumentException("split-ID is null");
 		}
 
-		if ( ! id.isSet() ) {
+		if ( ! spltID.isSet() ) {
 			throw new IllegalArgumentException("split-ID is not set");
 		}
 
 		for (KMyMoneyTransactionSplit split : getSplits()) {
-			if (split.getID().equals(id)) {
+			if (split.getID().equals(spltID)) {
 				return split;
 			}
 
@@ -275,8 +274,7 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
     }
 
     /**
-     * @throws SplitNotFoundException 
-     * @see KMyMoneyTransaction#getFirstSplit()
+     * {@inheritDoc}
      */
     public KMyMoneyTransactionSplit getFirstSplit() throws TransactionSplitNotFoundException {
 	if ( getSplits().size() == 0 )
@@ -286,8 +284,7 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
     }
 
     /**
-     * @throws SplitNotFoundException 
-     * @see KMyMoneyTransaction#getSecondSplit()
+     * {@inheritDoc}
      */
     public KMyMoneyTransactionSplit getSecondSplit() throws TransactionSplitNotFoundException {
 	if ( getSplits().size() <= 1 )
@@ -342,9 +339,9 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
     }
 
     /**
-     * @see KMyMoneyTransaction#getEntryDate()
+     * @see KMyMoneyTransaction#getDateEntered()
      */
-    public LocalDate getEntryDate() {
+    public LocalDate getDateEntered() {
 	if (entryDate == null) {
 	    String dateStr = jwsdpPeer.getEntrydate();
 	    entryDate = LocalDate.parse(dateStr);
@@ -460,9 +457,9 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
 
 	buffer.append(", entry-date=");
 	try {
-	    buffer.append(getEntryDate().format(DATE_ENTERED_FORMAT));
+	    buffer.append(getDateEntered().format(DATE_ENTERED_FORMAT));
 	} catch (Exception e) {
-	    buffer.append(getEntryDate().toString());
+	    buffer.append(getDateEntered().toString());
 	}
 
 	buffer.append("]");
@@ -483,7 +480,7 @@ public class KMyMoneyTransactionImpl extends KMyMoneyObjectImpl
 		return compare;
 	    }
 
-	    return otherTrx.getEntryDate().compareTo(getEntryDate());
+	    return otherTrx.getDateEntered().compareTo(getDateEntered());
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    return 0;

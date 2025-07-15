@@ -3,7 +3,6 @@ package org.kmymoney.api.read.impl;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,20 +25,16 @@ public class KMyMoneyTagImpl extends KMyMoneyObjectImpl
 
 	// ---------------------------------------------------------------
 
-	/**
-	 * the JWSDP-object we are facading.
-	 */
+	// the JWSDP-object we are facading.
 	protected final TAG jwsdpPeer;
 
     // ---------------------------------------------------------------
 
     // protected KMyMoneyObjectImpl helper;
 
-    /**
+    /*
      * The splits of this transaction. May not be fully initialized during loading
      * of the KMyMoney-file.
-     *
-     * @see #mySplitsNeedSorting
      */
     private final List<KMyMoneyTransactionSplit> mySplits = new ArrayList<KMyMoneyTransactionSplit>();
 

@@ -76,10 +76,8 @@ public class TestKMyMoneyTransactionSplitImpl {
 		assertEquals(null, splt.getAction());
 		assertEquals(10000.00, splt.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals("10.000,00 €", splt.getValueFormatted()); // ::TODO: locale-specific!
-		assertEquals("10.000,00 &euro;", splt.getValueFormattedForHTML());
 		assertEquals(10000.00, splt.getShares().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals("10.000,00 €", splt.getSharesFormatted());
-		assertEquals("10.000,00 &euro;", splt.getSharesFormattedForHTML());
 		assertEquals("", splt.getMemo());
 //		assertEquals(null, splt.getUserDefinedAttributeKeys());
 	}
@@ -95,10 +93,8 @@ public class TestKMyMoneyTransactionSplitImpl {
 		assertEquals(KMyMoneyTransactionSplit.Action.BUY_SHARES, splt.getAction());
 		assertEquals(1800.00, splt.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals("1.800,00 €", splt.getValueFormatted()); // ::TODO: locale-specific!
-		assertEquals("1.800,00 &euro;", splt.getValueFormattedForHTML());
 		assertEquals(15.00, splt.getShares().doubleValue(), ConstTest.DIFF_TOLERANCE);
 		assertEquals("15 SECURITY:E000001", splt.getSharesFormatted());
-		assertEquals("15 SECURITY:E000001", splt.getSharesFormattedForHTML());
 		assertEquals("", splt.getMemo());
 //		assertEquals(null, splt.getUserDefinedAttributeKeys());
 	}

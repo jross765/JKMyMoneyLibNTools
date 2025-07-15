@@ -28,13 +28,12 @@ import org.slf4j.LoggerFactory;
 public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl 
 								  implements KMyMoneySecurity 
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneySecurityImpl.class);
+    @SuppressWarnings("unused")
+	private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneySecurityImpl.class);
 
     // ---------------------------------------------------------------
     
-    /**
-     * the JWSDP-object we are facading.
-     */
+    // the JWSDP-object we are facading.
     protected final SECURITY jwsdpPeer;
 
     // ---------------------------------------------------------------

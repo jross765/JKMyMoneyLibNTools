@@ -16,7 +16,7 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 public class ComplexPriceTable implements Serializable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComplexPriceTable.class);
 
-	private static final long serialVersionUID = -3303232787168479120L;
+	private static final long serialVersionUID = -8548432873139328788L;
 
 	// ---------------------------------------------------------------
 
@@ -243,7 +243,7 @@ public class ComplexPriceTable implements Serializable {
 	 * @see SimplePriceTable#convertFromBaseCurrency(FixedPointNumber,
 	 *      java.lang.String)
 	 */
-	public boolean convertFromBaseCurrency(FixedPointNumber pValue, final KMMQualifSecCurrID secCurrID) {
+	public boolean convertFromBaseCurrency(final FixedPointNumber pValue, final KMMQualifSecCurrID secCurrID) {
 		if ( pValue == null )
 			throw new IllegalArgumentException("null value given");
 
@@ -287,7 +287,7 @@ public class ComplexPriceTable implements Serializable {
 	
 	// ----------------------------
 
-	public boolean convertToBaseCurrency(FixedPointNumber pValue, final KMMQualifSecCurrID secCurrID) {
+	public boolean convertToBaseCurrency(final FixedPointNumber pValue, final KMMQualifSecCurrID secCurrID) {
 		if ( pValue == null ) {
 			throw new IllegalArgumentException("null value given"); 
 		}

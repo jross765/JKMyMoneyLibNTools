@@ -7,7 +7,7 @@ import org.kmymoney.api.write.hlp.HasWritableUserDefinedAttributes;
 import org.kmymoney.api.write.hlp.KMyMoneyWritableObject;
 
 /**
- * Payee that can be modified.
+ * Institution that can be modified.
  * 
  * @see KMyMoneyInstitution
  */

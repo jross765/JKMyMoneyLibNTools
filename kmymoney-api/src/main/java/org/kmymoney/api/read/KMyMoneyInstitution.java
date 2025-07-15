@@ -7,6 +7,9 @@ import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
 import org.kmymoney.api.read.hlp.KMyMoneyObject;
 import org.kmymoney.base.basetypes.simple.KMMInstID;
 
+/**
+ * Bank or other entity which one or several accounts are registered with.
+ */
 public interface KMyMoneyInstitution extends KMyMoneyObject,
 										     HasUserDefinedAttributes,
 										     HasAddress,
@@ -35,6 +38,10 @@ public interface KMyMoneyInstitution extends KMyMoneyObject,
 
     // ------------------------------------------------------------
     
+    /**
+     * 
+     * @return
+     */
     String getBIC();
     
 }

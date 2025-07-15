@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import java.util.Currency;
 
 import org.kmymoney.api.generated.CURRENCY;
-import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.read.KMMSecCurr.RoundingMethod;
 import org.kmymoney.api.read.UnknownRoundingMethodException;
 import org.kmymoney.api.read.impl.KMyMoneyCurrencyImpl;
@@ -22,16 +21,12 @@ import org.slf4j.LoggerFactory;
 public class KMyMoneyWritableCurrencyImpl extends KMyMoneyCurrencyImpl 
                                           implements KMyMoneyWritableCurrency 
 {
-    /**
-     * Automatically created logger for debug and error-output.
-     */
+
     private static final Logger LOGGER = LoggerFactory.getLogger(KMyMoneyWritableCurrencyImpl.class);
 
     // ---------------------------------------------------------------
 
-    /**
-     * Our helper to implement the KMyMoneyWritableObject-interface.
-     */
+    // Our helper to implement the KMyMoneyWritableObject-interface.
     private final KMyMoneyWritableObjectImpl helper = new KMyMoneyWritableObjectImpl(getWritableKMyMoneyFile(), this);
 
     // ---------------------------------------------------------------

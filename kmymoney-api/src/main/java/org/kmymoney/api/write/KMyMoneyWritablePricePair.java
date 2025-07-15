@@ -15,8 +15,18 @@ public interface KMyMoneyWritablePricePair extends KMyMoneyPricePair,
                                                    KMyMoneyWritableObject
 {
 
+	/**
+	 * 
+	 * @param prcPr
+	 */
 	void set(KMyMoneyPricePair prcPr);
-	
+
+	/**
+	 * 
+	 * @param prcPr
+	 * 
+	 * @see #getID()
+	 */
 	void setID(KMMPricePairID prcPr);
 	
 }

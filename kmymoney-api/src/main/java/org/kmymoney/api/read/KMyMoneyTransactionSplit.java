@@ -123,11 +123,19 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     // ---------------------------------------------------------------
     
     /**
-     *
-     * @return the unique-id to identify this object with across name- and hirarchy-changes
+     * 
+     * @return the ID identify this object <em>within one transaction</em>.
+     * 
+     * @see #getQualifID()
      */
     KMMSpltID getID();
 
+    /**
+     * @return the fully-qualified and thus unique ID to identify this object
+     * (in effect: the pair (transaction ID, split-ID)).
+     * 
+     * @see #getID()
+     */
     KMMQualifSpltID getQualifID();
 
     // ----------------------------
@@ -135,35 +143,67 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     /**
      *
      * @return the ID of the account we transfer from/to.
+     * 
+     * @see #getAccount()
      */
     KMMComplAcctID getAccountID();
 
     /**
      * @return the account we transfer from/to.
+     * 
+     * @see #getAccountID()
      */
     KMyMoneyAccount getAccount();
 
     // ----------------------------
 
+    /**
+     * 
+     * @return
+     * 
+     * @see #getPayee()
+     */
     KMMPyeID getPayeeID();
     
+    /**
+     * 
+     * @return
+     * 
+     * @see #getPayeeID()
+     */
     KMyMoneyPayee getPayee();
     
     // ----------------------------
 
+    /**
+     * 
+     * @return
+     * 
+     * @see #getTags()
+     */
     Collection<KMMTagID> getTagIDs();
     
+    /**
+     * 
+     * @return
+     * 
+     * @see #getTagIDs()
+     */
     Collection<KMyMoneyTag> getTags();
     
     // ----------------------------
 
     /**
      * @return the ID of the transaction this is a split of.
+     * 
+     * @see #getTransaction()
      */
     KMMTrxID getTransactionID();
 
     /**
      * @return the transaction this is a split of.
+     * 
+     * @see #getTransactionID()
      */
     KMyMoneyTransaction getTransaction();
 
@@ -173,7 +213,6 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * Get the type of association this split has with
      * an invoice's lot.
      * @return null, or one of the ACTION_xyz values defined
-     * @throws UnknownSplitActionException 
      */
     Action getAction();
 
@@ -184,37 +223,39 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     /**
      * The value is in the currency of the transaction!
      * @return the value-transfer this represents
+     * 
+     * @see #getValueFormatted()
+     * @see #getValueFormatted(Locale)
      */
     FixedPointNumber getValue();
 
     /**
      * The value is in the currency of the transaction!
      * @return the value-transfer this represents
+     * 
+     * @see #getValue()
+     * @see #getValueFormatted(Locale)
      */
     String getValueFormatted();
+    
     /**
      * The value is in the currency of the transaction!
      * @param lcl the locale to use
      * @return the value-transfer this represents
+     * 
+     * @see #getValue()
+     * @see #getValueFormatted()
      */
     String getValueFormatted(Locale lcl);
-    /**
-     * The value is in the currency of the transaction!
-     * @return the value-transfer this represents
-     */
-    String getValueFormattedForHTML();
-    /**
-     * The value is in the currency of the transaction!
-     * @param lcl the locale to use
-     * @return the value-transfer this represents
-     */
-    String getValueFormattedForHTML(Locale lcl);
 
     // ----------------------------
 
     /**
      * @return the balance of the account (in the account's currency)
      *         up to this split.
+     *         
+     * @see #getAccountBalanceFormatted()
+     * @see #getAccountBalanceFormatted(Locale)
      */
     FixedPointNumber getAccountBalance();
 
@@ -222,7 +263,10 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * @return the balance of the account (in the account's currency)
      *         up to this split.
      * @throws InvalidQualifSecCurrIDException 
-     * @throws InvalidQualifSecCurrTypeException 
+     * @throws InvalidQualifSecCurrTypeException
+     *  
+     * @see #getAccountBalance()
+     * @see #getAccountBalanceFormatted(Locale)
      */
     String getAccountBalanceFormatted() throws InvalidQualifSecCurrIDException;
 
@@ -232,6 +276,9 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * @throws InvalidQualifSecCurrIDException 
      * @throws InvalidQualifSecCurrTypeException 
      * @see KMyMoneyAccount#getBalanceFormatted()
+     * 
+     * @see #getAccountBalance()
+     * @see #getAccountBalanceFormatted()
      */
     String getAccountBalanceFormatted(Locale lcl) throws InvalidQualifSecCurrIDException;
 
@@ -240,6 +287,9 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     /**
      * The quantity is in the currency of the account!
      * @return the number of items added to the account
+     * 
+     * @see #getSharesFormatted()
+     * @see #getSharesFormatted(Locale)
      */
     FixedPointNumber getShares();
 
@@ -247,7 +297,10 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * The quantity is in the currency of the account!
      * @return the number of items added to the account
      * @throws InvalidQualifSecCurrIDException 
-     * @throws InvalidQualifSecCurrTypeException 
+     * @throws InvalidQualifSecCurrTypeException
+     *  
+     * @see #getShares()
+     * @see #getSharesFormatted(Locale)
      */
     String getSharesFormatted() throws InvalidQualifSecCurrIDException;
 
@@ -256,39 +309,43 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
      * @param lcl the locale to use
      * @return the number of items added to the account
      * @throws InvalidQualifSecCurrIDException 
-     * @throws InvalidQualifSecCurrTypeException 
+     * @throws InvalidQualifSecCurrTypeException
+     * 
+     * @see #getShares()
+     * @see #getSharesFormatted()
      */
     String getSharesFormatted(Locale lcl) throws InvalidQualifSecCurrIDException;
 
-    /**
-     * The quantity is in the currency of the account!
-     * @return the number of items added to the account
-     * @throws InvalidQualifSecCurrIDException 
-     * @throws InvalidQualifSecCurrTypeException 
-     */
-    String getSharesFormattedForHTML() throws InvalidQualifSecCurrIDException;
-
-    /**
-     * The quantity is in the currency of the account!
-     * @param lcl the locale to use
-     * @return the number of items added to the account
-     * @throws InvalidQualifSecCurrIDException 
-     * @throws InvalidQualifSecCurrTypeException 
-     */
-    String getSharesFormattedForHTML(Locale lcl) throws InvalidQualifSecCurrIDException;
-    
     // ----------------------------
 
+    /**
+     * 
+     * @return
+     * 
+     * @see #getPriceFormatted()
+     * @see #getPriceFormatted(Locale)
+     */
     FixedPointNumber getPrice();
 
+    /**
+     * 
+     * @return
+     * 
+     * @see #getPrice()
+     * @see #getPriceFormatted(Locale)
+     */
     String getPriceFormatted();
 
+    /**
+     * 
+     * @param lcl
+     * @return
+     *  
+     * @see #getPrice()
+     * @see #getPriceFormatted()
+    */
     String getPriceFormatted(Locale lcl);
 
-    String getPriceFormattedForHTML();
-
-    String getPriceFormattedForHTML(Locale lcl);
-    
     // ----------------------------
 
     /**
