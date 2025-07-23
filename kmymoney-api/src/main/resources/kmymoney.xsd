@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
   
+  <!-- ============================================================== -->
+  <!-- ============================================================== -->
+  <!-- Top-Level Structure -->
+  <!-- ============================================================== -->
+  <!-- ============================================================== -->
+  
   <xs:element name="KMYMONEY-FILE">
     <xs:complexType>
       <xs:sequence>
@@ -24,6 +30,9 @@
     </xs:complexType>
   </xs:element>
   
+  <!-- ============================================================== -->
+  <!-- ============================================================== -->
+  <!-- Main Blocks that Define Top-Level Structure -->
   <!-- ============================================================== -->
   <!-- ============================================================== -->
   
@@ -189,53 +198,8 @@
     </xs:complexType>
   </xs:element>
   
-  <xs:element name="ACCOUNT">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" ref="SUBACCOUNTS"/>
-        <xs:element minOccurs="0" ref="ONLINEBANKING"/>
-        <xs:element minOccurs="0" ref="KEYVALUEPAIRS"/>
-      </xs:sequence>
-      <xs:attribute name="currency" type="xs:NCName"/>
-      <xs:attribute name="description"/>
-      <xs:attribute name="id" use="required" type="xs:NMTOKEN"/>
-      <xs:attribute name="institution"/>
-      <xs:attribute name="lastmodified"/>
-      <xs:attribute name="lastreconciled"/>
-      <xs:attribute name="name"/>
-      <xs:attribute name="number"/>
-      <xs:attribute name="opened"/>
-      <xs:attribute name="parentaccount" type="xs:anyURI"/>
-      <xs:attribute name="type" type="xs:integer"/>
-    </xs:complexType>
-  </xs:element>
+  <!-- Cf. general-block at the end for the rest -->
   
-  <!-- ============================ -->
-  
-  <xs:element name="SUBACCOUNTS">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="SUBACCOUNT"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  
-  <xs:element name="SUBACCOUNT">
-    <xs:complexType>
-      <xs:attribute name="id" use="required" type="xs:NCName"/>
-    </xs:complexType>
-  </xs:element>
-  
-  <!-- ============================ -->
-  
-  <xs:element name="ONLINEBANKING">
-    <xs:complexType>
-      <xs:attribute name="kbanking-acc-ref" type="xs:NMTOKEN"/>
-      <xs:attribute name="kbanking-statementDate" use="required" type="xs:integer"/>
-      <xs:attribute name="provider" use="required" type="xs:NCName"/>
-    </xs:complexType>
-  </xs:element>
-
   <!-- ============================================================== -->
   
   <xs:element name="TRANSACTIONS">
@@ -329,8 +293,6 @@
   <xs:element name="PAYMENTS">
     <xs:complexType/>
   </xs:element>
-  
-  <!-- ::TODO -->
   
   <!-- ============================================================== -->
   
@@ -479,8 +441,6 @@
     </xs:complexType>
   </xs:element>
   
-  <!-- ============================================================== -->
-  
   <xs:element name="ACCOUNTGROUP">
     <xs:complexType>
       <xs:attribute name="group" use="required" type="xs:NCName"/>
@@ -516,6 +476,10 @@
   
   <!-- ============================================================== -->
   <!-- ============================================================== -->
+  <!-- General Elements 
+       (i.e., elements that are referenced severaö times) -->
+  <!-- ============================================================== -->
+  <!-- ============================================================== -->
   
   <xs:complexType name="BASEADDRESS">
     <xs:sequence>
@@ -536,7 +500,7 @@
     </xs:complexType>
   </xs:element>
   
-  <!-- ============================ -->
+  <!-- ============================================================== -->
   
   <xs:element name="KEYVALUEPAIRS">
     <xs:complexType>
@@ -553,4 +517,53 @@
     </xs:complexType>
   </xs:element>
   
+  <!-- ============================================================== -->
+  
+  <xs:element name="ACCOUNT">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="SUBACCOUNTS"/>
+        <xs:element minOccurs="0" ref="ONLINEBANKING"/>
+        <xs:element minOccurs="0" ref="KEYVALUEPAIRS"/>
+      </xs:sequence>
+      <xs:attribute name="currency" type="xs:NCName"/>
+      <xs:attribute name="description"/>
+      <xs:attribute name="id" use="required" type="xs:NMTOKEN"/>
+      <xs:attribute name="institution"/>
+      <xs:attribute name="lastmodified"/>
+      <xs:attribute name="lastreconciled"/>
+      <xs:attribute name="name"/>
+      <xs:attribute name="number"/>
+      <xs:attribute name="opened"/>
+      <xs:attribute name="parentaccount" type="xs:anyURI"/>
+      <xs:attribute name="type" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  
+  <!-- ============================ -->
+  
+  <xs:element name="SUBACCOUNTS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="SUBACCOUNT"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="SUBACCOUNT">
+    <xs:complexType>
+      <xs:attribute name="id" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+  
+  <!-- ============================ -->
+  
+  <xs:element name="ONLINEBANKING">
+    <xs:complexType>
+      <xs:attribute name="kbanking-acc-ref" type="xs:NMTOKEN"/>
+      <xs:attribute name="kbanking-statementDate" use="required" type="xs:integer"/>
+      <xs:attribute name="provider" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+
 </xs:schema>
