@@ -22,10 +22,12 @@ KMyMoney project.
 * [Tools](https://github.com/jross765/JKMyMoneyLibNTools/tree/master/kmymoney-tools/README.md)
 
 ## Compatibility
-### System Compatibility
+### System and Format Compatibility
 Version 0.7 of the library has been tested with 
 KMyMoney 5.1.3 on Linux (locale de_DE) and 
 OpenJDK 21.0.
+
+**Caution: This version does not work with files generated with KMyMoney V. 5.2! The author plans to release a new version compatible with KMyMoney V. 5.2 soon, and compatibility with V. 5.1.3 will be dropped!**
 
 ### Locale/Language Compatibility
 As far as the author knows, there should be no issues with other locales, 
@@ -35,7 +37,7 @@ but he has not tested it.
 
 | Version | Backward Compat. | Note                           |
 |---------|------------------|--------------------------------|
-| 0.7     | almost           | Minor changes in interfaces, partially extensions |
+| 0.7     | almost           | Some non-trivial changes, although not dramatic |
 | 0.6     | almost           | Minor changes in interfaces    |
 | 0.5     | no               | Some substantial changes       |
 | 0.4     | almost           | Minor changes in interfaces    |

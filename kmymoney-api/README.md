@@ -6,6 +6,8 @@ file.
 
 ## Major Changes 
 ### V. 0.6 &rarr; 0.7
+**Caution: This is the last version of the API that is compatible with the KMyMoney V. 5.1.x format.**
+
 * Fixed a couple of bugs in write-branch of API (for various entities), esp. in object-deleting code.
 
 * Introduced `KMyMoney(Writable)Tag(Impl)`.
@@ -27,6 +29,10 @@ file.
 * Significantly improved overall test coverage, esp. in write-branch.
 
 * Various minor changes, cleaning and improving code.
+
+* Finally applied some minor corrections to the XSD file so that KMyMoney files read and written are valid.
+
+  (Seems obvious, doesn't it? Well, it isn't -- cf. the "known issues" part in the sister project's README file for details.)
 
 ### V. 0.5 &rarr; 0.6
 * Finally added institutions and dependent code in other classes (e.g. `KMyMoney(Writable)Account(Impl)`).
