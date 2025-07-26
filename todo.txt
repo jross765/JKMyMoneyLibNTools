@@ -1,9 +1,0 @@
- - [ OK ] Splt-Tag: Vgl. gleiche Notiz bei LibJGnuCashLibNTools 
-   sowie Notiz bei Pigasotro: ~/Programme/finanzen/gnucash/TODO.txt ->
-   >>
-   gcsh_rpt_stock_trx:
-   - Trx-Typ "Ausschüttung" braucht noch ein Mapping
-     Kommt bei EuroNAV vor.
-   <<
-   04.07.2025: 
-   o Alles analog zu JGnuCashLibNTools nachgezogen.

@@ -33,7 +33,7 @@ This sub-module contains classes that help to...
 * Extended sub-module SecAcct:
   * `SecuritiesAccountTransactionManager`: new type "distribution" (as opposed to "dividend"). 
     As opposed to the sister project, this effectively *does not* lead to any difference in the generated transaction: 
-    One of the splits generated will have another split action, as inteded,
+    One of the splits generated will have another split action, as intended,
     but it won't make any difference.
 
 ### V. 0.5 &rarr; 0.6
