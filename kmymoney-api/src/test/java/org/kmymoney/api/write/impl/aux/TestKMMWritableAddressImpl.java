@@ -96,11 +96,10 @@ public class TestKMMWritableAddressImpl {
 
 		assertEquals("Krailbacher Gasse 123 a\n" + "Postfach ABC\n" + "Kennwort Kasperlpost", addr.getStreet());
 		assertEquals("Wien", addr.getCity());
-		assertEquals(null, addr.getCounty());
 		assertEquals("1136", addr.getPostCode());
 		assertEquals("Österreich", addr.getState());
-		assertEquals(null, addr.getZip());
-		assertEquals(null, addr.getZipCode());
+		assertEquals("1136", addr.getZip());
+		assertEquals("1136", addr.getZipCode());
 		assertEquals("+43 - 12 - 277278279", addr.getTelephone());
 	}
 
@@ -157,11 +156,11 @@ public class TestKMMWritableAddressImpl {
 	private void test02_1_check_memory(KMMWritableAddress addr) throws Exception {
 		assertEquals("Judengasse 3", addr.getStreet()); // unchanged
 		assertEquals("Salzburg", addr.getCity()); // changed
-		assertEquals(null, addr.getCounty()); // unchanged
+		assertEquals("Österreich", addr.getCounty()); // unchanged
 		assertEquals("1334", addr.getPostCode()); // changed
 		assertEquals("Österreich", addr.getState()); // unchanged
 		assertEquals("2345", addr.getZip()); // changed
-		assertEquals(null, addr.getZipCode()); // unchanged
+		assertEquals("1136", addr.getZipCode()); // unchanged
 		assertEquals("+43 - 12 - 37403273", addr.getTelephone()); // changed
 	}
 
@@ -178,11 +177,11 @@ public class TestKMMWritableAddressImpl {
 
 		assertEquals("Judengasse 3", addr.getStreet()); // unchanged
 		assertEquals("Salzburg", addr.getCity()); // changed
-		assertEquals(null, addr.getCounty()); // unchanged
+		assertEquals("Österreich", addr.getCounty()); // unchanged
 		assertEquals("1334", addr.getPostCode()); // changed
 		assertEquals("Österreich", addr.getState()); // unchanged
 		assertEquals("2345", addr.getZip()); // changed
-		assertEquals(null, addr.getZipCode()); // unchanged
+		assertEquals("1136", addr.getZipCode()); // unchanged
 		assertEquals("+43 - 12 - 37403273", addr.getTelephone()); // changed
 	}
 

@@ -143,7 +143,6 @@ public class TestKMyMoneyWritableCurrencyImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_CURR, kmmInFileStats.getNofEntriesCurrencies(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_CURR, kmmInFileStats.getNofEntriesCurrencies(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_CURR, kmmInFileStats.getNofEntriesCurrencies(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritableCurrency curr = kmmInFile.getWritableCurrencyByQualifID(currID1);
@@ -190,7 +189,6 @@ public class TestKMyMoneyWritableCurrencyImpl {
 
 	private void test02_1_check_memory(KMyMoneyWritableCurrency curr) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_CURR, kmmInFileStats.getNofEntriesCurrencies(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_CURR, kmmInFileStats.getNofEntriesCurrencies(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_CURR, kmmInFileStats.getNofEntriesCurrencies(KMMFileStats.Type.CACHE));
 
 		assertEquals(currID1, curr.getQualifID()); // unchanged
@@ -208,7 +206,6 @@ public class TestKMyMoneyWritableCurrencyImpl {
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
 		assertEquals(ConstTest.Stats.NOF_CURR, kmmOutFileStats.getNofEntriesCurrencies(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_CURR, kmmOutFileStats.getNofEntriesCurrencies(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_CURR, kmmOutFileStats.getNofEntriesCurrencies(KMMFileStats.Type.CACHE));
 
 		KMyMoneyCurrency curr = kmmOutFile.getCurrencyByID(CURR_1_ID);
@@ -237,7 +234,6 @@ public class TestKMyMoneyWritableCurrencyImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_CURR, kmmInFileStats.getNofEntriesCurrencies(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_CURR, kmmInFileStats.getNofEntriesCurrencies(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_CURR, kmmInFileStats.getNofEntriesCurrencies(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritableCurrency curr = kmmInFile.createWritableCurrency("BMD", "Bermudian Dollar");
@@ -266,7 +262,6 @@ public class TestKMyMoneyWritableCurrencyImpl {
 
 	private void test03_1_1_check_memory(KMyMoneyWritableCurrency curr) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_CURR + 1, kmmInFileStats.getNofEntriesCurrencies(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_CURR + 1, kmmInFileStats.getNofEntriesCurrencies(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_CURR + 1, kmmInFileStats.getNofEntriesCurrencies(KMMFileStats.Type.CACHE));
 
 		assertEquals(newID.toString(), curr.getQualifID().toString());
@@ -278,7 +273,6 @@ public class TestKMyMoneyWritableCurrencyImpl {
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
 		assertEquals(ConstTest.Stats.NOF_CURR + 1, kmmOutFileStats.getNofEntriesCurrencies(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_CURR + 1, kmmOutFileStats.getNofEntriesCurrencies(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_CURR + 1, kmmOutFileStats.getNofEntriesCurrencies(KMMFileStats.Type.CACHE));
 
 		KMyMoneyCurrency curr = kmmOutFile.getCurrencyByQualifID(newID);

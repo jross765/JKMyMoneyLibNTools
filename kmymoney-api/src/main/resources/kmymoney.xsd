@@ -43,6 +43,7 @@
         <xs:element ref="LAST_MODIFIED_DATE"/>
         <xs:element ref="VERSION"/>
         <xs:element ref="FIXVERSION"/>
+        <xs:element ref="APPVERSION"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -71,6 +72,12 @@
     </xs:complexType>
   </xs:element>
   
+  <xs:element name="APPVERSION">
+    <xs:complexType>
+      <xs:attribute name="id" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  
   <!-- ============================================================== -->
   
   <xs:element name="USER">
@@ -91,7 +98,6 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="INSTITUTION"/>
       </xs:sequence>
-      <xs:attribute name="count" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   
@@ -133,7 +139,6 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="PAYEE"/>
       </xs:sequence>
-      <xs:attribute name="count" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   
@@ -160,7 +165,6 @@
   
   <xs:element name="COSTCENTERS">
     <xs:complexType>
-      <xs:attribute name="count" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   
@@ -173,7 +177,6 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="TAG"/>
       </xs:sequence>
-      <xs:attribute name="count" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   
@@ -194,7 +197,6 @@
       <xs:sequence>
         <xs:element maxOccurs="unbounded" ref="ACCOUNT"/>
       </xs:sequence>
-      <xs:attribute name="count" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   
@@ -207,7 +209,6 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="TRANSACTION"/>
       </xs:sequence>
-      <xs:attribute name="count" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   
@@ -264,7 +265,6 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="SCHEDULED_TX"/>
       </xs:sequence>
-      <xs:attribute name="count" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   
@@ -301,7 +301,6 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="SECURITY"/>
       </xs:sequence>
-      <xs:attribute name="count" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   
@@ -329,7 +328,6 @@
       <xs:sequence>
         <xs:element maxOccurs="unbounded" ref="CURRENCY"/>
       </xs:sequence>
-      <xs:attribute name="count" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   
@@ -353,7 +351,6 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="PRICEPAIR"/>
       </xs:sequence>
-      <xs:attribute name="count" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   
@@ -382,7 +379,6 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="REPORT"/>
       </xs:sequence>
-      <xs:attribute name="count" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   
@@ -458,7 +454,6 @@
   
   <xs:element name="BUDGETS">
     <xs:complexType>
-      <xs:attribute name="count" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   
@@ -468,7 +463,6 @@
   
   <xs:element name="ONLINEJOBS">
     <xs:complexType>
-      <xs:attribute name="count" use="required" type="xs:integer"/>
     </xs:complexType>
   </xs:element>
   
@@ -491,6 +485,7 @@
     <xs:complexType>
       <xs:attribute name="city" use="required"/>
       <xs:attribute name="county"/>
+      <xs:attribute name="country"/>
       <xs:attribute name="postcode"/>
       <xs:attribute name="state"/>
       <xs:attribute name="street" use="required"/>

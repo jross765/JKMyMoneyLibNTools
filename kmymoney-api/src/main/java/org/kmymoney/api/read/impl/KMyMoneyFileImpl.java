@@ -268,21 +268,21 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 		}
 		
 		if ( type.trim().equals("institution")  ) {
-			return getRootElement().getINSTITUTIONS().getCount().intValue();
+			return getRootElement().getINSTITUTIONS().getINSTITUTION().size();
 		} else if ( type.trim().equals("account")  ) {
-			return getRootElement().getACCOUNTS().getCount().intValue();
+			return getRootElement().getACCOUNTS().getACCOUNT().size();
 		} else if ( type.trim().equals("transaction")  ) {
-			return getRootElement().getTRANSACTIONS().getCount().intValue();
+			return getRootElement().getTRANSACTIONS().getTRANSACTION().size();
 		} else if ( type.trim().equals("payee")  ) {
-			return getRootElement().getPAYEES().getCount().intValue();
+			return getRootElement().getPAYEES().getPAYEE().size();
 		} else if ( type.trim().equals("tag")  ) {
-			return getRootElement().getTAGS().getCount().intValue();
+			return getRootElement().getTAGS().getTAG().size();
 		} else if ( type.trim().equals("security")  ) {
-			return getRootElement().getSECURITIES().getCount().intValue();
+			return getRootElement().getSECURITIES().getSECURITY().size();
 		} else if ( type.trim().equals("currency")  ) {
-			return getRootElement().getCURRENCIES().getCount().intValue();
+			return getRootElement().getCURRENCIES().getCURRENCY().size();
 		} else if ( type.trim().equals("pricepair")  ) {
-			return getRootElement().getPRICES().getCount().intValue();
+			return getRootElement().getPRICES().getPRICEPAIR().size();
 		} else {
 			throw new IllegalArgumentException("Unknown type '" + type + "'");
 		}

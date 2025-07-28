@@ -134,7 +134,6 @@ public class TestKMyMoneyWritablePayeeImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritablePayee pye = kmmInFile.getWritablePayeeByID(PYE_1_ID);
@@ -176,7 +175,6 @@ public class TestKMyMoneyWritablePayeeImpl {
 
 	private void test02_1_check_memory(KMyMoneyWritablePayee pye) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
 
 		assertEquals(PYE_1_ID, pye.getID()); // unchanged
@@ -189,7 +187,6 @@ public class TestKMyMoneyWritablePayeeImpl {
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmOutFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PYE, kmmOutFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmOutFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
 
 		KMyMoneyPayee pye = kmmOutFile.getPayeeByID(PYE_1_ID);
@@ -213,7 +210,6 @@ public class TestKMyMoneyWritablePayeeImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritablePayee pye = kmmInFile.createWritablePayee("Norma Jean Baker");
@@ -241,7 +237,6 @@ public class TestKMyMoneyWritablePayeeImpl {
 
 	private void test03_1_1_check_memory(KMyMoneyWritablePayee pye) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_PYE + 1, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PYE + 1, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PYE + 1, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
 
 		newID = pye.getID();
@@ -254,7 +249,6 @@ public class TestKMyMoneyWritablePayeeImpl {
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
 		assertEquals(ConstTest.Stats.NOF_PYE + 1, kmmOutFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PYE + 1, kmmOutFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PYE + 1, kmmOutFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
 
 		KMyMoneyPayee pye = kmmOutFile.getPayeeByID(newID);
@@ -424,7 +418,6 @@ public class TestKMyMoneyWritablePayeeImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritablePayee pye = kmmInFile.getWritablePayeeByID(PYE_2_ID);
@@ -456,7 +449,6 @@ public class TestKMyMoneyWritablePayeeImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritablePayee pye = kmmInFile.getWritablePayeeByID(PYE_1_ID);
@@ -495,7 +487,6 @@ public class TestKMyMoneyWritablePayeeImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritablePayee pye = kmmInFile.getWritablePayeeByID(PYE_1_ID);
@@ -532,7 +523,6 @@ public class TestKMyMoneyWritablePayeeImpl {
 
 	private void test04_2_check_memory(KMyMoneyWritablePayee pye) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_PYE - 1, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PYE    , kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
 		assertEquals(ConstTest.Stats.NOF_PYE - 1, kmmInFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
 
 		// CAUTION / ::TODO
@@ -563,7 +553,6 @@ public class TestKMyMoneyWritablePayeeImpl {
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
 		assertEquals(ConstTest.Stats.NOF_PYE - 1, kmmOutFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PYE - 1, kmmOutFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PYE - 1, kmmOutFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
 
 		// The transaction does not exist any more, just as you would expect.

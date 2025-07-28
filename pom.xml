@@ -5,7 +5,7 @@
 
 	<groupId>org.kmymoney</groupId>
 	<artifactId>kmymoney</artifactId>
-	<version>0.7.0</version>
+	<version>0.8.0</version>
 	<packaging>pom</packaging>
 	<name>${project.title}</name>
 

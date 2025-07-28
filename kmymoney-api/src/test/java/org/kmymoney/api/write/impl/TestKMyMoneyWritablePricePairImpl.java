@@ -247,7 +247,6 @@ public class TestKMyMoneyWritablePricePairImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritablePricePair prcPr = kmmInFile.getWritablePricePairByID(PRCPR_1_ID);
@@ -293,7 +292,6 @@ public class TestKMyMoneyWritablePricePairImpl {
 
 	private void test02_1_check_memory(KMyMoneyWritablePricePair prcPr) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
 
 		// CAUTION: The price pair, by its very definition, is a special
@@ -313,7 +311,6 @@ public class TestKMyMoneyWritablePricePairImpl {
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
 		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
 
 		// CAUTION: As opposed to the symmetrical test case in the other
@@ -345,7 +342,6 @@ public class TestKMyMoneyWritablePricePairImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW)); 
-		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
 
 		KMMQualifCurrID fromCurr = new KMMQualifCurrID("CNY");  
@@ -380,7 +376,6 @@ public class TestKMyMoneyWritablePricePairImpl {
 
 	private void test03_1_1_check_memory(KMyMoneyWritablePricePair prcPr) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
 
 		assertEquals(newID.toString(), prcPr.getID().toString());
@@ -391,7 +386,6 @@ public class TestKMyMoneyWritablePricePairImpl {
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
 		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PRCPR + 1, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
 
 		KMyMoneyPricePair sec = kmmOutFile.getPricePairByID(newID);
@@ -419,7 +413,6 @@ public class TestKMyMoneyWritablePricePairImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritablePricePair prc = kmmInFile.getWritablePricePairByID(PRCPR_1_ID);
@@ -456,7 +449,6 @@ public class TestKMyMoneyWritablePricePairImpl {
 
 	private void test04_1_check_memory(KMyMoneyWritablePricePair prcPr) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PRCPR, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
 		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmInFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
 
 		// CAUTION / ::TODO
@@ -496,7 +488,6 @@ public class TestKMyMoneyWritablePricePairImpl {
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
 		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PRCPR - 1, kmmOutFileStats.getNofEntriesPricePairs(KMMFileStats.Type.CACHE));
 
 		// The price pair does not exist any more, just as you would expect.

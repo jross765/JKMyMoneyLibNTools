@@ -61,14 +61,12 @@ public class TestKMyMoneyFileImpl {
 	@Test
 	public void test01() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_ACCT, kmmFileStats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_ACCT, kmmFileStats.getNofEntriesAccounts(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_ACCT, kmmFileStats.getNofEntriesAccounts(KMMFileStats.Type.CACHE));
 	}
 
 	@Test
 	public void test02() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TRX, kmmFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
 	}
 
@@ -85,28 +83,24 @@ public class TestKMyMoneyFileImpl {
 	@Test
 	public void test04() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmFileStats.getNofEntriesPayees(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_PYE, kmmFileStats.getNofEntriesPayees(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_PYE, kmmFileStats.getNofEntriesPayees(KMMFileStats.Type.CACHE));
 	}
 
 	@Test
 	public void test05() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmFileStats.getNofEntriesTags(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TAG, kmmFileStats.getNofEntriesTags(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmFileStats.getNofEntriesTags(KMMFileStats.Type.CACHE));
 	}
 
 	@Test
 	public void test06() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmFileStats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_SEC, kmmFileStats.getNofEntriesSecurities(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_SEC, kmmFileStats.getNofEntriesSecurities(KMMFileStats.Type.CACHE));
 	}
 
 	@Test
 	public void test07() throws Exception {
 		assertEquals(ConstTest.Stats.NOF_CURR, kmmFileStats.getNofEntriesCurrencies(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_CURR, kmmFileStats.getNofEntriesCurrencies(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_CURR, kmmFileStats.getNofEntriesCurrencies(KMMFileStats.Type.CACHE));
 	}
 

@@ -141,7 +141,6 @@ public class TestKMyMoneyWritableTagImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritableTag tag = kmmInFile.getWritableTagByID(TAG_1_ID);
@@ -183,7 +182,6 @@ public class TestKMyMoneyWritableTagImpl {
 
 	private void test02_1_check_memory(KMyMoneyWritableTag tag) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.CACHE));
 
 		assertEquals(TAG_1_ID, tag.getID()); // unchanged
@@ -196,7 +194,6 @@ public class TestKMyMoneyWritableTagImpl {
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmOutFileStats.getNofEntriesTags(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TAG, kmmOutFileStats.getNofEntriesTags(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmOutFileStats.getNofEntriesTags(KMMFileStats.Type.CACHE));
 
 		KMyMoneyTag tag = kmmOutFile.getTagByID(TAG_1_ID);
@@ -220,7 +217,6 @@ public class TestKMyMoneyWritableTagImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritableTag tag = kmmInFile.createWritableTag("Croa-croa");
@@ -248,7 +244,6 @@ public class TestKMyMoneyWritableTagImpl {
 
 	private void test03_1_1_check_memory(KMyMoneyWritableTag tag) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_TAG + 1, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TAG + 1, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TAG + 1, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.CACHE));
 
 		newID = tag.getID();
@@ -261,7 +256,6 @@ public class TestKMyMoneyWritableTagImpl {
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
 		assertEquals(ConstTest.Stats.NOF_TAG + 1, kmmOutFileStats.getNofEntriesTags(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TAG + 1, kmmOutFileStats.getNofEntriesTags(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TAG + 1, kmmOutFileStats.getNofEntriesTags(KMMFileStats.Type.CACHE));
 
 		KMyMoneyTag tag = kmmOutFile.getTagByID(newID);
@@ -453,7 +447,6 @@ public class TestKMyMoneyWritableTagImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritableTag tag = kmmInFile.getWritableTagByID(TAG_1_ID);
@@ -485,7 +478,6 @@ public class TestKMyMoneyWritableTagImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritableTag tag = kmmInFile.getWritableTagByID(TAG_3_ID);
@@ -524,7 +516,6 @@ public class TestKMyMoneyWritableTagImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TAG, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritableTag tag = kmmInFile.getWritableTagByID(TAG_3_ID);
@@ -561,7 +552,6 @@ public class TestKMyMoneyWritableTagImpl {
 
 	private void test04_2_check_memory(KMyMoneyWritableTag tag) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_TAG - 1, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TAG    , kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
 		assertEquals(ConstTest.Stats.NOF_TAG - 1, kmmInFileStats.getNofEntriesTags(KMMFileStats.Type.CACHE));
 
 		// CAUTION / ::TODO
@@ -592,7 +582,6 @@ public class TestKMyMoneyWritableTagImpl {
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
 		assertEquals(ConstTest.Stats.NOF_TAG - 1, kmmOutFileStats.getNofEntriesTags(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TAG - 1, kmmOutFileStats.getNofEntriesTags(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TAG - 1, kmmOutFileStats.getNofEntriesTags(KMMFileStats.Type.CACHE));
 
 		// The transaction does not exist any more, just as you would expect.

@@ -282,42 +282,6 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throw new IllegalArgumentException("val < 0 given");
 		}
 	
-		if ( type.trim().equals("institution") ) {
-			getRootElement().getINSTITUTIONS().setCount(BigInteger.valueOf(val));
-			setModified(true);
-			return;
-		} else if ( type.trim().equals("account") ) {
-			getRootElement().getACCOUNTS().setCount(BigInteger.valueOf(val));
-			setModified(true);
-			return;
-		} else if ( type.trim().equals("transaction") ) {
-			getRootElement().getTRANSACTIONS().setCount(BigInteger.valueOf(val));
-			setModified(true);
-			return;
-		} else if ( type.trim().equals("payee") ) {
-			getRootElement().getPAYEES().setCount(BigInteger.valueOf(val));
-			setModified(true);
-			return;
-		} else if ( type.trim().equals("tag") ) {
-			getRootElement().getTAGS().setCount(BigInteger.valueOf(val));
-			setModified(true);
-			return;
-		} else if ( type.trim().equals("currency") ) {
-			getRootElement().getCURRENCIES().setCount(BigInteger.valueOf(val));
-			setModified(true);
-			return;
-		} else if ( type.trim().equals("security") ) {
-			getRootElement().getSECURITIES().setCount(BigInteger.valueOf(val));
-			setModified(true);
-			return;
-		} else if ( type.trim().equals("pricepair") ) {
-			getRootElement().getPRICES().setCount(BigInteger.valueOf(val));
-			setModified(true);
-			return;
-		} else {
-			throw new IllegalArgumentException("Unknown type '" + type + "'");
-		}
-		
 	}
 
 	/**

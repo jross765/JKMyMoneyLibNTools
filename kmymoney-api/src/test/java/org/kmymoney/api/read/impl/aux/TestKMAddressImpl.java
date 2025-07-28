@@ -68,11 +68,11 @@ public class TestKMAddressImpl {
 
 		assertEquals("Krailbacher Gasse 123 a\n" + "Postfach ABC\n" + "Kennwort Kasperlpost", addr.getStreet());
 		assertEquals("Wien", addr.getCity());
-		assertEquals(null, addr.getCounty());
+		assertEquals("Österreich", addr.getCounty());
 		assertEquals("1136", addr.getPostCode());
 		assertEquals("Österreich", addr.getState());
-		assertEquals(null, addr.getZip());
-		assertEquals(null, addr.getZipCode());
+		assertEquals("1136", addr.getZip());
+		assertEquals("1136", addr.getZipCode());
 		assertEquals("+43 - 12 - 277278279", addr.getTelephone());
 	}
 }

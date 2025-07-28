@@ -136,7 +136,6 @@ public class TestKMyMoneyWritableTransactionImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
 
 		KMyMoneyWritableTransaction trx = kmmInFile.getWritableTransactionByID(TRX_1_ID);
@@ -184,7 +183,6 @@ public class TestKMyMoneyWritableTransactionImpl {
 
 	private void test02_1_check_memory(KMyMoneyWritableTransaction trx) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
 
 		assertEquals(0.0, trx.getBalance().getBigDecimal().doubleValue(), ConstTest.DIFF_TOLERANCE); // unchanged
@@ -202,7 +200,6 @@ public class TestKMyMoneyWritableTransactionImpl {
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmOutFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TRX, kmmOutFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmOutFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
 
 		KMyMoneyTransaction trx = kmmOutFile.getTransactionByID(TRX_1_ID);
@@ -232,7 +229,6 @@ public class TestKMyMoneyWritableTransactionImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
 
 		// ----------------------------
@@ -336,7 +332,6 @@ public class TestKMyMoneyWritableTransactionImpl {
 
 		// Here, all 3 stats variants must have been updated
 		assertEquals(ConstTest.Stats.NOF_TRX + 1, kmmOutFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TRX + 1, kmmOutFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TRX + 1, kmmOutFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
 
 		KMyMoneyTransaction trx = kmmOutFile.getTransactionByID(newTrxID);
@@ -392,7 +387,6 @@ public class TestKMyMoneyWritableTransactionImpl {
 		kmmInFileStats = new KMMFileStats(kmmInFile);
 
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
 
 
@@ -434,7 +428,6 @@ public class TestKMyMoneyWritableTransactionImpl {
 	private void test04_1_check_memory(KMyMoneyWritableTransaction trx1,
 									   KMyMoneyWritableTransaction trx2) throws Exception {
 		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TRX, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER)); // sic, because not persisted yet
 		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmInFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
 
 		// ---
@@ -486,7 +479,6 @@ public class TestKMyMoneyWritableTransactionImpl {
 		kmmOutFileStats = new KMMFileStats(kmmOutFile);
 
 		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmOutFileStats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
-		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmOutFileStats.getNofEntriesTransactions(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TRX - 2, kmmOutFileStats.getNofEntriesTransactions(KMMFileStats.Type.CACHE));
 
 		// ---
