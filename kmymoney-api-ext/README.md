@@ -24,6 +24,9 @@ This sub-module contains classes that help to...
 * ...generally manipulate transactions in a more convenient way than by using the pure API.
 
 ## Major Changes
+### V. 0.7 &rarr; 0.8
+None (not in this module).
+
 ### V. 0.6 &rarr; 0.7
 * Added sub-module TrxMgr.
   * New: `Transaction(Split)Filter`

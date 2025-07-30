@@ -5,6 +5,9 @@ This module is a collection of various ready-to-use tools reading and manipulati
 You will notice that the tools partially pull on the examples in the "Examples" module, and thus we have a *logical* dependency here. Currently, there are many similarties between the two modules, but expect those two modules to deviate from one another in the course of the future releases to come.
 
 ## Major Changes 
+### V. 0.7 &rarr; 0.8
+None (not in this module).
+
 ### V. 0.6 &rarr; 0.7
 * New tools: 
   * UpdSec, GenAcct (finally!), GetCurrList, GetPrcList.

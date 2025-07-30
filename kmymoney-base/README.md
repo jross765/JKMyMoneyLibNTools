@@ -5,6 +5,9 @@ This module is a small helper library that has been spun off from the API module
 This might seem overly complicated, but in fact, it was necessary, because the author uses it in another, external project as well, without using the API there.
 
 ## Major Changes 
+### V. 0.7 &rarr; 0.8
+None (not in this module).
+
 ### V. 0.6 &rarr; 0.7
 * `KMMQualifSecID`: Fixed bug in method `parse()`
 * `KMMPriceID`: New method `getPricePairID()`
