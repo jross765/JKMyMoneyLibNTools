@@ -252,44 +252,6 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
     // ---------------------------------------------------------------
 
-	/**
-	 * Get count data for specific type.
-	 *
-	 * @param type  the type to set it for
-	 * @return 
-	 */
-	public int getCountDataFor(final String type) {
-		if ( type == null ) {
-			throw new IllegalArgumentException("null type given");
-		}
-	
-		if ( type.trim().length() == 0 ) {
-			throw new IllegalArgumentException("empty type given");
-		}
-		
-		if ( type.trim().equals("institution")  ) {
-			return getRootElement().getINSTITUTIONS().getINSTITUTION().size();
-		} else if ( type.trim().equals("account")  ) {
-			return getRootElement().getACCOUNTS().getACCOUNT().size();
-		} else if ( type.trim().equals("transaction")  ) {
-			return getRootElement().getTRANSACTIONS().getTRANSACTION().size();
-		} else if ( type.trim().equals("payee")  ) {
-			return getRootElement().getPAYEES().getPAYEE().size();
-		} else if ( type.trim().equals("tag")  ) {
-			return getRootElement().getTAGS().getTAG().size();
-		} else if ( type.trim().equals("security")  ) {
-			return getRootElement().getSECURITIES().getSECURITY().size();
-		} else if ( type.trim().equals("currency")  ) {
-			return getRootElement().getCURRENCIES().getCURRENCY().size();
-		} else if ( type.trim().equals("pricepair")  ) {
-			return getRootElement().getPRICES().getPRICEPAIR().size();
-		} else {
-			throw new IllegalArgumentException("Unknown type '" + type + "'");
-		}
-	}
-
-    // ---------------------------------------------------------------
-
     /**
      * @return Returns the currencyTable.
      */
@@ -1146,6 +1108,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     		result += "    Last-modified date: " + metaInfo.getLastModifiedDate() + "\n"; 
     		result += "    Version:            " + metaInfo.getVersion() + "\n"; 
     		result += "    Fix version:        " + metaInfo.getFixVersion() + "\n"; 
+    		result += "    App version:        " + metaInfo.getAppVersion() + "\n"; 
     		result += "    Base currency:      " + metaInfo.getBaseCurrency() + "\n"; 
     		result += "    File ID:            " + metaInfo.getFileID() + "\n"; 
     	} catch (Exception e) {

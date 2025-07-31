@@ -66,6 +66,10 @@ public class KMMFileMetaInfo {
 		return info.getFIXVERSION().getId();
 	}
 
+	public String getAppVersion() {
+		return info.getAPPVERSION().getId();
+	}
+
 	public String getBaseCurrency() {
 		for ( PAIR kvp : kvpList.getPAIR() ) {
 		    if ( kvp.getKey().equals("kmm-baseCurrency") ) { // ::MAGIC

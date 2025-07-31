@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -214,7 +213,6 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			throw new IllegalArgumentException("Given file '" + file.getAbsolutePath() + "' does exist!");
 		}
 
-		checkAllCountData();
 		updateLastModified();
 
 		setFile(file);
@@ -263,122 +261,6 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	// ---------------------------------------------------------------
 
 	/**
-	 * keep the count-data up to date.
-	 *
-	 * @param type  the type to set it for
-	 * @param val the value
-	 */
-	protected void setCountDataFor(final String type, final int val) {
-	
-		if ( type == null ) {
-			throw new IllegalArgumentException("null type given");
-		}
-	
-		if ( type.trim().length() == 0 ) {
-			throw new IllegalArgumentException("empty type given");
-		}
-
-		if ( val < 0 ) {
-			throw new IllegalArgumentException("val < 0 given");
-		}
-	
-	}
-
-	/**
-	 * Keep the count-data up to date. The count-data is re-calculated on the fly
-	 * before writing but we like to keep our internal model up-to-date just to be
-	 * defensive.
-	 *
-	 * @param type the type to set it for
-	 */
-	protected void incrementCountDataFor(final String type) {
-
-		if ( type == null ) {
-			throw new IllegalArgumentException("null type given");
-		}
-
-		if ( type.trim().length() == 0 ) {
-			throw new IllegalArgumentException("empty type given");
-		}
-		
-		incrementCountDataForCore(type, 1);
-	}
-
-	/**
-	 * Keep the count-data up to date. The count-data is re-calculated on the fly
-	 * before writing but we like to keep our internal model up-to-date just to be
-	 * defensive.
-	 *
-	 * @param type the type to set it for
-	 */
-	protected void decrementCountDataFor(final String type) {
-
-		if ( type == null ) {
-			throw new IllegalArgumentException("null type given");
-		}
-
-		if ( type.trim().length() == 0 ) {
-			throw new IllegalArgumentException("empty type given");
-		}
-		
-		incrementCountDataForCore(type, -1);
-	}
-
-	private void incrementCountDataForCore(final String type, final int delta) {
-
-		if ( type == null ) {
-			throw new IllegalArgumentException("null type given");
-		}
-
-		if ( type.trim().length() == 0 ) {
-			throw new IllegalArgumentException("empty type given");
-		}
-
-		int currCnt = getCountDataFor(type);
-		setCountDataFor(type, currCnt + delta);
-	}
-
-	/**
-	 * Calculate and set the correct values for all the following count-data.<br/>
-	 * Also check the that only valid elements are in the book-element and that they
-	 * have the correct order.
-	 */
-	private void checkAllCountData() {
-
-		int cntInstitution = 0;
-		int cntAccount = 0;
-		int cntTransaction = 0;
-		int cntPayee = 0;
-		int cntTag = 0;
-		int cntCurrency = 0;
-		int cntSecurity = 0;
-		int cntPricePair = 0;
-
-		cntInstitution = getRootElement().getINSTITUTIONS().getINSTITUTION().size();
-		cntAccount     = getRootElement().getACCOUNTS().getACCOUNT().size();
-		cntTransaction = getRootElement().getTRANSACTIONS().getTRANSACTION().size();
-		cntPayee       = getRootElement().getPAYEES().getPAYEE().size();
-		cntTag         = getRootElement().getTAGS().getTAG().size();
-		cntCurrency    = getRootElement().getCURRENCIES().getCURRENCY().size();
-		cntSecurity    = getRootElement().getSECURITIES().getSECURITY().size();
-		cntPricePair   = getRootElement().getPRICES().getPRICEPAIR().size();
-
-		setCountDataFor("institution", cntInstitution);
-		setCountDataFor("account", cntAccount);
-		setCountDataFor("transaction", cntTransaction);
-		setCountDataFor("payee", cntPayee);
-		setCountDataFor("tag", cntTag);
-		setCountDataFor("currency", cntCurrency);
-		setCountDataFor("security", cntSecurity);
-		setCountDataFor("pricepair", cntPricePair);
-
-		// make sure the correct sort-order of the entity-types is obeyed in writing.
-		// (we do not enforce this in the xml-schema to allow for reading out of order
-		// files)
-		// java.util.Collections.sort(getRootElement(), new BookElementsSorter());
-	}
-
-	/**
 	 * Update the 'last updated' info in the KMM document.
 	 */
 	private void updateLastModified() {
@@ -415,8 +297,6 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * @see KMyMoneyTransactionImpl#createSplit(GncTransaction.TrnSplits.TrnSplit)
 	 */
 	protected void addTransaction(final KMyMoneyTransactionImpl trx) {
-		incrementCountDataFor("transaction");
-
 		getRootElement().getTRANSACTIONS().getTRANSACTION().add(trx.getJwsdpPeer());
 		setModified(true);
 		((org.kmymoney.api.write.impl.hlp.FileTransactionManager) super.trxMgr)
@@ -446,67 +326,56 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 
 	protected INSTITUTION createInstitutionType() {
 		INSTITUTION retval = getObjectFactory().createINSTITUTION();
-		incrementCountDataFor("institution");
 		return retval;
 	}
 	
 	protected ACCOUNT createAccountType() {
 		ACCOUNT retval = getObjectFactory().createACCOUNT();
-		incrementCountDataFor("account");
 		return retval;
 	}
 
 	protected TRANSACTION createTransactionType() {
 		TRANSACTION retval = getObjectFactory().createTRANSACTION();
-		incrementCountDataFor("transaction");
 		return retval;
 	}
 
 	protected SPLITS createSplitsType() {
 		SPLITS retval = getObjectFactory().createSPLITS();
-		// incrementCountDataFor("splits");
 		return retval;
 	}
 
 	protected SPLIT createSplitType() {
 		SPLIT retval = getObjectFactory().createSPLIT();
-		// incrementCountDataFor("split");
 		return retval;
 	}
 
 	protected PAYEE createPayeeType() {
 		PAYEE retval = getObjectFactory().createPAYEE();
-		incrementCountDataFor("payee");
 		return retval;
 	}
 	
 	protected TAG createTagType() {
 		TAG retval = getObjectFactory().createTAG();
-		incrementCountDataFor("tag");
 		return retval;
 	}
 	
 	protected SECURITY createSecurityType() {
 		SECURITY retval = getObjectFactory().createSECURITY();
-		incrementCountDataFor("security");
 		return retval;
 	}
 	
 	protected CURRENCY createCurrencyType() {
 		CURRENCY retval = getObjectFactory().createCURRENCY();
-		incrementCountDataFor("currency");
 		return retval;
 	}
 	
 	protected PRICEPAIR createPricePairType() {
 		PRICEPAIR retval = getObjectFactory().createPRICEPAIR();
-		incrementCountDataFor("pricepair");
 		return retval;
 	}
 	
 	protected PRICE createPriceType() {
 		PRICE retval = getObjectFactory().createPRICE();
-		// incrementCountDataFor("price");
 		return retval;
 	}
 	

@@ -3,7 +3,6 @@ package org.kmymoney.api.read.impl.aux;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.api.read.impl.hlp.FileStats;
 import org.kmymoney.api.read.impl.hlp.FileStats_Cache;
-import org.kmymoney.api.read.impl.hlp.FileStats_Counters;
 import org.kmymoney.api.read.impl.hlp.FileStats_Raw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,15 +20,13 @@ public class KMMFileStats {
 
 	// ---------------------------------------------------------------
 
-	private FileStats_Raw raw;
-	private FileStats_Counters cnt;
+	private FileStats_Raw   raw;
 	private FileStats_Cache che;
 
 	// ---------------------------------------------------------------
 
 	public KMMFileStats(KMyMoneyFileImpl kmmFile) {
 		raw = new FileStats_Raw(kmmFile);
-		cnt = new FileStats_Counters(kmmFile);
 		che = new FileStats_Cache(kmmFile);
 	}
 
