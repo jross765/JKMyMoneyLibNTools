@@ -6,11 +6,11 @@ file.
 
 ## Major Changes 
 ### V. 0.7 &rarr; 0.8
-**Caution: This is the first version of the API that is compatible with the KMyMoney V. 5.2 format.**
+**Caution: This is the first version of the API that is compatible with the KMyMoney V. 5.2 format. support for file format from V. 5.1.x any more.**
 
-* Changes to support new file format (KMyMoney V. 5.2).
-
-* No support for file format from V. 5.1.x any more.
+* Changes to support new file format (KMyMoney V. 5.2):
+  * Removed all code that referred to internal counters (they do not exist any more).
+  * Introduced KMMAccountReconciliation(Impl) (sub-entity of KMyMoneyAccount).
 
 ### V. 0.6 &rarr; 0.7
 **Caution: This is the last version of the API that is compatible with the KMyMoney V. 5.1.x format.**

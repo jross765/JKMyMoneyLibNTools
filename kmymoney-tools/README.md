@@ -6,7 +6,7 @@ You will notice that the tools partially pull on the examples in the "Examples" 
 
 ## Major Changes 
 ### V. 0.7 &rarr; 0.8
-None (not in this module).
+* GetAccountInfo: Now lists newly introduced list of account-reconciliations.
 
 ### V. 0.6 &rarr; 0.7
 * New tools: 

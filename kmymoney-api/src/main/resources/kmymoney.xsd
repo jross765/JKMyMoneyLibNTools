@@ -519,6 +519,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" ref="SUBACCOUNTS"/>
         <xs:element minOccurs="0" ref="ONLINEBANKING"/>
+        <xs:element minOccurs="0" ref="RECONCILIATIONS"/>
         <xs:element minOccurs="0" ref="KEYVALUEPAIRS"/>
       </xs:sequence>
       <xs:attribute name="currency" type="xs:NCName"/>
@@ -558,6 +559,21 @@
       <xs:attribute name="kbanking-acc-ref" type="xs:NMTOKEN"/>
       <xs:attribute name="kbanking-statementDate" use="required" type="xs:integer"/>
       <xs:attribute name="provider" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="RECONCILIATIONS">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="RECONCILIATION"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="RECONCILIATION">
+    <xs:complexType>
+      <xs:attribute name="date" use="required" type="xs:date"/>
+      <xs:attribute name="value" use="required"/>
     </xs:complexType>
   </xs:element>
 

@@ -6,6 +6,7 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
+import org.kmymoney.api.read.aux.KMMAccountReconciliation;
 import org.kmymoney.api.read.hlp.HasTransactions;
 import org.kmymoney.api.read.hlp.HasUserDefinedAttributes;
 import org.kmymoney.base.basetypes.complex.InvalidQualifSecCurrIDException;
@@ -477,5 +478,11 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
      * @throws InvalidQualifSecCurrTypeException 
      */
     String getBalanceRecursiveFormatted(LocalDate date) throws InvalidQualifSecCurrIDException;
+    
+    // ---------------------------------------------------------------
+    
+    boolean hasReconciliations();
+
+    List<KMMAccountReconciliation> getReconciliations();
 
 }

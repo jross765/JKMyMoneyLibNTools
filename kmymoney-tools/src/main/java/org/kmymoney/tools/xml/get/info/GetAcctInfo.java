@@ -13,6 +13,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransaction;
+import org.kmymoney.api.read.aux.KMMAccountReconciliation;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.tools.CommandLineTool;
@@ -41,6 +42,7 @@ public class GetAcctInfo extends CommandLineTool
   private static boolean showParents  = false;
   private static boolean showChildren = false;
   private static boolean showTrx      = false;
+  private static boolean showRcn   = false;
   
   private static boolean scriptMode = false; // ::TODO
 
@@ -113,6 +115,11 @@ public class GetAcctInfo extends CommandLineTool
       .longOpt("show-transactions")
       .build();
           
+    Option optShowRcn = Option.builder("srcn")
+      .desc("Show reconciliations")
+      .longOpt("show-reconciliations")
+      .build();
+    	          
     options = new Options();
     options.addOption(optFile);
     options.addOption(optMode);
@@ -121,6 +128,7 @@ public class GetAcctInfo extends CommandLineTool
     options.addOption(optShowPrnt);
     options.addOption(optShowChld);
     options.addOption(optShowTrx);
+    options.addOption(optShowRcn);
   }
 
   @Override
@@ -261,6 +269,9 @@ public class GetAcctInfo extends CommandLineTool
     
     if ( showTrx )
       showTransactions(acct);
+    
+    if ( showRcn )
+      showReconciliations(acct);
   }
 
   // -----------------------------------------------------------------
@@ -312,6 +323,17 @@ public class GetAcctInfo extends CommandLineTool
     }
   }
 
+  private void showReconciliations(KMyMoneyAccount acct)
+  {
+    System.out.println("");
+    System.out.println("Reconciliations:");
+    
+    for ( KMMAccountReconciliation rcn : acct.getReconciliations() )
+    {
+      System.out.println(" - " + rcn.toString());
+    }
+  }
+
   // -----------------------------------------------------------------
 
   @Override
@@ -343,7 +365,7 @@ public class GetAcctInfo extends CommandLineTool
     }
     
     if ( ! scriptMode )
-      System.err.println("KMyMoney file:     '" + kmmFileName + "'");
+      System.err.println("KMyMoney file:        '" + kmmFileName + "'");
     
     // <mode>
     try
@@ -357,7 +379,7 @@ public class GetAcctInfo extends CommandLineTool
     }
     
     if ( ! scriptMode )
-      System.err.println("Mode:              " + mode);
+      System.err.println("Mode:                 " + mode);
 
     // <account-id>
     if ( cmdLine.hasOption("account-id") )
@@ -388,7 +410,7 @@ public class GetAcctInfo extends CommandLineTool
     }
     
     if ( ! scriptMode )
-      System.err.println("Account ID:        '" + acctID + "'");
+      System.err.println("Account ID:           '" + acctID + "'");
 
     // <name>
     if ( cmdLine.hasOption("account-name") )
@@ -419,7 +441,7 @@ public class GetAcctInfo extends CommandLineTool
     }
     
     if ( ! scriptMode )
-      System.err.println("Name:              '" + acctName + "'");
+      System.err.println("Name:                 '" + acctName + "'");
 
     // <show-parents>
     if ( cmdLine.hasOption("show-parents"))
@@ -432,7 +454,7 @@ public class GetAcctInfo extends CommandLineTool
     }
     
     if ( ! scriptMode )
-      System.err.println("Show parents:      " + showParents);
+      System.err.println("Show parents:         " + showParents);
 
     // <show-children>
     if ( cmdLine.hasOption("show-children"))
@@ -445,7 +467,7 @@ public class GetAcctInfo extends CommandLineTool
     }
     
     if ( ! scriptMode )
-      System.err.println("Show children:     " + showChildren);
+      System.err.println("Show children:        " + showChildren);
 
     // <show-transactions>
     if ( cmdLine.hasOption("show-transactions"))
@@ -458,7 +480,20 @@ public class GetAcctInfo extends CommandLineTool
     }
     
     if ( ! scriptMode )
-      System.err.println("Show transactions: " + showTrx);
+      System.err.println("Show transactions:    " + showTrx);
+
+    // <show-reconciliations>
+    if ( cmdLine.hasOption("show-reconciliations"))
+    {
+      showRcn = true;
+    }
+    else
+    {
+      showRcn = false;
+    }
+    
+    if ( ! scriptMode )
+      System.err.println("Show reconciliations: " + showRcn);
   }
   
   @Override

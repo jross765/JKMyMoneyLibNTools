@@ -8,10 +8,14 @@ import java.util.List;
 
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.PAIR;
+import org.kmymoney.api.generated.RECONCILIATION;
+import org.kmymoney.api.generated.RECONCILIATIONS;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyInstitution;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
+import org.kmymoney.api.read.aux.KMMAccountReconciliation;
+import org.kmymoney.api.read.impl.aux.KMMAccountReconciliationImpl;
 import org.kmymoney.api.read.impl.hlp.HasUserDefinedAttributesImpl;
 import org.kmymoney.api.read.impl.hlp.SimpleAccount;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
@@ -35,7 +39,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     // ---------------------------------------------------------------
 
     // the JWSDP-object we are facading.
-    protected final ACCOUNT jwsdpPeer;
+    protected final ACCOUNT         jwsdpPeer;
 
     // ---------------------------------------------------------------
 
@@ -55,19 +59,24 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     
     // ---------------------------------------------------------------
 
+    protected List<RECONCILIATION> jwsdpRecons = null;
+
+    private final List<KMMAccountReconciliation> myRecons = new ArrayList<KMMAccountReconciliation>();
+
+    // ---------------------------------------------------------------
+
     /**
      * @param peer    the JWSDP-object we are facading.
      * @param kmmFile the file to register under
      */
     @SuppressWarnings("exports")
     public KMyMoneyAccountImpl(final ACCOUNT peer, final KMyMoneyFile kmmFile) {
-	super(kmmFile);
+    	super(kmmFile);
 
-	jwsdpPeer = peer;
+    	jwsdpPeer = peer;
+    	initRecons();
+	}
 	
-	// helper = new KMyMoneyObjectImpl(kmmFile);
-    }
-
     @SuppressWarnings("exports")
     public KMyMoneyAccountImpl(
 	    final ACCOUNT peer,
@@ -89,13 +98,29 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     }
 
     // ---------------------------------------------------------------
+    
+    private void initRecons() {
+    	if ( jwsdpPeer.getRECONCILIATIONS() != null ) {
+    		jwsdpRecons = jwsdpPeer.getRECONCILIATIONS().getRECONCILIATION();
+		
+    		if ( jwsdpRecons != null ) {
+    			for ( RECONCILIATION elt : jwsdpRecons ) {
+    				KMMAccountReconciliationImpl newElt = new KMMAccountReconciliationImpl(elt);
+    				myRecons.add(newElt);
+    			}
+    		}
+			LOGGER.debug("init: Added " + myRecons.size() + " elements to list of reconciliations");
+    	} else {
+			LOGGER.debug("init: No elements to add to list of reconciliations");
+    	}
+    }
 
     /**
      * @return the JWSDP-object we are wrapping.
      */
     @SuppressWarnings("exports")
     public ACCOUNT getJwsdpPeer() {
-	return jwsdpPeer;
+    return jwsdpPeer;
     }
 
     // ---------------------------------------------------------------
@@ -285,6 +310,25 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     	}
 
     	mySplits.add(impl);
+    }
+
+    // ---------------------------------------------------------------
+    
+    public boolean hasReconciliations() {
+    	return ( myRecons.size() > 0 );
+    }
+
+    public List<KMMAccountReconciliation> getReconciliations() {
+    	return myRecons;
+    }
+
+    public void addReconciliation(final KMMAccountReconciliation rcon) {
+    	if ( rcon == null ) {
+    		throw new IllegalArgumentException("null reconciliation given");
+    	}
+    	
+    	// ::TODO check for date -- no duplicates allowed
+	    myRecons.add(rcon);
     }
 
     // ---------------------------------------------------------------
