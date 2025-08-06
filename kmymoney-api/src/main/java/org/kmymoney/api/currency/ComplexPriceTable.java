@@ -146,8 +146,8 @@ public class ComplexPriceTable implements Serializable {
 	// -------------------------------------------------------
 
 	/**
-	 * Add a new nameSpace with no conversion-factors.<br/>
-	 * Will not overwrite an existing nameSpace.
+	 * Add a new name space with no conversion-factors.<br/>
+	 * Will not overwrite an existing name space.
 	 *
 	 * @param nameSpace the new nameSpace to add.
 	 */
@@ -168,7 +168,7 @@ public class ComplexPriceTable implements Serializable {
 	}
 
 	/**
-	 * Add a new nameSpace with an initial set of conversion-factors.
+	 * Add a new name space with an initial set of conversion-factors.
 	 *
 	 * @param nameSpace the new nameSpace to add.
 	 * @param table     an initial set of conversion-factors.
@@ -186,7 +186,7 @@ public class ComplexPriceTable implements Serializable {
 	 */
 	public FixedPointNumber getConversionFactor(final KMMQualifSecCurrID.Type nameSpace, final String code) {
 		if ( code == null ) {
-			throw new IllegalArgumentException("null code given");
+			throw new IllegalArgumentException("argument <code> is null");
 		}
 
 		if ( code.trim().equals("") ) {
@@ -203,6 +203,7 @@ public class ComplexPriceTable implements Serializable {
 
 	/**
 	 * If the nameSpace does not exist yet, it is created.
+	 * 
 	 * @param nameSpace 
 	 * @param code 
 	 * @param pFactor 
@@ -212,7 +213,7 @@ public class ComplexPriceTable implements Serializable {
 	public void setConversionFactor(final KMMQualifSecCurrID.Type nameSpace, final String code,
 			final FixedPointNumber pFactor) {
 		if ( code == null ) {
-			throw new IllegalArgumentException("null code given!");
+			throw new IllegalArgumentException("argument <code> is null");
 		}
 
 		if ( code.trim().equals("") ) {
@@ -220,7 +221,7 @@ public class ComplexPriceTable implements Serializable {
 		}
 
 		if ( pFactor == null ) {
-			throw new IllegalArgumentException("null conversion-factor given!");
+		    throw new IllegalArgumentException("argument <pFactor> is null");
 		}
 
 		SimplePriceTable table = getByNamespace(nameSpace);
