@@ -24,19 +24,25 @@ import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 public class UpdPye extends CommandLineTool
 {
   // Logger
+  @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(UpdPye.class);
   
+  // -----------------------------------------------------------------
+
   // private static PropertiesConfiguration cfg = null;
   private static Options options;
   
   private static String   kmmInFileName = null;
   private static String   kmmOutFileName = null;
+  
   private static KMMPyeID pyeID = null;
 
   private static String name = null;
   private static String descr = null;
 
   private static KMyMoneyWritablePayee pye = null;
+
+  // -----------------------------------------------------------------
 
   public static void main( String[] args )
   {

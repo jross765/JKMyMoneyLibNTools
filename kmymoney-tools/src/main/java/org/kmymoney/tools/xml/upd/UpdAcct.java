@@ -2,8 +2,6 @@ package org.kmymoney.tools.xml.upd;
 
 import java.io.File;
 
-import javax.security.auth.login.AccountNotFoundException;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -21,19 +19,24 @@ import org.kmymoney.tools.CommandLineTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import xyz.schnorxoborx.base.beanbase.AccountNotFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 
 public class UpdAcct extends CommandLineTool
 {
   // Logger
+  @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(UpdAcct.class);
   
+  // -----------------------------------------------------------------
+
   // private static PropertiesConfiguration cfg = null;
   private static Options options;
   
   private static String         kmmInFileName = null;
   private static String         kmmOutFileName = null;
+  
   private static KMMComplAcctID acctID = null;
 
   private static String               name = null;
@@ -42,6 +45,8 @@ public class UpdAcct extends CommandLineTool
   private static KMMQualifSecCurrID   secCurrID = null;
 
   private static KMyMoneyWritableAccount acct = null;
+
+  // -----------------------------------------------------------------
 
   public static void main( String[] args )
   {

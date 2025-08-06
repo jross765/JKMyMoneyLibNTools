@@ -42,7 +42,7 @@ public class TestKMMAcctID {
 		try {
 			kmmID.set(-12);
 			assertEquals(2, 1);
-		} catch (Exception InvalidKMMAccIDException) {
+		} catch (Exception InvalidKMMAcctIDException) {
 			// Muss Exception werfen, wenn er hier landet, ist es richtig
 			assertEquals(1, 1);
 		}
@@ -53,7 +53,7 @@ public class TestKMMAcctID {
 		try {
 			kmmID.set(1000000);
 			assertEquals(2, 1);
-		} catch (Exception InvalidKMMAccIDException) {
+		} catch (Exception InvalidKMMAcctIDException) {
 			// Muss Exception werfen, wenn er hier landet, ist es richtig
 			assertEquals(1, 1);
 		}

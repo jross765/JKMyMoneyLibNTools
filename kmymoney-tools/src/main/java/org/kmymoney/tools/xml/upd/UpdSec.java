@@ -26,6 +26,7 @@ import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 public class UpdSec extends CommandLineTool
 {
   // Logger
+  @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(UpdSec.class);
   
   // private static PropertiesConfiguration cfg = null;
@@ -39,7 +40,8 @@ public class UpdSec extends CommandLineTool
   private static String              isin        = null;
   
   private static String          name = null;
-  private static String          descr = null;
+  @SuppressWarnings("unused")
+private static String          descr = null;
   private static KMMSecCurr.Type type = null;
 
   private static KMyMoneyWritableSecurity sec = null;

@@ -1096,6 +1096,108 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     
     // ---------------------------------------------------------------
     
+    public void dump() {
+    	System.out.println("KMYMONEY FILE");
+    	
+    	// ------------------------
+
+    	System.out.println("");
+    	System.out.println("META INFO:"); 
+    	KMMFileMetaInfo metaInfo;
+    	try {
+    		metaInfo = new KMMFileMetaInfo(this);
+
+    		System.out.println("  Creation date:      " + metaInfo.getCreationDate()); 
+    		System.out.println("  Last-modified date: " + metaInfo.getLastModifiedDate()); 
+    		System.out.println("  Version:            " + metaInfo.getVersion()); 
+    		System.out.println("  Fix version:        " + metaInfo.getFixVersion()); 
+    		System.out.println("  App version:        " + metaInfo.getAppVersion()); 
+    		System.out.println("  Base currency:      " + metaInfo.getBaseCurrency()); 
+    		System.out.println("  File ID:            " + metaInfo.getFileID()); 
+    	} catch (Exception e) {
+    		System.out.println("ERROR"); 
+    	}
+
+    	System.out.println("");
+    	System.out.println("Stats (raw):"); 
+		KMMFileStats stats;
+    	try {
+			stats = new KMMFileStats(this);
+
+    		System.out.println("  No. of accounts:           " + stats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+    		System.out.println("  No. of transactions:       " + stats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
+    		System.out.println("  No. of transaction splits: " + stats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW));
+    		System.out.println("  No. of payees:             " + stats.getNofEntriesPayees(KMMFileStats.Type.RAW));
+    		System.out.println("  No. of tags:               " + stats.getNofEntriesTags(KMMFileStats.Type.RAW));
+    		System.out.println("  No. of securities:         " + stats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
+    		System.out.println("  No. of currencies:         " + stats.getNofEntriesCurrencies(KMMFileStats.Type.RAW));
+			System.out.println("  No. of price pairs:        " + stats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
+			System.out.println("  No. of prices:             " + stats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+    	} catch (Exception e) {
+    		System.out.println("ERROR"); 
+    	}
+    	
+    	// ------------------------
+
+    	System.out.println("");
+    	System.out.println("CONTENTS:"); 
+
+    	System.out.println("");
+    	System.out.println("Institutions:");
+    	for ( KMyMoneyInstitution inst : getInstitutions() ) {
+    		System.out.println(" - " + inst.toString());
+    	}
+
+    	System.out.println("");
+    	System.out.println("Accounts:");
+    	for ( KMyMoneyAccount acct : getAccounts() ) {
+    		System.out.println(" - " + acct.toString());
+    	}
+
+    	System.out.println("");
+    	System.out.println("Transactions:");
+    	for ( KMyMoneyTransaction trx : getTransactions() ) {
+    		System.out.println(" - " + trx.toString());
+        	for ( KMyMoneyTransactionSplit splt : trx.getSplits() ) {
+        		System.out.println("   o " + splt.toString());
+        	}
+    	}
+
+    	System.out.println("");
+    	System.out.println("Payees:");
+    	for ( KMyMoneyPayee vend : getPayees() ) {
+    		System.out.println(" - " + vend.toString());
+    	}
+
+    	System.out.println("");
+    	System.out.println("Tags:");
+    	for ( KMyMoneyTag tag : getTags() ) {
+    		System.out.println(" - " + tag.toString());
+    	}
+
+    	System.out.println("");
+    	System.out.println("Securities:");
+    	for ( KMyMoneySecurity empl : getSecurities() ) {
+    		System.out.println(" - " + empl.toString());
+    	}
+
+    	System.out.println("");
+    	System.out.println("Currencies:");
+    	for ( KMyMoneyCurrency job : getCurrencies() ) {
+    		System.out.println(" - " + job.toString());
+    	}
+
+    	System.out.println("");
+    	System.out.println("Prices:");
+    	for ( KMyMoneyPricePair prcPr : getPricePairs() ) {
+    		System.out.println(" - " + prcPr.toString());
+        	for ( KMyMoneyPrice prc : prcPr.getPrices() ) {
+        		System.out.println("   o " + prc.toString());
+        	}
+    	}
+    }
+    // ---------------------------------------------------------------
+    
     public String toString() {
     	String result = "KMyMoneyFileImpl: [\n";
 	
@@ -1120,6 +1222,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     	try {
     		stats = new KMMFileStats(this);
 
+    		result += "    No. of institutions:       " + stats.getNofEntriesInstitutions(KMMFileStats.Type.RAW) + "\n"; 
     		result += "    No. of accounts:           " + stats.getNofEntriesAccounts(KMMFileStats.Type.RAW) + "\n"; 
     		result += "    No. of transactions:       " + stats.getNofEntriesTransactions(KMMFileStats.Type.RAW) + "\n"; 
     		result += "    No. of transaction splits: " + stats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW) + "\n"; 

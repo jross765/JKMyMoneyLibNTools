@@ -29,8 +29,11 @@ import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 public class GetAcctInfo extends CommandLineTool
 {
   // Logger
+  @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(GetAcctInfo.class);
   
+  // -----------------------------------------------------------------
+
   // private static PropertiesConfiguration cfg = null;
   private static Options options;
   
@@ -45,6 +48,8 @@ public class GetAcctInfo extends CommandLineTool
   private static boolean showRcn   = false;
   
   private static boolean scriptMode = false; // ::TODO
+
+  // -----------------------------------------------------------------
 
   public static void main( String[] args )
   {

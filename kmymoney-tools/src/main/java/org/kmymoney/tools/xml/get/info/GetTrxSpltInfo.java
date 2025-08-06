@@ -23,6 +23,7 @@ import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 public class GetTrxSpltInfo extends CommandLineTool
 {
   // Logger
+  @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(GetTrxSpltInfo.class);
   
   // private static PropertiesConfiguration cfg = null;

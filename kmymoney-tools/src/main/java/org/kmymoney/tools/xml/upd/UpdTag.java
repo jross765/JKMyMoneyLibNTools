@@ -24,6 +24,7 @@ import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 public class UpdTag extends CommandLineTool
 {
   // Logger
+  @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(UpdTag.class);
   
   // private static PropertiesConfiguration cfg = null;
@@ -31,6 +32,7 @@ public class UpdTag extends CommandLineTool
   
   private static String   kmmInFileName = null;
   private static String   kmmOutFileName = null;
+  
   private static KMMTagID tagID = null;
 
   private static String name  = null;

@@ -39,6 +39,7 @@ public class GenStockAcct extends CommandLineTool
   // -----------------------------------------------------------------
 
   // Logger
+  @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(GenStockAcct.class);
   
   // private static PropertiesConfiguration cfg = null;

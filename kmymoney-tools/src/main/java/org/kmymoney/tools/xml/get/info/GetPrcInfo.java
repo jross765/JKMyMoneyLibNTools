@@ -29,6 +29,7 @@ import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 public class GetPrcInfo extends CommandLineTool
 {
   // Logger
+  @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(GetPrcInfo.class);
   
   // private static PropertiesConfiguration cfg = null;
@@ -41,7 +42,8 @@ public class GetPrcInfo extends CommandLineTool
   private static Helper.DateFormat    dateFormat    = null;
   private static LocalDate            date          = null;
   
-  private static boolean showQuotes = false;
+  @SuppressWarnings("unused")
+private static boolean showQuotes = false;
   
   private static boolean scriptMode = false; // ::TODO
 

@@ -593,4 +593,8 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 */
 	Collection<KMyMoneyTag> getTags();
 
+    // ---------------------------------------------------------------
+    
+    void dump();
+
 }

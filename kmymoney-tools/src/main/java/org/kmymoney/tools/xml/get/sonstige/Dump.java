@@ -1,7 +1,6 @@
-package org.kmymoney.tools.xml.get.list;
+package org.kmymoney.tools.xml.get.sonstige;
 
 import java.io.File;
-import java.util.Collection;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -11,34 +10,34 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.tools.CommandLineTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
 import xyz.schnorxoborx.base.cmdlinetools.CouldNotExecuteException;
 import xyz.schnorxoborx.base.cmdlinetools.InvalidCommandLineArgsException;
 
-public class GetCurrList extends CommandLineTool
+public class Dump extends CommandLineTool
 {
   // Logger
   @SuppressWarnings("unused")
-  private static final Logger LOGGER = LoggerFactory.getLogger(GetCurrList.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(Dump.class);
   
+  // -----------------------------------------------------------------
+
   // private static PropertiesConfiguration cfg = null;
   private static Options options;
   
-  private static String               kmmFileName = null;
-  
-  private static boolean scriptMode = false; // ::TODO
+  private static String  kmmFileName = null;
+
+  // -----------------------------------------------------------------
 
   public static void main( String[] args )
   {
     try
     {
-      GetCurrList tool = new GetCurrList ();
+      Dump tool = new Dump ();
       tool.execute(args);
     }
     catch (CouldNotExecuteException exc) 
@@ -52,11 +51,6 @@ public class GetCurrList extends CommandLineTool
   @Override
   protected void init() throws Exception
   {
-    // currID = UUID.randomUUID();
-
-//    cfg = new PropertiesConfiguration(System.getProperty("config"));
-//    getConfigSettings(cfg);
-
     // Options
     // The essential ones
     Option optFile = Option.builder("f")
@@ -66,7 +60,7 @@ public class GetCurrList extends CommandLineTool
       .desc("KMyMoney file")
       .longOpt("kmymoney-file")
       .build();
-      
+
     // The convenient ones
     // ::EMPTY
           
@@ -85,20 +79,7 @@ public class GetCurrList extends CommandLineTool
   {
     KMyMoneyFileImpl kmmFile = new KMyMoneyFileImpl(new File(kmmFileName));
     
-    Collection<KMyMoneyCurrency> currList = null; 
-    currList = kmmFile.getCurrencies();
-    
-    if ( currList.size() == 0 ) 
-    {
-    	System.err.println("Found no currency with that type.");
-    	throw new NoEntryFoundException();
-    }
-
-	System.err.println("Found " + currList.size() + " currency(s).");
-    for ( KMyMoneyCurrency curr : currList )
-    {
-    	System.out.println(curr.toString());	
-    }
+    kmmFile.dump();
   }
 
   // -----------------------------------------------------------------
@@ -131,14 +112,13 @@ public class GetCurrList extends CommandLineTool
       throw new InvalidCommandLineArgsException();
     }
     
-    if ( ! scriptMode )
-      System.err.println("KMyMoney file:      '" + kmmFileName + "'");
+    System.err.println("KMyMoney file:      '" + kmmFileName + "'");
   }
   
   @Override
   protected void printUsage()
   {
     HelpFormatter formatter = new HelpFormatter();
-    formatter.printHelp( "GetCurrList", options );
+    formatter.printHelp( "Dump", options );
   }
 }

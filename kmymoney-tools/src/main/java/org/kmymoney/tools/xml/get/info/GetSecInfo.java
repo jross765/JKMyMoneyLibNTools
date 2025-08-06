@@ -33,6 +33,7 @@ public class GetSecInfo extends CommandLineTool
   }
 
   // Logger
+  @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(GetSecInfo.class);
   
   // private static PropertiesConfiguration cfg = null;

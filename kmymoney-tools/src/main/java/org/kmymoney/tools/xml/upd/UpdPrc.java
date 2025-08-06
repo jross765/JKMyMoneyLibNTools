@@ -31,8 +31,11 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 public class UpdPrc extends CommandLineTool
 {
   // Logger
+  @SuppressWarnings("unused")
   private static final Logger LOGGER = LoggerFactory.getLogger(UpdPrc.class);
   
+  // -----------------------------------------------------------------
+
   // private static PropertiesConfiguration cfg = null;
   private static Options options;
   
@@ -49,6 +52,8 @@ public class UpdPrc extends CommandLineTool
   private static FixedPointNumber    value = null;
 
   private static KMyMoneyWritablePrice prc = null;
+
+  // -----------------------------------------------------------------
 
   public static void main( String[] args )
   {
