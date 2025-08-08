@@ -1,6 +1,7 @@
 package org.kmymoney.api.read;
 
 import java.io.File;
+import java.io.PrintStream;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Currency;
@@ -595,6 +596,6 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 
     // ---------------------------------------------------------------
     
-    void dump();
+    void dump(PrintStream strm);
 
 }

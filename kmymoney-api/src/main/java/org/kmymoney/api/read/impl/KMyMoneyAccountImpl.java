@@ -4,12 +4,12 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.kmymoney.api.generated.ACCOUNT;
 import org.kmymoney.api.generated.PAIR;
 import org.kmymoney.api.generated.RECONCILIATION;
-import org.kmymoney.api.generated.RECONCILIATIONS;
 import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyInstitution;
@@ -401,4 +401,21 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 	return buffer.toString();
     }
 
+
+    // https://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram-in-java
+    @Override
+    public void printTree(StringBuilder buffer, String prefix, String childrenPrefix) {
+        buffer.append(prefix);
+        buffer.append(toString());
+        buffer.append('\n');
+        
+        for ( Iterator<KMyMoneyAccount> it = getChildren().iterator(); it.hasNext(); ) {
+        	KMyMoneyAccount next = it.next();
+            if (it.hasNext()) {
+                next.printTree(buffer, childrenPrefix + "├── ", childrenPrefix + "│   ");
+            } else {
+                next.printTree(buffer, childrenPrefix + "└── ", childrenPrefix + "    ");
+            }
+        }
+    }
 }

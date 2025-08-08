@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -1097,102 +1098,106 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     // ---------------------------------------------------------------
     
     public void dump() {
-    	System.out.println("KMYMONEY FILE");
+    	dump(System.out);
+    }
+    
+    public void dump(PrintStream strm) {
+    	strm.println("KMYMONEY FILE");
     	
     	// ------------------------
 
-    	System.out.println("");
-    	System.out.println("META INFO:"); 
+    	strm.println("");
+    	strm.println("META INFO:"); 
     	KMMFileMetaInfo metaInfo;
     	try {
     		metaInfo = new KMMFileMetaInfo(this);
 
-    		System.out.println("  Creation date:      " + metaInfo.getCreationDate()); 
-    		System.out.println("  Last-modified date: " + metaInfo.getLastModifiedDate()); 
-    		System.out.println("  Version:            " + metaInfo.getVersion()); 
-    		System.out.println("  Fix version:        " + metaInfo.getFixVersion()); 
-    		System.out.println("  App version:        " + metaInfo.getAppVersion()); 
-    		System.out.println("  Base currency:      " + metaInfo.getBaseCurrency()); 
-    		System.out.println("  File ID:            " + metaInfo.getFileID()); 
+    		strm.println("  Creation date:      " + metaInfo.getCreationDate()); 
+    		strm.println("  Last-modified date: " + metaInfo.getLastModifiedDate()); 
+    		strm.println("  Version:            " + metaInfo.getVersion()); 
+    		strm.println("  Fix version:        " + metaInfo.getFixVersion()); 
+    		strm.println("  App version:        " + metaInfo.getAppVersion()); 
+    		strm.println("  Base currency:      " + metaInfo.getBaseCurrency()); 
+    		strm.println("  File ID:            " + metaInfo.getFileID()); 
     	} catch (Exception e) {
-    		System.out.println("ERROR"); 
+    		strm.println("ERROR"); 
     	}
 
-    	System.out.println("");
-    	System.out.println("Stats (raw):"); 
+    	strm.println("");
+    	strm.println("Stats (raw):"); 
 		KMMFileStats stats;
     	try {
 			stats = new KMMFileStats(this);
 
-    		System.out.println("  No. of accounts:           " + stats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
-    		System.out.println("  No. of transactions:       " + stats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
-    		System.out.println("  No. of transaction splits: " + stats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW));
-    		System.out.println("  No. of payees:             " + stats.getNofEntriesPayees(KMMFileStats.Type.RAW));
-    		System.out.println("  No. of tags:               " + stats.getNofEntriesTags(KMMFileStats.Type.RAW));
-    		System.out.println("  No. of securities:         " + stats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
-    		System.out.println("  No. of currencies:         " + stats.getNofEntriesCurrencies(KMMFileStats.Type.RAW));
-			System.out.println("  No. of price pairs:        " + stats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
-			System.out.println("  No. of prices:             " + stats.getNofEntriesPrices(KMMFileStats.Type.RAW));
+			strm.println("  No. of accounts:           " + stats.getNofEntriesAccounts(KMMFileStats.Type.RAW));
+			strm.println("  No. of transactions:       " + stats.getNofEntriesTransactions(KMMFileStats.Type.RAW));
+			strm.println("  No. of transaction splits: " + stats.getNofEntriesTransactionSplits(KMMFileStats.Type.RAW));
+			strm.println("  No. of payees:             " + stats.getNofEntriesPayees(KMMFileStats.Type.RAW));
+			strm.println("  No. of tags:               " + stats.getNofEntriesTags(KMMFileStats.Type.RAW));
+			strm.println("  No. of securities:         " + stats.getNofEntriesSecurities(KMMFileStats.Type.RAW));
+			strm.println("  No. of currencies:         " + stats.getNofEntriesCurrencies(KMMFileStats.Type.RAW));
+			strm.println("  No. of price pairs:        " + stats.getNofEntriesPricePairs(KMMFileStats.Type.RAW));
+			strm.println("  No. of prices:             " + stats.getNofEntriesPrices(KMMFileStats.Type.RAW));
     	} catch (Exception e) {
-    		System.out.println("ERROR"); 
+    		strm.println("ERROR"); 
     	}
     	
     	// ------------------------
 
-    	System.out.println("");
-    	System.out.println("CONTENTS:"); 
+    	strm.println("");
+    	strm.println("CONTENTS:"); 
 
-    	System.out.println("");
-    	System.out.println("Institutions:");
+    	strm.println("");
+    	strm.println("Institutions:");
     	for ( KMyMoneyInstitution inst : getInstitutions() ) {
-    		System.out.println(" - " + inst.toString());
+    		strm.println(" - " + inst.toString());
     	}
 
-    	System.out.println("");
-    	System.out.println("Accounts:");
+    	strm.println("");
+    	strm.println("Accounts:");
     	for ( KMyMoneyAccount acct : getAccounts() ) {
-    		System.out.println(" - " + acct.toString());
+    		strm.println(" - " + acct.toString());
     	}
 
-    	System.out.println("");
-    	System.out.println("Transactions:");
+    	strm.println("");
+    	strm.println("Transactions:");
     	for ( KMyMoneyTransaction trx : getTransactions() ) {
-    		System.out.println(" - " + trx.toString());
+    		strm.println(" - " + trx.toString());
         	for ( KMyMoneyTransactionSplit splt : trx.getSplits() ) {
-        		System.out.println("   o " + splt.toString());
+        		strm.println("   o " + splt.toString());
         	}
     	}
 
-    	System.out.println("");
-    	System.out.println("Payees:");
+    	strm.println("");
+    	strm.println("Payees:");
     	for ( KMyMoneyPayee vend : getPayees() ) {
-    		System.out.println(" - " + vend.toString());
+    		strm.println(" - " + vend.toString());
     	}
 
-    	System.out.println("");
-    	System.out.println("Tags:");
+    	strm.println("");
+    	strm.println("Tags:");
     	for ( KMyMoneyTag tag : getTags() ) {
-    		System.out.println(" - " + tag.toString());
+    		strm.println(" - " + tag.toString());
     	}
 
-    	System.out.println("");
-    	System.out.println("Securities:");
+    	strm.println("");
+    	strm.println("Securities:");
     	for ( KMyMoneySecurity empl : getSecurities() ) {
-    		System.out.println(" - " + empl.toString());
+    		strm.println(" - " + empl.toString());
     	}
 
-    	System.out.println("");
-    	System.out.println("Currencies:");
+    	strm.println("");
+    	strm.println("Currencies:");
     	for ( KMyMoneyCurrency job : getCurrencies() ) {
-    		System.out.println(" - " + job.toString());
+    		strm.println(" - " + job.toString());
     	}
 
-    	System.out.println("");
-    	System.out.println("Prices:");
+    	strm.println("");
+    	strm.println("Prices:");
     	for ( KMyMoneyPricePair prcPr : getPricePairs() ) {
-    		System.out.println(" - " + prcPr.toString());
+    		strm.println(" - " + prcPr.toString());
         	for ( KMyMoneyPrice prc : prcPr.getPrices() ) {
-        		System.out.println("   o " + prc.toString());
+        		strm.println("   o " + prc.toString());
         	}
     	}
     }

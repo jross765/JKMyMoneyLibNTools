@@ -485,4 +485,7 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
 
     List<KMMAccountReconciliation> getReconciliations();
 
+    // ---------------------------------------------------------------
+
+    void printTree(StringBuilder buffer, String prefix, String childrenPrefix);
 }
