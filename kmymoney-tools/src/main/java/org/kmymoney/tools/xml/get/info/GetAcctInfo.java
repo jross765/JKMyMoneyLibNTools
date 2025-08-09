@@ -15,6 +15,7 @@ import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.aux.KMMAccountReconciliation;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.api.read.impl.aux.KMMAccountReconciliationImpl;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.tools.CommandLineTool;
 import org.slf4j.Logger;
@@ -33,6 +34,11 @@ public class GetAcctInfo extends CommandLineTool
   private static final Logger LOGGER = LoggerFactory.getLogger(GetAcctInfo.class);
   
   // -----------------------------------------------------------------
+
+  // ::MAGIC
+  private static final String RECONCILIATION_HISTORY_KEY = "reconciliationHistory";
+
+  // ------------------------------
 
   // private static PropertiesConfiguration cfg = null;
   private static Options options;
@@ -331,11 +337,25 @@ public class GetAcctInfo extends CommandLineTool
   private void showReconciliations(KMyMoneyAccount acct)
   {
     System.out.println("");
-    System.out.println("Reconciliations:");
+    System.out.println("Reconciliations (primary):");
     
     for ( KMMAccountReconciliation rcn : acct.getReconciliations() )
     {
       System.out.println(" - " + rcn.toString());
+    }
+    
+    // ---
+    
+    System.out.println("");
+    System.out.println("Reconciliation History (redundant):");
+    
+    String reconHistStr = acct.getUserDefinedAttribute(RECONCILIATION_HISTORY_KEY);
+    String[] reconHistArr = reconHistStr.split(";");
+    for ( String rcnHistPairStr : reconHistArr )
+    {
+//      String[] reconHistPairArr = rcnHistPairStr.split(":");
+//      System.out.println(" - " + reconHistPairArr[0] + ";" + reconHistPairArr[1]);
+      System.out.println(" - " + rcnHistPairStr);
     }
   }
 
