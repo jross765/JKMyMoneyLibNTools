@@ -220,6 +220,17 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @return all accounts
 	 */
 	Collection<KMyMoneyAccount> getAccounts();
+	// ^--- ::TODO
+	// Caution: Although, originally, we defined a Collection and not a List
+	// for the accounts in the interface of KMyMoneyAccount, we recently
+	// found out that sorting -- thus a list -- is kind of necessary, 
+	// because else, the recently-introduced method dump() in KMyMoneyFile(Impl)
+	// is not of much use.
+	// Apart from that, KMyMoneyAccount extends Comparable, after all...
+	// Cf. comment in FileAccountManager.getAccounts()
+	
+	// ::TODO
+	// Same with the other "Collections" here, I guess...
 
     /**
      * THERE IS NO ROOT ACCOUNT!

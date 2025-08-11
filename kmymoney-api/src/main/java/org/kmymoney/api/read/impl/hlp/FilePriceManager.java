@@ -18,6 +18,7 @@ import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.PRICES;
+import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
@@ -147,7 +148,11 @@ public class FilePriceManager {
 			throw new IllegalStateException("no root-element loaded");
 		}
 
-		return Collections.unmodifiableCollection(prcPrMap.values());
+		// Caution: Yes, sorting necessary.
+		// Cf. comment in FileAccountManager.getAccounts().
+		ArrayList<KMyMoneyPricePair> temp = new ArrayList<KMyMoneyPricePair>(prcPrMap.values());
+		Collections.sort(temp);
+		return Collections.unmodifiableCollection(temp);
 	}
 
 	// ----------------------------

@@ -17,6 +17,10 @@ public class TestKMyMoneyFileImpl {
 
 	private KMMFileStats kmmFileStats = null;
 	private KMMFileStats kmmFileStats2 = null;
+	
+	// ::MAGIC
+	private final String DUMP_OUT_FILE_NAME = "/home/xxx/Programme/finanzen/kmymoney/test/out/dump.txt";
+	private final String DUMP_REF_FILE_NAME = "/home/xxx/Programme/finanzen/kmymoney/test/ref/dump.txt";
 
 	// -----------------------------------------------------------------
 
@@ -139,5 +143,20 @@ public class TestKMyMoneyFileImpl {
 		assertEquals(kmmFile.getPricePairs().toString(), kmmFile2.getPricePairs().toString());
 		assertEquals(kmmFile.getPrices().toString(), kmmFile2.getPrices().toString());
 	}
+
+	// ---------------------------------------------------------------
+
+	/*
+	@Test
+	public void test30() throws Exception {
+		PrintStream dumpOutStream = new PrintStream(DUMP_OUT_FILE_NAME);
+		kmmFile.dump(dumpOutStream);
+		dumpOutStream.close();
+		
+		File dumpOutFile = new File(DUMP_OUT_FILE_NAME);
+		File dumpRefFile = new File(DUMP_REF_FILE_NAME);
+		assertTrue(FileUtils.contentEquals(dumpOutFile, dumpRefFile));
+	}
+	*/
 
 }

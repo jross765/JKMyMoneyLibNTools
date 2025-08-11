@@ -11,6 +11,8 @@ file.
 * Changes to support new file format (KMyMoney V. 5.2):
   * Removed all code that referred to internal counters (they do not exist any more).
   * Introduced KMMAccountReconciliation(Impl) (sub-entity of KMyMoneyAccount).
+* `KMyMoneyAccount(Impl)`: New method `getReconciliations()`.
+* `KMyMoneyFile(Impl)`: New method `dump()`.
 
 ### V. 0.6 &rarr; 0.7
 **Caution: This is the last version of the API that is compatible with the KMyMoney V. 5.1.x format.**
