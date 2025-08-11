@@ -18,7 +18,6 @@ import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.generated.PRICE;
 import org.kmymoney.api.generated.PRICEPAIR;
 import org.kmymoney.api.generated.PRICES;
-import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPrice;
 import org.kmymoney.api.read.KMyMoneyPricePair;
@@ -117,11 +116,11 @@ public class FilePriceManager {
 
 	public KMyMoneyPricePair getPricePairByID(KMMPricePairID prcPrID) {
 		if ( prcPrID == null ) {
-			throw new IllegalArgumentException("null price pair ID given");
+			throw new IllegalArgumentException("argument <prcPrID> is null");
 		}
 
 		if ( ! prcPrID.isSet() ) {
-			throw new IllegalArgumentException("unset price pair ID given");
+			throw new IllegalArgumentException("argument <prcPrID> is not set");
 		}
 
 		if ( prcPrMap == null ) {
@@ -159,11 +158,11 @@ public class FilePriceManager {
 
 	public KMyMoneyPrice getPriceByID(KMMPriceID prcID) {
 		if ( prcID == null ) {
-			throw new IllegalArgumentException("null price ID given");
+			throw new IllegalArgumentException("argument <prcID> is null");
 		}
 
 		if ( ! prcID.isSet() ) {
-			throw new IllegalArgumentException("unset price ID given");
+			throw new IllegalArgumentException("argument <prcID> is not set");
 		}
 
 		if ( prcMap == null ) {
@@ -182,11 +181,11 @@ public class FilePriceManager {
 	
 	public KMyMoneyPrice getPriceBySecIDDate(final KMMSecID secID, final LocalDate date) {
 		if ( secID == null ) {
-			throw new IllegalArgumentException("null security ID given");
+			throw new IllegalArgumentException("argument <secID> is null");
 		}
 		
 		if ( ! secID.isSet() ) {
-			throw new IllegalArgumentException("unset security ID given");
+			throw new IllegalArgumentException("argument <secID> is not set");
 		}
 		
 		KMMQualifSecID qualifID = new KMMQualifSecID(secID);
@@ -195,11 +194,11 @@ public class FilePriceManager {
 	
 	public KMyMoneyPrice getPriceByQualifSecIDDate(final KMMQualifSecID secID, final LocalDate date) {
 		if ( secID == null ) {
-			throw new IllegalArgumentException("null security ID given");
+			throw new IllegalArgumentException("argument <secID> is null");
 		}
 		
 		if ( ! secID.isSet() ) {
-			throw new IllegalArgumentException("unset security ID given");
+			throw new IllegalArgumentException("argument <secID> is not set");
 		}
 		
 		return getPriceByQualifSecCurrIDDate(secID, date);
@@ -207,7 +206,7 @@ public class FilePriceManager {
 	
 	public KMyMoneyPrice getPriceByCurrDate(final Currency curr, final LocalDate date) {
 		if ( curr == null ) {
-			throw new IllegalArgumentException("null currency given");
+			throw new IllegalArgumentException("argument <curr> is null");
 		}
 		
 		KMMQualifCurrID qualifID = new KMMQualifCurrID(curr);
@@ -216,7 +215,7 @@ public class FilePriceManager {
 
 	public KMyMoneyPrice getPriceByQualifCurrIDDate(final KMMQualifCurrID currID, final LocalDate date) {
 		if ( currID == null ) {
-			throw new IllegalArgumentException("null currency given");
+			throw new IllegalArgumentException("argument <currID> is null");
 		}
 		
 		return getPriceByQualifSecCurrIDDate(currID, date);
@@ -233,11 +232,11 @@ public class FilePriceManager {
 
 	public KMyMoneyPrice getPriceByQualifSecCurrIDDate(final KMMQualifSecCurrID qualifID, final LocalDate date) {
 		if ( qualifID == null ) {
-			throw new IllegalArgumentException("null security/currency ID given");
+			throw new IllegalArgumentException("argument <qualifID> is null");
 		}
 		
 		if ( ! qualifID.isSet() ) {
-			throw new IllegalArgumentException("unset security/currency ID given");
+			throw new IllegalArgumentException("argument <qualifID> is not set");
 		}
 		
 		// clean but inefficient
@@ -292,11 +291,11 @@ public class FilePriceManager {
 
 	public List<KMyMoneyPrice> getPricesBySecID(final KMMSecID secID) {
 		if ( secID == null ) {
-			throw new IllegalArgumentException("null security ID given");
+			throw new IllegalArgumentException("argument <secID> is null");
 		}
 		
 		if ( ! secID.isSet() ) {
-			throw new IllegalArgumentException("unset security ID given");
+			throw new IllegalArgumentException("argument <secID> is not set");
 		}
 		
 		KMMQualifSecID qualifID = new KMMQualifSecID(secID);
@@ -305,7 +304,7 @@ public class FilePriceManager {
 
 	public List<KMyMoneyPrice> getPricesByCurr(final Currency curr) {
 		if ( curr == null ) {
-			throw new IllegalArgumentException("null currency given");
+			throw new IllegalArgumentException("argument <curr> is null");
 		}
 		
 		KMMQualifCurrID qualifID = new KMMQualifCurrID(curr);
@@ -314,11 +313,11 @@ public class FilePriceManager {
 
 	public List<KMyMoneyPrice> getPricesByQualifSecCurrID(final KMMQualifSecCurrID qualifID) {
 		if ( qualifID == null ) {
-			throw new IllegalArgumentException("null security/currency ID given");
+			throw new IllegalArgumentException("argument <qualifID> is null");
 		}
 		
 		if ( ! qualifID.isSet() ) {
-			throw new IllegalArgumentException("unset security/currency ID given");
+			throw new IllegalArgumentException("argument <qualifID> is not set");
 		}
 		
 		List<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
@@ -337,11 +336,11 @@ public class FilePriceManager {
 
 	public FixedPointNumber getLatestPrice(final String secCurrIDStr) {
 		if ( secCurrIDStr == null ) {
-			throw new IllegalArgumentException("null security ID given");
+			throw new IllegalArgumentException("argument <secCurrIDStr> is null");
 		}
 
 		if ( secCurrIDStr.trim().equals("") ) {
-			throw new IllegalArgumentException("empty security ID given");
+			throw new IllegalArgumentException("argument <secCurrIDStr> is empty");
 		}
 
 		if ( secCurrIDStr.startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
@@ -353,11 +352,11 @@ public class FilePriceManager {
 
 	public FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID) {
 		if ( secCurrID == null ) {
-			throw new IllegalArgumentException("null security/currency ID given");
+			throw new IllegalArgumentException("argument <secCurrID> is null");
 		}
 
 		if ( ! secCurrID.isSet() ) {
-			throw new IllegalArgumentException("unset security/currency ID given");
+			throw new IllegalArgumentException("argument <secCurrID> is not set");
 		}
 
 		return getLatestPrice(secCurrID, 0);
@@ -377,11 +376,11 @@ public class FilePriceManager {
 	 */
 	private FixedPointNumber getLatestPrice(final KMMQualifSecCurrID secCurrID, final int depth) {
 		if ( secCurrID == null ) {
-			throw new IllegalArgumentException("null security/currency ID given");
+			throw new IllegalArgumentException("argument <secCurrID> is null");
 		}
 
 		if ( ! secCurrID.isSet() ) {
-			throw new IllegalArgumentException("unset security/currency ID given");
+			throw new IllegalArgumentException("argument <secCurrID> is not set");
 		}
 
 		// System.err.println("depth: " + depth);
@@ -475,11 +474,11 @@ public class FilePriceManager {
 	@SuppressWarnings("unused")
 	private FixedPointNumber getLatestPrice_readAfresh(final KMMQualifSecCurrID secCurrID, final int depth) {
 		if ( secCurrID == null ) {
-			throw new IllegalArgumentException("null security/currency ID given");
+			throw new IllegalArgumentException("argument <secCurrID> is null");
 		}
 
 		if ( ! secCurrID.isSet() ) {
-			throw new IllegalArgumentException("unset security/currency ID given");
+			throw new IllegalArgumentException("argument <secCurrID> is not set");
 		}
 
 		// System.err.println("depth: " + depth);

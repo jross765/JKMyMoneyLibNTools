@@ -88,11 +88,11 @@ public class FileAccountManager {
 
 	public KMyMoneyAccount getAccountByID(final KMMComplAcctID acctID) {
 		if ( acctID == null ) {
-			throw new IllegalArgumentException("null account ID given");
+			throw new IllegalArgumentException("argument <acctID> is null");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalArgumentException("unset account ID given");
+			throw new IllegalArgumentException("argument <acctID> is not set");
 		}
 
 		if ( acctMap == null ) {
@@ -109,11 +109,11 @@ public class FileAccountManager {
 
 	public KMyMoneyAccount getAccountByID(final KMMAcctID acctID) {
 		if ( acctID == null ) {
-			throw new IllegalArgumentException("null account ID given"); 
+			throw new IllegalArgumentException("argument <acctID> is null");
 		}
 		
 		if ( ! acctID.isSet() ) {
-			throw new IllegalArgumentException("unset account ID given");
+			throw new IllegalArgumentException("argument <acctID> is not set");
 		}
 
 		return getAccountByID(new KMMComplAcctID(acctID));
@@ -156,11 +156,11 @@ public class FileAccountManager {
 
 	public List<KMyMoneyAccount> getAccountsByParentID(final KMMAcctID acctID) {
 		if ( acctID == null ) {
-			throw new IllegalArgumentException("null account ID given");
+			throw new IllegalArgumentException("argument <acctID> is null");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalArgumentException("unset account ID given");
+			throw new IllegalArgumentException("argument <acctID> is not set");
 		}
 
 		return getAccountsByParentID(new KMMComplAcctID(acctID));
@@ -168,11 +168,11 @@ public class FileAccountManager {
 	
 	public List<KMyMoneyAccount> getAccountsByName(final String name) {
 		if ( name == null ) {
-			throw new IllegalArgumentException("null name given");
+			throw new IllegalArgumentException("argument <name> is null");
 		}
 
 		if ( name.trim().equals("") ) {
-			throw new IllegalArgumentException("empty name given");
+			throw new IllegalArgumentException("argument <name> is empty");
 		}
 
 		return getAccountsByName(name, true, true);
@@ -180,11 +180,11 @@ public class FileAccountManager {
 
 	public List<KMyMoneyAccount> getAccountsByName(final String expr, boolean qualif, boolean relaxed) {
 		if ( expr == null ) {
-			throw new IllegalArgumentException("null expression given");
+			throw new IllegalArgumentException("argument <expr> is null");
 		}
 
 		if ( expr.trim().equals("") ) {
-			throw new IllegalArgumentException("empty expression given");
+			throw new IllegalArgumentException("argument <expr> is empty");
 		}
 
 		if ( acctMap == null ) {
@@ -217,17 +217,19 @@ public class FileAccountManager {
 			}
 		}
 
+		result.sort(Comparator.naturalOrder()); 
+
 		return result;
 	}
 
 	public KMyMoneyAccount getAccountByNameUniq(final String name, final boolean qualif)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( name == null ) {
-			throw new IllegalArgumentException("null name given");
+			throw new IllegalArgumentException("argument <name> is null");
 		}
 
 		if ( name.trim().equals("") ) {
-			throw new IllegalArgumentException("empty name given");
+			throw new IllegalArgumentException("argument <name> is empty");
 		}
 
 		List<KMyMoneyAccount> acctList = getAccountsByName(name, qualif, false);
@@ -247,11 +249,11 @@ public class FileAccountManager {
 	public KMyMoneyAccount getAccountByNameEx(final String nameRegEx)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( nameRegEx == null ) {
-			throw new IllegalStateException("null regular expression given");
+			throw new IllegalArgumentException("argument <nameRegEx> is null");
 		}
-
+		
 		if ( nameRegEx.trim().equals("") ) {
-			throw new IllegalStateException("empty regular expression given");
+			throw new IllegalArgumentException("argument <nameRegEx> is empty");
 		}
 
 		if ( acctMap == null ) {
@@ -281,19 +283,19 @@ public class FileAccountManager {
 	public KMyMoneyAccount getAccountByIDorName(final KMMComplAcctID acctID, final String name)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( acctID == null ) {
-			throw new IllegalStateException("null account ID given");
+			throw new IllegalArgumentException("argument <acctID> is null");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalStateException("unset account ID given");
+			throw new IllegalArgumentException("argument <acctID> is not set");
 		}
 
 		if ( name == null ) {
-			throw new IllegalStateException("null name given");
+			throw new IllegalArgumentException("argument <name> is null");
 		}
 
 		if ( name.trim().equals("") ) {
-			throw new IllegalStateException("empty name given");
+			throw new IllegalArgumentException("argument <name> is empty");
 		}
 
 		KMyMoneyAccount retval = getAccountByID(acctID);
@@ -304,22 +306,26 @@ public class FileAccountManager {
 		return retval;
 	}
 
+	/*
+	 * First try to fetch the account by id, then fall back to traversing all
+	 * accounts to get if by it's name.
+	 */
 	public KMyMoneyAccount getAccountByIDorName(final KMMAcctID acctID, final String name)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( acctID == null ) {
-			throw new IllegalStateException("null account ID given");
+			throw new IllegalStateException("argument <acctID> is null");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalStateException("unset account ID given");
+			throw new IllegalStateException("argument <acctID> is not set");
 		}
 
 		if ( name == null ) {
-			throw new IllegalStateException("null name given");
+			throw new IllegalStateException("argument <name> is null");
 		}
 
 		if ( name.trim().equals("") ) {
-			throw new IllegalStateException("empty name given");
+			throw new IllegalStateException("argument <name> is empty");
 		}
 
 		return getAccountByIDorName(new KMMComplAcctID(acctID), name);
@@ -332,19 +338,19 @@ public class FileAccountManager {
 	public KMyMoneyAccount getAccountByIDorNameEx(final KMMComplAcctID acctID, final String name)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( acctID == null ) {
-			throw new IllegalStateException("null account ID given");
+			throw new IllegalArgumentException("argument <acctID> is null");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalStateException("unset account ID given");
+			throw new IllegalArgumentException("argument <acctID> is not set");
 		}
 
 		if ( name == null ) {
-			throw new IllegalStateException("null name given");
+			throw new IllegalArgumentException("argument <name> is null");
 		}
 
 		if ( name.trim().equals("") ) {
-			throw new IllegalStateException("empty name given");
+			throw new IllegalArgumentException("argument <name> is empty");
 		}
 
 		KMyMoneyAccount retval = getAccountByID(acctID);
@@ -358,19 +364,19 @@ public class FileAccountManager {
 	public KMyMoneyAccount getAccountByIDorNameEx(final KMMAcctID acctID, final String name)
 			throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( acctID == null ) {
-			throw new IllegalStateException("null account ID given");
+			throw new IllegalStateException("argument <acctID> is null");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalStateException("unset account ID given");
+			throw new IllegalStateException("argument <acctID> is not set");
 		}
 
 		if ( name == null ) {
-			throw new IllegalStateException("null name given");
+			throw new IllegalStateException("argument <name> is null");
 		}
 
 		if ( name.trim().equals("") ) {
-			throw new IllegalStateException("empty name given");
+			throw new IllegalStateException("argument <name> is empty");
 		}
 
 		return getAccountByIDorNameEx(new KMMComplAcctID(acctID), name);
@@ -385,16 +391,18 @@ public class FileAccountManager {
 			}
 		}
 
+		result.sort(Comparator.naturalOrder()); 
+
 		return result;
 	}
 
 	public List<KMyMoneyAccount> getAccountsByTypeAndName(Type type, String expr, boolean qualif, boolean relaxed) {
 		if ( expr == null ) {
-			throw new IllegalStateException("null expression given");
+			throw new IllegalArgumentException("argument <expr> is null");
 		}
 
 		if ( expr.trim().equals("") ) {
-			throw new IllegalStateException("empty name given");
+			throw new IllegalArgumentException("argument <expr> is empty");
 		}
 
 		List<KMyMoneyAccount> result = new ArrayList<KMyMoneyAccount>();
@@ -404,6 +412,8 @@ public class FileAccountManager {
 				result.add(acct);
 			}
 		}
+
+		result.sort(Comparator.naturalOrder()); 
 
 		return result;
 	}
@@ -437,6 +447,8 @@ public class FileAccountManager {
 
 			}
 
+			retval.sort(Comparator.naturalOrder()); 
+
 			return retval;
 		} catch (RuntimeException e) {
 			LOGGER.error("getParentlessAccounts: Problem getting all root-account", e);
@@ -466,6 +478,8 @@ public class FileAccountManager {
 			KMyMoneyAccount acct = getAccountByID(acctID);
 			result.add(acct);
 		}
+
+		result.sort(Comparator.naturalOrder()); 
 
 		return result;
 	}
