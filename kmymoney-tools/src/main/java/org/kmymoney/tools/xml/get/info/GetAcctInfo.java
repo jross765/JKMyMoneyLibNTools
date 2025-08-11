@@ -15,7 +15,6 @@ import org.kmymoney.api.read.KMyMoneyAccount;
 import org.kmymoney.api.read.KMyMoneyTransaction;
 import org.kmymoney.api.read.aux.KMMAccountReconciliation;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
-import org.kmymoney.api.read.impl.aux.KMMAccountReconciliationImpl;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
 import org.kmymoney.tools.CommandLineTool;
 import org.slf4j.Logger;
