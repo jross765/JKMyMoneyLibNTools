@@ -17,6 +17,14 @@ import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 public class CmdLineHelper
 {
+  public enum PrcSelectMode
+  {
+    ID,
+    SEC_DATE
+  }
+
+  // -----------------------------------------------------------------
+
   // ::MAGIC
   public  static final String ACCT_AMT_DUMMY_ARG = "DUMMY";
   private static final String ACCT_AMT_SEP_OUTER = "\\|";
