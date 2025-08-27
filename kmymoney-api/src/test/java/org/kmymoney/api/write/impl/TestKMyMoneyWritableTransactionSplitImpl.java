@@ -33,11 +33,24 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 	public static final KMMComplAcctID ACCT_4_ID = TestKMyMoneyAccountImpl.ACCT_4_ID;
 	public static final KMMComplAcctID ACCT_8_ID = TestKMyMoneyAccountImpl.ACCT_8_ID;
 
-	public static final KMMTrxID TRX_1_ID = TestKMyMoneyTransactionSplitImpl.TRX_1_ID;
+	public static final KMMTrxID TRX_01_ID = TestKMyMoneyTransactionSplitImpl.TRX_01_ID;
+	public static final KMMTrxID TRX_02_ID = TestKMyMoneyTransactionSplitImpl.TRX_02_ID;
+	public static final KMMTrxID TRX_04_ID = TestKMyMoneyTransactionSplitImpl.TRX_04_ID;
+	public static final KMMTrxID TRX_06_ID = TestKMyMoneyTransactionSplitImpl.TRX_06_ID;
+	public static final KMMTrxID TRX_07_ID = TestKMyMoneyTransactionSplitImpl.TRX_07_ID;
+	public static final KMMTrxID TRX_08_ID = TestKMyMoneyTransactionSplitImpl.TRX_08_ID;
+	public static final KMMTrxID TRX_10_ID = TestKMyMoneyTransactionSplitImpl.TRX_10_ID;
+	public static final KMMTrxID TRX_15_ID = TestKMyMoneyTransactionSplitImpl.TRX_15_ID;
 	public static final KMMTrxID TRX_18_ID = TestKMyMoneyTransactionSplitImpl.TRX_18_ID;
 
-	public static final KMMQualifSpltID TRXSPLT_1_ID = TestKMyMoneyTransactionSplitImpl.TRXSPLT_1_ID;
-	public static final KMMQualifSpltID TRXSPLT_2_ID = TestKMyMoneyTransactionSplitImpl.TRXSPLT_2_ID;
+	public static final KMMQualifSpltID TRXSPLT_01_ID = TestKMyMoneyTransactionSplitImpl.TRXSPLT_01_ID;
+	public static final KMMQualifSpltID TRXSPLT_02_ID = TestKMyMoneyTransactionSplitImpl.TRXSPLT_02_ID;
+	public static final KMMQualifSpltID TRXSPLT_04_ID = TestKMyMoneyTransactionSplitImpl.TRXSPLT_04_ID;
+	public static final KMMQualifSpltID TRXSPLT_06_ID = TestKMyMoneyTransactionSplitImpl.TRXSPLT_06_ID;
+	public static final KMMQualifSpltID TRXSPLT_08_ID = TestKMyMoneyTransactionSplitImpl.TRXSPLT_08_ID;
+	public static final KMMQualifSpltID TRXSPLT_10_ID = TestKMyMoneyTransactionSplitImpl.TRXSPLT_10_ID;
+	public static final KMMQualifSpltID TRXSPLT_15_ID = TestKMyMoneyTransactionSplitImpl.TRXSPLT_15_ID;
+	public static final KMMQualifSpltID TRXSPLT_18_ID = TestKMyMoneyTransactionSplitImpl.TRXSPLT_18_ID;
 
 	// -----------------------------------------------------------------
 
@@ -99,11 +112,11 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 
 	@Test
 	public void test01_1() throws Exception {
-		KMyMoneyWritableTransactionSplit splt = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_1_ID);
+		KMyMoneyWritableTransactionSplit splt = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_01_ID);
 		assertNotEquals(null, splt);
 
-		assertEquals(TRXSPLT_1_ID, splt.getQualifID());
-		assertEquals(TRX_1_ID, splt.getTransactionID());
+		assertEquals(TRXSPLT_01_ID, splt.getQualifID());
+		assertEquals(TRX_01_ID, splt.getTransactionID());
 		assertEquals(ACCT_1_ID, splt.getAccountID());
 		assertEquals(null, splt.getAction());
 		assertEquals(10000.00, splt.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE);
@@ -118,10 +131,10 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 
 	@Test
 	public void test01_2() throws Exception {
-		KMyMoneyWritableTransactionSplit splt = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_2_ID);
+		KMyMoneyWritableTransactionSplit splt = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_18_ID);
 		assertNotEquals(null, splt);
 
-		assertEquals(TRXSPLT_2_ID, splt.getQualifID());
+		assertEquals(TRXSPLT_18_ID, splt.getQualifID());
 		assertEquals(TRX_18_ID, splt.getTransactionID());
 		assertEquals(ACCT_8_ID, splt.getAccountID());
 		assertEquals(KMyMoneyTransactionSplit.Action.BUY_SHARES, splt.getAction());
@@ -132,6 +145,60 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		assertEquals("15 SECURITY:E000001", splt.getSharesFormatted());
 		assertEquals("", splt.getMemo());
 //		assertEquals(null, splt.getUserDefinedAttributeKeys());
+	}
+
+	@Test
+	public void test01_3_1() throws Exception {
+		KMyMoneyWritableTransactionSplit splt = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_02_ID);
+		assertNotEquals(null, splt);
+
+		assertEquals(TRXSPLT_02_ID, splt.getQualifID());
+		assertEquals("0123", splt.getNumber());
+	}
+
+	@Test
+	public void test01_3_2() throws Exception {
+		KMyMoneyWritableTransactionSplit splt = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_04_ID);
+		assertNotEquals(null, splt);
+
+		assertEquals(TRXSPLT_04_ID, splt.getQualifID());
+		assertEquals("x762d", splt.getNumber());
+	}
+
+	@Test
+	public void test01_3_3() throws Exception {
+		KMyMoneyWritableTransactionSplit splt = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_06_ID);
+		assertNotEquals(null, splt);
+
+		assertEquals(TRXSPLT_06_ID, splt.getQualifID());
+		assertEquals("/$@d", splt.getNumber());
+	}
+
+	@Test
+	public void test01_3_4() throws Exception {
+		KMyMoneyWritableTransactionSplit splt = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_08_ID);
+		assertNotEquals(null, splt);
+
+		assertEquals(TRXSPLT_08_ID, splt.getQualifID());
+		assertEquals("ÄÖÜß", splt.getNumber());
+	}
+
+	@Test
+	public void test01_3_5() throws Exception {
+		KMyMoneyWritableTransactionSplit splt = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_10_ID);
+		assertNotEquals(null, splt);
+
+		assertEquals(TRXSPLT_10_ID, splt.getQualifID());
+		assertEquals("<SPLIT>", splt.getNumber()); // sic, tried injection
+	}
+
+	@Test
+	public void test01_3_6() throws Exception {
+		KMyMoneyWritableTransactionSplit splt = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_15_ID);
+		assertNotEquals(null, splt);
+
+		assertEquals(TRXSPLT_15_ID, splt.getQualifID());
+		assertEquals("5298", splt.getNumber()); // sic, tried injection
 	}
 
 	// -----------------------------------------------------------------
@@ -148,10 +215,10 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		// assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.CACHE));
 
-		KMyMoneyWritableTransactionSplit splt = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_1_ID);
+		KMyMoneyWritableTransactionSplit splt = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_01_ID);
 		assertNotEquals(null, splt);
 
-		assertEquals(TRXSPLT_1_ID, splt.getQualifID());
+		assertEquals(TRXSPLT_01_ID, splt.getQualifID());
 
 		// ----------------------------
 		// Modify the object
@@ -160,6 +227,7 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		splt.setValue(new FixedPointNumber("-123.45"));
 		splt.setShares(new FixedPointNumber("-67.8901"));
 		splt.setMemo("Alle meine Entchen");
+		splt.setNumber("<%$@üb234/xy&>"); // very dirty stuff...
 
 		// ::TODO not possible yet
 		// trx.getSplitByID("7abf90fe15124254ac3eb7ec33f798e7").remove()
@@ -198,12 +266,13 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		// assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.CACHE));
 
-		assertEquals(TRX_1_ID, splt.getTransactionID()); // unchanged
+		assertEquals(TRX_01_ID, splt.getTransactionID()); // unchanged
 		assertEquals(ACCT_2_ID, splt.getAccountID()); // changed
 		assertEquals(null, splt.getAction()); // unchanged
 		assertEquals(-123.45, splt.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE); // changed
 		assertEquals(-67.8901, splt.getShares().doubleValue(), ConstTest.DIFF_TOLERANCE); // changed
 		assertEquals("Alle meine Entchen", splt.getMemo()); // changed
+		assertEquals("<%$@üb234/xy&>", splt.getNumber()); // changed
 //		assertEquals(null, splt.getUserDefinedAttributeKeys()); // unchanged
 	}
 
@@ -215,15 +284,16 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		// assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmOutFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.CACHE));
 
-		KMyMoneyTransactionSplit splt = kmmOutFile.getTransactionSplitByID(TRXSPLT_1_ID);
+		KMyMoneyTransactionSplit splt = kmmOutFile.getTransactionSplitByID(TRXSPLT_01_ID);
 		assertNotEquals(null, splt);
 
-		assertEquals(TRX_1_ID, splt.getTransactionID()); // unchanged
+		assertEquals(TRX_01_ID, splt.getTransactionID()); // unchanged
 		assertEquals(ACCT_2_ID, splt.getAccountID()); // changed
 		assertEquals(null, splt.getAction()); // unchanged
 		assertEquals(-123.45, splt.getValue().doubleValue(), ConstTest.DIFF_TOLERANCE); // changed
 		assertEquals(-67.8901, splt.getShares().doubleValue(), ConstTest.DIFF_TOLERANCE); // changed
 		assertEquals("Alle meine Entchen", splt.getMemo()); // changed
+		assertEquals("<%$@üb234/xy&>", splt.getNumber()); // changed
 //		assertEquals(null, splt.getUserDefinedAttributeKeys()); // unchanged
 	}
 
@@ -260,15 +330,15 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.CACHE));
 
 		// Variant 1
-		KMyMoneyWritableTransaction trx1 = kmmInFile.getWritableTransactionByID(TRX_1_ID);
-		KMyMoneyWritableTransactionSplit splt1 = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_1_ID);
+		KMyMoneyWritableTransaction trx1 = kmmInFile.getWritableTransactionByID(TRX_01_ID);
+		KMyMoneyWritableTransactionSplit splt1 = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_01_ID);
 		assertNotEquals(null, trx1);
 		assertNotEquals(null, splt1);
 		trx1.remove(splt1);
 
 		// Variant 2
 		KMyMoneyWritableTransaction trx2 = kmmInFile.getWritableTransactionByID(TRX_18_ID);
-		KMyMoneyWritableTransactionSplit splt2 = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_2_ID);
+		KMyMoneyWritableTransactionSplit splt2 = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_18_ID);
 		assertNotEquals(null, trx2);
 		assertNotEquals(null, splt2);
 		splt2.remove();
@@ -308,14 +378,14 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		assertEquals(1, trx1.getSplitsCount());
 		assertEquals("S0002", trx1.getSplits().get(0).getID().toString());
 
-		KMyMoneyWritableTransaction trx1Now = kmmInFile.getWritableTransactionByID(TRX_1_ID);
+		KMyMoneyWritableTransaction trx1Now = kmmInFile.getWritableTransactionByID(TRX_01_ID);
 		// CAUTION / ::TODO
 		// Don't know what to do about this oddity right now,
 		// but it needs to be addressed at some point.
 		assertEquals(2, trx2.getSplitsCount()); // sic, 3, because it's not persisted yet
 		assertNotEquals(null, trx1Now); // still there
 		try {
-			KMyMoneyWritableTransactionSplit splt1Now = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_1_ID);
+			KMyMoneyWritableTransactionSplit splt1Now = kmmInFile.getWritableTransactionSplitByID(TRXSPLT_01_ID);
 			assertEquals(1, 0);
 		} catch ( NullPointerException exc ) {
 			assertEquals(0, 0);
@@ -330,10 +400,10 @@ public class TestKMyMoneyWritableTransactionSplitImpl {
 		// assertEquals(ConstTest.Stats.NOF_TRX_SPLT, kmmInFileStats.getNofEntriesTransactionSplits(kmmFileStats.Type.COUNTER));
 		assertEquals(ConstTest.Stats.NOF_TRX_SPLT - 2, kmmOutFileStats.getNofEntriesTransactionSplits(KMMFileStats.Type.CACHE));
 
-		KMyMoneyTransactionSplit splt = kmmOutFile.getTransactionSplitByID(TRXSPLT_1_ID);
+		KMyMoneyTransactionSplit splt = kmmOutFile.getTransactionSplitByID(TRXSPLT_01_ID);
 		assertEquals(null, splt); // sic
 
-		assertEquals(TRX_1_ID, trx.getID()); // unchanged
+		assertEquals(TRX_01_ID, trx.getID()); // unchanged
 		assertEquals(1, trx.getSplitsCount());
 		assertEquals("S0002", trx.getSplits().get(0).getID().toString());
 	}

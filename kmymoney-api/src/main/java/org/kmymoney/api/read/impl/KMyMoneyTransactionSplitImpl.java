@@ -154,6 +154,19 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     // ----------------------------
     
     @Override
+    public String getNumber() {
+    	if ( jwsdpPeer.getNumber() == null )
+    		return null;
+    	
+//    	if ( jwsdpPeer.getNumber().trim().length() == 0 )
+//    		return null;
+    	
+    	return jwsdpPeer.getNumber();
+    }
+    
+    // ----------------------------
+    
+    @Override
     public KMMPyeID getPayeeID() {
     	if ( jwsdpPeer.getPayee() == null )
     		return null;

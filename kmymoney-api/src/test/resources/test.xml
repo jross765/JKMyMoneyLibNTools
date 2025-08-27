@@ -3,7 +3,7 @@
 <KMYMONEY-FILE>
   <FILEINFO>
     <CREATION_DATE date="2023-10-14"/>
-    <LAST_MODIFIED_DATE date="2025-05-28"/>
+    <LAST_MODIFIED_DATE date="2025-08-27T10:02:20+02:00"/>
     <VERSION id="1"/>
     <FIXVERSION id="9"/>
     <APPVERSION id="5.2.1-c9bd024"/>
@@ -300,7 +300,7 @@
     </TRANSACTION>
     <TRANSACTION id="T000000000000000002" postdate="2023-01-03" memo="" entrydate="2023-10-14" commodity="EUR">
       <SPLITS>
-        <SPLIT id="S0001" payee="P000006" reconciledate="" action="" reconcileflag="0" value="1000/1" shares="1000/1" price="1/1" memo="Unfug und Quatsch GmbH Gehalt" account="A000004" number="" bankid="">
+        <SPLIT id="S0001" payee="P000006" reconciledate="" action="" reconcileflag="0" value="1000/1" shares="1000/1" price="1/1" memo="Unfug und Quatsch GmbH Gehalt" account="A000004" number="0123" bankid="">
           <TAG id="G000002"/>
         </SPLIT>
         <SPLIT id="S0002" payee="P000006" reconciledate="" action="" reconcileflag="0" value="-1000/1" shares="-1000/1" price="1/1" memo="Unfug und Quatsch GmbH Gehalt" account="A000050" number="" bankid=""/>
@@ -317,7 +317,7 @@
     </TRANSACTION>
     <TRANSACTION id="T000000000000000004" postdate="2023-02-03" memo="" entrydate="2023-12-09" commodity="EUR">
       <SPLITS>
-        <SPLIT id="S0001" payee="P000006" reconciledate="" action="" reconcileflag="0" value="1000/1" shares="1000/1" price="1/1" memo="" account="A000004" number="" bankid="">
+        <SPLIT id="S0001" payee="P000006" reconciledate="" action="" reconcileflag="0" value="1000/1" shares="1000/1" price="1/1" memo="" account="A000004" number="x762d" bankid="">
           <TAG id="G000001"/>
         </SPLIT>
         <SPLIT id="S0002" payee="P000006" reconciledate="" action="" reconcileflag="0" value="-1000/1" shares="-1000/1" price="1/1" memo="" account="A000050" number="" bankid=""/>
@@ -331,7 +331,7 @@
     </TRANSACTION>
     <TRANSACTION id="T000000000000000006" postdate="2023-03-03" memo="" entrydate="2023-12-09" commodity="EUR">
       <SPLITS>
-        <SPLIT id="S0001" payee="P000006" reconciledate="" action="" reconcileflag="0" value="1000/1" shares="1000/1" price="1/1" memo="" account="A000004" number="" bankid=""/>
+        <SPLIT id="S0001" payee="P000006" reconciledate="" action="" reconcileflag="0" value="1000/1" shares="1000/1" price="1/1" memo="" account="A000004" number="/$@d" bankid=""/>
         <SPLIT id="S0002" payee="P000006" reconciledate="" action="" reconcileflag="0" value="-1000/1" shares="-1000/1" price="1/1" memo="" account="A000050" number="" bankid=""/>
       </SPLITS>
     </TRANSACTION>
@@ -343,7 +343,7 @@
     </TRANSACTION>
     <TRANSACTION id="T000000000000000008" postdate="2023-04-03" memo="" entrydate="2023-12-09" commodity="EUR">
       <SPLITS>
-        <SPLIT id="S0001" payee="P000006" reconciledate="" action="" reconcileflag="0" value="1000/1" shares="1000/1" price="1/1" memo="" account="A000004" number="" bankid=""/>
+        <SPLIT id="S0001" payee="P000006" reconciledate="" action="" reconcileflag="0" value="1000/1" shares="1000/1" price="1/1" memo="" account="A000004" number="ÄÖÜß" bankid=""/>
         <SPLIT id="S0002" payee="P000006" reconciledate="" action="" reconcileflag="0" value="-1000/1" shares="-1000/1" price="1/1" memo="" account="A000050" number="" bankid=""/>
       </SPLITS>
     </TRANSACTION>
@@ -355,7 +355,7 @@
     </TRANSACTION>
     <TRANSACTION id="T000000000000000010" postdate="2023-05-03" memo="" entrydate="2023-12-09" commodity="EUR">
       <SPLITS>
-        <SPLIT id="S0001" payee="P000006" reconciledate="" action="" reconcileflag="0" value="1000/1" shares="1000/1" price="1/1" memo="" account="A000004" number="" bankid=""/>
+        <SPLIT id="S0001" payee="P000006" reconciledate="" action="" reconcileflag="0" value="1000/1" shares="1000/1" price="1/1" memo="" account="A000004" number="&lt;SPLIT&gt;" bankid=""/>
         <SPLIT id="S0002" payee="P000006" reconciledate="" action="" reconcileflag="0" value="-1000/1" shares="-1000/1" price="1/1" memo="" account="A000050" number="" bankid=""/>
       </SPLITS>
     </TRANSACTION>
@@ -385,7 +385,7 @@
     </TRANSACTION>
     <TRANSACTION id="T000000000000000015" postdate="2023-10-14" memo="" entrydate="2023-10-14" commodity="EUR">
       <SPLITS>
-        <SPLIT id="S0001" payee="P000003" reconciledate="" action="" reconcileflag="0" value="-150/1" shares="-150/1" price="1/1" memo="Bargeldauszahlung" account="A000004" number="" bankid=""/>
+        <SPLIT id="S0001" payee="P000003" reconciledate="" action="" reconcileflag="0" value="-150/1" shares="-150/1" price="1/1" memo="Bargeldauszahlung" account="A000004" number="5298" bankid=""/>
         <SPLIT id="S0002" payee="P000003" reconciledate="" action="" reconcileflag="0" value="150/1" shares="150/1" price="1/1" memo="Bargeldauszahlung" account="A000065" number="" bankid=""/>
       </SPLITS>
     </TRANSACTION>
@@ -416,7 +416,7 @@
     </TRANSACTION>
   </TRANSACTIONS>
   <KEYVALUEPAIRS>
-    <PAIR key="LastModificationDate" value="2025-05-28"/>
+    <PAIR key="LastModificationDate" value="2025-08-27T10:02:20+02:00"/>
     <PAIR key="kmm-baseCurrency" value="EUR"/>
     <PAIR key="kmm-id" value="{1f7ec5d2-f982-48eb-9ae3-22095e2362ee}"/>
   </KEYVALUEPAIRS>

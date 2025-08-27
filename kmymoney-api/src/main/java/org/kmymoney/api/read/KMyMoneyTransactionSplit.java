@@ -156,6 +156,10 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     KMyMoneyAccount getAccount();
 
     // ----------------------------
+    
+    String getNumber();
+
+    // ----------------------------
 
     /**
      * 

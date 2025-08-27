@@ -1,5 +1,6 @@
 package org.kmymoney.api.write.impl;
 
+import java.beans.PropertyChangeSupport;
 import java.text.ParseException;
 import java.util.Collection;
 
@@ -421,6 +422,26 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 				helper.getPropertyChangeSupport().firePropertyChange("price", new FixedPointNumber(old), prc);
 			}
 		}
+	}
+
+	@Override
+	public void setNumber(final String num) {
+		if ( num == null ) {
+			throw new IllegalArgumentException("argument <num> is null");
+		}
+		
+		if ( num.trim().length() == 0 ) {
+			throw new IllegalArgumentException("argument <num> is empty");
+		}
+	
+    	String oldNumber = getNumber();
+    	jwsdpPeer.setNumber(num);
+    	getKMyMoneyFile().setModified(true);
+
+    	PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+    	if ( propertyChangeSupport != null) {
+    		propertyChangeSupport.firePropertyChange("number", oldNumber, num);
+    	}
 	}
 
 	@Override

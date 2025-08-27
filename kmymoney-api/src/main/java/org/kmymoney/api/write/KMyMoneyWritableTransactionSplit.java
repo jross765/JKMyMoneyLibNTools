@@ -105,6 +105,14 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 * 
 	 * @param pyeID
 	 * 
+	 * @see #getNumber()
+	 */
+	void setNumber(String num);
+
+	/**
+	 * 
+	 * @param pyeID
+	 * 
 	 * @see #getPayee()
 	 * @see #getPayeeID()
 	 */

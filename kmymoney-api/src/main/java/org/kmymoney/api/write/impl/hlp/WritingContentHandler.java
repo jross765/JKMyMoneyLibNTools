@@ -236,6 +236,7 @@ public class WritingContentHandler implements ContentHandler {
 					 isAcct && atts.getQName(i).equals("description") || 
 					 isTrx  && atts.getQName(i).equals("memo") || 
 					 isSplt && atts.getQName(i).equals("memo") || 
+					 isSplt && atts.getQName(i).equals("number") || 
 					 isPye  && atts.getQName(i).equals("name") ||
 					 isPye  && atts.getQName(i).equals("matchkey") ||
 					 isSec  && atts.getQName(i).equals("name") ||
