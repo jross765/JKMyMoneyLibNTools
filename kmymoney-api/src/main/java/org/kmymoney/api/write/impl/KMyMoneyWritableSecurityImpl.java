@@ -422,39 +422,39 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 
 	@Override
     public String toString() {
-	String result = "KMyMoneyWritableSecurityImpl ";
-	
-	result += "[id=" + getID();
-	result += ", symbol='" + getSymbol() + "'";
-	
-	try {
-	    result += ", type=" + getType();
-	} catch (Exception e) {
-	    result += ", type=" + "ERROR";
-	}
-	
-	result += ", name='" + getName() + "'";
-	result += ", pp=" + getPP();
-	
-	try {
-	    result += ", rounding-method=" + getRoundingMethod();
-	} catch (Exception e) {
-	    result += ", rounding-method=" + "ERROR";
-	}
-	
-	result += ", saf=" + getSAF();
-	
-	try {
-	    result += ", trading-curr=" + getTradingCurrency();
-	} catch (Exception e) {
-	    result += ", trading-curr=" + "ERROR";
-	}
-	
-	result += ", trading-mkt='" + getTradingMarket() + "'";
-	
-	result += "]";
-	
-	return result;
+		String result = "KMyMoneyWritableSecurityImpl ";
+
+		result += "[id=" + getID();
+		result += ", symbol='" + getSymbol() + "'";
+
+		try {
+			result += ", type=" + getType();
+		} catch (Exception e) {
+			result += ", type=" + "ERROR";
+		}
+
+		result += ", name='" + getName() + "'";
+		result += ", pp=" + getPP();
+
+		try {
+			result += ", rounding-method=" + getRoundingMethod();
+		} catch (Exception e) {
+			result += ", rounding-method=" + "ERROR";
+		}
+
+		result += ", saf=" + getSAF();
+
+		try {
+			result += ", trading-curr=" + getTradingCurrency();
+		} catch (Exception e) {
+			result += ", trading-curr=" + "ERROR";
+		}
+
+		result += ", trading-mkt='" + getTradingMarket() + "'";
+
+		result += "]";
+
+		return result;
     }
 
 }

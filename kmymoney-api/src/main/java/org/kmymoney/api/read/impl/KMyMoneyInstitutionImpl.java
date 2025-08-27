@@ -167,33 +167,29 @@ public class KMyMoneyInstitutionImpl extends KMyMoneyObjectImpl
     }
     
     public void addAccount(final KMyMoneyAccount acct) {
-    	if ( acct == null ) {
-    		throw new IllegalArgumentException("null account given");
-    	}
-    	
-	KMyMoneyAccount old = getAccountByID(acct.getID());
-	if ( old != null ) {
-	    // There already is a split with that ID
-	    if ( ! old.equals(acct) ) {
-			System.err.println("addAccount: New Account object with same ID, needs to be replaced: " + 
-					acct.getID() + "[" + acct.getClass().getName() + "] and " + 
-					old.getID() + "[" + old.getClass().getName() + "]\n" + 
-					"new=" + acct.toString() + "\n" + 
-					"old=" + old.toString());
-			LOGGER.error("addAccount: New Account object with same ID, needs to be replaced: " + 
-					acct.getID() + "[" + acct.getClass().getName() + "] and " + 
-					old.getID() + "[" + old.getClass().getName() + "]\n" + 
-					"new=" + acct.toString() + "\n" + 
-					"old=" + old.toString());
-			IllegalStateException exc = new IllegalStateException("DEBUG");
-			exc.printStackTrace();
-			replaceAccount(old, (KMyMoneyAccountImpl) acct);
-	    }
-	} else {
-	    // There is no account with that ID yet
-	    myAccts.add(acct);
-	    myAcctsNeedSorting = true;
-	}
+		if ( acct == null ) {
+			throw new IllegalArgumentException("null account given");
+		}
+
+		KMyMoneyAccount old = getAccountByID(acct.getID());
+		if ( old != null ) {
+			// There already is a split with that ID
+			if ( !old.equals(acct) ) {
+				System.err.println("addAccount: New Account object with same ID, needs to be replaced: " + acct.getID()
+						+ "[" + acct.getClass().getName() + "] and " + old.getID() + "[" + old.getClass().getName()
+						+ "]\n" + "new=" + acct.toString() + "\n" + "old=" + old.toString());
+				LOGGER.error("addAccount: New Account object with same ID, needs to be replaced: " + acct.getID() + "["
+						+ acct.getClass().getName() + "] and " + old.getID() + "[" + old.getClass().getName() + "]\n"
+						+ "new=" + acct.toString() + "\n" + "old=" + old.toString());
+				IllegalStateException exc = new IllegalStateException("DEBUG");
+				exc.printStackTrace();
+				replaceAccount(old, (KMyMoneyAccountImpl) acct);
+			}
+		} else {
+			// There is no account with that ID yet
+			myAccts.add(acct);
+			myAcctsNeedSorting = true;
+		}
     }
 
     /**

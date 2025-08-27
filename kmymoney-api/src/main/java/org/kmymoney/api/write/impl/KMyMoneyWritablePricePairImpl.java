@@ -68,7 +68,7 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
      * @return the file we are associated with
      */
     public KMyMoneyWritableFileImpl getWritableKMyMoneyFile() {
-	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+    	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
     }
 
     /**
@@ -78,7 +78,7 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
      */
     @Override
     public KMyMoneyWritableFileImpl getKMyMoneyFile() {
-	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+    	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
     }
 
     // ---------------------------------------------------------------
@@ -279,23 +279,23 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 //    }
 
     public String toStringLong() {
-	String result = "KMMWritablePricePairImpl [";
-	
-	try {
-	    result += "from-sec-curr=" + getFromSecCurrQualifID();
-	} catch (Exception e) {
-	    result += "from-sec-curr=" + "ERROR";
-	}
+		String result = "KMMWritablePricePairImpl [";
 
-	try {
-	    result += ", to-curr=" + getToCurrencyQualifID();
-	} catch (Exception e) {
-	    result += ", to-curr=" + "ERROR";
-	}
-	
-	result += "]";
-	
-	return result;
+		try {
+			result += "from-sec-curr=" + getFromSecCurrQualifID();
+		} catch (Exception e) {
+			result += "from-sec-curr=" + "ERROR";
+		}
+
+		try {
+			result += ", to-curr=" + getToCurrencyQualifID();
+		} catch (Exception e) {
+			result += ", to-curr=" + "ERROR";
+		}
+
+		result += "]";
+
+		return result;
     }
 
 }

@@ -127,9 +127,9 @@ public class HasWritableUserDefinedAttributesImpl extends HasUserDefinedAttribut
 		if ( value.trim().equals("") )
 			throw new IllegalArgumentException("empty value given");
 		
-// CAUTION: Yes, that's valid
-//if ( value.isEmpty() )
-//throw new IllegalArgumentException("empty value given");
+// 		CAUTION: Yes, that's valid
+//		if ( value.isEmpty() )
+//			throw new IllegalArgumentException("empty value given");
 
 		if ( getUserDefinedAttributeKeysCore(kvpList).contains(name) )
 			throw new KVPListAlreadyContainsKeyException();

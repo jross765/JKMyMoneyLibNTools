@@ -46,24 +46,24 @@ public class KMyMoneyCurrencyImpl extends KMyMoneyObjectImpl
      */
     @SuppressWarnings("exports")
     public CURRENCY getJwsdpPeer() {
-	return jwsdpPeer;
+    	return jwsdpPeer;
     }
 
     // ---------------------------------------------------------------
 
     @Override
     public String getID() {
-	return jwsdpPeer.getId();
+    	return jwsdpPeer.getId();
     }
 
     @Override
     public KMMQualifCurrID getQualifID() {
-	return new KMMQualifCurrID(getID());
+    	return new KMMQualifCurrID(getID());
     }
 
     @Override
     public String getSymbol() {
-	return jwsdpPeer.getSymbol();
+    	return jwsdpPeer.getSymbol();
     }
 
     // ---------------------------------------------------------------
@@ -98,35 +98,35 @@ public class KMyMoneyCurrencyImpl extends KMyMoneyObjectImpl
 
     @Override
     public List<KMyMoneyPrice> getQuotes() {
-    	List<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
-	
-	Collection<KMyMoneyPrice> prices = getKMyMoneyFile().getPrices();
-	for ( KMyMoneyPrice price : prices ) {
-	    try {
-		if ( price.getFromSecCurrQualifID().toString().equals(getQualifID().toString()) ) {
-		    result.add(price);
-		} 
-	    } catch ( Exception exc ) {
-		LOGGER.error("getQuotes: Could not check price " + price.toString());
-	    }
-	}
+		List<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
 
-  	return result;
+		Collection<KMyMoneyPrice> prices = getKMyMoneyFile().getPrices();
+		for ( KMyMoneyPrice price : prices ) {
+			try {
+				if ( price.getFromSecCurrQualifID().toString().equals(getQualifID().toString()) ) {
+					result.add(price);
+				}
+			} catch (Exception exc) {
+				LOGGER.error("getQuotes: Could not check price " + price.toString());
+			}
+		}
+
+		return result;
     }
 
     @Override
     public KMyMoneyPrice getYoungestQuote() {
-	KMyMoneyPrice result = null;
+		KMyMoneyPrice result = null;
 
-	LocalDate youngestDate = LocalDate.of(1970, 1, 1); // ::MAGIC
-	for ( KMyMoneyPrice price : getQuotes() ) {
-	    if ( price.getDate().isAfter(youngestDate) ) {
-		result = price;
-		youngestDate = price.getDate();
-	    }
-	}
+		LocalDate youngestDate = LocalDate.of(1970, 1, 1); // ::MAGIC
+		for ( KMyMoneyPrice price : getQuotes() ) {
+			if ( price.getDate().isAfter(youngestDate) ) {
+				result = price;
+				youngestDate = price.getDate();
+			}
+		}
 
-	return result;
+		return result;
     }
 
     // -----------------------------------------------------------------
@@ -140,25 +140,25 @@ public class KMyMoneyCurrencyImpl extends KMyMoneyObjectImpl
 
     @Override
     public String toString() {
-	String result = "KMyMoneyCurrencyImpl ";
-	
-	result += "[id=" + getID();
-	result += ", symbol='" + getSymbol() + "'";
-	
-	result += ", name='" + getName() + "'";
-	result += ", pp=" + getPP();
-	result += ", saf=" + getSAF();
-	result += ", scf=" + getSCF();
-	
-	try {
-	    result += ", rounding-method=" + getRoundingMethod();
-	} catch (UnknownRoundingMethodException e) {
-	    result += ", rounding-method=" + "ERROR";
-	}
-	
-	result += "]";
-	
-	return result;
+		String result = "KMyMoneyCurrencyImpl ";
+
+		result += "[id=" + getID();
+		result += ", symbol='" + getSymbol() + "'";
+
+		result += ", name='" + getName() + "'";
+		result += ", pp=" + getPP();
+		result += ", saf=" + getSAF();
+		result += ", scf=" + getSCF();
+
+		try {
+			result += ", rounding-method=" + getRoundingMethod();
+		} catch (UnknownRoundingMethodException e) {
+			result += ", rounding-method=" + "ERROR";
+		}
+
+		result += "]";
+
+		return result;
     }
 
 }

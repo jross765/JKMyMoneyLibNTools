@@ -140,7 +140,7 @@ public class KMyMoneyWritableInstitutionImpl extends KMyMoneyInstitutionImpl
      */
     @Override
     public KMyMoneyWritableFileImpl getWritableKMyMoneyFile() {
-	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+    	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
     }
 
     /**
@@ -150,7 +150,7 @@ public class KMyMoneyWritableInstitutionImpl extends KMyMoneyInstitutionImpl
      */
     @Override
     public KMyMoneyWritableFileImpl getKMyMoneyFile() {
-	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+    	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
     }
 
     // ---------------------------------------------------------------
@@ -159,7 +159,7 @@ public class KMyMoneyWritableInstitutionImpl extends KMyMoneyInstitutionImpl
      * @see KMyMoneyWritableInstitution#getWritableAddress()
      */
     public KMMWritableAddress getWritableAddress() {
-	return new KMMWritableAddressImpl(jwsdpPeer.getADDRESS());
+    	return new KMMWritableAddressImpl(jwsdpPeer.getADDRESS());
     }
 
     /**
@@ -176,6 +176,7 @@ public class KMyMoneyWritableInstitutionImpl extends KMyMoneyInstitutionImpl
 		if ( helper.getPropertyChangeSupport() != null ) {
 			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableAddress());
 		}
+		
 		return addr;
     }
     
@@ -234,32 +235,32 @@ public class KMyMoneyWritableInstitutionImpl extends KMyMoneyInstitutionImpl
 
 	@Override
     public void setAddress(final KMMAddress adr) {
-	if ( adr == null ) {
-	    throw new IllegalArgumentException("null address given!");
-	}
+		if ( adr == null ) {
+			throw new IllegalArgumentException("null address given!");
+		}
 
-	/*
-	 * if (adr instanceof AddressImpl) { AddressImpl adrImpl = (AddressImpl) adr;
-	 * jwsdpPeer.setInstAddr(adrImpl.jwsdpPeer); } else
-	 */
-	
-	{
+		/*
+		 * if (adr instanceof AddressImpl) { AddressImpl adrImpl = (AddressImpl) adr;
+		 * jwsdpPeer.setInstAddr(adrImpl.jwsdpPeer); } else
+		 */
 
-	    if (jwsdpPeer.getADDRESS() == null) {
-		jwsdpPeer.setADDRESS(getKMyMoneyFile().getObjectFactory().createADDRESS());
-	    }
+		{
 
-	    jwsdpPeer.getADDRESS().setCity(adr.getCity());
-	    jwsdpPeer.getADDRESS().setCounty(adr.getCounty());
-	    jwsdpPeer.getADDRESS().setPostcode(adr.getPostCode());
-	    jwsdpPeer.getADDRESS().setState(adr.getState());
-	    jwsdpPeer.getADDRESS().setStreet(adr.getStreet());
-	    jwsdpPeer.getADDRESS().setTelephone(adr.getTelephone());
-	    jwsdpPeer.getADDRESS().setZip(adr.getZip());
-	    jwsdpPeer.getADDRESS().setZipcode(adr.getZipCode());
-	}
+			if ( jwsdpPeer.getADDRESS() == null ) {
+				jwsdpPeer.setADDRESS(getKMyMoneyFile().getObjectFactory().createADDRESS());
+			}
 
-	getKMyMoneyFile().setModified(true);
+			jwsdpPeer.getADDRESS().setCity(adr.getCity());
+			jwsdpPeer.getADDRESS().setCounty(adr.getCounty());
+			jwsdpPeer.getADDRESS().setPostcode(adr.getPostCode());
+			jwsdpPeer.getADDRESS().setState(adr.getState());
+			jwsdpPeer.getADDRESS().setStreet(adr.getStreet());
+			jwsdpPeer.getADDRESS().setTelephone(adr.getTelephone());
+			jwsdpPeer.getADDRESS().setZip(adr.getZip());
+			jwsdpPeer.getADDRESS().setZipcode(adr.getZipCode());
+		}
+
+		getKMyMoneyFile().setModified(true);
     }
 
     // ---------------------------------------------------------------

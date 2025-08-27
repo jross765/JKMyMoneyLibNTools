@@ -35,6 +35,7 @@ public interface KMyMoneyPrice extends Comparable<KMyMoneyPrice>,
 	 * Very dissatisfying indeed...     
 	 */
     public enum Source {
+    	
     	USER        ( "User" ),
     	TRANSACTION ( "Transaction" );
     	

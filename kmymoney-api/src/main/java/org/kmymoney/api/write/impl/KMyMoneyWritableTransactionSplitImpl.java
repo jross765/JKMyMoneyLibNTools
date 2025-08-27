@@ -127,8 +127,8 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 	}
 
     public KMyMoneyWritableTransactionSplitImpl(final KMyMoneyTransactionSplitImpl splt) {
-	super(splt.getJwsdpPeer(), splt.getTransaction(), 
-		  true, true, true);
+    	super(splt.getJwsdpPeer(), splt.getTransaction(), 
+    		  true, true, true);
     }
 
     public KMyMoneyWritableTransactionSplitImpl(
@@ -153,7 +153,6 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 			final KMyMoneyPayee pye, 
 			final Collection<KMyMoneyTag> tagList, 
 			final KMMSpltID newID) {
-
 		if ( trx == null ) {
 			throw new IllegalArgumentException("null transaction given");
 		}
@@ -280,14 +279,17 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		if ( acct == null ) {
 			return false;
 		}
+		
 		KMyMoneyWritableTransaction trx = getTransaction();
 		if ( trx == null ) {
 			return false;
 		}
+		
 		KMMQualifSecCurrID secCurrID = acct.getQualifSecCurrID();
 		if ( secCurrID == null ) {
 			return false;
 		}
+		
 		return secCurrID.toString().equals(trx.getQualifSecCurrID().toString());
 	}
 
@@ -534,54 +536,54 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
      */
     @Override
     public String toString() {
-	StringBuffer buffer = new StringBuffer();
-	buffer.append("KMyMoneyWritableTransactionSplitImpl [");
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("KMyMoneyWritableTransactionSplitImpl [");
 
-	buffer.append("qualif-id=");
-	buffer.append(getQualifID());
+		buffer.append("qualif-id=");
+		buffer.append(getQualifID());
 
-	// Part of qualif-id:
-	// buffer.append(" transaction-id=");
-	// buffer.append(getTransaction().getID());
+		// Part of qualif-id:
+		// buffer.append(" transaction-id=");
+		// buffer.append(getTransaction().getID());
 
-	buffer.append(", action=");
-	try {
-	    buffer.append(getAction());
-	} catch (Exception e) {
-	    buffer.append("ERROR");
-	}
+		buffer.append(", action=");
+		try {
+			buffer.append(getAction());
+		} catch (Exception e) {
+			buffer.append("ERROR");
+		}
 
-	buffer.append(", state=");
-	try {
-	    buffer.append(getState());
-	} catch (Exception e) {
-	    buffer.append("ERROR");
-	}
+		buffer.append(", state=");
+		try {
+			buffer.append(getState());
+		} catch (Exception e) {
+			buffer.append("ERROR");
+		}
 
-	buffer.append(", account-id=");
-	buffer.append(getAccountID());
+		buffer.append(", account-id=");
+		buffer.append(getAccountID());
 
-	buffer.append(", payee-id=");
-	buffer.append(getPayeeID());
+		buffer.append(", payee-id=");
+		buffer.append(getPayeeID());
 
-	buffer.append(", memo='");
-	buffer.append(getMemo() + "'");
+		buffer.append(", memo='");
+		buffer.append(getMemo() + "'");
 
-	// usually not set:
-	// buffer.append(" transaction-description: '");
-	// buffer.append(getTransaction().getMemo() + "'");
+		// usually not set:
+		// buffer.append(" transaction-description: '");
+		// buffer.append(getTransaction().getMemo() + "'");
 
-	buffer.append(", value=");
-	buffer.append(getValue());
+		buffer.append(", value=");
+		buffer.append(getValue());
 
-	buffer.append(", shares=");
-	buffer.append(getShares());
+		buffer.append(", shares=");
+		buffer.append(getShares());
 
-	buffer.append(", price=");
-	buffer.append(getPrice());
+		buffer.append(", price=");
+		buffer.append(getPrice());
 
-	buffer.append("]");
-	return buffer.toString();
+		buffer.append("]");
+		return buffer.toString();
     }
 
 }

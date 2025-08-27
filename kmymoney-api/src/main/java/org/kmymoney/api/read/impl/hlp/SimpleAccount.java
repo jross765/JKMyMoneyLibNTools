@@ -82,7 +82,6 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 
 	@Override
 	public boolean isChildAccountRecursive(final KMyMoneyAccount account) {
-
 		if ( this == account ) {
 			return true;
 		}
@@ -95,6 +94,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 				return true;
 			}
 		}
+		
 		return false;
 	}
 
@@ -183,7 +183,6 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 	 */
 	@Override
 	public FixedPointNumber getBalance(final LocalDate date, List<KMyMoneyTransactionSplit> after) {
-	
 		FixedPointNumber balance = new FixedPointNumber();
 	
 		for ( KMyMoneyTransactionSplit splt : getTransactionSplits() ) {
@@ -256,9 +255,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 	}
 
 	@Override
-	public FixedPointNumber getBalance(final LocalDate date, final Currency curr)
-			{
-
+	public FixedPointNumber getBalance(final LocalDate date, final Currency curr) {
 		FixedPointNumber retval = getBalance(date);
 
 		if ( retval == null ) {
@@ -303,7 +300,6 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 
 	@Override
 	public FixedPointNumber getBalance(final KMyMoneyTransactionSplit lastIncludesSplit) {
-	
 		FixedPointNumber balance = new FixedPointNumber();
 	
 		for ( KMyMoneyTransactionSplit splt : getTransactionSplits() ) {
@@ -336,14 +332,12 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 	}
 
 	@Override
-	public FixedPointNumber getBalanceRecursive()
-			{
+	public FixedPointNumber getBalanceRecursive() {
 		return getBalanceRecursive(LocalDate.now());
 	}
 
 	@Override
-	public FixedPointNumber getBalanceRecursive(final LocalDate date)
-			{
+	public FixedPointNumber getBalanceRecursive(final LocalDate date) {
 		return getBalanceRecursive(date, getQualifSecCurrID());
 	}
 
@@ -373,8 +367,7 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 
 		if ( secCurrID.getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
 			return getBalanceRecursive(date, new KMMQualifCurrID(secCurrID.getCode()).getCurrency());
-		}
-		else {
+		} else {
 //			return new FixedPointNumber(999999).copy().negate();
 			return getBalance(date, secCurrID); // CAUTION: This assumes that under a stock account,
 												// there are no children (which sounds sensible,
@@ -431,20 +424,17 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 	}
 
 	@Override
-	public String getBalanceRecursiveFormatted()
-			{
+	public String getBalanceRecursiveFormatted() {
 		return getCurrencyFormat().format(getBalanceRecursive());
 	}
 
 	@Override
-	public String getBalanceRecursiveFormatted(final LocalDate date)
-			{
+	public String getBalanceRecursiveFormatted(final LocalDate date) {
 		return getCurrencyFormat().format(getBalanceRecursive(date));
 	}
 
 	@Override
 	public KMyMoneyTransactionSplit getLastSplitBeforeRecursive(final LocalDate date) {
-	
 		KMyMoneyTransactionSplit lastSplit = null;
 	
 		for ( KMyMoneyTransactionSplit split : getTransactionSplits() ) {
@@ -596,9 +586,11 @@ public abstract class SimpleAccount extends KMyMoneyObjectImpl
 		for ( int i = 0; i < s.length() && Character.isDigit(s.charAt(i)); i++ ) {
 			digitCount++;
 		}
+		
 		if ( digitCount == 0 ) {
 			return null;
 		}
+		
 		return Long.valueOf(s.substring(0, digitCount));
 	}
 

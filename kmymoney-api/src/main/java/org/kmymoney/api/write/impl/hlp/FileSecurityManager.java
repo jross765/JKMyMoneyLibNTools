@@ -3,8 +3,8 @@ package org.kmymoney.api.write.impl.hlp;
 import org.kmymoney.api.generated.SECURITY;
 import org.kmymoney.api.read.KMyMoneySecurity;
 import org.kmymoney.api.read.impl.KMyMoneySecurityImpl;
-import org.kmymoney.api.write.impl.KMyMoneyWritableSecurityImpl;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
+import org.kmymoney.api.write.impl.KMyMoneyWritableSecurityImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

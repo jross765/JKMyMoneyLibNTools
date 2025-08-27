@@ -60,7 +60,7 @@ public class KMyMoneyTagImpl extends KMyMoneyObjectImpl
      */
     @SuppressWarnings("exports")
     public TAG getJwsdpPeer() {
-	return jwsdpPeer;
+    	return jwsdpPeer;
     }
 
 	// ---------------------------------------------------------------
@@ -105,33 +105,29 @@ public class KMyMoneyTagImpl extends KMyMoneyObjectImpl
      * @see KMyMoneyPayee#addTransactionSplit(KMyMoneyTransactionSplit)
      */
     public void addTransactionSplit(final KMyMoneyTransactionSplit splt) {
-    	if ( splt == null ) {
-    		throw new IllegalArgumentException("null transaction split given");
-    	}
-    	
-	KMyMoneyTransactionSplit old = getTransactionSplitByID(splt.getQualifID());
-	if ( old != null ) {
-	    // There already is a split with that ID
-	    if ( ! old.equals(splt) ) {
-			System.err.println("addTransactionSplit: New Transaction object with same ID, needs to be replaced: " + 
-					splt.getID() + "[" + splt.getClass().getName() + "] and " + 
-					old.getID() + "[" + old.getClass().getName() + "]\n" + 
-					"new=" + splt.toString() + "\n" + 
-					"old=" + old.toString());
-			LOGGER.error("addTransactionSplit: New Transaction object with same ID, needs to be replaced: " + 
-					splt.getID() + "[" + splt.getClass().getName() + "] and " + 
-					old.getID() + "[" + old.getClass().getName() + "]\n" + 
-					"new=" + splt.toString() + "\n" + 
-					"old=" + old.toString());
-			IllegalStateException exc = new IllegalStateException("DEBUG");
-			exc.printStackTrace();
-			replaceTransactionSplit(old, (KMyMoneyTransactionSplitImpl) splt);
-	    }
-	} else {
-	    // There is no transaction with that ID yet
-	    mySplits.add(splt);
-	    mySplitsNeedSorting = true;
-	}
+		if ( splt == null ) {
+			throw new IllegalArgumentException("null transaction split given");
+		}
+
+		KMyMoneyTransactionSplit old = getTransactionSplitByID(splt.getQualifID());
+		if ( old != null ) {
+			// There already is a split with that ID
+			if ( !old.equals(splt) ) {
+				System.err.println("addTransactionSplit: New Transaction object with same ID, needs to be replaced: "
+						+ splt.getID() + "[" + splt.getClass().getName() + "] and " + old.getID() + "["
+						+ old.getClass().getName() + "]\n" + "new=" + splt.toString() + "\n" + "old=" + old.toString());
+				LOGGER.error("addTransactionSplit: New Transaction object with same ID, needs to be replaced: "
+						+ splt.getID() + "[" + splt.getClass().getName() + "] and " + old.getID() + "["
+						+ old.getClass().getName() + "]\n" + "new=" + splt.toString() + "\n" + "old=" + old.toString());
+				IllegalStateException exc = new IllegalStateException("DEBUG");
+				exc.printStackTrace();
+				replaceTransactionSplit(old, (KMyMoneyTransactionSplitImpl) splt);
+			}
+		} else {
+			// There is no transaction with that ID yet
+			mySplits.add(splt);
+			mySplitsNeedSorting = true;
+		}
     }
 
     /**

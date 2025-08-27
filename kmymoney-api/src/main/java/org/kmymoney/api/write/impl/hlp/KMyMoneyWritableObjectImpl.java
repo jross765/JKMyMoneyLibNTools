@@ -76,6 +76,7 @@ public class KMyMoneyWritableObjectImpl extends KMyMoneyObjectImpl
 		if ( myPtyChg == null ) {
 			myPtyChg = new PropertyChangeSupport(this);
 		}
+		
 		myPtyChg.addPropertyChangeListener(listener);
 	}
 
@@ -96,6 +97,7 @@ public class KMyMoneyWritableObjectImpl extends KMyMoneyObjectImpl
 		if ( myPtyChg == null ) {
 			myPtyChg = new PropertyChangeSupport(this);
 		}
+		
 		myPtyChg.addPropertyChangeListener(ptyName, listener);
 	}
 

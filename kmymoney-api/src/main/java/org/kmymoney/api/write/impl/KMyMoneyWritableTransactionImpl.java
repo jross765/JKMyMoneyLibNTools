@@ -549,14 +549,8 @@ public class KMyMoneyWritableTransactionImpl extends KMyMoneyTransactionImpl
 	buffer.append("id=");
 	buffer.append(getID());
 
-	// ::TODO: That only works in simple cases --
-	// need a more generic approach
-	buffer.append(", amount=");
-	try {
-	    buffer.append(getFirstSplit().getValueFormatted());
-	} catch (TransactionSplitNotFoundException e) {
-	    buffer.append("ERROR");
-	}
+	buffer.append(", balance=");
+	buffer.append(getBalanceFormatted());
 
 	buffer.append(", description='");
 	buffer.append(getMemo() + "'");

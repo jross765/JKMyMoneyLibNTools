@@ -37,9 +37,9 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
      */
     @SuppressWarnings("exports")
     public KMyMoneyPricePairImpl(final PRICEPAIR newPeer, final KMyMoneyFile kmmFile) {
-	super(kmmFile);
+    	super(kmmFile);
 		
-	this.jwsdpPeer = newPeer;
+    	this.jwsdpPeer = newPeer;
     }
 
 	// ---------------------------------------------------------------
@@ -49,7 +49,7 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
      */
     @SuppressWarnings("exports")
     public PRICEPAIR getJwsdpPeer() {
-	return jwsdpPeer;
+    	return jwsdpPeer;
     }
 
     // -----------------------------------------------------------
@@ -68,131 +68,131 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
     
     @Override
     public String getFromSecCurrStr() {
-	return jwsdpPeer.getFrom();
+    	return jwsdpPeer.getFrom();
     }
 
     @Override
     public String getToCurrStr() {
-	return jwsdpPeer.getTo();
+    	return jwsdpPeer.getTo();
     }
 
     // ---------------------------------------------------------------
     
     @Override
     public KMMQualifSecCurrID getFromSecCurrQualifID() {
-	String secCurrID = getFromSecCurrStr();
+		String secCurrID = getFromSecCurrStr();
 
-	KMMQualifSecCurrID result = null;
-	if ( secCurrID.startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
-	    result = new KMMQualifSecID(secCurrID);
-	} else {
-	    result = new KMMQualifCurrID(secCurrID);
-	}
-	    
-	return result;
+		KMMQualifSecCurrID result = null;
+		if ( secCurrID.startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
+			result = new KMMQualifSecID(secCurrID);
+		} else {
+			result = new KMMQualifCurrID(secCurrID);
+		}
+
+		return result;
     }
 
     @Override
     public KMMQualifSecID getFromSecurityQualifID() {
-	KMMQualifSecCurrID secCurrID = getFromSecCurrQualifID();
-	if ( secCurrID.getType() != KMMQualifSecCurrID.Type.SECURITY )
-	    throw new InvalidQualifSecCurrTypeException();
-	    
-	return new KMMQualifSecID(secCurrID);
+		KMMQualifSecCurrID secCurrID = getFromSecCurrQualifID();
+		if ( secCurrID.getType() != KMMQualifSecCurrID.Type.SECURITY )
+			throw new InvalidQualifSecCurrTypeException();
+
+		return new KMMQualifSecID(secCurrID);
     }
 
     @Override
     public KMMQualifCurrID getFromCurrencyQualifID() {
-	KMMQualifSecCurrID secCurrID = getFromSecCurrQualifID();
-	if ( secCurrID.getType() != KMMQualifSecCurrID.Type.CURRENCY )
-	    throw new InvalidQualifSecCurrTypeException();
+		KMMQualifSecCurrID secCurrID = getFromSecCurrQualifID();
+		if ( secCurrID.getType() != KMMQualifSecCurrID.Type.CURRENCY )
+			throw new InvalidQualifSecCurrTypeException();
 
-	return new KMMQualifCurrID(secCurrID);
+		return new KMMQualifCurrID(secCurrID);
     }
 
     @Override
     public KMyMoneySecurity getFromSecurity() {
-	KMMQualifSecID secID = getFromSecurityQualifID();
-	
-	KMyMoneySecurity cmdty = getKMyMoneyFile().getSecurityByQualifID(secID);
-	
-	return cmdty;
+		KMMQualifSecID secID = getFromSecurityQualifID();
+
+		KMyMoneySecurity cmdty = getKMyMoneyFile().getSecurityByQualifID(secID);
+
+		return cmdty;
     }
     
     @Override
     public String getFromCurrencyCode() {
-	return getFromCurrencyQualifID().getCurrency().getCurrencyCode();
+		return getFromCurrencyQualifID().getCurrency().getCurrencyCode();
     }
 
     @Override
     public KMyMoneyCurrency getFromCurrency() {
-	KMMQualifCurrID currID = getFromCurrencyQualifID();
-	
-	KMyMoneyCurrency curr = getKMyMoneyFile().getCurrencyByQualifID(currID);
-	
-	return curr;
+		KMMQualifCurrID currID = getFromCurrencyQualifID();
+
+		KMyMoneyCurrency curr = getKMyMoneyFile().getCurrencyByQualifID(currID);
+
+		return curr;
     }
     
     // ----------------------------
     
     @Override
     public KMMQualifCurrID getToCurrencyQualifID() {
-	String secCurrID = getToCurrStr();
+		String secCurrID = getToCurrStr();
 
-	KMMQualifCurrID result = null;
-	if ( secCurrID.startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
-	    throw new InvalidQualifSecCurrTypeException();
-	} else {
-	    result = new KMMQualifCurrID(secCurrID);
-	}
-	    
-	return result;
+		KMMQualifCurrID result = null;
+		if ( secCurrID.startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
+			throw new InvalidQualifSecCurrTypeException();
+		} else {
+			result = new KMMQualifCurrID(secCurrID);
+		}
+
+		return result;
     }
 
     @Override
     public String getToCurrencyCode() {
-	return getToCurrencyQualifID().getCode();
+    	return getToCurrencyQualifID().getCode();
     }
 
     @Override
     public KMyMoneyCurrency getToCurrency() {
-	KMMQualifCurrID currID = getToCurrencyQualifID();
-	
-	KMyMoneyCurrency curr = getKMyMoneyFile().getCurrencyByQualifID(currID);
-	
-	return curr;
+		KMMQualifCurrID currID = getToCurrencyQualifID();
+
+		KMyMoneyCurrency curr = getKMyMoneyFile().getCurrencyByQualifID(currID);
+
+		return curr;
     }
 
     // -----------------------------------------------------------
     
     @Override
     public List<KMyMoneyPrice> getPrices() {
-    	List<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
-	
-	for ( PRICE prc : jwsdpPeer.getPRICE() ) {
-	    KMyMoneyPrice newPrc = new KMyMoneyPriceImpl(this, prc, getKMyMoneyFile());
-	    result.add(newPrc);
-	}
-	
-	try {
-	    LOGGER.debug("getPrices: Found " + result.size() + " prices for KMMPricePair " + getID());
-	} catch (Exception e) {
-	    LOGGER.debug("getPrices: Found " + result.size() + " prices for KMMPricePair " + "ERROR");
-	}
-	
-	return result;
+		List<KMyMoneyPrice> result = new ArrayList<KMyMoneyPrice>();
+
+		for ( PRICE prc : jwsdpPeer.getPRICE() ) {
+			KMyMoneyPrice newPrc = new KMyMoneyPriceImpl(this, prc, getKMyMoneyFile());
+			result.add(newPrc);
+		}
+
+		try {
+			LOGGER.debug("getPrices: Found " + result.size() + " prices for KMMPricePair " + getID());
+		} catch (Exception e) {
+			LOGGER.debug("getPrices: Found " + result.size() + " prices for KMMPricePair " + "ERROR");
+		}
+
+		return result;
     }
 
     // -----------------------------------------------------------
     
     public boolean equals(KMyMoneyPricePair other) {
-	if ( ! getFromSecCurrQualifID().toString().equals(other.getFromSecCurrQualifID().toString()) )
-	    return false;
+		if ( !getFromSecCurrQualifID().toString().equals(other.getFromSecCurrQualifID().toString()) )
+			return false;
 
-	if ( ! getToCurrencyQualifID().toString().equals(other.getToCurrencyQualifID().toString()) )
-	    return false;
-	
-	return true;
+		if ( !getToCurrencyQualifID().toString().equals(other.getToCurrencyQualifID().toString()) )
+			return false;
+
+		return true;
     }
     
     // -----------------------------------------------------------------
@@ -211,31 +211,31 @@ public class KMyMoneyPricePairImpl extends KMyMoneyObjectImpl
     
     @Override
     public String toString() {
-	return toStringShort();
+    	return toStringShort();
     }
 
     public String toStringShort() {
-	return getFromSecCurrStr() + ";" + getToCurrStr();
+    	return getFromSecCurrStr() + ";" + getToCurrStr();
     }
 
     public String toStringLong() {
-	String result = "KMMPricePairImpl [";
-	
-	try {
-	    result += "from-sec-curr=" + getFromSecCurrQualifID();
-	} catch (Exception e) {
-	    result += "from-sec-curr=" + "ERROR";
-	}
+		String result = "KMMPricePairImpl [";
 
-	try {
-	    result += ", to-curr=" + getToCurrencyQualifID();
-	} catch (Exception e) {
-	    result += ", to-curr=" + "ERROR";
-	}
-	
-	result += "]";
-	
-	return result;
+		try {
+			result += "from-sec-curr=" + getFromSecCurrQualifID();
+		} catch (Exception e) {
+			result += "from-sec-curr=" + "ERROR";
+		}
+
+		try {
+			result += ", to-curr=" + getToCurrencyQualifID();
+		} catch (Exception e) {
+			result += ", to-curr=" + "ERROR";
+		}
+
+		result += "]";
+
+		return result;
     }
 
 }

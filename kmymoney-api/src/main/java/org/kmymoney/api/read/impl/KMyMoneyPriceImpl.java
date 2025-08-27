@@ -60,10 +60,10 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
     		final KMyMoneyPricePair parent, 
     		final PRICE newPeer, 
     		final KMyMoneyFile kmmFile) {
-	super(kmmFile);
+    	super(kmmFile);
 		
-	this.parent    = parent;
-	this.jwsdpPeer = newPeer;
+    	this.parent    = parent;
+    	this.jwsdpPeer = newPeer;
     }
 
 	// ---------------------------------------------------------------
@@ -73,95 +73,95 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
      */
     @SuppressWarnings("exports")
     public PRICE getJwsdpPeer() {
-	return jwsdpPeer;
+    	return jwsdpPeer;
     }
 
     // -----------------------------------------------------------
     
     @Override
     public KMMPriceID getID() {
-	return new KMMPriceID(parent.getFromSecCurrStr(),
-		              parent.getToCurrStr(),
-		              DATE_FORMAT.format(getDate()));
+    	return new KMMPriceID(parent.getFromSecCurrStr(),
+    						  parent.getToCurrStr(),
+    						  DATE_FORMAT.format(getDate()));
     }
 
     @Override
     public KMMPricePairID getParentPricePairID() {
-	return parent.getID();
+    	return parent.getID();
     }
 
     @Override
     public KMyMoneyPricePair getParentPricePair() {
-	return parent;
+    	return parent;
     }
 
     // ---------------------------------------------------------------
     
     @Override
     public String getFromSecCurrStr() {
-	return parent.getFromSecCurrStr();
+    	return parent.getFromSecCurrStr();
     }
 
     @Override
     public String getToCurrStr() {
-	return parent.getToCurrStr();
+    	return parent.getToCurrStr();
     }
     
     // ----------------------------
 
     @Override
     public KMMQualifSecCurrID getFromSecCurrQualifID() {
-	return parent.getFromSecCurrQualifID();
+    	return parent.getFromSecCurrQualifID();
     }
 
     @Override
     public KMMQualifSecID getFromSecurityQualifID() {
-	KMMQualifSecCurrID secCurrID = getFromSecCurrQualifID();
-	if ( secCurrID.getType() != KMMQualifSecCurrID.Type.SECURITY )
-	    throw new InvalidQualifSecCurrTypeException();
-	    
-	return new KMMQualifSecID(secCurrID);
+		KMMQualifSecCurrID secCurrID = getFromSecCurrQualifID();
+		if ( secCurrID.getType() != KMMQualifSecCurrID.Type.SECURITY )
+			throw new InvalidQualifSecCurrTypeException();
+
+		return new KMMQualifSecID(secCurrID);
     }
 
     @Override
     public KMMQualifCurrID getFromCurrencyQualifID() {
-	KMMQualifSecCurrID secCurrID = getFromSecCurrQualifID();
-	if ( secCurrID.getType() != KMMQualifSecCurrID.Type.CURRENCY )
-	    throw new InvalidQualifSecCurrTypeException();
+		KMMQualifSecCurrID secCurrID = getFromSecCurrQualifID();
+		if ( secCurrID.getType() != KMMQualifSecCurrID.Type.CURRENCY )
+			throw new InvalidQualifSecCurrTypeException();
 
-	return new KMMQualifCurrID(secCurrID);
+		return new KMMQualifCurrID(secCurrID);
     }
 
     @Override
     public KMyMoneySecurity getFromSecurity() {
-	return parent.getFromSecurity();
+    	return parent.getFromSecurity();
     }
     
     @Override
     public String getFromCurrencyCode() {
-	return getFromCurrencyQualifID().getCurrency().getCurrencyCode();
+    	return getFromCurrencyQualifID().getCurrency().getCurrencyCode();
     }
 
     @Override
     public KMyMoneyCurrency getFromCurrency() {
-	return parent.getFromCurrency();
+    	return parent.getFromCurrency();
     }
     
     // ----------------------------
     
     @Override
     public KMMQualifCurrID getToCurrencyQualifID() {
-	return parent.getToCurrencyQualifID();
+    	return parent.getToCurrencyQualifID();
     }
 
     @Override
     public String getToCurrencyCode() {
-	return getToCurrencyQualifID().getCode();
+    	return getToCurrencyQualifID().getCode();
     }
 
     @Override
     public KMyMoneyCurrency getToCurrency() {
-	return parent.getToCurrency();
+    	return parent.getToCurrency();
     }
 
     // ---------------------------------------------------------------
@@ -172,41 +172,41 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
      * @throws InvalidQualifSecCurrIDException 
      */
     private NumberFormat getCurrencyFormat() {
-	if (currencyFormat == null) {
-	    currencyFormat = NumberFormat.getCurrencyInstance();
-	}
+		if ( currencyFormat == null ) {
+			currencyFormat = NumberFormat.getCurrencyInstance();
+		}
 
-//	// the currency may have changed
-//	if ( ! getCurrencyQualifID().getType().equals(SecurityCurrID.Type.CURRENCY) )
-//	    throw new InvalidSecCurrTypeException();
-	    
-	Currency currency = Currency.getInstance(getToCurrencyCode());
-	currencyFormat.setCurrency(currency);
+//		The currency may have changed
+//		if ( ! getCurrencyQualifID().getType().equals(SecurityCurrID.Type.CURRENCY) )
+//	    	throw new InvalidSecCurrTypeException();
 
-	return currencyFormat;
+		Currency currency = Currency.getInstance(getToCurrencyCode());
+		currencyFormat.setCurrency(currency);
+
+		return currencyFormat;
     }
 
     @Override
     public LocalDate getDate() {
-	if ( jwsdpPeer.getDate() == null )
-	    return null;
-	
-	XMLGregorianCalendar cal = jwsdpPeer.getDate();
-	try {
-	    return LocalDate.of(cal.getYear(), cal.getMonth(), cal.getDay());
-	} catch (Exception e) {
-	    IllegalStateException ex = new IllegalStateException("unparsable date '" + cal + "' in price!");
-	    ex.initCause(e);
-	    throw ex;
-	}
+		if ( jwsdpPeer.getDate() == null )
+			return null;
+
+		XMLGregorianCalendar cal = jwsdpPeer.getDate();
+		try {
+			return LocalDate.of(cal.getYear(), cal.getMonth(), cal.getDay());
+		} catch (Exception e) {
+			IllegalStateException ex = new IllegalStateException("unparsable date '" + cal + "' in price!");
+			ex.initCause(e);
+			throw ex;
+		}
     }
 
     @Override
     public String getDateStr() {
-	if ( jwsdpPeer.getDate() == null )
-	    return null;
-	
-	return jwsdpPeer.getDate().toString();
+		if ( jwsdpPeer.getDate() == null )
+			return null;
+
+		return jwsdpPeer.getDate().toString();
     }
 
     @Override
@@ -223,15 +223,15 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
 
     @Override
     public FixedPointNumber getValue() {
-	if ( jwsdpPeer.getPrice() == null )
-	    return null;
-	
-	return new FixedPointNumber(jwsdpPeer.getPrice());
+		if ( jwsdpPeer.getPrice() == null )
+			return null;
+
+		return new FixedPointNumber(jwsdpPeer.getPrice());
     }
 
     @Override
     public String getValueFormatted() {
-	return getCurrencyFormat().format(getValue());
+    	return getCurrencyFormat().format(getValue());
     }
 
     // -----------------------------------------------------------------
@@ -262,36 +262,36 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
 
     @Override
     public String toString() {
-	String result = "KMyMoneyPriceImpl [";
-	
-	try {
-	    result += "id='" + getID() + "'";
-	} catch (Exception e) {
-	    result += "id=" + "ERROR";
-	}
-	
-	try {
-	    result += ", from-sec-curr-qualif-id='" + getFromSecCurrQualifID() + "'";
-	} catch (Exception e) {
-	    result += ", from-sec-curr-qualif-id=" + "ERROR";
-	}
-	
-	try {
-	    result += ", to-curr-qualif-id='" + getToCurrencyQualifID() + "'";
-	} catch (Exception e) {
-	    result += ", to-curr-qualif-id=" + "ERROR";
-	}
-	
-	result += ", date=" + getDate(); 
-	result += ", source='" + getSource() + "'"; 
-	
-	try {
-	    result += ", value=" + getValueFormatted() + "]";
-	} catch (Exception e) {
-	    result += ", value=" + "ERROR" + "]";
-	}
-	
-	return result;
+		String result = "KMyMoneyPriceImpl [";
+
+		try {
+			result += "id='" + getID() + "'";
+		} catch (Exception e) {
+			result += "id=" + "ERROR";
+		}
+
+		try {
+			result += ", from-sec-curr-qualif-id='" + getFromSecCurrQualifID() + "'";
+		} catch (Exception e) {
+			result += ", from-sec-curr-qualif-id=" + "ERROR";
+		}
+
+		try {
+			result += ", to-curr-qualif-id='" + getToCurrencyQualifID() + "'";
+		} catch (Exception e) {
+			result += ", to-curr-qualif-id=" + "ERROR";
+		}
+
+		result += ", date=" + getDate();
+		result += ", source='" + getSource() + "'";
+
+		try {
+			result += ", value=" + getValueFormatted() + "]";
+		} catch (Exception e) {
+			result += ", value=" + "ERROR" + "]";
+		}
+
+		return result;
     }
 
 }

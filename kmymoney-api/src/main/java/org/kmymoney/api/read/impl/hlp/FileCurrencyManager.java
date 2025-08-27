@@ -5,12 +5,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.kmymoney.api.generated.CURRENCY;
 import org.kmymoney.api.generated.KMYMONEYFILE;
 import org.kmymoney.api.read.KMyMoneyCurrency;
 import org.kmymoney.api.read.impl.KMyMoneyCurrencyImpl;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.base.basetypes.complex.KMMQualifCurrID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -41,7 +41,7 @@ public class KMyMoneyWritableTagImpl extends KMyMoneyTagImpl
 	public KMyMoneyWritableTagImpl(
 			final TAG jwsdpPeer,
 			final KMyMoneyWritableFileImpl file) {
-	super(jwsdpPeer, file);
+    	super(jwsdpPeer, file);
     }
 
     /**
@@ -137,7 +137,7 @@ public class KMyMoneyWritableTagImpl extends KMyMoneyTagImpl
      */
     @Override
     public KMyMoneyWritableFileImpl getWritableKMyMoneyFile() {
-	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+    	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
     }
 
     /**
@@ -147,7 +147,7 @@ public class KMyMoneyWritableTagImpl extends KMyMoneyTagImpl
      */
     @Override
     public KMyMoneyWritableFileImpl getKMyMoneyFile() {
-	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+    	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
     }
 
     // ---------------------------------------------------------------
@@ -220,23 +220,23 @@ public class KMyMoneyWritableTagImpl extends KMyMoneyTagImpl
 
     @Override
     public String toString() {
-	StringBuffer buffer = new StringBuffer();
-	buffer.append("KMyMoneyWritableTagImpl [");
-	
-	buffer.append("id=");
-	buffer.append(getID());
-	
-	buffer.append(", name='");
-	buffer.append(getName() + "'");
-	
-	buffer.append(", notes='");
-	buffer.append(getNotes() + "'");
-	
-	buffer.append(", color='");
-	buffer.append(getColor() + "'");
-	
-	buffer.append("]");
-	return buffer.toString();
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("KMyMoneyWritableTagImpl [");
+
+		buffer.append("id=");
+		buffer.append(getID());
+
+		buffer.append(", name='");
+		buffer.append(getName() + "'");
+
+		buffer.append(", notes='");
+		buffer.append(getNotes() + "'");
+
+		buffer.append(", color='");
+		buffer.append(getColor() + "'");
+
+		buffer.append("]");
+		return buffer.toString();
     }
 
 }

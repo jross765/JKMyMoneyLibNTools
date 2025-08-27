@@ -37,87 +37,87 @@ public interface KMyMoneyTransactionSplit extends Comparable<KMyMoneyTransaction
     public enum Action {
 	
         // ::MAGIC
-	CHECK             ( "Check" ),
-	DEPOSIT           ( "Deposit" ),
-	TRANSFER          ( "Transfer" ),
-	WITHDRAWAL        ( "Withdrawal" ),
-	ATM               ( "ATM" ),
-	AMORTIZATION      ( "Amortization" ),
-	INTEREST          ( "Interest" ),
-	BUY_SHARES        ( "Buy" ),
-	SELL_SHARES       ( "Sell" ),   // actually not used
+    	CHECK             ( "Check" ),
+    	DEPOSIT           ( "Deposit" ),
+    	TRANSFER          ( "Transfer" ),
+    	WITHDRAWAL        ( "Withdrawal" ),
+    	ATM               ( "ATM" ),
+    	AMORTIZATION      ( "Amortization" ),
+    	INTEREST          ( "Interest" ),
+    	BUY_SHARES        ( "Buy" ),
+    	SELL_SHARES       ( "Sell" ),   // actually not used
                                     // (instead, BUY_SHARES w/ neg. value)!
-	DIVIDEND          ( "Dividend" ),
-	REINVEST_DIVIDEND ( "Reinvest" ),
-	YIELD             ( "Yield" ),
-	ADD_SHARES        ( "Add" ),
-	REMOVE_SHARES     ( "Remove" ), // actually not used
+    	DIVIDEND          ( "Dividend" ),
+    	REINVEST_DIVIDEND ( "Reinvest" ),
+    	YIELD             ( "Yield" ),
+    	ADD_SHARES        ( "Add" ),
+    	REMOVE_SHARES     ( "Remove" ), // actually not used
                                     // (instead, ADD_SHARES w/ neg. value)!
-	SPLIT_SHARES      ( "Split" ),
-	INTEREST_INCOME   ( "IntIncome" );
+    	SPLIT_SHARES      ( "Split" ),
+    	INTEREST_INCOME   ( "IntIncome" );
 	
-	// ---
+    	// ---
 	      
-	private String code = "UNSET";
+    	private String code = "UNSET";
 
-	// ---
+    	// ---
 	      
-	Action(String code) {
-	    this.code = code;
-	}
+    	Action(String code) {
+    		this.code = code;
+    	}
 	      
-	// ---
+    	// ---
 		
-	public String getCode() {
-	    return code;
-	}
+    	public String getCode() {
+    		return code;
+    	}
 		
-	// no typo!
-	public static Action valueOff(String code) {
-	    for ( Action act : values() ) {
-		if ( act.getCode().equals(code) ) {
-		    return act;
-		}
+    	// no typo!
+    	public static Action valueOff(String code) {
+		    for ( Action act : values() ) {
+		    	if ( act.getCode().equals(code) ) {
+		    		return act;
+			}
 	    }
 		    
 	    return null;
-	}
+    	}
     }
     
     // Also called "ReconFlag"
     public enum State {
 
-	NOT_RECONCILED ( 0 ),
-	CLEARED        ( 1 ),
-	RECONCILED     ( 2 ),
-	FROZEN         ( 3 );
+    	NOT_RECONCILED ( 0 ),
+    	CLEARED        ( 1 ),
+    	RECONCILED     ( 2 ),
+    	FROZEN         ( 3 );
 	
-	// ---
+    	// ---
 	      
-	private int index = -1;
+    	private int index = -1;
 
-	// ---
+    	// ---
 	      
-	State(int index) {
-	    this.index = index;
-	}
+    	State(int index) {
+    		this.index = index;
+    	}
 	      
-	// ---
+    	// ---
 		
-	public int getIndex() {
-	    return index;
-	}
+    	public int getIndex() {
+	  	 return index;
+    	}
 		
-	// no typo!
-	public static State valueOff(int index) {
-	    for ( State stat : values() ) {
-		if ( stat.getIndex() == index ) {
-		    return stat;
-		}
-	    }
+    	// no typo!
+    	public static State valueOff(int index) {
+	    		for ( State stat : values() ) {
+			if ( stat.getIndex() == index ) {
+				return stat;
+			}
+	    		}
 		    
-	    return null;
-	}
+	    		return null;
+    	}
     }
 	
     // ---------------------------------------------------------------

@@ -104,7 +104,7 @@ public class KMyMoneyWritableCurrencyImpl extends KMyMoneyCurrencyImpl
      */
     @Override
     public KMyMoneyWritableFileImpl getWritableKMyMoneyFile() {
-	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+    	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
     }
 
     /**
@@ -114,7 +114,7 @@ public class KMyMoneyWritableCurrencyImpl extends KMyMoneyCurrencyImpl
      */
     @Override
     public KMyMoneyWritableFileImpl getKMyMoneyFile() {
-	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+    	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
     }
 
     // ---------------------------------------------------------------
@@ -185,7 +185,6 @@ public class KMyMoneyWritableCurrencyImpl extends KMyMoneyCurrencyImpl
 	@Override
 	public void setRoundingMethod(RoundingMethod mthd) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -211,7 +210,6 @@ public class KMyMoneyWritableCurrencyImpl extends KMyMoneyCurrencyImpl
 	@Override
 	public void getSCF(BigInteger scf) {
 		// TODO Auto-generated method stub
-		
 	}
 
     // -----------------------------------------------------------------

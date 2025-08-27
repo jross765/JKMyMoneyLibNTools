@@ -15,8 +15,6 @@ import org.kmymoney.base.basetypes.complex.KMMPricePairID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import xyz.schnorxoborx.base.beanbase.NoEntryFoundException;
-
 public class FilePriceManager extends org.kmymoney.api.read.impl.hlp.FilePriceManager {
 
 	protected static final Logger LOGGER = LoggerFactory.getLogger(FilePriceManager.class);

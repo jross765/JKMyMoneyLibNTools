@@ -305,7 +305,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      */
     @Override
     public FixedPointNumber getAccountBalance() {
-	return getAccount().getBalance(this);
+    	return getAccount().getBalance(this);
     }
 
     /**
@@ -315,7 +315,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      */
     @Override
     public String getAccountBalanceFormatted() {
-	return ((KMyMoneyAccountImpl) getAccount()).getCurrencyFormat().format(getAccountBalance());
+    	return ((KMyMoneyAccountImpl) getAccount()).getCurrencyFormat().format(getAccountBalance());
     }
 
     /**
@@ -325,7 +325,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      */
     @Override
     public String getAccountBalanceFormatted(final Locale lcl) {
-	return getAccount().getBalanceFormatted(lcl);
+    	return getAccount().getBalanceFormatted(lcl);
     }
 
     // ---------------------------------------------------------------
@@ -335,7 +335,7 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      */
     @Override
     public FixedPointNumber getShares() {
-	return new FixedPointNumber(jwsdpPeer.getShares());
+    	return new FixedPointNumber(jwsdpPeer.getShares());
     }
 
     /**
@@ -359,13 +359,12 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     @Override
     public String getSharesFormatted(final Locale lcl) {
 		NumberFormat nf = getSharesCurrencyFormat();
-	if ( getAccount().getQualifSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
-	    nf.setCurrency(new KMMQualifCurrID(getAccount().getQualifSecCurrID()).getCurrency());
-	    return nf.format(getShares());
-	}
-	else {
-	    return nf.format(getShares()) + " " + getAccount().getQualifSecCurrID().toString(); 
-	}
+		if ( getAccount().getQualifSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
+			nf.setCurrency(new KMMQualifCurrID(getAccount().getQualifSecCurrID()).getCurrency());
+			return nf.format(getShares());
+		} else {
+			return nf.format(getShares()) + " " + getAccount().getQualifSecCurrID().toString();
+		}
     }
 
     // ---------------------------------------------------------------
@@ -388,24 +387,23 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
 
     @Override
     public String getPriceFormatted(Locale lcl) {
-    	NumberFormat nf = NumberFormat.getCurrencyInstance(lcl);
-    	if ( getAccount().getQualifSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
-    	    nf.setCurrency(new KMMQualifCurrID(getAccount().getQualifSecCurrID()).getCurrency());
-    	    return nf.format(getPrice());
-    	}
-    	else {
-    	    return nf.format(getPrice()) + " " + getAccount().getQualifSecCurrID().toString(); 
-    	}
+		NumberFormat nf = NumberFormat.getCurrencyInstance(lcl);
+		if ( getAccount().getQualifSecCurrID().getType() == KMMQualifSecCurrID.Type.CURRENCY ) {
+			nf.setCurrency(new KMMQualifCurrID(getAccount().getQualifSecCurrID()).getCurrency());
+			return nf.format(getPrice());
+		} else {
+			return nf.format(getPrice()) + " " + getAccount().getQualifSecCurrID().toString();
+		}
     }
 
     // ---------------------------------------------------------------
 
     @Override
     public String getMemo() {
-	if (jwsdpPeer.getMemo() == null) {
-	    return "";
-	}
-	return jwsdpPeer.getMemo();
+    	if (jwsdpPeer.getMemo() == null) {
+    		return "";
+    	}
+    	return jwsdpPeer.getMemo();
     }
     
     // ---------------------------------------------------------------
@@ -433,32 +431,32 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     // ---------------------------------------------------------------
 
     public int compareTo(final KMyMoneyTransactionSplit otherSplt) {
-	try {
-	    KMyMoneyTransaction otherTrans = otherSplt.getTransaction();
-	    int c = otherTrans.compareTo(getTransaction());
-	    if (c != 0) {
-		return c;
-	    }
+		try {
+			KMyMoneyTransaction otherTrans = otherSplt.getTransaction();
+			int c = otherTrans.compareTo(getTransaction());
+			if ( c != 0 ) {
+				return c;
+			}
 
-	    if ( ! otherSplt.getQualifID().equals(getQualifID()) ) {
-		return otherSplt.getID().compareTo(getID());
-	    }
+			if ( !otherSplt.getQualifID().equals(getQualifID()) ) {
+				return otherSplt.getID().compareTo(getID());
+			}
 
-	    if (otherSplt != this) {
-		System.err.println("Duplicate transaction-split-id!! " + otherSplt.getQualifID() + "["
-			+ otherSplt.getClass().getName() + "] and " + getQualifID() + "[" + getClass().getName() + "]\n"
-			+ "split0=" + otherSplt.toString() + "\n" + "split1=" + toString() + "\n");
-		IllegalStateException x = new IllegalStateException("DEBUG");
-		x.printStackTrace();
+			if ( otherSplt != this ) {
+				System.err.println("Duplicate transaction-split-id!! " + otherSplt.getQualifID() + "["
+						+ otherSplt.getClass().getName() + "] and " + getQualifID() + "[" + getClass().getName() + "]\n"
+						+ "split0=" + otherSplt.toString() + "\n" + "split1=" + toString() + "\n");
+				IllegalStateException x = new IllegalStateException("DEBUG");
+				x.printStackTrace();
 
-	    }
+			}
 
-	    return 0;
+			return 0;
 
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    return 0;
-	}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		}
     }
 
     // ---------------------------------------------------------------
@@ -468,54 +466,54 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
      */
     @Override
     public String toString() {
-	StringBuffer buffer = new StringBuffer();
-	buffer.append("KMyMoneyTransactionSplitImpl [");
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("KMyMoneyTransactionSplitImpl [");
 
-	buffer.append("qualif-id=");
-	buffer.append(getQualifID());
+		buffer.append("qualif-id=");
+		buffer.append(getQualifID());
 
-	// Part of qualif-id:
-	// buffer.append(" transaction-id=");
-	// buffer.append(getTransaction().getID());
+		// Part of qualif-id:
+		// buffer.append(" transaction-id=");
+		// buffer.append(getTransaction().getID());
 
-	buffer.append(", action=");
-	try {
-	    buffer.append(getAction());
-	} catch (Exception e) {
-	    buffer.append("ERROR");
-	}
+		buffer.append(", action=");
+		try {
+			buffer.append(getAction());
+		} catch (Exception e) {
+			buffer.append("ERROR");
+		}
 
-	buffer.append(", state=");
-	try {
-	    buffer.append(getState());
-	} catch (Exception e) {
-	    buffer.append("ERROR");
-	}
+		buffer.append(", state=");
+		try {
+			buffer.append(getState());
+		} catch (Exception e) {
+			buffer.append("ERROR");
+		}
 
-	buffer.append(", account-id=");
-	buffer.append(getAccountID());
+		buffer.append(", account-id=");
+		buffer.append(getAccountID());
 
-	buffer.append(", payee-id=");
-	buffer.append(getPayeeID());
+		buffer.append(", payee-id=");
+		buffer.append(getPayeeID());
 
-	buffer.append(", memo='");
-	buffer.append(getMemo() + "'");
+		buffer.append(", memo='");
+		buffer.append(getMemo() + "'");
 
-	// usually not set:
-	// buffer.append(" transaction-description: '");
-	// buffer.append(getTransaction().getMemo() + "'");
+		// usually not set:
+		// buffer.append(" transaction-description: '");
+		// buffer.append(getTransaction().getMemo() + "'");
 
-	buffer.append(", value=");
-	buffer.append(getValue());
+		buffer.append(", value=");
+		buffer.append(getValue());
 
-	buffer.append(", shares=");
-	buffer.append(getShares());
+		buffer.append(", shares=");
+		buffer.append(getShares());
 
-	buffer.append(", price=");
-	buffer.append(getPrice());
+		buffer.append(", price=");
+		buffer.append(getPrice());
 
-	buffer.append("]");
-	return buffer.toString();
+		buffer.append("]");
+		return buffer.toString();
     }
 
 }

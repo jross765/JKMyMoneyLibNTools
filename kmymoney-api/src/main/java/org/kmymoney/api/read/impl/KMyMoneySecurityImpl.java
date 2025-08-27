@@ -54,24 +54,24 @@ public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl
      */
     @SuppressWarnings("exports")
     public SECURITY getJwsdpPeer() {
-	return jwsdpPeer;
+    	return jwsdpPeer;
     }
 
     // ---------------------------------------------------------------
 
     @Override
     public KMMSecID getID() {
-	return new KMMSecID(jwsdpPeer.getId());
+    	return new KMMSecID(jwsdpPeer.getId());
     }
 
     @Override
     public KMMQualifSecID getQualifID() {
-	return new KMMQualifSecID(getID());
+    	return new KMMQualifSecID(getID());
     }
     
     @Override
     public String getSymbol() {
-	return jwsdpPeer.getSymbol();
+    	return jwsdpPeer.getSymbol();
     }
 
     /**
@@ -89,43 +89,43 @@ public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl
 
     @Override
     public KMMSecCurr.Type getType() {
-	BigInteger typeVal = getTypeBigInt(); 
-	return KMMSecCurrImpl.getType(typeVal.intValue());
+    	BigInteger typeVal = getTypeBigInt(); 
+		return KMMSecCurrImpl.getType(typeVal.intValue());
     }
 
     public BigInteger getTypeBigInt() {
-	return jwsdpPeer.getType(); 
+    	return jwsdpPeer.getType(); 
     }
 
     @Override
     public String getName() {
-	return jwsdpPeer.getName();
+    	return jwsdpPeer.getName();
     }
 
     @Override
     public BigInteger getPP() {
-	return jwsdpPeer.getPp();
+    	return jwsdpPeer.getPp();
     }
 
     @Override
     public KMMSecCurr.RoundingMethod getRoundingMethod() throws UnknownRoundingMethodException {
-	BigInteger methodVal = jwsdpPeer.getRoundingMethod(); 
-	return KMMSecCurr.RoundingMethod.valueOff(methodVal.intValue());
+    	BigInteger methodVal = jwsdpPeer.getRoundingMethod(); 
+    	return KMMSecCurr.RoundingMethod.valueOff(methodVal.intValue());
     }
 
     @Override
     public BigInteger getSAF() {
-	return jwsdpPeer.getSaf();
+    	return jwsdpPeer.getSaf();
     }
 
     @Override
     public KMMQualifCurrID getTradingCurrency() {
-	return new KMMQualifCurrID(jwsdpPeer.getTradingCurrency());
+    	return new KMMQualifCurrID(jwsdpPeer.getTradingCurrency());
     }
 
     @Override
     public String getTradingMarket() {
-	return jwsdpPeer.getTradingMarket();
+    	return jwsdpPeer.getTradingMarket();
     }
     
     // ---------------------------------------------------------------
@@ -237,39 +237,39 @@ public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl
 
     @Override
     public String toString() {
-	String result = "KMyMoneySecurityImpl ";
-	
-	result += "[id=" + getID();
-	result += ", symbol='" + getSymbol() + "'";
-	
-	try {
-	    result += ", type=" + getType();
-	} catch (UnknownSecurityTypeException e) {
-	    result += ", type=" + "ERROR";
-	}
-	
-	result += ", name='" + getName() + "'";
-	result += ", pp=" + getPP();
-	
-	try {
-	    result += ", rounding-method=" + getRoundingMethod();
-	} catch (UnknownRoundingMethodException e) {
-	    result += ", rounding-method=" + "ERROR";
-	}
-	
-	result += ", saf=" + getSAF();
-	
-	try {
-	    result += ", trading-curr=" + getTradingCurrency();
-	} catch (Exception e) {
-	    result += ", trading-curr=" + "ERROR";
-	}
-	
-	result += ", trading-mkt='" + getTradingMarket() + "'";
-	
-	result += "]";
-	
-	return result;
+		String result = "KMyMoneySecurityImpl ";
+
+		result += "[id=" + getID();
+		result += ", symbol='" + getSymbol() + "'";
+
+		try {
+			result += ", type=" + getType();
+		} catch (UnknownSecurityTypeException e) {
+			result += ", type=" + "ERROR";
+		}
+
+		result += ", name='" + getName() + "'";
+		result += ", pp=" + getPP();
+
+		try {
+			result += ", rounding-method=" + getRoundingMethod();
+		} catch (UnknownRoundingMethodException e) {
+			result += ", rounding-method=" + "ERROR";
+		}
+
+		result += ", saf=" + getSAF();
+
+		try {
+			result += ", trading-curr=" + getTradingCurrency();
+		} catch (Exception e) {
+			result += ", trading-curr=" + "ERROR";
+		}
+
+		result += ", trading-mkt='" + getTradingMarket() + "'";
+
+		result += "]";
+
+		return result;
     }
 
 }

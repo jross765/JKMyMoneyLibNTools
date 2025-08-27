@@ -182,73 +182,67 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @see #setRootElement(KMYMONEYFILE)
      */
     protected void loadFile(final File pFile) throws IOException{
+		long start = System.currentTimeMillis();
 
-	long start = System.currentTimeMillis();
+		if ( pFile == null ) {
+			throw new IllegalArgumentException("null not allowed for field this.file");
+		}
 
-	if (pFile == null) {
-	    throw new IllegalArgumentException("null not allowed for field this.file");
-	}
+		if ( !pFile.exists() ) {
+			throw new IllegalArgumentException("Given file '" + pFile.getAbsolutePath() + "' does not exist!");
+		}
 
-	if (!pFile.exists()) {
-	    throw new IllegalArgumentException("Given file '" + pFile.getAbsolutePath() + "' does not exist!");
-	}
+		setFile(pFile);
 
-	setFile(pFile);
+		InputStream in = new FileInputStream(pFile);
+		if ( pFile.getName().endsWith(FILE_EXT_ZIPPED_1) || pFile.getName().endsWith(FILE_EXT_ZIPPED_2) ) {
+			in = new BufferedInputStream(in);
+			in = new GZIPInputStream(in);
+		} else {
+			// determine if it's gzipped by the magic bytes
+			byte[] magic = new byte[2];
+			in.read(magic);
+			in.close();
 
-	InputStream in = new FileInputStream(pFile);
-	if ( pFile.getName().endsWith(FILE_EXT_ZIPPED_1) ||
-	     pFile.getName().endsWith(FILE_EXT_ZIPPED_2) ) {
-	    in = new BufferedInputStream(in);
-	    in = new GZIPInputStream(in);
-	} else {
-	    // determine if it's gzipped by the magic bytes
-	    byte[] magic = new byte[2];
-	    in.read(magic);
-	    in.close();
+			in = new FileInputStream(pFile);
+			in = new BufferedInputStream(in);
+			if ( magic[0] == GZIP_HEADER_BYTE_1 && magic[1] == GZIP_HEADER_BYTE_2 ) {
+				in = new GZIPInputStream(in);
+			}
+		}
 
-	    in = new FileInputStream(pFile);
-	    in = new BufferedInputStream(in);
-	    if ( magic[0] == GZIP_HEADER_BYTE_1 && 
-	    	 magic[1] == GZIP_HEADER_BYTE_2 ) {
-	    	in = new GZIPInputStream(in);
-	    }
-	}
+		loadInputStream(in);
 
-	loadInputStream(in);
-
-	long end = System.currentTimeMillis();
-	LOGGER.info("loadFile: Took " + (end - start) + " ms (total) ");
-
+		long end = System.currentTimeMillis();
+		LOGGER.info("loadFile: Took " + (end - start) + " ms (total) ");
     }
 
     protected void loadInputStream(InputStream in) throws UnsupportedEncodingException, IOException{
-	long start = System.currentTimeMillis();
+		long start = System.currentTimeMillis();
 
-	NamespaceRemoverReader reader = new NamespaceRemoverReader(new InputStreamReader(in, "utf-8"));
-	try {
+		NamespaceRemoverReader reader = new NamespaceRemoverReader(new InputStreamReader(in, "utf-8"));
+		try {
 
-	    JAXBContext myContext = getJAXBContext();
-	    if ( myContext == null ) {
-	    	LOGGER.error("loadInputStream: JAXB context cannot be found/generated");
-	    	throw new IOException("JAXB context cannot be found/generated");
-	    }
-	    Unmarshaller unmarshaller = myContext.createUnmarshaller();
+			JAXBContext myContext = getJAXBContext();
+			if ( myContext == null ) {
+				LOGGER.error("loadInputStream: JAXB context cannot be found/generated");
+				throw new IOException("JAXB context cannot be found/generated");
+			}
+			Unmarshaller unmarshaller = myContext.createUnmarshaller();
 
-	    KMYMONEYFILE obj = (KMYMONEYFILE) unmarshaller.unmarshal(new InputSource(new BufferedReader(reader)));
-	    long start2 = System.currentTimeMillis();
-	    setRootElement(obj);
-	    long end = System.currentTimeMillis();
-	    LOGGER.info("loadFileInputStream: Took " + 
-	                (end - start) + " ms (total), " + 
-		        (start2 - start) + " ms (jaxb-loading), " + 
-	                (end - start2) + " ms (building facades)");
+			KMYMONEYFILE obj = (KMYMONEYFILE) unmarshaller.unmarshal(new InputSource(new BufferedReader(reader)));
+			long start2 = System.currentTimeMillis();
+			setRootElement(obj);
+			long end = System.currentTimeMillis();
+			LOGGER.info("loadFileInputStream: Took " + (end - start) + " ms (total), " + (start2 - start)
+					+ " ms (jaxb-loading), " + (end - start2) + " ms (building facades)");
 
-	} catch (JAXBException e) {
-	    LOGGER.error("loadInputStream: " + e.getMessage(), e);
-	    throw new IllegalStateException(e);
-	} finally {
-	    reader.close();
-	}
+		} catch (JAXBException e) {
+			LOGGER.error("loadInputStream: " + e.getMessage(), e);
+			throw new IllegalStateException(e);
+		} finally {
+			reader.close();
+		}
     }
 
     // ---------------------------------------------------------------
@@ -268,24 +262,24 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @return the default-currency to use.
      */
     public String getDefaultCurrencyID() {
-	KMYMONEYFILE root = getRootElement();
-	if (root == null) {
-	    return Const.DEFAULT_CURRENCY;
-	}
-	
-	KEYVALUEPAIRS kvpList = root.getKEYVALUEPAIRS();
-	if (kvpList == null) {
-	    return Const.DEFAULT_CURRENCY;
-	}
-	
-	for ( PAIR kvp : kvpList.getPAIR() ) {
-	    if ( kvp.getKey().equals("kmm-baseCurrency") ) { // ::MAGIC
-		return kvp.getValue();
-	    }
-	}
-	
-	// not found
-	return Const.DEFAULT_CURRENCY;
+		KMYMONEYFILE root = getRootElement();
+		if ( root == null ) {
+			return Const.DEFAULT_CURRENCY;
+		}
+
+		KEYVALUEPAIRS kvpList = root.getKEYVALUEPAIRS();
+		if ( kvpList == null ) {
+			return Const.DEFAULT_CURRENCY;
+		}
+
+		for ( PAIR kvp : kvpList.getPAIR() ) {
+			if ( kvp.getKey().equals("kmm-baseCurrency") ) { // ::MAGIC
+				return kvp.getValue();
+			}
+		}
+
+		// not found
+		return Const.DEFAULT_CURRENCY;
     }
 
     // ---------------------------------------------------------------

@@ -120,7 +120,7 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      */
     @SuppressWarnings("exports")
     public ACCOUNT getJwsdpPeer() {
-    return jwsdpPeer;
+    	return jwsdpPeer;
     }
 
     // ---------------------------------------------------------------
@@ -240,16 +240,15 @@ public class KMyMoneyAccountImpl extends SimpleAccount
 
     @Override
 	public KMMQualifSecCurrID getQualifSecCurrID() {
-	
-	KMMQualifSecCurrID result = null;
-	
-	if ( jwsdpPeer.getCurrency().startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
-	    result = new KMMQualifSecID(jwsdpPeer.getCurrency());
-	} else {
-	    result = new KMMQualifCurrID(jwsdpPeer.getCurrency());
-	}
-	
-	return result;
+		KMMQualifSecCurrID result = null;
+
+		if ( jwsdpPeer.getCurrency().startsWith(KMMQualifSecCurrID.PREFIX_SECURITY) ) {
+			result = new KMMQualifSecID(jwsdpPeer.getCurrency());
+		} else {
+			result = new KMMQualifCurrID(jwsdpPeer.getCurrency());
+		}
+
+		return result;
 	}
 
 	/**
@@ -257,7 +256,6 @@ public class KMyMoneyAccountImpl extends SimpleAccount
      */
     @Override
     public List<KMyMoneyTransactionSplit> getTransactionSplits() {
-
     	if (mySplitsNeedSorting) {
     		Collections.sort(mySplits);
     		mySplitsNeedSorting = false;
@@ -267,33 +265,31 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     }
 
     public void addTransactionSplit(final KMyMoneyTransactionSplit splt) {
-    	if ( splt == null ) {
-    		throw new IllegalArgumentException("null transaction-split given");
-    	}
-    	
-	KMyMoneyTransactionSplit old = getTransactionSplitByID(splt.getQualifID());
-	if ( old != null ) {
-	    // There already is a split with that ID
-	    if ( ! old.equals(splt) ) {
-			System.err.println("addTransactionSplit: New Transaction Split object with same ID, needs to be replaced: " + 
-					splt.getQualifID() + "[" + splt.getClass().getName() + "] and " + 
-					old.getQualifID() + "[" + old.getClass().getName() + "]\n" + 
-					"new=" + splt.toString() + "\n" + 
-					"old=" + old.toString());
-			LOGGER.error("addTransactionSplit: New Transaction Split object with same ID, needs to be replaced: " + 
-					splt.getQualifID() + "[" + splt.getClass().getName() + "] and " + 
-					old.getQualifID() + "[" + old.getClass().getName() + "]\n" + 
-					"new=" + splt.toString() + "\n" + 
-					"old=" + old.toString());
-			IllegalStateException exc = new IllegalStateException("DEBUG");
-			exc.printStackTrace();
-			replaceTransactionSplit(old, (KMyMoneyTransactionSplitImpl) splt);
-	    }
-	} else {
-	    // There is no split with that ID yet
-	    mySplits.add(splt);
-	    mySplitsNeedSorting = true;
-	}
+		if ( splt == null ) {
+			throw new IllegalArgumentException("null transaction-split given");
+		}
+
+		KMyMoneyTransactionSplit old = getTransactionSplitByID(splt.getQualifID());
+		if ( old != null ) {
+			// There already is a split with that ID
+			if ( !old.equals(splt) ) {
+				System.err.println(
+						"addTransactionSplit: New Transaction Split object with same ID, needs to be replaced: "
+								+ splt.getQualifID() + "[" + splt.getClass().getName() + "] and " + old.getQualifID()
+								+ "[" + old.getClass().getName() + "]\n" + "new=" + splt.toString() + "\n" + "old="
+								+ old.toString());
+				LOGGER.error("addTransactionSplit: New Transaction Split object with same ID, needs to be replaced: "
+						+ splt.getQualifID() + "[" + splt.getClass().getName() + "] and " + old.getQualifID() + "["
+						+ old.getClass().getName() + "]\n" + "new=" + splt.toString() + "\n" + "old=" + old.toString());
+				IllegalStateException exc = new IllegalStateException("DEBUG");
+				exc.printStackTrace();
+				replaceTransactionSplit(old, (KMyMoneyTransactionSplitImpl) splt);
+			}
+		} else {
+			// There is no split with that ID yet
+			mySplits.add(splt);
+			mySplitsNeedSorting = true;
+		}
     }
 
     /**
@@ -370,35 +366,35 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     // -----------------------------------------------------------------
 
     public String toString() {
-	StringBuffer buffer = new StringBuffer();
-	buffer.append("KMyMoneyAccountImpl [");
-	
-	buffer.append("id=");
-	buffer.append(getID());
-	
-	buffer.append(", type=");
-	try {
-	    buffer.append(getType());
-	} catch (UnknownAccountTypeException e) {
-	    buffer.append("ERROR");
-	}
-	
-	buffer.append(", institution-id=");
-	buffer.append(getInstitutionID());
-	
-	buffer.append(", qualif-name='");
-	buffer.append(getQualifiedName() + "'");
-	
-	buffer.append(", security/currency='");
-	try {
-	    buffer.append(getQualifSecCurrID() + "'");
-	} catch (Exception e) {
-	    buffer.append("ERROR");
-	}
-	
-	buffer.append("]");
-	
-	return buffer.toString();
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("KMyMoneyAccountImpl [");
+
+		buffer.append("id=");
+		buffer.append(getID());
+
+		buffer.append(", type=");
+		try {
+			buffer.append(getType());
+		} catch (UnknownAccountTypeException e) {
+			buffer.append("ERROR");
+		}
+
+		buffer.append(", institution-id=");
+		buffer.append(getInstitutionID());
+
+		buffer.append(", qualif-name='");
+		buffer.append(getQualifiedName() + "'");
+
+		buffer.append(", security/currency='");
+		try {
+			buffer.append(getQualifSecCurrID() + "'");
+		} catch (Exception e) {
+			buffer.append("ERROR");
+		}
+
+		buffer.append("]");
+
+		return buffer.toString();
     }
 
 

@@ -429,6 +429,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		inst.setName(name);
 		((org.kmymoney.api.write.impl.hlp.FileInstitutionManager) super.instMgr)
 			.addInstitution(inst);
+		
 		return inst;
 	}
 
@@ -456,7 +457,6 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 */
 	@Override
 	public void removeTransaction(final KMyMoneyWritableTransaction trx) {
-
 		Collection<KMyMoneyWritableTransactionSplit> spltList = new LinkedList<KMyMoneyWritableTransactionSplit>();
 		spltList.addAll(trx.getWritableSplits());
 		for ( KMyMoneyWritableTransactionSplit splt : spltList ) {
@@ -477,6 +477,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		KMyMoneyWritableTransactionImpl trx = new KMyMoneyWritableTransactionImpl(this);
 		((org.kmymoney.api.write.impl.hlp.FileTransactionManager) super.trxMgr)
 			.addTransaction(trx);
+		
 		return trx;
 	}
 
@@ -633,6 +634,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		for ( KMyMoneyAccount account : getAccounts() ) {
 			retval.add((KMyMoneyWritableAccount) account);
 		}
+		
 		return retval;
 	}
 
@@ -680,8 +682,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 				}
 				roots.append(kmmAccount.getID()).append("=\"").append(kmmAccount.getName()).append("\" ");
 			}
-			LOGGER.warn("File has more then one root-account! Attaching excess accounts to root-account: "
-					+ roots.toString());
+			LOGGER.warn("File has more then one root-account! Attaching excess accounts to root-account: " + roots.toString());
 			LinkedList<KMyMoneyAccount> rootAccounts2 = new LinkedList<KMyMoneyAccount>();
 			rootAccounts2.add(root);
 			for ( KMyMoneyAccount kmmAcct : rootAccounts ) {
@@ -696,6 +697,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			}
 			rootAccounts = rootAccounts2;
 		}
+		
 		return rootAccounts;
 	}
 
@@ -904,6 +906,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		pye.setName(name);
 		((org.kmymoney.api.write.impl.hlp.FilePayeeManager) super.pyeMgr)
 			.addPayee(pye);
+		
 		return pye;
 	}
 
@@ -943,6 +946,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		tag.setName(name);
 		((org.kmymoney.api.write.impl.hlp.FileTagManager) super.tagMgr)
 			.addTag(tag);
+		
 		return tag;
 	}
 
@@ -994,6 +998,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		curr.setName(name);
 		((org.kmymoney.api.write.impl.hlp.FileCurrencyManager) super.currMgr)
 			.addCurrency(curr);
+		
 		return curr;
 	}
 
@@ -1193,6 +1198,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	    sec.setCode(code);
 		((org.kmymoney.api.write.impl.hlp.FileSecurityManager) super.secMgr)
 			.addSecurity(sec);
+		
 		return sec;
 	}
 
@@ -1279,6 +1285,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 																			  this);
 		((org.kmymoney.api.write.impl.hlp.FilePriceManager) super.prcMgr)
 			.addPricePair(prc);
+		
 		return prc;
 	}
 
@@ -1287,6 +1294,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		KMyMoneyWritablePricePairImpl prc = new KMyMoneyWritablePricePairImpl(prcPrID, this);
 		((org.kmymoney.api.write.impl.hlp.FilePriceManager) super.prcMgr)
 			.addPricePair(prc);
+		
 		return prc;
 	}
 	
@@ -1369,6 +1377,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		prc.setDate(date);
 		((org.kmymoney.api.write.impl.hlp.FilePriceManager) super.prcMgr)
 			.addPrice(prc);
+		
 		return prc;
 	}
 

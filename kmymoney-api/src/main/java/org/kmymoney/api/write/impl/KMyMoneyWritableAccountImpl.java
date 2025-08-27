@@ -131,6 +131,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 		if ( hasTransactions() ) {
 			throw new IllegalStateException("Cannot remove account while it contains transaction-splits!");
 		}
+		
 		if ( this.getChildren().size() > 0 ) {
 			throw new IllegalStateException("Cannot remove account while it contains child-accounts!");
 		}
@@ -361,7 +362,6 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	 */
 	@Override
 	public FixedPointNumber getBalance() {
-
 		if ( myBalanceCached != null ) {
 			return myBalanceCached;
 		}
@@ -440,6 +440,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			
 			retval = retval.add(splt.getShares());
 		}
+		
 		return retval;
 	}
 	
@@ -578,6 +579,7 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 			SUBACCOUNTS jwsdpChldAcctWrp = getWritableKMyMoneyFile().getObjectFactory().createSUBACCOUNTS();
 			jwsdpPrntAcct.setSUBACCOUNTS(jwsdpChldAcctWrp);
 		}
+		
 		List<SUBACCOUNT> jwsdpChldAcctList = jwsdpPrntAcct.getSUBACCOUNTS().getSUBACCOUNT();
 		for ( SUBACCOUNT jwsdpChldAcct : jwsdpChldAcctList ) {
 			if ( jwsdpChldAcct.getId().equals( getID().toString() ) ) {

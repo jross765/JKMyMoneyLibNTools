@@ -48,7 +48,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 	public KMyMoneyWritablePayeeImpl(
 			final PAYEE jwsdpPeer,
 			final KMyMoneyWritableFileImpl file) {
-	super(jwsdpPeer, file);
+    	super(jwsdpPeer, file);
     }
 
     /**
@@ -155,7 +155,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
      */
     @Override
     public KMyMoneyWritableFileImpl getWritableKMyMoneyFile() {
-	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+    	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
     }
 
     /**
@@ -165,7 +165,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
      */
     @Override
     public KMyMoneyWritableFileImpl getKMyMoneyFile() {
-	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+    	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
     }
 
     // ---------------------------------------------------------------
@@ -174,7 +174,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
      * @see KMyMoneyWritablePayee#getWritableAddress()
      */
     public KMMWritableAddress getWritableAddress() {
-	return new KMMWritableAddressImpl(jwsdpPeer.getADDRESS());
+    	return new KMMWritableAddressImpl(jwsdpPeer.getADDRESS());
     }
 
     /**
@@ -191,6 +191,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 		if ( helper.getPropertyChangeSupport() != null ) {
 			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableAddress());
 		}
+		
 		return addr;
     }
     
@@ -225,32 +226,32 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 
     @Override
     public void setAddress(final KMMAddress adr) {
-	if ( adr == null ) {
-	    throw new IllegalArgumentException("null address given!");
-	}
+		if ( adr == null ) {
+			throw new IllegalArgumentException("null address given!");
+		}
 
-	/*
-	 * if (adr instanceof AddressImpl) { AddressImpl adrImpl = (AddressImpl) adr;
-	 * jwsdpPeer.setPyeAddr(adrImpl.jwsdpPeer); } else
-	 */
-	
-	{
+		/*
+		 * if (adr instanceof AddressImpl) { AddressImpl adrImpl = (AddressImpl) adr;
+		 * jwsdpPeer.setPyeAddr(adrImpl.jwsdpPeer); } else
+		 */
 
-	    if (jwsdpPeer.getADDRESS() == null) {
-		jwsdpPeer.setADDRESS(getKMyMoneyFile().getObjectFactory().createADDRESS());
-	    }
+		{
 
-	    jwsdpPeer.getADDRESS().setCity(adr.getCity());
-	    jwsdpPeer.getADDRESS().setCounty(adr.getCounty());
-	    jwsdpPeer.getADDRESS().setPostcode(adr.getPostCode());
-	    jwsdpPeer.getADDRESS().setState(adr.getState());
-	    jwsdpPeer.getADDRESS().setStreet(adr.getStreet());
-	    jwsdpPeer.getADDRESS().setTelephone(adr.getTelephone());
-	    jwsdpPeer.getADDRESS().setZip(adr.getZip());
-	    jwsdpPeer.getADDRESS().setZipcode(adr.getZipCode());
-	}
+			if ( jwsdpPeer.getADDRESS() == null ) {
+				jwsdpPeer.setADDRESS(getKMyMoneyFile().getObjectFactory().createADDRESS());
+			}
 
-	getKMyMoneyFile().setModified(true);
+			jwsdpPeer.getADDRESS().setCity(adr.getCity());
+			jwsdpPeer.getADDRESS().setCounty(adr.getCounty());
+			jwsdpPeer.getADDRESS().setPostcode(adr.getPostCode());
+			jwsdpPeer.getADDRESS().setState(adr.getState());
+			jwsdpPeer.getADDRESS().setStreet(adr.getStreet());
+			jwsdpPeer.getADDRESS().setTelephone(adr.getTelephone());
+			jwsdpPeer.getADDRESS().setZip(adr.getZip());
+			jwsdpPeer.getADDRESS().setZipcode(adr.getZipCode());
+		}
+
+		getKMyMoneyFile().setModified(true);
     }
 
     /**
@@ -268,9 +269,9 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 		}
 
 		// Caution: empty string allowed here
-//	if ( notes.trim().length() == 0 ) {
-//	    throw new IllegalArgumentException("empty notesgiven!");
-//	}
+//		if ( notes.trim().length() == 0 ) {
+//	   	 throw new IllegalArgumentException("empty notesgiven!");
+//		}
 
 		String oldNotes = getNotes();
 		jwsdpPeer.setNotes(notes);
@@ -328,17 +329,17 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 
     @Override
     public String toString() {
-	StringBuffer buffer = new StringBuffer();
-	buffer.append("KMyMoneyWritablePayeeImpl [");
-	
-	buffer.append("id=");
-	buffer.append(getID());
-	
-	buffer.append(", name='");
-	buffer.append(getName() + "'");
-	
-	buffer.append("]");
-	return buffer.toString();
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("KMyMoneyWritablePayeeImpl [");
+
+		buffer.append("id=");
+		buffer.append(getID());
+
+		buffer.append(", name='");
+		buffer.append(getName() + "'");
+
+		buffer.append("]");
+		return buffer.toString();
     }
 
 }

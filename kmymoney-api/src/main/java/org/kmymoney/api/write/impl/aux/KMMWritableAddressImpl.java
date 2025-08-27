@@ -51,7 +51,6 @@ public class KMMWritableAddressImpl extends KMMAddressImpl
 	protected static ADDRESS createAddress_int(
 			final KMyMoneyWritableFileImpl file, 
 			final KMyMoneyWritableInstitutionImpl inst) {
-
 		if ( inst == null ) {
 			throw new IllegalArgumentException("null institution given");
 		}
@@ -84,7 +83,6 @@ public class KMMWritableAddressImpl extends KMMAddressImpl
 	protected static ADDRESS createAddress_int(
 			final KMyMoneyWritableFileImpl file, 
 			final KMyMoneyWritablePayeeImpl pye) {
-
 		if ( pye == null ) {
 			throw new IllegalArgumentException("null payee given");
 		}

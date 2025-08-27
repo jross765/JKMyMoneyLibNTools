@@ -145,7 +145,7 @@ public class WritingContentHandler implements ContentHandler {
 	}
 
 	public void setDocumentLocator(final Locator locator) {
-
+		// ::TODO
 	}
 
 	public void processingInstruction(final String target, final String data) throws SAXException {
@@ -254,13 +254,11 @@ public class WritingContentHandler implements ContentHandler {
 		} catch (IOException e) {
 			LOGGER.error("startElement: Problem", e);
 		}
-
 	}
 
 	// ---------------------------------------------------------------
 
 	private void writeSpaces() throws IOException {
-
 		if ( depth < MAX_DEPTH_1 ) {
 			return;
 		}

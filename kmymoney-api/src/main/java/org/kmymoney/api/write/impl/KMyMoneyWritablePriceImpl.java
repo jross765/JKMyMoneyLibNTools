@@ -90,7 +90,7 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
      * @return the file we are associated with
      */
     public KMyMoneyWritableFileImpl getWritableKMyMoneyFile() {
-	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+    	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
     }
 
     /**
@@ -100,7 +100,7 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
      */
     @Override
     public KMyMoneyWritableFileImpl getKMyMoneyFile() {
-	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
+    	return (KMyMoneyWritableFileImpl) super.getKMyMoneyFile();
     }
 
     // ---------------------------------------------------------------
@@ -115,7 +115,6 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
     private static PRICE createPrice_int(
     		final KMyMoneyPricePairImpl prntPrcPr,
     		final KMyMoneyWritableFileImpl file) {
-	
         ObjectFactory factory = file.getObjectFactory();
         
         PRICE jwsdpPrc = file.createPriceType();
@@ -380,36 +379,36 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
     
     @Override
     public String toString() {
-	String result = "KMyMoneyWritablePriceImpl [";
-	
-	try {
-	    result += "id='" + getID() + "'";
-	} catch (Exception e) {
-	    result += "id=" + "ERROR";
-	}
-	
-	try {
-	    result += ", from-sec-curr-qualif-id='" + getFromSecCurrQualifID() + "'";
-	} catch (Exception e) {
-	    result += ", from-sec-curr-qualif-id=" + "ERROR";
-	}
-	
-	try {
-	    result += ", to-curr-qualif-id='" + getToCurrencyQualifID() + "'";
-	} catch (Exception e) {
-	    result += ", to-curr-qualif-id=" + "ERROR";
-	}
-	
-	result += ", date=" + getDate(); 
-	result += ", source='" + getSource() + "'"; 
-	
-	try {
-	    result += ", value=" + getValueFormatted() + "]";
-	} catch (Exception e) {
-	    result += ", value=" + "ERROR" + "]";
-	}
-	
-	return result;
+		String result = "KMyMoneyWritablePriceImpl [";
+
+		try {
+			result += "id='" + getID() + "'";
+		} catch (Exception e) {
+			result += "id=" + "ERROR";
+		}
+
+		try {
+			result += ", from-sec-curr-qualif-id='" + getFromSecCurrQualifID() + "'";
+		} catch (Exception e) {
+			result += ", from-sec-curr-qualif-id=" + "ERROR";
+		}
+
+		try {
+			result += ", to-curr-qualif-id='" + getToCurrencyQualifID() + "'";
+		} catch (Exception e) {
+			result += ", to-curr-qualif-id=" + "ERROR";
+		}
+
+		result += ", date=" + getDate();
+		result += ", source='" + getSource() + "'";
+
+		try {
+			result += ", value=" + getValueFormatted() + "]";
+		} catch (Exception e) {
+			result += ", value=" + "ERROR" + "]";
+		}
+
+		return result;
     }
 
 }
