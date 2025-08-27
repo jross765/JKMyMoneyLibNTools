@@ -2,7 +2,6 @@ package org.example.kmymoneyapi.write.gen.simple;
 
 import java.io.File;
 
-import org.kmymoney.api.Const;
 import org.kmymoney.api.read.KMMSecCurr;
 import org.kmymoney.api.write.KMyMoneyWritableSecurity;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;

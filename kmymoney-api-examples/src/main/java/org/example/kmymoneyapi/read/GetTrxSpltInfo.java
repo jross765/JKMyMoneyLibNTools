@@ -2,11 +2,11 @@ package org.example.kmymoneyapi.read;
 
 import java.io.File;
 
+import org.kmymoney.api.read.KMyMoneyTransactionSplit;
+import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 import org.kmymoney.base.basetypes.complex.KMMQualifSpltID;
 import org.kmymoney.base.basetypes.simple.KMMSpltID;
 import org.kmymoney.base.basetypes.simple.KMMTrxID;
-import org.kmymoney.api.read.KMyMoneyTransactionSplit;
-import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
 
 public class GetTrxSpltInfo {
     // BEGIN Example data -- adapt to your needs
