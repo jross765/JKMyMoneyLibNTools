@@ -152,6 +152,24 @@ public class GetTrxSpltInfo extends CommandLineTool
         
     try
     {
+      System.out.println("Number:         '" + splt.getNumber() + "'");
+    }
+    catch ( Exception exc )
+    {
+      System.out.println("Number:         " + "ERROR");
+    }
+        
+    try
+    {
+      System.out.println("Payee ID:       " + splt.getPayeeID());
+    }
+    catch ( Exception exc )
+    {
+      System.out.println("Payee:          " + "ERROR");
+    }
+        
+    try
+    {
       System.out.println("Value:          " + splt.getValueFormatted());
     }
     catch ( Exception exc )
