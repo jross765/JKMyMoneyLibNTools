@@ -1,6 +1,7 @@
 package org.kmymoney.base.tuples;
 
 import org.kmymoney.base.basetypes.simple.KMMAcctID;
+
 import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 public record AcctIDAmountPair(KMMAcctID accountID, FixedPointNumber amount) {
