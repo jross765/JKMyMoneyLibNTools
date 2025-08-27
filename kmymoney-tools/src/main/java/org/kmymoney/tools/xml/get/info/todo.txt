@@ -1,3 +1,0 @@
-GetPrcInfo: Spez. Price-ID -> auslagern in Helper-Klasse
-
-GetTrxSpltInfo: Number ausgeben -> API einrichten

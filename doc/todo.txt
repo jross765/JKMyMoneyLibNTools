@@ -1,0 +1,6 @@
+Module "Tools" 
+==============
+
+GetPrcInfo: Angabe Price-ID in CLI -> auslagern in Helper-Klasse
+
+[ OK ] GetTrxSpltInfo: Number ausgeben -> API einrichten
