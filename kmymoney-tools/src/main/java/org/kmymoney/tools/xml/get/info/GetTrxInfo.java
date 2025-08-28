@@ -212,7 +212,7 @@ public class GetTrxInfo extends CommandLineTool
     }
     
     if ( ! scriptMode )
-      System.err.println("Transaction ID: '" + trxID + "'");
+      System.err.println("Transaction ID: " + trxID);
 
     // <show-splits>
     if ( cmdLine.hasOption("show-splits"))

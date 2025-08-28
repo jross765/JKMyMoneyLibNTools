@@ -10,6 +10,7 @@ You will notice that the tools partially pull on the examples in the "Examples" 
   * Dump
 * Existing tools:
   * GetAccountInfo: Now lists newly-introduced list of account-reconciliations.
+  * GetTrxSpltInfo: Now returns number and payee-ID.
 
 ### V. 0.6 &rarr; 0.7
 * New tools: 

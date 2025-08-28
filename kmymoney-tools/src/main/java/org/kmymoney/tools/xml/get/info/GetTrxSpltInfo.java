@@ -241,7 +241,7 @@ public class GetTrxSpltInfo extends CommandLineTool
     }
     
     if ( ! scriptMode )
-      System.err.println("Transaction ID: '" + trxID + "'");
+      System.err.println("Transaction ID: " + trxID);
     
     // <split-id>
     try
@@ -255,7 +255,7 @@ public class GetTrxSpltInfo extends CommandLineTool
     }
     
     if ( ! scriptMode )
-      System.err.println("Split ID:       '" + spltID + "'");
+      System.err.println("Split ID:       " + spltID);
   }
   
   @Override

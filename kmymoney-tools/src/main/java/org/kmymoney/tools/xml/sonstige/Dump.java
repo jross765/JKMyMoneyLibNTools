@@ -1,4 +1,4 @@
-package org.kmymoney.tools.xml.get.sonstige;
+package org.kmymoney.tools.xml.sonstige;
 
 import java.io.File;
 
