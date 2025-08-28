@@ -401,17 +401,65 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     // https://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram-in-java
     @Override
     public void printTree(StringBuilder buffer, String prefix, String childrenPrefix) {
-        buffer.append(prefix);
-        buffer.append(toString());
-        buffer.append('\n');
-        
+    	printTree(buffer, prefix, childrenPrefix, null);
+    }
+    
+    public void printTree(StringBuilder buffer, String prefix, String childrenPrefix,
+    					  KMyMoneyAccount.Type acctType) {
+    	// 1) Top node
+    	boolean hasChildrenMatchingRecurs = false;
+    	if ( acctType != null ) {
+    		hasChildrenMatchingRecurs = hasChildrenMatchingRecursive(this, acctType);
+    	}
+    	
+    	if ( acctType == null ||
+    		 this.getType() == acctType ||
+    	     hasChildrenMatchingRecurs ) {
+            buffer.append(prefix);
+            buffer.append(this.toString());
+            buffer.append('\n');
+    	}
+
+    	// 2) Children
         for ( Iterator<KMyMoneyAccount> it = getChildren().iterator(); it.hasNext(); ) {
-        	KMyMoneyAccount next = it.next();
-            if (it.hasNext()) {
-                next.printTree(buffer, childrenPrefix + "├── ", childrenPrefix + "│   ");
-            } else {
-                next.printTree(buffer, childrenPrefix + "└── ", childrenPrefix + "    ");
-            }
+        	KMyMoneyAccountImpl next = (KMyMoneyAccountImpl) it.next();
+
+        	hasChildrenMatchingRecurs = false;
+        	if ( acctType != null ) {
+        		hasChildrenMatchingRecurs = hasChildrenMatchingRecursive(next, acctType);
+        	}
+        	
+        	if ( acctType == null ||
+           		 next.getType() == acctType ||
+           		 hasChildrenMatchingRecurs ) {
+                if ( it.hasNext() ) {
+                	next.printTree(buffer, childrenPrefix + "├── ", childrenPrefix + "│   ",
+                    		       acctType);
+                } else {
+                	next.printTree(buffer, childrenPrefix + "└── ", childrenPrefix + "    ",
+                				   acctType);
+            	}
+        	}
         }
     }
+
+    public boolean hasChildrenMatching(KMyMoneyAccount acct, KMyMoneyAccount.Type acctType) {
+    	for ( KMyMoneyAccount chld : acct.getChildren() ) {
+    		if ( chld.getType() == acctType ) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+	}
+
+    public boolean hasChildrenMatchingRecursive(KMyMoneyAccount acct, KMyMoneyAccount.Type acctType) {
+    	for ( KMyMoneyAccount chld : acct.getChildrenRecursive() ) {
+    		if ( chld.getType() == acctType ) {
+    			return true;
+    		}
+    	}
+    	
+    	return false;
+	}
 }

@@ -159,7 +159,6 @@ public class WritingContentHandler implements ContentHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public void startPrefixMapping(final String prefix, final String uri) throws SAXException {
@@ -211,7 +210,6 @@ public class WritingContentHandler implements ContentHandler {
 			if ( last_was == LAST_WAS_OPEN_ELEMENT ) {
 				wrt.write(">\n");
 				writeSpaces();
-
 			}
 
 			if ( last_was == LAST_WAS_CLOSE_ELEMENT ) {
@@ -233,10 +231,10 @@ public class WritingContentHandler implements ContentHandler {
 				if ( isInst && atts.getQName(i).equals("name") ||
 					 isInst && atts.getQName(i).equals("memo") ||
 					 isAcct && atts.getQName(i).equals("name") ||
-					 isAcct && atts.getQName(i).equals("description") || 
-					 isTrx  && atts.getQName(i).equals("memo") || 
-					 isSplt && atts.getQName(i).equals("memo") || 
+					 isAcct && atts.getQName(i).equals("description") ||					 
+					 isTrx  && atts.getQName(i).equals("memo") ||
 					 isSplt && atts.getQName(i).equals("number") || 
+					 isSplt && atts.getQName(i).equals("memo") ||
 					 isPye  && atts.getQName(i).equals("name") ||
 					 isPye  && atts.getQName(i).equals("matchkey") ||
 					 isSec  && atts.getQName(i).equals("name") ||

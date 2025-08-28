@@ -506,6 +506,9 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
 		buffer.append(", account-id=");
 		buffer.append(getAccountID());
 
+		buffer.append(", number='");
+		buffer.append(getNumber() + "'");
+
 		buffer.append(", payee-id=");
 		buffer.append(getPayeeID());
 
