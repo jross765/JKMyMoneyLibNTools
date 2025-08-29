@@ -125,11 +125,11 @@ public class KMyMoneyWritableCurrencyImpl extends KMyMoneyCurrencyImpl
     @Override
     public void setName(final String name) {
     	if ( name == null ) {
-    		throw new IllegalArgumentException("null name given!");
+    		throw new IllegalArgumentException("argument <name> is null");
     	}
 
     	if ( name.trim().length() == 0 ) {
-    		throw new IllegalArgumentException("empty name given!");
+    		throw new IllegalArgumentException("argument <name> is emptys");
     	}
 
     	String oldName = getName();
@@ -145,11 +145,11 @@ public class KMyMoneyWritableCurrencyImpl extends KMyMoneyCurrencyImpl
 	@Override
 	public void setSymbol(String symb) {
     	if ( symb == null ) {
-    		throw new IllegalArgumentException("null symbol given!");
+    		throw new IllegalArgumentException("argument <symb> is null");
     	}
 
     	if ( symb.trim().length() == 0 ) {
-    		throw new IllegalArgumentException("empty symbol given!");
+    		throw new IllegalArgumentException("argument <symb> is empty");
     	}
 
     	String oldSymb = getSymbol();
@@ -157,19 +157,19 @@ public class KMyMoneyWritableCurrencyImpl extends KMyMoneyCurrencyImpl
     	getKMyMoneyFile().setModified(true);
 
     	PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
-    	if (propertyChangeSupport != null) {
-    		propertyChangeSupport.firePropertyChange("name", oldSymb, symb);
+    	if ( propertyChangeSupport != null ) {
+    		propertyChangeSupport.firePropertyChange("symbol", oldSymb, symb);
     	}
 	}
 
 	@Override
 	public void setPP(final BigInteger pp) {
 		if ( pp == null ) {
-			throw new IllegalArgumentException("null PP given!");
+			throw new IllegalArgumentException("argument <pp> is null");
 		}
 
 		if ( pp.intValue() <= 0 ) {
-			throw new IllegalArgumentException("PP is <= 0");
+			throw new IllegalArgumentException("argument <pp> is <= 0");
 		}
 		
 		BigInteger oldPP = getPP();
@@ -177,24 +177,41 @@ public class KMyMoneyWritableCurrencyImpl extends KMyMoneyCurrencyImpl
 		getKMyMoneyFile().setModified(true);
 
 		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
-		if (propertyChangeSupport != null) {
+		if ( propertyChangeSupport != null ) {
 		    propertyChangeSupport.firePropertyChange("pp", oldPP, pp);
 		}
 	}
 
 	@Override
 	public void setRoundingMethod(RoundingMethod mthd) {
-		// TODO Auto-generated method stub
+		if ( mthd == null ) {
+			throw new IllegalArgumentException("argument <mthd> is null");
+		}
+
+		RoundingMethod oldMthd;
+		try {
+			oldMthd = getRoundingMethod();
+		} catch (UnknownRoundingMethodException e) {
+			LOGGER.error("setRoundingMethod: Could not get old rounding method. Assuming " + RoundingMethod.UNKNOWN);
+			oldMthd = RoundingMethod.UNKNOWN;
+		}
+		jwsdpPeer.setRoundingMethod(mthd.getCode());
+		getKMyMoneyFile().setModified(true);
+
+		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+		if ( propertyChangeSupport != null ) {
+		    propertyChangeSupport.firePropertyChange("rounding-method", oldMthd, mthd);
+		}
 	}
 
 	@Override
 	public void setSAF(final BigInteger saf) {
 		if ( saf == null ) {
-			throw new IllegalArgumentException("null SAF given!");
+			throw new IllegalArgumentException("argument <saf> is null");
 		}
 
 		if ( saf.intValue() <= 0 ) {
-			throw new IllegalArgumentException("SAF is <= 0");
+			throw new IllegalArgumentException("argument <saf> is <= 0");
 		}
 		
 		BigInteger oldSAF = getSAF();
@@ -202,14 +219,29 @@ public class KMyMoneyWritableCurrencyImpl extends KMyMoneyCurrencyImpl
 		getKMyMoneyFile().setModified(true);
 
 		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
-		if (propertyChangeSupport != null) {
+		if ( propertyChangeSupport != null ) {
 		    propertyChangeSupport.firePropertyChange("saf", oldSAF, saf);
 		}
 	}
 
 	@Override
 	public void getSCF(BigInteger scf) {
-		// TODO Auto-generated method stub
+		if ( scf == null ) {
+			throw new IllegalArgumentException("argument <scf> is null");
+		}
+
+		if ( scf.intValue() <= 0 ) {
+			throw new IllegalArgumentException("argument <scf> is <= 0");
+		}
+		
+		BigInteger oldSCF = getSCF();
+		jwsdpPeer.setPp(scf);
+		getKMyMoneyFile().setModified(true);
+
+		PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+		if ( propertyChangeSupport != null ) {
+		    propertyChangeSupport.firePropertyChange("scf", oldSCF, scf);
+		}
 	}
 
     // -----------------------------------------------------------------

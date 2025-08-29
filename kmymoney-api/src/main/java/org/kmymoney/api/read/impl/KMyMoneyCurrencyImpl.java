@@ -70,28 +70,28 @@ public class KMyMoneyCurrencyImpl extends KMyMoneyObjectImpl
 
     @Override
     public String getName() {
-	return jwsdpPeer.getName();
+    	return jwsdpPeer.getName();
     }
 
     @Override
     public BigInteger getPP() {
-	return jwsdpPeer.getPp();
+    	return jwsdpPeer.getPp();
     }
 
     @Override
     public KMMSecCurr.RoundingMethod getRoundingMethod() throws UnknownRoundingMethodException {
-	BigInteger methodVal = jwsdpPeer.getRoundingMethod(); 
-	return KMMSecCurr.RoundingMethod.valueOff(methodVal.intValue());
+    	BigInteger methodVal = jwsdpPeer.getRoundingMethod(); 
+    	return KMMSecCurr.RoundingMethod.valueOff(methodVal.intValue());
     }
 
     @Override
     public BigInteger getSAF() {
-	return jwsdpPeer.getSaf();
+    	return jwsdpPeer.getSaf();
     }
 
     @Override
     public BigInteger getSCF() {
-	return jwsdpPeer.getScf();
+    	return jwsdpPeer.getScf();
     }
 
     // ---------------------------------------------------------------
