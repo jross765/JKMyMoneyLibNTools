@@ -54,7 +54,7 @@
     <PAYEE id="P000008" name="Haushaltsgeld" reference="" email="" matchingenabled="0">
       <ADDRESS street="" city="" state="" zip="" telephone="" country="" county="" zipcode="" postcode=""/>
     </PAYEE>
-    <PAYEE id="P000009" name="Hubers Laden" reference="" email="" matchingenabled="1" usingmatchkey="1" matchignorecase="1" matchkey="Kiosk Sesamstrasse&#10;">
+    <PAYEE id="P000009" name="Hubers Laden" reference="" email="" matchingenabled="1" usingmatchkey="1" matchignorecase="1" matchkey="Kiosk Sesamstrasse">
       <ADDRESS street="" city="" state="" zip="" telephone="" country="" county="" zipcode="" postcode=""/>
     </PAYEE>
   </PAYEES>

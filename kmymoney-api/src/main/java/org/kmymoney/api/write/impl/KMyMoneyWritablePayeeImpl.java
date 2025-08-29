@@ -17,6 +17,7 @@ import org.kmymoney.api.write.aux.KMMWritableAddress;
 import org.kmymoney.api.write.impl.aux.KMMWritableAddressImpl;
 import org.kmymoney.api.write.impl.hlp.KMyMoneyWritableObjectImpl;
 import org.kmymoney.base.basetypes.complex.KMMComplAcctID;
+import org.kmymoney.base.basetypes.simple.KMMIDNotSetException;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -207,11 +208,11 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
     @Override
     public void setName(final String name) {
     	if ( name == null ) {
-    		throw new IllegalArgumentException("null name given!");
+    		throw new IllegalArgumentException("argument <name> is null");
     	}
 
     	if ( name.trim().length() == 0 ) {
-    		throw new IllegalArgumentException("empty name given!");
+    		throw new IllegalArgumentException("argument <name> is empty");
     	}
 
     	String oldName = getName();
@@ -227,7 +228,7 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
     @Override
     public void setAddress(final KMMAddress adr) {
 		if ( adr == null ) {
-			throw new IllegalArgumentException("null address given!");
+			throw new IllegalArgumentException("argument <adr> is null");
 		}
 
 		/*
@@ -261,11 +262,11 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
     @Override
     public void setNotes(final String notes) {
 		if ( notes == null ) {
-			throw new IllegalArgumentException("null notes given");
+			throw new IllegalArgumentException("argument <notes> is null");
 		}
 		
-		if ( notes.isEmpty() ) {
-			throw new IllegalArgumentException("empty notes given");
+		if ( notes.trim().length() == 0 ) {
+			throw new IllegalArgumentException("argument <notes> is empty");
 		}
 
 		// Caution: empty string allowed here
@@ -285,44 +286,149 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 
 	@Override
 	public void setDefaultAccountID(KMMComplAcctID acctID) {
-		// TODO Auto-generated method stub
-		
+    	if ( acctID == null ) {
+    		throw new IllegalArgumentException("argument <acctID> is null");
+    	}
+
+    	if ( ! acctID.isSet() ) {
+    		throw new IllegalArgumentException("argument <acctID> is not set");
+    	}
+
+    	KMMComplAcctID oldAcctID = getDefaultAccountID();
+    	try {
+			jwsdpPeer.setDefaultaccountid(acctID.getStdID().get());
+		} catch (KMMIDNotSetException e) {
+			LOGGER.error("setDefaultAccountID: Could not set new account ID");
+			// ::TODO: Don't really want to throw exceptions --
+			// I think this branch cannot practically be reached
+			e.printStackTrace();
+		}
+    	getKMyMoneyFile().setModified(true);
+
+    	PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+    	if ( propertyChangeSupport != null ) {
+    		propertyChangeSupport.firePropertyChange("default-account-id", oldAcctID, acctID);
+    	}
 	}
 
 	@Override
 	public void setEmail(String eml) {
-		// TODO Auto-generated method stub
-		
+    	if ( eml == null ) {
+    		throw new IllegalArgumentException("argument <eml> is null");
+    	}
+
+    	if ( eml.trim().length() == 0 ) {
+    		throw new IllegalArgumentException("argument <eml> is empty");
+    	}
+
+    	String oldEml = getEmail();
+    	jwsdpPeer.setEmail(eml);
+    	getKMyMoneyFile().setModified(true);
+
+    	PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+    	if ( propertyChangeSupport != null ) {
+    		propertyChangeSupport.firePropertyChange("email", oldEml, eml);
+    	}
 	}
 
 	@Override
 	public void setReference(String ref) {
-		// TODO Auto-generated method stub
-		
+    	if ( ref == null ) {
+    		throw new IllegalArgumentException("argument <ref> is null");
+    	}
+
+    	if ( ref.trim().length() == 0 ) {
+    		throw new IllegalArgumentException("argument <ref> is empty");
+    	}
+
+    	String oldRef = getReference();
+    	jwsdpPeer.setReference(ref);
+    	getKMyMoneyFile().setModified(true);
+
+    	PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+    	if ( propertyChangeSupport != null ) {
+    		propertyChangeSupport.firePropertyChange("reference", oldRef, ref);
+    	}
 	}
 
 	@Override
 	public void setMatchingEnabled(BigInteger enbl) {
-		// TODO Auto-generated method stub
-		
+    	if ( enbl == null ) {
+    		throw new IllegalArgumentException("argument <enbl> is null");
+    	}
+
+    	if ( enbl.intValue() < 0 ) {
+    		throw new IllegalArgumentException("argument <enbl> is < 0");
+    	}
+
+    	BigInteger oldEnbl = getMatchingEnabled();
+    	jwsdpPeer.setMatchingenabled(enbl);
+    	getKMyMoneyFile().setModified(true);
+
+    	PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+    	if ( propertyChangeSupport != null ) {
+    		propertyChangeSupport.firePropertyChange("matching-enabled", oldEnbl, enbl);
+    	}
 	}
 
 	@Override
 	public void setMatchKey(String key) {
-		// TODO Auto-generated method stub
-		
+    	if ( key == null ) {
+    		throw new IllegalArgumentException("argument <key> is null");
+    	}
+
+    	if ( key.trim().length() == 0 ) {
+    		throw new IllegalArgumentException("argument <key> is empty");
+    	}
+
+    	String oldKey = getMatchKey();
+    	jwsdpPeer.setReference(key);
+    	getKMyMoneyFile().setModified(true);
+
+    	PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+    	if ( propertyChangeSupport != null ) {
+    		propertyChangeSupport.firePropertyChange("matching-key", oldKey, key);
+    	}
 	}
 
 	@Override
-	public void setUsingMatchKey(BigInteger key) {
-		// TODO Auto-generated method stub
-		
+	public void setUsingMatchKey(BigInteger val) {
+    	if ( val == null ) {
+    		throw new IllegalArgumentException("argument <val> is null");
+    	}
+
+    	if ( val.intValue() == 0 ) {
+    		throw new IllegalArgumentException("argument <val> is < 0");
+    	}
+
+    	BigInteger oldVal = getUsingMatchKey();
+    	jwsdpPeer.setUsingmatchkey(val);
+    	getKMyMoneyFile().setModified(true);
+
+    	PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+    	if ( propertyChangeSupport != null ) {
+    		propertyChangeSupport.firePropertyChange("using-match-key", oldVal, val);
+    	}
 	}
 
 	@Override
 	public void setMatchIgnoreCase(BigInteger val) {
-		// TODO Auto-generated method stub
-		
+    	if ( val == null ) {
+    		throw new IllegalArgumentException("argument <val> is null");
+    	}
+
+    	if ( val.intValue() == 0 ) {
+    		throw new IllegalArgumentException("argument <val> is < 0");
+    	}
+
+    	BigInteger oldVal = getUsingMatchKey();
+    	jwsdpPeer.setMatchignorecase(val);
+    	getKMyMoneyFile().setModified(true);
+
+    	PropertyChangeSupport propertyChangeSupport = helper.getPropertyChangeSupport();
+    	if ( propertyChangeSupport != null ) {
+    		propertyChangeSupport.firePropertyChange("match-ignore-case", oldVal, val);
+    	}
 	}
 
     // -----------------------------------------------------------------
@@ -337,6 +443,30 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
 
 		buffer.append(", name='");
 		buffer.append(getName() + "'");
+
+		buffer.append(", notes='");
+		buffer.append(getNotes() + "'");
+
+		buffer.append(", default-account-id='");
+		buffer.append(getDefaultAccountID() + "'");
+
+		buffer.append(", email='");
+		buffer.append(getEmail() + "'");
+
+		buffer.append(", reference='");
+		buffer.append(getReference() + "'");
+
+		buffer.append(", matching-enabled=");
+		buffer.append(getMatchingEnabled());
+
+		buffer.append(", match-key='");
+		buffer.append(getMatchKey() + "'");
+
+		buffer.append(", using-match-key=");
+		buffer.append(getUsingMatchKey());
+
+		buffer.append(", match-ignore-case=");
+		buffer.append(getMatchIgnoreCase());
 
 		buffer.append("]");
 		return buffer.toString();

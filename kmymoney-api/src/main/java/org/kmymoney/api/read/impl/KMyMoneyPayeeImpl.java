@@ -256,7 +256,41 @@ public class KMyMoneyPayeeImpl extends KMyMoneyObjectImpl
 
 	@Override
 	public String toString() {
-		return "KMyMoneyPayeeImpl [id=" + getID() + ", name='" + getName() + "']";
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("KMyMoneyPayeeImpl [");
+
+		buffer.append("id=");
+		buffer.append(getID());
+
+		buffer.append(", name='");
+		buffer.append(getName() + "'");
+
+		buffer.append(", notes='");
+		buffer.append(getNotes() + "'");
+
+		buffer.append(", default-account-id='");
+		buffer.append(getDefaultAccountID() + "'");
+
+		buffer.append(", email='");
+		buffer.append(getEmail() + "'");
+
+		buffer.append(", reference='");
+		buffer.append(getReference() + "'");
+
+		buffer.append(", matching-enabled=");
+		buffer.append(getMatchingEnabled());
+
+		buffer.append(", match-key='");
+		buffer.append(getMatchKey() + "'");
+
+		buffer.append(", using-match-key=");
+		buffer.append(getUsingMatchKey());
+
+		buffer.append(", match-ignore-case=");
+		buffer.append(getMatchIgnoreCase());
+
+		buffer.append("]");
+		return buffer.toString();
 	}
 
 }
