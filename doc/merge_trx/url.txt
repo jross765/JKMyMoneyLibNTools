@@ -1,0 +1,4 @@
+https://github.com/KDE/kmymoney/blob/master/kmymoney/dialogs/transactionmatcher.cpp
+https://github.com/KDE/kmymoney/blob/master/kmymoney/mymoney/mymoneysplit.cpp#L389
+https://github.com/KDE/kmymoney/blob/master/kmymoney/mymoney/mymoneytransaction.cpp#L220
+https://github.com/KDE/kmymoney/blob/master/kmymoney/mymoney/mymoneykeyvaluecontainer.cpp
