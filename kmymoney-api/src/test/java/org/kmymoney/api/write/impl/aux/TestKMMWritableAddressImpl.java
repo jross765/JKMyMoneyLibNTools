@@ -11,7 +11,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
@@ -20,6 +19,7 @@ import org.kmymoney.api.read.impl.aux.KMMFileStats;
 import org.kmymoney.api.write.KMyMoneyWritablePayee;
 import org.kmymoney.api.write.aux.KMMWritableAddress;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
+import org.kmymoney.base.basetypes.simple.KMMPyeID;
 
 import junit.framework.JUnit4TestAdapter;
 
@@ -94,7 +94,9 @@ public class TestKMMWritableAddressImpl {
 		KMMAddress addr = pye.getAddress();
 		assertNotEquals(null, addr);
 
-		assertEquals("Krailbacher Gasse 123 a\n" + "Postfach ABC\n" + "Kennwort Kasperlpost", addr.getStreet());
+		assertEquals("Krailbacher Gasse 123 a\n" + 
+		             "Postfach ABC\n" + 
+				     "Kennwort Kasperlpost", addr.getStreet());
 		assertEquals("Wien", addr.getCity());
 		assertEquals("1136", addr.getPostCode());
 		assertEquals("Österreich", addr.getState());

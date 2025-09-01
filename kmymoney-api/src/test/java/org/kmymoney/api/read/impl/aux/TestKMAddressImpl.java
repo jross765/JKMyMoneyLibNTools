@@ -8,11 +8,11 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 import org.kmymoney.api.ConstTest;
-import org.kmymoney.base.basetypes.simple.KMMPyeID;
 import org.kmymoney.api.read.KMyMoneyFile;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
+import org.kmymoney.base.basetypes.simple.KMMPyeID;
 
 import junit.framework.JUnit4TestAdapter;
 
@@ -66,7 +66,9 @@ public class TestKMAddressImpl {
 		KMMAddress addr = pye.getAddress();
 		assertNotEquals(null, addr);
 
-		assertEquals("Krailbacher Gasse 123 a\n" + "Postfach ABC\n" + "Kennwort Kasperlpost", addr.getStreet());
+		assertEquals("Krailbacher Gasse 123 a\n" + 
+		             "Postfach ABC\n" + 
+				     "Kennwort Kasperlpost", addr.getStreet());
 		assertEquals("Wien", addr.getCity());
 		assertEquals("Österreich", addr.getCounty());
 		assertEquals("1136", addr.getPostCode());
