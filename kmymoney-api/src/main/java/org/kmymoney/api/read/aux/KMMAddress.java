@@ -15,7 +15,13 @@ public interface KMMAddress {
     /**
      * @return the county of the address
      */
+    @Deprecated
     String getCounty();
+
+    /**
+     * @return the country of the address
+     */
+    String getCountry();
 
     /**
      * @return the state (US) or region/province/whatever (non-US) of the address
@@ -30,6 +36,7 @@ public interface KMMAddress {
      * @see #getZip()
      * @see #getZipCode()
      */
+    @Deprecated
     String getPostCode();
     
     /**
@@ -38,6 +45,7 @@ public interface KMMAddress {
      * @see #getPostCode()
      * @see #getZipCode()
      */
+    @Deprecated
     String getZip();
     
     /**

@@ -50,8 +50,14 @@ public class KMMAddressImpl implements KMMAddress {
 	}
 
 	@Override
+	@Deprecated
 	public String getCounty() {
 		return jwsdpPeer.getCounty();
+	}
+
+	@Override
+	public String getCountry() {
+		return jwsdpPeer.getCountry();
 	}
 
 	@Override
@@ -62,11 +68,13 @@ public class KMMAddressImpl implements KMMAddress {
 	// ----------------------------
 
 	@Override
+	@Deprecated
 	public String getPostCode() {
 		return jwsdpPeer.getPostcode();
 	}
 
 	@Override
+	@Deprecated
 	public String getZip() {
 		return jwsdpPeer.getZip();
 	}
@@ -91,11 +99,12 @@ public class KMMAddressImpl implements KMMAddress {
 
 		result += "street='" + getStreet() + "'";
 		result += ", city='" + getCity() + "'";
-		result += ", county='" + getCounty() + "'";
-		result += ", state='" + getState() + "'";
-		result += ", postcode='" + getPostCode() + "'";
 		result += ", zip='" + getZip() + "'";
 		result += ", zip-code='" + getZipCode() + "'";
+		result += ", post-code='" + getPostCode() + "'";
+		result += ", state='" + getState() + "'";
+		result += ", county='" + getCounty() + "'";
+		result += ", country='" + getCountry() + "'";
 		result += ", telephone='" + getTelephone() + "'";
 
 		result += "]";

@@ -7,9 +7,11 @@ public interface HasWritableAddress {
 
     KMMWritableAddress getWritableAddress();
     
-    KMMWritableAddress createWritableAddress();
+//  sic, not necessary / counter-productive:
+//  KMMWritableAddress createWritableAddress();
     
-	void removeAddress(KMMWritableAddress impl);
+//  dto.    
+//	void removeAddress(KMMWritableAddress impl);
 
     void setAddress(KMMAddress adr);
     

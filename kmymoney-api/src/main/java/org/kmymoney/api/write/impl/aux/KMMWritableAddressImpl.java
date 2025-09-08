@@ -121,8 +121,14 @@ public class KMMWritableAddressImpl extends KMMAddressImpl
 	}
 
 	@Override
+	@Deprecated
 	public void setCounty(String county) {
 		getJwsdpPeer().setCounty(county);		
+	}
+
+	@Override
+	public void setCountry(String country) {
+		getJwsdpPeer().setCountry(country);		
 	}
 
 	@Override
@@ -158,11 +164,12 @@ public class KMMWritableAddressImpl extends KMMAddressImpl
 
 		result += "street='" + getStreet() + "'";
 		result += ", city='" + getCity() + "'";
-		result += ", county='" + getCounty() + "'";
-		result += ", state='" + getState() + "'";
-		result += ", postcode='" + getPostCode() + "'";
 		result += ", zip='" + getZip() + "'";
 		result += ", zip-code='" + getZipCode() + "'";
+		result += ", post-code='" + getPostCode() + "'";
+		result += ", state='" + getState() + "'";
+		result += ", county='" + getCounty() + "'";
+		result += ", country='" + getCountry() + "'";
 		result += ", telephone='" + getTelephone() + "'";
 
 		result += "]";

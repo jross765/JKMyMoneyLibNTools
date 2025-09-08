@@ -14,18 +14,24 @@ import org.kmymoney.api.ConstTest;
 import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
-import org.kmymoney.api.read.impl.TestKMyMoneyPayeeImpl;
 import org.kmymoney.api.read.impl.aux.KMMFileStats;
+import org.kmymoney.api.read.impl.aux.TestKMMAddressImpl;
+import org.kmymoney.api.write.KMyMoneyWritableInstitution;
 import org.kmymoney.api.write.KMyMoneyWritablePayee;
 import org.kmymoney.api.write.aux.KMMWritableAddress;
 import org.kmymoney.api.write.impl.KMyMoneyWritableFileImpl;
+import org.kmymoney.base.basetypes.simple.KMMInstID;
 import org.kmymoney.base.basetypes.simple.KMMPyeID;
 
 import junit.framework.JUnit4TestAdapter;
 
 public class TestKMMWritableAddressImpl {
-	public static final KMMPyeID PYE_2_ID = TestKMyMoneyPayeeImpl.PYE_2_ID;
-	public static final KMMPyeID PYE_3_ID = TestKMyMoneyPayeeImpl.PYE_3_ID;
+	
+	public static final KMMPyeID PYE_2_ID = TestKMMAddressImpl.PYE_2_ID;
+	public static final KMMPyeID PYE_3_ID = TestKMMAddressImpl.PYE_3_ID;
+
+	public static final KMMInstID INST_1_ID = TestKMMAddressImpl.INST_1_ID;
+	public static final KMMInstID INST_2_ID = TestKMMAddressImpl.INST_2_ID;
 
 	// -----------------------------------------------------------------
 
@@ -97,12 +103,37 @@ public class TestKMMWritableAddressImpl {
 		assertEquals("Krailbacher Gasse 123 a\n" + 
 		             "Postfach ABC\n" + 
 				     "Kennwort Kasperlpost", addr.getStreet());
-		assertEquals("Wien", addr.getCity());
-		assertEquals("1136", addr.getPostCode());
 		assertEquals("Österreich", addr.getState());
 		assertEquals("1136", addr.getZip());
 		assertEquals("1136", addr.getZipCode());
+		assertEquals("1136", addr.getPostCode());
+		assertEquals("Wien", addr.getCity());
+		assertEquals("Österreich", addr.getState());
+		assertEquals("Österreich", addr.getCounty());
+		assertEquals("Österreich", addr.getCountry());
+		
 		assertEquals("+43 - 12 - 277278279", addr.getTelephone());
+	}
+
+	@Test
+	public void test01_2() throws Exception {
+		KMyMoneyWritableInstitution inst = kmmInFile.getWritableInstitutionByID(INST_2_ID);
+		assertNotEquals(null, inst);
+		assertEquals(INST_2_ID, inst.getID());
+
+		KMMAddress addr = inst.getAddress();
+		assertNotEquals(null, addr);
+
+		assertEquals("Gibby St", addr.getStreet());
+		assertEquals("E23Q452", addr.getZip());
+		assertEquals("E23Q452", addr.getZipCode());
+		assertEquals("E23Q452", addr.getPostCode());
+		assertEquals("Gibbon City", addr.getCity());
+		assertEquals("", addr.getState());
+		assertEquals("", addr.getCounty());
+		assertEquals("", addr.getCountry());
+		
+		assertEquals("+1 - 44 - 1234", addr.getTelephone());
 	}
 
 	// -----------------------------------------------------------------
@@ -125,8 +156,9 @@ public class TestKMMWritableAddressImpl {
 
 		addr.setStreet("Judengasse 3");
 		addr.setCity("Salzburg");
-		addr.setPostCode("1334");
-		addr.setZip("2345");
+		addr.setZip("1234");
+		addr.setZipCode("2345");
+		addr.setPostCode("3456");
 		addr.setTelephone("+43 - 12 - 37403273");
 
 		// ----------------------------
@@ -158,11 +190,12 @@ public class TestKMMWritableAddressImpl {
 	private void test02_1_check_memory(KMMWritableAddress addr) throws Exception {
 		assertEquals("Judengasse 3", addr.getStreet()); // unchanged
 		assertEquals("Salzburg", addr.getCity()); // changed
-		assertEquals("Österreich", addr.getCounty()); // unchanged
-		assertEquals("1334", addr.getPostCode()); // changed
+		assertEquals("1234", addr.getZip()); // changed
+		assertEquals("2345", addr.getZipCode()); // changed
+		assertEquals("3456", addr.getPostCode()); // changed
 		assertEquals("Österreich", addr.getState()); // unchanged
-		assertEquals("2345", addr.getZip()); // changed
-		assertEquals("1136", addr.getZipCode()); // unchanged
+		assertEquals("Österreich", addr.getCounty()); // unchanged
+		assertEquals("Österreich", addr.getCountry()); // unchanged
 		assertEquals("+43 - 12 - 37403273", addr.getTelephone()); // changed
 	}
 
@@ -179,11 +212,12 @@ public class TestKMMWritableAddressImpl {
 
 		assertEquals("Judengasse 3", addr.getStreet()); // unchanged
 		assertEquals("Salzburg", addr.getCity()); // changed
-		assertEquals("Österreich", addr.getCounty()); // unchanged
-		assertEquals("1334", addr.getPostCode()); // changed
+		assertEquals("1234", addr.getZip()); // changed
+		assertEquals("2345", addr.getZipCode()); // changed
+		assertEquals("3456", addr.getPostCode()); // changed
 		assertEquals("Österreich", addr.getState()); // unchanged
-		assertEquals("2345", addr.getZip()); // changed
-		assertEquals("1136", addr.getZipCode()); // unchanged
+		assertEquals("Österreich", addr.getCounty()); // unchanged
+		assertEquals("Österreich", addr.getCountry()); // unchanged
 		assertEquals("+43 - 12 - 37403273", addr.getTelephone()); // changed
 	}
 
@@ -214,28 +248,12 @@ public class TestKMMWritableAddressImpl {
 		assertEquals(PYE_2_ID, pye.getID());
 
 		KMMWritableAddress addr = pye.getWritableAddress();
-		if ( addr == null ) {
-			// Create a new address object
-			// Note: this is, as far as we understand, the
-			// case that *normally* does not occur.
-			addr = pye.createWritableAddress();
-		} else {
-			// Take the existing address object
-			// Note: this is, as far as we understand, the 
-			// standard case, as it seems that the address
-			// object is always generated with the Payee object
-			// by default.
-			// In that case, however, the following test(s) is/are
-			// redundant, because it effectively becomes a variant
-			// of the test cases in part 2.
-			int dummy = 1;
-		}
-
+		
 		// ----------------------------
 
 		addr.setStreet("Champs Élysées");
 		addr.setCity("Paris");
-		addr.setPostCode("75000");
+		addr.setZipCode("75000");
 		addr.setTelephone("+33 - 1 - 99 91 99 91");
 
 		// ----------------------------
@@ -262,7 +280,7 @@ public class TestKMMWritableAddressImpl {
 	private void test03_1_1_check_memory(KMMWritableAddress addr) throws Exception {
 		assertEquals("Champs Élysées", addr.getStreet());
 		assertEquals("Paris", addr.getCity());
-		assertEquals("75000", addr.getPostCode());
+		assertEquals("75000", addr.getZipCode());
 		assertEquals("+33 - 1 - 99 91 99 91", addr.getTelephone());
 	}
 
@@ -279,7 +297,7 @@ public class TestKMMWritableAddressImpl {
 
 		assertEquals("Champs Élysées", addr.getStreet());
 		assertEquals("Paris", addr.getCity());
-		assertEquals("75000", addr.getPostCode());
+		assertEquals("75000", addr.getZipCode());
 		assertEquals("+33 - 1 - 99 91 99 91", addr.getTelephone());
 	}
 

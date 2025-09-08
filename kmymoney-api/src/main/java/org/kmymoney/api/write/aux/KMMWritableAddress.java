@@ -26,7 +26,16 @@ public interface KMMWritableAddress extends KMMAddress {
      * 
      * @see #getCounty()
      */
+    @Deprecated
     void  setCounty(String county);
+
+    /**
+     * 
+     * @param county
+     * 
+     * @see #getCountry()
+     */
+    void  setCountry(String country);
 
     /**
      * 
@@ -44,6 +53,7 @@ public interface KMMWritableAddress extends KMMAddress {
      * 
      * @see #getPostCode()
      */
+    @Deprecated
     void  setPostCode(String postCode);
     
     /**
@@ -53,6 +63,7 @@ public interface KMMWritableAddress extends KMMAddress {
      * @see #getZip()
      * @see #setZipCode(String)
      */
+    @Deprecated
     void  setZip(String zip);
     
     /**

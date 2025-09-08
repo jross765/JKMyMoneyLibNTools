@@ -6,7 +6,6 @@ import org.kmymoney.api.generated.ADDRESS;
 import org.kmymoney.api.generated.INSTITUTION;
 import org.kmymoney.api.generated.KEYVALUEPAIRS;
 import org.kmymoney.api.generated.ObjectFactory;
-import org.kmymoney.api.read.KMyMoneyInstitution;
 import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.read.impl.KMyMoneyInstitutionImpl;
 import org.kmymoney.api.read.impl.hlp.KVPListDoesNotContainKeyException;
@@ -161,28 +160,6 @@ public class KMyMoneyWritableInstitutionImpl extends KMyMoneyInstitutionImpl
     public KMMWritableAddress getWritableAddress() {
     	return new KMMWritableAddressImpl(jwsdpPeer.getADDRESS());
     }
-
-    /**
-     * @see KMyMoneyInstitution#getAddress()
-     */
-//    @Override
-//    public KMMWritableAddress getAddress() {
-//	return getWritableAddress();
-//    }
-
-    public KMMWritableAddress createWritableAddress() {
-		KMMWritableAddressImpl addr = new KMMWritableAddressImpl(this);
-		setAddress(addr);
-		if ( helper.getPropertyChangeSupport() != null ) {
-			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableAddress());
-		}
-		
-		return addr;
-    }
-    
-	public void removeAddress(KMMWritableAddress impl) {
-		// ::TODO
-	}
 
     // ---------------------------------------------------------------
 

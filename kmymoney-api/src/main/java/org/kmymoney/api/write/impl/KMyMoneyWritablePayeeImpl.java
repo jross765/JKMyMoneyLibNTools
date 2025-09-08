@@ -6,7 +6,6 @@ import java.math.BigInteger;
 import org.kmymoney.api.generated.ADDRESS;
 import org.kmymoney.api.generated.ObjectFactory;
 import org.kmymoney.api.generated.PAYEE;
-import org.kmymoney.api.read.KMyMoneyPayee;
 import org.kmymoney.api.read.KMyMoneyTransactionSplit;
 import org.kmymoney.api.read.aux.KMMAddress;
 import org.kmymoney.api.read.impl.KMyMoneyFileImpl;
@@ -177,28 +176,6 @@ public class KMyMoneyWritablePayeeImpl extends KMyMoneyPayeeImpl
     public KMMWritableAddress getWritableAddress() {
     	return new KMMWritableAddressImpl(jwsdpPeer.getADDRESS());
     }
-
-    /**
-     * @see KMyMoneyPayee#getAddress()
-     */
-//    @Override
-//    public KMMWritableAddress getAddress() {
-//	return getWritableAddress();
-//    }
-
-    public KMMWritableAddress createWritableAddress() {
-		KMMWritableAddressImpl addr = new KMMWritableAddressImpl(this);
-		setAddress(addr);
-		if ( helper.getPropertyChangeSupport() != null ) {
-			helper.getPropertyChangeSupport().firePropertyChange("splits", null, getWritableAddress());
-		}
-		
-		return addr;
-    }
-    
-	public void removeAddress(KMMWritableAddress impl) {
-		// ::TODO
-	}
 
     // ---------------------------------------------------------------
 
