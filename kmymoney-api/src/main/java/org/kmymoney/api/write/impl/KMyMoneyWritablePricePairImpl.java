@@ -83,13 +83,6 @@ public class KMyMoneyWritablePricePairImpl extends KMyMoneyPricePairImpl
 
     // ---------------------------------------------------------------
     
-    // ::TODO
-//  public KMMWritablePrice createWritablePrice(final KMMPrice prc) {
-//	KMMWritablePriceImpl splt = new KMMWritablePriceImpl(this, prc);
-//	addPrice(splt);
-//	return splt;
-//  }
-
     private static PRICEPAIR createPricePair_int(
     		final KMMQualifSecCurrID fromSecCurrID, 
     		final KMMQualifCurrID toCurrID,
