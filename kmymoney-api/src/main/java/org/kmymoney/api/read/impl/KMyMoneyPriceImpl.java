@@ -237,8 +237,6 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
     // -----------------------------------------------------------------
 
     @Override
-    // ::TODO ::CHECK Check the order yet again (and have it consistent
-    // with sister project)
 	public int compareTo(final KMyMoneyPrice otherPrc) {
 		int i = getParentPricePairID().toString().compareTo(otherPrc.getParentPricePairID().toString());
 		if ( i != 0 ) {
