@@ -1,7 +1,6 @@
 package org.kmymoney.api.read.impl.hlp;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Currency;
 import java.util.HashMap;
@@ -133,12 +132,15 @@ public class FileTransactionManager {
 		return retval;
 	}
 
-	public Collection<? extends KMyMoneyTransaction> getTransactions() {
+	public List<? extends KMyMoneyTransaction> getTransactions() {
 		if ( trxMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
 		
-		return Collections.unmodifiableCollection(trxMap.values());
+		ArrayList<KMyMoneyTransaction> temp = new ArrayList<KMyMoneyTransaction>(trxMap.values());
+		Collections.sort(temp);
+		
+		return Collections.unmodifiableList(temp);
 	}
 
 	// ----------------------------

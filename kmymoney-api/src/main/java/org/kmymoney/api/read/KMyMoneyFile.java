@@ -260,7 +260,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 *         
 	 * @see #getTransactions(LocalDate, LocalDate)
 	 */
-	Collection<? extends KMyMoneyTransaction> getTransactions();
+	List<? extends KMyMoneyTransaction> getTransactions();
 
 	/**
 	 * 
@@ -270,7 +270,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * 
 	 * @see #getTransactions()
 	 */
-	Collection<? extends KMyMoneyTransaction> getTransactions(LocalDate fromDate, LocalDate toDate);
+	List<? extends KMyMoneyTransaction> getTransactions(LocalDate fromDate, LocalDate toDate);
 
 	// ----------------------------
 

@@ -557,12 +557,12 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @see KMyMoneyFile#getTransactions()
      */
     @Override
-    public Collection<? extends KMyMoneyTransaction> getTransactions() {
+    public List<? extends KMyMoneyTransaction> getTransactions() {
     	return trxMgr.getTransactions();
     }
     
     @Override
-    public Collection<? extends KMyMoneyTransaction> getTransactions(final LocalDate fromDate, final LocalDate toDate) {
+    public List<? extends KMyMoneyTransaction> getTransactions(final LocalDate fromDate, final LocalDate toDate) {
 		ArrayList<KMyMoneyTransaction> result = new ArrayList<KMyMoneyTransaction>();
 		
 		for ( KMyMoneyTransaction trx : getTransactions() ) {
@@ -574,7 +574,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 			 }
 		}
 		
-		return Collections.unmodifiableCollection(result);
+		return Collections.unmodifiableList(result);
     }
     
     // ----------------------------

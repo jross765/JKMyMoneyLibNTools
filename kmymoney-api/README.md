@@ -15,7 +15,10 @@ file.
   * New method `getReconciliations()`
   * New method `printTree()`
 * `KMyMoney(Writable)TransactionSplit(Impl)`: New methods `getNumber()` and `setNumber()`.
-* `KMyMoneyFile(Impl)`: New method `dump()`.
+* `KMyMoneyFile(Impl)`: 
+  * Changed return type of `getAccountsXYZ()` from Collection to List.
+  * Dto. for `getTransactionsXYZ()`.
+  * New method `dump()`.
 
 ### V. 0.6 &rarr; 0.7
 **Caution: This is the last version of the API that is compatible with the KMyMoney V. 5.1.x format.**
