@@ -364,7 +364,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     }
 
     @Override
-    public Collection<KMyMoneyAccount> getAccountsByName(final String name) {
+    public List<KMyMoneyAccount> getAccountsByName(final String name) {
 		if ( name == null ) {
 			throw new IllegalArgumentException("null name given");
 		}
@@ -380,7 +380,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @see KMyMoneyFile#getAccountsByName(java.lang.String)
      */
     @Override
-    public Collection<KMyMoneyAccount> getAccountsByName(final String expr, boolean qualif, boolean relaxed) {
+    public List<KMyMoneyAccount> getAccountsByName(final String expr, boolean qualif, boolean relaxed) {
 		if ( expr == null ) {
 			throw new IllegalArgumentException("null expression given");
 		}
@@ -492,12 +492,12 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     }
 
     @Override
-    public Collection<KMyMoneyAccount> getAccountsByType(KMyMoneyAccount.Type type) {
+    public List<KMyMoneyAccount> getAccountsByType(KMyMoneyAccount.Type type) {
     	return acctMgr.getAccountsByType(type);
     }
 
     @Override
-    public Collection<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, 
+    public List<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, 
 	                                                            boolean qualif, boolean relaxed) {
     	return acctMgr.getAccountsByTypeAndName(type, expr, qualif, relaxed);
     }
@@ -506,7 +506,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * @return a read-only collection of all accounts
      */
     @Override
-    public Collection<KMyMoneyAccount> getAccounts() {
+    public List<KMyMoneyAccount> getAccounts() {
         return acctMgr.getAccounts();
     }
 
@@ -524,17 +524,17 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      *         result is sorted)
      */
     @Override
-    public Collection<? extends KMyMoneyAccount> getParentlessAccounts() {
+    public List<? extends KMyMoneyAccount> getParentlessAccounts() {
     	return acctMgr.getParentlessAccounts();
     }
 
     @Override
-    public Collection<KMMComplAcctID> getTopAccountIDs() {
+    public List<KMMComplAcctID> getTopAccountIDs() {
     	return acctMgr.getTopAccountIDs();
     }
 
     @Override
-    public Collection<KMyMoneyAccount> getTopAccounts() {
+    public List<KMyMoneyAccount> getTopAccounts() {
     	return acctMgr.getTopAccounts();
     }
 

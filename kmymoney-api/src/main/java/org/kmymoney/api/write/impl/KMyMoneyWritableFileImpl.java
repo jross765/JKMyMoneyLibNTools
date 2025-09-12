@@ -666,9 +666,9 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	 * @see org.kmm.write.jwsdpimpl.KMyMoneyFileImpl#getRootAccounts()
 	 */
 	@Override
-	public Collection<? extends KMyMoneyAccount> getParentlessAccounts() {
+	public List<? extends KMyMoneyAccount> getParentlessAccounts() {
 		// TODO Auto-generated method stub
-		Collection<? extends KMyMoneyAccount> rootAccounts = super.getParentlessAccounts();
+		List<? extends KMyMoneyAccount> rootAccounts = super.getParentlessAccounts();
 		if ( rootAccounts.size() > 1 ) {
 			KMyMoneyAccount root = null;
 			StringBuilder roots = new StringBuilder();

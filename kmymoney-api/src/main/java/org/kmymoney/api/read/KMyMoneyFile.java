@@ -136,7 +136,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @see #getAccountsByParentID(KMMComplAcctID)
 	 * @see #getAccountsByName(String, boolean, boolean)
 	 */
-	Collection<KMyMoneyAccount> getAccountsByName(String expr);
+	List<KMyMoneyAccount> getAccountsByName(String expr);
 
 	/**
 	 * @param expr search expression
@@ -144,7 +144,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param relaxed Whether to ignore upper/lower-case letters or not (true: case-insensitive)
 	 * @return the qualified or unqualified name to look for, depending on parameter qualif.
 	 */
-	Collection<KMyMoneyAccount> getAccountsByName(String expr, boolean qualif, boolean relaxed);
+	List<KMyMoneyAccount> getAccountsByName(String expr, boolean qualif, boolean relaxed);
 
 	/**
 	 * @param expr search expression
@@ -203,7 +203,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param type
 	 * @return list of read-only account objects of the given type
 	 */
-    Collection<KMyMoneyAccount> getAccountsByType(KMyMoneyAccount.Type type);
+	List<KMyMoneyAccount> getAccountsByType(KMyMoneyAccount.Type type);
     
 	/**
 	 * @param type
@@ -213,25 +213,14 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @return list of read-only account objects of the given type and
      *   matching the other parameters for the name.
 	 */
-	Collection<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, 
-														 boolean qualif, boolean relaxed);
+    List<KMyMoneyAccount> getAccountsByTypeAndName(KMyMoneyAccount.Type type, String expr, 
+    											   boolean qualif, boolean relaxed);
 
 	/**
 	 * @return all accounts
 	 */
-	Collection<KMyMoneyAccount> getAccounts();
-	// ^--- ::TODO
-	// Caution: Although, originally, we defined a Collection and not a List
-	// for the accounts in the interface of KMyMoneyAccount, we recently
-	// found out that sorting -- thus a list -- is kind of necessary, 
-	// because else, the recently-introduced method dump() in KMyMoneyFile(Impl)
-	// is not of much use.
-	// Apart from that, KMyMoneyAccount extends Comparable, after all...
-	// Cf. comment in FileAccountManager.getAccounts()
+	List<KMyMoneyAccount> getAccounts();
 	
-	// ::TODO
-	// Same with the other "Collections" here, I guess...
-
     /**
      * THERE IS NO ROOT ACCOUNT!
      * 
@@ -243,19 +232,19 @@ public interface KMyMoneyFile extends KMyMoneyObject {
      * @return a read-only collection of all accounts that have no parent (the
      *         result is sorted)
      */
-    Collection<? extends KMyMoneyAccount> getParentlessAccounts();
+	List<? extends KMyMoneyAccount> getParentlessAccounts();
 
     /**
      * @return collection of the IDs of all top-level accounts (i.e., 
      * one level under root, if there was a root) 
      */
-    Collection<KMMComplAcctID> getTopAccountIDs();
+	List<KMMComplAcctID> getTopAccountIDs();
 
     /**
      * @return collection of all top-level accounts (ro-objects) (i.e., 
      * one level under root, if there was a root)
      */
-    Collection<KMyMoneyAccount> getTopAccounts();
+	List<KMyMoneyAccount> getTopAccounts();
 
 	// ---------------------------------------------------------------
 

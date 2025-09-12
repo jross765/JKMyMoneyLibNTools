@@ -1,7 +1,6 @@
 package org.kmymoney.api.read.impl.hlp;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -420,7 +419,7 @@ public class FileAccountManager {
 
 	// ---------------------------------------------------------------
 
-	public Collection<KMyMoneyAccount> getAccounts() {
+	public List<KMyMoneyAccount> getAccounts() {
 		if ( acctMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
@@ -433,7 +432,7 @@ public class FileAccountManager {
 		// Cf. comment in KMyMoneyAccount.
 		ArrayList<KMyMoneyAccount> temp = new ArrayList<KMyMoneyAccount>(acctMap.values());
 		Collections.sort(temp);
-		return Collections.unmodifiableCollection(temp);
+		return Collections.unmodifiableList(temp);
 	}
 
 	public List<? extends KMyMoneyAccount> getParentlessAccounts() {
