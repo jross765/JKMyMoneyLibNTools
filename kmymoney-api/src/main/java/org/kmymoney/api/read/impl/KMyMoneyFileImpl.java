@@ -792,18 +792,18 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     
 
 	@Override
-	public Collection<KMyMoneySecurity> getSecuritiesByType(KMMSecCurr.Type type) {
+	public List<KMyMoneySecurity> getSecuritiesByType(KMMSecCurr.Type type) {
     	return secMgr.getSecuritiesByType(type);
 	}
 
 	@Override
-	public Collection<KMyMoneySecurity> getSecuritiesByTypeAndName(KMMSecCurr.Type type, String expr, 
-																   boolean relaxed) {
+	public List<KMyMoneySecurity> getSecuritiesByTypeAndName(KMMSecCurr.Type type, String expr,
+															 boolean relaxed) {
     	return secMgr.getSecuritiesByTypeAndName(type, expr, relaxed);
 	}
 
     @Override
-    public Collection<KMyMoneySecurity> getSecurities() {
+    public List<KMyMoneySecurity> getSecurities() {
     	return secMgr.getSecurities();
     }
 

@@ -19,6 +19,7 @@ file.
   * Changed return type of `getAccountsXYZ()` from Collection to List.
   * Dto. for `getTransactionsXYZ()`.
   * Dto. for `getTransactionSplitsXYZ()`.
+  * Dto. for `getSecuritiesXYZ()`.
   * New method `dump()`.
 
 ### V. 0.6 &rarr; 0.7

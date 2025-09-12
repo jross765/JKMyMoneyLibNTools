@@ -448,7 +448,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param type
 	 * @return
 	 */
-	Collection<KMyMoneySecurity> getSecuritiesByType(KMMSecCurr.Type type);
+	List<KMyMoneySecurity> getSecuritiesByType(KMMSecCurr.Type type);
     
 	/**
 	 * @param type
@@ -456,13 +456,13 @@ public interface KMyMoneyFile extends KMyMoneyObject {
 	 * @param relaxed
 	 * @return
 	 */
-	Collection<KMyMoneySecurity> getSecuritiesByTypeAndName(KMMSecCurr.Type type, String expr, 
-														   boolean relaxed);
+	List<KMyMoneySecurity> getSecuritiesByTypeAndName(KMMSecCurr.Type type, String expr,
+													  boolean relaxed);
 
 	/**
 	 * @return
 	 */
-	Collection<KMyMoneySecurity> getSecurities();
+	List<KMyMoneySecurity> getSecurities();
 
 	// ---------------------------------------------------------------
 

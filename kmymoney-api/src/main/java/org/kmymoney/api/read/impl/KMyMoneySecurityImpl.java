@@ -66,6 +66,10 @@ public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl
 
     @Override
     public KMMQualifSecID getQualifID() {
+    	if ( getID() == null ) {
+   			return null;
+   		}
+   	
     	return new KMMQualifSecID(getID());
     }
     
@@ -89,6 +93,10 @@ public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl
 
     @Override
     public KMMSecCurr.Type getType() {
+    	if ( getTypeBigInt() == null ) {
+    		return null;
+    	}
+    	
     	BigInteger typeVal = getTypeBigInt(); 
 		return KMMSecCurrImpl.getType(typeVal.intValue());
     }
@@ -99,6 +107,10 @@ public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl
 
     @Override
     public String getName() {
+    	if ( jwsdpPeer.getName() == null ) {
+			return ""; // sic, important for compareToByName()
+		}
+	
     	return jwsdpPeer.getName();
     }
 
@@ -109,6 +121,10 @@ public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl
 
     @Override
     public KMMSecCurr.RoundingMethod getRoundingMethod() throws UnknownRoundingMethodException {
+    	if ( jwsdpPeer.getRoundingMethod() == null ) {
+    		return null;
+    	}
+    	
     	BigInteger methodVal = jwsdpPeer.getRoundingMethod(); 
     	return KMMSecCurr.RoundingMethod.valueOff(methodVal.intValue());
     }
