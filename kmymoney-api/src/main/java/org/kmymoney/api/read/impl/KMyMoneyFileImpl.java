@@ -866,7 +866,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     // ---------------------------------------------------------------
     
     @Override
-    public Collection<KMyMoneyPrice> getPrices() {
+    public List<KMyMoneyPrice> getPrices() {
     	return prcMgr.getPrices();
     }
 

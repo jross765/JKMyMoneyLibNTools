@@ -16,10 +16,11 @@ file.
   * New method `printTree()`
 * `KMyMoney(Writable)TransactionSplit(Impl)`: New methods `getNumber()` and `setNumber()`.
 * `KMyMoneyFile(Impl)`: 
-  * Changed return type of `getAccountsXYZ()` from Collection to List.
+  * Changed return type of *all* `getAccountsXYZ()` from Collection to List.
   * Dto. for `getTransactionsXYZ()`.
   * Dto. for `getTransactionSplitsXYZ()`.
   * Dto. for `getSecuritiesXYZ()`.
+  * Dto. for `getPricesXYZ()`.
   * New method `dump()`.
 
 ### V. 0.6 &rarr; 0.7

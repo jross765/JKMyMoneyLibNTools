@@ -281,12 +281,15 @@ public class FilePriceManager {
 	
 	// ---------------------------------------------------------------
 
-	public Collection<KMyMoneyPrice> getPrices() {
+	public List<KMyMoneyPrice> getPrices() {
 		if ( prcMap == null ) {
 			throw new IllegalStateException("no root-element loaded");
 		}
 
-		return prcMap.values();
+		ArrayList<KMyMoneyPrice> temp = new ArrayList<KMyMoneyPrice>(prcMap.values());
+		Collections.sort(temp);
+		
+		return Collections.unmodifiableList(temp);
 	}
 
 	public List<KMyMoneyPrice> getPricesBySecID(final KMMSecID secID) {

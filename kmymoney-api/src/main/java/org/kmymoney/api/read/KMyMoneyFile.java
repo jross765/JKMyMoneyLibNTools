@@ -531,7 +531,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
     /**
 	 * @return all prices defined in the book
 	 */
-	Collection<KMyMoneyPrice> getPrices();
+	List<KMyMoneyPrice> getPrices();
 
     // sic: List, not Collection
 	List<KMyMoneyPrice> getPricesBySecID(KMMSecID secID);
