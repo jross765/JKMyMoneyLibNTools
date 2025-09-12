@@ -635,7 +635,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     }
 
     @Override
-    public Collection<KMyMoneyTransactionSplit> getTransactionSplits() {
+    public List<KMyMoneyTransactionSplit> getTransactionSplits() {
     	return trxMgr.getTransactionSplits();
     }
 

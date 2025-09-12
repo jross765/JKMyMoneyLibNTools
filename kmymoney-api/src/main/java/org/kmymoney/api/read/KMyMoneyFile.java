@@ -327,7 +327,7 @@ public interface KMyMoneyFile extends KMyMoneyObject {
     /**
      * @return list of all transaction splits (ro-objects)
      */
-	Collection<KMyMoneyTransactionSplit> getTransactionSplits();
+	List<KMyMoneyTransactionSplit> getTransactionSplits();
 
 	// ---------------------------------------------------------------
 

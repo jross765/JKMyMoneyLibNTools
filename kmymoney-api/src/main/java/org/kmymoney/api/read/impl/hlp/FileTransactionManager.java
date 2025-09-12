@@ -271,12 +271,10 @@ public class FileTransactionManager {
 			throw new IllegalStateException("no root-element loaded");
 		}
 
-		List<KMyMoneyTransactionSplit> result = new ArrayList<KMyMoneyTransactionSplit>();
-		for ( KMyMoneyTransactionSplit elt : trxSpltMap.values() ) {
-			result.add(elt);
-		}
+		ArrayList<KMyMoneyTransactionSplit> temp = new ArrayList<KMyMoneyTransactionSplit>(trxSpltMap.values());
+		Collections.sort(temp);
 		
-		return Collections.unmodifiableList(result);
+		return Collections.unmodifiableList(temp);
 	}
 
 	public List<KMyMoneyTransactionSplitImpl> getTransactionSplits_readAfresh() {
