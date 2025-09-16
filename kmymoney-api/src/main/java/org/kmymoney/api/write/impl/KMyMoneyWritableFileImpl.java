@@ -113,7 +113,6 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	// true if this file has been modified.
 	private boolean modified = false;
 
-	// @see {@link #getLastWriteTime()}
 	private long lastWriteTime = 0;
 
 	// ---------------------------------------------------------------
@@ -158,8 +157,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	// ::TODO Description
 	// ---------------------------------------------------------------
 	
-	// ::TODO
-
+	@Override
+	public KMyMoneyWritableFile getWritableKMyMoneyFile() {
+		return this;
+	}
+	
 	// ---------------------------------------------------------------
 	// ::TODO Description
 	// ---------------------------------------------------------------
@@ -187,7 +189,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	// ---------------------------------------------------------------
 
 	/**
-	 * @see {@link KMyMoneyFileImpl#loadFile(java.io.File)}
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected void loadFile(final File pFile) throws IOException {
@@ -196,21 +198,24 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	}
 
 	/**
-	 * @see KMyMoneyWritableFile#writeFile(java.io.File)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void writeFile(final File file) throws IOException {
 		writeFile(file, CompressMode.GUESS_FROM_FILENAME);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void writeFile(File file, CompressMode compMode) throws IOException {
 		if ( file == null ) {
-			throw new IllegalArgumentException("null not allowed for field this file");
+			throw new IllegalArgumentException("argument <file> is null");
 		}
 
 		if ( file.exists() ) {
-			throw new IllegalArgumentException("Given file '" + file.getAbsolutePath() + "' does exist!");
+			throw new IllegalArgumentException("File '" + file.getAbsolutePath() + "' already exists");
 		}
 
 		updateLastModified();
@@ -406,11 +411,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritableInstitution getWritableInstitutionByID(KMMInstID instID) {
 		if ( instID == null ) {
-			throw new IllegalArgumentException("null institution ID given");
+			throw new IllegalArgumentException("argument <instID> is null");
 		}
 
 		if ( ! instID.isSet() ) {
-			throw new IllegalArgumentException("unset institution ID given");
+			throw new IllegalArgumentException("argument <instID> is not set");
 		}
 
 		KMyMoneyInstitution inst = super.getInstitutionByID(instID);
@@ -701,11 +706,6 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 		return rootAccounts;
 	}
 
-	@Override
-	public KMyMoneyWritableFile getWritableKMyMoneyFile() {
-		return this;
-	}
-	
 	// ---------------------------------------------------------------
 
 	@Override
@@ -748,11 +748,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritableAccount getWritableAccountByID(final KMMComplAcctID acctID) {
 		if ( acctID == null ) {
-			throw new IllegalArgumentException("null account ID given");
+			throw new IllegalArgumentException("argument <acctID> is null");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalArgumentException("account ID is not set");
+			throw new IllegalArgumentException("argument <acctID> is not set");
 		}
 
 		try {
@@ -770,11 +770,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritableAccount getWritableAccountByID(final KMMAcctID acctID) {
 		if ( acctID == null ) {
-			throw new IllegalArgumentException("null account ID given");
+			throw new IllegalArgumentException("argument <acctID> is null");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalArgumentException("account ID is not set");
+			throw new IllegalArgumentException("argument <acctID> is not set");
 		}
 
 		try {
@@ -792,11 +792,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritableTransaction getWritableTransactionByID(KMMTrxID trxID) {
 		if ( trxID == null ) {
-			throw new IllegalArgumentException("null transaction ID given");
+			throw new IllegalArgumentException("argument <trxID> is null");
 		}
 
 		if ( ! trxID.isSet() ) {
-			throw new IllegalArgumentException("transaction ID is not set");
+			throw new IllegalArgumentException("argument <trxID> is not set");
 		}
 
 		try {
@@ -810,11 +810,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritableTransactionSplit getWritableTransactionSplitByID(KMMQualifSpltID spltID) {
 		if ( spltID == null ) {
-			throw new IllegalArgumentException("null transaction split ID given");
+			throw new IllegalArgumentException("argument <spltID> is null");
 		}
 
 		if ( !spltID.isSet() ) {
-			throw new IllegalArgumentException("transaction split ID is not set");
+			throw new IllegalArgumentException("argument <spltID> is not set");
 		}
 
 		KMyMoneyTransactionSplit splt = super.getTransactionSplitByID(spltID);
@@ -875,11 +875,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritablePayee getWritablePayeeByID(KMMPyeID pyeID) {
 		if ( pyeID == null ) {
-			throw new IllegalArgumentException("null payee ID given");
+			throw new IllegalArgumentException("argument <pyeID> is null");
 		}
 
 		if ( ! pyeID.isSet() ) {
-			throw new IllegalArgumentException("unset payee ID given");
+			throw new IllegalArgumentException("argument <pyeID> is not set");
 		}
 
 		try {
@@ -915,11 +915,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritableTag getWritableTagByID(KMMTagID tagID) {
 		if ( tagID == null ) {
-			throw new IllegalArgumentException("null tag ID given");
+			throw new IllegalArgumentException("argument <trxID> is null");
 		}
 
 		if ( ! tagID.isSet() ) {
-			throw new IllegalArgumentException("unset tag ID given");
+			throw new IllegalArgumentException("argument <trxID> is not set");
 		}
 
 		try {
@@ -955,11 +955,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritableCurrency getWritableCurrencyByID(String currCode) {
 		if ( currCode == null ) {
-			throw new IllegalArgumentException("null currency code given");
+			throw new IllegalArgumentException("argument <currCode> is null");
 		}
 
 		if ( currCode.trim().equals("") ) {
-			throw new IllegalArgumentException("currency code is not set");
+			throw new IllegalArgumentException("argument <currCode> is not set");
 		}
 
 		KMyMoneyCurrency curr = super.getCurrencyByID(currCode);
@@ -969,11 +969,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritableCurrency getWritableCurrencyByQualifID(KMMQualifCurrID qualifID) {
 		if ( qualifID == null ) {
-			throw new IllegalArgumentException("null security ID given");
+			throw new IllegalArgumentException("argument <qualifID> is null");
 		}
 
 		if ( ! qualifID.isSet() ) {
-			throw new IllegalArgumentException("security ID is not set");
+			throw new IllegalArgumentException("argument <qualifID> is not set");
 		}
 
 		KMyMoneyCurrency curr = super.getCurrencyByQualifID(qualifID);
@@ -1017,16 +1017,16 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			final int pCmdtyNameFraction, final String pCmdtyName) {
 
 		if ( conversionFactor == null ) {
-			throw new IllegalArgumentException("null conversionFactor given");
+			throw new IllegalArgumentException("argument <conversionFactor> is null");
 		}
 		if ( pCmdtySpace == null ) {
-			throw new IllegalArgumentException("null comodity-space given");
+			throw new IllegalArgumentException("argument <pCmdtySpace> is null");
 		}
 		if ( pCmdtyId == null ) {
-			throw new IllegalArgumentException("null comodity-id given");
+			throw new IllegalArgumentException("argument <pCmdtyId> is null");
 		}
 		if ( pCmdtyName == null ) {
-			throw new IllegalArgumentException("null comodity-name given");
+			throw new IllegalArgumentException("argument <pCmdtyName> is null");
 		}
 		
 		/*
@@ -1082,11 +1082,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritableSecurity getWritableSecurityByID(KMMSecID secID) {
 		if ( secID == null ) {
-			throw new IllegalArgumentException("null security ID given");
+			throw new IllegalArgumentException("argument <secID> is null");
 		}
 
 		if ( ! secID.isSet() ) {
-			throw new IllegalArgumentException("security ID is not set");
+			throw new IllegalArgumentException("argument <secID> is not set");
 		}
 
 		KMyMoneySecurity sec = super.getSecurityByID(secID);
@@ -1096,11 +1096,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritableSecurity getWritableSecurityByQualifID(KMMQualifSecID qualifID) {
 		if ( qualifID == null ) {
-			throw new IllegalArgumentException("null security ID given");
+			throw new IllegalArgumentException("argument <qualifID> is null");
 		}
 
 		if ( ! qualifID.isSet() ) {
-			throw new IllegalArgumentException("security ID is not set");
+			throw new IllegalArgumentException("argument <qualifID> is not set");
 		}
 
 		KMyMoneySecurity sec = super.getSecurityByQualifID(qualifID);
@@ -1205,7 +1205,7 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public void removeSecurity(KMyMoneyWritableSecurity sec) throws ObjectCascadeException {
 		if ( sec == null ) {
-			throw new IllegalArgumentException("null security given");
+			throw new IllegalArgumentException("argument <sec> is null");
 		}
 
 		if ( sec.getQuotes().size() > 0 ) {
@@ -1232,11 +1232,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritablePricePair getWritablePricePairByID(KMMPricePairID prcPrID) {
 		if ( prcPrID == null ) {
-			throw new IllegalArgumentException("null price pair ID given");
+			throw new IllegalArgumentException("argument <prcPrID> is null");
 		}
 
 		if ( ! prcPrID.isSet() ) {
-			throw new IllegalArgumentException("price ID is not set");
+			throw new IllegalArgumentException("argument <prcPrID> is not set");
 		}
 
 		KMyMoneyPricePair prcPr = super.getPricePairByID(prcPrID);
@@ -1266,19 +1266,19 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 			final KMMQualifSecCurrID fromSecCurrID, 
 			final KMMQualifCurrID toCurrID) {
 		if ( fromSecCurrID == null ) {
-			throw new IllegalArgumentException("null from-security/currency ID given");
+			throw new IllegalArgumentException("argument <fromSecCurrID> is null");
 		}
 
 		if ( ! fromSecCurrID.isSet() ) {
-			throw new IllegalArgumentException("unset from-security/currency ID given");
+			throw new IllegalArgumentException("argument <fromSecCurrID> is not set");
 		}
 
 		if ( toCurrID == null ) {
-			throw new IllegalArgumentException("null to-currency ID given");
+			throw new IllegalArgumentException("argument <toCurrID> is null");
 		}
 
 		if ( ! toCurrID.isSet() ) {
-			throw new IllegalArgumentException("unset to-currency ID given");
+			throw new IllegalArgumentException("argument <toCurrID> is not set");
 		}
 
 		KMyMoneyWritablePricePairImpl prc = new KMyMoneyWritablePricePairImpl(fromSecCurrID, toCurrID, 
@@ -1317,11 +1317,11 @@ public class KMyMoneyWritableFileImpl extends KMyMoneyFileImpl
 	@Override
 	public KMyMoneyWritablePrice getWritablePriceByID(KMMPriceID prcID) {
 		if ( prcID == null ) {
-			throw new IllegalArgumentException("null price ID given");
+			throw new IllegalArgumentException("argument <prcID> is null");
 		}
 
 		if ( ! prcID.isSet() ) {
-			throw new IllegalArgumentException("price ID is not set");
+			throw new IllegalArgumentException("argument <prcID> is not set");
 		}
 
 		KMyMoneyPrice prc = super.getPriceByID(prcID);

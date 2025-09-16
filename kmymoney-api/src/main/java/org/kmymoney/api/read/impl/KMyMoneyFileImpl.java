@@ -76,8 +76,9 @@ import xyz.schnorxoborx.base.beanbase.TooManyEntriesFoundException;
 import xyz.schnorxoborx.base.numbers.FixedPointNumber;
 
 /**
- * Implementation of KMyMoneyFile that can only
- * read but not modify KMyMoney-Files. <br/>
+ * Implementation of KMyMoneyFile that can only read but not modify 
+ * KMyMoney-Files. <br/>
+ * 
  * @see KMyMoneyFile
  */
 public class KMyMoneyFileImpl implements KMyMoneyFile
@@ -165,7 +166,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      */
     protected void setFile(final File pFile) {
     	if (pFile == null) {
-    		throw new IllegalArgumentException("null not allowed for field this.file");
+    		throw new IllegalArgumentException("argument <pFile> is null");
     	}
     	
     	file = pFile;
@@ -177,25 +178,25 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      * loads the file and calls setRootElement.
      *
      * @param pFile the file to read
-     * @throws IOException on low level reading-errors (FileNotFoundException if not
-     *                     found)
+     * @throws IOException on low level reading-errors (FileNotFoundException if not found)
      * @see #setRootElement(KMYMONEYFILE)
      */
     protected void loadFile(final File pFile) throws IOException{
 		long start = System.currentTimeMillis();
 
 		if ( pFile == null ) {
-			throw new IllegalArgumentException("null not allowed for field this.file");
+			throw new IllegalArgumentException("argument <pFile> is null");
 		}
 
 		if ( !pFile.exists() ) {
-			throw new IllegalArgumentException("Given file '" + pFile.getAbsolutePath() + "' does not exist!");
+			throw new IllegalArgumentException("File '" + pFile.getAbsolutePath() + "' does not exist");
 		}
 
 		setFile(pFile);
 
 		InputStream in = new FileInputStream(pFile);
-		if ( pFile.getName().endsWith(FILE_EXT_ZIPPED_1) || pFile.getName().endsWith(FILE_EXT_ZIPPED_2) ) {
+		if ( pFile.getName().endsWith(FILE_EXT_ZIPPED_1) ||
+			 pFile.getName().endsWith(FILE_EXT_ZIPPED_2) ) {
 			in = new BufferedInputStream(in);
 			in = new GZIPInputStream(in);
 		} else {
@@ -206,7 +207,8 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
 			in = new FileInputStream(pFile);
 			in = new BufferedInputStream(in);
-			if ( magic[0] == GZIP_HEADER_BYTE_1 && magic[1] == GZIP_HEADER_BYTE_2 ) {
+			if ( magic[0] == GZIP_HEADER_BYTE_1 && 
+				 magic[1] == GZIP_HEADER_BYTE_2 ) {
 				in = new GZIPInputStream(in);
 			}
 		}
@@ -234,7 +236,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 			long start2 = System.currentTimeMillis();
 			setRootElement(obj);
 			long end = System.currentTimeMillis();
-			LOGGER.info("loadFileInputStream: Took " + (end - start) + " ms (total), " + (start2 - start)
+			LOGGER.info("loadInputStream: Took " + (end - start) + " ms (total), " + (start2 - start)
 					+ " ms (jaxb-loading), " + (end - start2) + " ms (building facades)");
 
 		} catch (JAXBException e) {
@@ -287,11 +289,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public KMyMoneyInstitution getInstitutionByID(final KMMInstID instID) {
 		if ( instID == null ) {
-			throw new IllegalArgumentException("null institution ID given");
+			throw new IllegalArgumentException("argument <instID> is null");
 		}
 
 		if ( ! instID.isSet() ) {
-			throw new IllegalArgumentException("unset institution ID given");
+			throw new IllegalArgumentException("argument <instID> is not set");
 		}
 
 		return instMgr.getInstitutionByID(instID);
@@ -323,11 +325,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public KMyMoneyAccount getAccountByID(final KMMComplAcctID acctID) {
 		if ( acctID == null ) {
-			throw new IllegalArgumentException("null account ID given");
+			throw new IllegalArgumentException("argument <acctID> is null");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalArgumentException("unset account ID given");
+			throw new IllegalArgumentException("argument <acctID> is not set");
 		}
 
 		return acctMgr.getAccountByID(acctID);
@@ -336,11 +338,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public KMyMoneyAccount getAccountByID(final KMMAcctID acctID) {
 		if ( acctID == null ) {
-			throw new IllegalArgumentException("null account ID given");
+			throw new IllegalArgumentException("argument <acctID> is null");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalArgumentException("unset account ID given");
+			throw new IllegalArgumentException("argument <acctID> is not set");
 		}
 
 		return acctMgr.getAccountByID(acctID);
@@ -353,11 +355,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public List<KMyMoneyAccount> getAccountsByParentID(final KMMComplAcctID acctID) {
 		if ( acctID == null ) {
-			throw new IllegalArgumentException("null account ID given");
+			throw new IllegalArgumentException("argument <acctID> is null");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalArgumentException("unset account ID given");
+			throw new IllegalArgumentException("argument <acctID> is not set");
 		}
 
         return acctMgr.getAccountsByParentID(acctID);
@@ -366,11 +368,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public List<KMyMoneyAccount> getAccountsByName(final String name) {
 		if ( name == null ) {
-			throw new IllegalArgumentException("null name given");
+			throw new IllegalArgumentException("argument <name> is null");
 		}
 
 		if ( name.trim().equals("") ) {
-			throw new IllegalArgumentException("empty name given");
+			throw new IllegalArgumentException("argument <name> is empty");
 		}
 
 		return acctMgr.getAccountsByName(name);
@@ -382,11 +384,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public List<KMyMoneyAccount> getAccountsByName(final String expr, boolean qualif, boolean relaxed) {
 		if ( expr == null ) {
-			throw new IllegalArgumentException("null expression given");
+			throw new IllegalArgumentException("argument <expr> is null");
 		}
 
 		if ( expr.trim().equals("") ) {
-			throw new IllegalArgumentException("empty expression given");
+			throw new IllegalArgumentException("argument <expr> is empty");
 		}
 
     	return acctMgr.getAccountsByName(expr, qualif, relaxed);
@@ -395,11 +397,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public KMyMoneyAccount getAccountByNameUniq(final String name, final boolean qualif) throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( name == null ) {
-			throw new IllegalArgumentException("null name given");
+			throw new IllegalArgumentException("argument <name> is null");
 		}
 
 		if ( name.trim().equals("") ) {
-			throw new IllegalArgumentException("empty name given");
+			throw new IllegalArgumentException("argument <name> is empty");
 		}
 
     	return acctMgr.getAccountByNameUniq(name, qualif);
@@ -418,11 +420,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public KMyMoneyAccount getAccountByNameEx(final String nameRegEx) throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( nameRegEx == null ) {
-			throw new IllegalArgumentException("null regular expression given");
+			throw new IllegalArgumentException("argument <nameRegEx> is null");
 		}
 
 		if ( nameRegEx.trim().equals("") ) {
-			throw new IllegalArgumentException("empty regular expression given");
+			throw new IllegalArgumentException("argument <nameRegEx> is empty");
 		}
 
 		return acctMgr.getAccountByNameEx(nameRegEx);
@@ -441,19 +443,19 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public KMyMoneyAccount getAccountByIDorName(final KMMComplAcctID acctID, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( acctID == null ) {
-			throw new IllegalArgumentException("null account ID given");
+			throw new IllegalArgumentException("argument <acctID> is null");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalArgumentException("unset account ID given");
+			throw new IllegalArgumentException("argument <acctID> is not set");
 		}
 
 		if ( name == null ) {
-			throw new IllegalArgumentException("null name given");
+			throw new IllegalArgumentException("argument <name> is null");
 		}
 
 		if ( name.trim().equals("") ) {
-			throw new IllegalArgumentException("empty name given");
+			throw new IllegalArgumentException("argument <name> is empty");
 		}
 
 		return acctMgr.getAccountByIDorName(acctID, name);
@@ -473,19 +475,19 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public KMyMoneyAccount getAccountByIDorNameEx(final KMMComplAcctID acctID, final String name) throws NoEntryFoundException, TooManyEntriesFoundException {
 		if ( acctID == null ) {
-			throw new IllegalArgumentException("null account ID given");
+			throw new IllegalArgumentException("argument <acctID> is null");
 		}
 
 		if ( ! acctID.isSet() ) {
-			throw new IllegalArgumentException("unset account ID given");
+			throw new IllegalArgumentException("argument <acctID> is not set");
 		}
 
 		if ( name == null ) {
-			throw new IllegalArgumentException("null name given");
+			throw new IllegalArgumentException("argument <name> is null");
 		}
 
 		if ( name.trim().equals("") ) {
-			throw new IllegalArgumentException("empty name given");
+			throw new IllegalArgumentException("argument <name> is empty");
 		}
 
 		return acctMgr.getAccountByIDorNameEx(acctID, name);
@@ -543,11 +545,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public KMyMoneyTransaction getTransactionByID(final KMMTrxID trxID) {
 		if ( trxID == null ) {
-			throw new IllegalArgumentException("null transaction ID given");
+			throw new IllegalArgumentException("argument <trxID> is null");
 		}
 
 		if ( ! trxID.isSet() ) {
-			throw new IllegalArgumentException("unset transaction ID given");
+			throw new IllegalArgumentException("argument <trxID> is not set");
 		}
 
 		return trxMgr.getTransactionByID(trxID);
@@ -624,11 +626,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public KMyMoneyTransactionSplit getTransactionSplitByID(final KMMQualifSpltID spltID) {
 		if ( spltID == null ) {
-			throw new IllegalArgumentException("null split ID given");
+			throw new IllegalArgumentException("argument <spltID> is null");
 		}
 
 		if ( ! spltID.isSet() ) {
-			throw new IllegalArgumentException("unset split ID given");
+			throw new IllegalArgumentException("argument <spltID> is not set");
 		}
 
 		return trxMgr.getTransactionSplitByID(spltID);
@@ -645,11 +647,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 
     public Collection<KMyMoneyTransactionSplitImpl> getTransactionSplits_readAfresh(final KMMTrxID trxID) {
 		if ( trxID == null ) {
-			throw new IllegalArgumentException("null transaction ID given");
+			throw new IllegalArgumentException("argument <trxID> is null");
 		}
 
 		if ( ! trxID.isSet() ) {
-			throw new IllegalArgumentException("unset transaction ID given");
+			throw new IllegalArgumentException("argument <trxID> is not set");
 		}
 
 		return trxMgr.getTransactionSplits_readAfresh(trxID);
@@ -660,11 +662,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public KMyMoneyPayee getPayeeByID(final KMMPyeID pyeID) {
 		if ( pyeID == null ) {
-			throw new IllegalArgumentException("null payee ID given");
+			throw new IllegalArgumentException("argument <pyeID> is null");
 		}
 
 		if ( ! pyeID.isSet() ) {
-			throw new IllegalArgumentException("unset payee ID given");
+			throw new IllegalArgumentException("argument <pyeID> is not set");
 		}
 
 		return pyeMgr.getPayeeByID(pyeID);
@@ -696,11 +698,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
 	@Override
 	public KMyMoneyTag getTagByID(KMMTagID tagID) {
 		if ( tagID == null ) {
-			throw new IllegalArgumentException("null tag ID given");
+			throw new IllegalArgumentException("argument <tagID> is null");
 		}
 
 		if ( ! tagID.isSet() ) {
-			throw new IllegalArgumentException("unset tag ID given");
+			throw new IllegalArgumentException("argument <tagID> is not set");
 		}
 
 		return tagMgr.getTagByID(tagID);
@@ -732,11 +734,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public KMyMoneySecurity getSecurityByID(final KMMSecID secID) {
 		if ( secID == null ) {
-			throw new IllegalArgumentException("null security ID given");
+			throw new IllegalArgumentException("argument <secID> is null");
 		}
 
 		if ( ! secID.isSet() ) {
-			throw new IllegalArgumentException("unset security ID given");
+			throw new IllegalArgumentException("argument <secID> is not set");
 		}
 
 		return secMgr.getSecurityByID(secID);
@@ -750,11 +752,11 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
     @Override
     public KMyMoneySecurity getSecurityByQualifID(final KMMQualifSecID secID) {
 		if ( secID == null ) {
-			throw new IllegalArgumentException("null security ID given");
+			throw new IllegalArgumentException("argument <secID> is null");
 		}
 
 		if ( ! secID.isSet() ) {
-			throw new IllegalArgumentException("unset security ID given");
+			throw new IllegalArgumentException("argument <secID> is not set");
 		}
 
 		return secMgr.getSecurityByQualifID(secID);
@@ -920,7 +922,7 @@ public class KMyMoneyFileImpl implements KMyMoneyFile
      */
     protected void setRootElement(final KMYMONEYFILE pRootElement) {
     	if (pRootElement == null) {
-    		throw new IllegalArgumentException("null not allowed for field this.rootElement");
+    		throw new IllegalArgumentException("argument <pRootElement> is null");
     	}
     	rootElement = pRootElement;
 
