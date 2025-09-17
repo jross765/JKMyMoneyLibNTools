@@ -24,10 +24,10 @@ KMyMoney project.
 ## Compatibility
 ### System and Format Compatibility
 Version 0.8 of the library has been tested with 
-KMyMoney 5.2 on Linux (locale de_DE) and 
+KMyMoney 5.2.1 on Linux (locale de_DE) and 
 OpenJDK 21.0.
 
-**Caution: This version only works with files generated with recently-released KMyMoney V. 5.2! Files generated with V. 5.1.3 are not supported any more.**
+**Caution: Version 0.8 only works with files generated with recently-released KMyMoney V. 5.2.x! Files generated with V. 5.1.x are not supported any more.**
 
 ### Locale/Language Compatibility
 As far as the author knows, there should be no issues with other locales, 
@@ -37,7 +37,7 @@ but he has not tested it.
 
 | Version | Backward Compat. | Note                           |
 |---------|------------------|--------------------------------|
-| 0.8     | no               | File format change (KMyMoney V. 5.2) |
+| 0.8     | no               | File format change (KMyMoney V. 5.2.x) |
 | 0.7     | almost           | Some non-trivial changes, although not dramatic |
 | 0.6     | almost           | Minor changes in interfaces    |
 | 0.5     | no               | Some substantial changes       |
