@@ -116,11 +116,6 @@ public interface KMyMoneyPrice extends Comparable<KMyMoneyPrice>,
      */
     Source getSource();
 
-//    /**
-//     * @return
-//     */
-//    String getSourceStr();
-
     /**
      * @return Returns the price value (the actual "price" in the narrower sense)
      * 

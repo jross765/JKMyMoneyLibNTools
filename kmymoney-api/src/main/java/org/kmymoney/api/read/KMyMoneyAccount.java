@@ -261,18 +261,8 @@ public interface KMyMoneyAccount extends Comparable<KMyMoneyAccount>,
     /**
      * 
      * @return
-     * 
-     * @see #getTypeBigInt()
      */
     Type getType();
-
-    /**
-     * 
-     * @return
-     * 
-     * @see #getType()
-     */
-    BigInteger getTypeBigInt();
 
     /**
      * 

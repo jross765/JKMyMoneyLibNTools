@@ -487,7 +487,12 @@ public class KMyMoneyWritableAccountImpl extends KMyMoneyAccountImpl
 	}
 
 	/**
-	 * {@inheritDoc}
+     * <b>Using this method is discouraged.</b>
+     * Use {@link #setType(org.kmymoney.api.read.KMyMoneyAccount.Type)} whenever possible/applicable instead.
+     * 
+     * @return
+     * 
+     * @see #setType(org.kmymoney.api.read.KMyMoneyAccount.Type)
 	 */
 	public void setTypeBigInt(final BigInteger typeInt) {
 		if ( typeInt == null ) {

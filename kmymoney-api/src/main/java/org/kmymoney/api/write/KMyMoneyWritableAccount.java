@@ -1,6 +1,5 @@
 package org.kmymoney.api.write;
 
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Currency;
 
@@ -81,14 +80,6 @@ public interface KMyMoneyWritableAccount extends KMyMoneyAccount,
 	 * @see #getType()
 	 */
 	void setType(KMyMoneyAccount.Type type);
-
-	/**
-	 * 
-	 * @param typeInt
-	 * 
-	 * @see #getTypeBigInt()
-	 */
-	void setTypeBigInt(BigInteger typeInt);
 
 	// ----------------------------
 

@@ -328,12 +328,22 @@ public class KMyMoneyWritablePriceImpl extends KMyMoneyPriceImpl
 		setDate(dateTime.toLocalDate());
 	}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setSource(Source src) {
 		setSourceStr(src.getCode());
     }
 
-    @Override
+    /**
+     * <b>Using this method is discouraged.</b>
+     * Use {@link #setSource(org.kmymoney.api.read.KMyMoneyPrice.Source)} whenever possible/applicable instead.
+     * 
+     * @return
+     * 
+     * @see #setSource(org.kmymoney.api.read.KMyMoneyPrice.Source)
+     */
     public void setSourceStr(String srcStr) {
 		if ( srcStr == null )
 			throw new IllegalArgumentException("null source given");

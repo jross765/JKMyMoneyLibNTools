@@ -223,6 +223,9 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Type getType() {
     	try {
@@ -233,7 +236,14 @@ public class KMyMoneyAccountImpl extends SimpleAccount
     	}
     }
 
-    @Override
+    /**
+     * <b>Using this method is discouraged.</b>
+     * Use {@link #getType()} whenever possible/applicable instead.
+     * 
+     * @return
+     * 
+     * @see #getType()
+     */
     public BigInteger getTypeBigInt() {
     	return jwsdpPeer.getType();
     }

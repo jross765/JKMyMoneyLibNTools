@@ -187,11 +187,22 @@ public class KMyMoneyWritableSecurityImpl extends KMyMoneySecurityImpl
 
 	// ---------------------------------------------------------------
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setType(final KMMSecCurr.Type type) {
 		setTypeBigInt(type.getCode());
 	}
 
+    /**
+     * <b>Using this method is discouraged.</b>
+     * Use {@link #setType(org.kmymoney.api.read.KMMSecCurr.Type)} whenever possible/applicable instead.
+     * 
+     * @return
+     * 
+     * @see #setType(org.kmymoney.api.read.KMMSecCurr.Type)
+     */
 	public void setTypeBigInt(final BigInteger type) {
 		if ( type == null ) {
 			throw new IllegalArgumentException("null type given!");

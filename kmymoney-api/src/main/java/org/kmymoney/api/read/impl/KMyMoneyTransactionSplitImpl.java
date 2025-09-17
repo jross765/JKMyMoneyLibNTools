@@ -245,8 +245,12 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     }
 
     /**
-     * see {@link #getAction()}
-     * @return 
+     * <b>Using this method is discouraged.</b>
+     * Use {@link #getAction()} whenever possible/applicable instead.
+     * 
+     * @return
+     * 
+     * @see #getAction()
      */
     public String getActionStr() {
     	if (getJwsdpPeer().getAction() == null) {
@@ -256,6 +260,9 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     	return getJwsdpPeer().getAction();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public State getState() {
     	try {
@@ -266,11 +273,15 @@ public class KMyMoneyTransactionSplitImpl extends KMyMoneyObjectImpl
     }
 
     /**
-     * see {@link #getState()}
+     * <b>Using this method is discouraged.</b>
+     * Use {@link #getState()} whenever possible/applicable instead.
+     * 
      * @return
+     * 
+     * @see #getState()
      */
     public int getStateInt() {
-    	if (jwsdpPeer.getAction() == null) {
+    	if (jwsdpPeer.getReconcileflag() == null) {
     		return -1;
     	}
 

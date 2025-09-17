@@ -146,13 +146,8 @@ public interface KMyMoneyWritableTransactionSplit extends KMyMoneyTransactionSpl
 	 * @see #getAction()
 	 */
 	void setAction(Action act) throws IllegalTransactionSplitActionException;
-
-	/**
-	 * Set the type of association this split has with an invoice's lot.
-	 * 
-	 * @param action null, or one of the ACTION_xyz values defined
-	 * @throws IllegalTransactionSplitActionException
-	 */
-	// void setActionStr(String actStr) throws IllegalTransactionSplitActionException;
+	
+	// ::TODO
+	// void setState(State stat);
 
 }

@@ -497,16 +497,21 @@ public class KMyMoneyWritableTransactionSplitImpl extends KMyMoneyTransactionSpl
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setAction(final Action act) throws IllegalTransactionSplitActionException {
 		setActionStr(act.getCode());
 	}
 	
 	/**
-	 * Set the type of association this split has with an invoice's lot.
-	 *
-	 * @param actStr null, or one of the defined ACTION_xyz values
-	 * @throws IllegalTransactionSplitActionException
+     * <b>Using this method is discouraged.</b>
+     * Use {@link #setAction(org.kmymoney.api.read.KMyMoneyTransactionSplit.Action)} whenever possible/applicable instead.
+     * 
+     * @return
+     * 
+     * @see #setAction(org.kmymoney.api.read.KMyMoneyTransactionSplit.Action)
 	 */
 	public void setActionStr(final String actStr) throws IllegalTransactionSplitActionException {
 		if ( actStr == null ) {

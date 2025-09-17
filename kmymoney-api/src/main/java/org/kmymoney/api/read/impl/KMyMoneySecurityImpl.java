@@ -91,6 +91,9 @@ public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl
 
     // ---------------------------------------------------------------
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public KMMSecCurr.Type getType() {
     	if ( getTypeBigInt() == null ) {
@@ -101,6 +104,14 @@ public class KMyMoneySecurityImpl extends KMyMoneyObjectImpl
 		return KMMSecCurrImpl.getType(typeVal.intValue());
     }
 
+    /**
+     * <b>Using this method is discouraged.</b>
+     * Use {@link #getType()} whenever possible/applicable instead.
+     * 
+     * @return
+     * 
+     * @see #getType()
+     */
     public BigInteger getTypeBigInt() {
     	return jwsdpPeer.getType(); 
     }

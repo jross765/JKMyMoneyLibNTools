@@ -69,14 +69,6 @@ public interface KMyMoneyWritablePrice extends KMyMoneyPrice,
 
     /**
      * 
-     * @param src
-     * 
-     * @see #getSource()
-     */
-    void setSourceStr(String src);
-
-    /**
-     * 
      * @param val
      * 
      * @see #getValue()

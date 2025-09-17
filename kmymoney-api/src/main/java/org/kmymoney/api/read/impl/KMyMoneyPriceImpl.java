@@ -209,11 +209,22 @@ public class KMyMoneyPriceImpl extends KMyMoneyObjectImpl
 		return jwsdpPeer.getDate().toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Source getSource() {
     	return Source.valueOff(getSourceStr());
     }
 
+    /**
+     * <b>Using this method is discouraged.</b>
+     * Use {@link #getSource()} whenever possible/applicable instead.
+     * 
+     * @return
+     * 
+     * @see #getSource()
+     */
     public String getSourceStr() {
     	if ( jwsdpPeer.getSource() == null )
     		return null;
