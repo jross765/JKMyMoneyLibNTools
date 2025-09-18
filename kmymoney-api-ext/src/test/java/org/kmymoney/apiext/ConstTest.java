@@ -1,5 +1,6 @@
 package org.kmymoney.apiext;
 
+// On purpose redundant to according class in org.gnucash.api
 public class ConstTest {
 
     public static final String KMM_FILENAME = "test.xml";

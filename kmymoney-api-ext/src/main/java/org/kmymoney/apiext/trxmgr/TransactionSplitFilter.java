@@ -97,7 +97,7 @@ public class TransactionSplitFilter {
 //		}
 		
 		if ( acctID.isSet() ) {
-			if ( ! splt.getAccount().getID().equals(acctID) ) {
+			if ( ! splt.getAccount().getID().toString().equals(acctID.toString()) ) { // important: toString()
 				return false;
 			}
 		}
