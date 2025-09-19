@@ -37,7 +37,7 @@ but he has not tested it.
 
 | Version | Backward Compat. | Note                           |
 |---------|------------------|--------------------------------|
-| 0.8     | no               | File format change (KMyMoney V. 5.2.x), minor changes in interfaces |
+| 0.8     | no               | File format change (KMyMoney V. 5.2.x), "medium" changes in interfaces |
 | 0.7     | almost           | Some non-trivial changes, although not dramatic |
 | 0.6     | almost           | Minor changes in interfaces    |
 | 0.5     | no               | Some substantial changes       |
