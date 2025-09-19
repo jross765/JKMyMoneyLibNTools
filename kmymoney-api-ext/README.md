@@ -13,15 +13,15 @@ Currently, the module consists of two sub-modules:
 ### SecAcct
 This sub-module contains classes that provide a simplified, high-level interface for...
 
-* ...generating and maintaining stock accounts,
-* ...generating buy- and dividend/distribution transactions in a securities account (brokerage account).
+* generating and maintaining stock accounts,
+* generating buy- and dividend/distribution transactions in a securities account (brokerage account).
 
 ### TrxMgr
 This sub-module contains classes that help to...
 
-* ...find transaction and splits by setting filter criteria,
-* ...merge stock account transcations,
-* ...generally manipulate transactions in a more convenient way than by using the pure API.
+* find transaction and splits by setting filter criteria,
+* merge stock account transcations,
+* generally manipulate transactions in a more convenient way than by using the pure API.
 
 ## Major Changes
 ### V. 0.7 &rarr; 0.8
@@ -54,6 +54,13 @@ Created module.
 	* Possibly new class for high-level consistency checks of existing transactions, e.g.: All dividends of domestic shares are actually posted to the domestic dividend account.
 
 * New sub-module for accounting-macros, such as closing the books.
+
+    **Note**: Will have to re-think this, because, altough equity accounts
+    (in the accounting sense of the word, not as a badly-chosen synonym for 
+    stock accounts) do exist in KMyMoney, they do not seem to be used 
+    in completely the same way as in GnuCash (it's a *personal finance* software,
+    after all...) -- "closing the books", altough technically possible, might be 
+    counter-productive here.
 
 * New sub-module for management of securities and currencies (esp. bulk quote import).
 

@@ -8,13 +8,16 @@ file.
 ### V. 0.7 &rarr; 0.8
 **Caution: This is the first version of the API that is compatible with the KMyMoney V. 5.2.x format. No support for file format from V. 5.1.x any more.**
 
-* Changes to support new file format (KMyMoney V. 5.2):
+* Changes to support new file format (KMyMoney V. 5.2.x):
   * Removed all code that referred to internal counters (they do not exist any more).
   * Introduced KMMAccountReconciliation(Impl) (sub-entity of KMyMoneyAccount).
+
 * `KMyMoneyAccount(Impl)`: 
   * New method `getReconciliations()`
   * New method `printTree()`
+
 * `KMyMoney(Writable)TransactionSplit(Impl)`: New methods `getNumber()` and `setNumber()`.
+
 * `KMyMoneyFile(Impl)`: 
   * Changed return type of *all* `getAccountsXYZ()` from Collection to List.
   * Dto. for `getTransactionsXYZ()`.
@@ -92,7 +95,9 @@ Write access to all supported entities (there are a few unsupported ones  left).
 In addition to that:
 
 * More interface methods (get/set).
+
 * Fixed a couple of bugs.
+
 * Renamed class `KMMCurrPair` to `KMMPricePairID`.
 
 ### V. 0.2 &rarr; 0.3

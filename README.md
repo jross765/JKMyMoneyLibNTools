@@ -37,7 +37,7 @@ but he has not tested it.
 
 | Version | Backward Compat. | Note                           |
 |---------|------------------|--------------------------------|
-| 0.8     | no               | File format change (KMyMoney V. 5.2.x) |
+| 0.8     | no               | File format change (KMyMoney V. 5.2.x), minor changes in interfaces |
 | 0.7     | almost           | Some non-trivial changes, although not dramatic |
 | 0.6     | almost           | Minor changes in interfaces    |
 | 0.5     | no               | Some substantial changes       |
@@ -92,8 +92,11 @@ Cf. the README file of modules "API" and "Example programs" (links below).
 This software is beta.
 
 It is worth noting, though, that the author has been using both the published tools 
-as well as some unpublished ones on a nearly daily basis for over a year now to 
-facilitate and part-automate his private finances' accounting. This proves that the 
+as well as some unpublished ones on a nearly daily basis 
+for over a year now 
+to facilitate and part-automate his 
+private finances' 
+accounting. This proves that the 
 software is well-tested and stable enough for a real-world setting (as opposed to 
 theoretical test cases and arbitrary examples).
 
@@ -105,8 +108,15 @@ In short: You are encouraged to use this software, but be advised to use it unde
 
 * As for the write-branch, take the usual precautions: 
 
-  * Do not just take the software and "wildly" change things in your valuable KMyMoney files that you may have been building for years or possibly even decades. It still might contain some non-trivial bugs, and you should not assume that it works correctly in all conceivable edge and corner cases.
-  * If you write your own tools, do not *change* the KMyMoney file but *generate a new one* instead (as done in the published tools) and keep the old version for a while.
+  * Do not just take the software and "wildly" change things in your valuable 
+    KMyMoney 
+    files that you may have been building for years or possibly even decades. 
+    It still might contain some non-trivial bugs, and you should not assume that 
+    it works correctly in all conceivable edge and corner cases.
+  * If you write your own tools, do not *change* the 
+    KMyMoney 
+    file but *generate a new one* instead (as done in the published tools) and 
+    keep the old version for a while.
   * If you have to change your file, **make backups before you use this lib/these tools!** Take your time and check the generated/changed files thoroughly before moving on.
 
 ## Compiling the Sources
@@ -118,15 +128,16 @@ To compile the sources, do the following:
 
 3) Clone this repository.
 
-4) Check out the latest version tag. In this case: `V_0_7`.
+4) Check out the latest version tag. In this case: `V_0_8_0`.
 
-   The author has, in the course of his professional career, met plenty of self-appointed super-pro developers 
-   who do not seem to understand the concept of version tags and configuration management, 
-   so please bear with him...
+     The author has, in the course of his professional career, met plenty of self-appointed super-pro developers 
+     who do not seem to understand the concept of version tags and configuration management, 
+     so please bear with him for telling you the seemlingly obvious...
 
 5) Compile the sources:
-    a) Adapt the path to your local repository in *all* pom.xml files (search for "`schnorxolib-base-systemPath`").
-    b) Type:
+
+      a) Adapt the path to your local repository in *all* pom.xml files (search for "`schnorxolib-base-systemPath`").
+      b) Type:
 
         `$ ./build.sh`
 
