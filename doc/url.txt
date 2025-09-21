@@ -1,1 +1,2 @@
 https://zvon.org/xxl/XMLSchemaTutorial/Output/ser_keys_st5.html
+https://www.isabekov.pro/structure-of-a-kmymoney-xml-file/
