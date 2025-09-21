@@ -115,7 +115,8 @@ In short: You are encouraged to use this software, but be advised to use it unde
     it works correctly in all conceivable edge and corner cases.
   * If you write your own tools, do not *change* the 
     KMyMoney 
-    file but *generate a new one* instead (as done in the published tools) and 
+    file loaded. You are, however, advised not to do so in the beta stage, but 
+    rather to *generate a new one* instead (as done in the published tools) and 
     keep the old version for a while.
   * If you have to change your file, **make backups before you use this lib/these tools!** Take your time and check the generated/changed files thoroughly before moving on.
 
@@ -130,9 +131,9 @@ To compile the sources, do the following:
 
 4) Check out the latest version tag. In this case: `V_0_8_0`.
 
-     The author has, in the course of his professional career, met plenty of self-appointed super-pro developers 
-     who do not seem to understand the concept of version tags and configuration management, 
-     so please bear with him for telling you the seemlingly obvious...
+      The author has, in the course of his professional career, met plenty of self-appointed super-pro developers 
+      who do not seem to understand the concept of version tags and configuration management, 
+      so please bear with him for telling you the seemlingly obvious...
 
 5) Compile the sources:
 
