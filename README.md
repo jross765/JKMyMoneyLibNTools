@@ -19,7 +19,7 @@ KMyMoney project.
 
 * [Example Programs](https://github.com/jross765/kmymoney-api-examples)
 
-* [Tools](https://github.com/jross765/gnucash-tools)
+* [Tools](https://github.com/jross765/kmymoney-tools)
 
 ## Compatibility
 ### System and Format Compatibility
