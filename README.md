@@ -153,9 +153,14 @@ To compile the sources, do the following:
 
 2) Build and install [`SchnorxoLib`](https://github.com/jross765/Schnorxolib) (cf. details there).
 
-3) Clone this repository.
+3) Clone this repository as well as its sub-repositories. 
+   Place the sub-repos directories *under* this repo's cloned directory,
+   just as it was until V. 0.8.
 
-4) Check out the latest version tag. In this case: `V_0_8_0`.
+      **Note**: We do *not* use Git modules for managing the hierarchy yet. 
+      That will come in a future release.
+
+4) Check out the latest version tag. In this case: `V_0_8_0_RESTRUCT`.
 
       The author has, in the course of his professional career, met plenty of self-appointed super-pro developers 
       who do not seem to understand the concept of version tags and configuration management, 
