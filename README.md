@@ -11,15 +11,15 @@ KMyMoney project.
 
 ## Modules and Further Details
 
-* [Base](https://github.com/jross765/JKMyMoneyLibNTools/tree/master/kmymoney-base/README.md)
+* [Base](https://github.com/jross765/kmymoney-base)
 
-* [API](https://github.com/jross765/JKMyMoneyLibNTools/tree/master/kmymoney-api/README.md)
+* [API](https://github.com/jross765/kmymoney-api)
 
-* [API Extensions](https://github.com/jross765/JKMyMoneyLibNTools/tree/master/kmymoney-api-ext/README.md)
+* [API Extensions](https://github.com/jross765/kmymoney-api-ext)
 
-* [Example Programs](https://github.com/jross765/JKMyMoneyLibNTools/tree/master/kmymoney-api-examples/README.md)
+* [Example Programs](https://github.com/jross765/kmymoney-api-examples)
 
-* [Tools](https://github.com/jross765/JKMyMoneyLibNTools/tree/master/kmymoney-tools/README.md)
+* [Tools](https://github.com/jross765/gnucash-tools)
 
 ## Compatibility
 ### System and Format Compatibility
