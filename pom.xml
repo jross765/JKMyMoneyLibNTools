@@ -12,7 +12,6 @@
 	<properties>
 		<java.version>21</java.version>
 		<project.title>KMyMoney.org</project.title>
-		<project.version>0.9</project.version>
 	</properties>
 
 	<modules>
