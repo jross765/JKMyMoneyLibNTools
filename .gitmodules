@@ -1,0 +1,18 @@
+[submodule "kmymoney-base"]
+        path = kmymoney-base
+        url = https://github.com/jross765/kmymoney-base.git
+[submodule "kmymoney-api"]
+	path = kmymoney-api
+	url = https://github.com/jross765/kmymoney-api.git
+[submodule "kmymoney-api-examples"]
+	path = kmymoney-api-examples
+	url = https://github.com/jross765/kmymoney-api-examples.git
+[submodule "kmymoney-api-ext"]
+	path = kmymoney-api-ext
+	url = https://github.com/jross765/kmymoney-api-ext.git
+[submodule "kmymoney-tools"]
+	path = kmymoney-tools
+	url = https://github.com/jross765/kmymoney-tools.git
+[submodule "kmymoney-viewer"]
+	path = kmymoney-viewer
+	url = https://github.com/jross765/kmymoney-viewer.git

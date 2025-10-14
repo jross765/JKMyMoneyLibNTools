@@ -1,9 +1,9 @@
-kmymoney-api
-kmymoney-api-examples
-kmymoney-api-ext
-kmymoney-base
-kmymoney-tools
-kmymoney-viewer
+# kmymoney-api
+# kmymoney-api-examples
+# kmymoney-api-ext
+# kmymoney-base
+# kmymoney-tools
+# kmymoney-viewer
 #
 .classpath
 .directory
