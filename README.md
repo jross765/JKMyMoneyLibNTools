@@ -21,6 +21,8 @@ KMyMoney project.
 
 * [Tools](https://github.com/jross765/kmymoney-tools)
 
+* [Viewer](https://github.com/jross765/kmymoney-viewer)
+
 ## Compatibility
 ### System and Format Compatibility
 Version 0.8 of the library has been tested with 
@@ -205,9 +207,9 @@ is not maintainable.
 
 ## Acknowledgements
 
-Special thanks to **Marcus Wolschon (Sofware-Design u. Beratung)** and **Deniss Larka** -- 
+Special thanks to **Marcus Wolschon (Sofware-Design u. Beratung)** , **Deniss Larka** and **Roberto Bertolino** -- 
 they don't / did not contribute directly to this project, but they did the pioneering and 
 stewardship work of the sister project `JGnuCashLibNTools` (and its predecessor, resp.) for quite
-a few years, long before the author got into it. This project heavily makes use of the 
+a few years, long before the current author/maintainer got into it. This project heavily makes use of the 
 approaches and techniques in said project.
 

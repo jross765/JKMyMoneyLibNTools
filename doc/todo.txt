@@ -1,6 +1,11 @@
+Module "API"
+============
+
+- [ OK ] Security: Attribute "idpattern" und "urltemplate"
+
 Module "Tools" 
 ==============
 
-GetPrcInfo: Angabe Price-ID in CLI -> auslagern in Helper-Klasse
+- GetPrcInfo: Angabe Price-ID in CLI -> auslagern in Helper-Klasse
 
-[ OK ] GetTrxSpltInfo: Number ausgeben -> API einrichten
+- [ OK ] GetTrxSpltInfo: Number ausgeben -> API einrichten
