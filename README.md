@@ -66,11 +66,11 @@ need not be/is not identical to the single modules' versions any more.**
 
 * Module "API" (V. 0.8.0 &rarr; 0.8.1): Bug-fixes and mini-improvements.
 
-* The other modules remain unchanged:
-  * "Base": V. 0.8.0
-  * "API Examples": V. 0.8.0
-  * "API Extensions": V. 0.8.0
-  * "Tools": V. 0.8.0
+* The other modules have changed only technically; essentially (i.e., code) unchanged:
+  * "Base": V. 0.8.1
+  * "API Examples": V. 0.8.1
+  * "API Extensions": V. 0.8.1
+  * "Tools": V. 0.8.1
 
 ### V. 0.8 &rarr; 0.8 (RESTRUCT)
 Split up the all-encompassing repository into several ones: One per module plus one for the parent (this one).
