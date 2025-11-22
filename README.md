@@ -195,9 +195,9 @@ To compile the sources, do the following:
 
       b) Type:
 
-         ```console
-         $ ./build.sh
-         ```
+      ```console
+    $ ./build.sh
+      ```
 
 ## Planned
 
