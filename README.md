@@ -179,7 +179,9 @@ To compile the sources, do the following:
 
 3) Clone this repository as well as its sub-repositories. 
 
-      `$ git clone --recurse-submodules https://github.com/jross765/JKMyMoneyLibNTools`
+      ```console
+    $ git clone --recurse-submodules https://github.com/jross765/JKMyMoneyLibNTools
+      ```
 
 4) Check out the latest version tag. In this case: `V_0_9`.
 
@@ -190,9 +192,12 @@ To compile the sources, do the following:
 5) Compile the sources:
 
       a) Adapt the path to your local repository in *all* pom.xml files (search for "`schnorxolib-base-systemPath`").
+
       b) Type:
 
-        `$ ./build.sh`
+         ```console
+         $ ./build.sh
+         ```
 
 ## Planned
 
