@@ -11,17 +11,35 @@ KMyMoney project.
 
 ## Modules and Further Details
 
-* [Base](https://github.com/jross765/kmymoney-base)
+Here is a high-level overview:
 
-* [API](https://github.com/jross765/kmymoney-api)
+![Module Architecture](doc/module-arch.png)
 
-* [API Extensions](https://github.com/jross765/kmymoney-api-ext)
+List of modules and other relevant stuff:
 
-* [Example Programs](https://github.com/jross765/kmymoney-api-examples)
+* JKMyMoneyLibs:
 
-* [Tools](https://github.com/jross765/kmymoney-tools)
+  * [Base (kmymoney-base)](https://github.com/jross765/kmymoney-base)
 
-* [Viewer](https://github.com/jross765/kmymoney-viewer)
+  * [API (kmymoney-api)](https://github.com/jross765/kmymoney-api)
+
+  * [API Specialized Entities (kmymoney-spec)](https://github.com/jross765/kmymoney-api-spec)
+
+  * [API Extensions (kmymoney-tools)](https://github.com/jross765/kmymoney-api-ext)
+
+* JKMyMoneyTools:
+
+  * [Tools (kmymoney-tools)](https://github.com/jross765/kmymoney-tools)
+
+  * [Viewer (kmymoney-viewer)](https://github.com/jross765/kmymoney-viewer)
+
+* Miscellaneous:
+
+  * [Example Programs (kmymoney-api-examples)](https://github.com/jross765/kmymoney-api-examples)
+
+  * [SchnorxoLib](https://github.com/jross765/schnorxolib)
+
+  * [Apache Commons](https://commons.apache.org)
 
 ## Compatibility
 ### System and Format Compatibility
