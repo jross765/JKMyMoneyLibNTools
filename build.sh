@@ -40,6 +40,7 @@ JAVADOC_STATUS_ALL=0
 
 for module in kmymoney-base \
               kmymoney-api \
+              kmymoney-api-spec \
               kmymoney-api-ext
 do
   echo ""

@@ -16,3 +16,6 @@
 [submodule "kmymoney-viewer"]
 	path = kmymoney-viewer
 	url = https://github.com/jross765/kmymoney-viewer.git
+[submodule "kmymoney-api-spec"]
+	path = kmymoney-api-spec
+	url = https://github.com/jross765/kmymoney-api-spec.git
