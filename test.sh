@@ -91,6 +91,7 @@ doInitPrepareScripts()
 
   for module in kmymoney-base \
                 kmymoney-api \
+                kmymoney-api-spec \
                 kmymoney-api-ext \
                 kmymoney-tools
   do
