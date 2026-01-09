@@ -17,32 +17,61 @@ Here is a high-level overview:
 
 List of modules and other relevant stuff:
 
-* JKMyMoneyLibs:
+* JKMyMoneyLibs (the API)
+
+  The four following together form the API:
 
   * [Base (kmymoney-base)](https://github.com/jross765/kmymoney-base)
 
+    Some basic data types and helper classes.
+
   * [API (kmymoney-api)](https://github.com/jross765/kmymoney-api)
+
+    The Core API (read/write) -- no bells, no whistles, yet still providing a certain level 
+    of convenience as well as solid type safety and input-value checks.
+
+    "Good and well-tested wrappers for the the JAXB-generated classes".
 
   * [API Specialized Entities (kmymoney-spec)](https://github.com/jross765/kmymoney-api-spec)
 
+    Bells & whistles, part 1: Some specialized classes derived from the Core API.
+
   * [API Extensions (kmymoney-tools)](https://github.com/jross765/kmymoney-api-ext)
+
+    Bells & whistles, part 2: Some specialized helper classes providing
+    high-level functionalities based on low-level actions in of the Core API
+    (partially with the data specialized entities).
 
 * JKMyMoneyTools:
 
   * [Tools (kmymoney-tools)](https://github.com/jross765/kmymoney-tools)
 
+    CLI Tools (read/write).
+
   * [Viewer (kmymoney-viewer)](https://github.com/jross765/kmymoney-viewer)
 
+    The (read-only) GUI.
+
   * [Example Programs (kmymoney-api-examples)](https://github.com/jross765/kmymoney-api-examples)
-    (actually not "officially" part of the 
+
+    Some examples on how to use the API (all levels).
+
+    Actually not "officially" part of the 
     JKMyMoneyTools, 
-    but we won't define a new category just for this one, and they are in the same ballpark...)
+    but we won't define a new category just for this one, and they are in the same ballpark...
 
 * Miscellaneous:
 
   * [SchnorxoLib](https://github.com/jross765/schnorxolib)
 
+    Some basic data types and helper classes 
+    (used by this project as well as the sister project).
+
   * [Apache Commons](https://commons.apache.org)
+
+    Ye ole venerable collection of general-purpose Java libs.
+    The following ones are used:
+
     * [Configuration](https://commons.apache.org/proper/commons-configuration/)
     * [IO](https://commons.apache.org/proper/commons-io/)
     * [CLI](https://commons.apache.org/proper/commons-cli/)
@@ -52,15 +81,17 @@ List of modules and other relevant stuff:
 
   * [Jakarta XML Binding (JAXB)](https://eclipse-ee4j.github.io/jaxb-ri/)
 
-  * [Jakarta Activation API](https://jakartaee.github.io/jaf-api/)
+  * Progress Bar (xxx)
+
+  * JLine (xxx)
 
 ## Compatibility
 ### System and Format Compatibility
-Version 0.9 of the library has been tested with 
+Version 0.10 of the libs and tools has been tested with 
 KMyMoney 5.2.1 on Linux (locale de_DE) and 
 OpenJDK 21.0.
 
-**Caution: Version 0.9 only works with files generated with recently-released KMyMoney V. 5.2.x! Files generated with V. 5.1.x are not supported any more.**
+**Caution: Version 0.10 only works with files generated with KMyMoney V. 5.2.x! Files generated with V. 5.1.x are not supported any more.**
 
 ### Locale/Language Compatibility
 As far as the author knows, there should be no issues with other locales, 
@@ -68,8 +99,9 @@ but he has not tested it.
 
 ### Version Compatibility
 
-| Version | Backward Compat. | Note                           |
+| Overall Version | Backward Compat. | Note                           |
 |---------|------------------|--------------------------------|
+| 0.10    | ???              | ???                            |
 | 0.9     | almost           | Minor changes in interfaces    |
 | 0.8     | no               | File format change (KMyMoney V. 5.2.x), "medium" changes in interfaces |
 | 0.7     | almost           | Some non-trivial changes, although not dramatic |
@@ -83,25 +115,74 @@ but he has not tested it.
 Here, only the top-level changes on module-level are mentioned. 
 For more details, cf. the README files of the resp. modules (links above).
 
+### V. 0.9 &rarr; 0.10
+
+* Parent repo (this one): xyz.
+
+* Module "API (Core)":
+  * Loading files now shows progress bars in console (optional).
+  * Bug fixes.
+  * Maintenance.
+
+* Module "API Specialized Entities: New.
+
+* Module "API Extensions": Maintenance.
+
+* Module "API Examples": 
+  * New example program for API Specialized Entities".
+  * New package structure to better reflect different modules.
+
+* Module "Tools":
+  * All tools now load files showing progress bars (cf. Module "API (Core)").
+  * Maintenance.
+
+* Module "Viewer": xyz.
+
+* The other modules have changed only technically; essentially (i.e., code) unchanged:
+  * "Base"
+
+Module versions:
+
+| Name                     | Version |
+|--------------------------|---------|
+| Base                     | 0.8.2   |
+| API (Core)               | 0.9     |
+| API Specialized Entities | 0.2     |
+| API Extensions           | 0.9     |
+| API Examples             | 0.9     |
+| Tools                    | 0.9     |
+| Viewer                   | 1.2     |
+
 ### V. 0.8 (RESTRUCT) &rarr; 0.9
 **Caution: Please note that, due to the changes in the last major release 
 (splitting up the one big repository in several smaller ones), 
 from now on, each module is versioned on its own, and the overall project's version 
-(0.9 in this case) 
+(0.9, in this case) 
 need not be/is not identical to the single modules' versions any more.**
 
 * Parent repo (this one): Finished restruct work, i.e. made the
   (Maven) modules' repos Git sub-modules as well.
 
-* Module "Viewer" (V. 1.1.0): New.
+* Module "Viewer": New.
 
-* Module "API" (V. 0.8.0 &rarr; 0.8.1): Bug-fixes and mini-improvements.
+* Module "API": Bug-fixes and mini-improvements.
 
 * The other modules have changed only technically; essentially (i.e., code) unchanged:
-  * "Base": V. 0.8.1
-  * "API Examples": V. 0.8.1
-  * "API Extensions": V. 0.8.1
-  * "Tools": V. 0.8.1
+  * "Base"
+  * "API Examples"
+  * "API Extensions"
+  * "Tools"
+
+Module versions:
+
+| Name                     | Version |
+|--------------------------|---------|
+| Base                     | 0.8.1   |
+| API (Core)               | 0.8.1   |
+| API Extensions           | 0.8.1   |
+| API Examples             | 0.8.1   |
+| Tools                    | 0.8.1   |
+| Viewer                   | 1.1.0   |
 
 ### V. 0.8 &rarr; 0.8 (RESTRUCT)
 Split up the all-encompassing repository into several ones: One per module plus one for the parent (this one).
@@ -214,7 +295,7 @@ To compile the sources, do the following:
     $ git clone --recurse-submodules https://github.com/jross765/JKMyMoneyLibNTools
       ```
 
-4) Check out the latest version tag. In this case: `V_0_9`.
+4) Check out the latest version tag. In this case: `V_0_10`.
 
       The author has, in the course of his professional career, met plenty of self-appointed super-pro developers 
       who do not seem to understand the concept of version tags and configuration management, 
