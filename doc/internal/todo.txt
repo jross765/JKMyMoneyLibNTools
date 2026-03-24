@@ -1,0 +1,51 @@
+Module "API (Core)"
+===================
+
+- [ OK ] Security: Attribute "idpattern" und "urltemplate"
+
+- KMMPriceID --> KMMPrcID (doch noch)
+
+- KMyMoneyFile: getCurrencyByID() --> Parameter String -> KMMCurrID
+
+- IF KMyMoneyFile_TrxSplt: Symmetrie zu Schwester.
+
+Module "API Specialized Entities"
+=================================
+
+./.
+
+Module "API Extensions"
+=======================
+
+./.
+
+Module "Tools"
+==============
+
+- [ OK ] GetTrxSpltInfo: Number ausgeben --> API einrichten
+
+- GenPrc: Kern-Code so kapseln, dass auf dieser Ebene ganz symmetrisch zu Schwester
+
+- [ OK ] GenStockAcct: Cmd-Line Param. acctID nicht KMMComplAcctID, sondern KMMAcctID
+
+- GetAcctInfo: RECON_HIST_KEY -> Const
+  bzw. eigene Methode dafür in IF/Impl
+  
+- GetPrcInfo: 
+  o Da geht bessere Symmetrie mit Schwester
+  o Angabe Price-ID in CLI -> auslagern in Helper-Klasse
+
+- [ OK ] GetSecInfo: SecSelectMode -> weg, ist in Schnorxo
+  (oder zumindest in die Helper rein, weil's in der Schwester da spezieller zugeht)
+
+- [ OK ] UpdAcct: Cmd-Line Param. acctID nicht KMMComplAcctID, sondern KMMAcctID
+
+- UpdPrc: Symmetrie kann bisschen verbessert werden.
+
+- [ OK ] UpdSec: mit Schwester abgleichen
+
+Module "Viewer"
+===============
+
+- Anzeige Acct. Balance: ist falsch bzw. erneut implementiert -->
+  umstellen auf das, was die API (Core) vorsieht.
