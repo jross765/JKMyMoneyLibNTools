@@ -82,7 +82,7 @@ Then, you have several options:
       -f test.kmy \
       -psm ID \
       -pssm DIRECT \
-      -prc USD:EUR:2022-06-02
+      -prc USD:EUR:2023-11-01
   ```
 
   or 
@@ -92,7 +92,7 @@ Then, you have several options:
       -f test.kmy \
       -psm ID \
       -pssm DIRECT \
-      -prc E000001:EUR:2023-12-01
+      -prc E000003:EUR:2023-03-06
   ```
 
   In essence, with the direct method, we kind of "stubbornly" pretend not to know that the "technical" ID is, 
@@ -118,8 +118,9 @@ Then, you have several options:
       -psm ID \
       -pssm INDIRECT \
       -fsc CURRENCY:USD \
-      -tc  CURRENCY:EUR \
-      -dat 2022-06-02
+      -tc CURRENCY:EUR \
+      -df ISO \
+      -dat 2023-11-01
   ```
   or
 
@@ -128,9 +129,10 @@ Then, you have several options:
       -f test.kmy \
       -psm ID \
       -pssm INDIRECT \
-      -fsc SECURITY:E000001 \
-      -tc  CURRENCY:EUR \
-      -dat 2022-06-02
+      -fsc SECURITY:E000003 \
+      -tc CURRENCY:EUR \
+      -df ISO \
+      -dat 2023-03-06
   ```
 
   Notice the prefixes `CURRENCY` and `SECURITY`. They are not optional.
@@ -160,14 +162,13 @@ Then, you have several options:
       -f test.kmy \
       -psm ISIN_CURR_DATE \
       -is  DE000BASF111 \
-      -cur EUR \
-      -dat 2022-06-02
+      -tc CURRENCY:EUR \
+      -df ISO \
+      -dat 2023-03-06
   ```
 
   Notice that -- for the time being -- the exact same command is used when you have CUSIPs, SEDOLs, WKNs or something else in your "Code" field instead of ISINs. Still the above notation with "ISIN" etc. is used.[^4]
-
-::TODO Select by name (not recommended but possible for get_prc_info, and not supported for upd_sec).
-
+  
 
 [^1]: Every entity's ID has a prefix in KMyMoney, except the price, of course. So the 
       'Q' (for quote) does not actually exist, and 'P' (for price) is used for payees.

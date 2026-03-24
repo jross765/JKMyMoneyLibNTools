@@ -31,9 +31,9 @@ Module "Tools"
 - GetAcctInfo: RECON_HIST_KEY -> Const
   bzw. eigene Methode dafür in IF/Impl
   
-- GetPrcInfo: 
-  o Da geht bessere Symmetrie mit Schwester
-  o Angabe Price-ID in CLI -> auslagern in Helper-Klasse
+- [ OK ] GetPrcInfo: 
+  o [ OK ] Da geht bessere Symmetrie mit Schwester
+  o [ OK ] Angabe Price-ID in CLI -> auslagern in Helper-Klasse
 
 - [ OK ] GetSecInfo: SecSelectMode -> weg, ist in Schnorxo
   (oder zumindest in die Helper rein, weil's in der Schwester da spezieller zugeht)
