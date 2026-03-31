@@ -6,7 +6,7 @@ format of the
 KMyMoney open source personal finance software 
 ([kmymoney.org](https://kmymoney.org)).
 
-This project is not affiliated with / sponsored or coordinated by the developers of the 
+This project is not affiliated with nor sponsored or coordinated by the developers of the 
 KMyMoney 
 project.
 
@@ -14,7 +14,7 @@ project.
 
 Here is a high-level overview:
 
-![Module Architecture](doc/developer/module-arch.png)
+![Module Architecture](doc/developer/module-arch_cut.png)
 
 List of modules and other relevant stuff:
 
@@ -24,7 +24,7 @@ List of modules and other relevant stuff:
 
   * [Base (kmymoney-base)](https://github.com/jross765/kmymoney-base)
 
-    Some basic data types and helper classes.
+    Some basic data types and helper classes (project-specific).
 
   * [API (kmymoney-api)](https://github.com/jross765/kmymoney-api)
 
@@ -37,7 +37,7 @@ List of modules and other relevant stuff:
 
     Bells & whistles, part 1: Some specialized classes derived from the Core API.
 
-  * [API Extensions (kmymoney-tools)](https://github.com/jross765/kmymoney-api-ext)
+  * [API Extensions (kmymoney-ext)](https://github.com/jross765/kmymoney-api-ext)
 
     Bells & whistles, part 2: Some specialized helper classes providing
     high-level functionalities based on low-level actions in of both the Core API
@@ -61,12 +61,24 @@ List of modules and other relevant stuff:
     JKMyMoneyTools, 
     but we won't define a new category just for this one, and they are in the same ballpark...
 
+* Project-specific base stuff:
+
+  There is one project-specific quasi-central pseudo-lib used by this 
+  project as well as by its sister (written and maintained by
+  this project's current maintainer):
+
+  [SchnorxoLib](https://github.com/jross765/schnorxolib)
+
+  It contains some basic data types and helper classes
+  used by both projects.
+
 * Miscellaneous:
 
-  * [SchnorxoLib](https://github.com/jross765/schnorxolib)
+  Of course, a couple of "real" libs are also used:
 
-    Some basic data types and helper classes 
-    (used by this project as well as the sister project).
+  * [Jakarta XML Binding (JAXB)](https://eclipse-ee4j.github.io/jaxb-ri/)
+
+    Obviously...
 
   * [Apache Commons](https://commons.apache.org)
 
@@ -82,8 +94,6 @@ List of modules and other relevant stuff:
 
     (Doesn't provide real added value in this project. We will therefore 
     probably get rid of that dependency in the next release).
-
-  * [Jakarta XML Binding (JAXB)](https://eclipse-ee4j.github.io/jaxb-ri/)
 
   * [Progress Bar](https://github.com/ctongfei/progressbar/)
 
@@ -269,7 +279,12 @@ private finances'
 accounting. This proves that the software is well-tested and stable enough 
 for a real-world setting (as opposed to theoretical test cases and arbitrary examples).
 
-Therefore, the author now feels confident not just to use the software in his own particular productive environment, but also to encourage others to use it. However, he is experienced a developer enough to know that there are other production environments and other use cases out there, and that only by further usage and testing by at least a handful of other users in real-world scenarios for a year or so, the software can mature to finally attain genuine "production-ready" status.
+Therefore, the current maintainer now feels confident not just to use the software in 
+his own particular productive environment, but also to encourage others to use it. 
+However, he is experienced a developer enough to know that there are other production 
+environments and other use cases out there, and that only by further usage and testing 
+by at least a handful of other users in real-world scenarios for a year or so, the 
+software can mature to finally attain genuine "production-ready" status.
 
 In short: You are encouraged to use this software, but be advised to use it under the following principles:
 
@@ -316,9 +331,38 @@ To compile the sources, do the following:
 
       b) Type:
 
+         ```console
+       $ ./build.sh
+         ```
+
+6) Perform the test cases (optional):
+
       ```console
-    $ ./build.sh
+    $ ./test.sh
       ```
+
+## Installing and Using the Software
+
+Installation is a manual process -- there is no "install" target
+in the build process (well, there actually is one, but only
+in the Maven sense, meaning its repository under `~/.m2`).
+
+Consequently, there is no pre-defined/default path for the software; 
+it does not really matter. But in case want to do it like the maintainer: 
+
+I have put the stuff into `~/Programme/finanzen/kmymoney`.
+
+As always with Java libs, you will have to set the classpath file,
+preferrably in a file called `environment.sh` that you must source
+before starting one of the tools. Don't forget the basic libs used 
+(list above).
+
+For convenience, the build process also generates top-level JAR files 
+that contain all dependencies (modules 
+"kmymoney-tools" and "kmymoney-viewer").
+
+In short: Nothing special; just as it's usually done with Java software...
+
 
 ## Planned
 
@@ -337,8 +381,8 @@ Obviously, the author strives to keep both projects symmetrical.
 
 What does "symmetry" mean in this context? It means that 
 this project 
-has literally evolved from a source-code copy of its sister, 
-`JGnuCashLibNTools`.
+has literally evolved from a source-code copy of
+its sister, `JGnuCashLibNTools`.
 Meanwhile, changes and adaptations are going in both directions.
 Let's call this "coupled development". 
 Given that KMyMoney and GnuCash are two finance applications with quite a few 
@@ -354,9 +398,8 @@ you can use `diff`. You will, however, also see some exceptions here and there w
 
 ## Acknowledgements
 
-Special thanks to **Marcus Wolschon (Sofware-Design u. Beratung)** , **Deniss Larka** and **Roberto Bertolino** -- 
-they don't / did not contribute directly to this project, but they did the pioneering and 
+Special thanks to **Marcus Wolschon (Sofware-Design u. Beratung)**, **Deniss Larka** and **Roberto Bertolino** -- 
+they don't/did not contribute directly to this project, but they did the pioneering and 
 stewardship work of the sister project `JGnuCashLibNTools` (and its predecessor, resp.) for quite
 a few years, long before the current author/maintainer got into it. This project heavily makes use of the 
 approaches and techniques in said project.
-
