@@ -7,13 +7,14 @@ KMyMoney open source personal finance software
 ([kmymoney.org](https://kmymoney.org)).
 
 This project is not affiliated with / sponsored or coordinated by the developers of the 
-KMyMoney project.
+KMyMoney 
+project.
 
 ## Modules and Further Details
 
 Here is a high-level overview:
 
-![Module Architecture](doc/module-arch.png)
+![Module Architecture](doc/developer/module-arch.png)
 
 List of modules and other relevant stuff:
 
@@ -39,8 +40,8 @@ List of modules and other relevant stuff:
   * [API Extensions (kmymoney-tools)](https://github.com/jross765/kmymoney-api-ext)
 
     Bells & whistles, part 2: Some specialized helper classes providing
-    high-level functionalities based on low-level actions in of the Core API
-    (partially with the data specialized entities).
+    high-level functionalities based on low-level actions in of both the Core API
+    and the Specialized Entities.
 
 * JKMyMoneyTools:
 
@@ -69,29 +70,34 @@ List of modules and other relevant stuff:
 
   * [Apache Commons](https://commons.apache.org)
 
-    Ye ole venerable collection of general-purpose Java libs.
+    Ye olde venerable collection of general-purpose Java libs.
     The following ones are used:
 
+    * [CLI](https://commons.apache.org/proper/commons-cli/)
     * [Configuration](https://commons.apache.org/proper/commons-configuration/)
     * [IO](https://commons.apache.org/proper/commons-io/)
-    * [CLI](https://commons.apache.org/proper/commons-cli/)
     * [Numbers](https://commons.apache.org/proper/commons-numbers/)
 
   * [Joda Money](https://www.joda.org/joda-money/)
 
+    (Doesn't provide real added value in this project. We will therefore 
+    probably get rid of that dependency in the next release).
+
   * [Jakarta XML Binding (JAXB)](https://eclipse-ee4j.github.io/jaxb-ri/)
 
-  * Progress Bar (xxx)
+  * [Progress Bar](https://github.com/ctongfei/progressbar/)
 
-  * JLine (xxx)
+  * [JLine](https://jline.org/)
 
 ## Compatibility
 ### System and Format Compatibility
-Version 0.10 of the libs and tools has been tested with 
-KMyMoney 5.2.1 on Linux (locale de_DE) and 
+Version 2026-03
+of the libs and tools has been tested with 
+KMyMoney 5.2.2 
+on Linux (locale de_DE) and 
 OpenJDK 21.0.
 
-**Caution: Version 0.10 only works with files generated with KMyMoney V. 5.2.x! Files generated with V. 5.1.x are not supported any more.**
+**Caution: Version 2026-03 only works with files generated with KMyMoney V. 5.2.x! Files generated with V. 5.1.x are not supported any more.**
 
 ### Locale/Language Compatibility
 As far as the author knows, there should be no issues with other locales, 
@@ -101,23 +107,27 @@ but he has not tested it.
 
 | Overall Version | Backward Compat. | Note                           |
 |---------|------------------|--------------------------------|
-| 0.10    | ???              | ???                            |
-| 0.9     | almost           | Minor changes in interfaces    |
-| 0.8     | no               | File format change (KMyMoney V. 5.2.x), "medium" changes in interfaces |
-| 0.7     | almost           | Some non-trivial changes, although not dramatic |
-| 0.6     | almost           | Minor changes in interfaces    |
-| 0.5     | no               | Some substantial changes       |
-| 0.4     | almost           | Minor changes in interfaces    |
-| 0.3     | no               | Major changes in interfaces    |
-| 0.2     | no               | Major changes in interfaces    |
+| 2026-03 | no      | "Medium" changes in interfaces |
+| 0.9     | almost  | Minor changes in interfaces    |
+| 0.8     | no      | File format change (KMyMoney V. 5.2.x), "medium" changes in interfaces |
+| 0.7     | almost  | Some non-trivial changes, although not dramatic |
+| 0.6     | almost  | Minor changes in interfaces    |
+| 0.5     | no      | Some substantial changes       |
+| 0.4     | almost  | Minor changes in interfaces    |
+| 0.3     | no      | Major changes in interfaces    |
+| 0.2     | no      | Major changes in interfaces    |
 
 ## Major Changes
 Here, only the top-level changes on module-level are mentioned. 
 For more details, cf. the README files of the resp. modules (links above).
 
-### V. 0.9 &rarr; 0.10
+### V. 0.9 &rarr; 2026-03
+**Caution: With this release, the top-level version naming scheme has changed
+in order to avoid confusion with the single modules' version numbers.**
 
-* Parent repo (this one): xyz.
+* Parent repo (this one): Nothing special.
+
+* Module "Base": Changes that improve the symmetry with the sister project.
 
 * Module "API (Core)":
   * Loading files now shows progress bars in console (optional).
@@ -138,16 +148,13 @@ For more details, cf. the README files of the resp. modules (links above).
 
 * Module "Viewer": xyz.
 
-* The other modules have changed only technically; essentially (i.e., code) unchanged:
-  * "Base"
-
 Module versions:
 
 | Name                     | Version |
 |--------------------------|---------|
-| Base                     | 0.8.2   |
+| Base                     | 0.9     |
 | API (Core)               | 0.9     |
-| API Specialized Entities | 0.2     |
+| API Specialized Entities | 0.3     |
 | API Extensions           | 0.9     |
 | API Examples             | 0.9     |
 | Tools                    | 0.9     |
@@ -253,13 +260,14 @@ Cf. the README file of modules "API" and "Example programs" (links below).
 This software is beta.
 
 It is worth noting, though, that the author has been using both the published tools 
-as well as some unpublished ones on a nearly daily basis 
-for over a year now 
+as well as some unpublished ones (the latter ones also based on 
+`JKMyMoneyLibs`) 
+on a nearly daily basis 
+for almost two years now (march 2026)
 to facilitate and part-automate his 
 private finances' 
-accounting. This proves that the 
-software is well-tested and stable enough for a real-world setting (as opposed to 
-theoretical test cases and arbitrary examples).
+accounting. This proves that the software is well-tested and stable enough 
+for a real-world setting (as opposed to theoretical test cases and arbitrary examples).
 
 Therefore, the author now feels confident not just to use the software in his own particular productive environment, but also to encourage others to use it. However, he is experienced a developer enough to know that there are other production environments and other use cases out there, and that only by further usage and testing by at least a handful of other users in real-world scenarios for a year or so, the software can mature to finally attain genuine "production-ready" status.
 
@@ -295,7 +303,7 @@ To compile the sources, do the following:
     $ git clone --recurse-submodules https://github.com/jross765/JKMyMoneyLibNTools
       ```
 
-4) Check out the latest version tag. In this case: `V_0_10`.
+4) Check out the latest version tag. In this case: `V_2026-03`.
 
       The author has, in the course of his professional career, met plenty of self-appointed super-pro developers 
       who do not seem to understand the concept of version tags and configuration management, 
@@ -303,7 +311,8 @@ To compile the sources, do the following:
 
 5) Compile the sources:
 
-      a) Adapt the path to your local repository in *all* pom.xml files (search for "`schnorxolib-base-systemPath`").
+      a) Adapt the path to your local repository in *all* pom.xml files 
+         (search for "`schnorxolib-base-systemPath`" and xyz).
 
       b) Type:
 
@@ -326,8 +335,10 @@ This project has a sister project:
 By now, both projects have roughly the same level of maturity. 
 Obviously, the author strives to keep both projects symmetrical.
 
-What does "symmetry" mean in this context? It means that this project has 
-literally evolved from a source-code copy of its sister, `JGnuCashLibNTools`.
+What does "symmetry" mean in this context? It means that 
+this project 
+has literally evolved from a source-code copy of its sister, 
+`JGnuCashLibNTools`.
 Meanwhile, changes and adaptations are going in both directions.
 Let's call this "coupled development". 
 Given that KMyMoney and GnuCash are two finance applications with quite a few 
@@ -337,9 +348,9 @@ and has been working well so far.
 Of course, this is a "10.000-metre bird's-eye view". As always in life, things are a little more
 complicated once you go into the details. Still, looking at the big picture and at least 
 up to the current state of development, the author has managed to keep both projects very 
-similar on a source code level -- so much so that you partially can use `diff`. 
-You will, however, also see some exceptions here and there where that "low-level-symmetry" 
-is not maintainable.
+similar on a source code level -- so much so that you throughout large parts of the code,
+you can use `diff`. You will, however, also see some exceptions here and there where that 
+"low-level-symmetry" is not maintainable.
 
 ## Acknowledgements
 
