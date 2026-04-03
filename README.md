@@ -61,11 +61,10 @@ List of modules and other relevant stuff:
     JKMyMoneyTools, 
     but we won't define a new category just for this one, and they are in the same ballpark...
 
-* Project-specific base stuff:
+* Project-specific basic stuff:
 
-  There is one project-specific quasi-central pseudo-lib used by this 
-  project as well as by its sister (written and maintained by
-  this project's current maintainer):
+  There is one project-specific pseudo-base-lib containing some semi-generic
+  stuff used by this project as well as by its sister:
 
   [SchnorxoLib](https://github.com/jross765/schnorxolib)
 
@@ -101,13 +100,13 @@ List of modules and other relevant stuff:
 
 ## Compatibility
 ### System and Format Compatibility
-Version 2026-03
+Version 2026-04
 of the libs and tools has been tested with 
 KMyMoney 5.2.2 
 on Linux (locale de_DE) and 
 OpenJDK 21.0.
 
-**Caution: Version 2026-03 only works with files generated with KMyMoney V. 5.2.x! Files generated with V. 5.1.x are not supported any more.**
+**Caution: Version 2026-04 only works with files generated with KMyMoney V. 5.2.x. Files generated with V. 5.1.x are not supported any more.**
 
 ### Locale/Language Compatibility
 As far as the author knows, there should be no issues with other locales, 
@@ -117,7 +116,7 @@ but he has not tested it.
 
 | Overall Version | Backward Compat. | Note                           |
 |---------|------------------|--------------------------------|
-| 2026-03 | no      | "Medium" changes in interfaces |
+| 2026-04 | no      | "Medium" changes in interfaces |
 | 0.9     | almost  | Minor changes in interfaces    |
 | 0.8     | no      | File format change (KMyMoney V. 5.2.x), "medium" changes in interfaces |
 | 0.7     | almost  | Some non-trivial changes, although not dramatic |
@@ -131,7 +130,7 @@ but he has not tested it.
 Here, only the top-level changes on module-level are mentioned. 
 For more details, cf. the README files of the resp. modules (links above).
 
-### V. 0.9 &rarr; 2026-03
+### V. 0.9 &rarr; 2026-04
 **Caution: With this release, the top-level version naming scheme has changed
 in order to avoid confusion with the single modules' version numbers.**
 
@@ -156,7 +155,10 @@ in order to avoid confusion with the single modules' version numbers.**
   * All tools now load files showing progress bars (cf. Module "API (Core)").
   * Maintenance.
 
-* Module "Viewer": xyz.
+* Module "Viewer":
+  * Program now accepts various command line args, supporting start variants,
+    supporting various additonal use cases.
+  * Maintenance.
 
 Module versions:
 
@@ -318,16 +320,17 @@ To compile the sources, do the following:
     $ git clone --recurse-submodules https://github.com/jross765/JKMyMoneyLibNTools
       ```
 
-4) Check out the latest version tag. In this case: `V_2026-03`.
+4) Check out the latest version tag. In this case: `V_2026-04`.
 
-      The author has, in the course of his professional career, met plenty of self-appointed super-pro developers 
-      who do not seem to understand the concept of version tags and configuration management, 
-      so please bear with him for telling you the seemlingly obvious...
+      The current maintainer has, in the course of his professional career, met plenty of self-declared 
+      super-pro developers who do not seem to understand the concept of version tags and configuration 
+      management, so please bear with him for telling you the seemlingly obvious...
 
 5) Compile the sources:
 
       a) Adapt the path to your local repository in *all* pom.xml files 
-         (search for "`schnorxolib-base-systemPath`" and xyz).
+         (search for "`schnorxolib-base-systemPath`" and "`xxx`").
+         All other libs are drawn from Maven Central.
 
       b) Type:
 
@@ -348,9 +351,7 @@ in the build process (well, there actually is one, but only
 in the Maven sense, meaning its repository under `~/.m2`).
 
 Consequently, there is no pre-defined/default path for the software; 
-it does not really matter. But in case want to do it like the maintainer: 
-
-I have put the stuff into `~/Programme/finanzen/kmymoney`.
+it does not really matter.
 
 As always with Java libs, you will have to set the classpath file,
 preferrably in a file called `environment.sh` that you must source
@@ -360,6 +361,11 @@ before starting one of the tools. Don't forget the basic libs used
 For convenience, the build process also generates top-level JAR files 
 that contain all dependencies (modules 
 "kmymoney-tools" and "kmymoney-viewer").
+
+You will also have to write your own wrapper scripts for the tools (for now).
+(No, the maintainer cannot provide his own ones, at least not right now,
+for specific reasons which he won't dive into now.)
+You will find an example wrapper script in the folder `doc/user`.
 
 In short: Nothing special; just as it's usually done with Java software...
 
