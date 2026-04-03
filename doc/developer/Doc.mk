@@ -1,0 +1,47 @@
+all : DOC
+
+
+######################################################################
+
+DOC : PICS \
+      TEXTS
+
+
+######################################################################
+
+PICS : module-arch_cut.png
+
+TEXTS : select-prices.pdf
+
+
+######################################################################
+# PICS
+
+module-arch.png : module-arch.pdf
+
+module-arch_cut.png : module-arch.png
+	convert $< -fuzz 45% -trim +repage temp.png && \
+        convert temp.png -alpha set -bordercolor White -border 50 $@ && \
+        rm -f temp.png
+
+module-arch.pdf : module-arch.odg
+
+
+######################################################################
+# TEXTS
+
+select-prices.pdf : select-prices.md
+	pandoc -f markdown -t pdf -V geometry:a4paper -i $< -o $@
+
+
+######################################################################
+# Various
+
+%.pdf : %.odt
+	ooo2pdf.sh $< $@
+
+%.pdf : %.odg
+	ooo2pdf.sh $< $@
+
+%.png : %.pdf
+	pdf2png_p1.sh -i $<
