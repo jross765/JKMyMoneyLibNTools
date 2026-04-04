@@ -116,7 +116,7 @@ security/currency identifiers: `KMM(Qualif)SecID`, `KMM(Qualif)CurrID`, `KMMQual
 but just the simpler ones: `KMMSecID`, `KMMCurrID`.
 
 Have a look at module "API Examples", program 
-`GetPrcInfo` ::TODO
+`GetPrcInfo`
 for a simple example on how to use them.
 
 You will also find a more elaborate variant of it (with better code encapsulation)
@@ -141,7 +141,7 @@ mythical external source), and then you use:
 
 Look at the example program in module "API Examples",
 it is called
-`GetPrcInfo`. ::TODO
+`GetPrcInfo`.
 
 (You will also find a more elaborate version of it
 in module "Tools").

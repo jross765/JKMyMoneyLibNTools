@@ -3,11 +3,15 @@ Module "API (Core)"
 
 - [ OK ] Security: Attribute "idpattern" und "urltemplate"
 
-- KMMPriceID --> KMMPrcID (doch noch)
+- [ OK ] KMMPrice(Pair)ID --> KMMPrc(Pr)ID (doch noch).
 
 - KMyMoneyFile: getCurrencyByID() --> Parameter String -> KMMCurrID
 
+- KMyMoneyWritableFile: beim Speichern LastModificationDate (KVP) updaten
+  (redundant zu Meta-Info)
+
 - IF KMyMoneyFile_TrxSplt: Symmetrie zu Schwester.
+
 
 Module "API Specialized Entities"
 =================================
