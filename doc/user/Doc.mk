@@ -9,8 +9,7 @@ TEXTS : select-prices.pdf
 ######################################################################
 # TEXTS
 
-select-prices.pdf : select-prices.md \
-                    ../xsec/prcid-logic.png
+select-prices.pdf : select-prices.md
 	pandoc -f markdown -t pdf -V geometry:a4paper -i $< -o $@
 
 

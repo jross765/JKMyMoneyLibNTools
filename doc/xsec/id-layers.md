@@ -87,9 +87,11 @@ ID looks something like these:
 (More precisely: the pair `<from-sec-curr>:<to-curr>`, which leads to a list of dates
 from which to choose, so together a triple).
 
-Just by glancing at these, you can see that they are essentially business-logic IDs 
-maskerading as technical ones; they do mean something (i.e., they have semantics) and 
-can thus very well be interpreted and understood.
+Just by glancing at these, you can see that 
+the first one is essentially a business-logic ID maskerading as a technical one, 
+and that the second one is sort-of semi-technical;
+they both do mean something (i.e., they have semantics) and can thus very well be interpreted 
+and understood.
 
 It is important to understand this (non-)difference between technical and business-logic IDs in
 KMyMoney 
