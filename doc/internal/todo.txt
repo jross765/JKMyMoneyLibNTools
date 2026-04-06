@@ -44,7 +44,7 @@ Module "Tools"
 
 - [ OK ] UpdAcct: Cmd-Line Param. acctID nicht KMMComplAcctID, sondern KMMAcctID
 
-- UpdPrc: Symmetrie kann bisschen verbessert werden.
+- [ OK ] UpdPrc: Symmetrie kann bisschen verbessert werden.
 
 - [ OK ] UpdSec: mit Schwester abgleichen
 
