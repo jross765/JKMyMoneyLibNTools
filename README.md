@@ -89,6 +89,9 @@ List of modules and other relevant stuff:
     * [IO](https://commons.apache.org/proper/commons-io/)
     * [Numbers](https://commons.apache.org/proper/commons-numbers/)
 
+    Actually, the Configurtion lib is, at this stage, not really
+    used yet. But it's ready to be and definitely will.
+
   * [Joda Money](https://www.joda.org/joda-money/)
 
     (Doesn't provide real added value in this project. We will therefore 
@@ -114,7 +117,7 @@ but he has not tested it.
 
 ### Version Compatibility
 
-| Overall Version | Backward Compat. | Note                           |
+| **Overall Version** | **Backward Compat.** | **Note**                   |
 |---------|------------------|--------------------------------|
 | 2026-04 | no      | "Medium" changes in interfaces |
 | 0.9     | almost  | Minor changes in interfaces    |
@@ -162,7 +165,7 @@ in order to avoid confusion with the single modules' version numbers.**
 
 Module versions:
 
-| Name                     | Version |
+| **Name**                 | **Version** |
 |--------------------------|---------|
 | Base                     | 0.9     |
 | API (Core)               | 0.9     |
@@ -194,7 +197,7 @@ need not be/is not identical to the single modules' versions any more.**
 
 Module versions:
 
-| Name                     | Version |
+| **Name**                 | **Version** |
 |--------------------------|---------|
 | Base                     | 0.8.1   |
 | API (Core)               | 0.8.1   |
