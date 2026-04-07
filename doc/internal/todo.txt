@@ -7,7 +7,7 @@ Module "API (Core)"
 
 - KMyMoneyFile: getCurrencyByID() --> Parameter String -> KMMCurrID
 
-- KMyMoneyWritableFile: beim Speichern LastModificationDate (KVP) updaten
+- [ OK ] KMyMoneyWritableFile: beim Speichern LastModificationDate (KVP) updaten
   (redundant zu Meta-Info)
 
 - [ OK ] IF KMyMoneyFile_TrxSplt: Symmetrie zu Schwester.
