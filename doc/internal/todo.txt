@@ -10,7 +10,14 @@ Module "API (Core)"
 - KMyMoneyWritableFile: beim Speichern LastModificationDate (KVP) updaten
   (redundant zu Meta-Info)
 
-- IF KMyMoneyFile_TrxSplt: Symmetrie zu Schwester.
+- [ OK ] IF KMyMoneyFile_TrxSplt: Symmetrie zu Schwester.
+  (zusammen mit GnuCashFileExt_TrxSplt)
+                           ===
+
+- [ OK ] Alle str.trim().length() == 0 durch isBlank() ersetzen.
+  Dto str.trim().equals("") u.ä.
+
+- Es sind noch magische "kmm-xyz" Strings im Code --> in Const auslagern.
 
 
 Module "API Specialized Entities"
