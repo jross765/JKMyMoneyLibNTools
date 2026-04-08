@@ -5,7 +5,7 @@ Module "API (Core)"
 
 - [ OK ] KMMPrice(Pair)ID --> KMMPrc(Pr)ID (doch noch).
 
-- KMyMoneyFile: getCurrencyByID() --> Parameter String -> KMMCurrID
+- [ OK ] KMyMoney(Writable)File(_Curr): getCurrencyByID(): Param String -> KMMCurrID
 
 - [ OK ] KMyMoneyWritableFile: beim Speichern LastModificationDate (KVP) updaten
   (redundant zu Meta-Info)
