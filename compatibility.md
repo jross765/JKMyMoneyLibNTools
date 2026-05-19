@@ -7,7 +7,7 @@ KMyMoney 5.2.2
 on Linux (locale de_DE) and 
 OpenJDK 21.0.
 
-**Caution: Version 2026-04 only works with files generated with KMyMoney V. 5.2.x. Files generated with V. 5.1.x are not supported any more.**
+**Caution: Since version 0.8, the lib and tools only work with files generated with KMyMoney V. 5.2.x. Files generated with V. 5.1.x are not supported any more.**
 
 ## Locale/Language Compatibility
 As far as the author knows, there should be no issues with other locales, 
