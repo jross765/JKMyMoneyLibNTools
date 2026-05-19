@@ -102,174 +102,10 @@ List of modules and other relevant stuff:
   * [JLine](https://jline.org/)
 
 ## Compatibility
-### System and Format Compatibility
-Version 2026-04
-of the libs and tools has been tested with 
-KMyMoney 5.2.2 
-on Linux (locale de_DE) and 
-OpenJDK 21.0.
-
-**Caution: Version 2026-04 only works with files generated with KMyMoney V. 5.2.x. Files generated with V. 5.1.x are not supported any more.**
-
-### Locale/Language Compatibility
-As far as the author knows, there should be no issues with other locales, 
-but he has not tested it.
-
-### Version Compatibility
-
-| **Overall Version** | **Backward Compat.** | **Note**                   |
-|---------|------------------|--------------------------------|
-| 2026-04 | no      | "Medium" changes in interfaces |
-| 0.9     | almost  | Minor changes in interfaces    |
-| 0.8     | no      | File format change (KMyMoney V. 5.2.x), "medium" changes in interfaces |
-| 0.7     | almost  | Some non-trivial changes, although not dramatic |
-| 0.6     | almost  | Minor changes in interfaces    |
-| 0.5     | no      | Some substantial changes       |
-| 0.4     | almost  | Minor changes in interfaces    |
-| 0.3     | no      | Major changes in interfaces    |
-| 0.2     | no      | Major changes in interfaces    |
+Cf. document "[Compatibility](https://github.com/jross765/JKMyMoneyLibNTools/compatibility.md)"
 
 ## Major Changes
-Here, only the top-level changes on module-level are mentioned. 
-For more details, cf. the README files of the resp. modules (links above).
-
-### V. 0.9 &rarr; 2026-04
-**Caution: With this release, the top-level version naming scheme has changed
-in order to avoid confusion with the single modules' version numbers.**
-
-* Parent repo (this one): Nothing special.
-
-* Module "Base": Changes that improve the symmetry with the sister project.
-
-* Module "API (Core)":
-  * Loading files now shows progress bars in console (optional).
-  * Bug fixes.
-  * Maintenance.
-
-* Module "API Specialized Entities: New.
-
-* Module "API Extensions": Maintenance.
-
-* Module "API Examples": 
-  * New example program for API Specialized Entities".
-  * New package structure to better reflect different modules.
-
-* Module "Tools":
-  * All tools now load files showing progress bars (cf. Module "API (Core)").
-  * Maintenance.
-
-* Module "Viewer":
-  * Program now accepts various command line args, supporting start variants,
-    supporting various additonal use cases.
-  * Maintenance.
-
-Module versions:
-
-| **Name**                 | **Version** |
-|--------------------------|---------|
-| Base                     | 0.9     |
-| API (Core)               | 0.9     |
-| API Specialized Entities | 0.3     |
-| API Extensions           | 0.9     |
-| API Examples             | 0.9     |
-| Tools                    | 0.9     |
-| Viewer                   | 1.2     |
-
-### V. 0.8 (RESTRUCT) &rarr; 0.9
-**Caution: Please note that, due to the changes in the last major release 
-(splitting up the one big repository in several smaller ones), 
-from now on, each module is versioned on its own, and the overall project's version 
-(0.9, in this case) 
-need not be/is not identical to the single modules' versions any more.**
-
-* Parent repo (this one): Finished restruct work, i.e. made the
-  (Maven) modules' repos Git sub-modules as well.
-
-* Module "Viewer": New.
-
-* Module "API": Bug-fixes and mini-improvements.
-
-* The other modules have changed only technically; essentially (i.e., code) unchanged:
-  * "Base"
-  * "API Examples"
-  * "API Extensions"
-  * "Tools"
-
-Module versions:
-
-| **Name**                 | **Version** |
-|--------------------------|---------|
-| Base                     | 0.8.1   |
-| API (Core)               | 0.8.1   |
-| API Extensions           | 0.8.1   |
-| API Examples             | 0.8.1   |
-| Tools                    | 0.8.1   |
-| Viewer                   | 1.1.0   |
-
-### V. 0.8 &rarr; 0.8 (RESTRUCT)
-Split up the all-encompassing repository into several ones: One per module plus one for the parent (this one).
-
-Apart from that, I have made *no relevant changes* (i.e. only small changes in the README-files etc., but not in the actual source code).
-
-*Rationale*:
-
-I know, that comes with some disadvantages, and there are quite a few people who would advise against it for valid reasons. 
-
-That being said, life's not black and white, and while I acknowledge that having everything in one single repository makes things easier in the early stages of development, I am convinced that in the long run, the advantages of doing so will outweigh the disadvantages for the following reasons:
-
-* The modules' rates of change will vary considerably (they already do, and they will problably do even more in the years to come).
-
-* It feels odd *not* to have "API Examples" and "Tools" in separate repositories (and that's just the most obvious example).
-
-* The measure will greatly facilitate accepting and managing future contributions from others (or possibly handing single modules completely over to others), which I currently would feel much more inclined to do for the modules "API Extensions" and "Tools" than for the other ones.
-  
-* Last not least, I manage some additional (unpublished) projects that way, and I would like to keep things consistent (you see, my day has only 24 hours just as yours, and I have other things to do...).
-
-*History*:
-
-I have made a clean cut:
-
-* The top-level repository (this one) contains the whole history up to V. 0.8. 
-* The newly-generated sub-repos contain no history until V. 0.8. But they will contain their respective module's history from that point onwards.
-
-### V. 0.7 &rarr; 0.8
-* Module "API":
-  * Changes to support new file format (KMyMoney V. 5.2).
-  * No support for file format from V. 5.1.x any more.
-
-### V. 0.6 &rarr; 0.7
-* Module "API":
-  * Some bug-fixing and cleanup-work, making code more robust.
-  * New functionalities.
-
-* Module "API Extensions": 
-  * New sub-module.
-  * Expanded functionality of already-existing module.
-
-* Module "Tools": 
-  * New Tools
-  * Maintenance.
-
-### V. 0.5 &rarr; 0.6
-* Added module "Tools".
-
-* New external dependency (outside of Maven central): 
-[`SchnorxoLib`](https://github.com/jross765/Schnorxolib), 
-a small library that contains some auxiliary stuff that is used both in this and the sister project. Some of the code in the module "Base" has moved there.
-
-### V. 0.4 &rarr; 0.5
-Changed project structure:
-
-* Introduced new module "Base" (spun off from "API").
-
-	This was necessary because the author is using the new module in other, external projects (not published).
-
-* Introduced new module "API Extensions"
-
-	Currently, this module it is very small. It will (hopefully) grow.
-
-### V. 0.3 &rarr; 0.4 and Before
-Cf. the README file of modules "API" and "Example programs" (links below).
+Cf. document "[Major Changes](https://github.com/jross765/JKMyMoneyLibNTools/major_changes.md)"
 
 ## Level of Maturity
 This software is beta.
@@ -278,7 +114,7 @@ It is worth noting, though, that the author has been using both the published to
 as well as some unpublished ones (the latter ones also based on 
 `JKMyMoneyLibs`) 
 on a nearly daily basis 
-for almost two years now (march 2026)
+for almost two years now (june 2026)
 to facilitate and part-automate his 
 private finances' 
 accounting. This proves that the software is well-tested and stable enough 
@@ -310,69 +146,8 @@ In short: You are encouraged to use this software, but be advised to use it unde
   * If you have to change your file, **make backups before you use this lib/these tools!** Take your time and check the generated/changed files thoroughly before moving on.
     The `diff` tool is your friend as well as the provided `Dump` tool!
 
-## Compiling the Sources
-To compile the sources, do the following:
-
-1) Make sure that you have Maven installed on your system.
-
-2) Build and install [`SchnorxoLib`](https://github.com/jross765/Schnorxolib) V. 0.2
-   (cf. details there).
-
-3) Clone this repository as well as its sub-repositories. 
-
-      ```console
-    $ git clone --recurse-submodules https://github.com/jross765/JKMyMoneyLibNTools
-      ```
-
-4) Check out the latest version tag. In this case: `V_2026-04`.
-
-      The current maintainer has, in the course of his professional career, met plenty of self-declared 
-      super-pro developers who do not seem to understand the concept of version tags and configuration 
-      management, so please bear with him for telling you the seemlingly obvious...
-
-5) Compile the sources:
-
-      a) Adapt the path to your local repository in *all* pom.xml files 
-         (search for "`schnorxolib-base-systemPath`" and "`xxx`").
-         All other libs are drawn from Maven Central.
-
-      b) Type:
-
-         ```console
-       $ ./build.sh
-         ```
-
-6) Perform the test cases (optional):
-
-      ```console
-    $ ./test.sh
-      ```
-
-## Installing and Using the Software
-
-Installation is a manual process -- there is no "install" target
-in the build process (well, there actually is one, but only
-in the Maven sense, meaning its repository under `~/.m2`).
-
-Consequently, there is no pre-defined/default path for the software; 
-it does not really matter.
-
-As always with Java libs, you will have to set the classpath file,
-preferrably in a file called `environment.sh` that you must source
-before starting one of the tools. Don't forget the basic libs used 
-(list above).
-
-For convenience, the build process also generates top-level JAR files 
-that contain all dependencies (modules 
-"kmymoney-tools" and "kmymoney-viewer").
-
-You will also have to write your own wrapper scripts for the tools (for now).
-(No, the maintainer cannot provide his own ones, at least not right now,
-for specific reasons which he won't dive into now.)
-You will find an example wrapper script in the folder `doc/user`.
-
-In short: Nothing special; just as it's usually done with Java software...
-
+## Compile and Install
+Cf. document "[Compile and Install](https://github.com/jross765/JKMyMoneyLibNTools/compile_install.md)"
 
 ## Planned
 
@@ -402,7 +177,7 @@ and has been working well so far.
 Of course, this is a "10.000-metre bird's-eye view". As always in life, things are a little more
 complicated once you go into the details. Still, looking at the big picture and at least 
 up to the current state of development, the author has managed to keep both projects very 
-similar on a source code level -- so much so that you throughout large parts of the code,
+similar on a source code level -- so much so that, throughout large parts of the code,
 you can use `diff`. You will, however, also see some exceptions here and there where that 
 "low-level-symmetry" is not maintainable.
 
