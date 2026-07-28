@@ -128,7 +128,7 @@ Last not least: Have a look at the test cases for
 
 ### Selecting a Price Object with an ID
 
-This section overlaps with the previos one, and there is a reason for it:
+This section overlaps with the previous one, and there is a reason for it:
 
 Once you have the 
 `KMyMoneyPrice` 
