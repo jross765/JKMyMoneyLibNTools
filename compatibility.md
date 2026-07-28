@@ -1,7 +1,7 @@
 # Compatibility
 
 ## System and Format Compatibility
-Version 2026-06
+Version 2026-07
 of the libs and tools has been tested with 
 KMyMoney 5.2.2 
 on Linux (locale de_DE) and 
@@ -17,7 +17,7 @@ but he has not tested it.
 
 | **Overall Version** | **Backward Compat.** | **Note**                   |
 |---------|------------------|--------------------------------|
-| 2026-06 | yes     | Only additions to and deprecations in interfaces |
+| 2026-07 | yes     | Only additions to and deprecations in interfaces |
 | 2026-04 | no      | "Medium" changes in interfaces |
 | 0.9     | almost  | Minor changes in interfaces    |
 | 0.8     | no      | File format change (KMyMoney V. 5.2.x), "medium" changes in interfaces |

@@ -87,7 +87,9 @@ List of modules and other relevant stuff:
     * [CLI](https://commons.apache.org/proper/commons-cli/)
     * [Configuration](https://commons.apache.org/proper/commons-configuration/)
     * [IO](https://commons.apache.org/proper/commons-io/)
+    * [Lang](https://commons.apache.org/proper/commons-lang/)
     * [Numbers](https://commons.apache.org/proper/commons-numbers/)
+    * [Text](https://commons.apache.org/proper/commons-text/)
 
     Actually, the Configurtion lib is, at this stage, not really
     used yet. But it's ready to be and definitely will.
@@ -102,10 +104,10 @@ List of modules and other relevant stuff:
   * [JLine](https://jline.org/)
 
 ## Compatibility
-Cf. document "[Compatibility](https://github.com/jross765/JKMyMoneyLibNTools/compatibility.md)"
+Cf. document "[Compatibility](https://github.com/jross765/JKMyMoneyLibNTools/compatibility.md)".
 
 ## Major Changes
-Cf. document "[Major Changes](https://github.com/jross765/JKMyMoneyLibNTools/major_changes.md)"
+Cf. document "[Major Changes](https://github.com/jross765/JKMyMoneyLibNTools/major_changes.md)".
 
 ## Level of Maturity
 This software is beta.
@@ -114,7 +116,7 @@ It is worth noting, though, that the author has been using both the published to
 as well as some unpublished ones (the latter ones also based on 
 `JKMyMoneyLibs`) 
 on a nearly daily basis 
-for almost two years now (june 2026)
+for two years now (july 2026)
 to facilitate and part-automate his 
 private finances' 
 accounting. This proves that the software is well-tested and stable enough 
@@ -147,7 +149,7 @@ In short: You are encouraged to use this software, but be advised to use it unde
     The `diff` tool is your friend as well as the provided `Dump` tool!
 
 ## Compile and Install
-Cf. document "[Compile and Install](https://github.com/jross765/JKMyMoneyLibNTools/compile_install.md)"
+Cf. document "[Compile and Install](https://github.com/jross765/JKMyMoneyLibNTools/compile_install.md)".
 
 ## Planned
 
@@ -159,7 +161,7 @@ Cf. the according module's README file (links above).
 
 ## Sister Project
 This project has a sister project: 
-[`JGnuCashLibNTools`](https://github.com/jross765/JGnuCashLibNTools)
+[`JGnuCashLibNTools`](https://github.com/jross765/JGnuCashLibNTools).
 
 By now, both projects have roughly the same level of maturity. 
 Obviously, the author strives to keep both projects symmetrical.
@@ -176,8 +178,8 @@ and has been working well so far.
 
 Of course, this is a "10.000-metre bird's-eye view". As always in life, things are a little more
 complicated once you go into the details. Still, looking at the big picture and at least 
-up to the current state of development, the author has managed to keep both projects very 
-similar on a source code level -- so much so that, throughout large parts of the code,
+up to the current state of development, the author/maintainer has managed to keep both projects 
+very similar on a source code level -- so much so that, throughout large parts of the code,
 you can use `diff`. You will, however, also see some exceptions here and there where that 
 "low-level-symmetry" is not maintainable.
 
