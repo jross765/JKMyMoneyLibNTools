@@ -1,3 +1,3 @@
-**!!! THIS REPO HAS MOVED!!!**
+**!!! THIS REPO HAS MOVED !!!**
 
 [New site](https://codeberg.org/jross765/JKMyMoneyLibNTools)
